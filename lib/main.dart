@@ -9,6 +9,9 @@ import 'bloc/home_screen_bloc/counter_cubit.dart';
 import 'bloc/internet_connectivity_bloc/internet_cubit.dart';
 import 'bloc/setting_screen_bloc/settings_cubit.dart';
 import 'config/app_router.dart';
+import 'screens/contacts_screen/contact_detail_screen.dart';
+import 'screens/login_screen/auth_screen.dart';
+import 'screens/splash_screen/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,9 +21,7 @@ void main() async {
   );
 
   HydratedBlocOverrides.runZoned(
-        () => runApp(MyApp(
-          appRouter: AppRouter(),
-          connectivity: Connectivity())),
+    () => runApp(MyApp(appRouter: AppRouter(), connectivity: Connectivity())),
     storage: storage,
     blocObserver: AppBlocObserver(),
   );
@@ -58,11 +59,17 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         onGenerateRoute: appRouter.onGenerateRoute,
+        initialRoute: '/',
+        routes: {
+          '/': (ctx) => SplashScreen(),
+          AuthScreen.routeName: (ctx) => AuthScreen(),
+          TapsScreen.routeName: (ctx) => TapsScreen(),
+          ContactDetailScreen.routeName: (ctx) => ContactDetailScreen(),
+        },
       ),
     );
   }
 }
-
 
 class AppBlocObserver extends BlocObserver {
   @override
@@ -104,5 +111,4 @@ class AppBlocObserver extends BlocObserver {
     // TODO: implement onEvent
     super.onEvent(bloc, event);
   }
-
 }
