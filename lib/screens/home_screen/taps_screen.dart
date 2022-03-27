@@ -42,7 +42,7 @@ class _TapsScreenState extends State<TapsScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 2,
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         drawer: MainDrawer(),
@@ -132,10 +132,10 @@ class _TapsScreenState extends State<TapsScreen> {
                 icon: Icon(Icons.people),
                 text: 'Contacts',
               ),
-              Tab(
-                icon: Icon(Icons.account_balance),
-                text: 'Test',
-              ),
+              // Tab(
+              //   icon: Icon(Icons.account_balance),
+              //   text: 'Test',
+              // ),
             ],
           ),
         ),
