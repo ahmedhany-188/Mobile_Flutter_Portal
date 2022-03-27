@@ -5,15 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'bloc/contacts_screen_bloc/contacts_bloc_states.dart';
 import 'bloc/contacts_screen_bloc/contacts_cubit.dart';
 import 'bloc/home_screen_bloc/counter_cubit.dart';
 import 'bloc/internet_connectivity_bloc/internet_cubit.dart';
 import 'bloc/setting_screen_bloc/settings_cubit.dart';
 import 'config/app_router.dart';
+import 'data/data_providers/dio_provider.dart';
 import 'screens/contacts_screen/contact_detail_screen.dart';
 import 'screens/home_screen/taps_screen.dart';
 import 'screens/login_screen/auth_screen.dart';
 import 'screens/splash_screen/splash_screen.dart';
+import 'widgets/drawer/main_drawer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +30,9 @@ void main() async {
     storage: storage,
     blocObserver: AppBlocObserver(),
   );
+
+  DioProvider.init();
+
 }
 
 class MyApp extends StatelessWidget {
@@ -53,8 +59,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<SettingsCubit>(
           create: (counterCubitContext) => SettingsCubit(),
         ),
-        BlocProvider(
-          create: (context) => AppCubit()..getContacts(),
+        BlocProvider<ContactsCubit>(
+          create: (contactsCubitContext) => ContactsCubit()..getContacts(),
         ),
       ],
       child: MaterialApp(
@@ -75,6 +81,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
 class AppBlocObserver extends BlocObserver {
   @override

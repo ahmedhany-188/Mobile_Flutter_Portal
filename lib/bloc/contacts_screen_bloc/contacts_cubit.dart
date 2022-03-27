@@ -2,17 +2,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/data/data_providers/dio_provider.dart';
 import 'contacts_bloc_states.dart';
 
-class AppCubit extends Cubit<BlocStates> {
-  AppCubit() : super(BlocInitialState());
+class ContactsCubit extends Cubit<ContactsBlocStates> {
+  ContactsCubit() : super(BlocInitialState());
 
-  static AppCubit get(context) => BlocProvider.of(context);
+  static ContactsCubit get(context) => BlocProvider.of(context);
 
   List<dynamic> contacts = [];
 
   void getContacts() {
     emit(BlocGetContactsLoadingState());
 
-    DioHelper.getContactListData().then((value) {
+    DioProvider.getContactListData().then((value) {
       contacts = value.data;
       emit(BlocGetContactsSuccessState());
     }).catchError((error) {

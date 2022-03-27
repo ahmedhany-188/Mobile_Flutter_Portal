@@ -1,17 +1,17 @@
-abstract class BlocStates{}
+abstract class ContactsBlocStates{}
 
-class BlocInitialState extends BlocStates{}
+class BlocInitialState extends ContactsBlocStates{}
 
-class BlocGetContactsLoadingState extends BlocStates{}
-class BlocGetContactsSuccessState extends BlocStates{}
-class BlocGetContactsErrorState extends BlocStates {
+class BlocGetContactsLoadingState extends ContactsBlocStates{}
+class BlocGetContactsSuccessState extends ContactsBlocStates{}
+class BlocGetContactsErrorState extends ContactsBlocStates {
   final String error;
   BlocGetContactsErrorState(this.error);
 }
 
-class BlocGetFiltersForContactsLoadingState extends BlocStates{}
-class BlocGetFiltersForContactsSuccessState extends BlocStates{}
-class BlocGetFiltersForContactsErrorState extends BlocStates {
+class BlocGetFiltersForContactsLoadingState extends ContactsBlocStates{}
+class BlocGetFiltersForContactsSuccessState extends ContactsBlocStates{}
+class BlocGetFiltersForContactsErrorState extends ContactsBlocStates {
   final String error;
   BlocGetFiltersForContactsErrorState(this.error);
 }

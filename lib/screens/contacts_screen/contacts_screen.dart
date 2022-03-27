@@ -6,7 +6,6 @@ import 'package:hassanallamportalflutter/bloc/contacts_screen_bloc/contacts_cubi
 import 'package:hassanallamportalflutter/data/models/filters_categories.dart';
 import 'package:hassanallamportalflutter/widgets/filters/dialog_contact_filter.dart';
 
-
 import 'contacts_widget.dart';
 
 class ContactsScreen extends StatefulWidget {
@@ -23,7 +22,11 @@ class _ContactsScreenState extends State<ContactsScreen> {
   bool isTypingFilterSet = false;
   List<dynamic> filtersDataSavedFromDialog = [];
 
-  FiltersCategories testObject = FiltersCategories(companiesFilter: [], projectsFilter: [], departmentFilter: [], titleFilter: []);
+  FiltersCategories filtersCategoriesObject = FiltersCategories(
+      companiesFilter: [],
+      projectsFilter: [],
+      departmentFilter: [],
+      titleFilter: []);
 
   @override
   void initState() {
@@ -34,7 +37,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
     super.initState();
   }
 
-   _showDialogAndGetFiltersResults(BuildContext context) async {
+  _showDialogAndGetFiltersResults(BuildContext context) async {
     final result = await Navigator.push(
       context,
       MaterialPageRoute(
@@ -49,7 +52,13 @@ class _ContactsScreenState extends State<ContactsScreen> {
     // );
     setState(() {
       filtersDataSavedFromDialog = result;
-      testObject = result;
+      filtersCategoriesObject.companiesFilter = result[0];
+      filtersCategoriesObject.projectsFilter = result[1];
+      filtersCategoriesObject.departmentFilter = result[2];
+      filtersCategoriesObject.titleFilter = result[3];
+      print(filtersCategoriesObject.companiesFilter);
+
+
     });
 
     return DialogContactFilter(contactListFromApi);
@@ -75,7 +84,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                 .toString()
                 .toLowerCase()
                 .trim()
-                .contains(singleSplitElement) && contactElement['companyName'].toString().trim().contains('Hassan Allam Road and Bradges') ))
+                .contains(singleSplitElement)))
         .toList()
       ..sort((a, b) {
         int indexOfSearchQueryA = a[listKeyForCondition]
@@ -105,16 +114,16 @@ class _ContactsScreenState extends State<ContactsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    contactListFromApi = AppCubit.get(context).contacts;
+    contactListFromApi = ContactsCubit.get(context).contacts;
     var deviceSize = MediaQuery.of(context).size;
     // filtersDataSavedFromDialog = [];
 
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Theme.of(context).colorScheme.background,
-      body: BlocProvider(
-        create: (context) => AppCubit()..getContacts(),
-        child: BlocConsumer<AppCubit, BlocStates>(
+      body: BlocProvider<ContactsCubit>(
+        create: (context) => ContactsCubit()..getContacts(),
+        child: BlocConsumer<ContactsCubit, ContactsBlocStates>(
             listener: (context, state) {},
             builder: (context, state) {
               return SizedBox(
@@ -169,15 +178,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
                               onPressed: () {
                                 (state is BlocGetContactsLoadingState)
                                     ? null
-                                    :
-                                    _showDialogAndGetFiltersResults(context);
-                                    // showDialog(
-                                    //     context: context,
-                                    //     barrierDismissible: true,
-                                    //     builder: (context) =>
-                                    //         DialogContactFilter(
-                                    //             contactListFromApi),
-                                    //   );
+                                    : _showDialogAndGetFiltersResults(context);
+                                // showDialog(
+                                //     context: context,
+                                //     barrierDismissible: true,
+                                //     builder: (context) =>
+                                //         DialogContactFilter(
+                                //             contactListFromApi),
+                                //   );
                               },
                               label: const Text('Filter Contacts'),
                               icon: const Icon(

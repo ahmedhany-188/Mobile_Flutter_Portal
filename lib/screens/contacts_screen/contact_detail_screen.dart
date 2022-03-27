@@ -12,7 +12,7 @@ class ContactDetailScreen extends StatelessWidget {
     // selectedContactDataAsMap['companyName'];
 
     Widget detailedColumnForContactData(
-        String staticDataName, String dynamicDataString) {
+        String staticDataName, String? dynamicDataString) {
       return Column(
         children: [
           Row(

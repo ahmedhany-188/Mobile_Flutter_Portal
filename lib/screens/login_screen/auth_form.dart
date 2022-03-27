@@ -78,7 +78,7 @@ class _AuthFormState extends State<AuthForm> {
         delayedDuration: 0,
         context: context,
         transitionDuration: 500,
-      ).navigateFromBottomToTopJoined(widget);
+      ).navigateFromBottom();
     }
 
     if (isValid) {
