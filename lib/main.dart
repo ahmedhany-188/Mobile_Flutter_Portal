@@ -10,6 +10,7 @@ import 'bloc/internet_connectivity_bloc/internet_cubit.dart';
 import 'bloc/setting_screen_bloc/settings_cubit.dart';
 import 'config/app_router.dart';
 import 'screens/contacts_screen/contact_detail_screen.dart';
+import 'screens/home_screen/taps_screen.dart';
 import 'screens/login_screen/auth_screen.dart';
 import 'screens/splash_screen/splash_screen.dart';
 

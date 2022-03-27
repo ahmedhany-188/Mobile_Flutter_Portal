@@ -6,6 +6,7 @@ import 'package:delayed_display/delayed_display.dart';
 import 'package:entry/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/widgets/animation/page_transition_animation.dart';
 
 
