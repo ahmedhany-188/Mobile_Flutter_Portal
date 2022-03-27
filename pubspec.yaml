@@ -39,6 +39,8 @@ dependencies:
   flutter_bloc: any
   hydrated_bloc: any
   path_provider: any
+  http: any
+
 
 dev_dependencies:
   flutter_test:
