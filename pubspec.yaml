@@ -39,7 +39,27 @@ dependencies:
   flutter_bloc: any
   hydrated_bloc: any
   path_provider: any
+  bloc: any
+  json_serializable: any
+  json_annotation: any
   http: any
+
+  animated_splash_screen: ^1.2.0
+  animations: ^2.0.2
+  entry: ^0.0.6
+  sprung: ^3.0.0
+  delayed_display: ^2.0.0
+  page_transition: ^2.0.5
+  dio: ^4.0.4
+  conditional_builder_null_safety: ^0.0.6
+  flutter_search_bar: ^2.1.0
+  dropdown_search: ^2.0.1
+  anim_search_bar: ^2.0.2
+  badges: ^2.0.2
+  flutter_keyboard_visibility: ^5.2.0
+  dynamic_text_highlighting: ^2.2.0
+  multi_select_flutter: ^4.1.2
+  sizer: ^2.0.15
 
 
 dev_dependencies:
