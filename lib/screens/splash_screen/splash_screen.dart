@@ -1,16 +1,14 @@
 import 'dart:ui';
 
 import 'package:badges/badges.dart';
-import 'package:delayed_display/delayed_display.dart';
 import 'package:entry/entry.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sprung/sprung.dart';
 
 import '../../widgets/animation/page_transition_animation.dart';
+import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 
 
 class SplashScreen extends StatelessWidget {
