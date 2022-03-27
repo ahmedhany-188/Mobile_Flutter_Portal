@@ -1,12 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/contacts_screen_bloc/contacts_bloc_states.dart';
+import 'package:hassanallamportalflutter/bloc/contacts_screen_bloc/contacts_cubit.dart';
 import 'package:hassanallamportalflutter/data/models/filters_categories.dart';
 import 'package:hassanallamportalflutter/widgets/filters/dialog_contact_filter.dart';
 
 
-import '../bloc/bloc_states.dart';
-import '../bloc/cubit.dart';
 import 'contacts_widget.dart';
 
 class ContactsScreen extends StatefulWidget {

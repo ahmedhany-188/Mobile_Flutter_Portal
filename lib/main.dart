@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
+import 'bloc/contacts_screen_bloc/contacts_cubit.dart';
 import 'bloc/home_screen_bloc/counter_cubit.dart';
 import 'bloc/internet_connectivity_bloc/internet_cubit.dart';
 import 'bloc/setting_screen_bloc/settings_cubit.dart';
@@ -51,6 +52,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SettingsCubit>(
           create: (counterCubitContext) => SettingsCubit(),
+        ),
+        BlocProvider(
+          create: (context) => AppCubit()..getContacts(),
         ),
       ],
       child: MaterialApp(
