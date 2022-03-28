@@ -2,6 +2,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/weather_bloc/weather_bloc.dart';
+import 'package:hassanallamportalflutter/data/models/weather.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -13,7 +15,6 @@ import 'bloc/setting_screen_bloc/settings_cubit.dart';
 import 'config/app_router.dart';
 import 'data/data_providers/dio_provider.dart';
 import 'screens/contacts_screen/contact_detail_screen.dart';
-import 'screens/home_screen/taps_screen.dart';
 import 'screens/login_screen/auth_screen.dart';
 import 'screens/splash_screen/splash_screen.dart';
 import 'widgets/drawer/main_drawer.dart';
@@ -26,7 +27,9 @@ void main() async {
   );
 
   HydratedBlocOverrides.runZoned(
-    () => runApp(MyApp(appRouter: AppRouter(), connectivity: Connectivity())),
+        () => runApp(MyApp(
+          appRouter: AppRouter(),
+          connectivity: Connectivity())),
     storage: storage,
     blocObserver: AppBlocObserver(),
   );
@@ -60,6 +63,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ContactsCubit>(
           create: (contactsCubitContext) => ContactsCubit()..getContacts(),
+        ),
+        BlocProvider<WeatherBloc>(
+          create: (weatherBlockContext) => WeatherBloc()..add(WeatherRequest()),
         ),
       ],
       child: MaterialApp(
@@ -114,4 +120,5 @@ class AppBlocObserver extends BlocObserver {
     // TODO: implement onEvent
     super.onEvent(bloc, event);
   }
+
 }
