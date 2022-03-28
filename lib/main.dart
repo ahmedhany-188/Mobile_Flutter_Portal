@@ -2,6 +2,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/weather_bloc/weather_bloc.dart';
+import 'package:hassanallamportalflutter/data/models/weather.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -49,6 +51,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<SettingsCubit>(
           create: (counterCubitContext) => SettingsCubit(),
+        ),
+        BlocProvider<WeatherBloc>(
+          create: (weatherBlockContext) => WeatherBloc()..add(WeatherRequest()),
         ),
       ],
       child: MaterialApp(
