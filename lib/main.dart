@@ -69,13 +69,6 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         onGenerateRoute: appRouter.onGenerateRoute,
-        initialRoute: '/',
-        routes: {
-          '/': (ctx) => TapsScreen(),
-          AuthScreen.routeName: (ctx) => AuthScreen(),
-          TapsScreen.routeName: (ctx) => TapsScreen(),
-          ContactDetailScreen.routeName: (ctx) => ContactDetailScreen(),
-        },
       ),
     );
   }
