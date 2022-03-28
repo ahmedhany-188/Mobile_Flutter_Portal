@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
+import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
+import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
+import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
+      // case '/':
+      //   return MaterialPageRoute(
+      //     builder: (_) => HomeScreen(
+      //       title: "Home Screen",
+      //       color: Colors.blueAccent,
+      //     ),
+      //   );
       case '/':
         return MaterialPageRoute(
-          builder: (_) => HomeScreen(
-            title: "Home Screen",
-            color: Colors.blueAccent,
-          ),
+          builder: (_) => SplashScreen(),
         );
+
       // case '/second':
       //   return MaterialPageRoute(
       //     builder: (_) => SecondScreen(
@@ -29,6 +38,18 @@ class AppRouter {
       case '/settings':
         return MaterialPageRoute(
           builder: (_) => const SettingsScreen(),
+        );
+      case AuthScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const AuthScreen(),
+        );
+      case TapsScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const TapsScreen(),
+        );
+      case ContactDetailScreen.routeName:
+        return MaterialPageRoute(
+         builder: (_) =>  ContactDetailScreen(),
         );
       default:
         return null;

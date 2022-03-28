@@ -32,7 +32,6 @@ void main() async {
   );
 
   DioProvider.init();
-
 }
 
 class MyApp extends StatelessWidget {
@@ -72,7 +71,7 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: appRouter.onGenerateRoute,
         initialRoute: '/',
         routes: {
-          '/': (ctx) => SplashScreen(),
+          '/': (ctx) => TapsScreen(),
           AuthScreen.routeName: (ctx) => AuthScreen(),
           TapsScreen.routeName: (ctx) => TapsScreen(),
           ContactDetailScreen.routeName: (ctx) => ContactDetailScreen(),
@@ -81,7 +80,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 
 class AppBlocObserver extends BlocObserver {
   @override
