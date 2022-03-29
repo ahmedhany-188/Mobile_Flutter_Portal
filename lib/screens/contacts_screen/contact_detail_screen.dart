@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 
 class ContactDetailScreen extends StatelessWidget {
   static const routeName = '/contact-detail-screen';
+  final Map<String, dynamic> selectedContactDataAsMap;
+  const ContactDetailScreen({Key? key, required this.selectedContactDataAsMap}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final selectedContactListOfData =
-        ModalRoute.of(context)!.settings.arguments;
+    // final selectedContactListOfData =
+        // ModalRoute.of(context)!.settings.arguments;
 
-    final selectedContactDataAsMap =
-        selectedContactListOfData as Map<String, dynamic>;
+    // final selectedContactDataAsMap =
+    //     selectedContactListOfData as Map<String, dynamic>;
     // selectedContactDataAsMap['companyName'];
 
     Widget detailedColumnForContactData(

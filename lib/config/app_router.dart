@@ -48,8 +48,9 @@ class AppRouter {
           builder: (_) => const TapsScreen(),
         );
       case ContactDetailScreen.routeName:
+        final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-         builder: (_) =>  ContactDetailScreen(),
+         builder: (_) =>  ContactDetailScreen(selectedContactDataAsMap: args,),
         );
       default:
         return null;
