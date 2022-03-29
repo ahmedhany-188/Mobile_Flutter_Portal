@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:hassanallamportalflutter/data/models/filters_categories.dart';
-import 'multi_selection_chips_filters.dart';
+
+import '../../data/models/contacts_related_models/filters_categories.dart';
+import '../../widgets/filters/multi_selection_chips_filters.dart';
 
 
 class DialogContactFilter extends StatefulWidget {
