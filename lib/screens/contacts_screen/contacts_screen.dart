@@ -12,7 +12,7 @@ import '../../widgets/filters/dialog_contact_filter.dart';
 import '../../screens/contacts_screen/contacts_widget.dart';
 
 class ContactsScreen extends StatefulWidget {
-  ContactsScreen({Key? key}) : super(key: key);
+  const ContactsScreen({Key? key}) : super(key: key);
 
   @override
   State<ContactsScreen> createState() => _ContactsScreenState();
@@ -21,10 +21,13 @@ class ContactsScreen extends StatefulWidget {
 class _ContactsScreenState extends State<ContactsScreen> {
   FocusNode searchTextFieldFocusNode = FocusNode();
   TextEditingController textController = TextEditingController();
-
   bool isTypingFilterSet = false;
+  bool isFilterSet = false;
 
+  var contactListFromApi = [];
+  List<dynamic> contactSearchResultsList = [];
   List<dynamic> filtersDataSavedFromDialog = [];
+  List<dynamic> filtersSearchListSaved = [];
 
   FiltersCategories filtersCategoriesObject = FiltersCategories(
       companiesFilter: [],
@@ -32,44 +35,70 @@ class _ContactsScreenState extends State<ContactsScreen> {
       departmentFilter: [],
       titleFilter: []);
 
-  @override
-  void initState() {
-    contactListFromApi;
-    textController;
-    searchTextFieldFocusNode;
-    contactSearchResultsList;
-    super.initState();
-  }
+  // @override
+  // void initState() {
+  //   // contactListFromApi;
+  //   textController;
+  //   searchTextFieldFocusNode;
+  //   // contactSearchResultsList;
+  //   super.initState();
+  // }
 
   _showDialogAndGetFiltersResults(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: true,
       builder: (context) => DialogContactFilter(contactListFromApi),
-      useRootNavigator: true,
     ).then((result) {
-      setState(() {
-        filtersDataSavedFromDialog = result;
-        filtersCategoriesObject.companiesFilter = result[0];
-        filtersCategoriesObject.projectsFilter = result[1];
-        filtersCategoriesObject.departmentFilter = result[2];
-        filtersCategoriesObject.titleFilter = result[3];
+      filtersDataSavedFromDialog = result;
+      filtersCategoriesObject.companiesFilter = result[0];
+      filtersCategoriesObject.projectsFilter = result[1];
+      filtersCategoriesObject.departmentFilter = result[2];
+      filtersCategoriesObject.titleFilter = result[3];
 
-        contactSearchResultsList = SearchForContacts().setSearchForFilters(
-          query: filtersCategoriesObject.companiesFilter[0],
-          listKeyForCondition: 'companyName',
-          listFromApi: contactListFromApi,
-        );
+      filtersSearchListSaved = SearchForContacts().setSearchForFilters(
+        query: filtersCategoriesObject.companiesFilter[0],
+        listKeyForCondition: 'companyName',
+        listFromApi: contactListFromApi,
+      );
+      setState(() {
+        isFilterSet = true;
+        contactSearchResultsList = filtersSearchListSaved;
+      });
+    }).then((_) {
+      filtersSearchListSaved = SearchForContacts().setSearchForFilters(
+        query: filtersCategoriesObject.projectsFilter[0],
+        listKeyForCondition: 'projectName',
+        listFromApi: contactListFromApi,
+      );
+      setState(() {
+        isFilterSet = true;
+        contactSearchResultsList = filtersSearchListSaved;
+      });
+    }).whenComplete(() {
+      filtersSearchListSaved = SearchForContacts().setSearchForFilters(
+        query: filtersCategoriesObject.departmentFilter[0],
+        listKeyForCondition: 'mainDepartment',
+        listFromApi: contactListFromApi,
+      );
+      setState(() {
+        isFilterSet = true;
+        contactSearchResultsList = filtersSearchListSaved;
+      });
+    }).whenComplete(() {
+      filtersSearchListSaved = SearchForContacts().setSearchForFilters(
+        query: filtersCategoriesObject.titleFilter[0],
+        listKeyForCondition: 'titleName',
+        listFromApi: contactListFromApi,
+      );
+      setState(() {
+        isFilterSet = true;
+        contactSearchResultsList = filtersSearchListSaved;
       });
     });
   }
 
-  var contactListFromApi = [];
-  List<dynamic> contactSearchResultsList = [];
-
   @override
   Widget build(BuildContext context) {
-    contactListFromApi = ContactsCubit.get(context).contacts;
     var deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: true,
@@ -77,7 +106,11 @@ class _ContactsScreenState extends State<ContactsScreen> {
       body: BlocProvider<ContactsCubit>(
         create: (context) => ContactsCubit()..getContacts(),
         child: BlocConsumer<ContactsCubit, ContactsBlocStates>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            if (state is BlocGetContactsSuccessState) {
+              contactListFromApi = state.contacts;
+            }
+          },
           builder: (context, state) {
             return SizedBox(
               height: deviceSize.height,
@@ -98,7 +131,6 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           controller: textController,
                           onSubmitted: (searchValue) {
                             searchTextFieldFocusNode.unfocus();
-                            print(filtersDataSavedFromDialog);
                             setState(() {});
                           },
                           onChanged: (_) {
@@ -107,7 +139,9 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                   SearchForContacts().setSearchFromApiList(
                                 query: textController.text,
                                 listKeyForCondition: 'name',
-                                listFromApi: contactSearchResultsList,
+                                listFromApi: (isFilterSet == true)
+                                    ? filtersSearchListSaved
+                                    : contactListFromApi,
                               );
                               (textController.text.toString().isEmpty)
                                   ? isTypingFilterSet = false
@@ -160,8 +194,10 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                       filtersCategoriesObject.titleFilter
                                           .clear();
                                       contactSearchResultsList.clear();
+                                      filtersSearchListSaved.clear();
 
                                       isTypingFilterSet = false;
+                                      isFilterSet = false;
                                     });
                                   }
                                 : null,

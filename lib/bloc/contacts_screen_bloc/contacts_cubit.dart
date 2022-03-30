@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/data/data_providers/dio_provider.dart';
+import 'package:hassanallamportalflutter/data/data_providers/contacts_dio_provider/contacts_dio_provider.dart';
 import 'contacts_bloc_states.dart';
 
 class ContactsCubit extends Cubit<ContactsBlocStates> {
@@ -12,9 +12,9 @@ class ContactsCubit extends Cubit<ContactsBlocStates> {
   void getContacts() {
     emit(BlocGetContactsLoadingState());
 
-    DioProvider.getContactListData().then((value) {
+    ContactsDioProvider.getContactListData().then((value) {
       contacts = value.data;
-      emit(BlocGetContactsSuccessState());
+      emit(BlocGetContactsSuccessState(contacts));
     }).catchError((error) {
       print(error.toString());
       emit(BlocGetContactsErrorState(error.toString()));

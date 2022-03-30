@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/weather_bloc/weather_bloc.dart';
 import 'package:hassanallamportalflutter/data/models/weather.dart';
+import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -13,7 +14,7 @@ import 'bloc/home_screen_bloc/counter_cubit.dart';
 import 'bloc/internet_connectivity_bloc/internet_cubit.dart';
 import 'bloc/setting_screen_bloc/settings_cubit.dart';
 import 'config/app_router.dart';
-import 'data/data_providers/dio_provider.dart';
+import 'data/data_providers/contacts_dio_provider/contacts_dio_provider.dart';
 import 'screens/contacts_screen/contact_detail_screen.dart';
 import 'screens/login_screen/auth_screen.dart';
 import 'screens/splash_screen/splash_screen.dart';
@@ -34,7 +35,7 @@ void main() async {
     blocObserver: AppBlocObserver(),
   );
 
-  DioProvider.init();
+ await ContactsDioProvider.init();
 }
 
 class MyApp extends StatelessWidget {
@@ -63,6 +64,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ContactsCubit>(
           create: (contactsCubitContext) => ContactsCubit()..getContacts(),
+          // child: ContactsScreen(),
         ),
         BlocProvider<WeatherBloc>(
           create: (weatherBlockContext) => WeatherBloc()..add(WeatherRequest()),
@@ -70,6 +72,7 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Hassan Allam Portal',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
