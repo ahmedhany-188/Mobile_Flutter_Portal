@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 
 class MainDrawer extends StatefulWidget {
@@ -79,22 +80,10 @@ class _MainDrawerState extends State<MainDrawer> {
                         endIndent: 10,
                       ),
                       buildListTile(
-                        'About',
+                        'Get Direction',
                         Icons.nature_people,
                         () {
-                          // Navigator.of(context).pushReplacementNamed(FiltersScreen.routeName);
-                        },
-                      ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                      buildListTile(
-                        'Logout',
-                        Icons.logout,
-                        () {
-                          // Navigator.of(context).pushReplacementNamed(.routeName);
+                          Navigator.of(context).pushReplacementNamed(GetDirectionScreen.routeName);
                         },
                       ),
                       const Divider(

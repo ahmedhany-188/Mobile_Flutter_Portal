@@ -2,7 +2,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/get_direction_screen_bloc/get_direction_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/weather_bloc/weather_bloc.dart';
+import 'package:hassanallamportalflutter/data/data_providers/get_direction_provider/get_direction_provider.dart';
 import 'package:hassanallamportalflutter/data/models/weather.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -36,6 +38,7 @@ void main() async {
   );
 
  await ContactsDioProvider.init();
+ await GetDirectionProvider.getDirectionInit();
 }
 
 class MyApp extends StatelessWidget {
@@ -68,6 +71,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<WeatherBloc>(
           create: (weatherBlockContext) => WeatherBloc()..add(WeatherRequest()),
+        ),
+        BlocProvider<GetDirectionCubit>(
+          create: (getDirectionCubitContext) => GetDirectionCubit()..getDirection(),
         ),
       ],
       child: MaterialApp(
