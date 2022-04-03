@@ -84,7 +84,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         'Get Direction',
                         Icons.nature_people,
                         () {
-                          // Navigator.of(context).pushReplacementNamed(FiltersScreen.routeName);
+                          Navigator.of(context).pushReplacementNamed(GetDirectionScreen.routeName);
                         },
                       ),
 

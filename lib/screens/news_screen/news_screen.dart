@@ -12,12 +12,14 @@ class NewsScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => BenefitsCubit()..getBenefits(),
       child: BlocConsumer(
-        listener:(context, state) {
-    if (state is BenefitsSuccessState) {
-      benefitsData = state.benefits;
-    }
-    },
-        builder: (context, state) => Center(child: Text(benefitsData[0]['benefitsDescription']),),
+        listener: (context, state) {
+          if (state is BenefitsSuccessState) {
+            benefitsData = state.benefits;
+          }
+        },
+        builder: (context, state){ return Center(
+          child: Text(benefitsData[0]['benefitsDescription']),
+        );}
       ),
     );
   }
