@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
+import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
@@ -52,6 +53,10 @@ class AppRouter {
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
          builder: (_) =>  ContactDetailScreen(selectedContactDataAsMap: args,),
+        );
+      case GetDirectionScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => GetDirectionScreen(),
         );
 
       case attendance_screen.routeName:

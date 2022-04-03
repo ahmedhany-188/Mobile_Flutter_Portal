@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 
@@ -80,7 +81,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         endIndent: 10,
                       ),
                       buildListTile(
-                        'About',
+                        'Get Direction',
                         Icons.nature_people,
                         () {
                           // Navigator.of(context).pushReplacementNamed(FiltersScreen.routeName);
