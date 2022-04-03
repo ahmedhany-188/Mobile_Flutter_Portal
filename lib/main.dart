@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/weather_bloc/weather_bloc.dart';
 import 'package:hassanallamportalflutter/data/models/weather.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -35,6 +36,7 @@ void main() async {
   );
 
   DioProvider.init();
+
 }
 
 class MyApp extends StatelessWidget {
@@ -67,6 +69,10 @@ class MyApp extends StatelessWidget {
         BlocProvider<WeatherBloc>(
           create: (weatherBlockContext) => WeatherBloc()..add(WeatherRequest()),
         ),
+        BlocProvider<AttendanceCubit>(
+          create: (attendanceCubitContext) => AttendanceCubit(),
+        ),
+
       ],
       child: MaterialApp(
         title: 'Hassan Allam Portal',
