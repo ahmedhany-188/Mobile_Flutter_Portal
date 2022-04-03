@@ -19,12 +19,12 @@ class ProjectDirectionDetails {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
 
-    data['projectName'] = this.projectName;
-    data['city'] = this.city;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
+    data['projectName'] = projectName;
+    data['city'] = city;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
     return data;
   }
 }

@@ -1,16 +1,17 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 
+import '../../widgets/map/open_map.dart';
 import '../../constants/google_map_api_key.dart';
-import 'get_direction_screen.dart';
 
 class GetDirectionWidget extends StatelessWidget {
   List<dynamic> projectsDirectionData;
-  GetDirectionWidget(this.projectsDirectionData,{Key? key}) : super(key: key);
+  GetDirectionWidget(this.projectsDirectionData, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(maintainBottomViewPadding: true,
+    return SafeArea(
+      maintainBottomViewPadding: true,
       child: ConditionalBuilder(
         condition: projectsDirectionData.isNotEmpty,
         builder: (context) => GridView.builder(
@@ -37,15 +38,16 @@ class GetDirectionWidget extends StatelessWidget {
                   //   backgroundColor: Colors.black45,
                   // ),
                   child: Hero(
-                    tag: 'product',
+                    tag: 'tag$index',
                     child: FadeInImage(
-                      placeholder: const AssetImage('assets/images/1.png'),
-                      image: NetworkImage(DirectionHelper
-                          .generateLocationPreviewImage(
-                          latitude: projectsDirectionData[index]
-                          ['latitude'],
-                          longitude: projectsDirectionData[index]
-                          ['longitude'])),
+                      placeholder:
+                          const AssetImage('assets/images/fulllogoblue.png'),
+                      image: NetworkImage(
+                          DirectionHelper.generateLocationPreviewImage(
+                              latitude: projectsDirectionData[index]
+                                  ['latitude'],
+                              longitude: projectsDirectionData[index]
+                                  ['longitude'])),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -61,8 +63,7 @@ class GetDirectionWidget extends StatelessWidget {
                     ),
                     trailing: IconButton(
                         onPressed: () {
-                          GetDirectionScreen.openMap(
-                              projectsDirectionData[index]['latitude'],
+                          openMap(projectsDirectionData[index]['latitude'],
                               projectsDirectionData[index]['longitude']);
                         },
                         icon: const Icon(Icons.directions)),
@@ -72,8 +73,7 @@ class GetDirectionWidget extends StatelessWidget {
             );
           },
         ),
-        fallback: (context) =>
-            const Center(child: LinearProgressIndicator()),
+        fallback: (context) => const Center(child: LinearProgressIndicator()),
       ),
     );
   }

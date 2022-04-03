@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/search_for_contacts.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_widget.dart';
+import 'package:hassanallamportalflutter/widgets/search/general_search.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:hassanallamportalflutter/bloc/get_direction_screen_bloc/get_direction_cubit.dart';
 import 'package:hassanallamportalflutter/constants/google_map_api_key.dart';
@@ -16,39 +17,6 @@ class GetDirectionScreen extends StatefulWidget {
 
   GetDirectionScreen({Key? key}) : super(key: key);
 
-  static Future<void> openMap(double latitude, double longitude) async {
-    // String googleUrl ='https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
-    String appleUrl = 'https://maps.apple.com/?sll=$latitude,$longitude';
-    String googleUrl =
-        'https://www.google.com/maps/dir/?api=1&origin=30.1074108,31.3818438&destination=$latitude,$longitude&travelmode=driving&dir_action=navigate';
-
-    if (Platform.isIOS) {
-      if (await canLaunch(appleUrl)) {
-        await launch(appleUrl);
-      } else {
-        throw 'Could not open the map.';
-      }
-    } else {
-      /// any platform apart from IOS
-      if (await canLaunch(googleUrl)) {
-        await launch(googleUrl);
-      } else {
-        throw 'Could not open the map.';
-      }
-    }
-
-    /// /// other way to be done
-    /// String goo = 'comgooglemaps://?center=$latitude, $longitude';
-    /// if (await canLaunch("comgooglemaps://")) {
-    ///   print('launching com googleUrl');
-    ///   await launch(googleUrl);
-    /// } else if (await canLaunch(appleUrl)) {
-    ///   print('launching apple url');
-    ///   await launch(appleUrl);
-    /// } else {
-    ///   throw 'Could not launch url';
-    /// }
-  }
 
   @override
   State<GetDirectionScreen> createState() => _GetDirectionScreenState();
@@ -92,7 +60,7 @@ class _GetDirectionScreenState extends State<GetDirectionScreen> {
                       onChanged: (_) {
                         setState(() {
                           projectsSearchResult =
-                              SearchForContacts().setSearchFromApiList(
+                              GeneralSearch().setGeneralSearch(
                             query: textController.text,
                             listKeyForCondition: 'projectName',
                             listFromApi: projectsDirectionData,
@@ -110,10 +78,10 @@ class _GetDirectionScreenState extends State<GetDirectionScreen> {
                   ),
                   Container(
                     height: deviceSize.height -
-                        ((deviceSize.height * 0.2) -
+                        ((deviceSize.height * 0.24) -
                             MediaQuery.of(context).viewPadding.top),
                     color: Colors.grey,
-                    child: (projectsSearchResult.isNotEmpty)
+                    child: (projectsSearchResult.isNotEmpty || textController.text.isNotEmpty)
                         ? GetDirectionWidget(projectsSearchResult)
                         : GetDirectionWidget(projectsDirectionData),
                   )

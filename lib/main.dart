@@ -2,25 +2,20 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/bloc/get_direction_screen_bloc/get_direction_cubit.dart';
-import 'package:hassanallamportalflutter/bloc/weather_bloc/weather_bloc.dart';
-import 'package:hassanallamportalflutter/data/data_providers/get_direction_provider/get_direction_provider.dart';
-import 'package:hassanallamportalflutter/data/models/weather.dart';
-import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
+import 'package:hassanallamportalflutter/bloc/benefits_screen_bloc/benefits_cubit.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
-import 'bloc/contacts_screen_bloc/contacts_bloc_states.dart';
-import 'bloc/contacts_screen_bloc/contacts_cubit.dart';
-import 'bloc/home_screen_bloc/counter_cubit.dart';
-import 'bloc/internet_connectivity_bloc/internet_cubit.dart';
-import 'bloc/setting_screen_bloc/settings_cubit.dart';
-import 'config/app_router.dart';
-import 'data/data_providers/contacts_dio_provider/contacts_dio_provider.dart';
-import 'screens/contacts_screen/contact_detail_screen.dart';
-import 'screens/login_screen/auth_screen.dart';
-import 'screens/splash_screen/splash_screen.dart';
-import 'widgets/drawer/main_drawer.dart';
+import './bloc/get_direction_screen_bloc/get_direction_cubit.dart';
+import './bloc/weather_bloc/weather_bloc.dart';
+import './data/data_providers/get_direction_provider/get_direction_provider.dart';
+import './bloc/contacts_screen_bloc/contacts_cubit.dart';
+import './bloc/home_screen_bloc/counter_cubit.dart';
+import './bloc/internet_connectivity_bloc/internet_cubit.dart';
+import './bloc/setting_screen_bloc/settings_cubit.dart';
+import './config/app_router.dart';
+import './data/data_providers/benefits_provider/benefits_provider.dart';
+import './data/data_providers/contacts_dio_provider/contacts_dio_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,15 +25,14 @@ void main() async {
   );
 
   HydratedBlocOverrides.runZoned(
-        () => runApp(MyApp(
-          appRouter: AppRouter(),
-          connectivity: Connectivity())),
+    () => runApp(MyApp(appRouter: AppRouter(), connectivity: Connectivity())),
     storage: storage,
     blocObserver: AppBlocObserver(),
   );
 
- await ContactsDioProvider.init();
- await GetDirectionProvider.getDirectionInit();
+  await ContactsDioProvider.init();
+  await GetDirectionProvider.getDirectionInit();
+  await BenefitsProvider.benefitsInit();
 }
 
 class MyApp extends StatelessWidget {
@@ -73,7 +67,12 @@ class MyApp extends StatelessWidget {
           create: (weatherBlockContext) => WeatherBloc()..add(WeatherRequest()),
         ),
         BlocProvider<GetDirectionCubit>(
-          create: (getDirectionCubitContext) => GetDirectionCubit()..getDirection(),
+          create: (getDirectionCubitContext) =>
+              GetDirectionCubit()..getDirection(),
+        ),
+        BlocProvider<BenefitsCubit>(
+          create: (benefitsCubitContext) =>
+          BenefitsCubit()..getBenefits(),
         ),
       ],
       child: MaterialApp(
@@ -129,5 +128,4 @@ class AppBlocObserver extends BlocObserver {
     // TODO: implement onEvent
     super.onEvent(bloc, event);
   }
-
 }
