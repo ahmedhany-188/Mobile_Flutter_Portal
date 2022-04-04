@@ -2,6 +2,8 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:hassanallamportalflutter/bloc/payslip_screen_bloc/payslip_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/weather_bloc/weather_bloc.dart';
 import 'package:hassanallamportalflutter/data/models/weather.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -25,7 +27,8 @@ void main() async {
   final storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
-
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(debug: true);
   HydratedBlocOverrides.runZoned(
         () => runApp(MyApp(
           appRouter: AppRouter(),
@@ -49,6 +52,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final platform = Theme.of(context).platform;
     return MultiBlocProvider(
       providers: [
         BlocProvider<InternetCubit>(
@@ -65,7 +69,10 @@ class MyApp extends StatelessWidget {
           create: (contactsCubitContext) => ContactsCubit()..getContacts(),
         ),
         BlocProvider<WeatherBloc>(
-          create: (weatherBlockContext) => WeatherBloc()..add(WeatherRequest()),
+          create: (weatherBlocContext) => WeatherBloc()..add(WeatherRequest()),
+        ),
+        BlocProvider<PayslipCubit>(
+          create: (payslipContext) => PayslipCubit(),
         ),
       ],
       child: MaterialApp(

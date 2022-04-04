@@ -1,8 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
+import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 
@@ -51,6 +53,11 @@ class AppRouter {
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
          builder: (_) =>  ContactDetailScreen(selectedContactDataAsMap: args,),
+        );
+      case PayslipScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => PayslipScreen(),
         );
       default:
         return null;
