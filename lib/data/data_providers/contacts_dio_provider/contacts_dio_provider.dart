@@ -1,13 +1,14 @@
 import 'package:dio/dio.dart';
 
-class DioProvider {
+class ContactsDioProvider {
   static Dio? dio;
 
   static init() {
     dio = Dio(
       BaseOptions(
         baseUrl: 'https://api.hassanallam.com/api/portal/UserData/',
-        receiveDataWhenStatusError: true,
+        // receiveDataWhenStatusError: true,
+
       ),
     );
   }

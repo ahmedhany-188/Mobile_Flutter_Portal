@@ -2,24 +2,27 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:hassanallamportalflutter/bloc/payslip_screen_bloc/payslip_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/get_direction_screen_bloc/get_direction_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/weather_bloc/weather_bloc.dart';
+import 'package:hassanallamportalflutter/data/data_providers/get_direction_provider/get_direction_provider.dart';
 import 'package:hassanallamportalflutter/data/models/weather.dart';
+import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
-import 'bloc/contacts_screen_bloc/contacts_bloc_states.dart';
-import 'bloc/contacts_screen_bloc/contacts_cubit.dart';
-import 'bloc/home_screen_bloc/counter_cubit.dart';
-import 'bloc/internet_connectivity_bloc/internet_cubit.dart';
-import 'bloc/setting_screen_bloc/settings_cubit.dart';
-import 'config/app_router.dart';
-import 'data/data_providers/dio_provider.dart';
-import 'screens/contacts_screen/contact_detail_screen.dart';
-import 'screens/login_screen/auth_screen.dart';
-import 'screens/splash_screen/splash_screen.dart';
-import 'widgets/drawer/main_drawer.dart';
+import './bloc/get_direction_screen_bloc/get_direction_cubit.dart';
+import './bloc/weather_bloc/weather_bloc.dart';
+import './data/data_providers/get_direction_provider/get_direction_provider.dart';
+import './bloc/contacts_screen_bloc/contacts_cubit.dart';
+import './bloc/home_screen_bloc/counter_cubit.dart';
+import './bloc/internet_connectivity_bloc/internet_cubit.dart';
+import './bloc/setting_screen_bloc/settings_cubit.dart';
+import './config/app_router.dart';
+import './data/data_providers/benefits_provider/benefits_provider.dart';
+import './data/data_providers/contacts_dio_provider/contacts_dio_provider.dart';
+import 'bloc/benefits_screen_bloc/benefits_cubit.dart';
+import 'bloc/myattendance_screen_bloc/attendance_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,7 +40,9 @@ void main() async {
     blocObserver: AppBlocObserver(),
   );
 
-  DioProvider.init();
+  await ContactsDioProvider.init();
+  await GetDirectionProvider.getDirectionInit();
+  await BenefitsProvider.benefitsInit();
 }
 
 class MyApp extends StatelessWidget {
@@ -67,6 +72,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<ContactsCubit>(
           create: (contactsCubitContext) => ContactsCubit()..getContacts(),
+          // child: ContactsScreen(),
         ),
         BlocProvider<WeatherBloc>(
           create: (weatherBlocContext) => WeatherBloc()..add(WeatherRequest()),
@@ -74,9 +80,22 @@ class MyApp extends StatelessWidget {
         BlocProvider<PayslipCubit>(
           create: (payslipContext) => PayslipCubit(),
         ),
+        BlocProvider<AttendanceCubit>(
+          create: (attendanceCubitContext) => AttendanceCubit(),
+        ),
+
+        BlocProvider<GetDirectionCubit>(
+          create: (getDirectionCubitContext) =>
+              GetDirectionCubit()..getDirection(),
+        ),
+        BlocProvider<BenefitsCubit>(
+          create: (benefitsCubitContext) =>
+          BenefitsCubit()..getBenefits(),
+        ),
       ],
       child: MaterialApp(
         title: 'Hassan Allam Portal',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,

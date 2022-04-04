@@ -23,7 +23,7 @@ class _ExpandedListViewForFilters extends State<MultiSelectionChipsFilters> {
   @override
   Widget build(BuildContext context) {
     final _items = widget.filtersList
-        .map((String) => MultiSelectItem(String, String))
+        .map((string) => MultiSelectItem(string, string))
         .toList();
 
     return MultiSelectBottomSheetField(
