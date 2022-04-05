@@ -21,8 +21,10 @@ class DownloadPdfHelper{
         externalStorageDirPath = directory?.path;
       }
     } else if (Platform.isIOS) {
-      externalStorageDirPath =
-          (await getApplicationDocumentsDirectory()).absolute.path;
+      final directory = await getApplicationDocumentsDirectory();
+      externalStorageDirPath = directory.path;
+      // externalStorageDirPath =
+      //     (await getApplicationDocumentsDirectory()).absolute.path;
     }
 
 
@@ -40,9 +42,26 @@ class DownloadPdfHelper{
         showNotification: true,
         openFileFromNotification: true,
         saveInPublicStorage: true,
-      );
+      ).then(
+              (value) async {
+            bool waitTask = true;
+            while (waitTask) {
+              String query = "SELECT * FROM task WHERE task_id='" + value! +
+                  "'";
+              var _tasks =
+              await FlutterDownloader.loadTasksWithRawQuery(query: query);
+              String taskStatus = _tasks![0].status.toString();
+              int taskProgress = _tasks[0].progress;
+              if (taskStatus == "DownloadTaskStatus(3)" &&
+                  taskProgress == 100) {
+                waitTask = false;
+                await FlutterDownloader.open(taskId: value);
+              }
+            }
 
-      FlutterDownloader.open(taskId: _taskid!);
+          });
+
+
       print(_taskid);
     });
   }
