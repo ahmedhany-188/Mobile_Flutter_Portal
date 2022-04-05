@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/get_direction_screen_bloc/get_direction_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/weather_bloc/weather_bloc.dart';
 import 'package:hassanallamportalflutter/data/data_providers/get_direction_provider/get_direction_provider.dart';
-import 'package:hassanallamportalflutter/data/models/weather.dart';
-import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -23,6 +21,7 @@ import './data/data_providers/benefits_provider/benefits_provider.dart';
 import './data/data_providers/contacts_dio_provider/contacts_dio_provider.dart';
 import 'bloc/benefits_screen_bloc/benefits_cubit.dart';
 import 'bloc/myattendance_screen_bloc/attendance_cubit.dart';
+import 'bloc/payslip_screen_bloc/payslip_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
