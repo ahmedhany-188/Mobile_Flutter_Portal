@@ -7,7 +7,7 @@ class BenefitsInitial extends BenefitsState {}
 class BenefitsLoadingState extends BenefitsState {}
 
 class BenefitsSuccessState extends BenefitsState {
-  final List<dynamic> benefits;
+  List<dynamic> benefits;
 
   BenefitsSuccessState(this.benefits);
 }
