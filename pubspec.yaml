@@ -60,6 +60,14 @@ dependencies:
   multi_select_flutter: ^4.1.2
   sizer: ^2.0.15
   url_launcher: ^6.0.20
+
+  flutter_downloader: ^1.7.3
+  permission_handler: ^9.2.0
+  file_utils: ^1.0.1
+  device_info: ^2.0.3
+  android_path_provider: ^0.3.0
+  intl: ^0.17.0
+
   flutter_html: any
 #  al_downloader: ^1.2.0
 
