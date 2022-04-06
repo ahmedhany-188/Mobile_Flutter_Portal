@@ -67,6 +67,10 @@ dependencies:
   device_info: ^2.0.3
   android_path_provider: ^0.3.0
   intl: ^0.17.0
+  open_file: ^3.2.1
+  flutter_local_notifications: ^9.4.0
+
+
 
   flutter_html: any
 #  al_downloader: ^1.2.0
