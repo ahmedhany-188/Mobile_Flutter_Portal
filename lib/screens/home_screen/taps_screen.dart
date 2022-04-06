@@ -1,8 +1,8 @@
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
-import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 
 
@@ -126,8 +126,8 @@ class _TapsScreenState extends State<TapsScreen> {
             indicatorColor: Colors.white,
             tabs: [
               Tab(
-                icon: Icon(Icons.new_releases),
-                text: 'News',
+                icon: Icon(Icons.beach_access),
+                text: 'Benefits',
               ),
               Tab(
                 icon: Icon(Icons.people),
@@ -148,7 +148,7 @@ class _TapsScreenState extends State<TapsScreen> {
             physics: BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()),
             children: [
-              NewsScreen(),
+              BenefitsScreen(),
               ContactsScreen(),
             ],
           ),
