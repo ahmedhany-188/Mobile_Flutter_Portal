@@ -30,25 +30,24 @@ class GetDirectionWidget extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: GridTile(
-                  // header: GridTileBar(
-                  //   title: Text(
-                  //     projectsDirectionData[index]['city'],
-                  //     textAlign: TextAlign.center,
-                  //   ),
-                  //   backgroundColor: Colors.black45,
-                  // ),
                   child: Hero(
                     tag: 'tag$index',
-                    child: FadeInImage(
-                      placeholder:
-                          const AssetImage('assets/images/fulllogoblue.png'),
-                      image: NetworkImage(
-                          DirectionHelper.generateLocationPreviewImage(
-                              latitude: projectsDirectionData[index]
-                                  ['latitude'],
-                              longitude: projectsDirectionData[index]
-                                  ['longitude'])),
-                      fit: BoxFit.cover,
+                    child: GestureDetector(
+                      onTap: (){
+                        openMap(projectsDirectionData[index]['latitude'],
+                            projectsDirectionData[index]['longitude']);
+                      },
+                      child: FadeInImage(
+                        placeholder:
+                            const AssetImage('assets/images/fulllogoblue.png'),
+                        image: NetworkImage(
+                            DirectionHelper.generateLocationPreviewImage(
+                                latitude: projectsDirectionData[index]
+                                    ['latitude'],
+                                longitude: projectsDirectionData[index]
+                                    ['longitude'])),
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                   footer: GridTileBar(

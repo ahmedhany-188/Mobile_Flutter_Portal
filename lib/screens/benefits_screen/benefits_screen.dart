@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:hassanallamportalflutter/data/helpers/download_pdf.dart';
 import 'package:html/dom.dart' as dom;
 import '../../bloc/benefits_screen_bloc/benefits_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,6 +18,12 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    showErrorSnackBar(){
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Something went wrong'),));
+    }
+
     return BlocProvider(
       create: (context) => BenefitsCubit()..getBenefits(),
       child: BlocConsumer<BenefitsCubit, BenefitsState>(
@@ -42,23 +49,41 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                 children: [
                   Html(
                     shrinkWrap: true,
+                    // onAnchorTap: (String? url,
+                    //     RenderContext context,
+                    //     Map<String, String> attributes,
+                    //     dom.Element? element) async {
+                    //   if (await canLaunch(url!)) {
+                    //     launch(url);
+                    //   }
+                    //   else {
+                    //     await DownloadPdfHelper().requestDownload(url, url.lastIndexOf('/').toString());
+                    //     // await launch('https://www.google.com');
+                    //   }
+                    // },
                     data: benefitsData[index]['benefitsDescription'].toString(),
                     onLinkTap: (String? url,
                         RenderContext context,
                         Map<String, String> attributes,
                         dom.Element? element) async {
-                      // if (await canLaunch(url!)) {
-                      //   await launch(url);
-                      // } else {
-                      //   await launch('https://www.google.com');
-                      // }
+                      if (await canLaunch(url!)) {
+                        launch(url);
+                      } else {
+                        try {
+                          await DownloadPdfHelper().requestDownload(
+                              url, url.lastIndexOf('/').toString());
+                        } catch (e, s) {
+                          showErrorSnackBar();
+                          print(s);
+                        }
+                      }
                     },
                     style: {
                       '#': Style(
                           fontSize: const FontSize(18),
                           maxLines: benefitsData.length,
                           textOverflow: TextOverflow.ellipsis,
-                          margin: EdgeInsets.all(10)),
+                          margin: const EdgeInsets.all(10)),
                       'strong': Style(fontWeight: FontWeight.normal)
                     },
                   ),
