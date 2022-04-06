@@ -384,13 +384,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "8.0.1"
-  flutter_html:
-    dependency: "direct main"
-    description:
-      name: flutter_html
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.1"
   flutter_downloader:
     dependency: "direct main"
     description:
@@ -398,6 +391,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.3"
+  flutter_html:
+    dependency: "direct main"
+    description:
+      name: flutter_html
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.2.1"
   flutter_keyboard_visibility:
     dependency: "direct main"
     description:
