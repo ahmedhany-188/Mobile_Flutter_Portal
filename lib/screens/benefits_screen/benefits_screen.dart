@@ -70,8 +70,8 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                         launch(url);
                       } else {
                         try {
-                          await DownloadPdfHelper().requestDownload(
-                              url, url.lastIndexOf('/').toString());
+                          // await DownloadPdfHelper().requestDownload(
+                          //     url, url.lastIndexOf('/').toString());
                         } catch (e, s) {
                           showErrorSnackBar();
                           print(s);
