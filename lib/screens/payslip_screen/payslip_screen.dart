@@ -33,9 +33,15 @@ class _PayslipScreenState extends State<PayslipScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _bindBackgroundIsolate();
+
+    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+    _port.listen((dynamic data) {
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+      setState((){ });
+    });
     FlutterDownloader.registerCallback(downloadCallback);
-    _permissionReady = false;
 
     // _prepare();
     // _checkPermission();
@@ -46,81 +52,14 @@ class _PayslipScreenState extends State<PayslipScreen> {
     // }
 
   }
-
-  Future<bool> _checkPermission() async {
-    if (Platform.isIOS) return true;
-
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-    if (Platform.isAndroid &&
-        androidInfo.version.sdkInt <= 28) {
-      final status = await Permission.storage.status;
-      if (status != PermissionStatus.granted) {
-        final result = await Permission.storage.request();
-        if (result == PermissionStatus.granted) {
-          return true;
-        }
-      } else {
-        return true;
-      }
-    } else {
-      return true;
-    }
-    return false;
-  }
-
-  void _requestDownload(String link) async {
-    final task = await FlutterDownloader.enqueue(
-      url: link,
-      headers: {"auth": "test_for_sql_encoding"},
-      savedDir: _localPath,
-      showNotification: true,
-      openFileFromNotification: true,
-      saveInPublicStorage: true,
-    );
-  }
-  Future<String?> _findLocalPath() async {
-    var externalStorageDirPath;
-    if (Platform.isAndroid) {
-      try {
-        externalStorageDirPath = await AndroidPathProvider.downloadsPath;
-      } catch (e) {
-        final directory = await getExternalStorageDirectory();
-        externalStorageDirPath = directory?.path;
-      }
-    } else if (Platform.isIOS) {
-      externalStorageDirPath =
-          (await getApplicationDocumentsDirectory()).absolute.path;
-    }
-    return externalStorageDirPath;
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _unbindBackgroundIsolate();
+    super.dispose();
   }
   void _unbindBackgroundIsolate() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
-  }
-  void _bindBackgroundIsolate() {
-    bool isSuccess = IsolateNameServer.registerPortWithName(
-        _port.sendPort, 'downloader_send_port');
-    if (!isSuccess) {
-      _unbindBackgroundIsolate();
-      _bindBackgroundIsolate();
-      return;
-    }
-    _port.listen((dynamic data) {
-      // if (debug) {
-      print('UI Isolate Callback: $data');
-      // }
-      String? id = data[0];
-      DownloadTaskStatus? status = data[1];
-      int? progress = data[2];
-
-      // if (_tasks != null && _tasks!.isNotEmpty) {
-      //   final task = _tasks!.firstWhere((task) => task.taskId == id);
-      //   setState(() {
-      //     task.status = status;
-      //     task.progress = progress;
-      //   });
-      // }
-    });
   }
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
@@ -147,6 +86,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
       body: BlocConsumer<PayslipCubit, PayslipState>(
         listener: (context, state) {
           if (state is PayslipLoadingState) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Loading"),
@@ -154,14 +94,15 @@ class _PayslipScreenState extends State<PayslipScreen> {
             );
           }
           else if (state is PayslipErrorState) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.error),
               ),
             );
-          }
-          else if (state is PayslipSuccessState) {
+          } else if (state is PayslipSuccessState) {
             // _requestDownload(state.response);
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text(state.response),
@@ -169,7 +110,9 @@ class _PayslipScreenState extends State<PayslipScreen> {
             );
           }else if (state is PayslipDownloadState) {
             // _requestDownload(state.response);
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(
+
               SnackBar(
                 content: Text(state.response),
               ),

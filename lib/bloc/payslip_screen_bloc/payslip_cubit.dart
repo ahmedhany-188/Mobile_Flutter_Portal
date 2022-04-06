@@ -15,7 +15,7 @@ import 'package:meta/meta.dart';
 part 'payslip_state.dart';
 
 class PayslipCubit extends Cubit<PayslipState> {
-  final downloadPdfHelper = DownloadPdfHelper();
+
   final _payslipRepository = PayslipRepository();
   final Connectivity connectivity = Connectivity();
   PayslipCubit() : super(PayslipInitialState());
@@ -32,9 +32,10 @@ class PayslipCubit extends Cubit<PayslipState> {
                   .parse(response)
                   .isAbsolute;
 
-              _validURL ? downloadPdf(response) : emit(
-                  PayslipErrorState(
-                      response));
+              downloadPdf(response);
+              // _validURL ? downloadPdf(response) : emit(
+              //     PayslipErrorState(
+              //         response));
             }else {
             PayslipErrorState("No internet Connection");
           }
@@ -50,8 +51,14 @@ class PayslipCubit extends Cubit<PayslipState> {
     List<String> split = link.split("/");
     int monthNumber  = int.parse(split[split.length-2]);
     var monthName = DateFormat('MMMM').format(DateTime(0, monthNumber));
-    downloadPdfHelper.requestDownload(link, "Payslip-"+ monthName+".pdf");
-    emit(PayslipSuccessState("Finished"));
+    // downloadPdfHelper.requestDownload(link, "Payslip-"+ monthName+".pdf");
+
+    DownloadPdfHelper(fileName: "Payslip-"+ monthName+".pdf",fileUrl: link,success: (){
+      emit(PayslipSuccessState("Finished"));
+    },failed: (){
+      emit(PayslipErrorState("Error"));
+    }).download();
+
   }
 
 
