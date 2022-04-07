@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:hassanallamportalflutter/data/helpers/download_pdf.dart';
 import 'package:html/dom.dart' as dom;
-import '../../bloc/benefits_screen_bloc/benefits_cubit.dart';
 import 'package:url_launcher/url_launcher.dart';
+import '../../data/helpers/download_pdf.dart';
+import '../../bloc/benefits_screen_bloc/benefits_cubit.dart';
 
 class BenefitsScreen extends StatefulWidget {
   BenefitsScreen({Key? key}) : super(key: key);
@@ -18,10 +18,11 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    showErrorSnackBar(){
+    showErrorSnackBar() {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Something went wrong'),));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Something went wrong'),
+      ));
     }
 
     return BlocProvider(
@@ -66,17 +67,20 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                         RenderContext context,
                         Map<String, String> attributes,
                         dom.Element? element) async {
-                      if (await canLaunch(url!)) {
-                        launch(url);
-                      } else {
-                        try {
-                          await DownloadPdfHelper().requestDownload(
-                              url, url.lastIndexOf('/').toString());
-                        } catch (e, s) {
-                          showErrorSnackBar();
-                          print(s);
-                        }
-                      }
+                      // if (await canLaunch(url!)) {
+                      //   launch(url);
+                      // } else {
+                      //   var urlNameIndex = url.lastIndexOf('/');
+                      //   var urlName = url.substring(urlNameIndex+1 , url.length);
+                        print(url);
+                        await DownloadPdfHelper(
+                            fileUrl: url!,
+                            fileName: url.substring(url.lastIndexOf('/')+1 , url.length),
+                            success: () {},
+                            failed: () {
+                              showErrorSnackBar();
+                            }).download();
+                      // }
                     },
                     style: {
                       '#': Style(
