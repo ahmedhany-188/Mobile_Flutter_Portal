@@ -220,6 +220,10 @@ class DownloadPdfHelper{
     final dir = await _getDownloadDirectory();
     final isPermissionStatusGranted = await _requestPermissions();
 
+    if (Platform.isIOS){
+      requestDownload(fileUrl,fileName);
+    }
+
     if (isPermissionStatusGranted) {
       final savePath = path.join(dir!.path, fileName);
       await _startDownload(savePath);
