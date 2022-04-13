@@ -4,83 +4,32 @@ import 'package:badges/badges.dart';
 import 'package:entry/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sprung/sprung.dart';
 
 import '../../widgets/animation/page_transition_animation.dart';
-import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
-
+import '../../screens/login_screen/auth_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
-
-//   @override
-//   State<SplashScreen> createState() => _SplashScreenState();
-// }
-//
-// class _SplashScreenState extends State<SplashScreen>
-//     with TickerProviderStateMixin {
-//   // AnimationController? _controller;
-//   // Animation<Offset>? offset;
-//   //
-//   // @override
-//   // void initState() {
-//   //   super.initState();
-//   //   _controller =
-//   //       AnimationController(vsync: this, duration: const Duration(seconds: 1));
-//   //
-//   //   offset = Tween<Offset>(
-//   //       begin: Offset(Alignment.bottomCenter.x, Alignment.bottomCenter.y),
-//   //       end: Offset(Alignment.topCenter.x, Alignment.topCenter.y))
-//   //       .animate(_controller!);
-//   // }
-//   //
-//   // Future<void> loopOnce(BuildContext context)async{
-//   //   await _controller!.forward();
-//   //   await _controller!.reverse();
-//   //   //we can add duration here
-//   //   //await Future.delayed(Duration(seconds: 4));
-//   //   Navigator.of(context).push(MaterialPageRoute( // since this triggers when the animation is done, no duration is needed
-//   //     builder: (context) => AuthScreen(),
-//   //   ));
-//   // }
-//   AnimationController? _controller;
-//   Animation<double>? _animation;
-//   int state = 0;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     // _controller = AnimationController(
-//     //     vsync: this, duration: const Duration(milliseconds: 3000), value: 0);
-//
-//     // Future.delayed(Duration.zero, () async {
-//     //   FadeAnimation(AuthScreen(), context).navigate();
-//     // });
-//
-//   //   SchedulerBinding.instance!.addPostFrameCallback((_) => PageTransitionAnimation(
-//   //           pageDirection: AuthScreen(),
-//   //           context: context,
-//   //           delayedDuration: 3000,
-//   //           transitionDuration: 1500)
-//   //       .navigateFromBottom()); //i add this to access the context safely.
-//   }
 
   @override
   Widget build(BuildContext context) {
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
-    final double deviceTopPadding =MediaQueryData.fromWindow(window).padding.top;
-    final double resizeElements = deviceHeight * -0.09 - (deviceTopPadding) ;
+    final double deviceTopPadding =
+        MediaQueryData.fromWindow(window).padding.top;
+    final double resizeElements = deviceHeight * -0.09 - (deviceTopPadding);
     final double resizeCar = deviceHeight * -0.132 - (deviceTopPadding);
 
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        body: AnimatedSplashScreen.withScreenFunction(
+        body: AnimatedSplashScreen(
           splashIconSize: deviceWidth,
           curve: Sprung.criticallyDamped,
-          disableNavigation: true,
+          disableNavigation: false,
           duration: 2000,
           centered: true,
 
@@ -147,7 +96,8 @@ class SplashScreen extends StatelessWidget {
                           elevation: 0,
                           badgeColor: Colors.transparent,
                           position: BadgePosition.topStart(
-                            top: 0.sp * (MediaQuery.of(context).size.aspectRatio *0.7),
+                            top: 0.sp *
+                                (MediaQuery.of(context).size.aspectRatio * 0.7),
                             start: 10.sp,
                           ),
                           animationDuration: Duration(milliseconds: 2000),
@@ -169,42 +119,19 @@ class SplashScreen extends StatelessWidget {
               );
             },
           ),
-          // Column(verticalDirection: VerticalDirection.down, mainAxisSize: MainAxisSize.min,
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-          //   children: [
-          //     Image(
-          //       image: AssetImage('assets/images/logo.png'),
-          //       fit: BoxFit.cover,
-          //       width: deviceWidth * 0.3,
-          //       height: deviceHeight * 0.4,
-          //     ),
-          //     SizedBox(
-          //       height: 10,
-          //     ),
-          //     Text(
-          //       'Hassan Allam Holding',
-          //       style: TextStyle(
-          //           fontSize: 30,
-          //           fontWeight: FontWeight.w900,
-          //           fontFamily: 'assets/fonts/RobotoCondensed-Bold.ttf',
-          //           letterSpacing: 2,
-          //           color: Theme.of(context).colorScheme.primary),
-          //     ),
-          //   ],
-          // ),
-          // pageTransitionType: PageTransitionType.bottomToTop,
+          // splashTransition: SplashTransition.slideTransition,
+          pageTransitionType: PageTransitionType.bottomToTop,
           animationDuration: const Duration(milliseconds: 3000),
           backgroundColor: Colors.transparent,
-          // nextScreen: AuthScreen(),
-          screenFunction: () {
-            return PageTransitionAnimation(
-                    pageDirection: AuthScreen(),
-                    context: context,
-                    delayedDuration: 500,
-                    transitionDuration: 1300)
-                .navigateFromBottom();
-          },
+          nextScreen: AuthScreen(),
+          // screenFunction: () {
+          //   return PageTransitionAnimation(
+          //           pageDirection: AuthScreen(),
+          //           context: context,
+          //           delayedDuration: 0,
+          //           transitionDuration: 2000)
+          //       .navigateFromBottom();
+          // },
         ),
       ),
     );

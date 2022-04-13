@@ -9,7 +9,6 @@ import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/widgets/animation/page_transition_animation.dart';
 
-
 class AuthForm extends StatefulWidget {
   // final bool isLoading;
 
@@ -100,46 +99,28 @@ class _AuthFormState extends State<AuthForm> {
         AuthForm.emailAddressFocusNode.unfocus();
         AuthForm.passwordFocusNode.unfocus();
       },
-      child:
-          // DelayedDisplay(
-          //   delay: Duration(milliseconds: 1500),
-          //   child: Entry.offset(
-          //     xOffset: -280,
-          //     yOffset: 0,
-          //     curve:
-          //         // Sprung.custom(
-          //         // stiffness: 180,
-          //         // damping: 300,
-          //         // mass: -9000.0,
-          //         // velocity: 10.0),
-          //         Curves.bounceIn,
-          //     delay: const Duration(milliseconds: 1000),
-          //     duration: const Duration(milliseconds: 3000),
-          //     child:
-          Badge(
-        elevation: 0,
-        badgeColor: Colors.transparent,
-        position: BadgePosition.topStart(
-          top: -50,
-          start: 20,
-        ),
-        animationDuration: Duration(milliseconds: 2500),
-        animationType: BadgeAnimationType.slide,
-        badgeContent:
-            // (AuthForm.emailAddressFocusNode.hasFocus ||
-            //         AuthForm.passwordFocusNode.hasFocus)
-            //     ? null
-            //     :
-            Image.asset(
-          'assets/images/1.png',
-          scale: 10,
-        ),
-        child:
-        DelayedDisplay(
-          delay: Duration(milliseconds: 0),
+      child: DelayedDisplay(
+        child: Badge(
+          elevation: 0,
+          badgeColor: Colors.transparent,
+          position: BadgePosition.topStart(
+            top: -50,
+            start: 20,
+          ),
+          animationDuration: Duration(milliseconds: 2500),
+          // animationType: BadgeAnimationType.slide,
+          badgeContent:
+              // (AuthForm.emailAddressFocusNode.hasFocus ||
+              //         AuthForm.passwordFocusNode.hasFocus)
+              //     ? null
+              //     :
+              Image.asset(
+            'assets/images/1.png',
+            scale: 10,
+          ),
           child: SingleChildScrollView(
             child: SizedBox(
-              height: sizedBoxHeight ,
+              height: sizedBoxHeight,
               // height: .59 * deviceSize.height,
               child: Card(
                 color: Color(0xFFE9F4FF),
@@ -244,8 +225,6 @@ class _AuthFormState extends State<AuthForm> {
           ),
         ),
       ),
-      //   ),
-      // ),
     );
   }
 }
