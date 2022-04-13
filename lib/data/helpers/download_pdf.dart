@@ -220,12 +220,18 @@ class DownloadPdfHelper{
     final dir = await _getDownloadDirectory();
     final isPermissionStatusGranted = await _requestPermissions();
 
-    if (isPermissionStatusGranted) {
-      final savePath = path.join(dir!.path, fileName);
-      await _startDownload(savePath);
-    } else {
-      // handle the scenario when user declines the permissions
-      failed();
+    if (Platform.isIOS){
+      await requestDownload(fileUrl,fileName);
+    }else{
+      if (isPermissionStatusGranted) {
+        final savePath = path.join(dir!.path, fileName);
+        await _startDownload(savePath);
+      } else {
+        // handle the scenario when user declines the permissions
+        failed();
+      }
     }
+
+
   }
 }
