@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/get_direction_screen_bloc/get_direction_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/weather_bloc/weather_bloc.dart';
+import 'package:hassanallamportalflutter/data/data_providers/attendance_data_provider/attendance_data_provider.dart';
 import 'package:hassanallamportalflutter/data/data_providers/get_direction_provider/get_direction_provider.dart';
-import 'package:hassanallamportalflutter/data/models/weather.dart';
-import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-
 import './bloc/get_direction_screen_bloc/get_direction_cubit.dart';
 import './bloc/weather_bloc/weather_bloc.dart';
 import './data/data_providers/get_direction_provider/get_direction_provider.dart';
@@ -41,6 +39,7 @@ void main() async {
   await ContactsDioProvider.init();
   await GetDirectionProvider.getDirectionInit();
   await BenefitsProvider.benefitsInit();
+
 }
 
 class MyApp extends StatelessWidget {
@@ -75,7 +74,8 @@ class MyApp extends StatelessWidget {
           create: (weatherBlockContext) => WeatherBloc()..add(WeatherRequest()),
         ),
         BlocProvider<AttendanceCubit>(
-          create: (attendanceCubitContext) => AttendanceCubit(),
+          create: (attendanceCubitContext) =>
+              AttendanceCubit()..getAttendanceList(),
         ),
 
         BlocProvider<GetDirectionCubit>(

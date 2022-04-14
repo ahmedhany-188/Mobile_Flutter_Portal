@@ -61,7 +61,7 @@ class AppRouter {
 
       case attendance_screen.routeName:
         return MaterialPageRoute(
-            builder: (_) => attendance_screen()
+            builder: (_) => attendance_screen(),
         );
       default:
         return null;
