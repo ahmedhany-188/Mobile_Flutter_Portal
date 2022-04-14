@@ -8,6 +8,8 @@ import 'package:hassanallamportalflutter/data/data_providers/attendance_data_pro
 import 'package:hassanallamportalflutter/data/data_providers/get_direction_provider/get_direction_provider.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+
 import './bloc/get_direction_screen_bloc/get_direction_cubit.dart';
 import './bloc/weather_bloc/weather_bloc.dart';
 import './data/data_providers/get_direction_provider/get_direction_provider.dart';
@@ -20,6 +22,7 @@ import './data/data_providers/benefits_provider/benefits_provider.dart';
 import './data/data_providers/contacts_dio_provider/contacts_dio_provider.dart';
 import 'bloc/benefits_screen_bloc/benefits_cubit.dart';
 import 'bloc/myattendance_screen_bloc/attendance_cubit.dart';
+import 'bloc/payslip_screen_bloc/payslip_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +30,8 @@ void main() async {
   final storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
-
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(debug: true);
   HydratedBlocOverrides.runZoned(
         () => runApp(MyApp(
           appRouter: AppRouter(),
@@ -54,6 +58,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final platform = Theme.of(context).platform;
     return MultiBlocProvider(
       providers: [
         BlocProvider<InternetCubit>(
@@ -71,7 +76,10 @@ class MyApp extends StatelessWidget {
           // child: ContactsScreen(),
         ),
         BlocProvider<WeatherBloc>(
-          create: (weatherBlockContext) => WeatherBloc()..add(WeatherRequest()),
+          create: (weatherBlocContext) => WeatherBloc()..add(WeatherRequest()),
+        ),
+        BlocProvider<PayslipCubit>(
+          create: (payslipContext) => PayslipCubit(),
         ),
         BlocProvider<AttendanceCubit>(
           create: (attendanceCubitContext) =>

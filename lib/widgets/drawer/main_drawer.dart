@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
+import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 
 class MainDrawer extends StatefulWidget {
   @override
@@ -98,6 +99,18 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.fingerprint,
                             () {
                           Navigator.of(context).pushReplacementNamed(attendance_screen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'Payslip',
+                        Icons.nature_people,
+                            () {
+                          Navigator.of(context).pushNamed(PayslipScreen.routeName);
                         },
                       ),
                       const Divider(

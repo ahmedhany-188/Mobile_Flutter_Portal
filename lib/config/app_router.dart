@@ -7,6 +7,7 @@ import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
+import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
@@ -62,6 +63,11 @@ class AppRouter {
       case attendance_screen.routeName:
         return MaterialPageRoute(
             builder: (_) => attendance_screen(),
+        );
+      case PayslipScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => PayslipScreen(),
         );
       default:
         return null;
