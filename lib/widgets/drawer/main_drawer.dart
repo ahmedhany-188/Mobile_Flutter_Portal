@@ -3,6 +3,7 @@ import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direct
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
+import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
 class MainDrawer extends StatefulWidget {
   @override
@@ -119,10 +120,10 @@ class _MainDrawerState extends State<MainDrawer> {
                         endIndent: 10,
                       ),
                       buildListTile(
-                        'Logout',
+                        'Subsidiaries',
                         Icons.logout,
                         () {
-                          // Navigator.of(context).pushReplacementNamed(.routeName);
+                          Navigator.of(context).pushNamed(SubsidiariesScreen.routeName);
                         },
                       ),
                       const Divider(
@@ -134,7 +135,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         'Logout',
                         Icons.logout,
                         () {
-                          // Navigator.of(context).pushReplacementNamed(.routeName);
+                          // Navigator.of(context).pushNamed(.routeName);
                         },
                       ),
                     ],
