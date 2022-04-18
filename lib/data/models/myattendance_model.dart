@@ -1,18 +1,17 @@
 class MyAttendance_Model{
 
-
   String? id;
-      String? date;
+  String? date;
   bool? holiday;
   int? monthPeriod;
   String? finger_HRCode;
   String? time_IN;
   String? time_OUT;
-  int? vacation;
-  int? permission;
-  int? businessMission;
-  int? forget;
-  int? deduction;
+  String? vacation;
+  String? permission;
+  String? businessMission;
+  String? forget;
+  String? deduction;
 
   MyAttendance_Model(
       this.id,
@@ -28,7 +27,21 @@ class MyAttendance_Model{
       this.forget,
       this.deduction);
 
+  MyAttendance_Model.fromJson(Map<String, dynamic> json) {
 
+     id=json['id'];
+     date=json['date'];
+     holiday=json['holiday'];
+     monthPeriod=json['monthPeriod'];
+     finger_HRCode=json['finger_HRCode'];
+     time_IN=json['time_IN'];
+     time_OUT=json['time_OUT'];
+     vacation=json['vacation'];
+     permission=json['permission'];
+     businessMission=json['businessMission'];
+     forget=json['forget'];
+     deduction=json['deduction'];
 
+  }
 
 }
