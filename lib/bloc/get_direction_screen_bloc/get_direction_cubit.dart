@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/data_providers/get_direction_provider/get_direction_provider.dart';
+import '../../data/data_providers/general_dio/general_dio.dart';
 
 part 'get_direction_state.dart';
 
@@ -15,7 +15,7 @@ class GetDirectionCubit extends Cubit<GetDirectionState> {
   void getDirection() {
     emit(GetDirectionLoadingState());
 
-    GetDirectionProvider.getGetDirectionData().then((value) {
+    GeneralDio.getGetDirectionData().then((value) {
       getDirectionList = value.data
           .where((element) =>
               element['latitude'].toString().contains('.') &&
