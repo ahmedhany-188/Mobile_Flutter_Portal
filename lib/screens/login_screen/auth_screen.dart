@@ -15,19 +15,6 @@ class AuthScreen extends StatefulWidget {
   _AuthScreenState createState() => _AuthScreenState();
 }
 
-SizedBox addPaddingWhenKeyboardAppears() {
-  final viewInsets = EdgeInsets.fromWindowPadding(
-    WidgetsBinding.instance!.window.viewInsets,
-    WidgetsBinding.instance!.window.devicePixelRatio,
-  );
-
-  final bottomOffset = viewInsets.bottom * 0.55;
-  const hiddenKeyboard = 0.0; // Always 0 if keyboard is not opened
-  final isNeedPadding = bottomOffset != hiddenKeyboard;
-
-  return SizedBox(height: isNeedPadding ? bottomOffset : hiddenKeyboard);
-}
-
 class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {

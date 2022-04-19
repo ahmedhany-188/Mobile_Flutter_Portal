@@ -10,6 +10,7 @@ PreferredSizeWidget basicAppBar(BuildContext context, String title){
       statusBarIconBrightness: Brightness.light,
     ),
     title: Text(title),
+    centerTitle: true,
     leading: Builder(
       builder: (context) => IconButton(
         icon: Image.asset('assets/images/logo.png'),
@@ -68,7 +69,7 @@ PreferredSizeWidget basicAppBar(BuildContext context, String title){
     //   //               TextButton(
     //   //                   child: const Text('Add'),
     //   //                   onPressed: () {
-    //   //                     //TODO: Add News
+    //   //
     //   //                     Navigator.pop(context);
     //   //                   }),
     //   //             ],

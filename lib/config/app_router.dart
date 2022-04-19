@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
+import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
@@ -75,6 +77,16 @@ class AppRouter {
 
         return MaterialPageRoute(
           builder: (_) => SubsidiariesScreen(),
+        );
+      case ValueScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => ValueScreen(),
+        );
+      case AboutScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => AboutScreen(),
         );
       default:
         return null;

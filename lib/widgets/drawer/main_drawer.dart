@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
+import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
@@ -121,9 +123,33 @@ class _MainDrawerState extends State<MainDrawer> {
                       ),
                       buildListTile(
                         'Subsidiaries',
-                        Icons.logout,
+                        Icons.add_business_sharp,
                         () {
                           Navigator.of(context).pushNamed(SubsidiariesScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'Value',
+                        Icons.agriculture_sharp,
+                            () {
+                          Navigator.of(context).pushNamed(ValueScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'About',
+                        Icons.details,
+                            () {
+                          Navigator.of(context).pushNamed(AboutScreen.routeName);
                         },
                       ),
                       const Divider(
