@@ -25,7 +25,7 @@ SizedBox addPaddingWhenKeyboardAppears() {
     WidgetsBinding.instance!.window.devicePixelRatio,
   );
 
-  final bottomOffset = viewInsets.bottom * 0.55;
+  final bottomOffset = viewInsets.bottom ;
   const hiddenKeyboard = 0.0; // Always 0 if keyboard is not opened
   final isNeedPadding = bottomOffset != hiddenKeyboard;
 

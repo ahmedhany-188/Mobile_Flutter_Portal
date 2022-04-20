@@ -6,6 +6,7 @@ import 'package:delayed_display/delayed_display.dart';
 import 'package:entry/entry.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:hassanallamportalflutter/data/helpers/assist_function.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/widgets/animation/page_transition_animation.dart';
 
@@ -34,7 +35,7 @@ class _AuthFormState extends State<AuthForm> {
   final _formKey = GlobalKey<FormState>();
   // static FocusNode emailAddressFocusNode = FocusNode();
   // static FocusNode passwordFocusNode = FocusNode();
-  var isKeyboardOpened = false;
+  // var isKeyboardOpened = false;
 
   var _userEmail = '';
   var _userPassword = '';
@@ -109,19 +110,13 @@ class _AuthFormState extends State<AuthForm> {
           ),
           animationDuration: Duration(milliseconds: 2500),
           // animationType: BadgeAnimationType.slide,
-          badgeContent:
-              // (AuthForm.emailAddressFocusNode.hasFocus ||
-              //         AuthForm.passwordFocusNode.hasFocus)
-              //     ? null
-              //     :
-              Image.asset(
+          badgeContent: Image.asset(
             'assets/images/1.png',
             scale: 10,
           ),
           child: SingleChildScrollView(
             child: SizedBox(
               height: sizedBoxHeight,
-              // height: .59 * deviceSize.height,
               child: Card(
                 color: Color(0xFFE9F4FF),
                 // clipBehavior: Clip.none,
@@ -198,8 +193,7 @@ class _AuthFormState extends State<AuthForm> {
                             },
                           ),
                           const SizedBox(height: 10),
-                          // if (widget.isLoading) CircularProgressIndicator(),
-                          // if (!widget.isLoading)
+
                           SizedBox(
                             width: double.infinity,
                             height: 50,
@@ -215,6 +209,8 @@ class _AuthFormState extends State<AuthForm> {
                               onPressed: _trySubmit,
                             ),
                           ),
+
+                          addPaddingWhenKeyboardAppears(),
                         ],
                       ),
                     ),
