@@ -17,7 +17,6 @@ class GetDirectionScreen extends StatefulWidget {
 
   GetDirectionScreen({Key? key}) : super(key: key);
 
-
   @override
   State<GetDirectionScreen> createState() => _GetDirectionScreenState();
 }
@@ -41,53 +40,61 @@ class _GetDirectionScreenState extends State<GetDirectionScreen> {
           listener: (context, state) {
             if (state is GetDirectionSuccessState) {
               projectsDirectionData = state.getDirectionList;
+              setState(() {
+
+              });
             }
           },
           builder: (context, state) {
-            return SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: TextField(
-                      focusNode: searchTextFieldFocusNode,
-                      controller: textController,
-                      onSubmitted: (searchValue) {
-                        searchTextFieldFocusNode.unfocus();
-                        setState(() {});
-                      },
-                      onChanged: (_) {
-                        setState(() {
-                          projectsSearchResult =
-                              GeneralSearch().setGeneralSearch(
-                            query: textController.text,
-                            listKeyForCondition: 'projectName',
-                            listFromApi: projectsDirectionData,
-                          );
-                        });
-                      },
-                      decoration: const InputDecoration(
-                          labelText: "Search projects by name",
-                          hintText: "Search projects by name",
-                          prefixIcon: Icon(Icons.search),
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(25.0)))),
+            return (state is GetDirectionSuccessState ||
+                    state is GetDirectionLoadingState)
+                ? SingleChildScrollView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: TextField(
+                            focusNode: searchTextFieldFocusNode,
+                            controller: textController,
+                            onSubmitted: (searchValue) {
+                              searchTextFieldFocusNode.unfocus();
+                              setState(() {});
+                            },
+                            onChanged: (_) {
+                              setState(() {
+                                projectsSearchResult =
+                                    GeneralSearch().setGeneralSearch(
+                                  query: textController.text,
+                                  listKeyForCondition: 'projectName',
+                                  listFromApi: projectsDirectionData,
+                                );
+                              });
+                            },
+                            decoration: const InputDecoration(
+                                labelText: "Search projects by name",
+                                hintText: "Search projects by name",
+                                prefixIcon: Icon(Icons.search),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.all(
+                                        Radius.circular(25.0)))),
+                          ),
+                        ),
+                        Container(
+                          height: deviceSize.height -
+                              ((deviceSize.height * 0.24) -
+                                  MediaQuery.of(context).viewPadding.top),
+                          color: Colors.grey,
+                          child: (projectsSearchResult.isNotEmpty ||
+                                  textController.text.isNotEmpty)
+                              ? GetDirectionWidget(projectsSearchResult)
+                              : GetDirectionWidget(projectsDirectionData),
+                        )
+                      ],
                     ),
-                  ),
-                  Container(
-                    height: deviceSize.height -
-                        ((deviceSize.height * 0.24) -
-                            MediaQuery.of(context).viewPadding.top),
-                    color: Colors.grey,
-                    child: (projectsSearchResult.isNotEmpty || textController.text.isNotEmpty)
-                        ? GetDirectionWidget(projectsSearchResult)
-                        : GetDirectionWidget(projectsDirectionData),
                   )
-                ],
-              ),
-            );
+                : const AlertDialog(
+                    title: Text('Something went wrong!'), content: Text('Kindly check your internet connection'),);
           },
         ),
       ),
