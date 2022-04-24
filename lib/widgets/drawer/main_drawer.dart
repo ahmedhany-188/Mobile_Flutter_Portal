@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
+import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
+import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
 class MainDrawer extends StatefulWidget {
   @override
@@ -120,6 +123,34 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.nature_people,
                             () {
                           Navigator.of(context).pushNamed(PayslipScreen.routeName);
+                        'Subsidiaries',
+                        Icons.add_business_sharp,
+                        () {
+                          Navigator.of(context).pushNamed(SubsidiariesScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'Value',
+                        Icons.agriculture_sharp,
+                            () {
+                          Navigator.of(context).pushNamed(ValueScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'About',
+                        Icons.details,
+                            () {
+                          Navigator.of(context).pushNamed(AboutScreen.routeName);
                         },
                       ),
 
@@ -132,7 +163,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         'Logout',
                         Icons.logout,
                         () {
-                          // Navigator.of(context).pushReplacementNamed(.routeName);
+                          // Navigator.of(context).pushNamed(.routeName);
                         },
                       ),
                     ],

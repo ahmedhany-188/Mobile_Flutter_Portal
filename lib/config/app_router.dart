@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
+import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
@@ -9,6 +11,7 @@ import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
+import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
@@ -74,6 +77,22 @@ class AppRouter {
       case PayslipScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => PayslipScreen(),
+        );
+
+      case SubsidiariesScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => SubsidiariesScreen(),
+        );
+      case ValueScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => ValueScreen(),
+        );
+      case AboutScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => AboutScreen(),
         );
       default:
         return null;
