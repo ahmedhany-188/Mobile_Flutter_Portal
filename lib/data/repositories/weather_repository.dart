@@ -4,6 +4,7 @@ import 'package:hassanallamportalflutter/data/models/weather.dart';
 import 'package:http/http.dart' as http;
 
 class WeatherRepository {
+
   final WeatherDataProvider weatherDataProvider = WeatherDataProvider();
 
   Future<WeatherData> getWeather() async {
@@ -13,4 +14,5 @@ class WeatherRepository {
     final WeatherData weather = WeatherData.fromJson(json);
     return weather;
   }
+
 }

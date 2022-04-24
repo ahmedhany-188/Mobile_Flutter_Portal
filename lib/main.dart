@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/get_direction_screen_bloc/get_direction_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/weather_bloc/weather_bloc.dart';
 import 'package:hassanallamportalflutter/data/data_providers/attendance_data_provider/attendance_data_provider.dart';
 import 'package:hassanallamportalflutter/data/data_providers/get_direction_provider/get_direction_provider.dart';
@@ -84,6 +85,10 @@ class MyApp extends StatelessWidget {
         BlocProvider<AttendanceCubit>(
           create: (attendanceCubitContext) =>
               AttendanceCubit()..getAttendanceList(),
+        ),
+        BlocProvider<MedicalRequestCubit>(
+          create: (medicalRequestCubitContext) => MedicalRequestCubit()
+          // MedicalRequestCubit()..getSuccessMessage(),
         ),
 
         BlocProvider<GetDirectionCubit>(

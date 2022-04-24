@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
+import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 
@@ -98,9 +99,17 @@ class _MainDrawerState extends State<MainDrawer> {
                         'Attendance',
                         Icons.fingerprint,
                             () {
-                          Navigator.of(context).pushReplacementNamed(attendance_screen.routeName);
+                          Navigator.of(context).pushReplacementNamed(Attendance_Screen.routeName);
                         },
                       ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile('Medical Request', Icons.medical_services, (){
+                        Navigator.of(context).pushNamed(MedicalRequestScreen.routeName);
+                      }),
                       const Divider(
                         thickness: 1,
                         indent: 10,
@@ -113,18 +122,7 @@ class _MainDrawerState extends State<MainDrawer> {
                           Navigator.of(context).pushNamed(PayslipScreen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                      buildListTile(
-                        'Logout',
-                        Icons.logout,
-                        () {
-                          // Navigator.of(context).pushReplacementNamed(.routeName);
-                        },
-                      ),
+
                       const Divider(
                         thickness: 1,
                         indent: 10,
