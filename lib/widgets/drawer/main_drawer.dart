@@ -4,6 +4,7 @@ import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
+import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
@@ -150,6 +151,18 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.details,
                             () {
                           Navigator.of(context).pushNamed(AboutScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'News',
+                        Icons.list,
+                            () {
+                          Navigator.of(context).pushNamed(NewsScreen.routeName);
                         },
                       ),
                       const Divider(

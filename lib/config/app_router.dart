@@ -7,6 +7,7 @@ import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
+import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
@@ -87,6 +88,11 @@ class AppRouter {
 
         return MaterialPageRoute(
           builder: (_) => AboutScreen(),
+        );
+      case NewsScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => NewsScreen(),
         );
       default:
         return null;
