@@ -123,6 +123,14 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.nature_people,
                             () {
                           Navigator.of(context).pushNamed(PayslipScreen.routeName);
+                            },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
                         'Subsidiaries',
                         Icons.add_business_sharp,
                         () {
