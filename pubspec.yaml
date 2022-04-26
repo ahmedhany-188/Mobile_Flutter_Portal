@@ -67,6 +67,7 @@ dependencies:
   multi_select_flutter: ^4.1.2
   sizer: ^2.0.15
   url_launcher: ^6.0.20
+  card_swiper: ^2.0.3
 
 
   flutter_downloader: ^1.7.3
@@ -82,8 +83,6 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   authentication_repository:
     path: packages/authentication_repository
-  user_repository:
-    path: packages/user_repository
   formz: ^0.4.1
 
 
