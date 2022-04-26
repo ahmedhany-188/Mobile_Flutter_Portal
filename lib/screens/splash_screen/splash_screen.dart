@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:sizer/sizer.dart';
 import 'package:sprung/sprung.dart';
 
@@ -127,32 +128,36 @@ class SplashScreen extends StatelessWidget {
           pageTransitionType: PageTransitionType.bottomToTop,
           animationDuration: const Duration(milliseconds: 3000),
           backgroundColor: Colors.transparent,
-          // nextScreen: AuthScreen(),
-          screenFunction: () {
-            // return PageTransitionAnimation(
-            //         pageDirection: AuthScreen(),
-            //         context: context,
-            //         delayedDuration: 500,
-            //         transitionDuration: 1300)
-            //     .navigateFromBottom();
-            return BlocBuilder<AppBloc, AppState>(
-                builder: (context, state) {
-                  switch (state.status) {
-                    case AppStatus.authenticated:
-                      return const AnimatedSwitcher(
-                        duration: Duration(milliseconds: 1000),
-                        child: TapsScreen(),
-                      );
-                    case AppStatus.unauthenticated:
-                      return const AnimatedSwitcher(
-                        duration: Duration(milliseconds: 1000),
-                        child: AuthScreen(),
-                      );
-                    default:
-                      return AuthScreen();
-                  }
-                });
-          },
+          nextScreen: BlocBuilder<AppBloc, AppState>(
+              builder: (context, state) {
+                switch (state.status) {
+                  case AppStatus.authenticated:
+                    return const TapsScreen();
+                  case AppStatus.unauthenticated:
+                    return const AuthScreen();
+                  default:
+                    return AuthScreen();
+                }
+              }),
+          // screenFunction: () {
+          //   return BlocBuilder<AppBloc, AppState>(
+          //       builder: (context, state) {
+          //         switch (state.status) {
+          //           case AppStatus.authenticated:
+          //             return const AnimatedSwitcher(
+          //               duration: Duration(milliseconds: 1000),
+          //               child: TapsScreen(),
+          //             );
+          //           case AppStatus.unauthenticated:
+          //             return const AnimatedSwitcher(
+          //               duration: Duration(milliseconds: 1000),
+          //               child: AuthScreen(),
+          //             );
+          //           default:
+          //             return AuthScreen();
+          //         }
+          //       });
+          // }, nextScreen: null,
         ),
       ),
     );

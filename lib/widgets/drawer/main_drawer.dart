@@ -35,14 +35,20 @@ class _MainDrawerState extends State<MainDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceHeight = MediaQuery.of(context).size.height;
+    final deviceHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topRight: Radius.circular(30),
         bottomRight: Radius.circular(30),
       ),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width * 0.9,
+        width: MediaQuery
+            .of(context)
+            .size
+            .width * 0.9,
         child: Drawer(
           elevation: 5,
           child: Column(
@@ -53,7 +59,10 @@ class _MainDrawerState extends State<MainDrawer> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 alignment: Alignment.centerLeft,
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme
+                    .of(context)
+                    .colorScheme
+                    .primary,
                 // decoration: BoxDecoration(), use it if you will set another decoration apart from color
                 child: const Text(
                   'welcome!',
@@ -76,7 +85,7 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Home',
                         Icons.home,
-                        () {
+                            () {
                           Navigator.of(context)
                               .pushReplacementNamed(TapsScreen.routeName);
                         },
@@ -89,8 +98,9 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Get Direction',
                         Icons.nature_people,
-                        () {
-                          Navigator.of(context).pushReplacementNamed(GetDirectionScreen.routeName);
+                            () {
+                          Navigator.of(context).pushReplacementNamed(
+                              GetDirectionScreen.routeName);
                         },
                       ),
 
@@ -103,7 +113,8 @@ class _MainDrawerState extends State<MainDrawer> {
                         'Attendance',
                         Icons.fingerprint,
                             () {
-                          Navigator.of(context).pushReplacementNamed(Attendance_Screen.routeName);
+                          Navigator.of(context).pushReplacementNamed(
+                              Attendance_Screen.routeName);
                         },
                       ),
                       const Divider(
@@ -111,8 +122,10 @@ class _MainDrawerState extends State<MainDrawer> {
                         indent: 10,
                         endIndent: 10,
                       ),
-                      buildListTile('Medical Request', Icons.medical_services, (){
-                        Navigator.of(context).pushNamed(MedicalRequestScreen.routeName);
+                      buildListTile(
+                          'Medical Request', Icons.medical_services, () {
+                        Navigator.of(context).pushNamed(MedicalRequestScreen
+                            .routeName);
                       }),
                       const Divider(
                         thickness: 1,
@@ -123,11 +136,20 @@ class _MainDrawerState extends State<MainDrawer> {
                         'Payslip',
                         Icons.nature_people,
                             () {
-                          Navigator.of(context).pushNamed(PayslipScreen.routeName);
+                          Navigator.of(context).pushNamed(
+                              PayslipScreen.routeName);
+                        },),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
                         'Subsidiaries',
                         Icons.add_business_sharp,
-                        () {
-                          Navigator.of(context).pushNamed(SubsidiariesScreen.routeName);
+                            () {
+                          Navigator.of(context).pushNamed(SubsidiariesScreen
+                              .routeName);
                         },
                       ),
                       const Divider(
@@ -139,7 +161,8 @@ class _MainDrawerState extends State<MainDrawer> {
                         'Value',
                         Icons.agriculture_sharp,
                             () {
-                          Navigator.of(context).pushNamed(ValueScreen.routeName);
+                          Navigator.of(context).pushNamed(ValueScreen
+                              .routeName);
                         },
                       ),
                       const Divider(
@@ -151,7 +174,8 @@ class _MainDrawerState extends State<MainDrawer> {
                         'About',
                         Icons.details,
                             () {
-                          Navigator.of(context).pushNamed(AboutScreen.routeName);
+                          Navigator.of(context).pushNamed(AboutScreen
+                              .routeName);
                         },
                       ),
 
@@ -163,7 +187,8 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Logout',
                         Icons.logout,
-    () => context.read<AppBloc>().add(AppLogoutRequested()),
+                            () =>
+                            context.read<AppBloc>().add(AppLogoutRequested()),
                       ),
                     ],
                   ),

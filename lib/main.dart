@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +6,6 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:user_repository/user_repository.dart';
 
 import './data/data_providers/general_dio/general_dio.dart';
 import './bloc/get_direction_screen_bloc/get_direction_cubit.dart';
@@ -19,6 +19,9 @@ import './bloc/benefits_screen_bloc/benefits_cubit.dart';
 import './bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import './bloc/payslip_screen_bloc/payslip_cubit.dart';
 import './bloc/subsidiaries_screen_bloc/subsidiaries_cubit.dart';
+import 'bloc/auth_app_status_bloc/app_bloc.dart';
+import 'bloc/login_cubit/login_cubit.dart';
+import 'bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -54,7 +57,6 @@ class MyApp extends StatelessWidget {
     final platform = Theme.of(context).platform;
     final AuthenticationRepository _authenticationRepository = AuthenticationRepository();
     _authenticationRepository.init();
-    final UserRepository userRepository = UserRepository();
     // final AuthenticationBloc authenticationBloc = AuthenticationBloc(authenticationRepository);
     // final Repositor = AuthenticationRepository();
     return MultiBlocProvider(
