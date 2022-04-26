@@ -6,6 +6,7 @@ import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/payslip_screen_bloc/payslip_cubit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -75,6 +76,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.select((AppBloc bloc) => bloc.state.user);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -148,7 +150,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
                   ElevatedButton(
                     onPressed: () {
                       if (_passwordController.text.isNotEmpty) {
-                        BlocProvider.of<PayslipCubit>(context).getPdfLink("ahmed.elghandour@hassanallam.com", _passwordController.text.toString());
+                        BlocProvider.of<PayslipCubit>(context).getPdfLink(user.email, _passwordController.text.toString());
                         // context.read<PayslipCubit>().getPdfLink("ahmed.elghandour@hassanallam.com", _passwordController.text.toString());
                       }
                     },
