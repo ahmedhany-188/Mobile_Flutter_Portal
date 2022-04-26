@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
+import 'package:provider/src/provider.dart';
 
 class MainDrawer extends StatefulWidget {
   @override
@@ -121,9 +123,7 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Logout',
                         Icons.logout,
-                        () {
-                          // Navigator.of(context).pushReplacementNamed(.routeName);
-                        },
+                              () => context.read<AppBloc>().add(AppLogoutRequested()),
                       ),
                       const Divider(
                         thickness: 1,

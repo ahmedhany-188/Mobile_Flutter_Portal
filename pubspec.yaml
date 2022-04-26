@@ -70,6 +70,13 @@ dependencies:
   open_file: ^3.2.1
   flutter_local_notifications: ^9.4.0
 
+  flutter_secure_storage: ^5.0.2
+  authentication_repository:
+    path: packages/authentication_repository
+  user_repository:
+    path: packages/user_repository
+  formz: ^0.4.1
+
 
 
   flutter_html: any

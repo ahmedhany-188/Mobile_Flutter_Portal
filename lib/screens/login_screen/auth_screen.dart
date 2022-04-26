@@ -52,6 +52,12 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   // }
 
   @override
+  void initState() {
+    // TODO: implement initState
+
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
     final double deviceTopPadding =MediaQueryData.fromWindow(window).padding.top;
