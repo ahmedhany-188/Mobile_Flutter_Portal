@@ -32,10 +32,10 @@ class PayslipCubit extends Cubit<PayslipState> {
                   .parse(response)
                   .isAbsolute;
 
-              downloadPdf(response);
-              // _validURL ? downloadPdf(response) : emit(
-              //     PayslipErrorState(
-              //         response));
+              // downloadPdf(response);
+              _validURL ? downloadPdf(response) : emit(
+                  PayslipErrorState(
+                      response));
             }else {
             PayslipErrorState("No internet Connection");
           }

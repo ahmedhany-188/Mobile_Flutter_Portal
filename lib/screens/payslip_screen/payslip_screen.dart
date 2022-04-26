@@ -73,8 +73,6 @@ class _PayslipScreenState extends State<PayslipScreen> {
   }
 
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

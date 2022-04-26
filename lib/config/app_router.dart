@@ -6,6 +6,7 @@ import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direct
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
+import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
@@ -64,12 +65,17 @@ class AppRouter {
           builder: (_) => GetDirectionScreen(),
         );
 
-      case attendance_screen.routeName:
+      case Attendance_Screen.routeName:
         return MaterialPageRoute(
-            builder: (_) => attendance_screen(),
+            builder: (_) => Attendance_Screen(),
         );
-      case PayslipScreen.routeName:
 
+      case MedicalRequestScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => MedicalRequestScreen(),
+        );
+
+      case PayslipScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => PayslipScreen(),
         );

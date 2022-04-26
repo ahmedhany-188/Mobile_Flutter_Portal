@@ -7,16 +7,16 @@ import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direct
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_ticket_widget.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 
-class attendance_screen extends StatefulWidget {
+class Attendance_Screen extends StatefulWidget {
 
   static const routeName = '/myattendance-list-screen';
-  const attendance_screen({Key? key}) : super(key: key);
+  const Attendance_Screen({Key? key}) : super(key: key);
 
   @override
-  State<attendance_screen> createState() => _attendance_sreenState();
+  State<Attendance_Screen> createState() => _attendance_sreenState();
 }
 
-class _attendance_sreenState extends State<attendance_screen> {
+class _attendance_sreenState extends State<Attendance_Screen> {
 
   List<dynamic> AttendanceListData = [];
   String AttendanceStringData = "";
@@ -39,12 +39,18 @@ class _attendance_sreenState extends State<attendance_screen> {
         child: BlocConsumer<AttendanceCubit, AttendanceState>(
           listener: (context, state) {
             if (state is BlocGetTheAttendanceSuccesState) {
-              AttendanceStringData = state.getContactList;
 
+              AttendanceStringData = state.getContactList;
               AttendanceListData = jsonDecode(AttendanceStringData);
+
+
+              // open pdf file in
+              // final  _url = "https://portal.hassanallam.com/Public/medical.aspx?FormID=2217";
+              // if (await canLaunch(_url))
+              //   await launch(_url);
+
             }
           },
-
           builder: (context, state) {
             return SingleChildScrollView(
                 physics: const NeverScrollableScrollPhysics(),
@@ -57,9 +63,7 @@ class _attendance_sreenState extends State<attendance_screen> {
                                   .of(context)
                                   .viewPadding
                                   .top),
-                      child: AttendanceTicketWidget(AttendanceListData)
-
-                      ,
+                      child: AttendanceTicketWidget(AttendanceListData),
                       decoration: const BoxDecoration(
                           image: DecorationImage(image: AssetImage(
                               "assets/images/backgroundattendance.jpg"),

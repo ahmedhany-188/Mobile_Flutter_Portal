@@ -1,6 +1,8 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -18,6 +20,9 @@ import './bloc/benefits_screen_bloc/benefits_cubit.dart';
 import './bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import './bloc/payslip_screen_bloc/payslip_cubit.dart';
 import './bloc/subsidiaries_screen_bloc/subsidiaries_cubit.dart';
+import 'bloc/auth_app_status_bloc/app_bloc.dart';
+import 'bloc/login_cubit/login_cubit.dart';
+import 'bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,6 +56,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final platform = Theme.of(context).platform;
+    final AuthenticationRepository _authenticationRepository = AuthenticationRepository();
+    _authenticationRepository.init();
+    // final AuthenticationBloc authenticationBloc = AuthenticationBloc(authenticationRepository);
+    // final Repositor = AuthenticationRepository();
     return MultiBlocProvider(
       providers: [
         BlocProvider<InternetCubit>(
@@ -77,6 +86,10 @@ class MyApp extends StatelessWidget {
           create: (attendanceCubitContext) =>
               AttendanceCubit()..getAttendanceList(),
         ),
+        BlocProvider<MedicalRequestCubit>(
+          create: (medicalRequestCubitContext) => MedicalRequestCubit()
+          // MedicalRequestCubit()..getSuccessMessage(),
+        ),
 
         BlocProvider<GetDirectionCubit>(
           create: (getDirectionCubitContext) =>
@@ -90,6 +103,12 @@ class MyApp extends StatelessWidget {
           create: (subsidiariesCubitContext) =>
           SubsidiariesCubit()..getSubsidiaries(),
         ),
+        BlocProvider<AppBloc>(
+          create: (authenticationContext) =>
+              AppBloc(authenticationRepository: _authenticationRepository,),),
+        BlocProvider<LoginCubit>(
+          create: (authenticationContext) =>
+              LoginCubit(_authenticationRepository),),
       ],
       child: MaterialApp(
         title: 'Hassan Allam Portal',
@@ -108,7 +127,7 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
     if (kDebugMode) {
-      print(bloc);
+      print("Change --> $bloc");
     }
     super.onChange(bloc, change);
   }
@@ -117,7 +136,7 @@ class AppBlocObserver extends BlocObserver {
   void onClose(BlocBase bloc) {
     // TODO: implement onClose
     if (kDebugMode) {
-      print(bloc);
+      print("Close --> $bloc");
     }
     super.onClose(bloc);
   }
@@ -134,15 +153,17 @@ class AppBlocObserver extends BlocObserver {
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
     // TODO: implement onError
     if (kDebugMode) {
-      print(bloc);
+      print("Error --> $bloc");
     }
     super.onError(bloc, error, stackTrace);
   }
- 
+
   @override
   void onEvent(Bloc bloc, Object? event) {
     // TODO: implement onEvent
+    if (kDebugMode) {
+      print("Event --> $bloc");
+    }
     super.onEvent(bloc, event);
   }
-
 }
