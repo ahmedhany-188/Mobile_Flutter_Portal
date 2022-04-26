@@ -142,9 +142,10 @@ class _TapsScreenState extends State<TapsScreen> {
         ),
         drawerEnableOpenDragGesture: true,
         body:
-         DelayedDisplay(
-          delay: Duration(milliseconds: 1000),
-          child: TabBarView(
+         // DelayedDisplay(
+         //  delay: Duration(milliseconds: 1000),
+         //  child:
+          const TabBarView(
             physics: BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics()),
             children: [
@@ -152,7 +153,8 @@ class _TapsScreenState extends State<TapsScreen> {
               ContactsScreen(),
             ],
           ),
-        ),
+        // ),
+
         // _pages[_selectedPageIndex]['page'],
 
         // bottomNavigationBar:  BottomNavigationBar(

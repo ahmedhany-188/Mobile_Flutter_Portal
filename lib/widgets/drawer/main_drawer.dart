@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
+import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
+import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
+import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
-import 'package:provider/src/provider.dart';
-
+import 'package:provider/src/provider.dart';import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
+import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 class MainDrawer extends StatefulWidget {
   @override
   State<MainDrawer> createState() => _MainDrawerState();
@@ -100,9 +103,17 @@ class _MainDrawerState extends State<MainDrawer> {
                         'Attendance',
                         Icons.fingerprint,
                             () {
-                          Navigator.of(context).pushReplacementNamed(attendance_screen.routeName);
+                          Navigator.of(context).pushReplacementNamed(Attendance_Screen.routeName);
                         },
                       ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile('Medical Request', Icons.medical_services, (){
+                        Navigator.of(context).pushNamed(MedicalRequestScreen.routeName);
+                      }),
                       const Divider(
                         thickness: 1,
                         indent: 10,
@@ -113,29 +124,46 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.nature_people,
                             () {
                           Navigator.of(context).pushNamed(PayslipScreen.routeName);
-                        },
-                      ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                      buildListTile(
-                        'Logout',
-                        Icons.logout,
-                              () => context.read<AppBloc>().add(AppLogoutRequested()),
-                      ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
-                      buildListTile(
-                        'Logout',
-                        Icons.logout,
+                        'Subsidiaries',
+                        Icons.add_business_sharp,
                         () {
-                          // Navigator.of(context).pushReplacementNamed(.routeName);
+                          Navigator.of(context).pushNamed(SubsidiariesScreen.routeName);
                         },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'Value',
+                        Icons.agriculture_sharp,
+                            () {
+                          Navigator.of(context).pushNamed(ValueScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'About',
+                        Icons.details,
+                            () {
+                          Navigator.of(context).pushNamed(AboutScreen.routeName);
+                        },
+                      ),
+
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'Logout',
+                        Icons.logout,
+    () => context.read<AppBloc>().add(AppLogoutRequested()),
                       ),
                     ],
                   ),

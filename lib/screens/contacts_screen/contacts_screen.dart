@@ -149,12 +149,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
                             });
                           },
                           decoration: const InputDecoration(
+                              contentPadding: EdgeInsets.all(10),
+                              isCollapsed: false,
                               labelText: "Search contact",
                               hintText: "Search contact",
                               prefixIcon: Icon(Icons.search),
                               border: OutlineInputBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(25.0)))),
+                                      BorderRadius.all(Radius.circular(10.0)))),
                         ),
                       ),
                       Row(
@@ -209,12 +211,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
-                        height: deviceSize.height * 0.64,
-                        child: (textController.text.isEmpty &&
-                                filtersDataSavedFromDialog.isEmpty)
-                            ? ContactsWidget(contactListFromApi)
-                            : ContactsWidget(contactSearchResultsList),
+                      Scrollbar(
+                        child: SizedBox(
+                          height: deviceSize.height * 0.64,
+                          child: (textController.text.isEmpty &&
+                                  filtersDataSavedFromDialog.isEmpty)
+                              ? ContactsWidget(contactListFromApi)
+                              : ContactsWidget(contactSearchResultsList),
+                        ),
                       ),
                     ],
                   ),
