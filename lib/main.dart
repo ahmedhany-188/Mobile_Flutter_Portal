@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
+import 'package:hassanallamportalflutter/data/data_providers/album_dio/album_dio.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -41,6 +43,7 @@ void main() async {
   );
 
   await GeneralDio.init();
+  await AlbumDio.initAlbums();
 }
 
 class MyApp extends StatelessWidget {
@@ -109,6 +112,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<LoginCubit>(
           create: (authenticationContext) =>
               LoginCubit(_authenticationRepository),),
+        BlocProvider<PhotosCubit>(
+          create: (photosContext) =>
+              PhotosCubit()..getPhotos(),),
       ],
       child: MaterialApp(
         title: 'Hassan Allam Portal',

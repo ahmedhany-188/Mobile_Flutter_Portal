@@ -2,10 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
-import '../../widgets/search/general_search.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:sizer/sizer.dart';
-import 'package:url_launcher/url_launcher.dart';
+import '../../widgets/search/general_search.dart';
 import '../../data/helpers/download_pdf.dart';
 import '../../bloc/benefits_screen_bloc/benefits_cubit.dart';
 
@@ -144,9 +144,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                     ),
                   ),
                   SizedBox(
-                    height: (MediaQuery.of(context).size.height -
-                            MediaQuery.of(context).size.shortestSide * 1.1)
-                        .sp,
+                    height: 80.h,
                     child: (searchResult.isNotEmpty ||
                             textController.text.isNotEmpty)
                         ? benefitsListView(searchResult)
