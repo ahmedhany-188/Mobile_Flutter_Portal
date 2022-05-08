@@ -82,8 +82,6 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   authentication_repository:
     path: packages/authentication_repository
-  user_repository:
-    path: packages/user_repository
   formz: ^0.4.1
 
 

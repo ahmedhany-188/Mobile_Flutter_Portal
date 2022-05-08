@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:badges/badges.dart';
 import 'package:entry/entry.dart';

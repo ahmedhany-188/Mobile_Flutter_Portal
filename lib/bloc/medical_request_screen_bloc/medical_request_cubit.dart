@@ -11,7 +11,6 @@ class MedicalRequestCubit extends Cubit<MedicalRequestState> {
 
   static MedicalRequestCubit get(context) => BlocProvider.of(context);
 
-
   void getSuccessMessage(String HR_code,String HAHuser_MedicalRequest,String Patientname_MedicalRequest, String selectedValueLab,String selectedValueService,String selectedDate) async {
     emit(BlocGetTheMedicalRequestLoadingState());
 

@@ -2,7 +2,9 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
+import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -79,9 +81,11 @@ class MyApp extends StatelessWidget {
         BlocProvider<WeatherBloc>(
           create: (weatherBlocContext) => WeatherBloc()..add(WeatherRequest()),
         ),
+
         BlocProvider<PayslipCubit>(
           create: (payslipContext) => PayslipCubit(),
         ),
+
         BlocProvider<AttendanceCubit>(
           create: (attendanceCubitContext) =>
               AttendanceCubit()..getAttendanceList(),
@@ -89,6 +93,10 @@ class MyApp extends StatelessWidget {
         BlocProvider<MedicalRequestCubit>(
           create: (medicalRequestCubitContext) => MedicalRequestCubit()
           // MedicalRequestCubit()..getSuccessMessage(),
+        ),
+
+        BlocProvider<EconomyNewsCubit>(
+          create: (economyNewsCubitContext) => EconomyNewsCubit(),
         ),
 
         BlocProvider<GetDirectionCubit>(
