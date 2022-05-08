@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,15 +24,19 @@ import './bloc/subsidiaries_screen_bloc/subsidiaries_cubit.dart';
 import 'bloc/auth_app_status_bloc/app_bloc.dart';
 import 'bloc/login_cubit/login_cubit.dart';
 import 'bloc/medical_request_screen_bloc/medical_request_cubit.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  //
   final storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(debug: true);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform, //This line is necessary
+  );
   HydratedBlocOverrides.runZoned(
         () => runApp(MyApp(
           appRouter: AppRouter(),
@@ -41,6 +46,7 @@ void main() async {
   );
 
   await GeneralDio.init();
+
 }
 
 class MyApp extends StatelessWidget {
@@ -55,6 +61,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final platform = Theme.of(context).platform;
     final AuthenticationRepository _authenticationRepository = AuthenticationRepository();
     _authenticationRepository.init();

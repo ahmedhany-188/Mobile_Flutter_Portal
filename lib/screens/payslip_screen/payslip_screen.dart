@@ -25,9 +25,6 @@ class PayslipScreen extends StatefulWidget {
 class _PayslipScreenState extends State<PayslipScreen> {
   final _passwordController = TextEditingController();
 
-
-  late bool _permissionReady;
-  late String _localPath;
   ReceivePort _port = ReceivePort();
 
   @override
@@ -35,12 +32,13 @@ class _PayslipScreenState extends State<PayslipScreen> {
     // TODO: implement initState
     super.initState();
 
-    IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+    IsolateNameServer.registerPortWithName(
+        _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
       String id = data[0];
       DownloadTaskStatus status = data[1];
       int progress = data[2];
-      setState((){ });
+      setState(() {});
     });
     FlutterDownloader.registerCallback(downloadCallback);
 
@@ -53,20 +51,23 @@ class _PayslipScreenState extends State<PayslipScreen> {
     // }
 
   }
+
   @override
   void dispose() {
     // TODO: implement dispose
     _unbindBackgroundIsolate();
     super.dispose();
   }
+
   void _unbindBackgroundIsolate() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
   }
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
+
+  static void downloadCallback(String id, DownloadTaskStatus status,
+      int progress) {
     // if (debug) {
-      print(
-          'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
+    print(
+        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
     // }
     final SendPort send =
     IsolateNameServer.lookupPortByName('downloader_send_port')!;
@@ -108,7 +109,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
                 content: Text(state.response),
               ),
             );
-          }else if (state is PayslipDownloadState) {
+          } else if (state is PayslipDownloadState) {
             // _requestDownload(state.response);
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(
@@ -120,54 +121,35 @@ class _PayslipScreenState extends State<PayslipScreen> {
           }
         },
         builder: (context, state) {
-          // if (state is PayslipLoadingState) {
-          //   return const Center(
-          //     child: CircularProgressIndicator(),
-          //   );
-          // }
-          // else if (state is PayslipErrorState) {
-          //   ScaffoldMessenger.of(context).showSnackBar(
-          //     SnackBar(
-          //       content: Text(state.error),
-          //     ),
-          //   );
-          // }
-          // else if (state is PayslipSuccessState || state is PayslipInitialState) {
-            return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
-              child: Column(
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            child: Column(
 
-                children: [
-                  const SizedBox(height: 20,),
-                  TextFormField(
-                    controller: _passwordController,
-                    decoration: const InputDecoration(
-                      hintText: "Enter Password",
-                      border: OutlineInputBorder(),
-                    ),
+              children: [
+                const SizedBox(height: 20,),
+                TextFormField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                    hintText: "Enter Password",
+                    border: OutlineInputBorder(),
                   ),
-                  const SizedBox(height: 10,),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_passwordController.text.isNotEmpty) {
-                        BlocProvider.of<PayslipCubit>(context).getPdfLink(user.email, _passwordController.text.toString());
-                        // context.read<PayslipCubit>().getPdfLink("ahmed.elghandour@hassanallam.com", _passwordController.text.toString());
-                      }
-                    },
-                    child: const Text("Download Payslip"),
-                  )
-                ],
-              ),
-            );
-          // }
-          // else {
-          //   return Container();
-          // }
+                ),
+                const SizedBox(height: 10,),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_passwordController.text.isNotEmpty) {
+                      BlocProvider.of<PayslipCubit>(context).getPdfLink(
+                          user.email, _passwordController.text.toString());
+                      // context.read<PayslipCubit>().getPdfLink("ahmed.elghandour@hassanallam.com", _passwordController.text.toString());
+                    }
+                  },
+                  child: const Text("Download Payslip"),
+                )
+              ],
+            ),
+          );
         },
-
       ),
     );
   }
-
-
 }

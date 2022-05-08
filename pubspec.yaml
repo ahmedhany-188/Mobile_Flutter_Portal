@@ -82,13 +82,15 @@ dependencies:
   flutter_secure_storage: ^5.0.2
   authentication_repository:
     path: packages/authentication_repository
-  user_repository:
-    path: packages/user_repository
   formz: ^0.4.1
 
 
 
+
   flutter_html: any
+  firebase_core: ^1.15.0
+  firebase_auth: ^3.3.15
+
 #  al_downloader: ^1.2.0
 
 dev_dependencies:

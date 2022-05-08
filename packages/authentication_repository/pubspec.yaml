@@ -12,3 +12,5 @@ dependencies:
   http: any
   equatable: ^2.0.3
   shared_preferences: ^2.0.13
+  firebase_core: ^1.15.0
+  firebase_auth: ^3.3.15
