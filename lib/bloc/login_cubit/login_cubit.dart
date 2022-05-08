@@ -48,6 +48,13 @@ class LoginCubit extends Cubit<LoginState> {
           status: FormzStatus.submissionFailure,
         ),
       );
+    } on LogInWithEmailAndPasswordFailureFirebase catch (e) {
+      emit(
+        state.copyWith(
+          errorMessage: e.message,
+          status: FormzStatus.submissionFailure,
+        ),
+      );
     } catch (_) {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
     }

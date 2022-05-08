@@ -2,12 +2,13 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:authentication_repository/src/authentication_provider.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart'as flutter_firebase_auth;
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-
-import '../authentication_repository.dart';
-import 'authentication_provider.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'cashe.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 enum AuthenticationStatus {authenticated, unauthenticated}
 class AuthenticationRepository {
@@ -16,11 +17,10 @@ class AuthenticationRepository {
   static const userCacheKey = '__user_cache_key__';
   final CacheClient _cache = CacheClient();
   late SharedPreferences shared_User;
+  final firebase_auth.FirebaseAuth _firebaseAuth = firebase_auth.FirebaseAuth.instance;
   Future<void> init() async {
     shared_User = await SharedPreferences.getInstance();
   }
-
-
 
   Stream<User> get status async* {
     await Future<void>.delayed(const Duration(seconds: 1));
@@ -45,8 +45,6 @@ class AuthenticationRepository {
     required String password,
   }) async {
     //  authentication provider to api functions
-    // authenticationProvider = AuthenticationProvider();
-    // var box = await Hive.openBox('myBox');
     await authenticationProvider.loginApiAuthentication(username, password)
         .then(
             (value) async {
@@ -55,10 +53,14 @@ class AuthenticationRepository {
             try {
               User user = getFromJson(json[0]);
               String userData = jsonEncode(json[0]);
+              await logInWithEmailAndPassword(email: user.email,password: "12345678");
               shared_User.setString('user', userData);
               _controller.add(user);
-            } catch (e) {
-              print(e);
+            } on flutter_firebase_auth.FirebaseAuthException catch (e) {
+              // print(e);
+              throw LogInWithEmailAndPasswordFailureFirebase.fromCode(e.code);
+            } catch (message) {
+              throw message;
             }
           } else {
             throw LogInWithEmailAndPasswordFailureApi.fromCode(
@@ -66,6 +68,40 @@ class AuthenticationRepository {
           }
         });
   }
+  /// Creates a new user with the provided [email] and [password].
+  ///
+  /// Throws a [SignUpWithEmailAndPasswordFailure] if an exception occurs.
+  Future<void> signUp({required String email, required String password}) async {
+    try {
+      await _firebaseAuth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on flutter_firebase_auth.FirebaseAuthException catch (e) {
+      throw SignUpWithEmailAndPasswordFailureFirebase.fromCode(e.code);
+    } catch (_) {
+      throw const SignUpWithEmailAndPasswordFailureFirebase();
+    }
+  }
+  /// Signs in with the provided [email] and [password].
+  ///
+  /// Throws a [LogInWithEmailAndPasswordFailure] if an exception occurs.
+  Future<void> logInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await _firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on flutter_firebase_auth.FirebaseAuthException catch (e) {
+      throw LogInWithEmailAndPasswordFailureFirebase.fromCode(e.code);
+    } catch (_) {
+      throw const LogInWithEmailAndPasswordFailureFirebase();
+    }
+  }
+
 
   User getFromJson(Map<String, dynamic> json) {
     return User(email: json['email'],
@@ -158,14 +194,17 @@ class LogInWithEmailAndPasswordFailureFirebase implements Exception {
   factory LogInWithEmailAndPasswordFailureFirebase.fromCode(String code) {
     switch (code) {
       case 'invalid-email':
+        print("Email is not valid or badly formatted.");
         return const LogInWithEmailAndPasswordFailureFirebase(
           'Email is not valid or badly formatted.',
         );
       case 'user-disabled':
+        print("This user has been disabled. Please contact support for help.");
         return const LogInWithEmailAndPasswordFailureFirebase(
           'This user has been disabled. Please contact support for help.',
         );
       case 'user-not-found':
+        print("Email is not found, please create an account.");
         return const LogInWithEmailAndPasswordFailureFirebase(
           'Email is not found, please create an account.',
         );
