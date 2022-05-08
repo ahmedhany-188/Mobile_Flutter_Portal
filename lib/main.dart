@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -26,6 +27,7 @@ import './bloc/subsidiaries_screen_bloc/subsidiaries_cubit.dart';
 import 'bloc/auth_app_status_bloc/app_bloc.dart';
 import 'bloc/login_cubit/login_cubit.dart';
 import 'bloc/medical_request_screen_bloc/medical_request_cubit.dart';
+import 'data/data_providers/album_dio/album_dio.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -40,15 +42,13 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform, //This line is necessary
   );
   HydratedBlocOverrides.runZoned(
-        () => runApp(MyApp(
-          appRouter: AppRouter(),
-          connectivity: Connectivity())),
+    () => runApp(MyApp(appRouter: AppRouter(), connectivity: Connectivity())),
     storage: storage,
     blocObserver: AppBlocObserver(),
   );
 
   await GeneralDio.init();
-
+  await AlbumDio.initAlbums();
 }
 
 class MyApp extends StatelessWidget {
@@ -63,9 +63,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final platform = Theme.of(context).platform;
-    final AuthenticationRepository _authenticationRepository = AuthenticationRepository();
+    final AuthenticationRepository _authenticationRepository =
+        AuthenticationRepository();
     _authenticationRepository.init();
     // final AuthenticationBloc authenticationBloc = AuthenticationBloc(authenticationRepository);
     // final Repositor = AuthenticationRepository();
@@ -88,42 +88,43 @@ class MyApp extends StatelessWidget {
         BlocProvider<WeatherBloc>(
           create: (weatherBlocContext) => WeatherBloc()..add(WeatherRequest()),
         ),
-
         BlocProvider<PayslipCubit>(
           create: (payslipContext) => PayslipCubit(),
         ),
-
         BlocProvider<AttendanceCubit>(
           create: (attendanceCubitContext) =>
               AttendanceCubit()..getAttendanceList(),
         ),
         BlocProvider<MedicalRequestCubit>(
-          create: (medicalRequestCubitContext) => MedicalRequestCubit()
-          // MedicalRequestCubit()..getSuccessMessage(),
-        ),
-
+            create: (medicalRequestCubitContext) => MedicalRequestCubit()
+            // MedicalRequestCubit()..getSuccessMessage(),
+            ),
         BlocProvider<EconomyNewsCubit>(
           create: (economyNewsCubitContext) => EconomyNewsCubit(),
         ),
-
         BlocProvider<GetDirectionCubit>(
           create: (getDirectionCubitContext) =>
               GetDirectionCubit()..getDirection(),
         ),
         BlocProvider<BenefitsCubit>(
-          create: (benefitsCubitContext) =>
-          BenefitsCubit()..getBenefits(),
+          create: (benefitsCubitContext) => BenefitsCubit()..getBenefits(),
         ),
         BlocProvider<SubsidiariesCubit>(
           create: (subsidiariesCubitContext) =>
-          SubsidiariesCubit()..getSubsidiaries(),
+              SubsidiariesCubit()..getSubsidiaries(),
         ),
         BlocProvider<AppBloc>(
-          create: (authenticationContext) =>
-              AppBloc(authenticationRepository: _authenticationRepository,),),
+          create: (authenticationContext) => AppBloc(
+            authenticationRepository: _authenticationRepository,
+          ),
+        ),
         BlocProvider<LoginCubit>(
           create: (authenticationContext) =>
-              LoginCubit(_authenticationRepository),),
+              LoginCubit(_authenticationRepository),
+        ),
+        BlocProvider<PhotosCubit>(
+          create: (photosContext) => PhotosCubit()..getPhotos(),
+        ),
       ],
       child: MaterialApp(
         title: 'Hassan Allam Portal',
