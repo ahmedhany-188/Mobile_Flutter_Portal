@@ -1,10 +1,11 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
-import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
-import 'package:hassanallamportalflutter/data/data_providers/album_dio/album_dio.dart';
+import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -25,15 +26,19 @@ import './bloc/subsidiaries_screen_bloc/subsidiaries_cubit.dart';
 import 'bloc/auth_app_status_bloc/app_bloc.dart';
 import 'bloc/login_cubit/login_cubit.dart';
 import 'bloc/medical_request_screen_bloc/medical_request_cubit.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
+  //
   final storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(debug: true);
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform, //This line is necessary
+  );
   HydratedBlocOverrides.runZoned(
         () => runApp(MyApp(
           appRouter: AppRouter(),
@@ -43,7 +48,7 @@ void main() async {
   );
 
   await GeneralDio.init();
-  await AlbumDio.initAlbums();
+
 }
 
 class MyApp extends StatelessWidget {
@@ -58,6 +63,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final platform = Theme.of(context).platform;
     final AuthenticationRepository _authenticationRepository = AuthenticationRepository();
     _authenticationRepository.init();
@@ -82,9 +88,11 @@ class MyApp extends StatelessWidget {
         BlocProvider<WeatherBloc>(
           create: (weatherBlocContext) => WeatherBloc()..add(WeatherRequest()),
         ),
+
         BlocProvider<PayslipCubit>(
           create: (payslipContext) => PayslipCubit(),
         ),
+
         BlocProvider<AttendanceCubit>(
           create: (attendanceCubitContext) =>
               AttendanceCubit()..getAttendanceList(),
@@ -92,6 +100,10 @@ class MyApp extends StatelessWidget {
         BlocProvider<MedicalRequestCubit>(
           create: (medicalRequestCubitContext) => MedicalRequestCubit()
           // MedicalRequestCubit()..getSuccessMessage(),
+        ),
+
+        BlocProvider<EconomyNewsCubit>(
+          create: (economyNewsCubitContext) => EconomyNewsCubit(),
         ),
 
         BlocProvider<GetDirectionCubit>(
@@ -112,9 +124,6 @@ class MyApp extends StatelessWidget {
         BlocProvider<LoginCubit>(
           create: (authenticationContext) =>
               LoginCubit(_authenticationRepository),),
-        BlocProvider<PhotosCubit>(
-          create: (photosContext) =>
-              PhotosCubit()..getPhotos(),),
       ],
       child: MaterialApp(
         title: 'Hassan Allam Portal',

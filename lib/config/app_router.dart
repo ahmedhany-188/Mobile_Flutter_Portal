@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
+import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
@@ -74,6 +75,11 @@ class AppRouter {
       case MedicalRequestScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => MedicalRequestScreen(),
+        );
+
+      case EconomyNewsScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => EconomyNewsScreen(),
         );
 
       case PayslipScreen.routeName:
