@@ -1,9 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:authentication_repository/src/authentication_provider.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
+import 'package:authentication_repository/src/models/employee_data.dart';
+import 'package:authentication_repository/src/models/main_user_data.dart';
+// import 'package:firebase_auth/f
 import 'package:firebase_auth/firebase_auth.dart'as flutter_firebase_auth;
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:authentication_repository/authentication_repository.dart';
@@ -13,26 +18,52 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 enum AuthenticationStatus {authenticated, unauthenticated}
 class AuthenticationRepository {
   late final AuthenticationProvider authenticationProvider = AuthenticationProvider();
-  final _controller = StreamController<User>();
+  final _controller = StreamController<MainUserData>();
   static const userCacheKey = '__user_cache_key__';
-  final CacheClient _cache = CacheClient();
+  static const employeeCacheKey = '__employeeData__';
+  // final CacheClient _cache = CacheClient();
   late SharedPreferences shared_User;
   final firebase_auth.FirebaseAuth _firebaseAuth = firebase_auth.FirebaseAuth.instance;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  DatabaseReference _databaseReferenceUsers = FirebaseDatabase.instance.ref("Users");
   Future<void> init() async {
     shared_User = await SharedPreferences.getInstance();
-  }
-
-  Stream<User> get status async* {
-    await Future<void>.delayed(const Duration(seconds: 1));
 
     try{
-      String? data = shared_User.getString('user');
+      await _firebaseAuth.currentUser?.reload();
+    }on firebase_auth.FirebaseAuthException catch (e){
+      if (e.code == 'user-disabled') {
+        // User is disabled.
+        _controller.add(MainUserData.empty);
+        await Future.wait([
+          shared_User.remove(userCacheKey),
+          shared_User.remove(employeeCacheKey),
+          shared_User.clear(),
+          // _firebaseAuth.signOut(),
+        ]);
 
-      Map userMap = jsonDecode(data!);
-      var user = getFromJson(userMap as Map<String, dynamic>);
-      yield user;
+      }
+    }
+  }
+
+  Stream<MainUserData> get status async* {
+    // await Future<void>.delayed(const Duration(seconds: 1));
+    try{
+      if (_firebaseAuth.currentUser != null){
+        String? data = shared_User.getString(userCacheKey);
+        Map userMap = jsonDecode(data!);
+        var user = getFromJson(userMap as Map<String, dynamic>);
+        String? dataEmployee = shared_User.getString(employeeCacheKey);
+        Map employeeMap = jsonDecode(dataEmployee!);
+        var employeeData = getEmployeeDataFromJson(employeeMap as Map<String, dynamic>);
+        var mainUserData = MainUserData(user: user,employeeData: employeeData);
+        yield mainUserData;
+      }else{
+        yield MainUserData.empty;
+      }
+
     }catch(e){
-      yield User.empty;
+      yield MainUserData.empty;
     }
 
 
@@ -49,13 +80,47 @@ class AuthenticationRepository {
         .then(
             (value) async {
           if (value.statusCode == 200) {
-            final json = await jsonDecode(value.body);
+            final loginTokenDataJson = await jsonDecode(value.body);
             try {
-              User user = getFromJson(json[0]);
-              String userData = jsonEncode(json[0]);
+              User user = getFromJson(loginTokenDataJson[0]);
+              String userData = jsonEncode(loginTokenDataJson[0]);
               await logInWithEmailAndPassword(email: user.email,password: "12345678");
-              shared_User.setString('user', userData);
-              _controller.add(user);
+              shared_User.setString(userCacheKey, userData);
+
+              // if (Platform.isIOS){
+              //   _firebaseMessaging.requestPermission(
+              //       sound: true, badge: true, alert: true
+              //   );
+              //   _firebaseMessaging.onIosSettingsRegistered
+              //       .listen((IosNotificationSettings settings)
+              //   {
+              //     print("Settings registered: $settings");
+              //   });
+              //   // _firebaseMessaging.requestPermission()
+              // }
+              await authenticationProvider.getEmployeeData(user.userHRCode!).then((value) async {
+                print(value);
+                if (value.statusCode == 200) {
+                  final employeeDataJson = await jsonDecode(value.body);
+                  EmployeeData employeeData = getEmployeeDataFromJson(employeeDataJson[0]);
+                  print(employeeData.toString());
+                  await _firebaseMessaging.getToken().then((token) async {
+                    print("FCM --> $token");
+                    await _databaseReferenceUsers.child(user.email.replaceAll(".", ",")).update({
+                      "device_token": token,
+                      "hrcode": user.userHRCode,
+                      "imgProfile": employeeData.imgProfile,
+                      "managerCode":employeeData.managerCode,
+                      // "managerEmail":,
+                      "title":employeeData.titleName,
+                      "userID":_firebaseAuth.currentUser?.uid,
+                      "username":employeeData.name,
+
+                    });
+                  });
+                  _controller.add(MainUserData(employeeData: employeeData,user: user));
+                }
+              });
             } on flutter_firebase_auth.FirebaseAuthException catch (e) {
               // print(e);
               throw LogInWithEmailAndPasswordFailureFirebase.fromCode(e.code);
@@ -109,13 +174,62 @@ class AuthenticationRepository {
         token: json['token'],
         expiration: json['expiration']);
   }
+  EmployeeData getEmployeeDataFromJson(Map<String, dynamic> json) {
+    return EmployeeData(userHrCode : json['userHrCode'],
+      applications : json['applications'],
+      fingerPrintGroup : json['fingerPrintGroup'],
+      departmentId : json['departmentId'],
+      locationId : json['locationId'],
+      mainDepartmentID : json['mainDepartmentID'],
+      mainDepartment : json['mainDepartment'],
+      mainFunction : json['mainFunction'],
+      projectName : json['projectName'],
+      titleName : json['titleName'],
+      gradeName : json['grade_Name'],
+      companyName : json['companyName'],
+      name : json['name'],
+      arabicName : json['arabicName'],
+      stName : json['stName'],
+      middleName : json['middleName'],
+      lastName : json['lastName'],
+      managerCode : json['managerCode'],
+      titleId : json['titleId'],
+      email : json['email'],
+      deskPhone : json['deskPhone'],
+      phone : json['phone'],
+      mobile : json['mobile'],
+      mobile1 : json['mobile1'],
+      hireDate : json['hireDate'],
+      projectId : json['projectId'],
+      status : json['status'],
+      linkedIn : json['linkedIn'],
+      skype : json['skype'],
+      imgProfile : json['imgProfile'],
+      birthdate : json['birthdate'],
+      cv : json['cv'],
+      nationalId : json['nationalId'],
+      address : json['address'],
+      country : json['country'],
+      city : json['city'],
+      area : json['area'],
+      street : json['street'],
+      isActive : json['isActive'],
+      interviewId : json['interviewId'],
+      inDate : json['inDate'],
+      inUser : json['inUser'],
+      isTopManagement : json['isTopManagement'],
+      isCEO : json['isCEO'],
+      isLessonLearned : json['isLessonLearned']);
+
+  }
 
   Future<void> logOut() async {
     try {
-      _controller.add(User.empty);
+      _controller.add(MainUserData.empty);
       // add all functions to log out from user
       await Future.wait([
-        shared_User.remove('user'),
+        shared_User.remove(userCacheKey),
+        shared_User.remove(employeeCacheKey),
         shared_User.clear()
         // _firebaseAuth.signOut(),
       ]);
@@ -123,24 +237,64 @@ class AuthenticationRepository {
       // throw LogOutFailure();
     }
   }
-
-  User get currentUser  {
-    try{
-      String? data = shared_User.getString('user');
-
-      Map userMap = jsonDecode(data!);
-      var user = getFromJson(userMap as Map<String, dynamic>);
+  Stream<MainUserData> get user {
+    return _firebaseAuth.authStateChanges().map((firebaseUser) {
+      final user = firebaseUser == null ? MainUserData.empty : currentUser;
       return user;
+    });
+  }
+
+  MainUserData get currentUser {
+    try{
+      // try{
+      // await firebase_auth.FirebaseAuth.instance.currentUser?.reload();
+      // if(_firebaseAuth.currentUser != null){
+        print(_firebaseAuth.currentUser);
+        // String? data = shared_User.getString(userCacheKey);
+        // Map userMap = jsonDecode(data!);
+        // var user = getFromJson(userMap as Map<String, dynamic>);
+        // return user;
+
+        String? data = shared_User.getString(userCacheKey);
+        Map userMap = jsonDecode(data!);
+        var user = getFromJson(userMap as Map<String, dynamic>);
+        String? dataEmployee = shared_User.getString(employeeCacheKey);
+        Map employeeMap = jsonDecode(data!);
+        var employeeData = getEmployeeDataFromJson(employeeMap as Map<String, dynamic>);
+        var mainUserData = MainUserData(user: user,employeeData: employeeData);
+        return mainUserData;
+      // }else{
+      //   return User.empty;
+      // }
+
     }catch(e){
-      return User.empty;
+      return MainUserData.empty;
+    }
+  }
+  EmployeeData get currentUserData {
+    try{
+      // try{
+      // await firebase_auth.FirebaseAuth.instance.currentUser?.reload();
+      // if(_firebaseAuth.currentUser != null){
+      print(_firebaseAuth.currentUser);
+      String? data = shared_User.getString(employeeCacheKey);
+      Map userMap = jsonDecode(data!);
+      var employeeData = getEmployeeDataFromJson(userMap as Map<String, dynamic>);
+      return employeeData;
+      // }else{
+      //   return User.empty;
+      // }
+
+    }catch(e){
+      return EmployeeData.empty;
     }
   }
 
-  Stream<User> get user async* {
-    await Future<void>.delayed(const Duration(seconds: 1));
-    var user = _cache.read<User>(key: userCacheKey) ?? User.empty;
-    yield user;
-  }
+  // Stream<User> get user async* {
+  //   await Future<void>.delayed(const Duration(seconds: 1));
+  //   var user = _cache.read<User>(key: userCacheKey) ?? User.empty;
+  //   yield user;
+  // }
 
   void dispose() => _controller.close();
 }
