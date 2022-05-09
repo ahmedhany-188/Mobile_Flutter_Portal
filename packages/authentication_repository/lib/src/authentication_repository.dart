@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:authentication_repository/src/authentication_provider.dart';
-import 'package:authentication_repository/src/models/employee_data.dart';
-import 'package:authentication_repository/src/models/main_user_data.dart';
 // import 'package:firebase_auth/f
 import 'package:firebase_auth/firebase_auth.dart'as flutter_firebase_auth;
 import 'package:firebase_database/firebase_database.dart';
@@ -34,7 +32,7 @@ class AuthenticationRepository {
     }on firebase_auth.FirebaseAuthException catch (e){
       if (e.code == 'user-disabled') {
         // User is disabled.
-        _controller.add(MainUserData.empty);
+        // _controller.add(MainUserData.empty);
         await Future.wait([
           shared_User.remove(userCacheKey),
           shared_User.remove(employeeCacheKey),
@@ -103,6 +101,8 @@ class AuthenticationRepository {
                 if (value.statusCode == 200) {
                   final employeeDataJson = await jsonDecode(value.body);
                   EmployeeData employeeData = getEmployeeDataFromJson(employeeDataJson[0]);
+                  String employeeDataString = jsonEncode(employeeDataJson[0]);
+                  shared_User.setString(employeeCacheKey, employeeDataString);
                   print(employeeData.toString());
                   await _firebaseMessaging.getToken().then((token) async {
                     print("FCM --> $token");
@@ -259,7 +259,7 @@ class AuthenticationRepository {
         Map userMap = jsonDecode(data!);
         var user = getFromJson(userMap as Map<String, dynamic>);
         String? dataEmployee = shared_User.getString(employeeCacheKey);
-        Map employeeMap = jsonDecode(data!);
+        Map employeeMap = jsonDecode(dataEmployee!);
         var employeeData = getEmployeeDataFromJson(employeeMap as Map<String, dynamic>);
         var mainUserData = MainUserData(user: user,employeeData: employeeData);
         return mainUserData;
@@ -269,24 +269,6 @@ class AuthenticationRepository {
 
     }catch(e){
       return MainUserData.empty;
-    }
-  }
-  EmployeeData get currentUserData {
-    try{
-      // try{
-      // await firebase_auth.FirebaseAuth.instance.currentUser?.reload();
-      // if(_firebaseAuth.currentUser != null){
-      print(_firebaseAuth.currentUser);
-      String? data = shared_User.getString(employeeCacheKey);
-      Map userMap = jsonDecode(data!);
-      var employeeData = getEmployeeDataFromJson(userMap as Map<String, dynamic>);
-      return employeeData;
-      // }else{
-      //   return User.empty;
-      // }
-
-    }catch(e){
-      return EmployeeData.empty;
     }
   }
 

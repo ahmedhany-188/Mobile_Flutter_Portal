@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:equatable/equatable.dart';
 
-class MainUserData{
+class MainUserData extends Equatable{
   final User? user;
   final EmployeeData? employeeData;
   const MainUserData({this.employeeData,this.user});
@@ -13,4 +14,8 @@ class MainUserData{
 
   /// Convenience getter to determine whether the current user is not empty.
   bool get isNotEmpty => this != MainUserData.empty;
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [user, employeeData];
 }
