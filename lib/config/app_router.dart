@@ -10,6 +10,7 @@ import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
+import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
@@ -105,6 +106,11 @@ class AppRouter {
 
         return MaterialPageRoute(
           builder: (_) => NewsScreen(),
+        );
+      case PhotosScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => PhotosScreen(),
         );
       default:
         return null;

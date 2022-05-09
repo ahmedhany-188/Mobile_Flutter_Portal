@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
+import 'package:hassanallamportalflutter/data/models/weather.dart';
 import 'package:meta/meta.dart';
 
 part 'app_event.dart';
@@ -19,17 +21,17 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppUserChanged>(_onUserChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
     _userSubscription = _authenticationRepository.status.listen(
-          (user) => add(AppUserChanged(user)),
+          (userData) => add(AppUserChanged(userData)),
     );
   }
 
   final AuthenticationRepository _authenticationRepository;
-  late final StreamSubscription<User> _userSubscription;
+  late final StreamSubscription<MainUserData> _userSubscription;
 
-  void _onUserChanged(AppUserChanged event, Emitter<AppState> emit) {
+  Future<void> _onUserChanged(AppUserChanged event, Emitter<AppState> emit) async {
     emit(
-      event.user.isNotEmpty
-          ? AppState.authenticated(event.user)
+      event.userData.isNotEmpty
+          ? AppState.authenticated(event.userData)
           : const AppState.unauthenticated(),
     );
   }

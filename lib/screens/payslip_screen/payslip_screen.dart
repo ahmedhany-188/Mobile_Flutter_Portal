@@ -77,7 +77,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AppBloc bloc) => bloc.state.user);
+    final user = context.select((AppBloc bloc) => bloc.state.userData.user);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -139,7 +139,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
                   onPressed: () {
                     if (_passwordController.text.isNotEmpty) {
                       BlocProvider.of<PayslipCubit>(context).getPdfLink(
-                          user.email, _passwordController.text.toString());
+                          user?.email ?? "", _passwordController.text.toString());
                       // context.read<PayslipCubit>().getPdfLink("ahmed.elghandour@hassanallam.com", _passwordController.text.toString());
                     }
                   },
