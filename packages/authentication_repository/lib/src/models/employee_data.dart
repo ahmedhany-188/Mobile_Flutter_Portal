@@ -1,4 +1,6 @@
-class EmployeeData {
+import 'package:equatable/equatable.dart';
+
+class EmployeeData extends Equatable {
 
   final String? userHrCode;
   final Null? applications;
@@ -201,6 +203,10 @@ class EmployeeData {
       linkedIn: "",locationId: "",mainDepartment: "",mainDepartmentID: 0,mainFunction: "",managerCode: "",
       middleName: "",mobile1: "",mobile: "",name: "",nationalId: "",phone: "",projectId: null,projectName: "",skype: null,status: null,stName: "",
       street: "",titleId: "",titleName: "",userHrCode: "");
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [email, userHrCode];
 
   // EmployeeData.empty1();
 
