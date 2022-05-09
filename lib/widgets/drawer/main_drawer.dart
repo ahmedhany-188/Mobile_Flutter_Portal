@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
+import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
-import 'package:provider/src/provider.dart';import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
+import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
+import 'package:provider/src/provider.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
+import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
+
 class MainDrawer extends StatefulWidget {
   @override
   State<MainDrawer> createState() => _MainDrawerState();
@@ -36,20 +40,14 @@ class _MainDrawerState extends State<MainDrawer> {
 
   @override
   Widget build(BuildContext context) {
-    final deviceHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    final deviceHeight = MediaQuery.of(context).size.height;
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topRight: Radius.circular(30),
         bottomRight: Radius.circular(30),
       ),
       child: SizedBox(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width * 0.9,
+        width: MediaQuery.of(context).size.width * 0.9,
         child: Drawer(
           elevation: 5,
           child: Column(
@@ -60,10 +58,7 @@ class _MainDrawerState extends State<MainDrawer> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 alignment: Alignment.centerLeft,
-                color: Theme
-                    .of(context)
-                    .colorScheme
-                    .primary,
+                color: Theme.of(context).colorScheme.primary,
                 // decoration: BoxDecoration(), use it if you will set another decoration apart from color
                 child: const Text(
                   'welcome!',
@@ -86,7 +81,7 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Home',
                         Icons.home,
-                            () {
+                        () {
                           Navigator.of(context)
                               .pushReplacementNamed(TapsScreen.routeName);
                         },
@@ -99,12 +94,11 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Get Direction',
                         Icons.nature_people,
-                            () {
+                        () {
                           Navigator.of(context).pushReplacementNamed(
                               GetDirectionScreen.routeName);
                         },
                       ),
-
                       const Divider(
                         thickness: 1,
                         indent: 10,
@@ -113,7 +107,7 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Attendance',
                         Icons.fingerprint,
-                            () {
+                        () {
                           Navigator.of(context).pushReplacementNamed(
                               Attendance_Screen.routeName);
                         },
@@ -123,10 +117,10 @@ class _MainDrawerState extends State<MainDrawer> {
                         indent: 10,
                         endIndent: 10,
                       ),
-                      buildListTile(
-                          'Medical Request', Icons.medical_services, () {
-                        Navigator.of(context).pushNamed(MedicalRequestScreen
-                            .routeName);
+                      buildListTile('Medical Request', Icons.medical_services,
+                          () {
+                        Navigator.of(context)
+                            .pushNamed(MedicalRequestScreen.routeName);
                       }),
                       const Divider(
                         thickness: 1,
@@ -136,10 +130,11 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Payslip',
                         Icons.nature_people,
-                            () {
-                          Navigator.of(context).pushNamed(
-                              PayslipScreen.routeName);
-                        },),
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(PayslipScreen.routeName);
+                        },
+                      ),
                       const Divider(
                         thickness: 1,
                         indent: 10,
@@ -148,8 +143,21 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Subsidiaries',
                         Icons.add_business_sharp,
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(SubsidiariesScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'EconomyNews',
+                        Icons.waterfall_chart,
                             () {
-                          Navigator.of(context).pushNamed(SubsidiariesScreen
+                          Navigator.of(context).pushNamed(EconomyNewsScreen
                               .routeName);
                         },
                       ),
@@ -161,9 +169,9 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Value',
                         Icons.agriculture_sharp,
-                            () {
-                          Navigator.of(context).pushNamed(ValueScreen
-                              .routeName);
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(ValueScreen.routeName);
                         },
                       ),
                       const Divider(
@@ -174,12 +182,11 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'About',
                         Icons.details,
-                            () {
-                          Navigator.of(context).pushNamed(AboutScreen
-                              .routeName);
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(AboutScreen.routeName);
                         },
                       ),
-
                       const Divider(
                         thickness: 1,
                         indent: 10,
@@ -188,8 +195,20 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'News',
                         Icons.list,
-                            () {
+                        () {
                           Navigator.of(context).pushNamed(NewsScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'Photos',
+                        Icons.add_a_photo,
+                        () {
+                          Navigator.of(context).pushNamed(PhotosScreen.routeName);
                         },
                       ),
                       const Divider(
@@ -200,8 +219,7 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Logout',
                         Icons.logout,
-                            () =>
-                            context.read<AppBloc>().add(AppLogoutRequested()),
+                        () => context.read<AppBloc>().add(AppLogoutRequested()),
                       ),
                     ],
                   ),

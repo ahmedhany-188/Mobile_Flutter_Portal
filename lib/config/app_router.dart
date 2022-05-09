@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
+import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
@@ -9,6 +10,7 @@ import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
+import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
@@ -75,6 +77,11 @@ class AppRouter {
           builder: (_) => MedicalRequestScreen(),
         );
 
+      case EconomyNewsScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => EconomyNewsScreen(),
+        );
+
       case PayslipScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => PayslipScreen(),
@@ -99,6 +106,11 @@ class AppRouter {
 
         return MaterialPageRoute(
           builder: (_) => NewsScreen(),
+        );
+      case PhotosScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => PhotosScreen(),
         );
       default:
         return null;

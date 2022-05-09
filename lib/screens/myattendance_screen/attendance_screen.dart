@@ -43,7 +43,6 @@ class _attendance_sreenState extends State<Attendance_Screen> {
               AttendanceStringData = state.getContactList;
               AttendanceListData = jsonDecode(AttendanceStringData);
 
-
               // open pdf file in
               // final  _url = "https://portal.hassanallam.com/Public/medical.aspx?FormID=2217";
               // if (await canLaunch(_url))
