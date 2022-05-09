@@ -1,25 +1,41 @@
 import 'dart:convert';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_widget.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_ticket_widget.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
+import 'package:intl/intl.dart';
 
 class Attendance_Screen extends StatefulWidget {
 
   static const routeName = '/myattendance-list-screen';
+
+
+
   const Attendance_Screen({Key? key}) : super(key: key);
 
   @override
   State<Attendance_Screen> createState() => _attendance_sreenState();
+
 }
 
 class _attendance_sreenState extends State<Attendance_Screen> {
 
+  int monthNumber = DateTime
+      .now()
+      .month;
+
+
   List<dynamic> AttendanceListData = [];
   String AttendanceStringData = "";
+
+  var formatter = new DateFormat('MMMM');
+
 
   @override
   Widget build(BuildContext context) {
@@ -27,31 +43,84 @@ class _attendance_sreenState extends State<Attendance_Screen> {
         .of(context)
         .size;
 
+    final user = context.select((AppBloc bloc) => bloc.state.user);
+
     return Scaffold(
       appBar: AppBar(),
       resizeToAvoidBottomInset: false,
 
-        drawer: MainDrawer(),
-      body: BlocProvider<AttendanceCubit>(
-        create: (context) =>
-        AttendanceCubit()
-          ..getAttendanceList(),
-        child: BlocConsumer<AttendanceCubit, AttendanceState>(
-          listener: (context, state) {
-            if (state is BlocGetTheAttendanceSuccesState) {
+      drawer: MainDrawer(),
 
-              AttendanceStringData = state.getContactList;
-              AttendanceListData = jsonDecode(AttendanceStringData);
+      body: BlocConsumer<AttendanceCubit, AttendanceState>(
+        listener: (context, state) {
 
-              // open pdf file in
-              // final  _url = "https://portal.hassanallam.com/Public/medical.aspx?FormID=2217";
-              // if (await canLaunch(_url))
-              //   await launch(_url);
+          if (state is BlocGetTheAttendanceSuccesState) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Success"),
+              ),
+            );
+            AttendanceStringData = state.getContactList;
+            AttendanceListData = jsonDecode(AttendanceStringData);
+          }
+          else if(state is BlocGetTheAttendanceLoadingState){
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Loading"),
+              ),
+            );
+          }
+          else if(state is BlocGetTheAttendanceErrorState){
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("error"),
+              ),
+            );
+          }
 
-            }
-          },
-          builder: (context, state) {
-            return SingleChildScrollView(
+        },
+        builder: (context, state) {
+          return Container(child: Column(children: [
+
+
+            Container(
+
+              child: Row(children: [
+                Row(children: [
+                  RaisedButton(
+                    onPressed: () {
+                      monthNumber--;
+                      BlocProvider.of<AttendanceCubit>(context)
+                          .getAttendanceList(user.userHRCode, monthNumber);
+                    },
+                    child: Text('prev'),
+                  ),
+                ],
+                ),
+                Row(children: [
+                  RaisedButton(
+                    onPressed: () {
+                      monthNumber++;
+                      BlocProvider.of<AttendanceCubit>(context)
+                          .getAttendanceList(user.userHRCode, monthNumber);
+                    },
+                    child: Text('next'),
+                  ),
+                ],
+                  mainAxisAlignment: MainAxisAlignment.end,
+                ),
+              ],
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ),
+            ),
+
+            Text(monthNumber.toString(),
+              style: TextStyle(fontSize: 20, color: Colors.black),),
+
+            SingleChildScrollView(
                 physics: const NeverScrollableScrollPhysics(),
                 child: Column(
                   children: [
@@ -64,17 +133,21 @@ class _attendance_sreenState extends State<Attendance_Screen> {
                                   .top),
                       child: AttendanceTicketWidget(AttendanceListData),
                       decoration: const BoxDecoration(
-                          image: DecorationImage(image: AssetImage(
-                              "assets/images/backgroundattendance.jpg"),
-                              fit: BoxFit.cover)
+                        // image: DecorationImage(image: AssetImage(
+                        //     "assets/images/backgroundattendance.jpg"),
+                        //     fit: BoxFit.cover)
                       ),
                     )
                   ],
                 )
-            );
-          },
-        ),
+            )
+          ],
+          ),
+          );
+        },
+
       ),
+
     );
   }
 }

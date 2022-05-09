@@ -95,7 +95,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                         Container(
 
                           child: Text(date[1] + "/" + date[2].substring(0, 2),
-                              style: TextStyle(color: Colors.white)),
+                              style: TextStyle(color: Colors.black)),
                         ),
 
                         Container(
@@ -147,7 +147,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                         Container(
 
                             child: Text(date[1] + "/" + date[2].substring(0, 2),
-                                style: TextStyle(color: Colors.white))),
+                                style: TextStyle(color: Colors.black))),
 
                         Container(
                           height: 30,
@@ -208,7 +208,7 @@ class AttendanceTicketWidget extends StatelessWidget {
 
                       Container(child:
                       Text(date[1] + "/" + date[2].substring(0, 2),
-                          style: TextStyle(color: Colors.white)),),
+                          style: TextStyle(color: Colors.black)),),
 
                       Container(
                         height: 30,
@@ -261,7 +261,7 @@ class AttendanceTicketWidget extends StatelessWidget {
 
                       Container(child: Text(
                           date[1] + "/" + date[2].substring(0, 2),
-                          style: TextStyle(color: Colors.white)),),
+                          style: TextStyle(color: Colors.black)),),
                       Container(
                         height: 30,
                         child: Text(
@@ -313,7 +313,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                     child: Column(children: [
                       Container(
                         child: Text(date[1] + "/" + date[2].substring(0, 2),
-                            style: TextStyle(color: Colors.white)),
+                            style: TextStyle(color: Colors.black)),
 
                       ),
 

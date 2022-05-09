@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,7 +25,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
   TextEditingController Patientname_MedicalRequest = TextEditingController();
   TextEditingController HAHuser_MedicalRequest = TextEditingController();
 
-  String HR_code="10204738";
+
 
   String selectedValueLab = "" ;
   String selectedValueService = "" ;
@@ -60,6 +61,9 @@ class _medical_request_state extends State<MedicalRequestScreen> {
   }
 
   Future<void> _sendSubmit(BuildContext context) async{
+
+    final user = context.select((AppBloc bloc) => bloc.state.user);
+    String HR_code=user.userHRCode.toString();
 
     if(selectedValueService=="" || selectedValueLab=="" || Patientname_MedicalRequest.text=="" || HAHuser_MedicalRequest.text==""){
 
