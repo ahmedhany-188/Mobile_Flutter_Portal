@@ -43,7 +43,7 @@ class _attendance_sreenState extends State<Attendance_Screen> {
         .of(context)
         .size;
 
-    final user = context.select((AppBloc bloc) => bloc.state.user);
+    final user = context.select((AppBloc bloc) => bloc.state.userData);
 
     return Scaffold(
       appBar: AppBar(),
@@ -92,9 +92,13 @@ class _attendance_sreenState extends State<Attendance_Screen> {
                 Row(children: [
                   RaisedButton(
                     onPressed: () {
+
                       monthNumber--;
+                      if(monthNumber<1){
+                        monthNumber=12;
+                      }
                       BlocProvider.of<AttendanceCubit>(context)
-                          .getAttendanceList(user.userHRCode, monthNumber);
+                          .getAttendanceList(user.user!.userHRCode, monthNumber);
                     },
                     child: Text('prev'),
                   ),
@@ -104,8 +108,11 @@ class _attendance_sreenState extends State<Attendance_Screen> {
                   RaisedButton(
                     onPressed: () {
                       monthNumber++;
+                      if(monthNumber>12){
+                        monthNumber=1;
+                      }
                       BlocProvider.of<AttendanceCubit>(context)
-                          .getAttendanceList(user.userHRCode, monthNumber);
+                          .getAttendanceList(user.user!.userHRCode, monthNumber);
                     },
                     child: Text('next'),
                   ),
@@ -117,7 +124,8 @@ class _attendance_sreenState extends State<Attendance_Screen> {
               ),
             ),
 
-            Text(monthNumber.toString(),
+
+            Text(DateFormat('MMMM').format(DateTime(0, monthNumber)),
               style: TextStyle(fontSize: 20, color: Colors.black),),
 
             SingleChildScrollView(
@@ -132,17 +140,18 @@ class _attendance_sreenState extends State<Attendance_Screen> {
                                   .viewPadding
                                   .top),
                       child: AttendanceTicketWidget(AttendanceListData),
-                      decoration: const BoxDecoration(
-                        // image: DecorationImage(image: AssetImage(
-                        //     "assets/images/backgroundattendance.jpg"),
-                        //     fit: BoxFit.cover)
-                      ),
+
                     )
                   ],
                 )
             )
           ],
           ),
+            decoration: const BoxDecoration(
+                image: DecorationImage(image: AssetImage(
+                    "assets/images/backgroundattendance.jpg"),
+                    fit: BoxFit.cover)
+            ),
           );
         },
 

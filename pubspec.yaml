@@ -134,7 +134,7 @@ flutter:
     - assets/images/close.png
     - assets/images/shadows.png
     - assets/images/fulllogoblue.png
-#    - assets/images/backgroundattendance.jpg
+    - assets/images/backgroundattendance.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

@@ -16,6 +16,7 @@ class AuthenticationProvider{
       Uri.parse(
           "https://api.hassanallam.com/api/Employee/GetEmployee?HRCode=$hrCode"),
     );
+
     print(rawAttendanceData.body);
     return rawAttendanceData;
   }

@@ -1,6 +1,8 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hassanallamportalflutter/screens/myattendance_screen/dialog_attendance_employee.dart';
 
 import '../../widgets/map/open_map.dart';
 import '../../constants/google_map_api_key.dart';
@@ -26,6 +28,74 @@ class AttendanceTicketWidget extends StatelessWidget {
       : super(key: key);
 
 
+  void showDialogRequest(BuildContext context, int dayIndex) {
+    Fluttertoast.showToast(
+        msg: "Fill all the fields",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.black,
+        fontSize: 16.0
+    );
+      Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
+      child: Stack(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.only(left: 5,top: 5
+                + 5, right:5,bottom: 5
+            ),
+            margin: EdgeInsets.only(top:5),
+            decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                boxShadow: [
+                  BoxShadow(color: Colors.black,offset: Offset(0,10),
+                      blurRadius: 10
+                  ),
+                ]
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text("title",style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),),
+                SizedBox(height: 15,),
+                Text("descreption",style: TextStyle(fontSize: 14),textAlign: TextAlign.center,),
+                SizedBox(height: 22,),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: FlatButton(
+                      onPressed: (){
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("text",style: TextStyle(fontSize: 18),)),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            left: 5,
+            right: 5,
+            child: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              radius: 5,
+              child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  child: Image.asset("assets/logo.png")
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -35,6 +105,7 @@ class AttendanceTicketWidget extends StatelessWidget {
         condition: projectsDirectionData.isNotEmpty,
         builder: (context) =>
             GridView.builder(
+
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -80,6 +151,8 @@ class AttendanceTicketWidget extends StatelessWidget {
                 deduction =
                     projectsDirectionData[index]["deduction"].toString();
 
+
+
                 if (projectsDirectionData[index]["time_IN"].toString() !=
                     "null" &&
                     projectsDirectionData[index]["time_OUT"].toString() !=
@@ -90,64 +163,84 @@ class AttendanceTicketWidget extends StatelessWidget {
                       ((int.parse(time_in) < 8) || (int.parse(time_in) == 8 &&
                           int.parse(time_in2) < 31))) {
                     return Container(
+
                       width: double.infinity,
-                      child: Column(children: [
-                        Container(
+                      child: InkWell(
+                          onTap: () {
+                            showDialogRequest(context,index);
 
-                          child: Text(date[1] + "/" + date[2].substring(0, 2),
-                              style: TextStyle(color: Colors.black)),
-                        ),
+                          },
 
-                        Container(
+                          child: Column(children: [
+                            Container(
 
-                          child: Text(projectsDirectionData[index]["time_IN"],
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 11,)),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(5),
-                                topRight: Radius.circular(5)),
-                            color: Colors.lightGreenAccent,
-                          ),
-                          alignment: Alignment.center,
-                          width: double.infinity,
-                          height: 30,
+                              child: Text(
+                                  date[1] + "/" + date[2].substring(0, 2),
+                                  style: TextStyle(color: Colors.white)),
+                            ),
 
-                        ),
+                            Container(
 
-                        Container(height: 5,color:Colors.white,),
-                        Container(
-                          width: double.infinity,
-                          alignment: Alignment.center,
-                          height: 30,
-                          child: Text(projectsDirectionData[index]["time_OUT"],
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 11,)),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(5),
-                                bottomRight: Radius.circular(5)),
-                            color: Colors.lightGreenAccent,
-                          ),
-                        ),
-                      ]),
+
+                              child: Text(
+                                  projectsDirectionData[index]["time_IN"],
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11,)),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(5),
+                                    topRight: Radius.circular(5)),
+                                color: Colors.lightGreen,
+                              ),
+                              alignment: Alignment.center,
+                              width: double.infinity,
+                              height: 30,
+
+                            ),
+
+                            Container(height: 5, color: Colors.white,),
+                            Container(
+                              width: double.infinity,
+                              alignment: Alignment.center,
+                              height: 30,
+                              child: Text(
+                                  projectsDirectionData[index]["time_OUT"],
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11,)),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(5),
+                                    bottomRight: Radius.circular(5)),
+                                color: Colors.lightGreen,
+                              ),
+                            ),
+                          ])
+
+                      ),
+
                     );
-                  } else if
+                  }
+
+                  else if
                   (((int.parse(time_out) >= 5) || (int.parse(time_out) == 4 &&
                       int.parse(time_out2) == 59)) &&
                       ((int.parse(time_in) > 8) || (int.parse(time_in) == 8 &&
                           int.parse(time_in2) > 30))) {
                     return Container(
                       width: double.infinity,
-                      child:
-                      Column(children: [
+                        child: InkWell(
+                          onTap: () {
+                            showDialogRequest(context,index);
+
+                          },
+                      child: Column(children: [
 
                         Container(
 
                             child: Text(date[1] + "/" + date[2].substring(0, 2),
-                                style: TextStyle(color: Colors.black))),
+                                style: TextStyle(color: Colors.white))),
 
                         Container(
                           height: 30,
@@ -178,7 +271,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(5),
                                 bottomRight: Radius.circular(5)),
-                            color: Colors.lightGreenAccent,
+                            color: Colors.lightGreen,
                           ),
                           alignment: Alignment.center,
                           width: double.infinity,
@@ -187,9 +280,10 @@ class AttendanceTicketWidget extends StatelessWidget {
 
 
                       ]),
-
+                        ),
                     );
-                  } else if
+                  }
+                  else if
                   ((int.parse(time_out) != 4 && int.parse(time_out2) != 59)
                       ||
                       (int.parse(time_out) != 4 && int.parse(time_out2) < 59) ||
@@ -199,16 +293,18 @@ class AttendanceTicketWidget extends StatelessWidget {
                               (int.parse(time_in) == 8 &&
                                   int.parse(time_in2) < 31))) {
                     return Container(
-                      width: double.infinity,
 
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ), child:
-                    Column(children: [
+                      width: double.infinity,
+                        child: InkWell(
+                        onTap: () {
+                          showDialogRequest(context,index);
+
+                    },
+                      child: Column(children: [
 
                       Container(child:
                       Text(date[1] + "/" + date[2].substring(0, 2),
-                          style: TextStyle(color: Colors.black)),),
+                          style: TextStyle(color: Colors.white)),),
 
                       Container(
                         height: 30,
@@ -222,7 +318,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(5),
                               topRight: Radius.circular(5)),
-                          color: Colors.lightGreenAccent,
+                          color: Colors.lightGreen,
                         ),
                         alignment: Alignment.center,
                         width: double.infinity,),
@@ -247,21 +343,22 @@ class AttendanceTicketWidget extends StatelessWidget {
 
 
                     ]),
-
+                        ),
                     );
                   }
                   else {
                     return Container(
                       width: double.infinity,
+                    child: InkWell(
+                    onTap: () {
+                      showDialogRequest(context,index);
 
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ), child:
-                    Column(children: [
+                    },
+                       child: Column(children: [
 
                       Container(child: Text(
                           date[1] + "/" + date[2].substring(0, 2),
-                          style: TextStyle(color: Colors.black)),),
+                          style: TextStyle(color: Colors.white)),),
                       Container(
                         height: 30,
                         child: Text(
@@ -300,25 +397,27 @@ class AttendanceTicketWidget extends StatelessWidget {
 
 
                     ]),
-
+                    ),
                     );
                   }
                 }
                 else {
                   return Container(
                     width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                    ),
+                  child: InkWell(
+                  onTap: () {
+
+                    AdvanceCustomAlert();
+                    // showDialogRequest(context,index);
+                  },
                     child: Column(children: [
                       Container(
                         child: Text(date[1] + "/" + date[2].substring(0, 2),
-                            style: TextStyle(color: Colors.black)),
+                            style: TextStyle(color: Colors.white)),
 
                       ),
 
                       Container(
-
 
                         height: 65,
                         decoration: BoxDecoration(
@@ -329,12 +428,15 @@ class AttendanceTicketWidget extends StatelessWidget {
                         alignment: Alignment.center,
                         width: double.infinity,),
                     ]),
+                  ),
                   );
                 }
               },
+
             ),
         fallback: (context) => const Center(child: LinearProgressIndicator()),
       ),
     );
   }
+
 }
