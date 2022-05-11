@@ -84,10 +84,7 @@ class _attendance_sreenState extends State<Attendance_Screen> {
         },
         builder: (context, state) {
           return Container(child: Column(children: [
-
-
             Container(
-
               child: Row(children: [
                 Row(children: [
                   RaisedButton(

@@ -91,6 +91,8 @@ class _medical_request_state extends State<MedicalRequestScreen> {
         .of(context)
         .size;
 
+    final user = context.select((AppBloc bloc) => bloc.state.userData);
+
     return Scaffold(
       appBar: AppBar(),
       resizeToAvoidBottomInset: false,
@@ -224,8 +226,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
 
                 ElevatedButton(
                   onPressed: () {
-                    final user = context.select((AppBloc bloc) =>
-                    bloc.state.userData);
+
                     String HR_code = user.user!.userHRCode.toString();
 
                     print("-----------"+user.user!.userHRCode.toString());

@@ -36,7 +36,6 @@ class EconomyNewsTicketWidget extends StatelessWidget{
               itemBuilder: (BuildContext context, int index) {
 
                     return Container(
-                      width: double.infinity,
                       child:Text("abc"),
 
                     );
