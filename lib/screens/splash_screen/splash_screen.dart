@@ -1,11 +1,13 @@
 import 'dart:ui';
 
-
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:badges/badges.dart';
+import 'package:delayed_display/delayed_display.dart';
 import 'package:entry/entry.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
@@ -22,147 +24,93 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+        overlays: [SystemUiOverlay.bottom,SystemUiOverlay.top]);
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+    ));
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
-    final double deviceTopPadding =
-        MediaQueryData.fromWindow(window).padding.top;
-    final double resizeElements = deviceHeight * -0.09 - (deviceTopPadding);
-    final double resizeCar = deviceHeight * -0.132 - (deviceTopPadding);
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        body: AnimatedSplashScreen(
-          splashIconSize: deviceWidth,
-          curve: Sprung.criticallyDamped,
-          disableNavigation: false,
-          duration: 2000,
-          centered: true,
-
-          splash: Sizer(
-            builder: (BuildContext context, Orientation orientation,
-                DeviceType deviceType) {
-              return SizedBox(
-                height: deviceHeight.h - deviceTopPadding.h,
-                child: Stack(
-                  fit: StackFit.expand,
-                  clipBehavior: Clip.none,
-                  // alignment: Alignment.bottomCenter,
-                  children: [
-                    Positioned(
-                      left: 20.sp,
-                      bottom: 250.sp,
-                      // height: 100,
-                      child: Image.asset(
-                        'assets/images/fulllogoblue.png',
-                        scale: 1.sp,
-                      ),
-                    ),
-                    Positioned(
-                      bottom: resizeElements.sp,
-                      // height: 100,
-                      child: Entry.all(
-                        opacity: 1,
-                        curve: Sprung.criticallyDamped,
-                        delay: const Duration(milliseconds: 1000),
-                        duration: const Duration(milliseconds: 1500),
-                        child: Image.asset(
-                          'assets/images/far.png',
-                          width: deviceWidth,
-                          height: deviceHeight.h * 0.1.sp,
-                          fit: BoxFit.fill,
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: AnimatedSplashScreen(
+        splashIconSize: deviceWidth * 2,
+        curve: Curves.linear,
+        disableNavigation: true,
+        duration: 1500,
+        centered: false,
+        splash: Stack(
+          children: [
+            Image.asset(
+              'assets/images/S_Background.png',
+              fit: BoxFit.fill,
+              width: deviceWidth,
+            ),
+            DelayedDisplay(
+              delay: Duration(milliseconds: 1000),
+              slidingCurve: Curves.decelerate,
+              fadeIn: true,
+              fadingDuration: Duration(milliseconds: 1500),
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Flexible(
+                      child: Text(
+                        'Hello',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 80,
+                          letterSpacing: 4,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    Positioned(
-                      bottom: resizeElements.sp,
-                      child: Entry.offset(
-                        // opacity: 1,
-                        curve: Sprung.overDamped,
-                        delay: const Duration(milliseconds: 1000),
-                        duration: const Duration(milliseconds: 1500),
-                        child: Image.asset(
-                          'assets/images/close.png',
-                          width: deviceWidth,
-                          height: deviceHeight.h * 0.1.sp,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: resizeCar,
-                      left: 10,
-                      child: Entry.offset(
-                        xOffset: -280,
-                        yOffset: 0,
-                        curve: Curves.bounceIn,
-                        delay: const Duration(milliseconds: 1500),
-                        duration: const Duration(milliseconds: 2000),
-                        child: Badge(
-                          elevation: 0,
-                          badgeColor: Colors.transparent,
-                          position: BadgePosition.topStart(
-                            top: 0.sp *
-                                (MediaQuery.of(context).size.aspectRatio * 0.7),
-                            start: 10.sp,
-                          ),
-                          animationDuration: Duration(milliseconds: 2000),
-                          animationType: BadgeAnimationType.slide,
-                          badgeContent: Image.asset(
-                            'assets/images/1.png',
-                            scale: 10,
-                          ),
-                          child: Container(
-                            height: 60,
-                            width: 100,
-                            color: Colors.transparent,
-                          ),
+                    Flexible(
+                      child: Text(
+                        'Welcome To Hassan Allam Portal',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                          letterSpacing: 4,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ],
                 ),
-              );
-            },
-          ),
-          // splashTransition: SplashTransition.slideTransition,
-          pageTransitionType: PageTransitionType.bottomToTop,
-          animationDuration: const Duration(milliseconds: 3000),
-          backgroundColor: Colors.transparent,
-          nextScreen: BlocBuilder<AppBloc, AppState>(
-              builder: (context, state) {
-                switch (state.status) {
-                  case AppStatus.authenticated:
-                    return const TapsScreen();
-                  case AppStatus.unauthenticated:
-                    return const AuthScreen();
-                  default:
-                    return AuthScreen();
-                }
-              }),
-          // screenFunction: () {
-          //   return BlocBuilder<AppBloc, AppState>(
-          //       builder: (context, state) {
-          //         switch (state.status) {
-          //           case AppStatus.authenticated:
-          //             return const AnimatedSwitcher(
-          //               duration: Duration(milliseconds: 1000),
-          //               child: TapsScreen(),
-          //             );
-          //           case AppStatus.unauthenticated:
-          //             return const AnimatedSwitcher(
-          //               duration: Duration(milliseconds: 1000),
-          //               child: AuthScreen(),
-          //             );
-          //           default:
-          //             return AuthScreen();
-          //         }
-          //       });
-          // }, nextScreen: null,
+              ),
+            ),
+          ],
+        ),
+        // Sizer(
+        //   builder: (BuildContext context, Orientation orientation,
+        //       DeviceType deviceType) {
+        //     return Image.asset(
+        //           'assets/images/S_Background.png',width: deviceWidth.w,
+        //         );
+        //   },
+        // ),
+        splashTransition: SplashTransition.fadeTransition,
+        pageTransitionType: PageTransitionType.bottomToTop,
+        animationDuration: const Duration(milliseconds: 2000),
+        backgroundColor: Colors.transparent,
+        nextScreen: BlocBuilder<AppBloc, AppState>(
+          builder: (context, state) {
+            switch (state.status) {
+              case AppStatus.authenticated:
+                return const TapsScreen();
+              case AppStatus.unauthenticated:
+                return const AuthScreen();
+              default:
+                return AuthScreen();
+            }
+          },
         ),
       ),
     );
   }
 }
-
-/// PageTransitionAnimation(pageDirection: AuthScreen(), context: context, delayedDuration: 2000, transitionDuration: 3000).navigateFromBottom()
