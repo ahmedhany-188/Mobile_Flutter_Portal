@@ -135,6 +135,12 @@ flutter:
     - assets/images/close.png
     - assets/images/shadows.png
     - assets/images/fulllogoblue.png
+    - assets/images/backgroundattendance.jpg
+    - assets/images/login_image_background.png
+    - assets/images/login_image_background_two.png
+    - assets/images/login_image_buildings.png
+    - assets/images/login_image_light.png
+    - assets/images/login_image_logo.jpg
     - assets/images/Builds.png
     - assets/images/login_background.png
     - assets/images/S_Background.png

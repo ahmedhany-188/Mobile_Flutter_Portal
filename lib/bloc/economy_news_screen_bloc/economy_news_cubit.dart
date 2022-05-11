@@ -12,11 +12,11 @@ class EconomyNewsCubit extends Cubit<EconomyNewsState> {
 
   String economyNews ="";
 
-  void getSuccessMessage() async {
+  void getEconomyNews() async {
 
     emit(BlocGetTheEconomyNewsLoadingState());
 
-    EconomyNewsDataProvider().getEconomyNewsList().then((value){
+    EconomyNewsDataProvider().getEconomyNews().then((value){
 
       economyNews = value.body;
       print("----------"+economyNews);

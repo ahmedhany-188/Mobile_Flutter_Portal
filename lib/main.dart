@@ -95,7 +95,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<AttendanceCubit>(
           create: (attendanceCubitContext) =>
-              AttendanceCubit()..getAttendanceList(),
+              AttendanceCubit(),
         ),
         BlocProvider<MedicalRequestCubit>(
             create: (medicalRequestCubitContext) => MedicalRequestCubit()
