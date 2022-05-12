@@ -47,8 +47,6 @@ dependencies:
   fluttertoast: ^8.0.9
 
 
-
-
   flutter_form_builder: ^7.1.1
   animated_splash_screen: ^1.2.0
   animations: ^2.0.2
@@ -139,7 +137,7 @@ flutter:
     - assets/images/login_image_background_two.png
     - assets/images/login_image_buildings.png
     - assets/images/login_image_light.png
-    - assets/images/login_image_logo.jpg
+    - assets/images/login_image_logo.png
 
 
 
