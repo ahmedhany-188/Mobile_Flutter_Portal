@@ -16,6 +16,9 @@ import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dar
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
+import '../screens/polls_screen/polls_screen.dart';
+import '../screens/videos_screen/videos_screen.dart';
+
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -112,6 +115,17 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => PhotosScreen(),
         );
+      case PollsScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => PollsScreen(),
+        );
+      case VideosScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => VideosScreen(),
+        );
+
       default:
         return null;
     }

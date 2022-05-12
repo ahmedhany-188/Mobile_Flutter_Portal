@@ -10,9 +10,12 @@ import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
+import 'package:hassanallamportalflutter/screens/polls_screen/polls_screen.dart';
 import 'package:provider/src/provider.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
+
+import '../../screens/videos_screen/videos_screen.dart';
 
 class MainDrawer extends StatefulWidget {
   @override
@@ -209,6 +212,30 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.add_a_photo,
                         () {
                           Navigator.of(context).pushNamed(PhotosScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'Polls',
+                        Icons.add_a_photo,
+                            () {
+                          Navigator.of(context).pushNamed(PollsScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'Videos',
+                        Icons.add_a_photo,
+                            () {
+                          Navigator.of(context).pushNamed(VideosScreen.routeName);
                         },
                       ),
                       const Divider(
