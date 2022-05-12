@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
@@ -44,6 +46,8 @@ class _MainDrawerState extends State<MainDrawer> {
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
+    final double deviceTopPadding =
+        MediaQueryData.fromWindow(window).padding.bottom;
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topRight: Radius.circular(30),
@@ -77,7 +81,7 @@ class _MainDrawerState extends State<MainDrawer> {
               //   height: 20,
               // ),
               Container(
-                height: deviceHeight * 0.6,
+                height: deviceHeight * 0.6 - deviceTopPadding,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [

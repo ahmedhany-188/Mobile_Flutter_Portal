@@ -2,9 +2,8 @@ import 'dart:ui';
 
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/services.dart';
-import 'package:sprung/sprung.dart';
 import 'package:flutter/material.dart';
-import 'package:entry/entry.dart';
+import 'package:hassanallamportalflutter/data/helpers/assist_function.dart';
 
 import 'auth_form.dart';
 
@@ -22,13 +21,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
         overlays: [SystemUiOverlay.bottom]);
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
 
     final deviceSize = MediaQuery.of(context).size;
-    final double deviceTopPadding =
-        MediaQueryData.fromWindow(window).padding.top;
 
     return GestureDetector(
       onTap: () {
@@ -36,52 +33,119 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
         AuthForm.passwordFocusNode.unfocus();
         AuthForm.keyboardSubscription;
       },
-      child: Container(
-        height: deviceSize.height,
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage("assets/images/login_background.png"),
-                fit: BoxFit.fitHeight)),
+      child: DelayedDisplay(
         child: Scaffold(
           backgroundColor: Colors.transparent,
           resizeToAvoidBottomInset: false,
           extendBodyBehindAppBar: true,
-          body: SingleChildScrollView(
-            physics: const PageScrollPhysics(),
-            child: Column(
-              // mainAxisSize: MainAxisSize.min,
-              // mainAxisAlignment: MainAxisAlignment.center,
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                DelayedDisplay(
-                  delay: Duration(milliseconds: 2000),
-                  child: Image.asset(
-                    'assets/images/login_background.png',
-                    // height: deviceSize.height * 0.3 - deviceTopPadding,
-                    width: deviceSize.width,
-                    fit: BoxFit.fitWidth,
+          body: Container(
+            width: deviceSize.width,
+            height: deviceSize.height,
+            decoration: const BoxDecoration(
+              color: Color.fromRGBO(255, 255, 255, 1),
+            ),
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                ///from here this is the container code
+                Positioned(
+                    top: 0,
+                    left: 0,
+                    child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 337,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            bottomRight: Radius.circular(300),
+                          ),
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/images/login_image_background_two.png'),
+                              fit: BoxFit.fitWidth),
+                        ))),
+                Positioned(
+                    top: 252,
+                    left: 0,
+                    child: Container(
+                        width: 360,
+                        height: 356,
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(80),
+                          ),
+                          color: Color.fromRGBO(255, 255, 255, 1),
+                        ))),
+                Positioned(
+                  top: 0,
+                  left: 0,
+                  child: Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 252,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(80),
+                      ),
+                      image: DecorationImage(
+                          image: AssetImage(
+                              'assets/images/login_image_background.png'),
+                          fit: BoxFit.fitWidth),
+                    ),
                   ),
                 ),
-                Entry.offset(
-                  // opacity: 1,
-                  curve: Sprung.overDamped,
-                  delay: const Duration(milliseconds: 2000),
-                  duration: const Duration(milliseconds: 1000),
-                  child: Column(
-                    children: [
-                      ClipPath(
-                        clipper: CustomClipPath(),
-                        child: Container(
-                          height: 100,
-                          width: deviceSize.width,
-                          decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(100)),
-                              color: Colors.white),
-                        ),
+
+                /// end of the containers code
+
+                /// the light code
+                Positioned(
+                    top: -20,
+                    left: -70,
+                    child: Container(
+                        width: deviceSize.width,
+                        height: 252,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/images/login_image_light.png'),
+                              fit: BoxFit.fitWidth),
+                        ))),
+
+                /// Centered Logo on the screen
+                Positioned(
+                    top: 56,
+                    child: Container(
+                        width: deviceSize.width / 1.5,
+                        height: deviceSize.height / 5,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/images/login_image_logo.png'),
+                              fit: BoxFit.fitWidth),
+                        ))),
+
+                /// down buildings
+                Positioned(
+                    top: deviceSize.height / 1.4,
+                    left: 0,
+                    child: Container(
+                        width: deviceSize.width,
+                        height: deviceSize.height / 4,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                              image: AssetImage(
+                                  'assets/images/login_image_buildings.png'),
+                              fit: BoxFit.fitWidth),
+                        ))),
+
+                Positioned(
+                  top: deviceSize.height / 2.5,
+                  child: Container(
+                    child: AuthForm(),
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
                       ),
-                      AuthForm(),
-                    ],
+                      // color: Color.fromRGBO(207, 222, 236, 1),
+                    ),
                   ),
                 ),
               ],
@@ -92,84 +156,3 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
     );
   }
 }
-
-class CustomClipPath extends CustomClipper<Path> {
-  // path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
-  // firstPoint.dx, firstPoint.dy);
-
-  @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.moveTo(size.width, 0);
-    // path.lineTo(size.width, 0);
-
-    // path.quadraticBezierTo(
-    //     size.height, size.height * 0.10, size.width, size.width * 0.5);
-
-    path.quadraticBezierTo(
-      size.width / 1.05,
-      size.width / 3.4,
-      260,
-      size.height,
-    );
-    path.lineTo(size.width, size.height);
-    return path;
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
-}
-
-// Container(
-// height: deviceSize.height,
-// decoration: const BoxDecoration(
-// image: DecorationImage(
-// image: AssetImage("assets/images/login_background.png"),
-// fit: BoxFit.fitHeight)),
-// child: Scaffold(
-// backgroundColor: Colors.transparent,
-// resizeToAvoidBottomInset: false,
-// extendBodyBehindAppBar: true,
-// body: SingleChildScrollView(
-// physics: const PageScrollPhysics(),
-// child: Column(
-// // mainAxisSize: MainAxisSize.min,
-// // mainAxisAlignment: MainAxisAlignment.center,
-// // crossAxisAlignment: CrossAxisAlignment.center,
-// children: [
-// DelayedDisplay(
-// delay: Duration(milliseconds: 2000),
-// child: Image.asset(
-// 'assets/images/login_background.png',
-// // height: deviceSize.height * 0.3 - deviceTopPadding,
-// width: deviceSize.width,
-// fit: BoxFit.fitWidth,
-// ),
-// ),
-// Entry.offset(
-// // opacity: 1,
-// curve: Sprung.overDamped,
-// delay: const Duration(milliseconds: 2000),
-// duration: const Duration(milliseconds: 1000),
-// child: Column(
-// children: [
-// ClipPath(
-// clipper: CustomClipPath(),
-// child: Container(
-// height: 100,
-// width: deviceSize.width,
-// decoration: const BoxDecoration(
-// borderRadius: BorderRadius.only(
-// topLeft: Radius.circular(100)),
-// color: Colors.white),
-// ),
-// ),
-// AuthForm(),
-// ],
-// ),
-// ),
-// ],
-// ),
-// ),
-// ),
-// ),

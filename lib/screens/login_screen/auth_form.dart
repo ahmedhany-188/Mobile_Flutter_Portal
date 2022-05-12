@@ -64,38 +64,26 @@ class _AuthFormState extends State<AuthForm> {
               );
           }
         },
-        child: SingleChildScrollView(
-          child: Container(
-            height: sizedBoxHeight,
-            decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.only(topLeft: Radius.circular(100))),
-            child: Form(
-              key: _formKey,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 50.0, right: 50, top: 50),
-                      child: UsernameInput(
-                        emailAddressFocusNode: AuthForm.emailAddressFocusNode,
-                      ),
-                    ),
-                    // Padding(padding: EdgeInsets.all(12)),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 50.0, right: 50, top: 50),
-                      child: PasswordInput(
-                          passwordFocusNode: AuthForm.passwordFocusNode),
-                    ),
-                    // Padding(padding: EdgeInsets.all(12)),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 50.0, right: 50, top: 30, bottom: 10),
-                      child: LoginButton(),
-                    ),
-                    addPaddingWhenKeyboardAppears(),
-                  ],
-                ),
+        child: Form(
+          key: _formKey,
+          child: SizedBox(
+            width: deviceSize.width / 1.5,
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  UsernameInput(
+                    emailAddressFocusNode: AuthForm.emailAddressFocusNode,
+                  ),
+                  const Padding(padding: EdgeInsets.all(8)),
+                  PasswordInput(passwordFocusNode: AuthForm.passwordFocusNode),
+                  const Padding(padding: EdgeInsets.all(8)),
+                  SizedBox(
+                    width: deviceSize.width / 1.5,
+                    child: GradientButton(),
+                  ),
+                ],
               ),
             ),
           ),
@@ -111,7 +99,6 @@ class CustomClipPath extends CustomClipper<Path> {
 
   @override
   Path getClip(Size size) {
-
     Path path = Path();
     path.moveTo(size.width, 300);
     // path.lineTo(size.width, 0);
@@ -122,10 +109,8 @@ class CustomClipPath extends CustomClipper<Path> {
     path.quadraticBezierTo(
       size.width,
       size.width * 1.2,
-
       100,
       size.height,
-
     );
     path.lineTo(size.width, size.height);
     return path;
