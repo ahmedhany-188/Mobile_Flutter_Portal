@@ -3,6 +3,7 @@ import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
+import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
@@ -17,6 +18,9 @@ import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dar
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../screens/polls_screen/polls_screen.dart';
+import '../screens/videos_screen/videos_screen.dart';
 
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
@@ -74,6 +78,11 @@ class AppRouter {
             builder: (_) => Attendance_Screen(),
         );
 
+      case EmployeeAppraisal_Screen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => EmployeeAppraisal_Screen(),
+        );
+
       case MedicalRequestScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => MedicalRequestScreen(),
@@ -118,6 +127,16 @@ class AppRouter {
 
         return MaterialPageRoute(
           builder: (_) => PermissionScreen(),
+        );
+      case PollsScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => PollsScreen(),
+        );
+      case VideosScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => VideosScreen(),
         );
       default:
         return null;

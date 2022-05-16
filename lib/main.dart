@@ -2,6 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/hr_permission_form_bloc.dart';
@@ -30,6 +31,7 @@ import 'bloc/auth_app_status_bloc/app_bloc.dart';
 import 'bloc/hr_request_bloc/permission_cubit.dart';
 import 'bloc/login_cubit/login_cubit.dart';
 import 'bloc/medical_request_screen_bloc/medical_request_cubit.dart';
+import 'bloc/videos_screen_bloc/videos_cubit.dart';
 import 'data/data_providers/album_dio/album_dio.dart';
 import 'firebase_options.dart';
 
@@ -39,7 +41,7 @@ void main() async {
   final storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
-  // WidgetsFlutterBinding.ensureInitialized();
+
   await FlutterDownloader.initialize(debug: true);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform, //This line is necessary
@@ -96,7 +98,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<AttendanceCubit>(
           create: (attendanceCubitContext) =>
-              AttendanceCubit()..getAttendanceList(),
+              AttendanceCubit(),
         ),
         BlocProvider<MedicalRequestCubit>(
             create: (medicalRequestCubitContext) => MedicalRequestCubit()
@@ -127,6 +129,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<PhotosCubit>(
           create: (photosContext) => PhotosCubit()..getPhotos(),
+        ),
+        BlocProvider<VideosCubit>(
+          create: (videosContext) => VideosCubit()..getVideos(),
         ),
         BlocProvider<PermissionCubit>(
           create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),

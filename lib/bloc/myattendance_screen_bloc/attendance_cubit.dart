@@ -11,22 +11,21 @@ class AttendanceCubit extends Cubit<AttendanceState> {
   static AttendanceCubit get(context) =>BlocProvider.of(context);
   String myAttendance ="";
 
-  void getAttendanceList() async {
+  void getAttendanceList(userHRcode,monthNumber) async {
 
     emit(BlocGetTheAttendanceLoadingState());
-    AttendanceDataProvider().getAttendanceList().then((value){
+    AttendanceDataProvider().getAttendanceList(userHRcode,monthNumber).then((value){
       // final json =  jsonDecode(value.body);
       // myAttendance=MyAttendance_Model.fromJson(json);
       myAttendance = value.body;
 
-      print("----------"+myAttendance);
+      // print("----------"+myAttendance);
       emit(BlocGetTheAttendanceSuccesState(myAttendance));
     }).catchError((error){
       print(error.toString());
       emit(BlocGetTheAttendanceErrorState(error.toString()));
     });
   }
-
 
   @override
   Future<void> close() {

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,10 +25,10 @@ class _medical_request_state extends State<MedicalRequestScreen> {
   TextEditingController Patientname_MedicalRequest = TextEditingController();
   TextEditingController HAHuser_MedicalRequest = TextEditingController();
 
-  String HR_code="10204738";
 
-  String selectedValueLab = "" ;
-  String selectedValueService = "" ;
+  String selectedValueLab = "";
+
+  String selectedValueService = "";
 
   List<String> LabsType = [
     "Al mokhtabar",
@@ -59,11 +60,13 @@ class _medical_request_state extends State<MedicalRequestScreen> {
     }
   }
 
-  Future<void> _sendSubmit(BuildContext context) async{
+  Future<void> _sendSubmit(BuildContext context) async {
+    final user = context.select((AppBloc bloc) => bloc.state.userData);
+    String HR_code = user.user!.userHRCode.toString();
 
-    if(selectedValueService=="" || selectedValueLab=="" || Patientname_MedicalRequest.text=="" || HAHuser_MedicalRequest.text==""){
-
-
+    if (selectedValueService == "" || selectedValueLab == "" ||
+        Patientname_MedicalRequest.text == "" ||
+        HAHuser_MedicalRequest.text == "") {
       Fluttertoast.showToast(
           msg: "Fill all the fields",
           toastLength: Toast.LENGTH_SHORT,
@@ -73,17 +76,13 @@ class _medical_request_state extends State<MedicalRequestScreen> {
           textColor: Colors.black,
           fontSize: 16.0
       );
-
-    }else{
-
+    } else {
       BlocProvider.of<MedicalRequestCubit>(context)
-        .getSuccessMessage(HR_code,HAHuser_MedicalRequest.text,Patientname_MedicalRequest.text,selectedValueLab,selectedValueService,"${selectedDate.toLocal()}".split(' ')[0]+"T12:39:19.532Z");
-
+          .getSuccessMessage(
+          HR_code, HAHuser_MedicalRequest.text, Patientname_MedicalRequest.text,
+          selectedValueLab, selectedValueService,
+          "${selectedDate.toLocal()}".split(' ')[0] + "T12:39:19.532Z");
     }
-
-
-
-
   }
 
   @override
@@ -92,6 +91,8 @@ class _medical_request_state extends State<MedicalRequestScreen> {
         .of(context)
         .size;
 
+    final user = context.select((AppBloc bloc) => bloc.state.userData);
+
     return Scaffold(
       appBar: AppBar(),
       resizeToAvoidBottomInset: false,
@@ -99,133 +100,165 @@ class _medical_request_state extends State<MedicalRequestScreen> {
       drawer: MainDrawer(),
 
       body: BlocConsumer<MedicalRequestCubit, MedicalRequestState>(
-          listener: (context, state) {
-            if (state is BlocgetTheMedicalRequestSuccesState) {
+        listener: (context, state) {
+          if (state is BlocgetTheMedicalRequestSuccesState) {
+            launch(jsonDecode(state.getMedicalRequestMessage)['link']);
+          }
+        },
 
-              launch(jsonDecode(state.getMedicalRequestMessage)['link']);
+        builder: (context, state) {
+          return Container(
 
-            }
-          },
-
-          builder: (context, state) {
-            return Container(
-              padding: EdgeInsets.all(20),
-              child: Column(
-                children: [
-                  TextField(
-                      controller: Patientname_MedicalRequest,
-                      decoration: InputDecoration(
-                        labelText: "Patient Name",
-                        prefixIcon: Icon(Icons.people),
-                        border: myinputborder(),
-                        enabledBorder: myinputborder(),
-                        focusedBorder: myfocusborder(),
-                      )
-                  ),
+            decoration: const BoxDecoration(
+                image: DecorationImage(image: AssetImage(
+                    "assets/images/backgroundattendance.jpg"),
+                    fit: BoxFit.cover)
+            ),
 
 
-                  Container(height: 20),
+            padding: EdgeInsets.all(20),
+            child: Column(
+              children: [
+                TextField(
+                    controller: Patientname_MedicalRequest,
+                    decoration: InputDecoration(
+                      labelText: "Patient Name",
+                      prefixIcon: Icon(Icons.people),
+                      border: myinputborder(),
+                      enabledBorder: myinputborder(),
+                      focusedBorder: myfocusborder(),
+                    )
+                ),
 
-                  TextField(
-                      controller: HAHuser_MedicalRequest,
-                      decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.lock),
-                        labelText: "HAH User",
-                        enabledBorder: myinputborder(),
-                        focusedBorder: myfocusborder(),
-                      )
-                  ),
 
-                  Container(height: 20),
+                Container(height: 20),
 
-                  RaisedButton(
-                    onPressed: () => _selectDate(context),
-                    child: Text('Select ticket date'),
-                  ),
+                TextField(
+                    controller: HAHuser_MedicalRequest,
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.lock),
+                      labelText: "HAH User",
+                      enabledBorder: myinputborder(),
+                      focusedBorder: myfocusborder(),
+                    )
+                ),
 
-                  Container(height: 20),
+                Container(height: 20),
 
-                  Text("${selectedDate.toLocal()}".split(' ')[0]),
+                RaisedButton(
+                  onPressed: () => _selectDate(context),
+                  child: Text('Select ticket date'),
+                ),
 
-                  Text("${selectedDate.toLocal()}"),
+                Container(height: 20),
 
-                  Text("Lab Type"),
+                Text("${selectedDate.toLocal()}".split(' ')[0]),
 
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      hint: Text(
-                        selectedValueLab,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme
-                              .of(context)
-                              .hintColor,
-                        ),
+                Text("${selectedDate.toLocal()}"),
+
+                Text("Lab Type"),
+
+                DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                    hint: Text(
+                      selectedValueLab,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme
+                            .of(context)
+                            .hintColor,
                       ),
-                      items: LabsType
-                          .map((item) =>
-                          DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                          ))
-                          .toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedValueLab = value.toString();
-                        });
-                      },
-                      // value: selectedValueLab,
                     ),
+                    items: LabsType
+                        .map((item) =>
+                        DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ))
+                        .toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedValueLab = value.toString();
+                      });
+                    },
+                    // value: selectedValueLab,
                   ),
+                ),
 
-                  Text("Service Type"),
-                  DropdownButtonHideUnderline(
-                    child: DropdownButton2(
-                      hint: Text(
-                        selectedValueService,
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Theme
-                              .of(context)
-                              .hintColor,
-                        ),
+                Text("Service Type"),
+                DropdownButtonHideUnderline(
+                  child: DropdownButton2(
+                    hint: Text(
+                      selectedValueService,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme
+                            .of(context)
+                            .hintColor,
                       ),
-                      items: ServiceTypeElborg
-                          .map((item) =>
-                          DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(
-                              item,
-                              style: const TextStyle(
-                                fontSize: 14,
-                              ),
-                            ),
-                          ))
-                          .toList(),
-
-                      onChanged: (value) {
-                        setState(() {
-                          selectedValueService = value.toString();
-                        });
-                      },
-                      // value: selectedValueLab,
                     ),
-                  ),
+                    items: ServiceTypeElborg
+                        .map((item) =>
+                        DropdownMenuItem<String>(
+                          value: item,
+                          child: Text(
+                            item,
+                            style: const TextStyle(
+                              fontSize: 14,
+                            ),
+                          ),
+                        ))
+                        .toList(),
 
-                  RaisedButton(
-                    onPressed: () => _sendSubmit(context),
-                    child: Text('Submit'),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedValueService = value.toString();
+                      });
+                    },
+                    // value: selectedValueLab,
                   ),
-                ],
-              ),
-            );
-          },
-        ),
+                ),
+
+                ElevatedButton(
+                  onPressed: () {
+
+                    String HR_code = user.user!.userHRCode.toString();
+
+                    print("-----------"+user.user!.userHRCode.toString());
+                    if (selectedValueService == "" || selectedValueLab == "" ||
+                        Patientname_MedicalRequest.text == "" ||
+                        HAHuser_MedicalRequest.text == "") {
+                      Fluttertoast.showToast(
+                          msg: "Fill all the fields",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: Colors.grey,
+                          textColor: Colors.black,
+                          fontSize: 16.0
+                      );
+                    } else {
+                      // BlocProvider.of<MedicalRequestCubit>(context)
+                      //     .getSuccessMessage(
+                      //     HR_code, HAHuser_MedicalRequest.text,
+                      //     Patientname_MedicalRequest.text, selectedValueLab,
+                      //     selectedValueService,
+                      //     "${selectedDate.toLocal()}".split(' ')[0] +
+                      //         "T12:39:19.532Z");
+                    }
+                  },
+                  child: Text('Submit'),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
 
     );
   }

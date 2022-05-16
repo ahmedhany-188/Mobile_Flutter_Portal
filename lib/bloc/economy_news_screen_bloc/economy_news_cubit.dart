@@ -2,22 +2,17 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/data/data_providers/economy_news_data_provider/economy_news_data_provider.dart';
 import 'package:meta/meta.dart';
-
 part 'economy_news_state.dart';
 
 class EconomyNewsCubit extends Cubit<EconomyNewsState> {
   EconomyNewsCubit() : super(EconomyNewsInitial());
 
   static EconomyNewsCubit get(context) => BlocProvider.of(context);
-
   String economyNews ="";
 
-  void getSuccessMessage() async {
-
+  void getEconomyNews() async {
     emit(BlocGetTheEconomyNewsLoadingState());
-
-    EconomyNewsDataProvider().getEconomyNewsList().then((value){
-
+    EconomyNewsDataProvider().getEconomyNews().then((value){
       economyNews = value.body;
       print("----------"+economyNews);
       emit(BlocGetTheEconomyNewsSuccesState(economyNews));
@@ -26,9 +21,7 @@ class EconomyNewsCubit extends Cubit<EconomyNewsState> {
       print(error.toString());
       emit(BlocGetTheEconomyNewsErrorState(error.toString()));
     });
-
   }
-
   @override
   Future<void> close() {
     // TODO: implement close

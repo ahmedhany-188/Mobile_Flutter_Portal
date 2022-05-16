@@ -1,15 +1,16 @@
 import 'dart:math';
 
+import 'package:sizer/sizer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
+
 import '../../bloc/photos_screen_bloc/photos_cubit.dart';
-import 'package:sizer/sizer.dart';
 
 class PhotosScreen extends StatefulWidget {
-  static const routeName = 'photos-page';
+  static const routeName = 'photos-screen';
 
   const PhotosScreen({Key? key}) : super(key: key);
 
@@ -102,9 +103,9 @@ Widget albumSwiper(String albumId) {
             },
             layout: SwiperLayout.DEFAULT,
             indicatorLayout: PageIndicatorLayout.COLOR,
-            autoplay: false,
+            autoplay: true,duration: 3000,autoplayDelay: 10000,
             itemCount: albumPhotosList.length,
-            pagination: const FractionPaginationBuilder(),
+            pagination:  SwiperPagination.fraction,
             physics: const BouncingScrollPhysics(),
             control: const SwiperControl(
                 color: Colors.transparent),

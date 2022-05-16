@@ -1,8 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
+import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
@@ -11,9 +14,12 @@ import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
+import 'package:hassanallamportalflutter/screens/polls_screen/polls_screen.dart';
 import 'package:provider/src/provider.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
+
+import '../../screens/videos_screen/videos_screen.dart';
 
 class MainDrawer extends StatefulWidget {
   @override
@@ -42,6 +48,8 @@ class _MainDrawerState extends State<MainDrawer> {
   @override
   Widget build(BuildContext context) {
     final deviceHeight = MediaQuery.of(context).size.height;
+    final double deviceTopPadding =
+        MediaQueryData.fromWindow(window).padding.bottom;
     return ClipRRect(
       borderRadius: const BorderRadius.only(
         topRight: Radius.circular(30),
@@ -75,7 +83,7 @@ class _MainDrawerState extends State<MainDrawer> {
               //   height: 20,
               // ),
               Container(
-                height: deviceHeight * 0.6,
+                height: deviceHeight * 0.6 - deviceTopPadding,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -162,6 +170,20 @@ class _MainDrawerState extends State<MainDrawer> {
                               .routeName);
                         },
                       ),
+
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'Appraisal',
+                        Icons.quiz,
+                            () {
+                          Navigator.of(context).pushNamed(EmployeeAppraisal_Screen
+                              .routeName);
+                        },
+                      ),
                       const Divider(
                         thickness: 1,
                         indent: 10,
@@ -228,6 +250,30 @@ class _MainDrawerState extends State<MainDrawer> {
                         thickness: 1,
                         indent: 10,
                         endIndent: 10,
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'Polls',
+                        Icons.add_a_photo,
+                            () {
+                          Navigator.of(context).pushNamed(PollsScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'Videos',
+                        Icons.add_a_photo,
+                            () {
+                          Navigator.of(context).pushNamed(VideosScreen.routeName);
+                        },
                       ),
                       buildListTile(
                         'Logout',

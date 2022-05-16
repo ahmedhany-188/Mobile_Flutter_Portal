@@ -11,7 +11,7 @@ class EconomyNewsDataProvider {
 
   EconomyNewsDataProvider();
 
-  Future<http.Response> getEconomyNewsList() async {
+  Future<http.Response> getEconomyNews() async {
     http.Response rawAttendanceData = await http.get(
       Uri.parse(
           "https://newsapi.org/v2/top-headlines?country=$country&category=$type&apiKey=$api_key"),

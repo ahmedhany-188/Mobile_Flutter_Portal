@@ -17,6 +17,7 @@ class AppState extends Equatable {
 
   @override
   List<Object> get props => [status, userData];
+
 }
 enum AppStatus {
   authenticated,
