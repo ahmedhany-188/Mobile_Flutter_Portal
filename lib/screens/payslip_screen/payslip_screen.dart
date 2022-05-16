@@ -101,7 +101,8 @@ class _PayslipScreenState extends State<PayslipScreen> {
                 content: Text(state.error),
               ),
             );
-          } else if (state is PayslipSuccessState) {
+          }
+          else if (state is PayslipSuccessState) {
             // _requestDownload(state.response);
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(
@@ -109,7 +110,8 @@ class _PayslipScreenState extends State<PayslipScreen> {
                 content: Text(state.response),
               ),
             );
-          } else if (state is PayslipDownloadState) {
+          }
+          else if (state is PayslipDownloadState) {
             // _requestDownload(state.response);
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
             ScaffoldMessenger.of(context).showSnackBar(

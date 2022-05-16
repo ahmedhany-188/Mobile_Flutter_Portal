@@ -6,6 +6,7 @@ import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_new
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
@@ -15,6 +16,7 @@ import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.d
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
@@ -111,6 +113,11 @@ class AppRouter {
 
         return MaterialPageRoute(
           builder: (_) => PhotosScreen(),
+        );
+      case PermissionScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => PermissionScreen(),
         );
       default:
         return null;

@@ -86,8 +86,7 @@ dependencies:
     path: packages/authentication_repository
   formz: ^0.4.1
 
-
-
+  flutter_form_bloc: ^0.30.1
 
   flutter_html: any
   firebase_core: ^1.15.0

@@ -5,6 +5,7 @@ import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
@@ -209,6 +210,18 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.add_a_photo,
                         () {
                           Navigator.of(context).pushNamed(PhotosScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'HR Permission',
+                        Icons.add_a_photo,
+                            () {
+                          Navigator.of(context).pushNamed(PermissionScreen.routeName);
                         },
                       ),
                       const Divider(

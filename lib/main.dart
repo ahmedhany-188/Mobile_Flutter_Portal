@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/hr_request_bloc/hr_permission_form_bloc.dart';
+// import 'package:hassanallamportalflutter/bloc/hr_request_bloc/permission_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
@@ -25,6 +27,7 @@ import './bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import './bloc/payslip_screen_bloc/payslip_cubit.dart';
 import './bloc/subsidiaries_screen_bloc/subsidiaries_cubit.dart';
 import 'bloc/auth_app_status_bloc/app_bloc.dart';
+import 'bloc/hr_request_bloc/permission_cubit.dart';
 import 'bloc/login_cubit/login_cubit.dart';
 import 'bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'data/data_providers/album_dio/album_dio.dart';
@@ -124,6 +127,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<PhotosCubit>(
           create: (photosContext) => PhotosCubit()..getPhotos(),
+        ),
+        BlocProvider<PermissionCubit>(
+          create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),
         ),
       ],
       child: MaterialApp(
