@@ -86,16 +86,8 @@ class SplashScreen extends StatelessWidget {
             ),
           ],
         ),
-        // Sizer(
-        //   builder: (BuildContext context, Orientation orientation,
-        //       DeviceType deviceType) {
-        //     return Image.asset(
-        //           'assets/images/S_Background.png',width: deviceWidth.w,
-        //         );
-        //   },
-        // ),
         splashTransition: SplashTransition.fadeTransition,
-        pageTransitionType: PageTransitionType.bottomToTop,
+        pageTransitionType: PageTransitionType.fade,
         animationDuration: const Duration(milliseconds: 2000),
         backgroundColor: Colors.transparent,
         nextScreen: BlocBuilder<AppBloc, AppState>(
