@@ -5,8 +5,6 @@ import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen
 import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 
-
-
 class TapsScreen extends StatefulWidget {
   static const routeName = 'tabs-screen';
 
@@ -17,7 +15,6 @@ class TapsScreen extends StatefulWidget {
 }
 
 class _TapsScreenState extends State<TapsScreen> {
-
   // late List<Map<String, dynamic>> _pages;
   // int _selectedPageIndex = 0;
   // @override
@@ -43,18 +40,30 @@ class _TapsScreenState extends State<TapsScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 4,
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Colors.white,
         drawer: MainDrawer(),
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          elevation: 5,
+          backgroundColor: Colors.transparent,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(50),
+            ),
+          ),
+          elevation: 0,
+          flexibleSpace: Container(
+            width: MediaQuery.of(context).size.width,
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(bottomRight: Radius.circular(50)),
+              child: Image.asset('assets/images/login_image_background.png',
+                  fit: BoxFit.fill),
+            ),
+          ),
           systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Colors.transparent,
             statusBarIconBrightness: Brightness.light,
           ),
-          title: const Text('Portal Demo'),
           leading: Builder(
             builder: (context) => IconButton(
               icon: Image.asset('assets/images/logo.png'),
@@ -126,33 +135,40 @@ class _TapsScreenState extends State<TapsScreen> {
             indicatorColor: Colors.white,
             tabs: [
               Tab(
-                icon: Icon(Icons.beach_access),
+                icon: Icon(
+                  Icons.beach_access,
+                ),
                 text: 'Benefits',
               ),
               Tab(
                 icon: Icon(Icons.people),
                 text: 'Contacts',
               ),
-              // Tab(
-              //   icon: Icon(Icons.account_balance),
-              //   text: 'Test',
-              // ),
+              Tab(
+                icon: Icon(Icons.account_balance),
+                text: 'Test',
+              ),
+              Tab(
+                child: CircleAvatar(child: Icon(Icons.list),backgroundColor: Colors.white,),
+              ),
             ],
           ),
         ),
         drawerEnableOpenDragGesture: true,
         body:
-         // DelayedDisplay(
-         //  delay: Duration(milliseconds: 1000),
-         //  child:
-          const TabBarView(
-            physics: BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            children: [
-              BenefitsScreen(),
-              ContactsScreen(),
-            ],
-          ),
+            // DelayedDisplay(
+            //  delay: Duration(milliseconds: 1000),
+            //  child:
+            const TabBarView(
+          physics:
+              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+          children: [
+            BenefitsScreen(),
+            ContactsScreen(),
+            BenefitsScreen(),
+            ContactsScreen(),
+          ],
+        ),
         // ),
 
         // _pages[_selectedPageIndex]['page'],
@@ -180,4 +196,21 @@ class _TapsScreenState extends State<TapsScreen> {
       ),
     );
   }
+}
+class WaveClip extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    double curveHeight = size.height / 2;
+    var p = Path()
+      ..lineTo(0, size.height)
+      ..quadraticBezierTo(0, curveHeight, curveHeight, curveHeight)
+      ..lineTo(size.width - curveHeight, curveHeight)
+      ..quadraticBezierTo(size.width, curveHeight, size.width, size.height)
+      ..lineTo(size.width, 0);
+
+    return p;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => true;
 }

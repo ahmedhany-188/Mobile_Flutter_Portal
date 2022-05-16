@@ -32,11 +32,11 @@ class PageTransitionAnimation {
   //   ),
   // );
 
-  Future<Widget> navigateFromBottom() async {
+  Future<Widget> navigateWithFading() async {
     return Future.delayed(Duration(milliseconds: delayedDuration), () async {
       return await Navigator.of(context).pushReplacement(PageTransition(
-        type: PageTransitionType.bottomToTop,
-        curve: Curves.bounceIn,
+        type: PageTransitionType.fade,
+        curve: Curves.slowMiddle,
         child: pageDirection,
         alignment: Alignment.bottomCenter,
         duration: Duration(milliseconds: transitionDuration),
