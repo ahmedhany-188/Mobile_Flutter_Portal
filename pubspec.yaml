@@ -70,6 +70,8 @@ dependencies:
   font_awesome_flutter: ^10.1.0
   flutter_polls: ^0.0.2
 
+  vector_math: ^2.1.1
+  circular: ^0.0.5
 
   flutter_downloader: ^1.7.3
   permission_handler: ^9.2.0
@@ -140,7 +142,7 @@ flutter:
     - assets/images/login_image_background_two.png
     - assets/images/login_image_buildings.png
     - assets/images/login_image_light.png
-    - assets/images/login_image_logo.jpg
+    - assets/images/login_image_logo.png
     - assets/images/Builds.png
     - assets/images/login_background.png
     - assets/images/S_Background.png

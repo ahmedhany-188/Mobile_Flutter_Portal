@@ -37,7 +37,7 @@ class SplashScreen extends StatelessWidget {
       body: AnimatedSplashScreen(
         splashIconSize: deviceWidth * 2,
         curve: Curves.linear,
-        disableNavigation: true,
+        disableNavigation: false,
         duration: 1500,
         centered: false,
         splash: Stack(
