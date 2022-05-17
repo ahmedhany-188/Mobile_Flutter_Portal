@@ -10,6 +10,7 @@ import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
+import 'package:hassanallamportalflutter/screens/myprofile_screen/myprofile_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
@@ -84,6 +85,11 @@ class AppRouter {
       case MedicalRequestScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => MedicalRequestScreen(),
+        );
+
+      case myProfile_Screen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => myProfile_Screen(),
         );
 
       case EconomyNewsScreen.routeName:

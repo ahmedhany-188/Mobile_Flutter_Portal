@@ -2,7 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:hassanallamportalflutter/screens/myattendance_screen/dialog_attendance_employee.dart';
+import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_userprofile.dart';
 
 import '../../widgets/map/open_map.dart';
 import '../../constants/google_map_api_key.dart';
@@ -28,73 +28,6 @@ class AttendanceTicketWidget extends StatelessWidget {
       : super(key: key);
 
 
-  void showDialogRequest(BuildContext context, int dayIndex) {
-    Fluttertoast.showToast(
-        msg: "Fill all the fields",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        timeInSecForIosWeb: 1,
-        backgroundColor: Colors.grey,
-        textColor: Colors.black,
-        fontSize: 16.0
-    );
-      Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      child: Stack(
-        children: <Widget>[
-          Container(
-            padding: EdgeInsets.only(left: 5,top: 5
-                + 5, right:5,bottom: 5
-            ),
-            margin: EdgeInsets.only(top:5),
-            decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(5),
-                boxShadow: [
-                  BoxShadow(color: Colors.black,offset: Offset(0,10),
-                      blurRadius: 10
-                  ),
-                ]
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Text("title",style: TextStyle(fontSize: 22,fontWeight: FontWeight.w600),),
-                SizedBox(height: 15,),
-                Text("descreption",style: TextStyle(fontSize: 14),textAlign: TextAlign.center,),
-                SizedBox(height: 22,),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: FlatButton(
-                      onPressed: (){
-                        Navigator.of(context).pop();
-                      },
-                      child: Text("text",style: TextStyle(fontSize: 18),)),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            left: 5,
-            right: 5,
-            child: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              radius: 5,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  child: Image.asset("assets/logo.png")
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -167,8 +100,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                       width: double.infinity,
                       child: InkWell(
                           onTap: () {
-                            showDialogRequest(context,index);
-
+                            Dialog_PopUp_UserProfile();
                           },
 
                           child: Column(children: [
@@ -232,8 +164,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                       width: double.infinity,
                         child: InkWell(
                           onTap: () {
-                            showDialogRequest(context,index);
-
+                            Dialog_PopUp_UserProfile();
                           },
                       child: Column(children: [
 
@@ -297,8 +228,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                       width: double.infinity,
                         child: InkWell(
                         onTap: () {
-                          showDialogRequest(context,index);
-
+                          Dialog_PopUp_UserProfile();
                     },
                       child: Column(children: [
 
@@ -351,8 +281,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                       width: double.infinity,
                     child: InkWell(
                     onTap: () {
-                      showDialogRequest(context,index);
-
+                      Dialog_PopUp_UserProfile();
                     },
                        child: Column(children: [
 
@@ -394,8 +323,6 @@ class AttendanceTicketWidget extends StatelessWidget {
                         ),
                         alignment: Alignment.center,
                         width: double.infinity,),
-
-
                     ]),
                     ),
                     );
@@ -405,18 +332,14 @@ class AttendanceTicketWidget extends StatelessWidget {
                   return Container(
                     width: double.infinity,
                   child: InkWell(
-                  onTap: () {
-
-                    AdvanceCustomAlert();
-                    // showDialogRequest(context,index);
+                  onLongPress: () {
+                    Dialog_PopUp_UserProfile();
                   },
                     child: Column(children: [
                       Container(
                         child: Text(date[1] + "/" + date[2].substring(0, 2),
                             style: TextStyle(color: Colors.white)),
-
                       ),
-
                       Container(
 
                         height: 65,

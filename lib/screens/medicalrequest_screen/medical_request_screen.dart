@@ -73,7 +73,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.grey,
-          textColor: Colors.black,
+          textColor: Colors.white,
           fontSize: 16.0
       );
     } else {
@@ -123,6 +123,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                     controller: Patientname_MedicalRequest,
                     decoration: InputDecoration(
                       labelText: "Patient Name",
+                      labelStyle: TextStyle(color: Colors.white),
                       prefixIcon: Icon(Icons.people),
                       border: myinputborder(),
                       enabledBorder: myinputborder(),
@@ -137,6 +138,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                     controller: HAHuser_MedicalRequest,
                     decoration: InputDecoration(
                       prefixIcon: Icon(Icons.lock),
+                      labelStyle: TextStyle(color: Colors.white),
                       labelText: "HAH User",
                       enabledBorder: myinputborder(),
                       focusedBorder: myfocusborder(),
@@ -148,15 +150,23 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                 RaisedButton(
                   onPressed: () => _selectDate(context),
                   child: Text('Select ticket date'),
+
                 ),
 
-                Container(height: 20),
+                Container(height: 10),
 
-                Text("${selectedDate.toLocal()}".split(' ')[0]),
+                Text("${selectedDate.toLocal()}".split(' ')[0],
+                  style: TextStyle(color: Colors.white, fontSize: 15,
+                      fontFamily: 'Nisebuschgardens'),
+                ),
 
-                Text("${selectedDate.toLocal()}"),
+                Text("${selectedDate.toLocal()}",
+                  style: TextStyle(color: Colors.white, fontSize: 15,
+                      fontFamily: 'Nisebuschgardens'),),
 
-                Text("Lab Type"),
+                Text("Lab Type",
+                    style: TextStyle(color: Colors.white, fontSize: 15,
+                      fontFamily: 'Nunito',)),
 
                 DropdownButtonHideUnderline(
                   child: DropdownButton2(
@@ -164,9 +174,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                       selectedValueLab,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Theme
-                            .of(context)
-                            .hintColor,
+                        color: Colors.white,
                       ),
                     ),
                     items: LabsType
@@ -190,16 +198,15 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                   ),
                 ),
 
-                Text("Service Type"),
+                Text("Service Type",style: TextStyle(color: Colors.white, fontSize: 15,
+                  fontFamily: 'Nunito',)),
                 DropdownButtonHideUnderline(
                   child: DropdownButton2(
                     hint: Text(
                       selectedValueService,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Theme
-                            .of(context)
-                            .hintColor,
+                        color: Colors.white,
                       ),
                     ),
                     items: ServiceTypeElborg
@@ -226,10 +233,8 @@ class _medical_request_state extends State<MedicalRequestScreen> {
 
                 ElevatedButton(
                   onPressed: () {
-
                     String HR_code = user.user!.userHRCode.toString();
-
-                    print("-----------"+user.user!.userHRCode.toString());
+                    print("-----------" + user.user!.userHRCode.toString());
                     if (selectedValueService == "" || selectedValueLab == "" ||
                         Patientname_MedicalRequest.text == "" ||
                         HAHuser_MedicalRequest.text == "") {
@@ -239,17 +244,17 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,
                           backgroundColor: Colors.grey,
-                          textColor: Colors.black,
+                          textColor: Colors.white,
                           fontSize: 16.0
                       );
                     } else {
-                      // BlocProvider.of<MedicalRequestCubit>(context)
-                      //     .getSuccessMessage(
-                      //     HR_code, HAHuser_MedicalRequest.text,
-                      //     Patientname_MedicalRequest.text, selectedValueLab,
-                      //     selectedValueService,
-                      //     "${selectedDate.toLocal()}".split(' ')[0] +
-                      //         "T12:39:19.532Z");
+                      BlocProvider.of<MedicalRequestCubit>(context)
+                          .getSuccessMessage(
+                          HR_code, HAHuser_MedicalRequest.text,
+                          Patientname_MedicalRequest.text, selectedValueLab,
+                          selectedValueService,
+                          "${selectedDate.toLocal()}".split(' ')[0] +
+                              "T12:39:19.532Z");
                     }
                   },
                   child: Text('Submit'),
