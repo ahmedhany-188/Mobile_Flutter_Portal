@@ -15,6 +15,8 @@ class InputTextField extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
       child: TextFormField(
         initialValue: initialValue,
+        keyboardType: TextInputType.multiline,
+        maxLines: null,
         decoration: InputDecoration(
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20.0),
@@ -25,6 +27,7 @@ class InputTextField extends StatelessWidget {
           fillColor: Colors.white70,
           prefixIcon:  icon,
           enabled: enabled,
+
 
 
         ),

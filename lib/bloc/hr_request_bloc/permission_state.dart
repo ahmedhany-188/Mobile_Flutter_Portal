@@ -11,32 +11,38 @@ class PermissionInitial extends PermissionState {
   const PermissionInitial({
     this.requestDate = const RequestDate.pure(),
     this.permissionDate = const PermissionDate.pure(),
-    this.permissionType = const PermissionType.pure(),
+    this.permissionType = 2,
     this.permissionTime = const PermissionTime.pure(),
     this.status = FormzStatus.pure,
     this.errorMessage,
+    this.successMessage,
     this.requestStatus,
+    this.comment = "",
   });
 
   final RequestDate requestDate;
   final PermissionDate permissionDate;
-  final PermissionType permissionType;
+  final int permissionType;
   final PermissionTime permissionTime;
   final FormzStatus status;
   final String? errorMessage;
+  final String? successMessage;
   final RequestStatus? requestStatus;
+  final String comment;
 
   @override
-  List<Object> get props => [requestDate, permissionDate,permissionType,permissionTime, status];
+  List<Object> get props => [requestDate, permissionDate,permissionType,permissionTime, status,comment];
 
   PermissionInitial copyWith({
     RequestDate? requestDate,
     PermissionDate? permissionDate,
-    PermissionType? permissionType,
+    int? permissionType,
     PermissionTime? permissionTime,
     FormzStatus? status,
     String? errorMessage,
-    RequestStatus? requestStatus
+    String? successMessage,
+    RequestStatus? requestStatus,
+    String? comment,
   }) {
     return PermissionInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -45,7 +51,9 @@ class PermissionInitial extends PermissionState {
       permissionTime: permissionTime ?? this.permissionTime,
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
-      requestStatus: requestStatus ?? this.requestStatus
+      successMessage: successMessage ?? this.successMessage,
+      requestStatus: requestStatus ?? this.requestStatus,
+      comment: comment ?? this.comment,
 
     );
   }
