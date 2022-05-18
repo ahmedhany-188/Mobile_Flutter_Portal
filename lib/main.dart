@@ -133,9 +133,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<VideosCubit>(
           create: (videosContext) => VideosCubit()..getVideos(),
         ),
-        BlocProvider<PermissionCubit>(
-          create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),
-        ),
+        // BlocProvider<PermissionCubit>(
+        //   create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),
+        // ),
       ],
       child: MaterialApp(
         title: 'Hassan Allam Portal',
