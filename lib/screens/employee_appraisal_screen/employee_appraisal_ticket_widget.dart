@@ -24,7 +24,7 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget{
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 // childAspectRatio: (1 / .4),
-                mainAxisExtent: 90, // here set custom Height You Want
+                mainAxisExtent: 150, // here set custom Height You Want
                 // width between items
                 crossAxisSpacing: 2,
                 // height between items
@@ -40,7 +40,7 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget{
                     children: [
                       CircularViewer(
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
+                            borderRadius: BorderRadius.circular(50),
                             boxShadow: const [
                               BoxShadow(
                                   offset: Offset(-10, -10),
@@ -55,7 +55,7 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget{
                             ]),
                         value: employeeAppraisaleList[index],
                         maxValue: 100,
-                        radius: 100,
+                        radius: 50,
                         textStyle: const TextStyle(fontSize: 30),
                         color: const Color(0xffEEEEEE),
                         sliderColor: const Color(0xff62CBDA),
@@ -72,8 +72,6 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget{
         ),
     );
 
-
   }
-
 
 }
