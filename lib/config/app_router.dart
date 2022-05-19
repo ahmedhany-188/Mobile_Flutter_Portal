@@ -3,18 +3,22 @@ import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
+import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
+import 'package:hassanallamportalflutter/screens/myprofile_screen/myprofile_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../screens/polls_screen/polls_screen.dart';
 import '../screens/videos_screen/videos_screen.dart';
@@ -75,9 +79,19 @@ class AppRouter {
             builder: (_) => Attendance_Screen(),
         );
 
+      case EmployeeAppraisal_Screen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => EmployeeAppraisal_Screen(),
+        );
+
       case MedicalRequestScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => MedicalRequestScreen(),
+        );
+
+      case myProfile_Screen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => myProfile_Screen(),
         );
 
       case EconomyNewsScreen.routeName:
@@ -115,6 +129,11 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => PhotosScreen(),
         );
+      case PermissionScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => PermissionScreen(),
+        );
       case PollsScreen.routeName:
 
         return MaterialPageRoute(
@@ -125,7 +144,6 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => VideosScreen(),
         );
-
       default:
         return null;
     }

@@ -5,10 +5,13 @@ import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
+import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
+import 'package:hassanallamportalflutter/screens/myprofile_screen/myprofile_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
@@ -93,6 +96,20 @@ class _MainDrawerState extends State<MainDrawer> {
                               .pushReplacementNamed(TapsScreen.routeName);
                         },
                       ),
+
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'My Profile',
+                        Icons.person,
+                            () {
+                          Navigator.of(context).pushReplacementNamed(
+                              myProfile_Screen.routeName);
+                        },
+                      ),
                       const Divider(
                         thickness: 1,
                         indent: 10,
@@ -168,6 +185,20 @@ class _MainDrawerState extends State<MainDrawer> {
                               .routeName);
                         },
                       ),
+
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'Appraisal',
+                        Icons.quiz,
+                            () {
+                          Navigator.of(context).pushNamed(EmployeeAppraisal_Screen
+                              .routeName);
+                        },
+                      ),
                       const Divider(
                         thickness: 1,
                         indent: 10,
@@ -224,6 +255,23 @@ class _MainDrawerState extends State<MainDrawer> {
                         endIndent: 10,
                       ),
                       buildListTile(
+                        'HR Permission',
+                        Icons.add_a_photo,
+                            () {
+                          Navigator.of(context).pushNamed(PermissionScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
                         'Polls',
                         Icons.add_a_photo,
                             () {
@@ -241,11 +289,6 @@ class _MainDrawerState extends State<MainDrawer> {
                             () {
                           Navigator.of(context).pushNamed(VideosScreen.routeName);
                         },
-                      ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
                       ),
                       buildListTile(
                         'Logout',
