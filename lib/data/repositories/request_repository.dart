@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:hassanallamportalflutter/data/data_providers/requests_data_providers/request_data_providers.dart';
+import 'package:hassanallamportalflutter/data/models/requests_form_models/request_duration_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_response.dart';
 import 'package:http/http.dart' as http;
 
@@ -25,11 +26,17 @@ class RequestRepository {
       "dateToAmpm": dateToAmpm,
       "permissionDate": permissionDate,
     });
-
     final http.Response rawPermission = await requestDataProviders
         .postPermissionRequest(bodyString);
     final json = await jsonDecode(rawPermission.body);
     final RequestResponse response = RequestResponse.fromJson(json);
+    return response;
+  }
+  Future<DurationResponse> getDurationVacation(int type,String dateFrom,String dateTo) async{
+    final http.Response rawPermission = await requestDataProviders
+        .getDurationVacation(type,dateFrom,dateTo);
+    final json = await jsonDecode(rawPermission.body);
+    final DurationResponse response = DurationResponse.fromJson(json);
     return response;
   }
 }
