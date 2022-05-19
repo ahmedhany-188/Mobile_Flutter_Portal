@@ -36,11 +36,11 @@ class PageTransitionAnimation {
     return Future.delayed(Duration(milliseconds: delayedDuration), () async {
       return await Navigator.of(context).pushReplacement(PageTransition(
         type: PageTransitionType.fade,
-        curve: Curves.slowMiddle,
+        curve: Curves.easeIn,
         child: pageDirection,
         alignment: Alignment.bottomCenter,
         duration: Duration(milliseconds: transitionDuration),
-        // reverseDuration: const Duration(milliseconds: 1500),
+        reverseDuration: const Duration(milliseconds: 1500),
       ));
     });
   }

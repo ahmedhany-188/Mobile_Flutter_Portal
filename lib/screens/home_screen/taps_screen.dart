@@ -1,9 +1,14 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
+import 'package:permission_handler/permission_handler.dart';
+
+import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 
 class TapsScreen extends StatefulWidget {
   static const routeName = 'tabs-screen';
@@ -39,6 +44,7 @@ class _TapsScreenState extends State<TapsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.select((AppBloc bloc) => bloc.state.userData.user);
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -46,16 +52,19 @@ class _TapsScreenState extends State<TapsScreen> {
         drawer: MainDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(50),
-            ),
+          // toolbarHeight: MediaQuery.of(context).size.height / 4,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(bottomRight: Radius.circular(100)),
           ),
           elevation: 0,
           flexibleSpace: Container(
             width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+
+            ///new added
             child: ClipRRect(
-              borderRadius: BorderRadius.only(bottomRight: Radius.circular(50)),
+              borderRadius:
+                  BorderRadius.only(bottomRight: Radius.circular(100)),
               child: Image.asset('assets/images/login_image_background.png',
                   fit: BoxFit.fill),
             ),
@@ -64,12 +73,22 @@ class _TapsScreenState extends State<TapsScreen> {
             statusBarColor: Colors.transparent,
             statusBarIconBrightness: Brightness.light,
           ),
-          leading: Builder(
-            builder: (context) => IconButton(
-              icon: Image.asset('assets/images/logo.png'),
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            ),
-          ),
+          leading: Builder(builder: (context) {
+            return GestureDetector(
+              onTap: () => Scaffold.of(context).openDrawer(),
+              child: CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.white,
+                child: CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.white,
+                  backgroundImage: NetworkImage(
+                      'https://portal.hassanallam.com/Apps/images/Profile/${user!.userHRCode}.jpg'),
+                ),
+              ),
+            );
+          }),
+          leadingWidth: 100,
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
@@ -149,7 +168,10 @@ class _TapsScreenState extends State<TapsScreen> {
                 text: 'Test',
               ),
               Tab(
-                child: CircleAvatar(child: Icon(Icons.list),backgroundColor: Colors.white,),
+                child: CircleAvatar(
+                  child: Icon(Icons.list),
+                  backgroundColor: Colors.white,
+                ),
               ),
             ],
           ),
@@ -159,16 +181,20 @@ class _TapsScreenState extends State<TapsScreen> {
             // DelayedDisplay(
             //  delay: Duration(milliseconds: 1000),
             //  child:
-            const TabBarView(
+            Container(
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              child: const TabBarView(
           physics:
-              BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
           children: [
-            BenefitsScreen(),
-            ContactsScreen(),
-            BenefitsScreen(),
-            ContactsScreen(),
+              BenefitsScreen(),
+              ContactsScreen(),
+              BenefitsScreen(),
+              ContactsScreen(),
           ],
         ),
+            ),
         // ),
 
         // _pages[_selectedPageIndex]['page'],
@@ -197,20 +223,4 @@ class _TapsScreenState extends State<TapsScreen> {
     );
   }
 }
-class WaveClip extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    double curveHeight = size.height / 2;
-    var p = Path()
-      ..lineTo(0, size.height)
-      ..quadraticBezierTo(0, curveHeight, curveHeight, curveHeight)
-      ..lineTo(size.width - curveHeight, curveHeight)
-      ..quadraticBezierTo(size.width, curveHeight, size.width, size.height)
-      ..lineTo(size.width, 0);
 
-    return p;
-  }
-
-  @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => true;
-}

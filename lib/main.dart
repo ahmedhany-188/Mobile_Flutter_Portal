@@ -12,8 +12,6 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-
 
 import './data/data_providers/general_dio/general_dio.dart';
 import './bloc/get_direction_screen_bloc/get_direction_cubit.dart';
@@ -36,8 +34,7 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // FlutterNativeSplash.preserve(widgetsBinding: WidgetsFlutterBinding.ensureInitialized());
-  //
+
   final storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );

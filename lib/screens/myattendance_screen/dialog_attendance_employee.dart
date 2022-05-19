@@ -9,7 +9,7 @@ class AdvanceCustomAlert extends StatelessWidget {
             borderRadius: BorderRadius.circular(4.0)
         ),
         child: Stack(
-          overflow: Overflow.visible,
+          // overflow: Overflow.visible,
           alignment: Alignment.topCenter,
           children: [
             Container(
