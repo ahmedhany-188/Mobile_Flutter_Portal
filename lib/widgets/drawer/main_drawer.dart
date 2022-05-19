@@ -9,6 +9,7 @@ import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/emplo
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/myprofile_screen/myprofile_screen.dart';
@@ -265,6 +266,13 @@ class _MainDrawerState extends State<MainDrawer> {
                         thickness: 1,
                         indent: 10,
                         endIndent: 10,
+                      ),
+                      buildListTile(
+                        'HR Vacation',
+                        Icons.add_a_photo,
+                            () {
+                          Navigator.of(context).pushNamed(VacationScreen.routeName);
+                        },
                       ),
                       const Divider(
                         thickness: 1,

@@ -8,6 +8,7 @@ import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direct
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
@@ -133,6 +134,11 @@ class AppRouter {
 
         return MaterialPageRoute(
           builder: (_) => PermissionScreen(),
+        );
+      case VacationScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => VacationScreen(),
         );
       case PollsScreen.routeName:
 
