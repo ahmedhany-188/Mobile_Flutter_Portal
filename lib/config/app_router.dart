@@ -7,6 +7,7 @@ import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/emplo
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
@@ -140,6 +141,11 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => VacationScreen(),
         );
+      case BusinessMissionScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => BusinessMissionScreen(),
+        );
       case PollsScreen.routeName:
 
         return MaterialPageRoute(
@@ -150,6 +156,7 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => VideosScreen(),
         );
+
       default:
         return null;
     }
