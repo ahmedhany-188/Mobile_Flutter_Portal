@@ -102,7 +102,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
     var deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Colors.transparent,
       body: BlocProvider<ContactsCubit>(
         create: (context) => ContactsCubit()..getContacts(),
         child: BlocConsumer<ContactsCubit, ContactsBlocStates>(

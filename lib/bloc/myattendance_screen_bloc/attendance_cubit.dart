@@ -1,7 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/data/data_providers/attendance_data_provider/attendance_data_provider.dart';
-import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
 import 'package:meta/meta.dart';
 part 'attendance_state.dart';
 

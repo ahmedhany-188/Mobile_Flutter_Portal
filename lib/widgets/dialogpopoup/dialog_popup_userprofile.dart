@@ -1,5 +1,3 @@
-import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Dialog_PopUp_UserProfile extends StatefulWidget {
@@ -26,15 +24,15 @@ class _Dialog_PopUp_UserProfile extends State<Dialog_PopUp_UserProfile> {
       children: <Widget>[
         Container(
 
-          padding: EdgeInsets.only(left: 20, top: 45
+          padding: const EdgeInsets.only(left: 20, top: 45
               + 20, right: 20, bottom: 20
           ),
-          margin: EdgeInsets.only(top: 45),
+          margin: const EdgeInsets.only(top: 45),
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(color: Colors.black, offset: Offset(0, 3),
                     blurRadius: 3
                 ),
@@ -42,17 +40,17 @@ class _Dialog_PopUp_UserProfile extends State<Dialog_PopUp_UserProfile> {
           ),
           child: Container(
             height: 80,
-              margin: EdgeInsets.all(10),
+              margin: const EdgeInsets.all(10),
               child: RaisedButton(
                 onPressed: () {},
-                color: Theme.of(context).accentColor,
+                color: Theme.of(context).colorScheme.secondary,
                 child: Padding(
-                  padding: EdgeInsets.all(0),
+                  padding: const EdgeInsets.all(0),
                   child: Container(
                     alignment: Alignment.center,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
+                      children: const <Widget>[
                         Text(
                           'Upload Image',
                           style: TextStyle(
@@ -80,7 +78,7 @@ class _Dialog_PopUp_UserProfile extends State<Dialog_PopUp_UserProfile> {
             backgroundColor: Colors.transparent,
             radius: 45,
             child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(45)),
+                borderRadius: const BorderRadius.all(Radius.circular(45)),
                 child: Image.asset("assets/images/logo.png")
             ),
           ),

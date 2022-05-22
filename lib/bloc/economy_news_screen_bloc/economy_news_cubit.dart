@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/data/data_providers/economy_news_data_provider/economy_news_data_provider.dart';
 import 'package:meta/meta.dart';

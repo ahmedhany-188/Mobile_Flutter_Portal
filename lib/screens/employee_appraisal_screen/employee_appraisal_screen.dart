@@ -1,21 +1,19 @@
 import 'dart:convert';
 
-import 'package:circular/circular.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/employee_appraisal_screen_bloc/employee_appraisal_bloc_cubit.dart';
-import 'package:hassanallamportalflutter/data/models/employee_appraisal_model.dart';
 import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_ticket_widget.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 
 class EmployeeAppraisal_Screen extends StatefulWidget {
 
   static const routeName = "/employee-appraisal-list";
-  EmployeeAppraisal_Screen({Key? key}) : super(key: key);
+  const EmployeeAppraisal_Screen({Key? key}) : super(key: key);
 
 
+  @override
   State<EmployeeAppraisal_Screen> createState() => _EmployeeAppraisal_ScreenState();
 }
   class _EmployeeAppraisal_ScreenState extends State<EmployeeAppraisal_Screen> {
@@ -43,7 +41,7 @@ class EmployeeAppraisal_Screen extends StatefulWidget {
         body: SingleChildScrollView(
 
           child: ConstrainedBox(
-            constraints: BoxConstraints(),
+            constraints: const BoxConstraints(),
             child: BlocProvider<EmployeeAppraisalBlocCubit>(
 
               create: (context) =>
@@ -98,7 +96,7 @@ class EmployeeAppraisal_Screen extends StatefulWidget {
                                     .of(context)
                                     .viewPadding
                                     .top),
-                            child: EmployeeAppraisalTicketWidget([
+                            child: EmployeeAppraisalTicketWidget(const [
                               30.3,
                               43.3,
                               82.1,

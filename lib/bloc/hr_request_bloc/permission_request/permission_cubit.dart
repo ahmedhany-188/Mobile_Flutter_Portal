@@ -1,11 +1,7 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_date.dart';
-import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_type.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 
 import '../../../constants/enums.dart';
@@ -36,7 +32,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
         ),
       );
     }else{
-      final requestDate = RequestDate.dirty("requestDate");
+      const requestDate = RequestDate.dirty("requestDate");
       emit(
         state.copyWith(
             requestDate: requestDate,

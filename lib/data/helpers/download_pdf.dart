@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -25,7 +24,7 @@ class DownloadPdfHelper{
   Future<void> requestDownload(String _url, String _name) async {
     await _checkPermission();
 
-    var externalStorageDirPath;
+    String? externalStorageDirPath;
     if (Platform.isAndroid) {
       try {
         // final directory = await getApplicationDocumentsDirectory();
@@ -47,7 +46,7 @@ class DownloadPdfHelper{
     final dir =
     await getApplicationDocumentsDirectory(); //From path_provider package
     var _localPath = externalStorageDirPath;
-    final savedDir = Directory(_localPath);
+    final savedDir = Directory(_localPath!);
     await savedDir.create(recursive: true).then((value) async {
       try {
         String? _taskid = await FlutterDownloader.enqueue(
@@ -74,6 +73,7 @@ class DownloadPdfHelper{
               }
 
               await FlutterDownloader.open(taskId: value!);
+              return null;
             });
         print(_taskid);
       } catch (e) {
@@ -121,7 +121,7 @@ class DownloadPdfHelper{
   }
 
   Future<void> _showNotification(Map<String, dynamic> downloadStatus) async {
-    final android = AndroidNotificationDetails(
+    const android = AndroidNotificationDetails(
         'channel id',
         'channel name',
         channelDescription: 'channel description',
@@ -129,8 +129,8 @@ class DownloadPdfHelper{
         importance: Importance.max
     );
 
-    final iOS = IOSNotificationDetails();
-    final platform = NotificationDetails(android: android,iOS:  iOS);
+    const iOS = IOSNotificationDetails();
+    const platform = const NotificationDetails(android: android,iOS:  iOS);
     final json = jsonEncode(downloadStatus);
     final isSuccess = downloadStatus['isSuccess'];
 
@@ -210,9 +210,9 @@ class DownloadPdfHelper{
 
   Future<void> download() async {
 
-    final android = const AndroidInitializationSettings('@mipmap/ic_launcher');
-    final iOS = IOSInitializationSettings();
-    final initSettings = InitializationSettings(android: android,iOS:  iOS);
+    const android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    const iOS = IOSInitializationSettings();
+    const initSettings = const InitializationSettings(android: android,iOS:  iOS);
 
     await flutterLocalNotificationsPlugin.initialize(initSettings, onSelectNotification: _onSelectNotification);
 

@@ -20,7 +20,6 @@ import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dar
 import 'package:hassanallamportalflutter/screens/polls_screen/polls_screen.dart';
 import 'package:provider/src/provider.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
-import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
 import '../../screens/videos_screen/videos_screen.dart';
 
@@ -85,7 +84,7 @@ class _MainDrawerState extends State<MainDrawer> {
               // const SizedBox(
               //   height: 20,
               // ),
-              Container(
+              SizedBox(
                 height: deviceHeight * 0.6 - deviceTopPadding,
                 child: SingleChildScrollView(
                   child: Column(

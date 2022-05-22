@@ -1,6 +1,5 @@
 import 'package:circular/circular.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EmployeeAppraisalTicketWidget extends StatelessWidget{
@@ -40,7 +39,7 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget{
                     children: [
                       CircularViewer(
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(50),
+                            borderRadius: BorderRadius.circular(10),
                             boxShadow: const [
                               BoxShadow(
                                   offset: Offset(-10, -10),
@@ -55,7 +54,7 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget{
                             ]),
                         value: employeeAppraisaleList[index],
                         maxValue: 100,
-                        radius: 50,
+                        radius: 70,
                         textStyle: const TextStyle(fontSize: 30),
                         color: const Color(0xffEEEEEE),
                         sliderColor: const Color(0xff62CBDA),

@@ -3,7 +3,7 @@ part of 'permission_cubit.dart';
 abstract class PermissionState extends Equatable {
   const PermissionState();
 
-  PermissionState.copyWith({required RequestDate requestDate, required FormzStatus status}) {}
+  const PermissionState.copyWith({required RequestDate requestDate, required FormzStatus status});
 }
 
 class PermissionInitial extends PermissionState {

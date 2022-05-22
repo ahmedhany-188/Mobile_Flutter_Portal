@@ -21,8 +21,8 @@ Widget paragraphText(String paragraph) {
 
 SizedBox addPaddingWhenKeyboardAppears() {
   final viewInsets = EdgeInsets.fromWindowPadding(
-    WidgetsBinding.instance!.window.viewInsets,
-    WidgetsBinding.instance!.window.devicePixelRatio,
+    WidgetsBinding.instance.window.viewInsets,
+    WidgetsBinding.instance.window.devicePixelRatio,
   );
 
   final bottomOffset = viewInsets.bottom ;

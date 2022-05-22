@@ -5,7 +5,6 @@ import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
-import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
@@ -20,7 +19,6 @@ import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.d
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import '../screens/polls_screen/polls_screen.dart';
 import '../screens/videos_screen/videos_screen.dart';
@@ -37,7 +35,7 @@ class AppRouter {
       //   );
       case '/':
         return MaterialPageRoute(
-          builder: (_) => SplashScreen(),
+          builder: (_) => const SplashScreen(),
         );
 
       // case '/second':
@@ -73,68 +71,68 @@ class AppRouter {
         );
       case GetDirectionScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => GetDirectionScreen(),
+          builder: (_) => const GetDirectionScreen(),
         );
 
       case Attendance_Screen.routeName:
         return MaterialPageRoute(
-            builder: (_) => Attendance_Screen(),
+            builder: (_) => const Attendance_Screen(),
         );
 
       case EmployeeAppraisal_Screen.routeName:
         return MaterialPageRoute(
-          builder: (_) => EmployeeAppraisal_Screen(),
+          builder: (_) => const EmployeeAppraisal_Screen(),
         );
 
       case MedicalRequestScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => MedicalRequestScreen(),
+          builder: (_) => const MedicalRequestScreen(),
         );
 
       case myProfile_Screen.routeName:
         return MaterialPageRoute(
-          builder: (_) => myProfile_Screen(),
+          builder: (_) => const myProfile_Screen(),
         );
 
       case EconomyNewsScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => EconomyNewsScreen(),
+          builder: (_) => const EconomyNewsScreen(),
         );
 
       case PayslipScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => PayslipScreen(),
+          builder: (_) => const PayslipScreen(),
         );
 
       case SubsidiariesScreen.routeName:
 
         return MaterialPageRoute(
-          builder: (_) => SubsidiariesScreen(),
+          builder: (_) => const SubsidiariesScreen(),
         );
       case ValueScreen.routeName:
 
         return MaterialPageRoute(
-          builder: (_) => ValueScreen(),
+          builder: (_) => const ValueScreen(),
         );
       case AboutScreen.routeName:
 
         return MaterialPageRoute(
-          builder: (_) => AboutScreen(),
+          builder: (_) => const AboutScreen(),
         );
       case NewsScreen.routeName:
 
         return MaterialPageRoute(
-          builder: (_) => NewsScreen(),
+          builder: (_) => const NewsScreen(),
         );
       case PhotosScreen.routeName:
 
         return MaterialPageRoute(
-          builder: (_) => PhotosScreen(),
+          builder: (_) => const PhotosScreen(),
         );
       case PermissionScreen.routeName:
 
         return MaterialPageRoute(
-          builder: (_) => PermissionScreen(),
+          builder: (_) => const PermissionScreen(),
         );
       case VacationScreen.routeName:
 
@@ -149,12 +147,12 @@ class AppRouter {
       case PollsScreen.routeName:
 
         return MaterialPageRoute(
-          builder: (_) => PollsScreen(),
+          builder: (_) => const PollsScreen(),
         );
       case VideosScreen.routeName:
 
         return MaterialPageRoute(
-          builder: (_) => VideosScreen(),
+          builder: (_) => const VideosScreen(),
         );
 
       default:

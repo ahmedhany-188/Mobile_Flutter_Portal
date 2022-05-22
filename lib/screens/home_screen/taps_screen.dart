@@ -1,11 +1,11 @@
-import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
-import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
-import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-
+import '../../screens/benefits_screen/benefits_screen.dart';
+import '../../screens/contacts_screen/contacts_screen.dart';
+import '../../widgets/drawer/main_drawer.dart';
+import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 
 class TapsScreen extends StatefulWidget {
   static const routeName = 'tabs-screen';
@@ -17,7 +17,6 @@ class TapsScreen extends StatefulWidget {
 }
 
 class _TapsScreenState extends State<TapsScreen> {
-
   // late List<Map<String, dynamic>> _pages;
   // int _selectedPageIndex = 0;
   // @override
@@ -42,25 +41,51 @@ class _TapsScreenState extends State<TapsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.select((AppBloc bloc) => bloc.state.userData.user);
     return DefaultTabController(
-      length: 2,
+      length: 4,
       child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
+        backgroundColor: Colors.white,
         drawer: MainDrawer(),
         appBar: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          elevation: 5,
+          backgroundColor: Colors.transparent,
+          // toolbarHeight: MediaQuery.of(context).size.height / 4,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(bottomRight: Radius.circular(50)),
+          ),
+          elevation: 0,
+          flexibleSpace: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+
+            ///new added
+            child: ClipRRect(
+              borderRadius:
+                  const BorderRadius.only(bottomRight: Radius.circular(50)),
+              child: Image.asset('assets/images/login_image_background.png',
+                  fit: BoxFit.fill),
+            ),
+          ),
           systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarColor: Colors.transparent,
             statusBarIconBrightness: Brightness.light,
           ),
-          title: const Text('Portal Demo'),
-          leading: Builder(
-            builder: (context) => IconButton(
-              icon: Image.asset('assets/images/logo.png'),
-              onPressed: () => Scaffold.of(context).openDrawer(),
-            ),
-          ),
+          leading: Builder(builder: (context) {
+            return GestureDetector(
+              onTap: () => Scaffold.of(context).openDrawer(),
+              child: CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.white,
+                child: CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.white,
+                  backgroundImage: NetworkImage(
+                      'https://portal.hassanallam.com/Apps/images/Profile/${user!.userHRCode}.jpg'),
+                ),
+              ),
+            );
+          }),
+          leadingWidth: 100,
           actions: [
             IconButton(
               icon: const Icon(Icons.add),
@@ -122,37 +147,62 @@ class _TapsScreenState extends State<TapsScreen> {
               },
             ),
           ],
-          bottom: const TabBar(
+          bottom: TabBar(
             indicatorColor: Colors.white,
-            tabs: [
+            splashFactory: NoSplash.splashFactory,
+            overlayColor: MaterialStateProperty.resolveWith(
+              (Set states) {
+                return states.contains(MaterialState.focused)
+                    ? null
+                    : Colors.transparent;
+              },
+            ),
+            tabs: const [
               Tab(
-                icon: Icon(Icons.beach_access),
+                // child: Row(children: [Icon(
+                //   Icons.beach_access,
+                // ),Text('Benefits'),]),
+                icon: Icon(
+                  Icons.beach_access,
+                ),
                 text: 'Benefits',
               ),
               Tab(
                 icon: Icon(Icons.people),
                 text: 'Contacts',
               ),
-              // Tab(
-              //   icon: Icon(Icons.account_balance),
-              //   text: 'Test',
-              // ),
+              Tab(
+                icon: Icon(Icons.account_balance),
+                text: 'Test',
+              ),
+              Tab(
+                child: CircleAvatar(
+                  child: Icon(Icons.menu),
+                  backgroundColor: Colors.white,
+                ),
+              ),
             ],
           ),
         ),
         drawerEnableOpenDragGesture: true,
         body:
-         // DelayedDisplay(
-         //  delay: Duration(milliseconds: 1000),
-         //  child:
-          const TabBarView(
-            physics: BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
+            // DelayedDisplay(
+            //  delay: Duration(milliseconds: 1000),
+            //  child:
+            SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: const TabBarView(
+            physics:
+                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
+              BenefitsScreen(),
+              ContactsScreen(),
               BenefitsScreen(),
               ContactsScreen(),
             ],
           ),
+        ),
         // ),
 
         // _pages[_selectedPageIndex]['page'],

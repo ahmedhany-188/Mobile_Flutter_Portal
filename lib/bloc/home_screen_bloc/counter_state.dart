@@ -20,10 +20,12 @@ class CounterState {
   }
 
   factory CounterState.fromMap(Map<String, dynamic> map) {
-    if (map == null) return CounterState(
+    if (map == null) {
+      return CounterState(
       counterValue: 0,
       wasIncremented: false,
     );
+    }
 
     return CounterState(
       counterValue: map['counterValue'],

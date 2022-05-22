@@ -1,9 +1,6 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
-import 'package:hassanallamportalflutter/screens/hr_requests_screen/request_input_widgets.dart';
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../bloc/hr_request_bloc/permission_request/permission_cubit.dart';
 import '../../../constants/enums.dart';
@@ -235,7 +232,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                         children: [
                                           RadioListTile<int>(
                                             value: 2,
-                                            title: Text("2 hours"),
+                                            title: const Text("2 hours"),
                                             groupValue: state.permissionType,
                                             onChanged: (permissionType) =>
                                                 context
@@ -246,7 +243,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                           RadioListTile<int>(
                                             value: 4,
                                             // dense: true,
-                                            title: Text("4 hours"),
+                                            title: const Text("4 hours"),
                                             groupValue: state.permissionType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (permissionType) =>
@@ -335,7 +332,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                             color: Colors.grey[800]),
                                         labelText: "Add your comment",
                                         fillColor: Colors.white70,
-                                        prefixIcon: Icon(Icons.comment),
+                                        prefixIcon: const Icon(Icons.comment),
                                         enabled: true,
                                       ),
 

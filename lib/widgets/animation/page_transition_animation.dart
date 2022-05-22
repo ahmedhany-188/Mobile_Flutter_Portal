@@ -1,7 +1,5 @@
-import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:sprung/sprung.dart';
 
 class PageTransitionAnimation {
   Widget pageDirection;
@@ -32,15 +30,15 @@ class PageTransitionAnimation {
   //   ),
   // );
 
-  Future<Widget> navigateFromBottom() async {
+  Future<Widget> navigateWithFading() async {
     return Future.delayed(Duration(milliseconds: delayedDuration), () async {
       return await Navigator.of(context).pushReplacement(PageTransition(
-        type: PageTransitionType.bottomToTop,
-        curve: Curves.bounceIn,
+        type: PageTransitionType.fade,
+        curve: Curves.easeIn,
         child: pageDirection,
         alignment: Alignment.bottomCenter,
         duration: Duration(milliseconds: transitionDuration),
-        // reverseDuration: const Duration(milliseconds: 1500),
+        reverseDuration: const Duration(milliseconds: 1500),
       ));
     });
   }
