@@ -25,7 +25,6 @@ class _medical_request_state extends State<MedicalRequestScreen> {
   TextEditingController Patientname_MedicalRequest = TextEditingController();
   TextEditingController HAHuser_MedicalRequest = TextEditingController();
 
-
   String selectedValueLab = "";
 
   String selectedValueService = "";
@@ -70,6 +69,8 @@ class _medical_request_state extends State<MedicalRequestScreen> {
 
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
+    // HAHuser_MedicalRequest.text=user.employeeData!.name!;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Medical Request"),
@@ -89,7 +90,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                 content: Text(state.getMedicalRequestMessage),
               ),
             );
-            launch(jsonDecode(state.getMedicalRequestMessage)['link']);
+            launchUrl(jsonDecode(state.getMedicalRequestMessage)['link']);
           }
           else if (state is BlocGetTheMedicalRequestLoadingState) {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -120,11 +121,11 @@ class _medical_request_state extends State<MedicalRequestScreen> {
         builder: (context, state) {
           return Container(
 
-            // decoration: const BoxDecoration(
-            //     image: DecorationImage(image: AssetImage(
-            //         "assets/images/S_Background.png"),
-            //         fit: BoxFit.cover)
-            // ),
+            decoration: const BoxDecoration(
+                image: DecorationImage(image: AssetImage(
+                    "assets/images/S_Background.png"),
+                    fit: BoxFit.cover)
+            ),
 
 
             padding: EdgeInsets.all(20),
@@ -134,7 +135,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                     controller: Patientname_MedicalRequest,
                     decoration: InputDecoration(
                       labelText: "Patient Name",
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Colors.black),
                       prefixIcon: Icon(Icons.people),
                       border: myinputborder(),
                       enabledBorder: myinputborder(),
@@ -146,13 +147,17 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                 Container(height: 20),
 
                 TextField(
+                  // enabled: false,
+
                     controller: HAHuser_MedicalRequest,
                     decoration: InputDecoration(
+
                       prefixIcon: Icon(Icons.lock),
-                      labelStyle: TextStyle(color: Colors.white),
-                      labelText: "HAH User",
+                      labelStyle: TextStyle(color: Colors.black),
+                      labelText: "HAH User:",
                       enabledBorder: myinputborder(),
                       focusedBorder: myfocusborder(),
+
                     )
                 ),
 
@@ -287,7 +292,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                           gravity: ToastGravity.BOTTOM,
                           timeInSecForIosWeb: 1,
                           backgroundColor: Colors.grey,
-                          textColor: Colors.white,
+                          textColor: Colors.black,
                           fontSize: 16.0
                       );
                     } else {
@@ -302,7 +307,8 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                   },
                   label: const Text('Submit'),
                   icon: const Icon(Icons.thumb_up_alt_outlined),
-                  backgroundColor: Colors.indigo,)
+                  backgroundColor: Colors.indigo,),
+
               ],
             ),
           );
@@ -318,7 +324,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
     return const OutlineInputBorder( // Outline border type for TextFeild
         borderRadius: BorderRadius.all(Radius.circular(20)),
         borderSide: BorderSide(
-          color: Colors.white,
+          color: Colors.black,
           width: 3,
         )
     );
@@ -337,7 +343,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
   BoxDecoration outlineboxTypes() {
     return BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(20)),
-        border: Border.all(width: 2, color: Colors.white)
+        border: Border.all(width: 2, color: Colors.black)
     );
   }
 

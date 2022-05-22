@@ -12,7 +12,7 @@ import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_r
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
-import 'package:hassanallamportalflutter/screens/myprofile_screen/myprofile_screen.dart';
+import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
@@ -108,7 +108,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.person,
                             () {
                           Navigator.of(context).pushReplacementNamed(
-                              myProfile_Screen.routeName);
+                              ProfileScreen.routeName);
                         },
                       ),
                       const Divider(

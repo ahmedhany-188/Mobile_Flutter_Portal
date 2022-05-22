@@ -30,9 +30,11 @@ class _economynews_screenState extends State<EconomyNewsScreen>{
         .size;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text('Economy news'),
+        centerTitle: true,
+      ),
       resizeToAvoidBottomInset: false,
-      drawer: MainDrawer(),
 
       body: BlocProvider<EconomyNewsCubit>(
         create: (context) =>
@@ -72,7 +74,7 @@ class _economynews_screenState extends State<EconomyNewsScreen>{
                     children: [
                       Container(
                         height: deviceSize.height -
-                            ((deviceSize.height * 0.20) -
+                            ((deviceSize.height * 0.18) -
                                 MediaQuery
                                     .of(context)
                                     .viewPadding
