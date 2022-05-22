@@ -1,12 +1,9 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
-import 'package:hassanallamportalflutter/bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_ticket_widget.dart';
-import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_ticket_widget.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 
 class EconomyNewsScreen extends StatefulWidget{
@@ -14,6 +11,7 @@ class EconomyNewsScreen extends StatefulWidget{
   static const routeName = "/economynews-list-screen";
   const EconomyNewsScreen({Key? key}) : super(key: key);
 
+  @override
   State<EconomyNewsScreen> createState() => _economynews_screenState();
 }
 

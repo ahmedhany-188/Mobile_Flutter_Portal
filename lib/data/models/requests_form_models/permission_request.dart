@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
 
 
 class PermissionRequest extends Equatable {

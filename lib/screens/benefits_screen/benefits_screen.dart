@@ -256,10 +256,10 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              if (await canLaunch(
-                                  'https://portal.hassanallam.com/images/Benefits/${benefitsDataList[index]['benefitsId']}.pdf')) {
-                                await launch(
-                                    'https://portal.hassanallam.com/images/Benefits/${benefitsDataList[index]['benefitsId']}.pdf');
+                              if (await canLaunchUrl( /// the canLaunch is deprecated TODO the link is not working on emulator
+                                  Uri.parse('https://portal.hassanallam.com/images/Benefits/${benefitsDataList[index]['benefitsId']}.pdf'))) {
+                                await launchUrl(
+                                    Uri.parse('https://portal.hassanallam.com/images/Benefits/${benefitsDataList[index]['benefitsId']}.pdf'));
                               }
                             },
                             child: const Padding(

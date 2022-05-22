@@ -1,22 +1,17 @@
 import 'dart:isolate';
 import 'dart:ui';
-import 'dart:io' show Directory, Platform;
 
-import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/payslip_screen_bloc/payslip_cubit.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:android_path_provider/android_path_provider.dart';
 
 class PayslipScreen extends StatefulWidget {
   static const routeName = 'payslip-screen';
   // final TargetPlatform? platform;
 
-  PayslipScreen({Key? key}) : super(key: key);
+  const PayslipScreen({Key? key}) : super(key: key);
 
   @override
   State<PayslipScreen> createState() => _PayslipScreenState();
@@ -25,7 +20,7 @@ class PayslipScreen extends StatefulWidget {
 class _PayslipScreenState extends State<PayslipScreen> {
   final _passwordController = TextEditingController();
 
-  ReceivePort _port = ReceivePort();
+  final ReceivePort _port = ReceivePort();
 
   @override
   void initState() {
@@ -81,7 +76,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Payslip"),
+        title: const Text("Payslip"),
         centerTitle: true,
       ),
       body: BlocConsumer<PayslipCubit, PayslipState>(

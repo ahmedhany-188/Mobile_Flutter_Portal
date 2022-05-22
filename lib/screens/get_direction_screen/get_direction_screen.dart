@@ -1,21 +1,15 @@
-import 'dart:io';
 
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/screens/contacts_screen/search_for_contacts.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_widget.dart';
 import 'package:hassanallamportalflutter/widgets/search/general_search.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:hassanallamportalflutter/bloc/get_direction_screen_bloc/get_direction_cubit.dart';
-import 'package:hassanallamportalflutter/constants/google_map_api_key.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 
 class GetDirectionScreen extends StatefulWidget {
   static const routeName = 'get-direction';
 
-  GetDirectionScreen({Key? key}) : super(key: key);
+  const GetDirectionScreen({Key? key}) : super(key: key);
 
   @override
   State<GetDirectionScreen> createState() => _GetDirectionScreenState();

@@ -1,28 +1,24 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:formz/formz.dart';
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
-import '../../../bloc/hr_request_bloc/permission_request/permission_cubit.dart';
+import '../../../bloc/hr_request_bloc/business_mission_request/business_mission_cubit.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
 
-// import '../../../bloc/hr_request_bloc/hr_permission_form_bloc.dart';
+class BusinessMissionScreen extends StatefulWidget {
+  static const routeName = 'business-mission-page';
 
-class PermissionScreen extends StatefulWidget {
-  static const routeName = 'permission-page';
-
-  const PermissionScreen({Key? key}) : super(key: key);
+  const BusinessMissionScreen({Key? key}) : super(key: key);
 
   @override
-  State<PermissionScreen> createState() => _PermissionScreenState();
+  State<BusinessMissionScreen> createState() => _BusinessMissionScreenState();
 }
 
-class _PermissionScreenState extends State<PermissionScreen> {
+class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
   @override
   Widget build(BuildContext context) {
-    // final formBloc = context.select((PermissionFormBloc bloc) => bloc.state);
-
     TextEditingController permissionDateController = TextEditingController();
     TextEditingController permissionTimeController = TextEditingController();
     final user = context.select((AppBloc bloc) =>
@@ -36,19 +32,19 @@ class _PermissionScreenState extends State<PermissionScreen> {
           ),
         ),
       ),
-      child: BlocProvider<PermissionCubit>(
+      child: BlocProvider<BusinessMissionCubit>(
         create: (permissionContext) =>
-        PermissionCubit(RequestRepository())
+        BusinessMissionCubit(RequestRepository())
           ..getRequestData(RequestStatus.newRequest),
         child: Builder(
             builder: (context) {
               return Scaffold(
-                appBar: AppBar(title: const Text('Permission Request')),
+                appBar: AppBar(title: const Text('Business Mission Request')),
                 floatingActionButton: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     if(context
-                        .read<PermissionCubit>()
+                        .read<BusinessMissionCubit>()
                         .state
                         .requestStatus ==
                         RequestStatus.oldRequest)FloatingActionButton.extended(
@@ -59,7 +55,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                     ),
                     const SizedBox(height: 12),
                     if(context
-                        .read<PermissionCubit>()
+                        .read<BusinessMissionCubit>()
                         .state
                         .requestStatus ==
                         RequestStatus.oldRequest)FloatingActionButton.extended(
@@ -72,13 +68,13 @@ class _PermissionScreenState extends State<PermissionScreen> {
                     ),
                     const SizedBox(height: 12),
                     if(context
-                        .read<PermissionCubit>()
+                        .read<BusinessMissionCubit>()
                         .state
                         .requestStatus == RequestStatus.newRequest)
                       FloatingActionButton.extended(
                         heroTag: null,
                         onPressed: () {
-                          context.read<PermissionCubit>()
+                          context.read<BusinessMissionCubit>()
                               .submitPermissionRequest(user?.userHrCode ?? "0");
                         },
                         // formBloc.state.status.isValidated
@@ -92,7 +88,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                     const SizedBox(height: 12),
                   ],
                 ),
-                body: BlocListener<PermissionCubit, PermissionInitial>(
+                body: BlocListener<BusinessMissionCubit, BusinessMissionInitial>(
                   listener: (context, state) {
                     if (state.status.isSubmissionInProgress){
                       LoadingDialog.show(context);
@@ -124,13 +120,11 @@ class _PermissionScreenState extends State<PermissionScreen> {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
-                              child: BlocBuilder<
-                                  PermissionCubit,
-                                  PermissionInitial>(
+                              child: BlocBuilder<BusinessMissionCubit,
+                                  BusinessMissionInitial>(
                                   buildWhen: (previous, current) {
                                     return (previous.requestDate !=
-                                        current.requestDate) ||
-                                        previous.status != current.status;
+                                        current.requestDate);
                                   },
                                   builder: (context, state) {
                                     return TextFormField(
@@ -152,55 +146,20 @@ class _PermissionScreenState extends State<PermissionScreen> {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
-                              child: BlocBuilder<
-                                  PermissionCubit,
-                                  PermissionInitial>(
-                                  buildWhen: (previous, current) {
-                                    return (previous.permissionDate.value !=
-                                        current.permissionDate.value) ||
-                                        previous.status != current.status;
-                                  },
-                                  builder: (context, state) {
-                                    print(state.permissionDate.value);
-                                    return TextFormField(
-                                      key: UniqueKey(),
-                                      initialValue: state.permissionDate.value,
-                                      readOnly: true,
-                                      decoration: InputDecoration(
-                                        floatingLabelAlignment:
-                                        FloatingLabelAlignment.start,
-                                        labelText: 'Permission Date',
-                                        errorText: state.permissionDate.invalid
-                                            ? 'invalid permission date'
-                                            : null,
-                                        prefixIcon: const Icon(
-                                            Icons.date_range_outlined),
-                                      ),
-                                      onTap: () async {
-                                        context.read<PermissionCubit>()
-                                            .permissionDateChanged(context);
-                                      },
-                                    );
-                                  }
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 8),
                               child: InputDecorator(
                                 decoration: const InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 0, vertical: 5),
-                                  labelText: 'Permission Type',
+                                  labelText: 'Mission Location',
                                   floatingLabelAlignment:
                                   FloatingLabelAlignment.start,
                                   prefixIcon: Icon(Icons.event),
                                 ),
-                                child: BlocBuilder<PermissionCubit,
-                                    PermissionInitial>(
+                                child: BlocBuilder<BusinessMissionCubit,
+                                    BusinessMissionInitial>(
                                     buildWhen: (previous, current) {
-                                      return (previous.permissionType !=
-                                          current.permissionType);
+                                      return (previous.missionType !=
+                                          current.missionType);
                                     },
                                     builder: (context, state) {
                                       return Column(
@@ -210,25 +169,49 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                             .center,
                                         children: [
                                           RadioListTile<int>(
-                                            value: 2,
-                                            title: const Text("2 hours"),
-                                            groupValue: state.permissionType,
+                                            value: 1,
+                                            title: Text("Meeting"),
+                                            groupValue: state.missionType,
                                             onChanged: (permissionType) =>
                                                 context
-                                                    .read<PermissionCubit>()
-                                                    .permissionTypeChanged(
+                                                    .read<BusinessMissionCubit>()
+                                                    .missionTypeChanged(
+                                                    permissionType!),
+                                          ),
+                                          RadioListTile<int>(
+                                            value: 2,
+                                            // dense: true,
+                                            title: Text("Site Visit"),
+                                            groupValue: state.missionType,
+                                            // radioClickState: (mstate) => mstate.value),
+                                            onChanged: (permissionType) =>
+                                                context
+                                                    .read<BusinessMissionCubit>()
+                                                    .missionTypeChanged(
+                                                    permissionType!),
+                                          ),
+                                          RadioListTile<int>(
+                                            value: 3,
+                                            // dense: true,
+                                            title: Text("Training"),
+                                            groupValue: state.missionType,
+                                            // radioClickState: (mstate) => mstate.value),
+                                            onChanged: (permissionType) =>
+                                                context
+                                                    .read<BusinessMissionCubit>()
+                                                    .missionTypeChanged(
                                                     permissionType!),
                                           ),
                                           RadioListTile<int>(
                                             value: 4,
                                             // dense: true,
-                                            title: const Text("4 hours"),
-                                            groupValue: state.permissionType,
+                                            title: Text("Others"),
+                                            groupValue: state.missionType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (permissionType) =>
                                                 context
-                                                    .read<PermissionCubit>()
-                                                    .permissionTypeChanged(
+                                                    .read<BusinessMissionCubit>()
+                                                    .missionTypeChanged(
                                                     permissionType!),
                                           ),
                                         ],
@@ -241,16 +224,73 @@ class _PermissionScreenState extends State<PermissionScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
                               child: BlocBuilder<
-                                  PermissionCubit,
-                                  PermissionInitial>(
+                                  BusinessMissionCubit,
+                                  BusinessMissionInitial>(
+                                // buildWhen: (previous, current) => previous.permissionDate != current.permissionDate,
+                                  buildWhen: (previous, current) {
+                                    return (previous.permissionDate !=
+                                        current.permissionDate) ||
+                                        previous.status != current.status;
+                                  },
+                                  builder: (context, state) {
+                                    return TextFormField(
+                                      onChanged: (permissionDate) =>
+                                          context
+                                              .read<BusinessMissionCubit>()
+                                              .permissionDateChanged(
+                                              permissionDate),
+                                      readOnly: true,
+                                      controller: permissionDateController,
+                                      decoration: InputDecoration(
+                                        floatingLabelAlignment:
+                                        FloatingLabelAlignment.start,
+                                        labelText: 'Permission Date',
+                                        errorText: state.permissionDate.invalid
+                                            ? 'invalid permission date'
+                                            : null,
+                                        prefixIcon: const Icon(
+                                            Icons.date_range_outlined),
+                                      ),
+                                      onTap: () async {
+                                        DateTime? date = DateTime.now();
+                                        FocusScope.of(context).requestFocus(
+                                            FocusNode());
+                                        date = await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime(2000),
+                                            lastDate: DateTime(2100));
+                                        var formatter = DateFormat(
+                                            'EEEE dd-MM-yyyy');
+                                        String formattedDate = formatter.format(
+                                            date ?? DateTime.now());
+                                        permissionDateController.text =
+                                            formattedDate;
+                                        // (permissionDate) =>
+                                        context
+                                            .read<BusinessMissionCubit>()
+                                            .permissionDateChanged(
+                                            formattedDate);
+                                      },
+                                    );
+                                  }
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: BlocBuilder<
+                                  BusinessMissionCubit,
+                                  BusinessMissionInitial>(
                                   buildWhen: (previous, current) =>
                                   previous.permissionTime !=
                                       current.permissionTime,
                                   builder: (context, state) {
                                     return TextFormField(
-                                      initialValue: state.permissionTime.value,
-                                      key: UniqueKey(),
+                                      // onChanged: null,
                                       readOnly: true,
+                                      controller: permissionTimeController,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
@@ -262,10 +302,26 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                             Icons.access_time),
                                       ),
                                       onTap: () async {
+                                        TimeOfDay? time = TimeOfDay.now();
+                                        FocusScope.of(context).requestFocus(
+                                            FocusNode());
+                                        time =
+                                        await showTimePicker(context: context,
+                                            initialTime: TimeOfDay.now());
+                                        // if (time != null){
+                                        final localizations = MaterialLocalizations
+                                            .of(context);
+                                        final formattedTimeOfDay = localizations
+                                            .formatTimeOfDay(
+                                            time ?? TimeOfDay.now());
+                                        permissionTimeController.text =
+                                            formattedTimeOfDay;
                                         context
-                                            .read<PermissionCubit>()
+                                            .read<BusinessMissionCubit>()
                                             .permissionTimeChanged(
-                                            context);
+                                            formattedTimeOfDay);
+                                        // }
+
                                       },
                                     );
                                   }
@@ -275,13 +331,13 @@ class _PermissionScreenState extends State<PermissionScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
                               child: BlocBuilder<
-                                  PermissionCubit,
-                                  PermissionInitial>(
+                                  BusinessMissionCubit,
+                                  BusinessMissionInitial>(
                                   builder: (context, state) {
                                     return TextFormField(
                                       onChanged: (commentValue) =>
                                           context
-                                              .read<PermissionCubit>()
+                                              .read<BusinessMissionCubit>()
                                               .commentChanged(commentValue),
                                       keyboardType: TextInputType.multiline,
                                       maxLines: null,
@@ -295,7 +351,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                             color: Colors.grey[800]),
                                         labelText: "Add your comment",
                                         fillColor: Colors.white70,
-                                        prefixIcon: const Icon(Icons.comment),
+                                        prefixIcon: Icon(Icons.comment),
                                         enabled: true,
                                       ),
 
@@ -369,7 +425,7 @@ class SuccessScreen extends StatelessWidget {
             const SizedBox(height: 10),
             ElevatedButton.icon(
               onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => const PermissionScreen())),
+                  MaterialPageRoute(builder: (_) => const BusinessMissionScreen())),
               icon: const Icon(Icons.replay),
               label: const Text('Create Another Permission Request'),
             ),

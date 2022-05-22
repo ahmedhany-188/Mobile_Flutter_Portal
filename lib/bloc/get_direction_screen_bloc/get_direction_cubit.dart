@@ -1,9 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/helpers/assist_function.dart';
 import '../../data/data_providers/general_dio/general_dio.dart';
 
 part 'get_direction_state.dart';

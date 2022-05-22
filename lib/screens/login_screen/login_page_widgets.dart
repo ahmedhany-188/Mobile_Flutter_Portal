@@ -14,7 +14,7 @@ class _LoginPageWidget extends State<LoginPageWidget> {
     return Container(
         width: 360,
         height: 800,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color : Color.fromRGBO(255, 255, 255, 1),
         ),
         child: Stack(
@@ -26,7 +26,7 @@ class _LoginPageWidget extends State<LoginPageWidget> {
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: 337,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         borderRadius : BorderRadius.only(
                           topLeft: Radius.circular(0),
                           topRight: Radius.circular(0),
@@ -45,7 +45,7 @@ class _LoginPageWidget extends State<LoginPageWidget> {
                   child: Container(
                       width: 360,
                       height: 356,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         borderRadius : BorderRadius.only(
                           topLeft: Radius.circular(80),
                           topRight: Radius.circular(0),
@@ -61,7 +61,7 @@ class _LoginPageWidget extends State<LoginPageWidget> {
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: 252,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         borderRadius : BorderRadius.only(
                           topLeft: Radius.circular(0),
                           topRight: Radius.circular(0),
@@ -80,7 +80,7 @@ class _LoginPageWidget extends State<LoginPageWidget> {
                   child: Container(
                       width: 360,
                       height: 252,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         image : DecorationImage(
                             image: AssetImage('assets/images/login_image_light.png'),
                             fit: BoxFit.fitWidth
@@ -93,7 +93,7 @@ class _LoginPageWidget extends State<LoginPageWidget> {
                   child: Container(
                       width: 279,
                       height: 44,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         borderRadius : BorderRadius.only(
                           topLeft: Radius.circular(10),
                           topRight: Radius.circular(10),
@@ -103,7 +103,7 @@ class _LoginPageWidget extends State<LoginPageWidget> {
                         color : Color.fromRGBO(207, 222, 236, 1),
                       )
                   )
-              ),Positioned(
+              ),const Positioned(
 
 
 
@@ -125,7 +125,7 @@ class _LoginPageWidget extends State<LoginPageWidget> {
                   child: Container(
                       width: 173,
                       height: 98,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         image : DecorationImage(
                             image: AssetImage('assets/images/login_image_logo.png'),
                             fit: BoxFit.fitWidth
@@ -138,7 +138,7 @@ class _LoginPageWidget extends State<LoginPageWidget> {
                       child: Container(
                           width: 279,
                           height: 43,
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             borderRadius : BorderRadius.only(
                               topLeft: Radius.circular(10),
                               topRight: Radius.circular(10),
@@ -149,7 +149,7 @@ class _LoginPageWidget extends State<LoginPageWidget> {
                           )
                       )
                   )
-              ),Positioned(
+              ),const Positioned(
                   top: 519,
                   child: Text('Sign in', textAlign: TextAlign.left, style: TextStyle(
                       color: Color.fromRGBO(255, 255, 255, 1),
@@ -165,7 +165,7 @@ class _LoginPageWidget extends State<LoginPageWidget> {
                   child: Container(
                       width: 279,
                       height: 46,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         borderRadius : BorderRadius.only(
                           topLeft: Radius.circular(10),
                           topRight: Radius.circular(10),
@@ -175,7 +175,7 @@ class _LoginPageWidget extends State<LoginPageWidget> {
                         color : Color.fromRGBO(207, 222, 236, 1),
                       )
                   )
-              ),Positioned(
+              ),const Positioned(
                   top: 450,
 
                   child: Text('Password', textAlign: TextAlign.left, style: TextStyle(
@@ -192,7 +192,7 @@ class _LoginPageWidget extends State<LoginPageWidget> {
                   child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: 178,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         image : DecorationImage(
                             image: AssetImage('assets/images/login_image_buildings.png'),
                             fit: BoxFit.fitWidth

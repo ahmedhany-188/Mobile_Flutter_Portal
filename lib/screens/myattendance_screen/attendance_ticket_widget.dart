@@ -1,11 +1,7 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_userprofile.dart';
 
-import '../../widgets/map/open_map.dart';
-import '../../constants/google_map_api_key.dart';
 
 class AttendanceTicketWidget extends StatelessWidget {
   List<dynamic> projectsDirectionData;
@@ -93,7 +89,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                           int.parse(time_out2) == 59)) &&
                       ((int.parse(time_in) < 8) || (int.parse(time_in) == 8 &&
                           int.parse(time_in2) < 31))) {
-                    return Container(
+                    return SizedBox(
 
                       width: double.infinity,
                       child: InkWell(
@@ -106,7 +102,7 @@ class AttendanceTicketWidget extends StatelessWidget {
 
                               child: Text(
                                   date[1] + "/" + date[2].substring(0, 2),
-                                  style: TextStyle(color: Colors.white)),
+                                  style: const TextStyle(color: Colors.white)),
                             ),
 
                             Container(
@@ -117,7 +113,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 11,)),
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(5),
                                     topRight: Radius.circular(5)),
@@ -139,7 +135,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 11,)),
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(5),
                                     bottomRight: Radius.circular(5)),
@@ -158,7 +154,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                       int.parse(time_out2) == 59)) &&
                       ((int.parse(time_in) > 8) || (int.parse(time_in) == 8 &&
                           int.parse(time_in2) > 30))) {
-                    return Container(
+                    return SizedBox(
                       width: double.infinity,
                         child: InkWell(
                           onTap: () {
@@ -169,7 +165,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                         Container(
 
                             child: Text(date[1] + "/" + date[2].substring(0, 2),
-                                style: TextStyle(color: Colors.white))),
+                                style: const TextStyle(color: Colors.white))),
 
                         Container(
                           height: 30,
@@ -178,7 +174,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                               color: Colors.white,
                               fontSize: 11,
                             )),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(5),
                                 topRight: Radius.circular(5)),
@@ -196,7 +192,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                               color: Colors.white,
                               fontSize: 11,
                             )),
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(5),
                                 bottomRight: Radius.circular(5)),
@@ -221,7 +217,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                           ((int.parse(time_in) < 8) ||
                               (int.parse(time_in) == 8 &&
                                   int.parse(time_in2) < 31))) {
-                    return Container(
+                    return SizedBox(
 
                       width: double.infinity,
                         child: InkWell(
@@ -232,7 +228,7 @@ class AttendanceTicketWidget extends StatelessWidget {
 
                       Container(child:
                       Text(date[1] + "/" + date[2].substring(0, 2),
-                          style: TextStyle(color: Colors.white)),),
+                          style: const TextStyle(color: Colors.white)),),
 
                       Container(
                         height: 30,
@@ -242,7 +238,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                             color: Colors.white,
                             fontSize: 11,
                           )),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(5),
                               topRight: Radius.circular(5)),
@@ -260,7 +256,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                             color: Colors.white,
                             fontSize: 11,
                           )),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(5),
                               bottomRight: Radius.circular(5)),
@@ -275,7 +271,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                     );
                   }
                   else {
-                    return Container(
+                    return SizedBox(
                       width: double.infinity,
                     child: InkWell(
                     onTap: () {
@@ -285,7 +281,7 @@ class AttendanceTicketWidget extends StatelessWidget {
 
                       Container(child: Text(
                           date[1] + "/" + date[2].substring(0, 2),
-                          style: TextStyle(color: Colors.white)),),
+                          style: const TextStyle(color: Colors.white)),),
                       Container(
                         height: 30,
                         child: Text(
@@ -294,7 +290,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                             color: Colors.white,
                             fontSize: 11,
                           )),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(5),
                               topRight: Radius.circular(5)),
@@ -313,7 +309,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                             color: Colors.white,
                             fontSize: 11,
                           )),
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(5),
                               bottomRight: Radius.circular(5)),
@@ -327,7 +323,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                   }
                 }
                 else {
-                  return Container(
+                  return SizedBox(
                     width: double.infinity,
                   child: InkWell(
                   onLongPress: () {
@@ -336,12 +332,12 @@ class AttendanceTicketWidget extends StatelessWidget {
                     child: Column(children: [
                       Container(
                         child: Text(date[1] + "/" + date[2].substring(0, 2),
-                            style: TextStyle(color: Colors.white)),
+                            style: const TextStyle(color: Colors.white)),
                       ),
                       Container(
 
                         height: 65,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius: BorderRadius.all(
                               Radius.circular(5)),
                           color: Colors.grey,

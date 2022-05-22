@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.15.1 <3.0.0"
+  sdk: ">=2.16.2 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -43,13 +43,16 @@ dependencies:
   json_annotation: any
   http: any
 
-  dropdown_button2: ^1.4.0
+
+  dropdown_button2: ^1.5.2
   fluttertoast: ^8.0.9
-  video_player: ^2.4.0
+  video_player: ^2.4.2
+  swipe_image_gallery: ^0.5.1
+  animated_text_kit: ^4.2.1
 
 
 
-  flutter_form_builder: ^7.1.1
+  flutter_form_builder: ^7.2.0
   animated_splash_screen: ^1.2.0
   animations: ^2.0.2
   entry: ^0.0.6
@@ -58,29 +61,30 @@ dependencies:
   page_transition: ^2.0.5
 
   conditional_builder_null_safety: ^0.0.6
-  dropdown_search: ^3.0.1
-  anim_search_bar: ^2.0.2
+#  dropdown_search: ^3.0.1
+#  anim_search_bar: ^2.0.2
   badges: ^2.0.2
   flutter_keyboard_visibility: ^5.2.0
-  dynamic_text_highlighting: ^2.2.0
+#  dynamic_text_highlighting: ^2.2.0
   multi_select_flutter: ^4.1.2
   sizer: ^2.0.15
 
   card_swiper: ^2.0.3
   font_awesome_flutter: ^10.1.0
-  flutter_polls: ^0.0.2
+  flutter_polls: ^0.0.4
 
-  vector_math: ^2.1.1
+  vector_math: ^2.1.2
   circular: ^0.0.5
 
-  flutter_downloader: ^1.7.3
+
+  flutter_downloader: ^1.7.4
   permission_handler: ^9.2.0
   file_utils: ^1.0.1
   device_info: ^2.0.3
   android_path_provider: ^0.3.0
   intl: ^0.17.0
   open_file: ^3.2.1
-  flutter_local_notifications: ^9.5.2
+  flutter_local_notifications: ^9.5.3+1
   cached_network_image: any
   full_screen_image_null_safe: any
 
@@ -92,8 +96,14 @@ dependencies:
   flutter_form_bloc: ^0.30.1
 
   flutter_html: any
-  firebase_core: ^1.16.0
-  firebase_auth: ^3.3.17
+  firebase_core: ^1.17.0
+  firebase_auth: ^3.3.18
+
+#  flutter_native_splash: any
+#flutter_native_splash:
+#    background_image: assets/images/native_splash.png
+#    fullscreen: false
+
 
 #  animated_text: ^1.0.2
 
@@ -109,11 +119,12 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.4
+  flutter_lints: ^2.0.1
   json_serializable: any
-  build_runner: ^2.1.10
-  url_launcher: ^6.1.0
+  build_runner: ^2.1.11
+  url_launcher: ^6.1.2
   dio: ^4.0.6
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -129,7 +140,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/logo.png
-    - assets/images/background.png
     - assets/images/buildings.png
     - assets/images/fulllogoblue.png
     - assets/images/backgroundattendance.jpg
@@ -139,7 +149,7 @@ flutter:
     - assets/images/login_image_light.png
     - assets/images/login_image_logo.png
     - assets/images/Builds.png
-    - assets/images/login_background.png
+    - assets/images/native_splash.png
     - assets/images/S_Background.png
 
   # An image asset can refer to one or more resolution-specific "variants", see

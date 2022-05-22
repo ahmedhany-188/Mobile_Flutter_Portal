@@ -1,16 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:authentication_repository/src/authentication_provider.dart';
 // import 'package:firebase_auth/f
 import 'package:firebase_auth/firebase_auth.dart'as flutter_firebase_auth;
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:authentication_repository/authentication_repository.dart';
-import 'cashe.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
 enum AuthenticationStatus {authenticated, unauthenticated}

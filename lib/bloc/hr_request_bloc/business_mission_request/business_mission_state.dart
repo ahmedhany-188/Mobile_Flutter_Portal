@@ -1,17 +1,17 @@
-part of 'permission_cubit.dart';
+part of 'business_mission_cubit.dart';
 
-abstract class PermissionState extends Equatable {
-  const PermissionState();
+abstract class BusinessMissionState extends Equatable {
+  const BusinessMissionState();
 
-  const PermissionState.copyWith({required RequestDate requestDate, required FormzStatus status});
+  BusinessMissionState.copyWith({required RequestDate requestDate, required FormzStatus status}) {}
 }
 
-class PermissionInitial extends PermissionState {
+class BusinessMissionInitial extends BusinessMissionState {
 
-  const PermissionInitial({
+  const BusinessMissionInitial({
     this.requestDate = const RequestDate.pure(),
     this.permissionDate = const PermissionDate.pure(),
-    this.permissionType = 2,
+    this.missionType = 1,
     this.permissionTime = const PermissionTime.pure(),
     this.status = FormzStatus.pure,
     this.errorMessage,
@@ -22,7 +22,7 @@ class PermissionInitial extends PermissionState {
 
   final RequestDate requestDate;
   final PermissionDate permissionDate;
-  final int permissionType;
+  final int missionType;
   final PermissionTime permissionTime;
   final FormzStatus status;
   final String? errorMessage;
@@ -31,12 +31,12 @@ class PermissionInitial extends PermissionState {
   final String comment;
 
   @override
-  List<Object> get props => [requestDate, permissionDate,permissionType,permissionTime, status,comment];
+  List<Object> get props => [requestDate, permissionDate,missionType,permissionTime, status,comment];
 
-  PermissionInitial copyWith({
+  BusinessMissionInitial copyWith({
     RequestDate? requestDate,
     PermissionDate? permissionDate,
-    int? permissionType,
+    int? missionType,
     PermissionTime? permissionTime,
     FormzStatus? status,
     String? errorMessage,
@@ -44,10 +44,10 @@ class PermissionInitial extends PermissionState {
     RequestStatus? requestStatus,
     String? comment,
   }) {
-    return PermissionInitial(
+    return BusinessMissionInitial(
       requestDate: requestDate ?? this.requestDate,
       permissionDate: permissionDate ?? this.permissionDate,
-      permissionType: permissionType ?? this.permissionType,
+      missionType: missionType ?? this.missionType,
       permissionTime: permissionTime ?? this.permissionTime,
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,

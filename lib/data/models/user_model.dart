@@ -14,11 +14,11 @@ class User {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['userHRCode'] = this.userHRCode;
-    data['email'] = this.email;
-    data['token'] = this.token;
-    data['expiration'] = this.expiration;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['userHRCode'] = userHRCode;
+    data['email'] = email;
+    data['token'] = token;
+    data['expiration'] = expiration;
     return data;
   }
 }
