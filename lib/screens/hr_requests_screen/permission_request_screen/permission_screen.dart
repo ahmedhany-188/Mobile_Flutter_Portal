@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:formz/formz.dart';
@@ -133,8 +134,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                   },
                                   builder: (context, state) {
                                     return TextFormField(
-                                      key: const Key(
-                                          'loginForm_usernameInput_textField'),
+                                      key: UniqueKey(),
                                       initialValue: state.requestDate.value,
                                       enabled: false,
                                       decoration: InputDecoration(
@@ -155,21 +155,17 @@ class _PermissionScreenState extends State<PermissionScreen> {
                               child: BlocBuilder<
                                   PermissionCubit,
                                   PermissionInitial>(
-                                // buildWhen: (previous, current) => previous.permissionDate != current.permissionDate,
                                   buildWhen: (previous, current) {
-                                    return (previous.permissionDate !=
-                                        current.permissionDate) ||
+                                    return (previous.permissionDate.value !=
+                                        current.permissionDate.value) ||
                                         previous.status != current.status;
                                   },
                                   builder: (context, state) {
+                                    print(state.permissionDate.value);
                                     return TextFormField(
-                                      onChanged: (permissionDate) =>
-                                          context
-                                              .read<PermissionCubit>()
-                                              .permissionDateChanged(
-                                              permissionDate),
+                                      key: UniqueKey(),
+                                      initialValue: state.permissionDate.value,
                                       readOnly: true,
-                                      controller: permissionDateController,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
@@ -181,25 +177,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                             Icons.date_range_outlined),
                                       ),
                                       onTap: () async {
-                                        DateTime? date = DateTime.now();
-                                        FocusScope.of(context).requestFocus(
-                                            FocusNode());
-                                        date = await showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(2000),
-                                            lastDate: DateTime(2100));
-                                        var formatter = DateFormat(
-                                            'EEEE dd-MM-yyyy');
-                                        String formattedDate = formatter.format(
-                                            date ?? DateTime.now());
-                                        permissionDateController.text =
-                                            formattedDate;
-                                        // (permissionDate) =>
-                                        context
-                                            .read<PermissionCubit>()
-                                            .permissionDateChanged(
-                                            formattedDate);
+                                        context.read<PermissionCubit>()
+                                            .permissionDateChanged(context);
                                       },
                                     );
                                   }
@@ -269,9 +248,9 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                       current.permissionTime,
                                   builder: (context, state) {
                                     return TextFormField(
-                                      // onChanged: null,
+                                      initialValue: state.permissionTime.value,
+                                      key: UniqueKey(),
                                       readOnly: true,
-                                      controller: permissionTimeController,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
@@ -283,26 +262,10 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                             Icons.access_time),
                                       ),
                                       onTap: () async {
-                                        TimeOfDay? time = TimeOfDay.now();
-                                        FocusScope.of(context).requestFocus(
-                                            FocusNode());
-                                        time =
-                                        await showTimePicker(context: context,
-                                            initialTime: TimeOfDay.now());
-                                        // if (time != null){
-                                        final localizations = MaterialLocalizations
-                                            .of(context);
-                                        final formattedTimeOfDay = localizations
-                                            .formatTimeOfDay(
-                                            time ?? TimeOfDay.now());
-                                        permissionTimeController.text =
-                                            formattedTimeOfDay;
                                         context
                                             .read<PermissionCubit>()
                                             .permissionTimeChanged(
-                                            formattedTimeOfDay);
-                                        // }
-
+                                            context);
                                       },
                                     );
                                   }
