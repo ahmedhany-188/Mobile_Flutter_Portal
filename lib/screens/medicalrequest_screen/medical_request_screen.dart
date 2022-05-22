@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
@@ -59,30 +60,6 @@ class _medical_request_state extends State<MedicalRequestScreen> {
     }
   }
 
-  Future<void> _sendSubmit(BuildContext context) async {
-    final user = context.select((AppBloc bloc) => bloc.state.userData);
-    String HRCode = user.user!.userHRCode.toString();
-
-    if (selectedValueService == "" || selectedValueLab == "" ||
-        Patientname_MedicalRequest.text == "" ||
-        HAHuser_MedicalRequest.text == "") {
-      Fluttertoast.showToast(
-          msg: "Fill all the fields",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          timeInSecForIosWeb: 1,
-          backgroundColor: Colors.grey,
-          textColor: Colors.white,
-          fontSize: 16.0
-      );
-    } else {
-      BlocProvider.of<MedicalRequestCubit>(context)
-          .getSuccessMessage(
-          HRCode, HAHuser_MedicalRequest.text, Patientname_MedicalRequest.text,
-          selectedValueLab, selectedValueService,
-          "${selectedDate.toLocal()}".split(' ')[0] + "T12:39:19.532Z");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -90,40 +67,75 @@ class _medical_request_state extends State<MedicalRequestScreen> {
         .of(context)
         .size;
 
+
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("Medical Request"),
+        centerTitle: true,
+      ),
       resizeToAvoidBottomInset: false,
+
 
       drawer: MainDrawer(),
 
       body: BlocConsumer<MedicalRequestCubit, MedicalRequestState>(
         listener: (context, state) {
           if (state is BlocgetTheMedicalRequestSuccesState) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.getMedicalRequestMessage),
+              ),
+            );
             launch(jsonDecode(state.getMedicalRequestMessage)['link']);
           }
+          else if (state is BlocGetTheMedicalRequestLoadingState) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text("Loading"),
+              ),
+            );
+          }
+          else if (state is BlocgetTheMedicalRequestErrorState) {
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMedicalRequestMessage),
+              ),
+            );
+          }
+          // else if (state is BlocGetTheMedicalRequestDownloadState) {
+          //   ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          //   ScaffoldMessenger.of(context).showSnackBar(
+          //     SnackBar(
+          //       content: Text(state.getMedicalRequestDownloadMessage),
+          //     ),
+          //   );
+          // }
         },
 
         builder: (context, state) {
           return Container(
 
-            decoration: const BoxDecoration(
-                image: DecorationImage(image: AssetImage(
-                    "assets/images/backgroundattendance.jpg"),
-                    fit: BoxFit.cover)
-            ),
+            // decoration: const BoxDecoration(
+            //     image: DecorationImage(image: AssetImage(
+            //         "assets/images/S_Background.png"),
+            //         fit: BoxFit.cover)
+            // ),
 
 
-            padding: const EdgeInsets.all(20),
+            padding: EdgeInsets.all(20),
             child: Column(
               children: [
                 TextField(
                     controller: Patientname_MedicalRequest,
                     decoration: InputDecoration(
                       labelText: "Patient Name",
-                      labelStyle: const TextStyle(color: Colors.white),
-                      prefixIcon: const Icon(Icons.people),
+                      labelStyle: TextStyle(color: Colors.white),
+                      prefixIcon: Icon(Icons.people),
                       border: myinputborder(),
                       enabledBorder: myinputborder(),
                       focusedBorder: myfocusborder(),
@@ -136,8 +148,8 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                 TextField(
                     controller: HAHuser_MedicalRequest,
                     decoration: InputDecoration(
-                      prefixIcon: const Icon(Icons.lock),
-                      labelStyle: const TextStyle(color: Colors.white),
+                      prefixIcon: Icon(Icons.lock),
+                      labelStyle: TextStyle(color: Colors.white),
                       labelText: "HAH User",
                       enabledBorder: myinputborder(),
                       focusedBorder: myfocusborder(),
@@ -146,42 +158,72 @@ class _medical_request_state extends State<MedicalRequestScreen> {
 
                 Container(height: 20),
 
-                RaisedButton(
-                  onPressed: () => _selectDate(context),
-                  child: const Text('Select ticket date'),
+                Container(
 
+                  constraints: BoxConstraints(
+                      maxWidth: double.infinity, minHeight: 50.0),
+                  margin: EdgeInsets.all(10),
+                  child: RaisedButton(
+                    onPressed: () {
+                      _selectDate(context);
+                    },
+                    color: Theme
+                        .of(context)
+                        .accentColor,
+                    child: Padding(
+                      padding: EdgeInsets.all(0),
+                      child: Container(
+                        alignment: Alignment.center,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Select ticket date',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Icon(
+                              Icons.calendar_today,
+                              color: Colors.black,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
 
                 Container(height: 10),
 
                 Text("${selectedDate.toLocal()}".split(' ')[0],
-                  style: const TextStyle(color: Colors.white, fontSize: 15,
+                  style: TextStyle(color: Colors.black, fontSize: 15,
                       fontFamily: 'Nisebuschgardens'),
                 ),
 
                 Text("${selectedDate.toLocal()}",
-                  style: const TextStyle(color: Colors.white, fontSize: 15,
+                  style: TextStyle(color: Colors.black, fontSize: 15,
                       fontFamily: 'Nisebuschgardens'),),
 
-                const Text("Lab Type",
-                    style: TextStyle(color: Colors.white, fontSize: 15,
+                Text("Lab Type",
+                    style: TextStyle(color: Colors.black, fontSize: 15,
                       fontFamily: 'Nunito',)),
 
                 DropdownButtonHideUnderline(
                   child: DropdownButton2(
+
                     hint: Text(
                       selectedValueLab,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
-                    items: LabsType
-                        .map((item) =>
+                    items: LabsType.map((item) =>
                         DropdownMenuItem<String>(
                           value: item,
-                          child: Text(
-                            item,
+                          child: Text(item,
                             style: const TextStyle(
                               fontSize: 14,
                             ),
@@ -193,19 +235,20 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                         selectedValueLab = value.toString();
                       });
                     },
-                    // value: selectedValueLab,
+
                   ),
                 ),
 
-                const Text("Service Type",style: TextStyle(color: Colors.white, fontSize: 15,
-                  fontFamily: 'Nunito',)),
+                Text("Service Type",
+                    style: TextStyle(color: Colors.black, fontSize: 15,
+                      fontFamily: 'Nunito',)),
                 DropdownButtonHideUnderline(
                   child: DropdownButton2(
                     hint: Text(
                       selectedValueService,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                     items: ServiceTypeElborg
@@ -226,15 +269,16 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                         selectedValueService = value.toString();
                       });
                     },
+                    // buttonDecoration: outlineboxTypes(),
                     // value: selectedValueLab,
                   ),
                 ),
 
-                ElevatedButton(
+                FloatingActionButton.extended(
                   onPressed: () {
-                    String HRCode = user.user!.userHRCode.toString();
-                    print("-----------" + user.user!.userHRCode.toString());
-                    if (selectedValueService == "" || selectedValueLab == "" ||
+                    String HR_code = user.user!.userHRCode.toString();
+                    if (selectedValueService == "" ||
+                        selectedValueLab == "" ||
                         Patientname_MedicalRequest.text == "" ||
                         HAHuser_MedicalRequest.text == "") {
                       Fluttertoast.showToast(
@@ -249,22 +293,24 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                     } else {
                       BlocProvider.of<MedicalRequestCubit>(context)
                           .getSuccessMessage(
-                          HRCode, HAHuser_MedicalRequest.text,
+                          HR_code, HAHuser_MedicalRequest.text,
                           Patientname_MedicalRequest.text, selectedValueLab,
                           selectedValueService,
                           "${selectedDate.toLocal()}".split(' ')[0] +
                               "T12:39:19.532Z");
                     }
                   },
-                  child: const Text('Submit'),
-                ),
+                  label: const Text('Submit'),
+                  icon: const Icon(Icons.thumb_up_alt_outlined),
+                  backgroundColor: Colors.indigo,)
               ],
             ),
           );
         },
       ),
-
     );
+  }
+
   }
 
   OutlineInputBorder myinputborder() {
@@ -272,7 +318,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
     return const OutlineInputBorder( // Outline border type for TextFeild
         borderRadius: BorderRadius.all(Radius.circular(20)),
         borderSide: BorderSide(
-          color: Colors.redAccent,
+          color: Colors.white,
           width: 3,
         )
     );
@@ -282,11 +328,17 @@ class _medical_request_state extends State<MedicalRequestScreen> {
     return const OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(20)),
         borderSide: BorderSide(
-          color: Colors.greenAccent,
+          color: Colors.indigo,
           width: 3,
         )
     );
   }
 
-}
+  BoxDecoration outlineboxTypes() {
+    return BoxDecoration(
+        borderRadius: BorderRadius.all(Radius.circular(20)),
+        border: Border.all(width: 2, color: Colors.white)
+    );
+  }
+
 

@@ -80,8 +80,6 @@ class AttendanceTicketWidget extends StatelessWidget {
                 deduction =
                     projectsDirectionData[index]["deduction"].toString();
 
-
-
                 if (projectsDirectionData[index]["time_IN"].toString() !=
                     "null" &&
                     projectsDirectionData[index]["time_OUT"].toString() !=

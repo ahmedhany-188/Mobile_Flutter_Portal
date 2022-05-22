@@ -15,4 +15,15 @@ class RequestDataProviders {
     print(permissionFeedbackRequest.body);
     return permissionFeedbackRequest;
   }
+
+  Future<http.Response> getDurationVacation(int type,String dateFrom,String dateTo) async{
+    // http://api.hassanallam.com:3415/api/SelfService/GetVacationDuration?VacationType=
+    http.Response rawDurationData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/GetVacationDuration?VacationType=$type&FromDate=$dateFrom&ToDate=$dateTo"),
+    );
+    print(rawDurationData.body);
+    return rawDurationData;
+
+  }
 }

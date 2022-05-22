@@ -1,28 +1,29 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/bloc/hr_request_bloc/vacation_request/vacation_cubit.dart';
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
-import '../../../bloc/hr_request_bloc/permission_request/permission_cubit.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
 
-// import '../../../bloc/hr_request_bloc/hr_permission_form_bloc.dart';
 
-class PermissionScreen extends StatefulWidget {
-  static const routeName = 'permission-page';
+class VacationScreen extends StatefulWidget {
+  static const routeName = 'vacation-page';
 
-  const PermissionScreen({Key? key}) : super(key: key);
+  const VacationScreen({Key? key}) : super(key: key);
 
   @override
-  State<PermissionScreen> createState() => _PermissionScreenState();
+  State<VacationScreen> createState() => _VacationScreenState();
 }
 
-class _PermissionScreenState extends State<PermissionScreen> {
+class _VacationScreenState extends State<VacationScreen> {
   @override
   Widget build(BuildContext context) {
     // final formBloc = context.select((PermissionFormBloc bloc) => bloc.state);
 
-    TextEditingController permissionDateController = TextEditingController();
+    TextEditingController vacationDateFromController = TextEditingController();
+    TextEditingController vacationDateToController = TextEditingController();
     TextEditingController permissionTimeController = TextEditingController();
     final user = context.select((AppBloc bloc) =>
     bloc.state.userData.employeeData);
@@ -35,19 +36,19 @@ class _PermissionScreenState extends State<PermissionScreen> {
           ),
         ),
       ),
-      child: BlocProvider<PermissionCubit>(
+      child: BlocProvider<VacationCubit>(
         create: (permissionContext) =>
-        PermissionCubit(RequestRepository())
+        VacationCubit(RequestRepository())
           ..getRequestData(RequestStatus.newRequest),
         child: Builder(
             builder: (context) {
               return Scaffold(
-                appBar: AppBar(title: const Text('Permission Request')),
+                appBar: AppBar(title: const Text('Vacation Request')),
                 floatingActionButton: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     if(context
-                        .read<PermissionCubit>()
+                        .read<VacationCubit>()
                         .state
                         .requestStatus ==
                         RequestStatus.oldRequest)FloatingActionButton.extended(
@@ -58,7 +59,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                     ),
                     const SizedBox(height: 12),
                     if(context
-                        .read<PermissionCubit>()
+                        .read<VacationCubit>()
                         .state
                         .requestStatus ==
                         RequestStatus.oldRequest)FloatingActionButton.extended(
@@ -71,13 +72,13 @@ class _PermissionScreenState extends State<PermissionScreen> {
                     ),
                     const SizedBox(height: 12),
                     if(context
-                        .read<PermissionCubit>()
+                        .read<VacationCubit>()
                         .state
                         .requestStatus == RequestStatus.newRequest)
                       FloatingActionButton.extended(
                         heroTag: null,
                         onPressed: () {
-                          context.read<PermissionCubit>()
+                          context.read<VacationCubit>()
                               .submitPermissionRequest(user?.userHrCode ?? "0");
                         },
                         // formBloc.state.status.isValidated
@@ -91,7 +92,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                     const SizedBox(height: 12),
                   ],
                 ),
-                body: BlocListener<PermissionCubit, PermissionInitial>(
+                body: BlocListener<VacationCubit, VacationInitial>(
                   listener: (context, state) {
                     if (state.status.isSubmissionInProgress){
                       LoadingDialog.show(context);
@@ -115,7 +116,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                     }
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
                     child: Form(
                       child: SingleChildScrollView(
                         child: Column(
@@ -124,8 +125,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
                               child: BlocBuilder<
-                                  PermissionCubit,
-                                  PermissionInitial>(
+                                  VacationCubit,
+                                  VacationInitial>(
                                   buildWhen: (previous, current) {
                                     return (previous.requestDate !=
                                         current.requestDate) ||
@@ -152,29 +153,118 @@ class _PermissionScreenState extends State<PermissionScreen> {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
+                              child: InputDecorator(
+                                decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 0, vertical: 5),
+                                  labelText: 'Vacation Type',
+                                  floatingLabelAlignment:
+                                  FloatingLabelAlignment.start,
+                                  prefixIcon: Icon(Icons.event),
+                                ),
+                                child: BlocBuilder<VacationCubit,
+                                    VacationInitial>(
+                                    buildWhen: (previous, current) {
+                                      return (previous.vacationType !=
+                                          current.vacationType);
+                                    },
+                                    builder: (context, state) {
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start,
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .center,
+                                        children: [
+                                          RadioListTile<int>(
+                                            value: 1,
+                                            title: Text("Annual"),
+                                            groupValue: state.vacationType,
+                                            onChanged: (vacationType) =>
+                                                context
+                                                    .read<VacationCubit>()
+                                                    .vacationTypeChanged(
+                                                    vacationType ?? 1),
+                                          ),
+                                          RadioListTile<int>(
+                                            value: 2,
+                                            // dense: true,
+                                            title: Text("Casual"),
+                                            groupValue: state.vacationType,
+                                            // radioClickState: (mstate) => mstate.value),
+                                            onChanged: (vacationType) =>
+                                                context
+                                                    .read<VacationCubit>()
+                                                    .vacationTypeChanged(
+                                                    vacationType ?? 1),
+                                          ),
+                                          RadioListTile<int>(
+                                            value: 3,
+                                            // dense: true,
+                                            title: Text("Holiday Replacement"),
+                                            groupValue: state.vacationType,
+                                            // radioClickState: (mstate) => mstate.value),
+                                            onChanged: (vacationType) =>
+                                                context
+                                                    .read<VacationCubit>()
+                                                    .vacationTypeChanged(
+                                                    vacationType ?? 1),
+                                          ),
+                                          RadioListTile<int>(
+                                            value: 4,
+                                            // dense: true,
+                                            title: Text("Maternity"),
+                                            groupValue: state.vacationType,
+                                            // radioClickState: (mstate) => mstate.value),
+                                            onChanged: (vacationType) =>
+                                                context
+                                                    .read<VacationCubit>()
+                                                    .vacationTypeChanged(
+                                                    vacationType ?? 1),
+                                          ),
+                                          RadioListTile<int>(
+                                            value: 5,
+                                            // dense: true,
+                                            title: Text("Haj"),
+                                            groupValue: state.vacationType,
+                                            // radioClickState: (mstate) => mstate.value),
+                                            onChanged: (vacationType) =>
+                                                context
+                                                    .read<VacationCubit>()
+                                                    .vacationTypeChanged(
+                                                    vacationType ?? 1),
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
                               child: BlocBuilder<
-                                  PermissionCubit,
-                                  PermissionInitial>(
+                                  VacationCubit,
+                                  VacationInitial>(
                                 // buildWhen: (previous, current) => previous.permissionDate != current.permissionDate,
                                   buildWhen: (previous, current) {
-                                    return (previous.permissionDate !=
-                                        current.permissionDate) ||
+                                    return (previous.vacationFromDate !=
+                                        current.vacationFromDate) ||
                                         previous.status != current.status;
                                   },
                                   builder: (context, state) {
                                     return TextFormField(
-                                      onChanged: (permissionDate) =>
+                                      onChanged: (vacationDate) =>
                                           context
-                                              .read<PermissionCubit>()
-                                              .permissionDateChanged(
-                                              permissionDate),
+                                              .read<VacationCubit>()
+                                              .vacationFromDateChanged(
+                                              vacationDate),
                                       readOnly: true,
-                                      controller: permissionDateController,
+                                      controller: vacationDateFromController,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
-                                        labelText: 'Permission Date',
-                                        errorText: state.permissionDate.invalid
+                                        labelText: 'Vacation From Date',
+                                        errorText: state.vacationFromDate.invalid
                                             ? 'invalid permission date'
                                             : null,
                                         prefixIcon: const Icon(
@@ -193,12 +283,12 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                             'EEEE dd-MM-yyyy');
                                         String formattedDate = formatter.format(
                                             date ?? DateTime.now());
-                                        permissionDateController.text =
+                                        vacationDateFromController.text =
                                             formattedDate;
                                         // (permissionDate) =>
                                         context
-                                            .read<PermissionCubit>()
-                                            .permissionDateChanged(
+                                            .read<VacationCubit>()
+                                            .vacationFromDateChanged(
                                             formattedDate);
                                       },
                                     );
@@ -208,101 +298,55 @@ class _PermissionScreenState extends State<PermissionScreen> {
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
-                              child: InputDecorator(
-                                decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 0, vertical: 5),
-                                  labelText: 'Permission Type',
-                                  floatingLabelAlignment:
-                                  FloatingLabelAlignment.start,
-                                  prefixIcon: Icon(Icons.event),
-                                ),
-                                child: BlocBuilder<PermissionCubit,
-                                    PermissionInitial>(
-                                    buildWhen: (previous, current) {
-                                      return (previous.permissionType !=
-                                          current.permissionType);
-                                    },
-                                    builder: (context, state) {
-                                      return Column(
-                                        crossAxisAlignment: CrossAxisAlignment
-                                            .start,
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .center,
-                                        children: [
-                                          RadioListTile<int>(
-                                            value: 2,
-                                            title: const Text("2 hours"),
-                                            groupValue: state.permissionType,
-                                            onChanged: (permissionType) =>
-                                                context
-                                                    .read<PermissionCubit>()
-                                                    .permissionTypeChanged(
-                                                    permissionType!),
-                                          ),
-                                          RadioListTile<int>(
-                                            value: 4,
-                                            // dense: true,
-                                            title: const Text("4 hours"),
-                                            groupValue: state.permissionType,
-                                            // radioClickState: (mstate) => mstate.value),
-                                            onChanged: (permissionType) =>
-                                                context
-                                                    .read<PermissionCubit>()
-                                                    .permissionTypeChanged(
-                                                    permissionType!),
-                                          ),
-                                        ],
-                                      );
-                                    }
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 8),
                               child: BlocBuilder<
-                                  PermissionCubit,
-                                  PermissionInitial>(
-                                  buildWhen: (previous, current) =>
-                                  previous.permissionTime !=
-                                      current.permissionTime,
+                                  VacationCubit,
+                                  VacationInitial>(
+                                // buildWhen: (previous, current) => previous.permissionDate != current.permissionDate,
+                                  buildWhen: (previous, current) {
+                                    return (previous.vacationToDate !=
+                                        current.vacationToDate) ||
+                                        previous.status != current.status ||
+                                    previous.vacationFromDate != current.vacationFromDate;
+                                  },
                                   builder: (context, state) {
                                     return TextFormField(
-                                      // onChanged: null,
+                                      onChanged: (vacationDate) =>
+                                          context
+                                              .read<VacationCubit>()
+                                              .vacationToDateChanged(
+                                              vacationDate),
                                       readOnly: true,
-                                      controller: permissionTimeController,
+                                      controller: vacationDateToController,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
-                                        labelText: 'Permission Time',
-                                        errorText: state.permissionTime.invalid
-                                            ? 'invalid permission time'
+                                        labelText: 'Vacation To Date',
+                                        errorText: state.vacationToDate.invalid
+                                            ? 'invalid permission date'
                                             : null,
                                         prefixIcon: const Icon(
-                                            Icons.access_time),
+                                            Icons.date_range_outlined),
                                       ),
                                       onTap: () async {
-                                        TimeOfDay? time = TimeOfDay.now();
+                                        DateTime? date = DateTime.now();
                                         FocusScope.of(context).requestFocus(
                                             FocusNode());
-                                        time =
-                                        await showTimePicker(context: context,
-                                            initialTime: TimeOfDay.now());
-                                        // if (time != null){
-                                        final localizations = MaterialLocalizations
-                                            .of(context);
-                                        final formattedTimeOfDay = localizations
-                                            .formatTimeOfDay(
-                                            time ?? TimeOfDay.now());
-                                        permissionTimeController.text =
-                                            formattedTimeOfDay;
+                                        date = await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime(2000),
+                                            lastDate: DateTime(2100));
+                                        var formatter = DateFormat(
+                                            'EEEE dd-MM-yyyy');
+                                        String formattedDate = formatter.format(
+                                            date ?? DateTime.now());
+                                        vacationDateToController.text =
+                                            formattedDate;
+                                        // (permissionDate) =>
                                         context
-                                            .read<PermissionCubit>()
-                                            .permissionTimeChanged(
-                                            formattedTimeOfDay);
-                                        // }
-
+                                            .read<VacationCubit>()
+                                            .vacationToDateChanged(
+                                            formattedDate);
                                       },
                                     );
                                   }
@@ -312,13 +356,42 @@ class _PermissionScreenState extends State<PermissionScreen> {
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
                               child: BlocBuilder<
-                                  PermissionCubit,
-                                  PermissionInitial>(
+                                  VacationCubit,
+                                  VacationInitial>(
+                                  buildWhen: (previous, current) {
+
+                                    print(previous.vacationDuration);
+                                    print(current.vacationDuration);
+
+                                    return (previous.vacationDuration !=
+                                        current.vacationDuration);
+                                  },
+                                  builder: (context, state) {
+                                    print("from Screen${state.vacationDuration}");
+                                    return TextFormField(
+                                      key: UniqueKey(),
+                                      initialValue: state.vacationDuration,
+                                      readOnly : true,
+                                      decoration: InputDecoration(
+                                        labelText: 'Vacation Duration',
+                                        prefixIcon: const Icon(
+                                            Icons.date_range),
+                                      ),
+                                    );
+                                  }
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: BlocBuilder<
+                                  VacationCubit,
+                                  VacationInitial>(
                                   builder: (context, state) {
                                     return TextFormField(
                                       onChanged: (commentValue) =>
                                           context
-                                              .read<PermissionCubit>()
+                                              .read<VacationCubit>()
                                               .commentChanged(commentValue),
                                       keyboardType: TextInputType.multiline,
                                       maxLines: null,
@@ -332,7 +405,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                             color: Colors.grey[800]),
                                         labelText: "Add your comment",
                                         fillColor: Colors.white70,
-                                        prefixIcon: const Icon(Icons.comment),
+                                        prefixIcon: Icon(Icons.comment),
                                         enabled: true,
                                       ),
 
@@ -406,7 +479,7 @@ class SuccessScreen extends StatelessWidget {
             const SizedBox(height: 10),
             ElevatedButton.icon(
               onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => const PermissionScreen())),
+                  MaterialPageRoute(builder: (_) => const VacationScreen())),
               icon: const Icon(Icons.replay),
               label: const Text('Create Another Permission Request'),
             ),

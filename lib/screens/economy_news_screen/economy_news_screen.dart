@@ -70,7 +70,7 @@ class _economynews_screenState extends State<EconomyNewsScreen>{
                     children: [
                       Container(
                         height: deviceSize.height -
-                            ((deviceSize.height * 0.24) -
+                            ((deviceSize.height * 0.20) -
                                 MediaQuery
                                     .of(context)
                                     .viewPadding
@@ -78,7 +78,7 @@ class _economynews_screenState extends State<EconomyNewsScreen>{
                         child: EconomyNewsTicketWidget(EconomyNewsListData),
                         decoration: const BoxDecoration(
                             image: DecorationImage(image: AssetImage(
-                                "assets/images/backgroundattendance.jpg"),
+                                "assets/images/S_Background.png"),
                                 fit: BoxFit.cover)
                         ),
                       )
