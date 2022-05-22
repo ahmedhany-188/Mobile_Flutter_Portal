@@ -1,13 +1,10 @@
-import 'package:authentication_repository/authentication_repository.dart';
-import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
-import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
-import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
-import 'package:permission_handler/permission_handler.dart';
 
+import '../../screens/benefits_screen/benefits_screen.dart';
+import '../../screens/contacts_screen/contacts_screen.dart';
+import '../../widgets/drawer/main_drawer.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 
 class TapsScreen extends StatefulWidget {
@@ -54,17 +51,17 @@ class _TapsScreenState extends State<TapsScreen> {
           backgroundColor: Colors.transparent,
           // toolbarHeight: MediaQuery.of(context).size.height / 4,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(bottomRight: Radius.circular(100)),
+            borderRadius: BorderRadius.only(bottomRight: Radius.circular(50)),
           ),
           elevation: 0,
-          flexibleSpace: Container(
+          flexibleSpace: SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
 
             ///new added
             child: ClipRRect(
               borderRadius:
-                  BorderRadius.only(bottomRight: Radius.circular(100)),
+                  const BorderRadius.only(bottomRight: Radius.circular(50)),
               child: Image.asset('assets/images/login_image_background.png',
                   fit: BoxFit.fill),
             ),
@@ -150,10 +147,21 @@ class _TapsScreenState extends State<TapsScreen> {
               },
             ),
           ],
-          bottom: const TabBar(
+          bottom: TabBar(
             indicatorColor: Colors.white,
-            tabs: [
+            splashFactory: NoSplash.splashFactory,
+            overlayColor: MaterialStateProperty.resolveWith(
+              (Set states) {
+                return states.contains(MaterialState.focused)
+                    ? null
+                    : Colors.transparent;
+              },
+            ),
+            tabs: const [
               Tab(
+                // child: Row(children: [Icon(
+                //   Icons.beach_access,
+                // ),Text('Benefits'),]),
                 icon: Icon(
                   Icons.beach_access,
                 ),
@@ -169,7 +177,7 @@ class _TapsScreenState extends State<TapsScreen> {
               ),
               Tab(
                 child: CircleAvatar(
-                  child: Icon(Icons.list),
+                  child: Icon(Icons.menu),
                   backgroundColor: Colors.white,
                 ),
               ),
@@ -181,20 +189,20 @@ class _TapsScreenState extends State<TapsScreen> {
             // DelayedDisplay(
             //  delay: Duration(milliseconds: 1000),
             //  child:
-            Container(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: const TabBarView(
-          physics:
+            SizedBox(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: const TabBarView(
+            physics:
                 BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
-          children: [
+            children: [
               BenefitsScreen(),
               ContactsScreen(),
               BenefitsScreen(),
               ContactsScreen(),
-          ],
+            ],
+          ),
         ),
-            ),
         // ),
 
         // _pages[_selectedPageIndex]['page'],
@@ -223,4 +231,3 @@ class _TapsScreenState extends State<TapsScreen> {
     );
   }
 }
-

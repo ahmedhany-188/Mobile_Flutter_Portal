@@ -1,7 +1,6 @@
 
 
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class EconomyNewsTicketWidget extends StatelessWidget {
@@ -36,7 +35,7 @@ class EconomyNewsTicketWidget extends StatelessWidget {
                 itemBuilder: (BuildContext context, int index) {
                   return Container(
                     child: Text(EconomyNewsTicketWidgetData[index]["title"],
-                      style: TextStyle(color: Colors.white
+                      style: const TextStyle(color: Colors.white
                       ),),
                   );
                 }

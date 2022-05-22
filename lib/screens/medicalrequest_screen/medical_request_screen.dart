@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
@@ -62,7 +61,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
 
   Future<void> _sendSubmit(BuildContext context) async {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
-    String HR_code = user.user!.userHRCode.toString();
+    String HRCode = user.user!.userHRCode.toString();
 
     if (selectedValueService == "" || selectedValueLab == "" ||
         Patientname_MedicalRequest.text == "" ||
@@ -79,7 +78,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
     } else {
       BlocProvider.of<MedicalRequestCubit>(context)
           .getSuccessMessage(
-          HR_code, HAHuser_MedicalRequest.text, Patientname_MedicalRequest.text,
+          HRCode, HAHuser_MedicalRequest.text, Patientname_MedicalRequest.text,
           selectedValueLab, selectedValueService,
           "${selectedDate.toLocal()}".split(' ')[0] + "T12:39:19.532Z");
     }
@@ -116,15 +115,15 @@ class _medical_request_state extends State<MedicalRequestScreen> {
             ),
 
 
-            padding: EdgeInsets.all(20),
+            padding: const EdgeInsets.all(20),
             child: Column(
               children: [
                 TextField(
                     controller: Patientname_MedicalRequest,
                     decoration: InputDecoration(
                       labelText: "Patient Name",
-                      labelStyle: TextStyle(color: Colors.white),
-                      prefixIcon: Icon(Icons.people),
+                      labelStyle: const TextStyle(color: Colors.white),
+                      prefixIcon: const Icon(Icons.people),
                       border: myinputborder(),
                       enabledBorder: myinputborder(),
                       focusedBorder: myfocusborder(),
@@ -137,8 +136,8 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                 TextField(
                     controller: HAHuser_MedicalRequest,
                     decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.lock),
-                      labelStyle: TextStyle(color: Colors.white),
+                      prefixIcon: const Icon(Icons.lock),
+                      labelStyle: const TextStyle(color: Colors.white),
                       labelText: "HAH User",
                       enabledBorder: myinputborder(),
                       focusedBorder: myfocusborder(),
@@ -149,22 +148,22 @@ class _medical_request_state extends State<MedicalRequestScreen> {
 
                 RaisedButton(
                   onPressed: () => _selectDate(context),
-                  child: Text('Select ticket date'),
+                  child: const Text('Select ticket date'),
 
                 ),
 
                 Container(height: 10),
 
                 Text("${selectedDate.toLocal()}".split(' ')[0],
-                  style: TextStyle(color: Colors.white, fontSize: 15,
+                  style: const TextStyle(color: Colors.white, fontSize: 15,
                       fontFamily: 'Nisebuschgardens'),
                 ),
 
                 Text("${selectedDate.toLocal()}",
-                  style: TextStyle(color: Colors.white, fontSize: 15,
+                  style: const TextStyle(color: Colors.white, fontSize: 15,
                       fontFamily: 'Nisebuschgardens'),),
 
-                Text("Lab Type",
+                const Text("Lab Type",
                     style: TextStyle(color: Colors.white, fontSize: 15,
                       fontFamily: 'Nunito',)),
 
@@ -172,7 +171,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                   child: DropdownButton2(
                     hint: Text(
                       selectedValueLab,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                         color: Colors.white,
                       ),
@@ -198,13 +197,13 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                   ),
                 ),
 
-                Text("Service Type",style: TextStyle(color: Colors.white, fontSize: 15,
+                const Text("Service Type",style: TextStyle(color: Colors.white, fontSize: 15,
                   fontFamily: 'Nunito',)),
                 DropdownButtonHideUnderline(
                   child: DropdownButton2(
                     hint: Text(
                       selectedValueService,
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 14,
                         color: Colors.white,
                       ),
@@ -233,7 +232,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
 
                 ElevatedButton(
                   onPressed: () {
-                    String HR_code = user.user!.userHRCode.toString();
+                    String HRCode = user.user!.userHRCode.toString();
                     print("-----------" + user.user!.userHRCode.toString());
                     if (selectedValueService == "" || selectedValueLab == "" ||
                         Patientname_MedicalRequest.text == "" ||
@@ -250,14 +249,14 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                     } else {
                       BlocProvider.of<MedicalRequestCubit>(context)
                           .getSuccessMessage(
-                          HR_code, HAHuser_MedicalRequest.text,
+                          HRCode, HAHuser_MedicalRequest.text,
                           Patientname_MedicalRequest.text, selectedValueLab,
                           selectedValueService,
                           "${selectedDate.toLocal()}".split(' ')[0] +
                               "T12:39:19.532Z");
                     }
                   },
-                  child: Text('Submit'),
+                  child: const Text('Submit'),
                 ),
               ],
             ),

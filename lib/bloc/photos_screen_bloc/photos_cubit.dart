@@ -2,7 +2,6 @@ import 'package:hassanallamportalflutter/data/data_providers/album_dio/album_dio
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../data/data_providers/general_dio/general_dio.dart';
 
 part 'photos_state.dart';
 

@@ -11,7 +11,7 @@ class WeatherScreen extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text("Weather Testing"),
+        title: const Text("Weather Testing"),
         centerTitle: true,
       ),
       body: BlocConsumer<WeatherBloc, WeatherState>(
@@ -35,7 +35,7 @@ class WeatherScreen extends StatelessWidget {
             );
           } else if (state is WeatherLoadSuccess) {
             return Padding(
-              padding: EdgeInsets.symmetric(horizontal: 12.0),
+              padding: const EdgeInsets.symmetric(horizontal: 12.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -53,14 +53,14 @@ class WeatherScreen extends StatelessWidget {
                         height: 200,
                         width: 200,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Text(
                         state.weather.name ?? "No Name",
                         style: Theme.of(context).textTheme.headline3,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 5,
                       ),
                       Text(
@@ -78,13 +78,14 @@ class WeatherScreen extends StatelessWidget {
                         );
                       }
                     },
-                    child: Text("Get Weather"),
+                    child: const Text("Get Weather"),
                   )
                 ],
               ),
             );
-          } else
+          } else {
             return Container();
+          }
         },
       ),
     );

@@ -28,7 +28,7 @@ class ProfileScreenWidget extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         Container(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             // gradient: LinearGradient(
             //   colors: [
             //     Color.fromRGBO(4, 9, 35, 1),
@@ -47,7 +47,7 @@ class ProfileScreenWidget extends StatelessWidget {
 
           backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
               child: Column(
@@ -77,7 +77,7 @@ class ProfileScreenWidget extends StatelessWidget {
                       ),
                     ],
                   ),
-                  Text(
+                  const Text(
                     'Hassan Allam Holding',
                     textAlign: TextAlign.center,
                     style: TextStyle(
@@ -86,10 +86,10 @@ class ProfileScreenWidget extends StatelessWidget {
                       fontFamily: 'Nisebuschgardens',
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 22,
                   ),
-                  Container(
+                  SizedBox(
                     height: height * 0.43,
                     child: LayoutBuilder(
                       builder: (context, constraints) {
@@ -111,12 +111,12 @@ class ProfileScreenWidget extends StatelessWidget {
                                 ),
                                 child: Column(
                                   children: [
-                                    SizedBox(
+                                    const SizedBox(
                                       height: 80,
                                     ),
                                     Text(
                                       user.employeeData!.name!,
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Color.fromRGBO(39, 105, 171, 1),
                                         fontFamily: 'Nunito',
                                         fontSize: 20,
@@ -126,7 +126,7 @@ class ProfileScreenWidget extends StatelessWidget {
 
                                     Text(
                                       user.employeeData!.titleName! + "",
-                                      style: TextStyle(
+                                      style: const TextStyle(
                                         color: Color.fromRGBO(39, 105, 171, 1),
                                         fontFamily: 'Nunito',
                                         fontSize: 15,
@@ -150,7 +150,7 @@ class ProfileScreenWidget extends StatelessWidget {
                                             Text(
                                               user.employeeData!.userHrCode! +
                                                   "",
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Color.fromRGBO(
                                                     39, 105, 171, 1),
                                                 fontFamily: 'Nunito',
@@ -187,7 +187,7 @@ class ProfileScreenWidget extends StatelessWidget {
                                             Text(
                                               user.employeeData!.gradeName
                                                   .toString() + "",
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                 color: Color.fromRGBO(
                                                     39, 105, 171, 1),
                                                 fontFamily: 'Nunito',
@@ -244,7 +244,7 @@ class ProfileScreenWidget extends StatelessWidget {
                       },
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Container(
@@ -258,10 +258,10 @@ class ProfileScreenWidget extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
-                          Text(
+                          const Text(
                             'My Info',
                             style: TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),
@@ -269,18 +269,18 @@ class ProfileScreenWidget extends StatelessWidget {
                               fontFamily: 'Nunito',
                             ),
                           ),
-                          Divider(
+                          const Divider(
                             thickness: 2.5,
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
-                          Container(
+                          SizedBox(
                             width: double.infinity,
                             height: height * 0.08,
                             child: Text(
                               'Department: \n'+user.employeeData!.mainDepartment!,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color.fromRGBO(39, 105, 171, 1),
 
                                 fontSize: 16,
@@ -288,15 +288,15 @@ class ProfileScreenWidget extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
-                          Container(
+                          SizedBox(
                             width: double.infinity,
                             height: height * 0.08,
                             child: Text(
                               'Direct Manager: \n'+user.employeeData!.managerCode!,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color.fromRGBO(39, 105, 171, 1),
                                 fontSize: 16,
                                 fontFamily: 'Nunito',
@@ -304,15 +304,15 @@ class ProfileScreenWidget extends StatelessWidget {
                               textAlign: TextAlign.left,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
-                          Container(
+                          SizedBox(
                             width: double.infinity,
                             height: height * 0.08,
                             child: Text(
                               'Email: \n'+user.employeeData!.email!,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color.fromRGBO(39, 105, 171, 1),
                                 fontSize: 16,
                                 fontFamily: 'Nunito',
@@ -320,15 +320,15 @@ class ProfileScreenWidget extends StatelessWidget {
                               textAlign: TextAlign.left,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
-                          Container(
+                          SizedBox(
                             width: double.infinity,
                             height: height * 0.08,
                             child: Text(
                               'Mobile Number: \n'+user.employeeData!.phone!,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Color.fromRGBO(39, 105, 171, 1),
                                 fontSize: 16,
                                 fontFamily: 'Nunito',
@@ -336,13 +336,13 @@ class ProfileScreenWidget extends StatelessWidget {
                               textAlign: TextAlign.left,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
-                          Container(
+                          SizedBox(
                             width: double.infinity,
                             height: height * 0.08,
-                            child: Text(
+                            child: const Text(
                               'Ext: \n',
                               style: TextStyle(
                                 color: Color.fromRGBO(39, 105, 171, 1),

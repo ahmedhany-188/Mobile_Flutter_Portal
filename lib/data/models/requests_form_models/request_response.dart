@@ -14,11 +14,11 @@ class RequestResponse {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['result'] = this.result;
-    data['serviceID'] = this.serviceID;
-    data['requestNo'] = this.requestNo;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['result'] = result;
+    data['serviceID'] = serviceID;
+    data['requestNo'] = requestNo;
     return data;
   }
 }

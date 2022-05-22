@@ -1,7 +1,5 @@
-import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:sprung/sprung.dart';
 
 class PageTransitionAnimation {
   Widget pageDirection;

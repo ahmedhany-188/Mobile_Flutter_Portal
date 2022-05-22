@@ -66,24 +66,24 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 }
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               },
             ),
-            Divider(
+            const Divider(
               height: 5,
             ),
             BlocConsumer<CounterCubit, CounterState>(
               listener: (counterCubitListenerContext, state) {
                 if (state.wasIncremented == true) {
                   Scaffold.of(counterCubitListenerContext).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text('Incremented!'),
                       duration: Duration(milliseconds: 300),
                     ),
                   );
                 } else if (state.wasIncremented == false) {
                   Scaffold.of(counterCubitListenerContext).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text('Decremented!'),
                       duration: Duration(milliseconds: 300),
                     ),
@@ -109,15 +109,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     style:
                     Theme.of(counterCubiBuilderContext).textTheme.headline4,
                   );
-                } else
+                } else {
                   return Text(
                     state.counterValue.toString(),
                     style:
                     Theme.of(counterCubiBuilderContext).textTheme.headline4,
                   );
+                }
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
             Builder(
@@ -151,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
             Builder(
@@ -164,20 +165,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 FloatingActionButton(
-                  heroTag: Text('${widget.title}'),
+                  heroTag: Text(widget.title),
                   onPressed: () {
                     BlocProvider.of<CounterCubit>(context).decrement();
                     // context.bloc<CounterCubit>().decrement();
                   },
                   tooltip: 'Decrement',
-                  child: Icon(Icons.remove),
+                  child: const Icon(Icons.remove),
                 ),
                 FloatingActionButton(
                   heroTag: Text('${widget.title} 2nd'),
@@ -186,17 +187,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     context.read<CounterCubit>().increment();
                   },
                   tooltip: 'Increment',
-                  child: Icon(Icons.add),
+                  child: const Icon(Icons.add),
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 24,
             ),
             Builder(
               builder: (materialButtonContext) => MaterialButton(
                 color: Colors.redAccent,
-                child: Text(
+                child: const Text(
                   'Go to Second Screen',
                   style: TextStyle(color: Colors.white),
                 ),
@@ -212,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
             // ),
             MaterialButton(
               color: Colors.greenAccent,
-              child: Text(
+              child: const Text(
                 'Go to Third Screen',
                 style: TextStyle(color: Colors.white),
               ),

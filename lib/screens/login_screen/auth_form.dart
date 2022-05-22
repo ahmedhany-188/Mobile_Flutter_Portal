@@ -6,11 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:hassanallamportalflutter/bloc/login_cubit/login_cubit.dart';
 import 'package:formz/formz.dart';
-import 'package:hassanallamportalflutter/data/helpers/assist_function.dart';
 import 'login_form_widgets.dart';
 
 class AuthForm extends StatefulWidget {
-  AuthForm();
+  const AuthForm();
 
   @override
   _AuthFormState createState() => _AuthFormState();
@@ -81,7 +80,7 @@ class _AuthFormState extends State<AuthForm> {
                   const Padding(padding: EdgeInsets.all(8)),
                   SizedBox(
                     width: deviceSize.width / 1.3,
-                    child: GradientButton(),
+                    child: const GradientButton(),
                   ),
                 ],
               ),
@@ -123,7 +122,7 @@ class CustomClipPath extends CustomClipper<Path> {
 class CurvePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()..color = Color(0xFFE9F4FF);
+    Paint paint = Paint()..color = const Color(0xFFE9F4FF);
 
     Path path = Path();
     path.moveTo(0, size.height);

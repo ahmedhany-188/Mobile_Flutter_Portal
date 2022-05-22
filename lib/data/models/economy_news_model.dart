@@ -1,4 +1,3 @@
-import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
 
 class Economynews_Model{
 

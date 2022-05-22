@@ -1,12 +1,9 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/myattendance_screen_bloc/attendance_cubit.dart';
-import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_widget.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_ticket_widget.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
@@ -34,7 +31,7 @@ class _attendance_sreenState extends State<Attendance_Screen> {
   List<dynamic> AttendanceListData = [];
   String AttendanceStringData = "";
 
-  var formatter = new DateFormat('MMMM');
+  var formatter = DateFormat('MMMM');
 
 
   @override
@@ -97,7 +94,7 @@ class _attendance_sreenState extends State<Attendance_Screen> {
                       BlocProvider.of<AttendanceCubit>(context)
                           .getAttendanceList(user.user!.userHRCode, monthNumber);
                     },
-                    child: Text('prev'),
+                    child: const Text('prev'),
                   ),
                 ],
                 ),
@@ -111,7 +108,7 @@ class _attendance_sreenState extends State<Attendance_Screen> {
                       BlocProvider.of<AttendanceCubit>(context)
                           .getAttendanceList(user.user!.userHRCode, monthNumber);
                     },
-                    child: Text('next'),
+                    child: const Text('next'),
                   ),
                 ],
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -123,13 +120,13 @@ class _attendance_sreenState extends State<Attendance_Screen> {
 
 
             Text(DateFormat('MMMM').format(DateTime(0, monthNumber)),
-              style: TextStyle(fontSize: 20, color: Colors.black),),
+              style: const TextStyle(fontSize: 20, color: Colors.black),),
 
             SingleChildScrollView(
                 physics: const NeverScrollableScrollPhysics(),
                 child: Column(
                   children: [
-                    Container(
+                    SizedBox(
                       height: deviceSize.height -
                           ((deviceSize.height * 0.24) -
                               MediaQuery

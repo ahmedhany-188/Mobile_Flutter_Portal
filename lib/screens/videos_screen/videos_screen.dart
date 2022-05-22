@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizer/sizer.dart';
@@ -6,7 +5,6 @@ import 'package:video_player/video_player.dart';
 import 'package:swipe_image_gallery/swipe_image_gallery.dart';
 
 import '../../bloc/videos_screen_bloc/videos_cubit.dart';
-import '../../data/models/user_model.dart';
 
 class VideosScreen extends StatefulWidget {
   const VideosScreen({Key? key}) : super(key: key);
@@ -68,11 +66,11 @@ class _VideosScreenState extends State<VideosScreen> {
         },
         builder: (context, state) {
           final heroProperties = [
-            ImageGalleryHeroProperties(tag: 'imageId1'),
-            ImageGalleryHeroProperties(tag: 'imageId2'),
+            const ImageGalleryHeroProperties(tag: 'imageId1'),
+            const ImageGalleryHeroProperties(tag: 'imageId2'),
           ];
 
-          final assets = const [
+          const assets = [
             Image(image: AssetImage('assets/images/logo.png')),
             Image(image: AssetImage('assets/images/Builds.png')),
           ];
@@ -126,7 +124,7 @@ class _VideosScreenState extends State<VideosScreen> {
                               child: Hero(
                                 tag: 'imageId$index',
                                 child: Container(
-                                  margin: EdgeInsets.all(5),
+                                  margin: const EdgeInsets.all(5),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(20),
                                     child: Image.asset('assets/images/S_Background.png'),

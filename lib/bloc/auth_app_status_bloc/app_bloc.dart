@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:hassanallamportalflutter/data/models/weather.dart';
 import 'package:meta/meta.dart';
 
 part 'app_event.dart';

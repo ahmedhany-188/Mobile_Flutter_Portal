@@ -4,11 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_polls/flutter_polls.dart';
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
-import '../../data/models/user_model.dart';
 import '../../data/models/voter_model.dart';
 
 class PollsScreen extends StatefulWidget {
-  PollsScreen({Key? key}) : super(key: key);
+  const PollsScreen({Key? key}) : super(key: key);
   static const routeName = 'polls-screen';
   @override
   State<PollsScreen> createState() => _PollsScreenState();
