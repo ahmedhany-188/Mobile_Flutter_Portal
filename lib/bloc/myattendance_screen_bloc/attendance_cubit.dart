@@ -29,7 +29,6 @@ class AttendanceCubit extends Cubit<AttendanceState> {
           // print("----------"+myAttendance);
           emit(BlocGetTheAttendanceSuccesState(myAttendance));
         }).catchError((error){
-          print(error.toString());
           emit(BlocGetTheAttendanceErrorState(error.toString()));
         });
 

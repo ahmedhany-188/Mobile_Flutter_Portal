@@ -65,7 +65,8 @@ class _economynews_screenState extends State<EconomyNewsScreen>{
             }
           },
           builder: (context, state) {
-            return Container(child: Column(children: [
+            return Container(
+                child: Column(children: [
               SingleChildScrollView(
                   physics: const NeverScrollableScrollPhysics(),
                   child: Column(

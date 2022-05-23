@@ -23,38 +23,36 @@ class MedicalRequestScreen extends StatefulWidget{
 class _medical_request_state extends State<MedicalRequestScreen> {
 
   TextEditingController Patientname_MedicalRequest = TextEditingController();
-  TextEditingController HAHuser_MedicalRequest = TextEditingController();
+  TextEditingController HrUser_MedicalRequest = TextEditingController();
 
   String selectedValueLab = "";
-
   String selectedValueService = "";
-
   List<String> LabsType = [
     "Al mokhtabar",
     "Al borg",
   ];
-
   List<String> ServiceTypeElborg = [
     "Analysis",
     "X-Ray",
   ];
-
   List<String> ServiceTypeElmokhtabr = [
     "Analysis",
   ];
-
-  DateTime selectedDate = DateTime.now();
+  DateTime currentDate = DateTime.now();
+  String DateAdded = "";
 
   // set the new date
   Future<void> _selectDate(BuildContext context) async {
+    currentDate = DateTime.now();
     final DateTime? picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+
+        initialDate: currentDate,
         firstDate: DateTime.now(),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
+    if (picked != null && picked != currentDate) {
       setState(() {
-        selectedDate = picked;
+        DateAdded = picked.toString();
       });
     }
   }
@@ -68,8 +66,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
 
 
     final user = context.select((AppBloc bloc) => bloc.state.userData);
-
-    // HAHuser_MedicalRequest.text=user.employeeData!.name!;
+    HrUser_MedicalRequest.text = user.employeeData!.userHrCode!;
 
     return Scaffold(
       appBar: AppBar(
@@ -135,7 +132,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                     controller: Patientname_MedicalRequest,
                     decoration: InputDecoration(
                       labelText: "Patient Name",
-                      labelStyle: TextStyle(color: Colors.black),
+                      labelStyle: TextStyle(color: Colors.white, fontSize: 15),
                       prefixIcon: Icon(Icons.people),
                       border: myinputborder(),
                       enabledBorder: myinputborder(),
@@ -147,14 +144,14 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                 Container(height: 20),
 
                 TextField(
-                  // enabled: false,
+                    enabled: false,
 
-                    controller: HAHuser_MedicalRequest,
+                    controller: HrUser_MedicalRequest,
                     decoration: InputDecoration(
 
                       prefixIcon: Icon(Icons.lock),
-                      labelStyle: TextStyle(color: Colors.black),
-                      labelText: "HAH User:",
+                      labelStyle: TextStyle(color: Colors.white, fontSize: 15),
+                      labelText: "Hr code:",
                       enabledBorder: myinputborder(),
                       focusedBorder: myfocusborder(),
 
@@ -172,9 +169,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                     onPressed: () {
                       _selectDate(context);
                     },
-                    color: Theme
-                        .of(context)
-                        .accentColor,
+                    color: Colors.white,
                     child: Padding(
                       padding: EdgeInsets.all(0),
                       child: Container(
@@ -183,7 +178,8 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             Text(
-                              'Select ticket date',
+
+                              textDate(DateAdded.toString()),
                               style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.black,
@@ -202,82 +198,81 @@ class _medical_request_state extends State<MedicalRequestScreen> {
 
                 Container(height: 10),
 
-                Text("${selectedDate.toLocal()}".split(' ')[0],
-                  style: TextStyle(color: Colors.black, fontSize: 15,
-                      fontFamily: 'Nisebuschgardens'),
-                ),
-
-                Text("${selectedDate.toLocal()}",
-                  style: TextStyle(color: Colors.black, fontSize: 15,
-                      fontFamily: 'Nisebuschgardens'),),
-
                 Text("Lab Type",
                     style: TextStyle(color: Colors.black, fontSize: 15,
                       fontFamily: 'Nunito',)),
 
-                DropdownButtonHideUnderline(
-                  child: DropdownButton2(
+                Container(
+                  decoration: outlineboxTypes(),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton2(
 
-                    hint: Text(
-                      selectedValueLab,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
+                      hint: Text(
+                        selectedValueLab,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
                       ),
-                    ),
-                    items: LabsType.map((item) =>
-                        DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(item,
-                            style: const TextStyle(
-                              fontSize: 14,
+                      items: LabsType.map((item) =>
+                          DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(item,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
                             ),
-                          ),
-                        ))
-                        .toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        selectedValueLab = value.toString();
-                      });
-                    },
+                          ))
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedValueLab = value.toString();
+                        });
+                      },
+                    ),
 
                   ),
                 ),
+
 
                 Text("Service Type",
                     style: TextStyle(color: Colors.black, fontSize: 15,
                       fontFamily: 'Nunito',)),
-                DropdownButtonHideUnderline(
-                  child: DropdownButton2(
-                    hint: Text(
-                      selectedValueService,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
-                    ),
-                    items: ServiceTypeElborg
-                        .map((item) =>
-                        DropdownMenuItem<String>(
-                          value: item,
-                          child: Text(
-                            item,
-                            style: const TextStyle(
-                              fontSize: 14,
-                            ),
-                          ),
-                        ))
-                        .toList(),
 
-                    onChanged: (value) {
-                      setState(() {
-                        selectedValueService = value.toString();
-                      });
-                    },
-                    // buttonDecoration: outlineboxTypes(),
-                    // value: selectedValueLab,
+                Container(
+                  decoration: outlineboxTypes(),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton2(
+                      hint: Text(
+                        selectedValueService,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.black,
+                        ),
+                      ),
+                      items: ServiceTypeElborg
+                          .map((item) =>
+                          DropdownMenuItem<String>(
+                            value: item,
+                            child: Text(
+                              item,
+                              style: const TextStyle(
+                                fontSize: 14,
+                              ),
+                            ),
+                          ))
+                          .toList(),
+
+                      onChanged: (value) {
+                        setState(() {
+                          selectedValueService = value.toString();
+                        });
+                      },
+                    ),
+
                   ),
                 ),
+                Container(height: 10),
 
                 FloatingActionButton.extended(
                   onPressed: () {
@@ -285,7 +280,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                     if (selectedValueService == "" ||
                         selectedValueLab == "" ||
                         Patientname_MedicalRequest.text == "" ||
-                        HAHuser_MedicalRequest.text == "") {
+                        HrUser_MedicalRequest.text == "") {
                       Fluttertoast.showToast(
                           msg: "Fill all the fields",
                           toastLength: Toast.LENGTH_SHORT,
@@ -298,17 +293,19 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                     } else {
                       BlocProvider.of<MedicalRequestCubit>(context)
                           .getSuccessMessage(
-                          HR_code, HAHuser_MedicalRequest.text,
+                          HR_code, HrUser_MedicalRequest.text,
                           Patientname_MedicalRequest.text, selectedValueLab,
                           selectedValueService,
-                          "${selectedDate.toLocal()}".split(' ')[0] +
+                          "${currentDate.toLocal()}".split(' ')[0] +
                               "T12:39:19.532Z");
                     }
                   },
-                  label: const Text('Submit'),
-                  icon: const Icon(Icons.thumb_up_alt_outlined),
-                  backgroundColor: Colors.indigo,),
-
+                  label: const Text('Submit', style: TextStyle(
+                      color: Colors.black
+                  )),
+                  icon: const Icon(
+                      Icons.thumb_up_alt_outlined, color: Colors.black),
+                  backgroundColor: Colors.white,),
               ],
             ),
           );
@@ -317,7 +314,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
     );
   }
 
-  }
+}
 
   OutlineInputBorder myinputborder() {
     // return type is OutlineInputBorder
@@ -334,7 +331,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
     return const OutlineInputBorder(
         borderRadius: BorderRadius.all(Radius.circular(20)),
         borderSide: BorderSide(
-          color: Colors.indigo,
+          color: Colors.white,
           width: 3,
         )
     );
@@ -343,8 +340,16 @@ class _medical_request_state extends State<MedicalRequestScreen> {
   BoxDecoration outlineboxTypes() {
     return BoxDecoration(
         borderRadius: BorderRadius.all(Radius.circular(20)),
-        border: Border.all(width: 2, color: Colors.black)
+        border: Border.all(width: 3, color: Colors.black)
     );
+  }
+
+  String textDate(String DateAdded) {
+    if (DateAdded.toString().length > 0) {
+      return DateAdded.split(" ")[0];
+    } else {
+      return "Select ticket date";
+    }
   }
 
 

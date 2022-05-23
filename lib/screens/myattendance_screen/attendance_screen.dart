@@ -14,21 +14,15 @@ import 'package:intl/intl.dart';
 class Attendance_Screen extends StatefulWidget {
 
   static const routeName = '/myattendance-list-screen';
-
-
-
-
   const Attendance_Screen({Key? key}) : super(key: key);
 
   @override
   State<Attendance_Screen> createState() => _attendance_sreenState();
-
 }
 
 class _attendance_sreenState extends State<Attendance_Screen> {
 
   bool loadingAttendanceData=false;
-
   int monthNumber = DateTime
       .now()
       .month;

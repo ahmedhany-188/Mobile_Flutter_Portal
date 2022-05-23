@@ -2,7 +2,7 @@
 
 import 'dart:ffi';
 
-class employee_appraisal_model{
+class EmployeeAppraisalModel{
 
   int ?code,id,appID,status;
   Bool ?error;
@@ -11,7 +11,7 @@ class employee_appraisal_model{
   String ?trainingneeds,acknowledge1,acknowledge2,inUser,inDate,message,hrcode;
 
 
-  employee_appraisal_model(
+  EmployeeAppraisalModel(
       this.code,
       this.id,
       this.appID,
