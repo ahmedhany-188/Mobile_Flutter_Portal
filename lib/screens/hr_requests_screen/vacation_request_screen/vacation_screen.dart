@@ -183,7 +183,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                         children: [
                                           RadioListTile<int>(
                                             value: 1,
-                                            title: Text("Annual"),
+                                            title: const Text("Annual"),
                                             groupValue: state.vacationType,
                                             onChanged: (vacationType) =>
                                                 context
@@ -194,7 +194,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                           RadioListTile<int>(
                                             value: 2,
                                             // dense: true,
-                                            title: Text("Casual"),
+                                            title: const Text("Casual"),
                                             groupValue: state.vacationType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
@@ -206,7 +206,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                           RadioListTile<int>(
                                             value: 3,
                                             // dense: true,
-                                            title: Text("Holiday Replacement"),
+                                            title: const Text("Holiday Replacement"),
                                             groupValue: state.vacationType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
@@ -218,7 +218,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                           RadioListTile<int>(
                                             value: 4,
                                             // dense: true,
-                                            title: Text("Maternity"),
+                                            title: const Text("Maternity"),
                                             groupValue: state.vacationType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
@@ -230,7 +230,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                           RadioListTile<int>(
                                             value: 5,
                                             // dense: true,
-                                            title: Text("Haj"),
+                                            title: const Text("Haj"),
                                             groupValue: state.vacationType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
@@ -378,9 +378,9 @@ class _VacationScreenState extends State<VacationScreen> {
                                       key: UniqueKey(),
                                       initialValue: state.vacationDuration,
                                       readOnly : true,
-                                      decoration: InputDecoration(
+                                      decoration: const InputDecoration(
                                         labelText: 'Vacation Duration',
-                                        prefixIcon: const Icon(
+                                        prefixIcon: Icon(
                                             Icons.date_range),
                                       ),
                                     );
@@ -394,17 +394,17 @@ class _VacationScreenState extends State<VacationScreen> {
                                   VacationCubit,
                                   VacationInitial>(
                                   buildWhen: (previous, current) {
-                                    return (previous.responsiblePerson?.name !=
-                                        current.responsiblePerson?.name);
+                                    return (previous.responsiblePerson.name !=
+                                        current.responsiblePerson.name);
                                   },
                                   builder: (context, state) {
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue: state.responsiblePerson?.name,
+                                      initialValue: state.responsiblePerson.name,
                                       readOnly : true,
-                                      decoration: InputDecoration(
+                                      decoration: const InputDecoration(
                                         labelText: 'Responsible Person',
-                                        prefixIcon: const Icon(
+                                        prefixIcon: Icon(
                                             Icons.date_range),
                                       ),onTap: () async{
 
@@ -443,7 +443,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                             color: Colors.grey[800]),
                                         labelText: "Add your comment",
                                         fillColor: Colors.white70,
-                                        prefixIcon: Icon(Icons.comment),
+                                        prefixIcon: const Icon(Icons.comment),
                                         enabled: true,
                                       ),
 
@@ -528,18 +528,18 @@ class ItemView extends StatelessWidget {
     final ResponsibleVacationCubit responsibleVacationCubit = BlocProvider.of<ResponsibleVacationCubit>(context);
     return Column(children: [
       Padding(
-          padding: EdgeInsets.all(8),
+          padding: const EdgeInsets.all(8),
           child: Row(children: [
             Expanded(
                 child: TextField(
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(8),
+                      contentPadding: const EdgeInsets.all(8),
                       border: OutlineInputBorder(
                         borderRadius:
                         new BorderRadius.circular(15.0),
                         borderSide: new BorderSide(),
                       ),
-                      prefixIcon: Icon(Icons.search),
+                      prefixIcon: const Icon(Icons.search),
                     ),
                     onChanged: (value) {
                       responsibleVacationCubit.searchForContacts(value);
@@ -562,7 +562,7 @@ class ItemView extends StatelessWidget {
                 ? items.length
                 : items.length,
             separatorBuilder: (context, int) {
-              return Divider();
+              return const Divider();
             },
             itemBuilder: (context, index) {
               return InkWell(
