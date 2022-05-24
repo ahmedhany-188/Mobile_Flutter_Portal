@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/data/models/contacts_related_models/contacts_data_from_api.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_date.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_type.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_vacation_date.dart';
@@ -81,6 +82,15 @@ class VacationCubit extends Cubit<VacationInitial> {
     emit(
       state.copyWith(
         vacationType: vacationType,
+        status: Formz.validate([state.requestDate,state.vacationFromDate,state.vacationToDate,state.permissionTime]),
+      ),
+    );
+  }
+  void vacationResponsiblePersonChanged(ContactsDataFromApi value) {
+    final responsiblePerson = value;
+    emit(
+      state.copyWith(
+        responsiblePerson: responsiblePerson,
         status: Formz.validate([state.requestDate,state.vacationFromDate,state.vacationToDate,state.permissionTime]),
       ),
     );

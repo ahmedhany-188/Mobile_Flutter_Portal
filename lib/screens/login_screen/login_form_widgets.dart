@@ -61,9 +61,8 @@ class GradientButton extends StatelessWidget {
                   ),
                 ),
                 child: TextButton(
-                  onPressed: state.status.isValidated
-                      ? () => context.read<LoginCubit>().logInWithCredentials()
-                      : null,
+                  onPressed:  () => context.read<LoginCubit>().logInWithCredentials()
+                      ,
                   child: const Text(
                     'Sign in',
                     textAlign: TextAlign.center,
