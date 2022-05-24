@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/login_cubit/login_cubit.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
@@ -313,7 +314,11 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Logout',
                         Icons.logout,
-                        () => context.read<AppBloc>().add(AppLogoutRequested()),
+                        ()
+                        {
+                          context.read<AppBloc>().add(AppLogoutRequested());
+                          context.read<LoginCubit>().clearCubit();
+                        },
                       ),
                     ],
                   ),
