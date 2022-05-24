@@ -1,10 +1,11 @@
 import 'package:circular/circular.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/data/models/appraisal_models/object_appraisal_model.dart';
 
 class EmployeeAppraisalTicketWidget extends StatelessWidget{
 
-  List<dynamic> employeeAppraisaleList;
+  List<ObjectAppraisalModel> employeeAppraisaleList;
 
   EmployeeAppraisalTicketWidget(this.employeeAppraisaleList,{Key? key})
       : super(key: key);
@@ -23,7 +24,6 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget{
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 // childAspectRatio: (1 / .4),
-                mainAxisExtent: 150, // here set custom Height You Want
                 // width between items
                 crossAxisSpacing: 2,
                 // height between items
@@ -33,29 +33,25 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget{
 
               itemBuilder: (BuildContext context,int index){
                 return  Container(
-                  color: const Color(0xffEEEEEE),
+
+                  color: Colors.transparent,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
+
+                      Text(
+                          employeeAppraisaleList[index].name,
+                          style: TextStyle(fontSize: 20,color: Colors.white)
+                      ),
+
                       CircularViewer(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: const [
-                              BoxShadow(
-                                  offset: Offset(-10, -10),
-                                  color: Colors.white,
-                                  blurRadius: 20,
-                                  spreadRadius: 1),
-                              BoxShadow(
-                                  offset: Offset(10, 10),
-                                  color: Color.fromARGB(255, 158, 158, 158),
-                                  blurRadius: 20,
-                                  spreadRadius: 1)
-                            ]),
-                        value: employeeAppraisaleList[index],
+
+
+                        value: employeeAppraisaleList[index].value,
                         maxValue: 100,
-                        radius: 70,
-                        textStyle: const TextStyle(fontSize: 30),
+                        radius: 65,
+
+                        textStyle: const TextStyle(fontSize: 25),
                         color: const Color(0xffEEEEEE),
                         sliderColor: const Color(0xff62CBDA),
                         unSelectedColor: const Color(0xffD7DEE7),
