@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
 // import 'package:hassanallamportalflutter/bloc/hr_request_bloc/permission_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -93,8 +94,7 @@ class MyApp extends StatelessWidget {
           create: (payslipContext) => PayslipCubit(),
         ),
         BlocProvider<AttendanceCubit>(
-          create: (attendanceCubitContext) =>
-              AttendanceCubit(),
+          create: (attendanceCubitContext) => AttendanceCubit(),
         ),
         BlocProvider<MedicalRequestCubit>(
             create: (medicalRequestCubitContext) => MedicalRequestCubit()
@@ -137,7 +137,10 @@ class MyApp extends StatelessWidget {
         title: 'Hassan Allam Portal',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Color.fromRGBO(23, 72, 115, 1),
+          ),
+          // primarySwatch: Colors.accents,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         onGenerateRoute: appRouter.onGenerateRoute,
