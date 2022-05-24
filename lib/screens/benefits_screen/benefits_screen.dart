@@ -11,6 +11,7 @@ import '../../bloc/benefits_screen_bloc/benefits_cubit.dart';
 
 class BenefitsScreen extends StatefulWidget {
   const BenefitsScreen({Key? key}) : super(key: key);
+  static const routeName = 'benefits-screen';
 
   @override
   State<BenefitsScreen> createState() => _BenefitsScreenState();
@@ -38,119 +39,122 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
           }
         },
         builder: (context, state) {
-          return Sizer(
-            builder: (c, o, d) => SingleChildScrollView(
-              physics: const NeverScrollableScrollPhysics(),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: TextField(
-                      focusNode: searchTextFieldFocusNode,
-                      controller: textController,
-                      onSubmitted: (searchValue) {
-                        searchTextFieldFocusNode.unfocus();
-                        setState(() {});
-                      },
-                      onChanged: (_) {
-                        setState(() {
-                          searchResult = GeneralSearch().setGeneralSearch(
-                            query: textController.text,
-                            listKeyForCondition: 'benefitsName',
-                            listFromApi: benefitsData,
-                          );
-                        });
-                      },
-                      decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(10),
-                          isCollapsed: false,
-                          labelText: "Search by name",
-                          hintText: "Search",
-                          prefixIcon: const Icon(Icons.search),
-                          suffixIcon: (textController.text.isEmpty)
-                              ? null
-                              : IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      searchResult.clear();
-                                      textController.clear();
-                                      searchTextFieldFocusNode.unfocus();
-                                    });
-                                  },
-                                  icon: const Icon(
-                                    Icons.clear,
-                                    color: Colors.red,
+          return Scaffold(
+            appBar: AppBar(),
+            body: Sizer(
+              builder: (c, o, d) => SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: TextField(
+                        focusNode: searchTextFieldFocusNode,
+                        controller: textController,
+                        onSubmitted: (searchValue) {
+                          searchTextFieldFocusNode.unfocus();
+                          setState(() {});
+                        },
+                        onChanged: (_) {
+                          setState(() {
+                            searchResult = GeneralSearch().setGeneralSearch(
+                              query: textController.text,
+                              listKeyForCondition: 'benefitsName',
+                              listFromApi: benefitsData,
+                            );
+                          });
+                        },
+                        decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.all(10),
+                            isCollapsed: false,
+                            labelText: "Search by name",
+                            hintText: "Search",
+                            prefixIcon: const Icon(Icons.search),
+                            suffixIcon: (textController.text.isEmpty)
+                                ? null
+                                : IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        searchResult.clear();
+                                        textController.clear();
+                                        searchTextFieldFocusNode.unfocus();
+                                      });
+                                    },
+                                    icon: const Icon(
+                                      Icons.clear,
+                                      color: Colors.red,
+                                    ),
                                   ),
-                                ),
-                          border: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)))),
-                    ),
-                  ),
-                  Scrollbar(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      padding: EdgeInsets.only(right: 5.sp, left: 5.sp),
-                      physics: const BouncingScrollPhysics(),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          RawMaterialButton(
-                            child: const Text('Retail shops'),
-                            onPressed: () {
-                              setState(() {
-                                searchResult =
-                                    setBenefitsFilters(2, benefitsData);
-                                textController.text = 'Retail shops';
-                              });
-                            },
-                          ),
-                          const SizedBox(width: 10),
-                          ElevatedButton(
-                            child: const Text('Hotels & travel'),
-                            onPressed: () {
-                              setState(() {
-                                searchResult =
-                                    setBenefitsFilters(3, benefitsData);
-                                textController.text = 'Hotels & travel';
-                              });
-                            },
-                          ),
-                          const SizedBox(width: 10),
-                          OutlinedButton(
-                            child: const Text('Health & Fitness'),
-                            onPressed: () {
-                              setState(() {
-                                searchResult =
-                                    setBenefitsFilters(4, benefitsData);
-                                textController.text = 'Health & Fitness';
-                              });
-                            },
-                          ),
-                          const SizedBox(width: 10),
-                          TextButton(
-                            child: const Text('Other'),
-                            onPressed: () {
-                              setState(() {
-                                searchResult =
-                                    setBenefitsFilters(5, benefitsData);
-                                textController.text = 'Banks, Schools and other';
-                              });
-                            },
-                          ),
-                        ],
+                            border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10.0)))),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 80.h,
-                    child: (searchResult.isNotEmpty ||
-                            textController.text.isNotEmpty)
-                        ? benefitsListView(searchResult)
-                        : benefitsListView(benefitsData),
-                  ),
-                ],
+                    Scrollbar(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.only(right: 5.sp, left: 5.sp),
+                        physics: const BouncingScrollPhysics(),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            RawMaterialButton(
+                              child: const Text('Retail shops'),
+                              onPressed: () {
+                                setState(() {
+                                  searchResult =
+                                      setBenefitsFilters(2, benefitsData);
+                                  textController.text = 'Retail shops';
+                                });
+                              },
+                            ),
+                            const SizedBox(width: 10),
+                            ElevatedButton(
+                              child: const Text('Hotels & travel'),
+                              onPressed: () {
+                                setState(() {
+                                  searchResult =
+                                      setBenefitsFilters(3, benefitsData);
+                                  textController.text = 'Hotels & travel';
+                                });
+                              },
+                            ),
+                            const SizedBox(width: 10),
+                            OutlinedButton(
+                              child: const Text('Health & Fitness'),
+                              onPressed: () {
+                                setState(() {
+                                  searchResult =
+                                      setBenefitsFilters(4, benefitsData);
+                                  textController.text = 'Health & Fitness';
+                                });
+                              },
+                            ),
+                            const SizedBox(width: 10),
+                            TextButton(
+                              child: const Text('Other'),
+                              onPressed: () {
+                                setState(() {
+                                  searchResult =
+                                      setBenefitsFilters(5, benefitsData);
+                                  textController.text = 'Banks, Schools and other';
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 80.h,
+                      child: (searchResult.isNotEmpty ||
+                              textController.text.isNotEmpty)
+                          ? benefitsListView(searchResult)
+                          : benefitsListView(benefitsData),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

@@ -87,6 +87,7 @@ dependencies:
   flutter_local_notifications: ^9.5.3+1
   cached_network_image: any
   full_screen_image_null_safe: any
+  shimmer: ^2.0.0
 
   flutter_secure_storage: ^5.0.2
   authentication_repository:
@@ -148,6 +149,7 @@ flutter:
     - assets/images/Builds.png
     - assets/images/native_splash.png
     - assets/images/S_Background.png
+    - assets/images/home_cropped.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

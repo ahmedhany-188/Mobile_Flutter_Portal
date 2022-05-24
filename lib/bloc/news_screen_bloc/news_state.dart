@@ -12,6 +12,11 @@ class NewsSuccessState extends NewsState {
 
   NewsSuccessState(this.newsList);
 }
+class LatestNewsSuccessState extends NewsState {
+  Map<String,dynamic> latestNewsList;
+
+  LatestNewsSuccessState(this.latestNewsList);
+}
 
 class NewsErrorState extends NewsState {
   final String error;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
+import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
@@ -147,6 +148,11 @@ class AppRouter {
 
         return MaterialPageRoute(
           builder: (_) => const VideosScreen(),
+        );
+      case BenefitsScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => const BenefitsScreen(),
         );
       default:
         return null;

@@ -15,6 +15,7 @@ class NewsCubit extends Cubit<NewsState> {
         try {
 
           getNews();
+          getLatestNews();
 
         } catch (e) {
           emit(NewsErrorState(e.toString()));
@@ -29,6 +30,8 @@ class NewsCubit extends Cubit<NewsState> {
 
 
   Map<String,dynamic> newsList = {};
+  Map<String,dynamic> latestNewsList = {};
+
 
   void getNews() {
     emit(NewsLoadingState());
@@ -37,6 +40,23 @@ class NewsCubit extends Cubit<NewsState> {
       newsList = value.data;
 
       emit(NewsSuccessState(newsList));
+    }).catchError((error) {
+      if (kDebugMode) {
+        print(error.toString());
+      }
+      emit(NewsErrorState(error.toString()));
+    });
+  }
+
+  void getLatestNews() {
+    emit(NewsLoadingState());
+
+    GeneralDio.latestNewsData().then((value) {
+      latestNewsList = value.data;
+
+      // latestNewsList.addAll(other)
+
+      emit(LatestNewsSuccessState(latestNewsList));
     }).catchError((error) {
       if (kDebugMode) {
         print(error.toString());
