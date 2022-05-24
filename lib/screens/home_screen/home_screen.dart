@@ -7,6 +7,7 @@ import 'package:sizer/sizer.dart';
 import 'package:swipe_image_gallery/swipe_image_gallery.dart';
 
 import '../../bloc/news_screen_bloc/news_cubit.dart';
+import '../../data/models/response_news.dart';
 import '../benefits_screen/benefits_screen.dart';
 import '../news_screen/news_screen.dart';
 
@@ -18,7 +19,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Map<String, dynamic> newsAllData = {};
+  List<Data> newsAllData = [];
 
   @override
   // ignore: avoid_renaming_method_parameters
@@ -29,11 +30,13 @@ class _HomeScreenState extends State<HomeScreen> {
         listener: (context, state) {
           if (state is LatestNewsSuccessState) {
             newsAllData = state.latestNewsList;
+
           }
         },
         buildWhen: (previous, current) {
           if (current is LatestNewsSuccessState) {
             newsAllData = current.latestNewsList;
+            newsAllData.add(Data(newsID: 0,newsBody: "Test",newsTitle: "Test"));
             return current.latestNewsList.isNotEmpty;
           } else {
             return false;
@@ -64,55 +67,67 @@ class _HomeScreenState extends State<HomeScreen> {
                           height: 30.h,
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,shrinkWrap: true,
-                            itemCount: newsAllData['data'].length,
+                            itemCount: newsAllData.length,
                             physics: const BouncingScrollPhysics(),
                             itemBuilder: (ctx, index) {
-                              Map<String, dynamic> news =
-                                  newsAllData['data'][index];
-
+                              // Map<String, dynamic> news =
+                              //     newsAllData[index];
+                              Data news = newsAllData[index];
                               /// adding the view that will appear when tap on the news photo
-                              assets.add(GridTile(
-                                header: GridTileBar(
-                                  title: Text(
-                                    (news['news_Title'] != null)
-                                        ? news['news_Title']
-                                        : 'Go to News to see more details',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
+                              if(news.newsID != 0) {
+                                assets.add(GridTile(
+                                  header: GridTileBar(
+                                    title: Text(news.newsTitle ??
+                                        "Go to News to see more details",
+                                      // (news.newsTitle != null)
+                                      //     ?
+                                      //     : 'Go to News to see more details',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    backgroundColor: Colors.black54,
+                                  ),
+                                  footer: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    color: Colors.black54,
+                                    child: Text(
+                                      news.newsDescription ?? "",
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                  backgroundColor: Colors.black54,
-                                ),
-                                footer: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  color: Colors.black54,
-                                  child: Text(
-                                    news['news_Description'],
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                    ),
+                                  child: CachedNetworkImage(
+                                    imageUrl:
+                                    'https://portal.hassanallam.com/images/imgs/${news
+                                        .newsID}.jpg',
+                                    fit: BoxFit.fill,
                                   ),
-                                ),
-                                child: CachedNetworkImage(
-                                  imageUrl:
-                                      'https://portal.hassanallam.com/images/imgs/${news['news_ID']}.jpg',
-                                  fit: BoxFit.fill,
-                                ),
-                              ));
-                              heroProperties.add(ImageGalleryHeroProperties(
-                                  tag: 'imageId$index'));
+                                ));
+                                heroProperties.add(ImageGalleryHeroProperties(
+                                    tag: 'imageId$index'));
+                              }
 
                               /// the news Slider
                               return InkWell(
-                                onTap: () => SwipeImageGallery(
-                                  context: context,
-                                  children: assets,
-                                  initialIndex: index,
-                                  heroProperties: heroProperties,
-                                ).show(),
+                                onTap: () {
+                                  if(news.newsID == 0){
+                                    Navigator.of(context).pushNamed(NewsScreen.routeName);
+                                  }else{
+                                    SwipeImageGallery(
+                                      context: context,
+                                      children: assets,
+                                      initialIndex: index,
+                                      heroProperties: heroProperties,
+                                    ).show();
+                                  }
+
+
+                                  },
                                 child: Hero(
                                   tag: 'imageId$index',
                                   child: Container(
@@ -127,9 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           height: 5.h,
                                           child: GridTileBar(
                                             title: Text(
-                                              (news['news_Title'] != null)
-                                                  ? news['news_Title']
-                                                  : 'Go to News to see more details',
+                                              news.newsTitle ?? "Go to News to see more details",
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 10,
@@ -140,7 +153,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ),
                                         child: CachedNetworkImage(
                                           imageUrl:
-                                              'https://portal.hassanallam.com/images/imgs/${news['news_ID']}.jpg',
+                                              'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg',
                                           fit: BoxFit.fill,
                                         ),
                                       ),
@@ -512,12 +525,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 // transform: Matrix4.rotationZ(-150)
                                 //   ..translate(10.0, -20.0, 0),
                                 padding: const EdgeInsets.all(10),
-                                child: const Text(
-                                  'Benefits',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.white,
+                                child: const Center(
+                                  child: Text(
+                                    'Benefits',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -693,21 +708,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     childAspectRatio: 1.sp,
                                   ),
                                   children: [
-                                    SizedBox(
-                                      height:
-                                          MediaQuery.of(context).size.height /
-                                              3,
-                                      width:
-                                          MediaQuery.of(context).size.width / 3,
-                                      child: const Center(
+                                    const Center(
+                                        child: FittedBox(
+                                          fit: BoxFit.fitWidth,
                                           child: Text(
-                                        'Benefits',
-                                        style: TextStyle(
+                                      'Benefits',
+                                      style: TextStyle(
                                             color: Colors.white,
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold),
-                                      )),
                                     ),
+                                        )),
                                     SizedBox(
                                       height:
                                           MediaQuery.of(context).size.height /
