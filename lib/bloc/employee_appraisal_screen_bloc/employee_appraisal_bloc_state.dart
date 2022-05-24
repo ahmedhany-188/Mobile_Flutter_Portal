@@ -12,6 +12,7 @@ class BlocgetEmployeeAppraisalBlocInitialSuccessState extends EmployeeAppraisalB
 
   String employeeAppraisaleList;
   BlocgetEmployeeAppraisalBlocInitialSuccessState(this.employeeAppraisaleList);
+
 }
 
 class BlocgetEmployeeAppraisalBlocInitialErrorState extends EmployeeAppraisalBlocState{

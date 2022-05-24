@@ -8,11 +8,12 @@ import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_new
 import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
-import 'package:hassanallamportalflutter/screens/myprofile_screen/myprofile_screen.dart';
+import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
@@ -137,7 +138,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.person,
                             () {
                           Navigator.of(context).pushReplacementNamed(
-                              myProfile_Screen.routeName);
+                              ProfileScreen.routeName);
                         },
                       ),
                       const Divider(
@@ -301,6 +302,18 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.add_a_photo,
                             () {
                           Navigator.of(context).pushNamed(VacationScreen.routeName);
+                        },
+                      ),
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'HR Business Mission',
+                        Icons.add_a_photo,
+                            () {
+                          Navigator.of(context).pushNamed(BusinessMissionScreen.routeName);
                         },
                       ),
                       const Divider(

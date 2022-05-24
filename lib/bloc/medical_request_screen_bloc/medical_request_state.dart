@@ -1,7 +1,8 @@
 part of 'medical_request_cubit.dart';
 
 @immutable
-abstract class MedicalRequestState {}
+abstract class MedicalRequestState {
+}
 
 class MedicalRequestInitial extends MedicalRequestState {}
 
