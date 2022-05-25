@@ -153,6 +153,11 @@ flutter:
     - assets/images/native_splash.png
     - assets/images/S_Background.png
     - assets/images/home_cropped.jpg
+    - assets/images/Benefits.png
+    - assets/images/Media.png
+    - assets/images/Subsidiaries.png
+    - assets/images/Values.png
+    - assets/images/Cover.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

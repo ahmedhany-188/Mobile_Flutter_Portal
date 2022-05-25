@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   (newsAllData.isNotEmpty)
-                      ? Padding(
+                      ? Padding( /// try remove this
                           padding: const EdgeInsets.only(left: 8.0),
                           child: SizedBox(
                             width: 100.w,
@@ -98,14 +98,21 @@ class HomeScreen extends StatelessWidget {
               childAspectRatio: 0.9.sp,
             ),
             children: [
-              /// with four pics without badge
               InkWell(
                 onTap: () {
                   Navigator.of(context).pushNamed(BenefitsScreen.routeName);
                 },
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: Color(0xFF186597),
+                    gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF1a4c78),
+                          Color(0xFF3772a6),
+                        ],
+                        begin: Alignment(0, 1),
+                        end: Alignment(0.5, 0),
+                        tileMode: TileMode.clamp),
+                    // color: Color(0xFF186597),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(20),
                       topRight: Radius.circular(20),
@@ -123,12 +130,23 @@ class HomeScreen extends StatelessWidget {
                         childAspectRatio: 1.sp,
                       ),
                       children: [
+                        const Center(
+                            child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text(
+                            'Benefits',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )),
                         SizedBox(
                           height: MediaQuery.of(context).size.height / 3,
                           width: MediaQuery.of(context).size.width / 3,
                           child: ClipRRect(
                             borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
+                              // bottomLeft: Radius.circular(20),
                               topRight: Radius.circular(20),
                             ),
                             child: CachedNetworkImage(
@@ -152,30 +170,7 @@ class HomeScreen extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: const BorderRadius.only(
                               bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                                  'https://portal.hassanallam.com/images/Benefits/1078.jpg',
-
-                              /// premium photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
-                              ),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
+                              // topRight: Radius.circular(20),
                             ),
                             child: CachedNetworkImage(
                               imageUrl:
@@ -197,8 +192,8 @@ class HomeScreen extends StatelessWidget {
                           width: MediaQuery.of(context).size.width / 3,
                           child: ClipRRect(
                             borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
+                              // topRight: Radius.circular(20),
                             ),
                             child: CachedNetworkImage(
                               imageUrl:
@@ -220,292 +215,255 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-
-              /// with badge
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
-                },
-                child: Badge(
-                  badgeContent: const Text('Benefits',
-                      style: TextStyle(color: Colors.white)),
-                  position: BadgePosition.topStart(),
-                  shape: BadgeShape.square,
-                  borderRadius: BorderRadius.circular(20),
-                  badgeColor: const Color(0xFF186597),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Color.fromRGBO(23, 72, 115, 1),
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(20),
-                        topLeft: Radius.circular(20),
-                      ),
-                    ),
-                    child: Center(
-                      child: GridView(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.all(10.sp),
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 5.sp,
-                          crossAxisSpacing: 5.sp,
-                          childAspectRatio: 1.sp,
-                        ),
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://portal.hassanallam.com/images/Benefits/1110.jpg',
-
-                                /// contact car photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://portal.hassanallam.com/images/Benefits/1078.jpg',
-
-                                /// premium photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://portal.hassanallam.com/images/Benefits/1105.jpg',
-
-                                /// medNet photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://portal.hassanallam.com/images/Benefits/1089.jpg',
-
-                                /// hotel photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              /// with grid tile
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
-                },
-                child: GridTile(
-                  footer: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF186597).withOpacity(0.4),
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                      ),
-                    ),
-                    // transform: Matrix4.rotationZ(-150)
-                    //   ..translate(10.0, -20.0, 0),
-                    padding: const EdgeInsets.all(10),
-                    child: const Center(
-                      child: Text(
-                        'Benefits',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF174873),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
-                    ),
-                    child: Center(
-                      child: GridView(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.all(10.sp),
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 5.sp,
-                          crossAxisSpacing: 5.sp,
-                          childAspectRatio: 1.sp,
-                        ),
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://portal.hassanallam.com/images/Benefits/1110.jpg',
-
-                                /// contact car photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://portal.hassanallam.com/images/Benefits/1078.jpg',
-
-                                /// premium photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://portal.hassanallam.com/images/Benefits/1105.jpg',
-
-                                /// medNet photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://portal.hassanallam.com/images/Benefits/1089.jpg',
-
-                                /// hotel photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              /// with 2 pics & text
               InkWell(
                 onTap: () {
                   Navigator.of(context).pushNamed(BenefitsScreen.routeName);
                 },
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: Color(0xFF186597),
+                    // color: Color(23, 72, 115, 1),
+                    gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF6860c8),
+                          Color(0xFF9695ed),
+                        ],
+                        begin: Alignment(0, 1),
+                        end: Alignment(0.5, 0),
+                        tileMode: TileMode.clamp),
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(20),
+                      topLeft: Radius.circular(20),
+                    ),
+                  ),
+                  child: Center(
+                    child: GridView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.all(10.sp),
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 5.sp,
+                        crossAxisSpacing: 5.sp,
+                        childAspectRatio: 1.sp,
+                      ),
+                      children: [
+                        const Center(
+                            child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text(
+                            'Media',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 3,
+                          width: MediaQuery.of(context).size.width / 3,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              // bottomLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://portal.hassanallam.com/images/Benefits/1110.jpg',
+
+                              /// contact car photo link
+                              placeholder: (c, m) => const Center(
+                                  child: RefreshProgressIndicator()),
+                              errorWidget: (c, s, d) => Image.asset(
+                                'assets/images/logo.png',
+                                scale: 7.sp,
+                              ),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 3,
+                          width: MediaQuery.of(context).size.width / 3,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              // topRight: Radius.circular(20),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://portal.hassanallam.com/images/Benefits/1105.jpg',
+
+                              /// medNet photo link
+                              placeholder: (c, m) => const Center(
+                                  child: RefreshProgressIndicator()),
+                              errorWidget: (c, s, d) => Image.asset(
+                                'assets/images/logo.png',
+                                scale: 7.sp,
+                              ),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 3,
+                          width: MediaQuery.of(context).size.width / 3,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              bottomRight: Radius.circular(20),
+                              // topRight: Radius.circular(20),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://portal.hassanallam.com/images/Benefits/1089.jpg',
+
+                              /// hotel photo link
+                              placeholder: (c, m) => const Center(
+                                  child: RefreshProgressIndicator()),
+                              errorWidget: (c, s, d) => Image.asset(
+                                'assets/images/logo.png',
+                                scale: 7.sp,
+                              ),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    // color: Color(0xFF174873),
+                    gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF6860c8),
+                          Color(0xFF9695ed),
+                        ],
+                        begin: Alignment(0, 1),
+                        end: Alignment(0.5, 0),
+                        tileMode: TileMode.clamp),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: Center(
+                    child: GridView(
+                      shrinkWrap: true,
+                      padding: EdgeInsets.all(10.sp),
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 5.sp,
+                        crossAxisSpacing: 5.sp,
+                        childAspectRatio: 1.sp,
+                      ),
+                      children: [
+                        const Center(
+                            child: FittedBox(
+                          fit: BoxFit.fitWidth,
+                          child: Text(
+                            'Benefits',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 3,
+                          width: MediaQuery.of(context).size.width / 3,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              // bottomLeft: Radius.circular(20),
+                              topRight: Radius.circular(20),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://portal.hassanallam.com/images/Benefits/1110.jpg',
+
+                              /// contact car photo link
+                              placeholder: (c, m) => const Center(
+                                  child: RefreshProgressIndicator()),
+                              errorWidget: (c, s, d) => Image.asset(
+                                'assets/images/logo.png',
+                                scale: 7.sp,
+                              ),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 3,
+                          width: MediaQuery.of(context).size.width / 3,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(20),
+                              // topRight: Radius.circular(20),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://portal.hassanallam.com/images/Benefits/1105.jpg',
+
+                              /// medNet photo link
+                              placeholder: (c, m) => const Center(
+                                  child: RefreshProgressIndicator()),
+                              errorWidget: (c, s, d) => Image.asset(
+                                'assets/images/logo.png',
+                                scale: 7.sp,
+                              ),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height / 3,
+                          width: MediaQuery.of(context).size.width / 3,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              bottomRight: Radius.circular(20),
+                              // topRight: Radius.circular(20),
+                            ),
+                            child: CachedNetworkImage(
+                              imageUrl:
+                                  'https://portal.hassanallam.com/images/Benefits/1089.jpg',
+
+                              /// hotel photo link
+                              placeholder: (c, m) => const Center(
+                                  child: RefreshProgressIndicator()),
+                              errorWidget: (c, s, d) => Image.asset(
+                                'assets/images/logo.png',
+                                scale: 7.sp,
+                              ),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    // color: Color(0xFF186597),
+                    gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF1a4c78),
+                          Color(0xFF3772a6),
+                        ],
+                        begin: Alignment(0, 1),
+                        end: Alignment(0.5, 0),
+                        tileMode: TileMode.clamp),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(20),
                       topLeft: Radius.circular(20),
@@ -539,7 +497,7 @@ class HomeScreen extends StatelessWidget {
                           width: MediaQuery.of(context).size.width / 3,
                           child: ClipRRect(
                             borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
+                              // bottomLeft: Radius.circular(20),
                               topRight: Radius.circular(20),
                             ),
                             child: CachedNetworkImage(
@@ -563,7 +521,7 @@ class HomeScreen extends StatelessWidget {
                           child: ClipRRect(
                             borderRadius: const BorderRadius.only(
                               bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
+                              // topRight: Radius.circular(20),
                             ),
                             child: CachedNetworkImage(
                               imageUrl:
@@ -585,8 +543,8 @@ class HomeScreen extends StatelessWidget {
                           width: MediaQuery.of(context).size.width / 3,
                           child: ClipRRect(
                             borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
+                              bottomRight: Radius.circular(20),
+                              // topRight: Radius.circular(20),
                             ),
                             child: CachedNetworkImage(
                               imageUrl:
@@ -663,16 +621,16 @@ class HomeScreen2 extends StatelessWidget {
                   ),
                   (newsAllData.isNotEmpty)
                       ? Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: SizedBox(
-                      width: 100.w,
-                      height: 30.h,
-                      child: NewsSliderList(
-                          newsAllData: newsAllData,
-                          assets: assets,
-                          heroProperties: heroProperties),
-                    ),
-                  )
+                          padding: EdgeInsets.only(left: 8),
+                          child: SizedBox(
+                            width: 100.w,
+                            height: 30.h,
+                            child: NewsSliderList(
+                                newsAllData: newsAllData,
+                                assets: assets,
+                                heroProperties: heroProperties),
+                          ),
+                        )
                       : const ShimmerHomeNews(),
                   _buildHomeScreenContent(context),
                 ],
@@ -708,142 +666,34 @@ class HomeScreen2 extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).pushNamed(BenefitsScreen.routeName);
                 },
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF186597),
-                    borderRadius: BorderRadius.only(
-                      bottomLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                  ),
-                  child: Center(
-                    child: GridView(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.all(10.sp),
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 5.sp,
-                        crossAxisSpacing: 5.sp,
-                        childAspectRatio: 1.sp,
+                child: GridTile(
+                  footer: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF186597).withOpacity(0.4),
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
                       ),
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1110.jpg',
-
-                              /// contact car photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
-                              ),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
+                    ),
+                    // transform: Matrix4.rotationZ(-150)
+                    //   ..translate(10.0, -20.0, 0),
+                    padding: const EdgeInsets.all(10),
+                    child: const Center(
+                      child: Text(
+                        'Benefits',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
                         ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1078.jpg',
-
-                              /// premium photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
-                              ),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1105.jpg',
-
-                              /// medNet photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
-                              ),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1089.jpg',
-
-                              /// hotel photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
-                              ),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
-
-              /// with badge
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
-                },
-                child: Badge(
-                  badgeContent: const Text('Benefits',
-                      style: TextStyle(color: Colors.white)),
-                  position: BadgePosition.topStart(),
-                  shape: BadgeShape.square,
-                  borderRadius: BorderRadius.circular(20),
-                  badgeColor: const Color(0xFF186597),
                   child: Container(
                     decoration: const BoxDecoration(
-                      color: Color.fromRGBO(23, 72, 115, 1),
+                      color: Color(0xFF174873),
                       borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(20),
-                        topLeft: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
                       ),
                     ),
                     child: Center(
@@ -868,7 +718,7 @@ class HomeScreen2 extends StatelessWidget {
                               ),
                               child: CachedNetworkImage(
                                 imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1110.jpg',
+                                    'https://portal.hassanallam.com/images/Benefits/1110.jpg',
 
                                 /// contact car photo link
                                 placeholder: (c, m) => const Center(
@@ -891,7 +741,7 @@ class HomeScreen2 extends StatelessWidget {
                               ),
                               child: CachedNetworkImage(
                                 imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1078.jpg',
+                                    'https://portal.hassanallam.com/images/Benefits/1078.jpg',
 
                                 /// premium photo link
                                 placeholder: (c, m) => const Center(
@@ -914,7 +764,7 @@ class HomeScreen2 extends StatelessWidget {
                               ),
                               child: CachedNetworkImage(
                                 imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1105.jpg',
+                                    'https://portal.hassanallam.com/images/Benefits/1105.jpg',
 
                                 /// medNet photo link
                                 placeholder: (c, m) => const Center(
@@ -937,7 +787,153 @@ class HomeScreen2 extends StatelessWidget {
                               ),
                               child: CachedNetworkImage(
                                 imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1089.jpg',
+                                    'https://portal.hassanallam.com/images/Benefits/1089.jpg',
+
+                                /// hotel photo link
+                                placeholder: (c, m) => const Center(
+                                    child: RefreshProgressIndicator()),
+                                errorWidget: (c, s, d) => Image.asset(
+                                  'assets/images/logo.png',
+                                  scale: 7.sp,
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              /// with badge
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                },
+                child: GridTile(
+                  footer: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF186597).withOpacity(0.4),
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                      ),
+                    ),
+                    // transform: Matrix4.rotationZ(-150)
+                    //   ..translate(10.0, -20.0, 0),
+                    padding: const EdgeInsets.all(10),
+                    child: const Center(
+                      child: Text(
+                        'Benefits',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF174873),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    child: Center(
+                      child: GridView(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.all(10.sp),
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 5.sp,
+                          crossAxisSpacing: 5.sp,
+                          childAspectRatio: 1.sp,
+                        ),
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 3,
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://portal.hassanallam.com/images/Benefits/1110.jpg',
+
+                                /// contact car photo link
+                                placeholder: (c, m) => const Center(
+                                    child: RefreshProgressIndicator()),
+                                errorWidget: (c, s, d) => Image.asset(
+                                  'assets/images/logo.png',
+                                  scale: 7.sp,
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 3,
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://portal.hassanallam.com/images/Benefits/1078.jpg',
+
+                                /// premium photo link
+                                placeholder: (c, m) => const Center(
+                                    child: RefreshProgressIndicator()),
+                                errorWidget: (c, s, d) => Image.asset(
+                                  'assets/images/logo.png',
+                                  scale: 7.sp,
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 3,
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://portal.hassanallam.com/images/Benefits/1105.jpg',
+
+                                /// medNet photo link
+                                placeholder: (c, m) => const Center(
+                                    child: RefreshProgressIndicator()),
+                                errorWidget: (c, s, d) => Image.asset(
+                                  'assets/images/logo.png',
+                                  scale: 7.sp,
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 3,
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://portal.hassanallam.com/images/Benefits/1089.jpg',
 
                                 /// hotel photo link
                                 placeholder: (c, m) => const Center(
@@ -1014,7 +1010,7 @@ class HomeScreen2 extends StatelessWidget {
                               ),
                               child: CachedNetworkImage(
                                 imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1110.jpg',
+                                    'https://portal.hassanallam.com/images/Benefits/1110.jpg',
 
                                 /// contact car photo link
                                 placeholder: (c, m) => const Center(
@@ -1037,7 +1033,7 @@ class HomeScreen2 extends StatelessWidget {
                               ),
                               child: CachedNetworkImage(
                                 imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1078.jpg',
+                                    'https://portal.hassanallam.com/images/Benefits/1078.jpg',
 
                                 /// premium photo link
                                 placeholder: (c, m) => const Center(
@@ -1060,7 +1056,7 @@ class HomeScreen2 extends StatelessWidget {
                               ),
                               child: CachedNetworkImage(
                                 imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1105.jpg',
+                                    'https://portal.hassanallam.com/images/Benefits/1105.jpg',
 
                                 /// medNet photo link
                                 placeholder: (c, m) => const Center(
@@ -1083,7 +1079,7 @@ class HomeScreen2 extends StatelessWidget {
                               ),
                               child: CachedNetworkImage(
                                 imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1089.jpg',
+                                    'https://portal.hassanallam.com/images/Benefits/1089.jpg',
 
                                 /// hotel photo link
                                 placeholder: (c, m) => const Center(
@@ -1108,107 +1104,142 @@ class HomeScreen2 extends StatelessWidget {
                 onTap: () {
                   Navigator.of(context).pushNamed(BenefitsScreen.routeName);
                 },
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Color(0xFF186597),
-                    borderRadius: BorderRadius.only(
-                      bottomRight: Radius.circular(20),
-                      topLeft: Radius.circular(20),
+                child: GridTile(
+                  footer: Container(
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF186597).withOpacity(0.4),
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                      ),
+                    ),
+                    // transform: Matrix4.rotationZ(-150)
+                    //   ..translate(10.0, -20.0, 0),
+                    padding: const EdgeInsets.all(10),
+                    child: const Center(
+                      child: Text(
+                        'Benefits',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
-                  child: Center(
-                    child: GridView(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.all(10.sp),
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 5.sp,
-                        crossAxisSpacing: 5.sp,
-                        childAspectRatio: 1.sp,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF174873),
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
                       ),
-                      children: [
-                        const Center(
-                            child: FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: Text(
-                                'Benefits',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold),
+                    ),
+                    child: Center(
+                      child: GridView(
+                        shrinkWrap: true,
+                        padding: EdgeInsets.all(10.sp),
+                        physics: const NeverScrollableScrollPhysics(),
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 5.sp,
+                          crossAxisSpacing: 5.sp,
+                          childAspectRatio: 1.sp,
+                        ),
+                        children: [
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 3,
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
                               ),
-                            )),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1110.jpg',
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://portal.hassanallam.com/images/Benefits/1110.jpg',
 
-                              /// contact car photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
+                                /// contact car photo link
+                                placeholder: (c, m) => const Center(
+                                    child: RefreshProgressIndicator()),
+                                errorWidget: (c, s, d) => Image.asset(
+                                  'assets/images/logo.png',
+                                  scale: 7.sp,
+                                ),
+                                fit: BoxFit.fill,
                               ),
-                              fit: BoxFit.fill,
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1105.jpg',
-
-                              /// medNet photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 3,
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
                               ),
-                              fit: BoxFit.fill,
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://portal.hassanallam.com/images/Benefits/1078.jpg',
+
+                                /// premium photo link
+                                placeholder: (c, m) => const Center(
+                                    child: RefreshProgressIndicator()),
+                                errorWidget: (c, s, d) => Image.asset(
+                                  'assets/images/logo.png',
+                                  scale: 7.sp,
+                                ),
+                                fit: BoxFit.fill,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1089.jpg',
-
-                              /// hotel photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 3,
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
                               ),
-                              fit: BoxFit.fill,
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://portal.hassanallam.com/images/Benefits/1105.jpg',
+
+                                /// medNet photo link
+                                placeholder: (c, m) => const Center(
+                                    child: RefreshProgressIndicator()),
+                                errorWidget: (c, s, d) => Image.asset(
+                                  'assets/images/logo.png',
+                                  scale: 7.sp,
+                                ),
+                                fit: BoxFit.fill,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height / 3,
+                            width: MediaQuery.of(context).size.width / 3,
+                            child: ClipRRect(
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(20),
+                                topRight: Radius.circular(20),
+                              ),
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    'https://portal.hassanallam.com/images/Benefits/1089.jpg',
+
+                                /// hotel photo link
+                                placeholder: (c, m) => const Center(
+                                    child: RefreshProgressIndicator()),
+                                errorWidget: (c, s, d) => Image.asset(
+                                  'assets/images/logo.png',
+                                  scale: 7.sp,
+                                ),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -1268,16 +1299,16 @@ class HomeScreen3 extends StatelessWidget {
                   ),
                   (newsAllData.isNotEmpty)
                       ? Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: SizedBox(
-                      width: 100.w,
-                      height: 30.h,
-                      child: NewsSliderList(
-                          newsAllData: newsAllData,
-                          assets: assets,
-                          heroProperties: heroProperties),
-                    ),
-                  )
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: SizedBox(
+                            width: 100.w,
+                            height: 30.h,
+                            child: NewsSliderList(
+                                newsAllData: newsAllData,
+                                assets: assets,
+                                heroProperties: heroProperties),
+                          ),
+                        )
                       : const ShimmerHomeNews(),
                   _buildHomeScreenContent(context),
                 ],
@@ -1291,13 +1322,13 @@ class HomeScreen3 extends StatelessWidget {
 
   Padding _buildHomeScreenContent(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
       child: SizedBox(
-        height: 60.h,
+        height: 63.h,
         width: 100.w,
         child: Center(
           child: GridView(
-            padding: EdgeInsets.all(5.0.sp),
+            padding: EdgeInsets.zero,
             addAutomaticKeepAlives: true,
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
@@ -1308,253 +1339,65 @@ class HomeScreen3 extends StatelessWidget {
               childAspectRatio: 0.9.sp,
             ),
             children: [
-              /// with four pics without badge
               InkWell(
                 onTap: () {
                   Navigator.of(context).pushNamed(BenefitsScreen.routeName);
                 },
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: Color(0xFF186597),
+                    gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF1a4c78),
+                          Color(0xFF3772a6),
+                        ],
+                        begin: Alignment(0, 1),
+                        end: Alignment(0.5, 0),
+                        tileMode: TileMode.clamp),
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/Benefits.png'),
+                        alignment: Alignment.centerRight,
+                        opacity: 0.5,
+                        scale: 1.8),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(20),
                       topRight: Radius.circular(20),
                     ),
                   ),
-                  child: Center(
-                    child: GridView(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.all(10.sp),
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 5.sp,
-                        crossAxisSpacing: 5.sp,
-                        childAspectRatio: 1.sp,
-                      ),
-                      children: [
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 3,
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 22.0,top: 25),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          CircleAvatar(
+                            radius: 20,
+                            child: Icon(
+                              Icons.loyalty_outlined,
+                              size: 30,
+                              color: Color(0xFF174873), /// Color(0xFF174873)
                             ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1110.jpg',
-
-                              /// contact car photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
-                              ),
-                              fit: BoxFit.fill,
+                            backgroundColor: Colors.white,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top:8.0,bottom: 5),
+                            child: Text(
+                              'Benefits',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontFamily: 'RobotoCondensed'),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1078.jpg',
-
-                              /// premium photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
-                              ),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1105.jpg',
-
-                              /// medNet photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
-                              ),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1089.jpg',
-
-                              /// hotel photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
-                              ),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-
-              /// with badge
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
-                },
-                child: Badge(
-                  badgeContent: const Text('Benefits',
-                      style: TextStyle(color: Colors.white)),
-                  position: BadgePosition.topStart(),
-                  shape: BadgeShape.square,
-                  borderRadius: BorderRadius.circular(20),
-                  badgeColor: const Color(0xFF186597),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Color.fromRGBO(23, 72, 115, 1),
-                      borderRadius: BorderRadius.only(
-                        bottomRight: Radius.circular(20),
-                        topLeft: Radius.circular(20),
-                      ),
-                    ),
-                    child: Center(
-                      child: GridView(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.all(10.sp),
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 5.sp,
-                          crossAxisSpacing: 5.sp,
-                          childAspectRatio: 1.sp,
-                        ),
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1110.jpg',
-
-                                /// contact car photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1078.jpg',
-
-                                /// premium photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1105.jpg',
-
-                                /// medNet photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1089.jpg',
-
-                                /// hotel photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
+                          Text(
+                            'Hotels, Health, Retails...',
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontFamily: 'RobotoCondensed'),
+                          )
                         ],
                       ),
                     ),
@@ -1562,258 +1405,214 @@ class HomeScreen3 extends StatelessWidget {
                 ),
               ),
 
-              /// with grid tile
-              InkWell(
-                onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
-                },
-                child: GridTile(
-                  footer: Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF186597).withOpacity(0.4),
-                      borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                      ),
-                    ),
-                    // transform: Matrix4.rotationZ(-150)
-                    //   ..translate(10.0, -20.0, 0),
-                    padding: const EdgeInsets.all(10),
-                    child: const Center(
-                      child: Text(
-                        'Benefits',
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF174873),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
-                    ),
-                    child: Center(
-                      child: GridView(
-                        shrinkWrap: true,
-                        padding: EdgeInsets.all(10.sp),
-                        physics: const NeverScrollableScrollPhysics(),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          mainAxisSpacing: 5.sp,
-                          crossAxisSpacing: 5.sp,
-                          childAspectRatio: 1.sp,
-                        ),
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1110.jpg',
-
-                                /// contact car photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1078.jpg',
-
-                                /// premium photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1105.jpg',
-
-                                /// medNet photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height / 3,
-                            width: MediaQuery.of(context).size.width / 3,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                bottomLeft: Radius.circular(20),
-                                topRight: Radius.circular(20),
-                              ),
-                              child: CachedNetworkImage(
-                                imageUrl:
-                                'https://portal.hassanallam.com/images/Benefits/1089.jpg',
-
-                                /// hotel photo link
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              /// with 2 pics & text
               InkWell(
                 onTap: () {
                   Navigator.of(context).pushNamed(BenefitsScreen.routeName);
                 },
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: Color(0xFF186597),
+                    gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF6860c8),
+                          Color(0xFF9695ed),
+                        ],
+                        begin: Alignment(0, 1),
+                        end: Alignment(0.5, 0),
+                        tileMode: TileMode.clamp),
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/Media.png'),
+                        alignment: Alignment.centerRight,
+                        opacity: 0.5,
+                        scale: 1.8),
                     borderRadius: BorderRadius.only(
                       bottomRight: Radius.circular(20),
                       topLeft: Radius.circular(20),
                     ),
                   ),
-                  child: Center(
-                    child: GridView(
-                      shrinkWrap: true,
-                      padding: EdgeInsets.all(10.sp),
-                      physics: const NeverScrollableScrollPhysics(),
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 5.sp,
-                        crossAxisSpacing: 5.sp,
-                        childAspectRatio: 1.sp,
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 3,
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 22.0,top: 25),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          CircleAvatar(
+                            radius: 20,
+                            child: Icon(
+                              Icons.camera_alt_outlined,
+                              size: 30,
+                              color: Color(0xFF174873), /// Color(0xFF174873)
+                            ),
+                            backgroundColor: Colors.white,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top:8.0,bottom: 5),
+                            child: Text(
+                              'Media',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: 'RobotoCondensed'),
+                            ),
+                          ),
+                          Text(
+                            'Photo Gallery, Videos.',
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontFamily: 'RobotoCondensed'),
+                          )
+                        ],
                       ),
-                      children: [
-                        const Center(
-                            child: FittedBox(
-                              fit: BoxFit.fitWidth,
-                              child: Text(
-                                'Benefits',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                            )),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1110.jpg',
+                    ),
+                  ),
+                ),
+              ),
 
-                              /// contact car photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
-                              ),
-                              fit: BoxFit.fill,
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF6860c8),
+                          Color(0xFF9695ed),
+                        ],
+                        begin: Alignment(0, 1),
+                        end: Alignment(0.5, 0),
+                        tileMode: TileMode.clamp),
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/Subsidiaries.png'),
+                        alignment: Alignment.centerRight,
+                        opacity: 0.5,
+                        scale: 1.8),
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 3,
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 22.0,top: 25),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children:  const [
+                          CircleAvatar(
+                            radius: 20,
+                            child:
+                            // Text(
+                            //   String.fromCharCode(0xf190),
+                            //   style: TextStyle(
+                            //     inherit: false,
+                            //     color: Color(0xFF174873),
+                            //     fontSize: 30.0,
+                            //     fontWeight: FontWeight.w100,
+                            //     fontFamily: "MaterialIcons",
+                            //     // package: CupertinoIcons.exclamationmark_circle.fontPackage,
+                            //   ),
+                            // ),
+                            Icon(
+                              // IconData(0xe7f1, fontFamily: 'MaterialIcons-Outlined'),
+                              Icons.location_city_outlined,
+                              size: 30,
+                              color: Color(0xFF174873), /// Color(0xFF174873)
+                            ),
+                            backgroundColor: Colors.white,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top:8.0,bottom: 5),
+                            child: Text(
+                              'Subsidiaries',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  fontFamily: 'RobotoCondensed'),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1105.jpg',
+                          Text(
+                            'Hotels, Health, Retails...',
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontFamily: 'RobotoCondensed'),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
 
-                              /// medNet photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
-                              ),
-                              fit: BoxFit.fill,
+              InkWell(
+                onTap: () {
+                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                },
+                child: Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                        colors: [
+                          Color(0xFF1a4c78),
+                          Color(0xFF3772a6),
+                        ],
+                        begin: Alignment(0, 1),
+                        end: Alignment(0.5, 0),
+                        tileMode: TileMode.clamp),
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/Values.png'),
+                        alignment: Alignment.centerRight,
+                        opacity: 0.5,
+                        scale: 1.8),
+                    borderRadius: BorderRadius.only(
+                      bottomRight: Radius.circular(20),
+                      topLeft: Radius.circular(20),
+                    ),
+                  ),
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height / 3,
+                    width: MediaQuery.of(context).size.width / 3,
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 22.0,top: 25),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          CircleAvatar(
+                            radius: 20,
+                            child: Icon(
+                              Icons.interpreter_mode_outlined,
+                              size: 30,
+                              color: Color(0xFF174873), /// Color(0xFF174873)
+                            ),
+                            backgroundColor: Colors.white,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top:8.0,bottom: 5),
+                            child: Text(
+                              'HAH Values',
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                  // fontWeight: FontWeight.bold,
+                                  fontFamily: 'RobotoCondensed'),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: MediaQuery.of(context).size.height / 3,
-                          width: MediaQuery.of(context).size.width / 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(20),
-                              topRight: Radius.circular(20),
-                            ),
-                            child: CachedNetworkImage(
-                              imageUrl:
-                              'https://portal.hassanallam.com/images/Benefits/1089.jpg',
-
-                              /// hotel photo link
-                              placeholder: (c, m) => const Center(
-                                  child: RefreshProgressIndicator()),
-                              errorWidget: (c, s, d) => Image.asset(
-                                'assets/images/logo.png',
-                                scale: 7.sp,
-                              ),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                      ],
+                          Text(
+                            'Know about our values',
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.white,
+                                fontFamily: 'RobotoCondensed'),
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -1825,13 +1624,6 @@ class HomeScreen3 extends StatelessWidget {
     );
   }
 }
-
-
-
-
-
-
-
 
 class NewsSliderList extends StatelessWidget {
   const NewsSliderList({
@@ -1983,8 +1775,8 @@ class ShimmerHomeNews extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: const Color(0xFF186597),
-      highlightColor: Colors.white,
+      baseColor: Colors.grey.shade200,
+      highlightColor: Colors.grey.shade50,
       child: SizedBox(
         width: 100.w,
         height: 30.h,
@@ -2012,3 +1804,539 @@ class ShimmerHomeNews extends StatelessWidget {
     );
   }
 }
+
+// Padding _buildHomeScreenContent(BuildContext context) {
+//   return Padding(
+//     padding: const EdgeInsets.only(left: 5.0, right: 5.0),
+//     child: SizedBox(
+//       height: 60.h,
+//       width: 100.w,
+//       child: Center(
+//         child: GridView(
+//           padding: EdgeInsets.all(5.0.sp),
+//           addAutomaticKeepAlives: true,
+//           shrinkWrap: true,
+//           physics: const NeverScrollableScrollPhysics(),
+//           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//             crossAxisCount: 2,
+//             crossAxisSpacing: 15.sp,
+//             mainAxisSpacing: 8.sp,
+//             childAspectRatio: 0.9.sp,
+//           ),
+//           children: [
+//             /// with four pics without badge
+//             InkWell(
+//               onTap: () {
+//                 Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+//               },
+//               child: Container(
+//                 decoration: const BoxDecoration(
+//                   color: Color(0xFF186597),
+//                   borderRadius: BorderRadius.only(
+//                     bottomLeft: Radius.circular(20),
+//                     topRight: Radius.circular(20),
+//                   ),
+//                 ),
+//                 child: Center(
+//                   child: GridView(
+//                     shrinkWrap: true,
+//                     padding: EdgeInsets.all(10.sp),
+//                     physics: const NeverScrollableScrollPhysics(),
+//                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//                       crossAxisCount: 2,
+//                       mainAxisSpacing: 5.sp,
+//                       crossAxisSpacing: 5.sp,
+//                       childAspectRatio: 1.sp,
+//                     ),
+//                     children: [
+//                       SizedBox(
+//                         height: MediaQuery.of(context).size.height / 3,
+//                         width: MediaQuery.of(context).size.width / 3,
+//                         child: ClipRRect(
+//                           borderRadius: const BorderRadius.only(
+//                             bottomLeft: Radius.circular(20),
+//                             topRight: Radius.circular(20),
+//                           ),
+//                           child: CachedNetworkImage(
+//                             imageUrl:
+//                             'https://portal.hassanallam.com/images/Benefits/1110.jpg',
+//
+//                             /// contact car photo link
+//                             placeholder: (c, m) => const Center(
+//                                 child: RefreshProgressIndicator()),
+//                             errorWidget: (c, s, d) => Image.asset(
+//                               'assets/images/logo.png',
+//                               scale: 7.sp,
+//                             ),
+//                             fit: BoxFit.fill,
+//                           ),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         height: MediaQuery.of(context).size.height / 3,
+//                         width: MediaQuery.of(context).size.width / 3,
+//                         child: ClipRRect(
+//                           borderRadius: const BorderRadius.only(
+//                             bottomLeft: Radius.circular(20),
+//                             topRight: Radius.circular(20),
+//                           ),
+//                           child: CachedNetworkImage(
+//                             imageUrl:
+//                             'https://portal.hassanallam.com/images/Benefits/1078.jpg',
+//
+//                             /// premium photo link
+//                             placeholder: (c, m) => const Center(
+//                                 child: RefreshProgressIndicator()),
+//                             errorWidget: (c, s, d) => Image.asset(
+//                               'assets/images/logo.png',
+//                               scale: 7.sp,
+//                             ),
+//                             fit: BoxFit.fill,
+//                           ),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         height: MediaQuery.of(context).size.height / 3,
+//                         width: MediaQuery.of(context).size.width / 3,
+//                         child: ClipRRect(
+//                           borderRadius: const BorderRadius.only(
+//                             bottomLeft: Radius.circular(20),
+//                             topRight: Radius.circular(20),
+//                           ),
+//                           child: CachedNetworkImage(
+//                             imageUrl:
+//                             'https://portal.hassanallam.com/images/Benefits/1105.jpg',
+//
+//                             /// medNet photo link
+//                             placeholder: (c, m) => const Center(
+//                                 child: RefreshProgressIndicator()),
+//                             errorWidget: (c, s, d) => Image.asset(
+//                               'assets/images/logo.png',
+//                               scale: 7.sp,
+//                             ),
+//                             fit: BoxFit.fill,
+//                           ),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         height: MediaQuery.of(context).size.height / 3,
+//                         width: MediaQuery.of(context).size.width / 3,
+//                         child: ClipRRect(
+//                           borderRadius: const BorderRadius.only(
+//                             bottomLeft: Radius.circular(20),
+//                             topRight: Radius.circular(20),
+//                           ),
+//                           child: CachedNetworkImage(
+//                             imageUrl:
+//                             'https://portal.hassanallam.com/images/Benefits/1089.jpg',
+//
+//                             /// hotel photo link
+//                             placeholder: (c, m) => const Center(
+//                                 child: RefreshProgressIndicator()),
+//                             errorWidget: (c, s, d) => Image.asset(
+//                               'assets/images/logo.png',
+//                               scale: 7.sp,
+//                             ),
+//                             fit: BoxFit.fill,
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ),
+//
+//             /// with badge
+//             InkWell(
+//               onTap: () {
+//                 Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+//               },
+//               child: Badge(
+//                 badgeContent: const Text('Benefits',
+//                     style: TextStyle(color: Colors.white)),
+//                 position: BadgePosition.topStart(),
+//                 shape: BadgeShape.square,
+//                 borderRadius: BorderRadius.circular(20),
+//                 badgeColor: const Color(0xFF186597),
+//                 child: Container(
+//                   decoration: const BoxDecoration(
+//                     color: Color.fromRGBO(23, 72, 115, 1),
+//                     borderRadius: BorderRadius.only(
+//                       bottomRight: Radius.circular(20),
+//                       topLeft: Radius.circular(20),
+//                     ),
+//                   ),
+//                   child: Center(
+//                     child: GridView(
+//                       shrinkWrap: true,
+//                       padding: EdgeInsets.all(10.sp),
+//                       physics: const NeverScrollableScrollPhysics(),
+//                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//                         crossAxisCount: 2,
+//                         mainAxisSpacing: 5.sp,
+//                         crossAxisSpacing: 5.sp,
+//                         childAspectRatio: 1.sp,
+//                       ),
+//                       children: [
+//                         SizedBox(
+//                           height: MediaQuery.of(context).size.height / 3,
+//                           width: MediaQuery.of(context).size.width / 3,
+//                           child: ClipRRect(
+//                             borderRadius: const BorderRadius.only(
+//                               bottomLeft: Radius.circular(20),
+//                               topRight: Radius.circular(20),
+//                             ),
+//                             child: CachedNetworkImage(
+//                               imageUrl:
+//                               'https://portal.hassanallam.com/images/Benefits/1110.jpg',
+//
+//                               /// contact car photo link
+//                               placeholder: (c, m) => const Center(
+//                                   child: RefreshProgressIndicator()),
+//                               errorWidget: (c, s, d) => Image.asset(
+//                                 'assets/images/logo.png',
+//                                 scale: 7.sp,
+//                               ),
+//                               fit: BoxFit.fill,
+//                             ),
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: MediaQuery.of(context).size.height / 3,
+//                           width: MediaQuery.of(context).size.width / 3,
+//                           child: ClipRRect(
+//                             borderRadius: const BorderRadius.only(
+//                               bottomLeft: Radius.circular(20),
+//                               topRight: Radius.circular(20),
+//                             ),
+//                             child: CachedNetworkImage(
+//                               imageUrl:
+//                               'https://portal.hassanallam.com/images/Benefits/1078.jpg',
+//
+//                               /// premium photo link
+//                               placeholder: (c, m) => const Center(
+//                                   child: RefreshProgressIndicator()),
+//                               errorWidget: (c, s, d) => Image.asset(
+//                                 'assets/images/logo.png',
+//                                 scale: 7.sp,
+//                               ),
+//                               fit: BoxFit.fill,
+//                             ),
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: MediaQuery.of(context).size.height / 3,
+//                           width: MediaQuery.of(context).size.width / 3,
+//                           child: ClipRRect(
+//                             borderRadius: const BorderRadius.only(
+//                               bottomLeft: Radius.circular(20),
+//                               topRight: Radius.circular(20),
+//                             ),
+//                             child: CachedNetworkImage(
+//                               imageUrl:
+//                               'https://portal.hassanallam.com/images/Benefits/1105.jpg',
+//
+//                               /// medNet photo link
+//                               placeholder: (c, m) => const Center(
+//                                   child: RefreshProgressIndicator()),
+//                               errorWidget: (c, s, d) => Image.asset(
+//                                 'assets/images/logo.png',
+//                                 scale: 7.sp,
+//                               ),
+//                               fit: BoxFit.fill,
+//                             ),
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: MediaQuery.of(context).size.height / 3,
+//                           width: MediaQuery.of(context).size.width / 3,
+//                           child: ClipRRect(
+//                             borderRadius: const BorderRadius.only(
+//                               bottomLeft: Radius.circular(20),
+//                               topRight: Radius.circular(20),
+//                             ),
+//                             child: CachedNetworkImage(
+//                               imageUrl:
+//                               'https://portal.hassanallam.com/images/Benefits/1089.jpg',
+//
+//                               /// hotel photo link
+//                               placeholder: (c, m) => const Center(
+//                                   child: RefreshProgressIndicator()),
+//                               errorWidget: (c, s, d) => Image.asset(
+//                                 'assets/images/logo.png',
+//                                 scale: 7.sp,
+//                               ),
+//                               fit: BoxFit.fill,
+//                             ),
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//
+//             /// with grid tile
+//             InkWell(
+//               onTap: () {
+//                 Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+//               },
+//               child: GridTile(
+//                 footer: Container(
+//                   decoration: BoxDecoration(
+//                     color: const Color(0xFF186597).withOpacity(0.4),
+//                     borderRadius: const BorderRadius.only(
+//                       bottomLeft: Radius.circular(20),
+//                     ),
+//                   ),
+//                   // transform: Matrix4.rotationZ(-150)
+//                   //   ..translate(10.0, -20.0, 0),
+//                   padding: const EdgeInsets.all(10),
+//                   child: const Center(
+//                     child: Text(
+//                       'Benefits',
+//                       style: TextStyle(
+//                         fontWeight: FontWeight.bold,
+//                         fontSize: 18,
+//                         color: Colors.white,
+//                       ),
+//                     ),
+//                   ),
+//                 ),
+//                 child: Container(
+//                   decoration: const BoxDecoration(
+//                     color: Color(0xFF174873),
+//                     borderRadius: BorderRadius.only(
+//                       bottomLeft: Radius.circular(20),
+//                       topRight: Radius.circular(20),
+//                     ),
+//                   ),
+//                   child: Center(
+//                     child: GridView(
+//                       shrinkWrap: true,
+//                       padding: EdgeInsets.all(10.sp),
+//                       physics: const NeverScrollableScrollPhysics(),
+//                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//                         crossAxisCount: 2,
+//                         mainAxisSpacing: 5.sp,
+//                         crossAxisSpacing: 5.sp,
+//                         childAspectRatio: 1.sp,
+//                       ),
+//                       children: [
+//                         SizedBox(
+//                           height: MediaQuery.of(context).size.height / 3,
+//                           width: MediaQuery.of(context).size.width / 3,
+//                           child: ClipRRect(
+//                             borderRadius: const BorderRadius.only(
+//                               bottomLeft: Radius.circular(20),
+//                               topRight: Radius.circular(20),
+//                             ),
+//                             child: CachedNetworkImage(
+//                               imageUrl:
+//                               'https://portal.hassanallam.com/images/Benefits/1110.jpg',
+//
+//                               /// contact car photo link
+//                               placeholder: (c, m) => const Center(
+//                                   child: RefreshProgressIndicator()),
+//                               errorWidget: (c, s, d) => Image.asset(
+//                                 'assets/images/logo.png',
+//                                 scale: 7.sp,
+//                               ),
+//                               fit: BoxFit.fill,
+//                             ),
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: MediaQuery.of(context).size.height / 3,
+//                           width: MediaQuery.of(context).size.width / 3,
+//                           child: ClipRRect(
+//                             borderRadius: const BorderRadius.only(
+//                               bottomLeft: Radius.circular(20),
+//                               topRight: Radius.circular(20),
+//                             ),
+//                             child: CachedNetworkImage(
+//                               imageUrl:
+//                               'https://portal.hassanallam.com/images/Benefits/1078.jpg',
+//
+//                               /// premium photo link
+//                               placeholder: (c, m) => const Center(
+//                                   child: RefreshProgressIndicator()),
+//                               errorWidget: (c, s, d) => Image.asset(
+//                                 'assets/images/logo.png',
+//                                 scale: 7.sp,
+//                               ),
+//                               fit: BoxFit.fill,
+//                             ),
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: MediaQuery.of(context).size.height / 3,
+//                           width: MediaQuery.of(context).size.width / 3,
+//                           child: ClipRRect(
+//                             borderRadius: const BorderRadius.only(
+//                               bottomLeft: Radius.circular(20),
+//                               topRight: Radius.circular(20),
+//                             ),
+//                             child: CachedNetworkImage(
+//                               imageUrl:
+//                               'https://portal.hassanallam.com/images/Benefits/1105.jpg',
+//
+//                               /// medNet photo link
+//                               placeholder: (c, m) => const Center(
+//                                   child: RefreshProgressIndicator()),
+//                               errorWidget: (c, s, d) => Image.asset(
+//                                 'assets/images/logo.png',
+//                                 scale: 7.sp,
+//                               ),
+//                               fit: BoxFit.fill,
+//                             ),
+//                           ),
+//                         ),
+//                         SizedBox(
+//                           height: MediaQuery.of(context).size.height / 3,
+//                           width: MediaQuery.of(context).size.width / 3,
+//                           child: ClipRRect(
+//                             borderRadius: const BorderRadius.only(
+//                               bottomLeft: Radius.circular(20),
+//                               topRight: Radius.circular(20),
+//                             ),
+//                             child: CachedNetworkImage(
+//                               imageUrl:
+//                               'https://portal.hassanallam.com/images/Benefits/1089.jpg',
+//
+//                               /// hotel photo link
+//                               placeholder: (c, m) => const Center(
+//                                   child: RefreshProgressIndicator()),
+//                               errorWidget: (c, s, d) => Image.asset(
+//                                 'assets/images/logo.png',
+//                                 scale: 7.sp,
+//                               ),
+//                               fit: BoxFit.fill,
+//                             ),
+//                           ),
+//                         ),
+//                       ],
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//
+//             /// with 2 pics & text
+//             InkWell(
+//               onTap: () {
+//                 Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+//               },
+//               child: Container(
+//                 decoration: const BoxDecoration(
+//                   color: Color(0xFF186597),
+//                   borderRadius: BorderRadius.only(
+//                     bottomRight: Radius.circular(20),
+//                     topLeft: Radius.circular(20),
+//                   ),
+//                 ),
+//                 child: Center(
+//                   child: GridView(
+//                     shrinkWrap: true,
+//                     padding: EdgeInsets.all(10.sp),
+//                     physics: const NeverScrollableScrollPhysics(),
+//                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//                       crossAxisCount: 2,
+//                       mainAxisSpacing: 5.sp,
+//                       crossAxisSpacing: 5.sp,
+//                       childAspectRatio: 1.sp,
+//                     ),
+//                     children: [
+//                       const Center(
+//                           child: FittedBox(
+//                             fit: BoxFit.fitWidth,
+//                             child: Text(
+//                               'Benefits',
+//                               style: TextStyle(
+//                                   color: Colors.white,
+//                                   fontSize: 18,
+//                                   fontWeight: FontWeight.bold),
+//                             ),
+//                           )),
+//                       SizedBox(
+//                         height: MediaQuery.of(context).size.height / 3,
+//                         width: MediaQuery.of(context).size.width / 3,
+//                         child: ClipRRect(
+//                           borderRadius: const BorderRadius.only(
+//                             bottomLeft: Radius.circular(20),
+//                             topRight: Radius.circular(20),
+//                           ),
+//                           child: CachedNetworkImage(
+//                             imageUrl:
+//                             'https://portal.hassanallam.com/images/Benefits/1110.jpg',
+//
+//                             /// contact car photo link
+//                             placeholder: (c, m) => const Center(
+//                                 child: RefreshProgressIndicator()),
+//                             errorWidget: (c, s, d) => Image.asset(
+//                               'assets/images/logo.png',
+//                               scale: 7.sp,
+//                             ),
+//                             fit: BoxFit.fill,
+//                           ),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         height: MediaQuery.of(context).size.height / 3,
+//                         width: MediaQuery.of(context).size.width / 3,
+//                         child: ClipRRect(
+//                           borderRadius: const BorderRadius.only(
+//                             bottomLeft: Radius.circular(20),
+//                             topRight: Radius.circular(20),
+//                           ),
+//                           child: CachedNetworkImage(
+//                             imageUrl:
+//                             'https://portal.hassanallam.com/images/Benefits/1105.jpg',
+//
+//                             /// medNet photo link
+//                             placeholder: (c, m) => const Center(
+//                                 child: RefreshProgressIndicator()),
+//                             errorWidget: (c, s, d) => Image.asset(
+//                               'assets/images/logo.png',
+//                               scale: 7.sp,
+//                             ),
+//                             fit: BoxFit.fill,
+//                           ),
+//                         ),
+//                       ),
+//                       SizedBox(
+//                         height: MediaQuery.of(context).size.height / 3,
+//                         width: MediaQuery.of(context).size.width / 3,
+//                         child: ClipRRect(
+//                           borderRadius: const BorderRadius.only(
+//                             bottomLeft: Radius.circular(20),
+//                             topRight: Radius.circular(20),
+//                           ),
+//                           child: CachedNetworkImage(
+//                             imageUrl:
+//                             'https://portal.hassanallam.com/images/Benefits/1089.jpg',
+//
+//                             /// hotel photo link
+//                             placeholder: (c, m) => const Center(
+//                                 child: RefreshProgressIndicator()),
+//                             errorWidget: (c, s, d) => Image.asset(
+//                               'assets/images/logo.png',
+//                               scale: 7.sp,
+//                             ),
+//                             fit: BoxFit.fill,
+//                           ),
+//                         ),
+//                       ),
+//                     ],
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//       ),
+//     ),
+//   );
+// }
