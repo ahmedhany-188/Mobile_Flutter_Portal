@@ -20,6 +20,8 @@ class VacationDateTo extends FormzInput<String, VacationDateToError> {
         if (toDate.isBefore(fromDate)) {
           return VacationDateToError.isBefore;
         }
+
+
       }catch(_){
         return VacationDateToError.empty;
       }

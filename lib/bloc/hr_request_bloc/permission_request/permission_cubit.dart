@@ -6,11 +6,9 @@ import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_date.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
-
 import '../../../constants/enums.dart';
 import '../../../data/models/requests_form_models/request_date.dart';
 import '../../../data/models/requests_form_models/request_permission_time.dart';
-
 part 'permission_state.dart';
 
 class PermissionCubit extends Cubit<PermissionInitial> {
@@ -167,6 +165,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
       permissionTime: permissionTime,
       status: Formz.validate([requestDate, permissionDate,permissionTime]),
     ));
+
     if (state.status.isValidated) {
       // print("Done permission");
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
@@ -258,5 +257,6 @@ class PermissionCubit extends Cubit<PermissionInitial> {
     // } catch (_) {
     //   emit(state.copyWith(status: FormzStatus.submissionFailure));
     // }
+
   }
 }
