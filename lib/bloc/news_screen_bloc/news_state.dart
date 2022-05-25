@@ -8,9 +8,14 @@ class NewsInitial extends NewsState {}
 class NewsLoadingState extends NewsState {}
 
 class NewsSuccessState extends NewsState {
-  Map<String,dynamic> newsList;
+  List<Data> newsList;
 
   NewsSuccessState(this.newsList);
+}
+class LatestNewsSuccessState extends NewsState {
+  List<Data> latestNewsList;
+
+  LatestNewsSuccessState(this.latestNewsList);
 }
 
 class NewsErrorState extends NewsState {

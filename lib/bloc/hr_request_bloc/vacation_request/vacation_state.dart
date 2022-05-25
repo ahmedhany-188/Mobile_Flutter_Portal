@@ -19,6 +19,7 @@ class VacationInitial extends PermissionState {
     this.successMessage,
     this.requestStatus,
     this.comment = "",
+    this.responsiblePerson = ContactsDataFromApi.empty,
     this.vacationDuration = "0"
   });
 
@@ -31,11 +32,12 @@ class VacationInitial extends PermissionState {
   final String? errorMessage;
   final String? successMessage;
   final RequestStatus? requestStatus;
+  final ContactsDataFromApi responsiblePerson;
   final String comment;
   final String vacationDuration;
 
   @override
-  List<Object> get props => [requestDate, vacationFromDate,vacationToDate,vacationType,permissionTime, status,comment,vacationDuration];
+  List<Object> get props => [requestDate, vacationFromDate,vacationToDate,vacationType,permissionTime, status,comment,vacationDuration,responsiblePerson];
 
   VacationInitial copyWith({
     RequestDate? requestDate,
@@ -49,6 +51,7 @@ class VacationInitial extends PermissionState {
     RequestStatus? requestStatus,
     String? comment,
     String? vacationDuration,
+    ContactsDataFromApi? responsiblePerson,
   }) {
     return VacationInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -61,6 +64,7 @@ class VacationInitial extends PermissionState {
       successMessage: successMessage ?? this.successMessage,
       requestStatus: requestStatus ?? this.requestStatus,
       comment: comment ?? this.comment,
+      responsiblePerson: responsiblePerson ?? this.responsiblePerson,
       vacationDuration: vacationDuration ?? this.vacationDuration,
 
     );

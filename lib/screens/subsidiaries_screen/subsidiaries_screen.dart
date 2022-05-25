@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 
 import '../../bloc/subsidiaries_screen_bloc/subsidiaries_cubit.dart';
-import '../../data/models/general_api_model/general_api_model.dart';
 
 class SubsidiariesScreen extends StatefulWidget {
   static const routeName = 'subsidiaries-screen';
@@ -21,7 +20,6 @@ class SubsidiariesScreen extends StatefulWidget {
 class _SubsidiariesScreenState extends State<SubsidiariesScreen> {
   Map<String, dynamic> subsidiariesAllData = {};
 
-  GeneralApiModel testScreen = GeneralApiModel();
 
   @override
   Widget build(BuildContext context) {

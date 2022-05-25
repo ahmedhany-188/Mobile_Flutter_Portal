@@ -64,7 +64,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
                 },
                 initialDateTime: DateTime.now(),
                 minimumYear: 2020,
-                maximumYear: 2023,
+                maximumYear: 2100,
               ),
             );
           });
@@ -119,7 +119,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
                 },
                 initialDateTime: DateTime.now(),
                 minimumYear: 2020,
-                maximumYear: 2022,
+                maximumYear: 2100,
               ),
             );
           });
@@ -158,6 +158,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
     final requestDate = RequestDate.dirty(state.requestDate.value);
     final permissionDate = PermissionDate.dirty(state.permissionDate.value);
     final permissionTime = PermissionTime.dirty(state.permissionTime.value);
+    print(permissionDate.value);
     emit(state.copyWith(
       requestDate: requestDate,
       permissionDate: permissionDate,

@@ -2,7 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/bloc/hr_request_bloc/responsible_vacation_request/responsible_vacation_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/vacation_request/vacation_cubit.dart';
+import 'package:hassanallamportalflutter/data/models/contacts_related_models/contacts_data_from_api.dart';
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
@@ -36,10 +38,14 @@ class _VacationScreenState extends State<VacationScreen> {
           ),
         ),
       ),
-      child: BlocProvider<VacationCubit>(
-        create: (permissionContext) =>
-        VacationCubit(RequestRepository())
-          ..getRequestData(RequestStatus.newRequest),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<VacationCubit>(create: (permissionContext) =>
+            VacationCubit(RequestRepository())
+            ..getRequestData(RequestStatus.newRequest)),
+          BlocProvider<ResponsibleVacationCubit>(
+              create: (_) => ResponsibleVacationCubit()..fetchList()),
+        ],
         child: Builder(
             builder: (context) {
               return Scaffold(
@@ -177,7 +183,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                         children: [
                                           RadioListTile<int>(
                                             value: 1,
-                                            title: Text("Annual"),
+                                            title: const Text("Annual"),
                                             groupValue: state.vacationType,
                                             onChanged: (vacationType) =>
                                                 context
@@ -188,7 +194,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                           RadioListTile<int>(
                                             value: 2,
                                             // dense: true,
-                                            title: Text("Casual"),
+                                            title: const Text("Casual"),
                                             groupValue: state.vacationType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
@@ -200,7 +206,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                           RadioListTile<int>(
                                             value: 3,
                                             // dense: true,
-                                            title: Text("Holiday Replacement"),
+                                            title: const Text("Holiday Replacement"),
                                             groupValue: state.vacationType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
@@ -212,7 +218,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                           RadioListTile<int>(
                                             value: 4,
                                             // dense: true,
-                                            title: Text("Maternity"),
+                                            title: const Text("Maternity"),
                                             groupValue: state.vacationType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
@@ -224,7 +230,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                           RadioListTile<int>(
                                             value: 5,
                                             // dense: true,
-                                            title: Text("Haj"),
+                                            title: const Text("Haj"),
                                             groupValue: state.vacationType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
@@ -372,11 +378,43 @@ class _VacationScreenState extends State<VacationScreen> {
                                       key: UniqueKey(),
                                       initialValue: state.vacationDuration,
                                       readOnly : true,
-                                      decoration: InputDecoration(
+                                      decoration: const InputDecoration(
                                         labelText: 'Vacation Duration',
-                                        prefixIcon: const Icon(
+                                        prefixIcon: Icon(
                                             Icons.date_range),
                                       ),
+                                    );
+                                  }
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: BlocBuilder<
+                                  VacationCubit,
+                                  VacationInitial>(
+                                  buildWhen: (previous, current) {
+                                    return (previous.responsiblePerson.name !=
+                                        current.responsiblePerson.name);
+                                  },
+                                  builder: (context, state) {
+                                    return TextFormField(
+                                      key: UniqueKey(),
+                                      initialValue: state.responsiblePerson.name,
+                                      readOnly : true,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Responsible Person',
+                                        prefixIcon: Icon(
+                                            Icons.date_range),
+                                      ),onTap: () async{
+
+                                     final contact =  await _showModal(context);
+                                     // print(contact?.name);
+                                     // BlocProvider.of<VacationCubit> (context).vacationResponsiblePersonChanged(contact!);
+                                      // context.read<VacationCubit>()
+                                      //     .vacationResponsiblePersonChanged(contact!);
+
+                                    },
                                     );
                                   }
                               ),
@@ -405,7 +443,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                             color: Colors.grey[800]),
                                         labelText: "Add your comment",
                                         fillColor: Colors.white70,
-                                        prefixIcon: Icon(Icons.comment),
+                                        prefixIcon: const Icon(Icons.comment),
                                         enabled: true,
                                       ),
 
@@ -426,7 +464,166 @@ class _VacationScreenState extends State<VacationScreen> {
       ),
     );
   }
+
+  final TextEditingController textController = TextEditingController();
+  Future<ContactsDataFromApi?> _showModal(context) async{
+    final VacationCubit bloc = BlocProvider.of<VacationCubit>(context);
+    return await showModalBottomSheet<ContactsDataFromApi>(
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
+        ),
+        context: context,
+        builder: (_) {
+          return BlocProvider.value(
+            value: BlocProvider.of<ResponsibleVacationCubit>(context),
+            child: StatefulBuilder(
+                builder: (BuildContext context, StateSetter setState) {
+                  return BlocBuilder<
+                      ResponsibleVacationCubit,
+                      ResponsibleVacationInitial>(
+                    builder: (context, state) {
+                      return DraggableScrollableSheet(
+                          expand: false,
+                          maxChildSize: 0.8,
+                          snap: true,
+                          builder:
+                              (BuildContext context,
+                              ScrollController scrollController) {
+
+                            switch (state.status) {
+                              case ResponsibleListStatus.failure:
+                                return const Center(
+                                    child: Text('Oops something went wrong!'));
+                              case ResponsibleListStatus.success:
+                                print("Successsssssss");
+                                return ItemView(items: state.items, scrollController: scrollController, bloc: bloc,);
+                              case ResponsibleListStatus.successSearching:
+                                print(state.tempItems.length);
+                                return ItemView(items: state.tempItems, scrollController: scrollController, bloc: bloc,);
+                              default:
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                            }
+                          });
+                    },
+                  );
+                }
+            ),
+          );
+        });
+  }
 }
+
+class ItemView extends StatelessWidget {
+  const ItemView({Key? key, required this.items, required this.scrollController, required this.bloc,}) : super(key: key);
+
+  final ScrollController scrollController;
+  final List<ContactsDataFromApi> items;
+  final VacationCubit bloc;
+
+  @override
+  Widget build(BuildContext context) {
+
+    final ResponsibleVacationCubit responsibleVacationCubit = BlocProvider.of<ResponsibleVacationCubit>(context);
+    return Column(children: [
+      Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(children: [
+            Expanded(
+                child: TextField(
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.all(8),
+                      border: OutlineInputBorder(
+                        borderRadius:
+                        new BorderRadius.circular(15.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      prefixIcon: const Icon(Icons.search),
+                    ),
+                    onChanged: (value) {
+                      responsibleVacationCubit.searchForContacts(value);
+                    })),
+            CloseButton(
+              
+                // icon: Icon(Icons.close),
+                // color: Color(0xFF1F91E7),
+                onPressed: () {
+                  responsibleVacationCubit.clearAll();
+                  Navigator.of(context).pop();
+                }),
+          ])),
+      Expanded(
+        child: ListView.separated(
+            controller: scrollController,
+            //5
+            itemCount: (items != null &&
+                items.length > 0)
+                ? items.length
+                : items.length,
+            separatorBuilder: (context, int) {
+              return const Divider();
+            },
+            itemBuilder: (context, index) {
+              return InkWell(
+
+                //6
+                  child: (items != null &&
+                      items.length > 0)
+                      ? _showBottomSheetWithSearch(
+                      index, items)
+                      : _showBottomSheetWithSearch(
+                      index, items),
+                  onTap: () {
+                    //7
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                          SnackBar(
+                              behavior: SnackBarBehavior.floating,
+                              content: Text((items.isNotEmpty)
+                                  ? items[index].name ?? ""
+                                  : items[index].name ?? "")));
+                    // showSnackBar(
+                    //     SnackBar(
+                    //         behavior: SnackBarBehavior.floating,
+                    //         content: Text((_tempListOfCities !=
+                    //             null &&
+                    //             _tempListOfCities.length > 0)
+                    //             ? _tempListOfCities[index]
+                    //             : _listOfCities[index])));
+
+                    bloc.vacationResponsiblePersonChanged(items[index]);
+                    responsibleVacationCubit.clearAll();
+                    Navigator.of(context).pop(items[index]);
+                  });
+            }),
+      )
+    ]);
+
+
+
+
+    // return items.isEmpty
+    //     ? const Center(child: Text('no content'))
+    //     : ListView.builder(
+    //   itemBuilder: (BuildContext context, int index) {
+    //     return ItemTile(
+    //       item: items[index],
+    //       onDeletePressed: (id) {
+    //         // context.read<ResponsibleVacationCubit>().deleteItem(id);
+    //       },
+    //     );
+    //   },
+    //   itemCount: items.length,
+    // );
+  }
+  Widget _showBottomSheetWithSearch(int index, List<ContactsDataFromApi> listOfCities) {
+    return Text(listOfCities[index].name ?? "",
+        style: const TextStyle(color: Colors.black, fontSize: 16),textAlign: TextAlign.center);
+  }
+}
+
 
 class LoadingDialog extends StatelessWidget {
   static void show(BuildContext context, {Key? key}) => showDialog<void>(

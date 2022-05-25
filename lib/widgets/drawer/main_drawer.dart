@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/login_cubit/login_cubit.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
@@ -49,6 +50,7 @@ class _MainDrawerState extends State<MainDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final user = context.select((AppBloc bloc) => bloc.state.userData.employeeData);
     final deviceHeight = MediaQuery.of(context).size.height;
     final double deviceTopPadding =
         MediaQueryData.fromWindow(window).padding.bottom;
@@ -65,27 +67,56 @@ class _MainDrawerState extends State<MainDrawer> {
             children: [
               Container(
                 clipBehavior: Clip.none,
-                height: deviceHeight * 0.4,
+                height: deviceHeight * 0.24,
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
                 alignment: Alignment.centerLeft,
                 color: Theme.of(context).colorScheme.primary,
-                // decoration: BoxDecoration(), use it if you will set another decoration apart from color
-                child: const Text(
-                  'welcome!',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w900,
-                    fontSize: 30,
-                    color: Colors.black,
-                    // Theme.of(context).primaryColor,
-                  ),
+
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children:[
+                    CircleAvatar(
+                      backgroundColor: Colors.white,
+                      radius: 30,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(50),
+                        child: Image.network(
+                          'https://portal.hassanallam.com/Apps/images/Profile/${user!.userHrCode}.jpg',
+                          width: 55,
+                          height: 55,
+                          fit: BoxFit.fill,
+                          errorBuilder: (ctx, obj, st) {
+                            return Image.asset(
+                              'assets/images/logo.png',
+                              fit: BoxFit.fitHeight,
+                              width: 65,
+                              height: 65,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    const Text(
+                      'welcome',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w900,
+                        fontSize: 25,
+                        color: Colors.black,
+                        // Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    Flexible(child: Text('${user.name}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold))),
+                    Flexible(child: Text('${user.titleName}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.normal))),
+                  ],
                 ),
               ),
               // const SizedBox(
               //   height: 20,
               // ),
               SizedBox(
-                height: deviceHeight * 0.6 - deviceTopPadding,
+                height: deviceHeight * 0.76 - deviceTopPadding,
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -313,7 +344,11 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Logout',
                         Icons.logout,
-                        () => context.read<AppBloc>().add(AppLogoutRequested()),
+                        ()
+                        {
+                          context.read<AppBloc>().add(AppLogoutRequested());
+                          context.read<LoginCubit>().clearCubit();
+                        },
                       ),
                     ],
                   ),

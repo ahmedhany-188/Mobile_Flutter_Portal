@@ -170,7 +170,7 @@ class _SplashScreenState extends State<SplashScreen>  with TickerProviderStateMi
                 return PageTransitionAnimation(
                   transitionDuration: 1500,
                   context: context,
-                  delayedDuration: 5000,
+                  delayedDuration: 3000,
                   pageDirection: BlocBuilder<AppBloc, AppState>(
                     builder: (context, state) {
                       switch (state.status) {

@@ -1,15 +1,17 @@
-class ContactsDataFromApi {
-  String? userHrCode;
-  String? name;
-  String? email;
-  String? projectName;
-  String? mainDepartment;
-  String? mainFunction;
-  String? titleName;
-  String? companyName;
-  String? imgProfile;
+import 'package:equatable/equatable.dart';
 
-  ContactsDataFromApi({
+class ContactsDataFromApi extends Equatable{
+  final String? userHrCode;
+  final String? name;
+  final String? email;
+  final String? projectName;
+  final String? mainDepartment;
+  final String? mainFunction;
+  final String? titleName;
+  final String? companyName;
+  final String? imgProfile;
+
+  const ContactsDataFromApi({
     this.userHrCode,
     this.name,
     this.email,
@@ -21,17 +23,16 @@ class ContactsDataFromApi {
     this.imgProfile,
   });
 
-  ContactsDataFromApi.fromJson(Map<String, dynamic> json) {
-    userHrCode = json['userHrCode'];
-    name = json['name'];
-    email = json['email'];
-    projectName = json['projectName'];
-    mainDepartment = json['mainDepartment'];
-    mainFunction = json['mainFunction'];
-    titleName = json['titleName'];
-    companyName = json['companyName'];
-    imgProfile = json['imgProfile'];
-  }
+
+  ContactsDataFromApi.fromJson(Map<String, dynamic> json): userHrCode = json['userHrCode'],
+  name = json['name'],
+  email = json['email'],
+  projectName = json['projectName'],
+  mainDepartment = json['mainDepartment'],
+  mainFunction = json['mainFunction'],
+  titleName = json['titleName'],
+  companyName = json['companyName'],
+  imgProfile = json['imgProfile'] ;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -46,4 +47,10 @@ class ContactsDataFromApi {
     data['imgProfile'] = imgProfile;
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [userHrCode, email];
+
+  static const ContactsDataFromApi empty = ContactsDataFromApi(name: "",userHrCode: "",email: "");
 }

@@ -93,14 +93,15 @@ class _PermissionScreenState extends State<PermissionScreen> {
                 ),
                 body: BlocListener<PermissionCubit, PermissionInitial>(
                   listener: (context, state) {
-                    if (state.status.isSubmissionInProgress){
+                    if (state.status.isSubmissionInProgress) {
                       LoadingDialog.show(context);
                     }
-                    if(state.status.isSubmissionSuccess){
+                    if (state.status.isSubmissionSuccess) {
                       LoadingDialog.hide(context);
                       Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => SuccessScreen(text: state.successMessage ?? "Error Number",)));
-
+                          MaterialPageRoute(builder: (_) =>
+                              SuccessScreen(text: state.successMessage ??
+                                  "Error Number",)));
                     }
                     if (state.status.isSubmissionFailure) {
                       LoadingDialog.hide(context);
@@ -155,8 +156,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                   PermissionCubit,
                                   PermissionInitial>(
                                   buildWhen: (previous, current) {
-                                    return (previous.permissionDate.value !=
-                                        current.permissionDate.value) ||
+                                    return (previous.permissionDate!=
+                                        current.permissionDate) ||
                                         previous.status != current.status;
                                   },
                                   builder: (context, state) {
@@ -307,13 +308,13 @@ class _PermissionScreenState extends State<PermissionScreen> {
                     ),
                   ),
                 ),
-
               );
             }
         ),
       ),
     );
   }
+
 }
 
 class LoadingDialog extends StatelessWidget {

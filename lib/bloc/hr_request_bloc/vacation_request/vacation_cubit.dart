@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/data/models/contacts_related_models/contacts_data_from_api.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_date.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_type.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_vacation_date.dart';
@@ -18,41 +19,32 @@ part 'vacation_state.dart';
 
 class VacationCubit extends Cubit<VacationInitial> {
   VacationCubit(this._requestRepository) : super(const VacationInitial());
-
   // LoginCubit(this._authenticationRepository) : super(const LoginState());
 
   final RequestRepository _requestRepository;
 
 
   void getRequestData(RequestStatus requestStatus) {
-    if (requestStatus == RequestStatus.newRequest) {
+    if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
       var formatter = DateFormat('EEEE dd-MM-yyyy');
       String formattedDate = formatter.format(now);
       final requestDate = RequestDate.dirty(formattedDate);
       emit(
         state.copyWith(
-            requestDate: requestDate,
-            status: Formz.validate([
-              requestDate,
-              state.permissionTime,
-              state.vacationFromDate,
-              state.vacationToDate
-            ]),
-            requestStatus: RequestStatus.newRequest
+          requestDate: requestDate,
+          status: Formz.validate([requestDate,
+            state.permissionTime , state.vacationFromDate,state.vacationToDate]),
+          requestStatus: RequestStatus.newRequest
         ),
       );
-    } else {
+    }else{
       final requestDate = RequestDate.dirty("requestDate");
       emit(
         state.copyWith(
             requestDate: requestDate,
-            status: Formz.validate([
-              requestDate,
-              state.permissionTime,
-              state.vacationFromDate,
-              state.vacationToDate
-            ]),
+            status: Formz.validate([requestDate,
+              state.permissionTime , state.vacationFromDate,state.vacationToDate]),
             requestStatus: RequestStatus.oldRequest
         ),
       );
@@ -70,82 +62,63 @@ class VacationCubit extends Cubit<VacationInitial> {
       state.copyWith(
         vacationFromDate: vacationFromDate,
         vacationToDate: vacationToDate,
-        status: Formz.validate([
-          state.requestDate,
-          vacationFromDate,
-          vacationToDate,
-          state.permissionTime
-        ]),
+        status: Formz.validate([state.requestDate,vacationFromDate,vacationToDate, state.permissionTime]),
       ),
     );
     getVacationDuration();
   }
-
   void vacationToDateChanged(String value) {
-    final vacationToDate = VacationDateTo.dirty(
-        vacationDateFrom: state.vacationFromDate.value, value: value);
+    final vacationToDate = VacationDateTo.dirty(vacationDateFrom: state.vacationFromDate.value,value: value);
     emit(
       state.copyWith(
         vacationToDate: vacationToDate,
-        status: Formz.validate([
-          state.requestDate,
-          state.vacationFromDate,
-          vacationToDate,
-          state.permissionTime
-        ]),
+        status: Formz.validate([state.requestDate,state.vacationFromDate,vacationToDate, state.permissionTime]),
       ),
     );
   }
-
   void vacationTypeChanged(int value) {
     final vacationType = value;
     emit(
       state.copyWith(
         vacationType: vacationType,
-        status: Formz.validate([
-          state.requestDate,
-          state.vacationFromDate,
-          state.vacationToDate,
-          state.permissionTime
-        ]),
+        status: Formz.validate([state.requestDate,state.vacationFromDate,state.vacationToDate,state.permissionTime]),
       ),
     );
   }
-
+  void vacationResponsiblePersonChanged(ContactsDataFromApi value) {
+    final responsiblePerson = value;
+    emit(
+      state.copyWith(
+        responsiblePerson: responsiblePerson,
+        status: Formz.validate([state.requestDate,state.vacationFromDate,state.vacationToDate,state.permissionTime]),
+      ),
+    );
+  }
   void permissionTimeChanged(String value) {
+
     final permissionTime = PermissionTime.dirty(value);
     print(permissionTime.value);
     emit(
       state.copyWith(
         permissionTime: permissionTime,
-        status: Formz.validate([
-          state.requestDate,
-          state.vacationFromDate,
-          state.vacationToDate,
-          permissionTime
-        ]),
+        status: Formz.validate([state.requestDate,state.vacationFromDate,state.vacationToDate,permissionTime]),
       ),
     );
   }
-
   void commentChanged(String value) {
+
     // final permissionTime = PermissionTime.dirty(value);
     // print(permissionTime.value);
     emit(
       state.copyWith(
         comment: value,
-        status: Formz.validate([
-          state.requestDate,
-          state.vacationFromDate,
-          state.vacationToDate,
-          state.permissionTime
-        ]),
+        status: Formz.validate([state.requestDate,state.vacationFromDate,state.vacationToDate,state.permissionTime]),
       ),
     );
   }
 
-  Future<void> getVacationDuration() async {
-    if (state.vacationFromDate.valid && state.vacationToDate.valid) {
+  Future<void> getVacationDuration()async {
+    if(state.vacationFromDate.valid && state.vacationToDate.valid){
       final dateFromString = state.vacationFromDate.value;
       final dateToString = state.vacationToDate.value;
       final dateFrom = DateFormat("EEEE dd-MM-yyyy").parse(dateFromString);
@@ -155,42 +128,41 @@ class VacationCubit extends Cubit<VacationInitial> {
       String formattedFromDate = formatter.format(dateFrom);
       String formattedToDate = formatter.format(dateTo);
 
-      final durationResponse = await _requestRepository.getDurationVacation(
-          state.vacationType, formattedFromDate, formattedToDate);
-      if (durationResponse.result != null) {
+      final durationResponse = await _requestRepository.getDurationVacation(state.vacationType, formattedFromDate, formattedToDate);
+      if(durationResponse.result != null){
         print(durationResponse.result![0].result);
         emit(
           state.copyWith(
             vacationDuration: durationResponse.result![0].result,
-            status: Formz.validate([
-              state.requestDate,
-              state.vacationFromDate,
-              state.vacationToDate,
-              state.permissionTime
-            ]),
+            status: Formz.validate([state.requestDate,state.vacationFromDate,state.vacationToDate,state.permissionTime]),
           ),
         );
       }
-    } else {
+
+
+    }else{
       return;
     }
+
+
+
+
+
+
   }
 
   Future<void> submitPermissionRequest(String hrCode) async {
     print("submit permission");
     final requestDate = RequestDate.dirty(state.requestDate.value);
     final vacationFromDate = VacationDate.dirty(state.vacationFromDate.value);
-    final vacationToDate = VacationDateTo.dirty(
-        value: state.vacationToDate.value,
-        vacationDateFrom: state.vacationFromDate.value);
+    final vacationToDate = VacationDateTo.dirty(value: state.vacationToDate.value,vacationDateFrom:state.vacationFromDate.value );
     final permissionTime = PermissionTime.dirty(state.permissionTime.value);
     emit(state.copyWith(
       requestDate: requestDate,
       vacationFromDate: vacationFromDate,
       vacationToDate: vacationToDate,
       permissionTime: permissionTime,
-      status: Formz.validate(
-          [requestDate, vacationFromDate, vacationToDate, permissionTime]),
+      status: Formz.validate([requestDate, vacationFromDate,vacationToDate,permissionTime]),
     ));
     if (state.status.isValidated) {
       // print("Done permission");

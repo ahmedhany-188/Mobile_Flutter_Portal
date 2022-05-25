@@ -28,12 +28,12 @@ class EmployeeData extends Equatable {
   final String? mobile1;
   final String? hireDate;
   final Null? projectId;
-  final Null? status;
+  final String? status;
   final String? linkedIn;
-  final Null? skype;
+  final String? skype;
   final String? imgProfile;
-  final Null? birthdate;
-  final Null? cv;
+  final String? birthdate;
+  final String? cv;
   final String? nationalId;
   final String? address;
   final String? country;
@@ -41,7 +41,7 @@ class EmployeeData extends Equatable {
   final String? area;
   final String? street;
   final bool? isActive;
-  final Null? interviewId;
+  final int? interviewId;
   final String? inDate;
   final String? inUser;
   final bool? isTopManagement;

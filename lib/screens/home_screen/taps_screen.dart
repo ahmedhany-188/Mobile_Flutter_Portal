@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 
 import '../../screens/benefits_screen/benefits_screen.dart';
 import '../../screens/contacts_screen/contacts_screen.dart';
@@ -45,13 +46,13 @@ class _TapsScreenState extends State<TapsScreen> {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.white, resizeToAvoidBottomInset: true,
         drawer: MainDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          // toolbarHeight: MediaQuery.of(context).size.height / 4,
+          toolbarHeight: MediaQuery.of(context).size.height * 0.10,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(bottomRight: Radius.circular(50)),
+            borderRadius: BorderRadius.only(bottomRight: Radius.circular(35)),
           ),
           elevation: 0,
           flexibleSpace: SizedBox(
@@ -61,9 +62,22 @@ class _TapsScreenState extends State<TapsScreen> {
             ///new added
             child: ClipRRect(
               borderRadius:
-                  const BorderRadius.only(bottomRight: Radius.circular(50)),
-              child: Image.asset('assets/images/login_image_background.png',
-                  fit: BoxFit.fill),
+                  const BorderRadius.only(bottomRight: Radius.circular(35)),
+              child: Stack(
+                // alignment: Alignment.topCenter,
+                fit: StackFit.expand,
+                clipBehavior: Clip.hardEdge,
+                children: <Widget>[
+                  Image.asset('assets/images/login_image_background.png',
+                      fit: BoxFit.cover),
+                  Image.asset(
+                    'assets/images/login_image_logo.png',
+                    scale: 3,
+                    opacity: const AlwaysStoppedAnimation(0.8),
+                    alignment: Alignment.topCenter,
+                  ),
+                ],
+              ),
             ),
           ),
           systemOverlayStyle: const SystemUiOverlayStyle(
@@ -73,14 +87,29 @@ class _TapsScreenState extends State<TapsScreen> {
           leading: Builder(builder: (context) {
             return GestureDetector(
               onTap: () => Scaffold.of(context).openDrawer(),
-              child: CircleAvatar(
-                radius: 30,
-                backgroundColor: Colors.white,
-                child: CircleAvatar(
-                  radius: 25,
-                  backgroundColor: Colors.white,
-                  backgroundImage: NetworkImage(
-                      'https://portal.hassanallam.com/Apps/images/Profile/${user!.userHRCode}.jpg'),
+              child: SizedBox(
+                width: 100,
+                height: 100,
+                child: Center(
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 30,
+                    child: CircleAvatar(
+                      radius: 28,
+                      // borderRadius: BorderRadius.circular(50),
+                      backgroundImage: NetworkImage(
+                        'https://portal.hassanallam.com/Apps/images/Profile/${user!.userHRCode}.jpg',
+                      ),
+                      onBackgroundImageError: (_, __) {
+                        Image.asset(
+                          'assets/images/logo.png',
+                          fit: BoxFit.fitHeight,
+                          width: 65,
+                          height: 65,
+                        );
+                      },
+                    ),
+                  ),
                 ),
               ),
             );
@@ -88,68 +117,74 @@ class _TapsScreenState extends State<TapsScreen> {
           leadingWidth: 100,
           actions: [
             IconButton(
-              icon: const Icon(Icons.add),
+              icon: const Icon(Icons.notifications),
               onPressed: () {
-                showDialog(
-                    barrierDismissible: true,
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.background,
-                        title: const Text('Add News'),
-                        elevation: 20,
-                        contentPadding: const EdgeInsets.all(10.0),
-                        content: Column(
-                          children: const <Widget>[
-                            SizedBox(
-                              height: 10,
-                            ),
-                            TextField(
-                              keyboardType: TextInputType.name,
-                              autofocus: true,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Name',
-                                hintText: 'eg. Hassan Allam',
-                              ),
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            TextField(
-                              maxLines: 3,
-                              keyboardType: TextInputType.multiline,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(),
-                                labelText: 'Add News',
-                                hintText:
-                                    'eg. hassan Allam construction release ...',
-                              ),
-                            ),
-                          ],
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                              child: const Text('CANCEL'),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              }),
-                          TextButton(
-                              child: const Text('Add'),
-                              onPressed: () {
-                                //TODO: Add News
-                                Navigator.pop(context);
-                              }),
-                        ],
-                      );
-                    });
+                // showDialog(
+                //     barrierDismissible: true,
+                //     context: context,
+                //     builder: (context) {
+                //       return AlertDialog(
+                //         backgroundColor:
+                //             Theme.of(context).colorScheme.background,
+                //         title: const Text('Add News'),
+                //         elevation: 20,
+                //         contentPadding: const EdgeInsets.all(10.0),
+                //         content: Column(
+                //           children: const <Widget>[
+                //             SizedBox(
+                //               height: 10,
+                //             ),
+                //             TextField(
+                //               keyboardType: TextInputType.name,
+                //               autofocus: true,
+                //               decoration: InputDecoration(
+                //                 border: OutlineInputBorder(),
+                //                 labelText: 'Name',
+                //                 hintText: 'eg. Hassan Allam',
+                //               ),
+                //             ),
+                //             SizedBox(
+                //               height: 10,
+                //             ),
+                //             TextField(
+                //               maxLines: 3,
+                //               keyboardType: TextInputType.multiline,
+                //               decoration: InputDecoration(
+                //                 border: OutlineInputBorder(),
+                //                 labelText: 'Add News',
+                //                 hintText:
+                //                     'eg. hassan Allam construction release ...',
+                //               ),
+                //             ),
+                //           ],
+                //         ),
+                //         actions: <Widget>[
+                //           TextButton(
+                //               child: const Text('CANCEL'),
+                //               onPressed: () {
+                //                 Navigator.pop(context);
+                //               }),
+                //           TextButton(
+                //               child: const Text('Add'),
+                //               onPressed: () {
+                //                 Navigator.pop(context);
+                //               }),
+                //         ],
+                //       );
+                //     });
               },
             ),
           ],
+          // title: Image.asset(
+          //   'assets/images/login_image_logo.png',
+          //   scale: 3,opacity: AlwaysStoppedAnimation(0.8),
+          // ),centerTitle: true,
           bottom: TabBar(
-            indicatorColor: Colors.white,
+            indicatorColor: Colors.transparent,
+            unselectedLabelColor: Colors.white54,
             splashFactory: NoSplash.splashFactory,
+            isScrollable: true,
+            padding: EdgeInsets.zero,
             overlayColor: MaterialStateProperty.resolveWith(
               (Set states) {
                 return states.contains(MaterialState.focused)
@@ -157,53 +192,93 @@ class _TapsScreenState extends State<TapsScreen> {
                     : Colors.transparent;
               },
             ),
-            tabs: const [
-              Tab(
-                // child: Row(children: [Icon(
-                //   Icons.beach_access,
-                // ),Text('Benefits'),]),
-                icon: Icon(
-                  Icons.beach_access,
+            labelPadding: EdgeInsets.only(bottom: 5),
+            tabs: [
+              Container(
+                width: MediaQuery.of(context).size.width / 3.5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.home,
+                      size: 25,
+                    ),
+                    Text(
+                      ' Home',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ),
-                text: 'Benefits',
               ),
-              Tab(
-                icon: Icon(Icons.people),
-                text: 'Contacts',
+              Container(
+                width: MediaQuery.of(context).size.width / 3.5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.apps,
+                      size: 25,
+                    ),
+                    Text(
+                      ' Apps',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
-              Tab(
-                icon: Icon(Icons.account_balance),
-                text: 'Test',
+              Container(
+                width: MediaQuery.of(context).size.width / 3.5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.people,
+                      size: 25,
+                    ),
+                    Text(
+                      ' Contacts',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
-              Tab(
+              Container(
+                height: 35,
+                width: MediaQuery.of(context).size.width / 7,
+                padding: EdgeInsets.only(),
+                // decoration: const BoxDecoration(
+                //     color: Colors.white,
+                //     borderRadius: BorderRadius.all(Radius.circular(50))),
                 child: CircleAvatar(
-                  child: Icon(Icons.menu),
-                  backgroundColor: Colors.white,
-                ),
+                    radius: 20,
+                    backgroundColor: Colors.white,
+                    child: const Icon(Icons.menu, color: Colors.black)),
               ),
             ],
           ),
         ),
         drawerEnableOpenDragGesture: true,
-        body:
-            // DelayedDisplay(
-            //  delay: Duration(milliseconds: 1000),
-            //  child:
-            SizedBox(
-          height: MediaQuery.of(context).size.height,
+        body: Container(
+          height: MediaQuery.of(context).size.height -
+              (MediaQuery.of(context).size.height / 10),
           width: MediaQuery.of(context).size.width,
-          child: const TabBarView(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/home_cropped.jpg'),
+              fit: BoxFit.fill,
+            ),
+          ),
+          child: TabBarView(
             physics:
                 BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
+              HomeScreen(),
               BenefitsScreen(),
               ContactsScreen(),
-              BenefitsScreen(),
               ContactsScreen(),
             ],
           ),
         ),
-        // ),
 
         // _pages[_selectedPageIndex]['page'],
 

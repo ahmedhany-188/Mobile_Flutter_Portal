@@ -45,4 +45,10 @@ class GeneralDio {
       url,
     );
   }
+
+  static Future<Response> latestNewsData({String url = 'portal/News/GetLatest'}) async {
+    return await dio!.get(
+      url,
+    );
+  }
 }

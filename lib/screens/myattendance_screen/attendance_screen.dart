@@ -49,7 +49,7 @@ class _attendance_sreenState extends State<Attendance_Screen> {
       drawer: MainDrawer(),
 
       body: BlocProvider<AttendanceCubit>(
-        create: (context) => AttendanceCubit()..getAttendanceList(user.user!.userHRCode.toString()!, monthNumber),
+        create: (context) => AttendanceCubit()..getAttendanceList(user.user!.userHRCode.toString(), monthNumber),
         child:  BlocConsumer<AttendanceCubit, AttendanceState>(
           listener: (context, state) {
             if (state is BlocGetTheAttendanceSuccesState) {
