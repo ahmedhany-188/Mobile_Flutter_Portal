@@ -46,13 +46,13 @@ class _TapsScreenState extends State<TapsScreen> {
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.white, resizeToAvoidBottomInset: true,
         drawer: MainDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           toolbarHeight: MediaQuery.of(context).size.height * 0.10,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(bottomRight: Radius.circular(50)),
+            borderRadius: BorderRadius.only(bottomRight: Radius.circular(35)),
           ),
           elevation: 0,
           flexibleSpace: SizedBox(
@@ -62,19 +62,22 @@ class _TapsScreenState extends State<TapsScreen> {
             ///new added
             child: ClipRRect(
               borderRadius:
-                  const BorderRadius.only(bottomRight: Radius.circular(50)),
+                  const BorderRadius.only(bottomRight: Radius.circular(35)),
               child: Stack(
-                  alignment: Alignment.topCenter,
-                  fit: StackFit.expand,
-                  clipBehavior: Clip.hardEdge,
-                  children: <Widget>[
-                    Image.asset('assets/images/login_image_background.png',
-                        fit: BoxFit.fill),
-                    Image.asset(
-                      'assets/images/login_image_logo.png',
-                      scale: 3,opacity: AlwaysStoppedAnimation(0.8),
-                    ),
-                  ]),
+                // alignment: Alignment.topCenter,
+                fit: StackFit.expand,
+                clipBehavior: Clip.hardEdge,
+                children: <Widget>[
+                  Image.asset('assets/images/login_image_background.png',
+                      fit: BoxFit.cover),
+                  Image.asset(
+                    'assets/images/login_image_logo.png',
+                    scale: 3,
+                    opacity: const AlwaysStoppedAnimation(0.8),
+                    alignment: Alignment.topCenter,
+                  ),
+                ],
+              ),
             ),
           ),
           systemOverlayStyle: const SystemUiOverlayStyle(
@@ -180,6 +183,8 @@ class _TapsScreenState extends State<TapsScreen> {
             indicatorColor: Colors.transparent,
             unselectedLabelColor: Colors.white54,
             splashFactory: NoSplash.splashFactory,
+            isScrollable: true,
+            padding: EdgeInsets.zero,
             overlayColor: MaterialStateProperty.resolveWith(
               (Set states) {
                 return states.contains(MaterialState.focused)
@@ -187,45 +192,67 @@ class _TapsScreenState extends State<TapsScreen> {
                     : Colors.transparent;
               },
             ),
-            labelPadding: EdgeInsets.zero,
+            labelPadding: EdgeInsets.only(bottom: 5),
             tabs: [
-              Row(mainAxisAlignment: MainAxisAlignment.end, children: const [
-                Icon(
-                  Icons.home,
+              Container(
+                width: MediaQuery.of(context).size.width / 3.5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.home,
+                      size: 25,
+                    ),
+                    Text(
+                      ' Home',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
                 ),
-                Text(' Home'),
-              ]),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(
-                    Icons.people,
-                  ),
-                  Text(' Apps'),
-                ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(
-                    Icons.people,
-                  ),
-                  Text(' Contacts'),
-                ],
+              Container(
+                width: MediaQuery.of(context).size.width / 3.5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.apps,
+                      size: 25,
+                    ),
+                    Text(
+                      ' Apps',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                // crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    height: 40,
-                    width: 40,
-                    decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.all(Radius.circular(50))),
-                    child: const Icon(Icons.menu, color: Colors.black),
-                  ),
-                ],
+              Container(
+                width: MediaQuery.of(context).size.width / 3.5,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(
+                      Icons.people,
+                      size: 25,
+                    ),
+                    Text(
+                      ' Contacts',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 35,
+                width: MediaQuery.of(context).size.width / 7,
+                padding: EdgeInsets.only(),
+                // decoration: const BoxDecoration(
+                //     color: Colors.white,
+                //     borderRadius: BorderRadius.all(Radius.circular(50))),
+                child: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.white,
+                    child: const Icon(Icons.menu, color: Colors.black)),
               ),
             ],
           ),
@@ -241,7 +268,7 @@ class _TapsScreenState extends State<TapsScreen> {
               fit: BoxFit.fill,
             ),
           ),
-          child: const TabBarView(
+          child: TabBarView(
             physics:
                 BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
