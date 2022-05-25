@@ -52,7 +52,7 @@ class _TapsScreenState extends State<TapsScreen> {
           backgroundColor: Colors.transparent,
           toolbarHeight: MediaQuery.of(context).size.height * 0.10,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(bottomRight: Radius.circular(50)),
+            borderRadius: BorderRadius.only(bottomRight: Radius.circular(35)),
           ),
           elevation: 0,
           flexibleSpace: SizedBox(
@@ -62,7 +62,7 @@ class _TapsScreenState extends State<TapsScreen> {
             ///new added
             child: ClipRRect(
               borderRadius:
-                  const BorderRadius.only(bottomRight: Radius.circular(50)),
+                  const BorderRadius.only(bottomRight: Radius.circular(35)),
               child: Stack(
                   alignment: Alignment.topCenter,
                   fit: StackFit.expand,
