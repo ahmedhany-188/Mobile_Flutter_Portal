@@ -75,7 +75,6 @@ class VacationCubit extends Cubit<VacationInitial> {
         status: Formz.validate([state.requestDate,state.vacationFromDate,vacationToDate, state.permissionTime]),
       ),
     );
-    getVacationDuration();
   }
   void vacationTypeChanged(int value) {
     final vacationType = value;
