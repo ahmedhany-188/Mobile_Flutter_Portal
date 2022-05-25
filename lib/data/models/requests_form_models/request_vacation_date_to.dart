@@ -21,7 +21,6 @@ class VacationDateTo extends FormzInput<String, VacationDateToError> {
           return VacationDateToError.empty;
         }
 
-
       }catch(_){
         return VacationDateToError.empty;
       }

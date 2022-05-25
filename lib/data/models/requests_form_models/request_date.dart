@@ -10,4 +10,5 @@ class RequestDate extends FormzInput<String, RequestDateError> {
   RequestDateError? validator(String? value) {
     return value?.isNotEmpty == true ? null : RequestDateError.empty;
   }
+
 }

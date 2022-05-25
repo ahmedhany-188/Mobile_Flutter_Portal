@@ -95,7 +95,6 @@ class VacationCubit extends Cubit<VacationInitial> {
         ]),
       ),
     );
-    getVacationDuration();
   }
 
   void vacationTypeChanged(int value) {

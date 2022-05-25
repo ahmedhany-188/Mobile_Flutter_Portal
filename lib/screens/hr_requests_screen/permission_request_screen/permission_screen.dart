@@ -85,7 +85,6 @@ class _PermissionScreenState extends State<PermissionScreen> {
                         //       ? () => formBloc.submitPermissionRequest()
                         //       : null,
                         // formBloc.submitPermissionRequest();
-
                         icon: const Icon(Icons.send),
                         label: const Text('SUBMIT'),
                       ),
@@ -298,7 +297,6 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                         prefixIcon: const Icon(Icons.comment),
                                         enabled: true,
                                       ),
-
                                     );
                                   }
                               ),
