@@ -5,6 +5,7 @@ import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/responsible_vacation_request/responsible_vacation_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/vacation_request/vacation_cubit.dart';
 import 'package:hassanallamportalflutter/data/models/contacts_related_models/contacts_data_from_api.dart';
+import 'package:hassanallamportalflutter/data/models/requests_form_models/request_vacation_date_to.dart';
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
@@ -24,8 +25,8 @@ class _VacationScreenState extends State<VacationScreen> {
   Widget build(BuildContext context) {
     // final formBloc = context.select((PermissionFormBloc bloc) => bloc.state);
 
-    TextEditingController vacationDateFromController = TextEditingController();
-    TextEditingController vacationDateToController = TextEditingController();
+    // TextEditingController vacationDateFromController = TextEditingController();
+    // TextEditingController vacationDateToController = TextEditingController();
     TextEditingController permissionTimeController = TextEditingController();
     final user = context.select((AppBloc bloc) =>
     bloc.state.userData.employeeData);
@@ -41,10 +42,12 @@ class _VacationScreenState extends State<VacationScreen> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<VacationCubit>(create: (permissionContext) =>
-            VacationCubit(RequestRepository())
+          VacationCubit(RequestRepository())
             ..getRequestData(RequestStatus.newRequest)),
           BlocProvider<ResponsibleVacationCubit>(
-              create: (_) => ResponsibleVacationCubit()..fetchList()),
+              create: (_) =>
+              ResponsibleVacationCubit()
+                ..fetchList()),
         ],
         child: Builder(
             builder: (context) {
@@ -100,14 +103,15 @@ class _VacationScreenState extends State<VacationScreen> {
                 ),
                 body: BlocListener<VacationCubit, VacationInitial>(
                   listener: (context, state) {
-                    if (state.status.isSubmissionInProgress){
+                    if (state.status.isSubmissionInProgress) {
                       LoadingDialog.show(context);
                     }
-                    if(state.status.isSubmissionSuccess){
+                    if (state.status.isSubmissionSuccess) {
                       LoadingDialog.hide(context);
                       Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) => SuccessScreen(text: state.successMessage ?? "Error Number",)));
-
+                          MaterialPageRoute(builder: (_) =>
+                              SuccessScreen(text: state.successMessage ??
+                                  "Error Number",)));
                     }
                     if (state.status.isSubmissionFailure) {
                       LoadingDialog.hide(context);
@@ -206,7 +210,8 @@ class _VacationScreenState extends State<VacationScreen> {
                                           RadioListTile<int>(
                                             value: 3,
                                             // dense: true,
-                                            title: const Text("Holiday Replacement"),
+                                            title: const Text(
+                                                "Holiday Replacement"),
                                             groupValue: state.vacationType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
@@ -258,44 +263,37 @@ class _VacationScreenState extends State<VacationScreen> {
                                         previous.status != current.status;
                                   },
                                   builder: (context, state) {
+                                    print(state.vacationFromDate.value);
                                     return TextFormField(
+                                      key: UniqueKey(),
+                                      initialValue: state.vacationFromDate.value,
                                       onChanged: (vacationDate) =>
                                           context
                                               .read<VacationCubit>()
                                               .vacationFromDateChanged(
-                                              vacationDate),
+                                              context),
                                       readOnly: true,
-                                      controller: vacationDateFromController,
+
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
                                         labelText: 'Vacation From Date',
-                                        errorText: state.vacationFromDate.invalid
+                                        errorText: state.vacationFromDate
+                                            .invalid
                                             ? 'invalid permission date'
                                             : null,
                                         prefixIcon: const Icon(
                                             Icons.date_range_outlined),
                                       ),
-                                      onTap: () async {
-                                        DateTime? date = DateTime.now();
-                                        FocusScope.of(context).requestFocus(
-                                            FocusNode());
-                                        date = await showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(2000),
-                                            lastDate: DateTime(2100));
-                                        var formatter = DateFormat(
-                                            'EEEE dd-MM-yyyy');
-                                        String formattedDate = formatter.format(
-                                            date ?? DateTime.now());
-                                        vacationDateFromController.text =
-                                            formattedDate;
+                                      onTap: () {
+
+                                        // vacationDateFromController.text =
+                                        //     formattedDate;
                                         // (permissionDate) =>
                                         context
                                             .read<VacationCubit>()
                                             .vacationFromDateChanged(
-                                            formattedDate);
+                                            context);
                                       },
                                     );
                                   }
@@ -312,47 +310,35 @@ class _VacationScreenState extends State<VacationScreen> {
                                     return (previous.vacationToDate !=
                                         current.vacationToDate) ||
                                         previous.status != current.status ||
-                                    previous.vacationFromDate != current.vacationFromDate;
+                                        previous.vacationFromDate !=
+                                            current.vacationFromDate;
                                   },
                                   builder: (context, state) {
                                     return TextFormField(
-                                      onChanged: (vacationDate) =>
-                                          context
-                                              .read<VacationCubit>()
-                                              .vacationToDateChanged(
-                                              vacationDate),
+                                      key: UniqueKey(),
+                                      initialValue: state.vacationToDate.value,
+                                      // onChanged: (vacationDate) =>
+                                      //     context
+                                      //         .read<VacationCubit>()
+                                      //         .vacationToDateChanged(
+                                      //         context),
                                       readOnly: true,
-                                      controller: vacationDateToController,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
                                         labelText: 'Vacation To Date',
-                                        errorText: state.vacationToDate.invalid
-                                            ? 'invalid permission date'
-                                            : null,
+                                        errorText: state.vacationToDate.invalid ? (state.vacationToDate.error == VacationDateToError.empty
+                                            ? "Empty Date To or Date From"
+                                            : (state.vacationToDate.error == VacationDateToError.isBefore)
+                                        ? "Date From must be before Date To" : null) : null,
                                         prefixIcon: const Icon(
                                             Icons.date_range_outlined),
                                       ),
-                                      onTap: () async {
-                                        DateTime? date = DateTime.now();
-                                        FocusScope.of(context).requestFocus(
-                                            FocusNode());
-                                        date = await showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(2000),
-                                            lastDate: DateTime(2100));
-                                        var formatter = DateFormat(
-                                            'EEEE dd-MM-yyyy');
-                                        String formattedDate = formatter.format(
-                                            date ?? DateTime.now());
-                                        vacationDateToController.text =
-                                            formattedDate;
-                                        // (permissionDate) =>
+                                      onTap: () {
                                         context
                                             .read<VacationCubit>()
                                             .vacationToDateChanged(
-                                            formattedDate);
+                                            context);
                                       },
                                     );
                                   }
@@ -365,7 +351,6 @@ class _VacationScreenState extends State<VacationScreen> {
                                   VacationCubit,
                                   VacationInitial>(
                                   buildWhen: (previous, current) {
-
                                     print(previous.vacationDuration);
                                     print(current.vacationDuration);
 
@@ -373,11 +358,12 @@ class _VacationScreenState extends State<VacationScreen> {
                                         current.vacationDuration);
                                   },
                                   builder: (context, state) {
-                                    print("from Screen${state.vacationDuration}");
+                                    print(
+                                        "from Screen${state.vacationDuration}");
                                     return TextFormField(
                                       key: UniqueKey(),
                                       initialValue: state.vacationDuration,
-                                      readOnly : true,
+                                      readOnly: true,
                                       decoration: const InputDecoration(
                                         labelText: 'Vacation Duration',
                                         prefixIcon: Icon(
@@ -400,21 +386,17 @@ class _VacationScreenState extends State<VacationScreen> {
                                   builder: (context, state) {
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue: state.responsiblePerson.name,
-                                      readOnly : true,
+                                      initialValue: state.responsiblePerson
+                                          .name,
+                                      readOnly: true,
                                       decoration: const InputDecoration(
                                         labelText: 'Responsible Person',
                                         prefixIcon: Icon(
                                             Icons.date_range),
-                                      ),onTap: () async{
-
-                                     final contact =  await _showModal(context);
-                                     // print(contact?.name);
-                                     // BlocProvider.of<VacationCubit> (context).vacationResponsiblePersonChanged(contact!);
-                                      // context.read<VacationCubit>()
-                                      //     .vacationResponsiblePersonChanged(contact!);
-
-                                    },
+                                      ),
+                                      onTap: () {
+                                        _showModal(context);
+                                      },
                                     );
                                   }
                               ),
@@ -446,7 +428,6 @@ class _VacationScreenState extends State<VacationScreen> {
                                         prefixIcon: const Icon(Icons.comment),
                                         enabled: true,
                                       ),
-
                                     );
                                   }
                               ),
@@ -465,10 +446,10 @@ class _VacationScreenState extends State<VacationScreen> {
     );
   }
 
-  final TextEditingController textController = TextEditingController();
-  Future<ContactsDataFromApi?> _showModal(context) async{
+  // final TextEditingController textController = TextEditingController();
+  void _showModal(context) {
     final VacationCubit bloc = BlocProvider.of<VacationCubit>(context);
-    return await showModalBottomSheet<ContactsDataFromApi>(
+    showModalBottomSheet(
         isScrollControlled: true,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
@@ -490,7 +471,6 @@ class _VacationScreenState extends State<VacationScreen> {
                           builder:
                               (BuildContext context,
                               ScrollController scrollController) {
-
                             switch (state.status) {
                               case ResponsibleListStatus.failure:
                                 return const Center(
@@ -595,7 +575,7 @@ class ItemView extends StatelessWidget {
 
                     bloc.vacationResponsiblePersonChanged(items[index]);
                     responsibleVacationCubit.clearAll();
-                    Navigator.of(context).pop(items[index]);
+                    Navigator.of(context).pop();
                   });
             }),
       )

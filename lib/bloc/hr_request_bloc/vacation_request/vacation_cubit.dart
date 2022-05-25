@@ -51,8 +51,20 @@ class VacationCubit extends Cubit<VacationInitial> {
     }
   }
 
-  void vacationFromDateChanged(String value) {
-    final vacationFromDate = VacationDate.dirty(value);
+  void vacationFromDateChanged(BuildContext context) async{
+    DateTime? date = DateTime.now();
+    FocusScope.of(context).requestFocus(
+        FocusNode());
+    date = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100));
+    var formatter = DateFormat(
+        'EEEE dd-MM-yyyy');
+    String formattedDate = formatter.format(
+        date ?? DateTime.now());
+    final vacationFromDate = VacationDate.dirty(formattedDate);
     final vacationToDate = VacationDateTo.dirty(
       vacationDateFrom: vacationFromDate.value,
       value: state.vacationToDate.value,
@@ -65,17 +77,29 @@ class VacationCubit extends Cubit<VacationInitial> {
         status: Formz.validate([state.requestDate,vacationFromDate,vacationToDate, state.permissionTime]),
       ),
     );
-    getVacationDuration();
+    await getVacationDuration();
   }
-  void vacationToDateChanged(String value) {
-    final vacationToDate = VacationDateTo.dirty(vacationDateFrom: state.vacationFromDate.value,value: value);
+  void vacationToDateChanged(BuildContext context) async {
+    DateTime? date = DateTime.now();
+    FocusScope.of(context).requestFocus(
+        FocusNode());
+    date = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100));
+    var formatter = DateFormat(
+        'EEEE dd-MM-yyyy');
+    String formattedDate = formatter.format(
+        date ?? DateTime.now());
+    final vacationToDate = VacationDateTo.dirty(vacationDateFrom: state.vacationFromDate.value,value: formattedDate);
     emit(
       state.copyWith(
         vacationToDate: vacationToDate,
         status: Formz.validate([state.requestDate,state.vacationFromDate,vacationToDate, state.permissionTime]),
       ),
     );
-    getVacationDuration();
+    await getVacationDuration();
   }
   void vacationTypeChanged(int value) {
     final vacationType = value;

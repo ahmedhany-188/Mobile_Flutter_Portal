@@ -3,7 +3,7 @@ import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_date.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_vacation_date.dart';
 
-enum VacationDateToError { empty }
+enum VacationDateToError { empty,isBefore }
 
 class VacationDateTo extends FormzInput<String, VacationDateToError> {
   const VacationDateTo.pure({this.vacationDateFrom = '' }) : super.pure('');
@@ -18,10 +18,8 @@ class VacationDateTo extends FormzInput<String, VacationDateToError> {
         final fromDate = DateFormat("EEEE dd-MM-yyyy").parse(vacationDateFrom);
 
         if (toDate.isBefore(fromDate)) {
-          return VacationDateToError.empty;
+          return VacationDateToError.isBefore;
         }
-
-
       }catch(_){
         return VacationDateToError.empty;
       }
