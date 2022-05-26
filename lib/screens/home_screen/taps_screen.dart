@@ -68,12 +68,12 @@ class _TapsScreenState extends State<TapsScreen> {
                 fit: StackFit.expand,
                 clipBehavior: Clip.hardEdge,
                 children: <Widget>[
-                  Image.asset('assets/images/login_image_background.png',
+                  Image.asset('assets/images/Cover.png',
                       fit: BoxFit.cover),
                   Image.asset(
                     'assets/images/login_image_logo.png',
-                    scale: 3,
-                    opacity: const AlwaysStoppedAnimation(0.8),
+                    scale: 3.5,
+                    // opacity: const AlwaysStoppedAnimation(0.8),
                     alignment: Alignment.topCenter,
                   ),
                 ],
@@ -91,23 +91,30 @@ class _TapsScreenState extends State<TapsScreen> {
                 width: 100,
                 height: 100,
                 child: Center(
-                  child: CircleAvatar(
-                    backgroundColor: Colors.white,
-                    radius: 30,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      shape: BoxShape.circle,
+                      boxShadow: [BoxShadow(blurRadius: 1,color: Colors.black26, spreadRadius: 1,blurStyle: BlurStyle.normal,offset: Offset(-2.0, 3.0))],
+                    ),
                     child: CircleAvatar(
-                      radius: 28,
-                      // borderRadius: BorderRadius.circular(50),
-                      backgroundImage: NetworkImage(
-                        'https://portal.hassanallam.com/Apps/images/Profile/${user!.userHRCode}.jpg',
+                      backgroundColor: Colors.white,
+                      radius: 30,
+                      child: CircleAvatar(
+                        radius: 29,
+                        // borderRadius: BorderRadius.circular(50),
+                        backgroundImage: NetworkImage(
+                          'https://portal.hassanallam.com/Apps/images/Profile/${user!.userHRCode}.jpg',
+                        ),
+                        onBackgroundImageError: (_, __) {
+                          Image.asset(
+                            'assets/images/logo.png',
+                            fit: BoxFit.fitHeight,
+                            width: 65,
+                            height: 65,
+                          );
+                        },
                       ),
-                      onBackgroundImageError: (_, __) {
-                        Image.asset(
-                          'assets/images/logo.png',
-                          fit: BoxFit.fitHeight,
-                          width: 65,
-                          height: 65,
-                        );
-                      },
                     ),
                   ),
                 ),
@@ -116,64 +123,73 @@ class _TapsScreenState extends State<TapsScreen> {
           }),
           leadingWidth: 100,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.notifications),
-              onPressed: () {
-                // showDialog(
-                //     barrierDismissible: true,
-                //     context: context,
-                //     builder: (context) {
-                //       return AlertDialog(
-                //         backgroundColor:
-                //             Theme.of(context).colorScheme.background,
-                //         title: const Text('Add News'),
-                //         elevation: 20,
-                //         contentPadding: const EdgeInsets.all(10.0),
-                //         content: Column(
-                //           children: const <Widget>[
-                //             SizedBox(
-                //               height: 10,
-                //             ),
-                //             TextField(
-                //               keyboardType: TextInputType.name,
-                //               autofocus: true,
-                //               decoration: InputDecoration(
-                //                 border: OutlineInputBorder(),
-                //                 labelText: 'Name',
-                //                 hintText: 'eg. Hassan Allam',
-                //               ),
-                //             ),
-                //             SizedBox(
-                //               height: 10,
-                //             ),
-                //             TextField(
-                //               maxLines: 3,
-                //               keyboardType: TextInputType.multiline,
-                //               decoration: InputDecoration(
-                //                 border: OutlineInputBorder(),
-                //                 labelText: 'Add News',
-                //                 hintText:
-                //                     'eg. hassan Allam construction release ...',
-                //               ),
-                //             ),
-                //           ],
-                //         ),
-                //         actions: <Widget>[
-                //           TextButton(
-                //               child: const Text('CANCEL'),
-                //               onPressed: () {
-                //                 Navigator.pop(context);
-                //               }),
-                //           TextButton(
-                //               child: const Text('Add'),
-                //               onPressed: () {
-                //                 Navigator.pop(context);
-                //               }),
-                //         ],
-                //       );
-                //     });
-              },
+            // Stack(
+            //   children: [IconButton(
+            //     icon: const Icon(Icons.message),
+            //     onPressed: () {},
+            //   ),],
+            // ),
+            Stack(
+              children: [IconButton(
+                icon: const Icon(Icons.notifications),
+                onPressed: () {
+                  // showDialog(
+                  //     barrierDismissible: true,
+                  //     context: context,
+                  //     builder: (context) {
+                  //       return AlertDialog(
+                  //         backgroundColor:
+                  //             Theme.of(context).colorScheme.background,
+                  //         title: const Text('Add News'),
+                  //         elevation: 20,
+                  //         contentPadding: const EdgeInsets.all(10.0),
+                  //         content: Column(
+                  //           children: const <Widget>[
+                  //             SizedBox(
+                  //               height: 10,
+                  //             ),
+                  //             TextField(
+                  //               keyboardType: TextInputType.name,
+                  //               autofocus: true,
+                  //               decoration: InputDecoration(
+                  //                 border: OutlineInputBorder(),
+                  //                 labelText: 'Name',
+                  //                 hintText: 'eg. Hassan Allam',
+                  //               ),
+                  //             ),
+                  //             SizedBox(
+                  //               height: 10,
+                  //             ),
+                  //             TextField(
+                  //               maxLines: 3,
+                  //               keyboardType: TextInputType.multiline,
+                  //               decoration: InputDecoration(
+                  //                 border: OutlineInputBorder(),
+                  //                 labelText: 'Add News',
+                  //                 hintText:
+                  //                     'eg. hassan Allam construction release ...',
+                  //               ),
+                  //             ),
+                  //           ],
+                  //         ),
+                  //         actions: <Widget>[
+                  //           TextButton(
+                  //               child: const Text('CANCEL'),
+                  //               onPressed: () {
+                  //                 Navigator.pop(context);
+                  //               }),
+                  //           TextButton(
+                  //               child: const Text('Add'),
+                  //               onPressed: () {
+                  //                 Navigator.pop(context);
+                  //               }),
+                  //         ],
+                  //       );
+                  //     });
+                },
+              ),],
             ),
+
           ],
           // title: Image.asset(
           //   'assets/images/login_image_logo.png',
@@ -183,8 +199,6 @@ class _TapsScreenState extends State<TapsScreen> {
             indicatorColor: Colors.transparent,
             unselectedLabelColor: Colors.white54,
             splashFactory: NoSplash.splashFactory,
-            isScrollable: true,
-            padding: EdgeInsets.zero,
             overlayColor: MaterialStateProperty.resolveWith(
               (Set states) {
                 return states.contains(MaterialState.focused)
@@ -192,10 +206,13 @@ class _TapsScreenState extends State<TapsScreen> {
                     : Colors.transparent;
               },
             ),
+            isScrollable: true,
+            padding: EdgeInsets.only(left: 20),
             labelPadding: EdgeInsets.only(bottom: 5),
             tabs: [
               Container(
-                width: MediaQuery.of(context).size.width / 3.5,
+                width: ((MediaQuery.of(context).size.width - 20) / 3.5),
+                padding: EdgeInsets.only(left: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -211,7 +228,7 @@ class _TapsScreenState extends State<TapsScreen> {
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width / 3.5,
+                width: ((MediaQuery.of(context).size.width - 20) / 3.5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -227,7 +244,7 @@ class _TapsScreenState extends State<TapsScreen> {
                 ),
               ),
               Container(
-                width: MediaQuery.of(context).size.width / 3.5,
+                width: ((MediaQuery.of(context).size.width - 20) / 3.5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -244,7 +261,7 @@ class _TapsScreenState extends State<TapsScreen> {
               ),
               Container(
                 height: 35,
-                width: MediaQuery.of(context).size.width / 7,
+                width: (MediaQuery.of(context).size.width -20) / 7,
                 padding: EdgeInsets.only(),
                 // decoration: const BoxDecoration(
                 //     color: Colors.white,
@@ -272,10 +289,10 @@ class _TapsScreenState extends State<TapsScreen> {
             physics:
                 BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
+              HomeScreen3(),
               HomeScreen(),
-              BenefitsScreen(),
               ContactsScreen(),
-              ContactsScreen(),
+              HomeScreen2(),
             ],
           ),
         ),
