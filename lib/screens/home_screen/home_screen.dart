@@ -14,9 +14,7 @@ import '../news_screen/news_screen.dart';
 import '../photos_screen/photos_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({Key? key}) : super(key: key);
-
-  List<Data> newsAllData = [];
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   // ignore: avoid_renaming_method_parameters
@@ -25,14 +23,11 @@ class HomeScreen extends StatelessWidget {
       create: (context) => NewsCubit()..getLatestNews(),
       child: BlocConsumer<NewsCubit, NewsState>(
         listener: (context, state) {
-          if (state is LatestNewsSuccessState) {
-            newsAllData = state.latestNewsList;
-          }
+          if (state is LatestNewsSuccessState) {}
         },
         buildWhen: (previous, current) {
           if (current is LatestNewsSuccessState) {
-            newsAllData = current.latestNewsList;
-            newsAllData
+            current.latestNewsList
                 .add(Data(newsID: 0, newsBody: "Test", newsTitle: "Test"));
             return current.latestNewsList.isNotEmpty;
           } else {
@@ -578,9 +573,7 @@ class HomeScreen extends StatelessWidget {
 }
 
 class HomeScreen2 extends StatelessWidget {
-  HomeScreen2({Key? key}) : super(key: key);
-
-  List<Data> newsAllData = [];
+  const HomeScreen2({Key? key}) : super(key: key);
 
   @override
   // ignore: avoid_renaming_method_parameters
@@ -589,14 +582,11 @@ class HomeScreen2 extends StatelessWidget {
       create: (context) => NewsCubit()..getLatestNews(),
       child: BlocConsumer<NewsCubit, NewsState>(
         listener: (context, state) {
-          if (state is LatestNewsSuccessState) {
-            newsAllData = state.latestNewsList;
-          }
+          if (state is LatestNewsSuccessState) {}
         },
         buildWhen: (previous, current) {
           if (current is LatestNewsSuccessState) {
-            newsAllData = current.latestNewsList;
-            newsAllData
+            current.latestNewsList
                 .add(Data(newsID: 0, newsBody: "Test", newsTitle: "Test"));
             return current.latestNewsList.isNotEmpty;
           } else {
@@ -624,7 +614,7 @@ class HomeScreen2 extends StatelessWidget {
                   ),
                   (state is LatestNewsSuccessState)
                       ? Padding(
-                          padding: EdgeInsets.only(left: 8),
+                          padding: const EdgeInsets.only(left: 8),
                           child: SizedBox(
                             width: 100.w,
                             height: 30.h,
@@ -1256,9 +1246,7 @@ class HomeScreen2 extends StatelessWidget {
 }
 
 class HomeScreen3 extends StatelessWidget {
-  HomeScreen3({Key? key}) : super(key: key);
-
-  List<Data> newsAllData = [];
+  const HomeScreen3({Key? key}) : super(key: key);
 
   @override
   // ignore: avoid_renaming_method_parameters
@@ -1267,14 +1255,11 @@ class HomeScreen3 extends StatelessWidget {
       create: (context) => NewsCubit()..getLatestNews(),
       child: BlocConsumer<NewsCubit, NewsState>(
         listener: (context, state) {
-          if (state is LatestNewsSuccessState) {
-            newsAllData = state.latestNewsList;
-          }
+          if (state is LatestNewsSuccessState) {}
         },
         buildWhen: (previous, current) {
           if (current is LatestNewsSuccessState) {
-            newsAllData = current.latestNewsList;
-            newsAllData
+            current.latestNewsList
                 .add(Data(newsID: 0, newsBody: "Test", newsTitle: "Test"));
             return current.latestNewsList.isNotEmpty;
           } else {
@@ -1284,10 +1269,7 @@ class HomeScreen3 extends StatelessWidget {
         builder: (context, state) {
           List<ImageGalleryHeroProperties> heroProperties = [];
           List<Widget> assets = [];
-          if (state is LatestNewsSuccessState) {
-            print("${state.latestNewsList.length}");
-          }
-          print("${newsAllData.length}");
+
           return Sizer(
             builder: (c, or, dt) {
               return Column(
@@ -1373,13 +1355,14 @@ class HomeScreen3 extends StatelessWidget {
                     height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width / 3,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 22.0, top: 25),
+                      padding: const EdgeInsets.only(left: 18.0, top: 20),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
                           CircleAvatar(
-                            radius: 20,
+                            radius: 25,
+                            backgroundColor: Colors.white,
                             child: Icon(
                               Icons.loyalty_outlined,
                               size: 30,
@@ -1387,12 +1370,12 @@ class HomeScreen3 extends StatelessWidget {
 
                               /// Color(0xFF174873)
                             ),
-                            backgroundColor: Colors.white,
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 8.0, bottom: 5),
                             child: Text(
                               'Benefits',
+                              overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,
@@ -1403,6 +1386,7 @@ class HomeScreen3 extends StatelessWidget {
                             'Hotels, Health, Retails...',
                             style: TextStyle(
                                 fontSize: 15,
+                                overflow: TextOverflow.ellipsis,
                                 color: Colors.white,
                                 fontFamily: 'RobotoCondensed'),
                           )
@@ -1440,13 +1424,14 @@ class HomeScreen3 extends StatelessWidget {
                     height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width / 3,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 22.0, top: 25),
+                      padding: const EdgeInsets.only(left: 18.0, top: 20),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
                           CircleAvatar(
-                            radius: 20,
+                            radius: 25,
+                            backgroundColor: Colors.white,
                             child: Icon(
                               Icons.camera_alt_outlined,
                               size: 30,
@@ -1454,7 +1439,6 @@ class HomeScreen3 extends StatelessWidget {
 
                               /// Color(0xFF174873)
                             ),
-                            backgroundColor: Colors.white,
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 8.0, bottom: 5),
@@ -1463,6 +1447,7 @@ class HomeScreen3 extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,
+                                  overflow: TextOverflow.ellipsis,
                                   // fontWeight: FontWeight.bold,
                                   fontFamily: 'RobotoCondensed'),
                             ),
@@ -1472,6 +1457,7 @@ class HomeScreen3 extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.white,
+                                overflow: TextOverflow.ellipsis,
                                 fontFamily: 'RobotoCondensed'),
                           )
                         ],
@@ -1508,13 +1494,14 @@ class HomeScreen3 extends StatelessWidget {
                     height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width / 3,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 22.0, top: 25),
+                      padding: const EdgeInsets.only(left: 18.0, top: 20),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
                           CircleAvatar(
-                            radius: 20,
+                            radius: 25,
+                            backgroundColor: Colors.white,
                             child:
                                 // Text(
                                 //   String.fromCharCode(0xf190),
@@ -1524,7 +1511,6 @@ class HomeScreen3 extends StatelessWidget {
                                 //     fontSize: 30.0,
                                 //     fontWeight: FontWeight.w100,
                                 //     fontFamily: "MaterialIcons",
-                                //     // package: CupertinoIcons.exclamationmark_circle.fontPackage,
                                 //   ),
                                 // ),
                                 Icon(
@@ -1535,7 +1521,6 @@ class HomeScreen3 extends StatelessWidget {
 
                               /// Color(0xFF174873)
                             ),
-                            backgroundColor: Colors.white,
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 8.0, bottom: 5),
@@ -1543,14 +1528,16 @@ class HomeScreen3 extends StatelessWidget {
                               'Subsidiaries',
                               style: TextStyle(
                                   fontSize: 20,
+                                  overflow: TextOverflow.ellipsis,
                                   color: Colors.white,
                                   fontFamily: 'RobotoCondensed'),
                             ),
                           ),
                           Text(
-                            'Know more about our subsidiaries...',
+                            'Know about subsidiaries',
                             style: TextStyle(
                                 fontSize: 15,
+                                overflow: TextOverflow.ellipsis,
                                 color: Colors.white,
                                 fontFamily: 'RobotoCondensed'),
                           )
@@ -1588,13 +1575,14 @@ class HomeScreen3 extends StatelessWidget {
                     height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width / 3,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 22.0, top: 25),
+                      padding: const EdgeInsets.only(left: 18.0, top: 20),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
                           CircleAvatar(
-                            radius: 20,
+                            radius: 25,
+                            backgroundColor: Colors.white,
                             child: Icon(
                               Icons.interpreter_mode_outlined,
                               size: 30,
@@ -1602,7 +1590,6 @@ class HomeScreen3 extends StatelessWidget {
 
                               /// Color(0xFF174873)
                             ),
-                            backgroundColor: Colors.white,
                           ),
                           Padding(
                             padding: EdgeInsets.only(top: 8.0, bottom: 5),
@@ -1611,6 +1598,7 @@ class HomeScreen3 extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 20,
                                   color: Colors.white,
+                                  overflow: TextOverflow.ellipsis,
                                   // fontWeight: FontWeight.bold,
                                   fontFamily: 'RobotoCondensed'),
                             ),
@@ -1620,6 +1608,7 @@ class HomeScreen3 extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.white,
+                                overflow: TextOverflow.ellipsis,
                                 fontFamily: 'RobotoCondensed'),
                           )
                         ],
@@ -1743,24 +1732,26 @@ class NewsSliderList extends StatelessWidget {
           // width: 30.w,
           // child:
           Container(
-              height: 10.h,
+              height: 15.h,
               width: double.infinity,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 gradient: LinearGradient(
                     colors: [
-                      Colors.black87,
-                      Colors.black12,
-                      // Color(0x12000000),
-                      // Color(0x02000000),
+                      Colors.black,
+                      // Colors.black26,
+                      // Colors.black45,
+                      // Colors.black38,
+                      // Colors.black26,
+                      // Colors.black12,
+                      Colors.transparent,
                     ],
-                    begin: Alignment(0, 1),
-                    end: Alignment(0.0, 0),
+                    begin: Alignment.bottomCenter,
+                    end: Alignment.topCenter,
                     tileMode: TileMode.clamp),
               ),
               child: GridTileBar(
                 title: Text(
-                  '${news.newsTitle} ${news.newsDescription}' ??
-                      "Go to News to see more details",
+                  '${news.newsTitle} ${news.newsDescription}',
                   style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 10,
