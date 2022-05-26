@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -130,63 +131,68 @@ class _TapsScreenState extends State<TapsScreen> {
             //   ),],
             // ),
             Stack(
-              children: [IconButton(
-                icon: const Icon(Icons.notifications),
-                onPressed: () {
-                  // showDialog(
-                  //     barrierDismissible: true,
-                  //     context: context,
-                  //     builder: (context) {
-                  //       return AlertDialog(
-                  //         backgroundColor:
-                  //             Theme.of(context).colorScheme.background,
-                  //         title: const Text('Add News'),
-                  //         elevation: 20,
-                  //         contentPadding: const EdgeInsets.all(10.0),
-                  //         content: Column(
-                  //           children: const <Widget>[
-                  //             SizedBox(
-                  //               height: 10,
-                  //             ),
-                  //             TextField(
-                  //               keyboardType: TextInputType.name,
-                  //               autofocus: true,
-                  //               decoration: InputDecoration(
-                  //                 border: OutlineInputBorder(),
-                  //                 labelText: 'Name',
-                  //                 hintText: 'eg. Hassan Allam',
-                  //               ),
-                  //             ),
-                  //             SizedBox(
-                  //               height: 10,
-                  //             ),
-                  //             TextField(
-                  //               maxLines: 3,
-                  //               keyboardType: TextInputType.multiline,
-                  //               decoration: InputDecoration(
-                  //                 border: OutlineInputBorder(),
-                  //                 labelText: 'Add News',
-                  //                 hintText:
-                  //                     'eg. hassan Allam construction release ...',
-                  //               ),
-                  //             ),
-                  //           ],
-                  //         ),
-                  //         actions: <Widget>[
-                  //           TextButton(
-                  //               child: const Text('CANCEL'),
-                  //               onPressed: () {
-                  //                 Navigator.pop(context);
-                  //               }),
-                  //           TextButton(
-                  //               child: const Text('Add'),
-                  //               onPressed: () {
-                  //                 Navigator.pop(context);
-                  //               }),
-                  //         ],
-                  //       );
-                  //     });
-                },
+              children: [Badge(
+                badgeColor: Colors.red,
+                badgeContent: Text('2',style: TextStyle(color: Colors.white),),
+                position: BadgePosition(start: 1,top: 1,),
+                child: IconButton(
+                  icon: const Icon(Icons.notifications),
+                  onPressed: () {
+                    // showDialog(
+                    //     barrierDismissible: true,
+                    //     context: context,
+                    //     builder: (context) {
+                    //       return AlertDialog(
+                    //         backgroundColor:
+                    //             Theme.of(context).colorScheme.background,
+                    //         title: const Text('Add News'),
+                    //         elevation: 20,
+                    //         contentPadding: const EdgeInsets.all(10.0),
+                    //         content: Column(
+                    //           children: const <Widget>[
+                    //             SizedBox(
+                    //               height: 10,
+                    //             ),
+                    //             TextField(
+                    //               keyboardType: TextInputType.name,
+                    //               autofocus: true,
+                    //               decoration: InputDecoration(
+                    //                 border: OutlineInputBorder(),
+                    //                 labelText: 'Name',
+                    //                 hintText: 'eg. Hassan Allam',
+                    //               ),
+                    //             ),
+                    //             SizedBox(
+                    //               height: 10,
+                    //             ),
+                    //             TextField(
+                    //               maxLines: 3,
+                    //               keyboardType: TextInputType.multiline,
+                    //               decoration: InputDecoration(
+                    //                 border: OutlineInputBorder(),
+                    //                 labelText: 'Add News',
+                    //                 hintText:
+                    //                     'eg. hassan Allam construction release ...',
+                    //               ),
+                    //             ),
+                    //           ],
+                    //         ),
+                    //         actions: <Widget>[
+                    //           TextButton(
+                    //               child: const Text('CANCEL'),
+                    //               onPressed: () {
+                    //                 Navigator.pop(context);
+                    //               }),
+                    //           TextButton(
+                    //               child: const Text('Add'),
+                    //               onPressed: () {
+                    //                 Navigator.pop(context);
+                    //               }),
+                    //         ],
+                    //       );
+                    //     });
+                  },
+                ),
               ),],
             ),
 
