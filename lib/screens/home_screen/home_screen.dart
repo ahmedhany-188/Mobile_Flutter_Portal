@@ -1,15 +1,14 @@
-import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
-import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 import 'package:swipe_image_gallery/swipe_image_gallery.dart';
 
 import '../../bloc/news_screen_bloc/news_cubit.dart';
 import '../../data/models/response_news.dart';
+import '../about_value_screen/value_screen.dart';
+import '../subsidiaries_screen/subsidiaries_screen.dart';
 import '../benefits_screen/benefits_screen.dart';
 import '../news_screen/news_screen.dart';
 import '../photos_screen/photos_screen.dart';
@@ -60,7 +59,8 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   (state is LatestNewsSuccessState)
-                      ? Padding( /// try remove this
+                      ? Padding(
+                          /// try remove this
                           padding: const EdgeInsets.only(left: 8.0),
                           child: SizedBox(
                             width: 100.w,
@@ -1284,7 +1284,7 @@ class HomeScreen3 extends StatelessWidget {
         builder: (context, state) {
           List<ImageGalleryHeroProperties> heroProperties = [];
           List<Widget> assets = [];
-          if(state is LatestNewsSuccessState){
+          if (state is LatestNewsSuccessState) {
             print("${state.latestNewsList.length}");
           }
           print("${newsAllData.length}");
@@ -1303,9 +1303,7 @@ class HomeScreen3 extends StatelessWidget {
                       ),
                     ),
                   ),
-
-
-    state is LatestNewsSuccessState
+                  state is LatestNewsSuccessState
                       ? Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: SizedBox(
@@ -1375,7 +1373,7 @@ class HomeScreen3 extends StatelessWidget {
                     height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width / 3,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 22.0,top: 25),
+                      padding: const EdgeInsets.only(left: 22.0, top: 25),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1385,12 +1383,14 @@ class HomeScreen3 extends StatelessWidget {
                             child: Icon(
                               Icons.loyalty_outlined,
                               size: 30,
-                              color: Color(0xFF174873), /// Color(0xFF174873)
+                              color: Color(0xFF174873),
+
+                              /// Color(0xFF174873)
                             ),
                             backgroundColor: Colors.white,
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top:8.0,bottom: 5),
+                            padding: EdgeInsets.only(top: 8.0, bottom: 5),
                             child: Text(
                               'Benefits',
                               style: TextStyle(
@@ -1412,7 +1412,6 @@ class HomeScreen3 extends StatelessWidget {
                   ),
                 ),
               ),
-
               InkWell(
                 onTap: () {
                   Navigator.of(context).pushNamed(PhotosScreen.routeName);
@@ -1441,7 +1440,7 @@ class HomeScreen3 extends StatelessWidget {
                     height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width / 3,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 22.0,top: 25),
+                      padding: const EdgeInsets.only(left: 22.0, top: 25),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1451,12 +1450,14 @@ class HomeScreen3 extends StatelessWidget {
                             child: Icon(
                               Icons.camera_alt_outlined,
                               size: 30,
-                              color: Color(0xFF174873), /// Color(0xFF174873)
+                              color: Color(0xFF174873),
+
+                              /// Color(0xFF174873)
                             ),
                             backgroundColor: Colors.white,
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top:8.0,bottom: 5),
+                            padding: EdgeInsets.only(top: 8.0, bottom: 5),
                             child: Text(
                               'Media',
                               style: TextStyle(
@@ -1479,7 +1480,6 @@ class HomeScreen3 extends StatelessWidget {
                   ),
                 ),
               ),
-
               InkWell(
                 onTap: () {
                   Navigator.of(context).pushNamed(SubsidiariesScreen.routeName);
@@ -1508,35 +1508,37 @@ class HomeScreen3 extends StatelessWidget {
                     height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width / 3,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 22.0,top: 25),
+                      padding: const EdgeInsets.only(left: 22.0, top: 25),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children:  const [
+                        children: const [
                           CircleAvatar(
                             radius: 20,
                             child:
-                            // Text(
-                            //   String.fromCharCode(0xf190),
-                            //   style: TextStyle(
-                            //     inherit: false,
-                            //     color: Color(0xFF174873),
-                            //     fontSize: 30.0,
-                            //     fontWeight: FontWeight.w100,
-                            //     fontFamily: "MaterialIcons",
-                            //     // package: CupertinoIcons.exclamationmark_circle.fontPackage,
-                            //   ),
-                            // ),
-                            Icon(
+                                // Text(
+                                //   String.fromCharCode(0xf190),
+                                //   style: TextStyle(
+                                //     inherit: false,
+                                //     color: Color(0xFF174873),
+                                //     fontSize: 30.0,
+                                //     fontWeight: FontWeight.w100,
+                                //     fontFamily: "MaterialIcons",
+                                //     // package: CupertinoIcons.exclamationmark_circle.fontPackage,
+                                //   ),
+                                // ),
+                                Icon(
                               // IconData(0xe7f1, fontFamily: 'MaterialIcons-Outlined'),
                               Icons.location_city_outlined,
                               size: 30,
-                              color: Color(0xFF174873), /// Color(0xFF174873)
+                              color: Color(0xFF174873),
+
+                              /// Color(0xFF174873)
                             ),
                             backgroundColor: Colors.white,
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top:8.0,bottom: 5),
+                            padding: EdgeInsets.only(top: 8.0, bottom: 5),
                             child: Text(
                               'Subsidiaries',
                               style: TextStyle(
@@ -1558,7 +1560,6 @@ class HomeScreen3 extends StatelessWidget {
                   ),
                 ),
               ),
-
               InkWell(
                 onTap: () {
                   Navigator.of(context).pushNamed(ValueScreen.routeName);
@@ -1587,7 +1588,7 @@ class HomeScreen3 extends StatelessWidget {
                     height: MediaQuery.of(context).size.height / 3,
                     width: MediaQuery.of(context).size.width / 3,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 22.0,top: 25),
+                      padding: const EdgeInsets.only(left: 22.0, top: 25),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1597,12 +1598,14 @@ class HomeScreen3 extends StatelessWidget {
                             child: Icon(
                               Icons.interpreter_mode_outlined,
                               size: 30,
-                              color: Color(0xFF174873), /// Color(0xFF174873)
+                              color: Color(0xFF174873),
+
+                              /// Color(0xFF174873)
                             ),
                             backgroundColor: Colors.white,
                           ),
                           Padding(
-                            padding: EdgeInsets.only(top:8.0,bottom: 5),
+                            padding: EdgeInsets.only(top: 8.0, bottom: 5),
                             child: Text(
                               'HAH Values',
                               style: TextStyle(
@@ -1674,6 +1677,8 @@ class NewsSliderList extends StatelessWidget {
                 children: assets,
                 initialIndex: index,
                 heroProperties: heroProperties,
+                hideOverlayOnTap: false,
+                hideStatusBar: false,
               ).show();
             }
           },
@@ -1733,14 +1738,15 @@ class NewsSliderList extends StatelessWidget {
     return GridTile(
       footer: (news.newsID != 0)
           ?
-      // SizedBox(
-              // height: 10.h,
-              // width: 30.w,
-              // child:
-      Container(
-                height: 10.h,
-                width: double.infinity,
-                decoration: BoxDecoration(gradient: LinearGradient(
+          // SizedBox(
+          // height: 10.h,
+          // width: 30.w,
+          // child:
+          Container(
+              height: 10.h,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
                     colors: [
                       Colors.black87,
                       Colors.black12,
@@ -1749,30 +1755,32 @@ class NewsSliderList extends StatelessWidget {
                     ],
                     begin: Alignment(0, 1),
                     end: Alignment(0.0, 0),
-                    tileMode: TileMode.clamp),),
-                child: GridTileBar(
-                  title: Text(
-                    '${news.newsTitle} ${news.newsDescription}' ?? "Go to News to see more details",
-                    style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 10,
-                        overflow: TextOverflow.ellipsis),
-                    maxLines: 4,
-                    softWrap: true,
-                  ),
-                  // subtitle: Text(
-                  //   news.newsDescription ?? "",
-                  //   maxLines: 4,
-                  //   softWrap: true,
-                  //   style: const TextStyle(
-                  //       fontWeight: FontWeight.bold,
-                  //       fontSize: 10,
-                  //       overflow: TextOverflow.fade),
-                  // ),
-                  // backgroundColor: Colors.black45,
+                    tileMode: TileMode.clamp),
+              ),
+              child: GridTileBar(
+                title: Text(
+                  '${news.newsTitle} ${news.newsDescription}' ??
+                      "Go to News to see more details",
+                  style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                      overflow: TextOverflow.ellipsis),
+                  maxLines: 4,
+                  softWrap: true,
                 ),
-              )
-            // )
+                // subtitle: Text(
+                //   news.newsDescription ?? "",
+                //   maxLines: 4,
+                //   softWrap: true,
+                //   style: const TextStyle(
+                //       fontWeight: FontWeight.bold,
+                //       fontSize: 10,
+                //       overflow: TextOverflow.fade),
+                // ),
+                // backgroundColor: Colors.black45,
+              ),
+            )
+          // )
           : Container(
               height: 30.h,
               color: Colors.black54,
