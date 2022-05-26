@@ -27,7 +27,7 @@ class _GetDirectionScreenState extends State<GetDirectionScreen> {
 
     return Scaffold(
       appBar: AppBar(),
-      drawer: MainDrawer(),
+      // drawer: MainDrawer(),
       body: BlocProvider(
         create: (context) => GetDirectionCubit()..getDirection(),
         child: BlocConsumer<GetDirectionCubit, GetDirectionState>(
