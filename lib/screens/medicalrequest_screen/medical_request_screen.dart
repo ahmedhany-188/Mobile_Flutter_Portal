@@ -60,7 +60,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
       ),
       resizeToAvoidBottomInset: false,
 
-      drawer: MainDrawer(),
+      // drawer: MainDrawer(),
 
       body: BlocListener<MedicalRequestCubit, MedicalRequestInitial>(
         listener: (context, state) {

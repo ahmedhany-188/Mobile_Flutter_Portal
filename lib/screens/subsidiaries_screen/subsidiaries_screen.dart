@@ -24,8 +24,8 @@ class _SubsidiariesScreenState extends State<SubsidiariesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MainDrawer(),
-      appBar: basicAppBar(context, 'Subsidiaries'),
+      // drawer: MainDrawer(),
+      appBar:AppBar(), /// basicAppBar(context, 'Subsidiaries'),
       backgroundColor: Colors.blueGrey,
       body: BlocProvider(
         create: (context) => SubsidiariesCubit()..getSubsidiaries(),

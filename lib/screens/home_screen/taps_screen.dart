@@ -74,7 +74,7 @@ class _TapsScreenState extends State<TapsScreen> {
                     'assets/images/login_image_logo.png',
                     scale: 3.5,
                     // opacity: const AlwaysStoppedAnimation(0.8),
-                    alignment: Alignment.topCenter,
+                    alignment: Alignment.center,
                   ),
                 ],
               ),
@@ -269,7 +269,7 @@ class _TapsScreenState extends State<TapsScreen> {
                 child: CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.white,
-                    child: const Icon(Icons.menu, color: Colors.black)),
+                    child: const Icon(Icons.menu, color: Colors.black,size: 25,)),
               ),
             ],
           ),

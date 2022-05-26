@@ -13,8 +13,8 @@ class ValueScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        appBar: basicAppBar(context, 'Values'),
-        drawer: MainDrawer(),
+        appBar:AppBar(),/// basicAppBar(context, 'Values'),
+        // drawer: MainDrawer(),
         body: Sizer(builder: (c, o, d) {
           return SizedBox(
             height: MediaQuery.of(context).size.height,

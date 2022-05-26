@@ -34,23 +34,34 @@ class _MainDrawerState extends State<MainDrawer> {
     return ListTile(
       leading: Icon(
         icon,
-        size: 26,
+        size: 25,
+        color: Colors.white,
       ),
       title: Text(
         title,
         style: const TextStyle(
-          fontFamily: 'RobotoCondensed',
-          fontSize: 24,
-          fontWeight: FontWeight.bold,
-        ),
+            fontFamily: 'RobotoCondensed',
+            fontSize: 22,
+            fontWeight: FontWeight.normal,
+            color: Colors.white),
       ),
       onTap: tapHandler,
     );
   }
 
+  Divider buildDivider() {
+    return const Divider(
+      thickness: 0.5,
+      indent: 20,
+      endIndent: 20,
+      color: Colors.white,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AppBloc bloc) => bloc.state.userData.employeeData);
+    final user =
+        context.select((AppBloc bloc) => bloc.state.userData.employeeData);
     final deviceHeight = MediaQuery.of(context).size.height;
     final double deviceTopPadding =
         MediaQueryData.fromWindow(window).padding.bottom;
@@ -59,10 +70,16 @@ class _MainDrawerState extends State<MainDrawer> {
         topRight: Radius.circular(30),
         bottomRight: Radius.circular(30),
       ),
-      child: SizedBox(
+      child: Container(
         width: MediaQuery.of(context).size.width * 0.9,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/images/login_image_background.png'),
+              fit: BoxFit.cover),
+        ),
         child: Drawer(
           elevation: 5,
+          backgroundColor: Colors.transparent,
           child: Column(
             children: [
               Container(
@@ -70,13 +87,12 @@ class _MainDrawerState extends State<MainDrawer> {
                 height: deviceHeight * 0.24,
                 width: double.infinity,
                 padding: const EdgeInsets.all(20),
-                alignment: Alignment.centerLeft,
-                color: Theme.of(context).colorScheme.primary,
-
+                alignment: Alignment.center,
+                color: Colors.transparent,
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  children:[
+                  children: [
                     CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 30,
@@ -98,23 +114,31 @@ class _MainDrawerState extends State<MainDrawer> {
                         ),
                       ),
                     ),
-                    const Text(
-                      'welcome',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 25,
-                        color: Colors.black,
-                        // Theme.of(context).primaryColor,
-                      ),
-                    ),
-                    Flexible(child: Text('${user.name}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold))),
-                    Flexible(child: Text('${user.titleName}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.normal))),
+                    // const Text(
+                    //   'welcome',
+                    //   style: TextStyle(
+                    //     fontWeight: FontWeight.w900,
+                    //     fontSize: 25,
+                    //     color: Colors.white,
+                    //     // Theme.of(context).primaryColor,
+                    //   ),
+                    // ),
+                    Flexible(
+                        child: Text(
+                            user.name!.split(' ').take(3).join(' '),
+                            style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white))),
+                    Flexible(
+                        child: Text('${user.titleName}',
+                            style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white))),
                   ],
                 ),
               ),
-              // const SizedBox(
-              //   height: 20,
-              // ),
               SizedBox(
                 height: deviceHeight * 0.76 - deviceTopPadding,
                 child: SingleChildScrollView(
@@ -128,61 +152,40 @@ class _MainDrawerState extends State<MainDrawer> {
                               .pushReplacementNamed(TapsScreen.routeName);
                         },
                       ),
-
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'My Profile',
                         Icons.person,
-                            () {
-                          Navigator.of(context).pushReplacementNamed(
-                              ProfileScreen.routeName);
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(ProfileScreen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'Get Direction',
                         Icons.nature_people,
                         () {
-                          Navigator.of(context).pushReplacementNamed(
-                              GetDirectionScreen.routeName);
+                          Navigator.of(context)
+                              .pushNamed(GetDirectionScreen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'Attendance',
                         Icons.fingerprint,
                         () {
-                          Navigator.of(context).pushReplacementNamed(
-                              Attendance_Screen.routeName);
+                          Navigator.of(context)
+                              .pushNamed(Attendance_Screen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile('Medical Request', Icons.medical_services,
                           () {
                         Navigator.of(context)
                             .pushNamed(MedicalRequestScreen.routeName);
                       }),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'Payslip',
                         Icons.nature_people,
@@ -191,11 +194,7 @@ class _MainDrawerState extends State<MainDrawer> {
                               .pushNamed(PayslipScreen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'Subsidiaries',
                         Icons.add_business_sharp,
@@ -204,38 +203,25 @@ class _MainDrawerState extends State<MainDrawer> {
                               .pushNamed(SubsidiariesScreen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'EconomyNews',
                         Icons.waterfall_chart,
-                            () {
-                          Navigator.of(context).pushNamed(EconomyNewsScreen
-                              .routeName);
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(EconomyNewsScreen.routeName);
                         },
                       ),
-
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'Appraisal',
                         Icons.quiz,
-                            () {
-                          Navigator.of(context).pushNamed(EmployeeAppraisal_Screen
-                              .routeName);
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(EmployeeAppraisal_Screen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'Value',
                         Icons.agriculture_sharp,
@@ -244,11 +230,7 @@ class _MainDrawerState extends State<MainDrawer> {
                               .pushNamed(ValueScreen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'About',
                         Icons.details,
@@ -257,11 +239,7 @@ class _MainDrawerState extends State<MainDrawer> {
                               .pushNamed(AboutScreen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'News',
                         Icons.list,
@@ -269,83 +247,65 @@ class _MainDrawerState extends State<MainDrawer> {
                           Navigator.of(context).pushNamed(NewsScreen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'Photos',
                         Icons.add_a_photo,
                         () {
-                          Navigator.of(context).pushNamed(PhotosScreen.routeName);
+                          Navigator.of(context)
+                              .pushNamed(PhotosScreen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'HR Permission',
                         Icons.add_a_photo,
-                            () {
-                          Navigator.of(context).pushNamed(PermissionScreen.routeName);
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(PermissionScreen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'HR Vacation',
                         Icons.add_a_photo,
-                            () {
-                          Navigator.of(context).pushNamed(VacationScreen.routeName);
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(VacationScreen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'HR Business Mission',
                         Icons.add_a_photo,
-                            () {
-                          Navigator.of(context).pushNamed(BusinessMissionScreen.routeName);
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(BusinessMissionScreen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'Polls',
                         Icons.add_a_photo,
-                            () {
-                          Navigator.of(context).pushNamed(PollsScreen.routeName);
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(PollsScreen.routeName);
                         },
                       ),
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'Videos',
                         Icons.add_a_photo,
-                            () {
-                          Navigator.of(context).pushNamed(VideosScreen.routeName);
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(VideosScreen.routeName);
                         },
                       ),
+                      buildDivider(),
                       buildListTile(
                         'Logout',
                         Icons.logout,
-                        ()
-                        {
+                        () {
                           context.read<AppBloc>().add(AppLogoutRequested());
                           context.read<LoginCubit>().clearCubit();
                         },

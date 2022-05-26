@@ -36,7 +36,7 @@ class _ProfileScreen extends State<ProfileScreen> {
         title: const Text('Hassan Allam Holding'),
         centerTitle: true,
       ),
-      drawer: MainDrawer(),
+      // drawer: MainDrawer(),
       resizeToAvoidBottomInset: false,
       body: Container(
         decoration: BoxDecoration(

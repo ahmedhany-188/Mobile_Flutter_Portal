@@ -2,6 +2,8 @@ import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
+import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 import 'package:swipe_image_gallery/swipe_image_gallery.dart';
@@ -10,6 +12,7 @@ import '../../bloc/news_screen_bloc/news_cubit.dart';
 import '../../data/models/response_news.dart';
 import '../benefits_screen/benefits_screen.dart';
 import '../news_screen/news_screen.dart';
+import '../photos_screen/photos_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -217,7 +220,7 @@ class HomeScreen extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                  Navigator.of(context).pushNamed(PhotosScreen.routeName);
                 },
                 child: Container(
                   decoration: const BoxDecoration(
@@ -334,7 +337,7 @@ class HomeScreen extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                  Navigator.of(context).pushNamed(SubsidiariesScreen.routeName);
                 },
                 child: Container(
                   decoration: const BoxDecoration(
@@ -451,7 +454,7 @@ class HomeScreen extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                  Navigator.of(context).pushNamed(ValueScreen.routeName);
                 },
                 child: Container(
                   decoration: const BoxDecoration(
@@ -810,7 +813,7 @@ class HomeScreen2 extends StatelessWidget {
               /// with badge
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                  Navigator.of(context).pushNamed(PhotosScreen.routeName);
                 },
                 child: GridTile(
                   footer: Container(
@@ -956,7 +959,7 @@ class HomeScreen2 extends StatelessWidget {
               /// with grid tile
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                  Navigator.of(context).pushNamed(SubsidiariesScreen.routeName);
                 },
                 child: GridTile(
                   footer: Container(
@@ -1102,7 +1105,7 @@ class HomeScreen2 extends StatelessWidget {
               /// with 2 pics & text
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                  Navigator.of(context).pushNamed(ValueScreen.routeName);
                 },
                 child: GridTile(
                   footer: Container(
@@ -1324,7 +1327,7 @@ class HomeScreen3 extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, right: 10.0),
       child: SizedBox(
-        height: 63.h,
+        height: 60.h,
         width: 100.w,
         child: Center(
           child: GridView(
@@ -1407,7 +1410,7 @@ class HomeScreen3 extends StatelessWidget {
 
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                  Navigator.of(context).pushNamed(PhotosScreen.routeName);
                 },
                 child: Container(
                   decoration: const BoxDecoration(
@@ -1474,7 +1477,7 @@ class HomeScreen3 extends StatelessWidget {
 
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                  Navigator.of(context).pushNamed(SubsidiariesScreen.routeName);
                 },
                 child: Container(
                   decoration: const BoxDecoration(
@@ -1553,7 +1556,7 @@ class HomeScreen3 extends StatelessWidget {
 
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+                  Navigator.of(context).pushNamed(ValueScreen.routeName);
                 },
                 child: Container(
                   decoration: const BoxDecoration(
@@ -1722,30 +1725,45 @@ class NewsSliderList extends StatelessWidget {
   GridTile _buildHomeScreenGridTile(Data news) {
     return GridTile(
       footer: (news.newsID != 0)
-          ? SizedBox(
-              height: 10.h,
-              child: GridTileBar(
-                title: Text(
-                  news.newsTitle ?? "Go to News to see more details",
-                  style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 10,
-                      overflow: TextOverflow.fade),
-                  maxLines: 2,
-                  softWrap: true,
+          ?
+      // SizedBox(
+              // height: 10.h,
+              // width: 30.w,
+              // child:
+      Container(
+                height: 10.h,
+                width: double.infinity,
+                decoration: BoxDecoration(gradient: LinearGradient(
+                    colors: [
+                      Colors.black87,
+                      Colors.black12,
+                    ],
+                    begin: Alignment(0, 1),
+                    end: Alignment(0.0, 0),
+                    tileMode: TileMode.clamp),),
+                child: GridTileBar(
+                  title: Text(
+                    '${news.newsTitle} ${news.newsDescription}' ?? "Go to News to see more details",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 10,
+                        overflow: TextOverflow.ellipsis),
+                    maxLines: 4,
+                    softWrap: true,
+                  ),
+                  // subtitle: Text(
+                  //   news.newsDescription ?? "",
+                  //   maxLines: 4,
+                  //   softWrap: true,
+                  //   style: const TextStyle(
+                  //       fontWeight: FontWeight.bold,
+                  //       fontSize: 10,
+                  //       overflow: TextOverflow.fade),
+                  // ),
+                  // backgroundColor: Colors.black45,
                 ),
-                // subtitle: Text(
-                //   news.newsDescription ?? "",
-                //   maxLines: 4,
-                //   softWrap: true,
-                //   style: const TextStyle(
-                //       fontWeight: FontWeight.bold,
-                //       fontSize: 10,
-                //       overflow: TextOverflow.fade),
-                // ),
-                backgroundColor: Colors.black26,
-              ),
-            )
+              )
+            // )
           : Container(
               height: 30.h,
               color: Colors.black54,
@@ -1780,25 +1798,28 @@ class ShimmerHomeNews extends StatelessWidget {
       child: SizedBox(
         width: 100.w,
         height: 30.h,
-        child: ListView.builder(
-          scrollDirection: Axis.horizontal,
-          itemCount: 5,
-          physics: const BouncingScrollPhysics(),
-          itemBuilder: (ctx, index) {
-            return Container(
-              width: 27.w,
-              margin: const EdgeInsets.symmetric(
-                horizontal: 4,
-              ),
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    height: 30.h,
-                    width: 27.w,
-                    color: Colors.grey,
-                  )),
-            );
-          },
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 5,
+            physics: const BouncingScrollPhysics(),
+            itemBuilder: (ctx, index) {
+              return Container(
+                width: 27.w,
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 4,
+                ),
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Container(
+                      height: 30.h,
+                      width: 27.w,
+                      color: Colors.grey,
+                    )),
+              );
+            },
+          ),
         ),
       ),
     );
