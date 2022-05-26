@@ -132,9 +132,13 @@ class _TapsScreenState extends State<TapsScreen> {
             // ),
             Stack(
               children: [Badge(
+                // borderRadius: BorderRadius.all(Radius.circular(10)),
+                toAnimate: true,
+                animationDuration: Duration(milliseconds: 1500),
+                animationType: BadgeAnimationType.scale,
                 badgeColor: Colors.red,
-                badgeContent: Text('2',style: TextStyle(color: Colors.white),),
-                position: BadgePosition(start: 1,top: 1,),
+                badgeContent: Text('2',style: TextStyle(color: Colors.white,fontSize: 12),),
+                position: BadgePosition(start: 5,top: 4,),
                 child: IconButton(
                   icon: const Icon(Icons.notifications),
                   onPressed: () {

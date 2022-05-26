@@ -59,14 +59,14 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                  (newsAllData.isNotEmpty)
+                  (state is LatestNewsSuccessState)
                       ? Padding( /// try remove this
                           padding: const EdgeInsets.only(left: 8.0),
                           child: SizedBox(
                             width: 100.w,
                             height: 30.h,
                             child: NewsSliderList(
-                                newsAllData: newsAllData,
+                                newsAllData: state.latestNewsList,
                                 assets: assets,
                                 heroProperties: heroProperties),
                           ),
@@ -622,14 +622,14 @@ class HomeScreen2 extends StatelessWidget {
                       ),
                     ),
                   ),
-                  (newsAllData.isNotEmpty)
+                  (state is LatestNewsSuccessState)
                       ? Padding(
                           padding: EdgeInsets.only(left: 8),
                           child: SizedBox(
                             width: 100.w,
                             height: 30.h,
                             child: NewsSliderList(
-                                newsAllData: newsAllData,
+                                newsAllData: state.latestNewsList,
                                 assets: assets,
                                 heroProperties: heroProperties),
                           ),
@@ -1284,7 +1284,10 @@ class HomeScreen3 extends StatelessWidget {
         builder: (context, state) {
           List<ImageGalleryHeroProperties> heroProperties = [];
           List<Widget> assets = [];
-
+          if(state is LatestNewsSuccessState){
+            print("${state.latestNewsList.length}");
+          }
+          print("${newsAllData.length}");
           return Sizer(
             builder: (c, or, dt) {
               return Column(
@@ -1300,14 +1303,16 @@ class HomeScreen3 extends StatelessWidget {
                       ),
                     ),
                   ),
-                  (newsAllData.isNotEmpty)
+
+
+    state is LatestNewsSuccessState
                       ? Padding(
                           padding: const EdgeInsets.only(left: 8.0),
                           child: SizedBox(
                             width: 100.w,
                             height: 30.h,
                             child: NewsSliderList(
-                                newsAllData: newsAllData,
+                                newsAllData: state.latestNewsList,
                                 assets: assets,
                                 heroProperties: heroProperties),
                           ),
@@ -1541,7 +1546,7 @@ class HomeScreen3 extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'Hotels, Health, Retails...',
+                            'Know more about our subsidiaries...',
                             style: TextStyle(
                                 fontSize: 15,
                                 color: Colors.white,
@@ -1690,34 +1695,36 @@ class NewsSliderList extends StatelessWidget {
     );
   }
 
-  GridTile _buildAssetGridTile(Data news) {
-    return GridTile(
-      header: GridTileBar(
-        title: Text(
-          news.newsTitle ?? "Go to News to see more details",
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
+  Widget _buildAssetGridTile(Data news) {
+    return Scaffold(
+      body: GridTile(
+        header: GridTileBar(
+          title: Text(
+            news.newsTitle ?? "Go to News to see more details",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+            ),
+          ),
+          backgroundColor: Colors.black54,
+        ),
+        footer: Container(
+          padding: const EdgeInsets.all(10),
+          color: Colors.black54,
+          child: Text(
+            news.newsDescription ?? "",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
+              color: Colors.white,
+            ),
           ),
         ),
-        backgroundColor: Colors.black54,
-      ),
-      footer: Container(
-        padding: const EdgeInsets.all(10),
-        color: Colors.black54,
-        child: Text(
-          news.newsDescription ?? "",
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-            color: Colors.white,
-          ),
+        child: CachedNetworkImage(
+          imageUrl:
+              'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg',
+          fit: BoxFit.fill,
         ),
-      ),
-      child: CachedNetworkImage(
-        imageUrl:
-            'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg',
-        fit: BoxFit.fill,
       ),
     );
   }
@@ -1737,6 +1744,8 @@ class NewsSliderList extends StatelessWidget {
                     colors: [
                       Colors.black87,
                       Colors.black12,
+                      // Color(0x12000000),
+                      // Color(0x02000000),
                     ],
                     begin: Alignment(0, 1),
                     end: Alignment(0.0, 0),

@@ -79,7 +79,7 @@ class _SplashScreenState extends State<SplashScreen>  with TickerProviderStateMi
                         child: Center(
                           child: Image.asset(
                               'assets/images/login_image_logo.png',
-                              fit: BoxFit.cover),
+                              fit: BoxFit.cover,scale: 2),
                         ),
                       ),
                     ),
@@ -102,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen>  with TickerProviderStateMi
                                 fontSize: 80,
                                 letterSpacing: 4,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: 'RobotoCondensed'
+                                fontFamily: 'RobotoFlex'
                               ),
                             ),
                           ),
@@ -114,7 +114,7 @@ class _SplashScreenState extends State<SplashScreen>  with TickerProviderStateMi
                                 fontSize: 25,
                                 letterSpacing: 4,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: 'RobotoCondensed'
+                                fontFamily: 'RobotoFlex'
                               ),
                             ),
                           ),
