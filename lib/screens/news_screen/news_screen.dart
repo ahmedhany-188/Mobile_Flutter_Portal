@@ -26,7 +26,7 @@ class _NewsScreenState extends State<NewsScreen> {
     return Scaffold(
       drawer: MainDrawer(),
       appBar: basicAppBar(context, 'News'),
-      backgroundColor: Colors.cyan,
+      backgroundColor: Colors.white,
       body: BlocProvider(
         create: (context) => NewsCubit()..getNews(),
         child: BlocConsumer<NewsCubit, NewsState>(
@@ -89,13 +89,6 @@ class _NewsScreenState extends State<NewsScreen> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: GridTile(
-                              child: FadeInImage(
-                                placeholder: const AssetImage('assets/images/logo.png'),
-                                image: NetworkImage(
-                                  'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg',
-                                ),
-                                fit: BoxFit.fill,
-                              ),
                               footer: GridTileBar(
                                 title:Text( news.newsTitle ?? "Tap to see more details",
                                             style: const TextStyle(
@@ -104,6 +97,13 @@ class _NewsScreenState extends State<NewsScreen> {
                                             ),
                                           ),
                                 backgroundColor: Colors.black54,
+                              ),
+                              child: FadeInImage(
+                                placeholder: const AssetImage('assets/images/logo.png'),
+                                image: NetworkImage(
+                                  'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg',
+                                ),
+                                fit: BoxFit.fill,
                               ),
                             ),
                           ),
