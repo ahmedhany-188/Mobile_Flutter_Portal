@@ -46,9 +46,27 @@ class GeneralDio {
     );
   }
 
-  static Future<Response> latestNewsData({String url = 'portal/News/GetLatest'}) async {
+  static Future<Response> latestNewsData(
+      {String url = 'portal/News/GetLatest'}) async {
     return await dio!.get(
       url,
     );
+  }
+
+  static Future<Response> appsData(String? hrCode) async {
+    String url = 'portal/UserData/GetApplications?HRCode=$hrCode';
+
+    if (hrCode!.isNotEmpty) {
+      return await dio!
+          .get(
+            url,
+          )
+          .timeout(Duration(minutes:5))
+          .catchError((err) {
+        print(err);
+      });
+    } else {
+      return dio!.delete(url);
+    }
   }
 }

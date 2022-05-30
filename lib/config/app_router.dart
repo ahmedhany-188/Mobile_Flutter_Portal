@@ -21,6 +21,7 @@ import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dar
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
+import '../screens/apps_screen/apps_screen.dart';
 import '../screens/polls_screen/polls_screen.dart';
 import '../screens/videos_screen/videos_screen.dart';
 
@@ -159,6 +160,12 @@ class AppRouter {
 
         return MaterialPageRoute(
           builder: (_) => const BenefitsScreen(),
+        );
+
+      case AppsScreen.routeName:
+
+        return MaterialPageRoute(
+          builder: (_) => AppsScreen(),
         );
       default:
         return null;
