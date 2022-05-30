@@ -22,6 +22,7 @@ import 'package:hassanallamportalflutter/screens/polls_screen/polls_screen.dart'
 import 'package:provider/src/provider.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
+import '../../screens/apps_screen/apps_screen.dart';
 import '../../screens/videos_screen/videos_screen.dart';
 
 class MainDrawer extends StatefulWidget {
@@ -303,9 +304,18 @@ class _MainDrawerState extends State<MainDrawer> {
                       ),
                       buildDivider(),
                       buildListTile(
+                        'Apps',
+                        Icons.apps,
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(AppsScreen.routeName);
+                        },
+                      ),
+                      buildDivider(),
+                      buildListTile(
                         'Logout',
                         Icons.logout,
-                        () {
+                            () {
                           context.read<AppBloc>().add(AppLogoutRequested());
                           context.read<LoginCubit>().clearCubit();
                         },
