@@ -10,10 +10,9 @@ class VacationInitial extends PermissionState {
 
   const VacationInitial({
     this.requestDate = const RequestDate.pure(),
-    this.vacationFromDate = const VacationDate.pure(),
-    this.vacationToDate = const VacationDateTo.pure(),
+    this.vacationFromDate = const DateFrom.pure(),
+    this.vacationToDate = const DateTo.pure(),
     this.vacationType = 1,
-    this.permissionTime = const PermissionTime.pure(),
     this.status = FormzStatus.pure,
     this.errorMessage,
     this.successMessage,
@@ -24,10 +23,9 @@ class VacationInitial extends PermissionState {
   });
 
   final RequestDate requestDate;
-  final VacationDate vacationFromDate;
-  final VacationDateTo vacationToDate;
+  final DateFrom vacationFromDate;
+  final DateTo vacationToDate;
   final int vacationType;
-  final PermissionTime permissionTime;
   final FormzStatus status;
   final String? errorMessage;
   final String? successMessage;
@@ -37,14 +35,13 @@ class VacationInitial extends PermissionState {
   final String vacationDuration;
 
   @override
-  List<Object> get props => [requestDate, vacationFromDate,vacationToDate,vacationType,permissionTime, status,comment,vacationDuration,responsiblePerson];
+  List<Object> get props => [requestDate, vacationFromDate,vacationToDate,vacationType, status,comment,vacationDuration,responsiblePerson];
 
   VacationInitial copyWith({
     RequestDate? requestDate,
-    VacationDate? vacationFromDate,
-    VacationDateTo? vacationToDate,
+    DateFrom? vacationFromDate,
+    DateTo? vacationToDate,
     int? vacationType,
-    PermissionTime? permissionTime,
     FormzStatus? status,
     String? errorMessage,
     String? successMessage,
@@ -58,7 +55,6 @@ class VacationInitial extends PermissionState {
       vacationFromDate: vacationFromDate ?? this.vacationFromDate,
       vacationToDate: vacationToDate ?? this.vacationToDate,
       vacationType: vacationType ?? this.vacationType,
-      permissionTime: permissionTime ?? this.permissionTime,
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       successMessage: successMessage ?? this.successMessage,

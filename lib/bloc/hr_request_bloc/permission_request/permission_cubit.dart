@@ -214,20 +214,19 @@ class PermissionCubit extends Cubit<PermissionInitial> {
           dateFrom: dateFrom,dateFromAmpm: dateFromAmpm,dateTo: dateTo,dateToAmpm: dateToAmpm,
           permissionDate: permissionDateValue,requestDate: requestDateValue,type: type);
 
-      if (permissionResponse.id == 0) {
-        // print(permissionResponse.requestNo);
-        emit(
-          state.copyWith(
-            errorMessage: permissionResponse.result,
-            status: FormzStatus.submissionFailure,
-          ),
-        );
-      } else if (permissionResponse.id == 1){
+      if (permissionResponse.id == 1){
         // print(permissionResponse.requestNo);
         emit(
           state.copyWith(
             successMessage: permissionResponse.requestNo,
             status: FormzStatus.submissionSuccess,
+          ),
+        );
+      }else{
+        emit(
+          state.copyWith(
+            errorMessage: permissionResponse.id == 1 ? permissionResponse.result : "An error occurred",
+            status: FormzStatus.submissionFailure,
           ),
         );
       }

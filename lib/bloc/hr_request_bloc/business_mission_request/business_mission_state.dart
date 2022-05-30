@@ -10,9 +10,11 @@ class BusinessMissionInitial extends BusinessMissionState {
 
   const BusinessMissionInitial({
     this.requestDate = const RequestDate.pure(),
-    this.permissionDate = const PermissionDate.pure(),
+    this.dateFrom = const DateFrom.pure(),
+    this.dateTo = const DateTo.pure(),
     this.missionType = 1,
-    this.permissionTime = const PermissionTime.pure(),
+    this.timeFrom = const TimeFrom.pure(),
+    this.timeTo = const TimeTo.pure(),
     this.status = FormzStatus.pure,
     this.errorMessage,
     this.successMessage,
@@ -21,9 +23,11 @@ class BusinessMissionInitial extends BusinessMissionState {
   });
 
   final RequestDate requestDate;
-  final PermissionDate permissionDate;
+  final DateFrom dateFrom;
+  final DateTo dateTo;
   final int missionType;
-  final PermissionTime permissionTime;
+  final TimeFrom timeFrom;
+  final TimeTo timeTo;
   final FormzStatus status;
   final String? errorMessage;
   final String? successMessage;
@@ -31,13 +35,15 @@ class BusinessMissionInitial extends BusinessMissionState {
   final String comment;
 
   @override
-  List<Object> get props => [requestDate, permissionDate,missionType,permissionTime, status,comment];
+  List<Object> get props => [requestDate, dateFrom,dateTo,missionType,timeFrom,timeTo, status,comment];
 
   BusinessMissionInitial copyWith({
     RequestDate? requestDate,
-    PermissionDate? permissionDate,
+    DateFrom? dateFrom,
+    DateTo? dateTo,
     int? missionType,
-    PermissionTime? permissionTime,
+    TimeFrom? timeFrom,
+    TimeTo? timeTo,
     FormzStatus? status,
     String? errorMessage,
     String? successMessage,
@@ -46,9 +52,11 @@ class BusinessMissionInitial extends BusinessMissionState {
   }) {
     return BusinessMissionInitial(
       requestDate: requestDate ?? this.requestDate,
-      permissionDate: permissionDate ?? this.permissionDate,
+      dateFrom: dateFrom ?? this.dateFrom,
+      dateTo: dateTo ?? this.dateTo,
       missionType: missionType ?? this.missionType,
-      permissionTime: permissionTime ?? this.permissionTime,
+      timeFrom: timeFrom ?? this.timeFrom,
+      timeTo: timeTo ?? this.timeTo,
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       successMessage: successMessage ?? this.successMessage,
