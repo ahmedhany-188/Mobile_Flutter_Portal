@@ -5,7 +5,7 @@ import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/responsible_vacation_request/responsible_vacation_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/vacation_request/vacation_cubit.dart';
 import 'package:hassanallamportalflutter/data/models/contacts_related_models/contacts_data_from_api.dart';
-import 'package:hassanallamportalflutter/data/models/requests_form_models/request_vacation_date_to.dart';
+import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
@@ -27,7 +27,7 @@ class _VacationScreenState extends State<VacationScreen> {
 
     // TextEditingController vacationDateFromController = TextEditingController();
     // TextEditingController vacationDateToController = TextEditingController();
-    TextEditingController permissionTimeController = TextEditingController();
+    // TextEditingController permissionTimeController = TextEditingController();
     final user = context.select((AppBloc bloc) =>
     bloc.state.userData.employeeData);
 
@@ -88,7 +88,7 @@ class _VacationScreenState extends State<VacationScreen> {
                         heroTag: null,
                         onPressed: () {
                           context.read<VacationCubit>()
-                              .submitPermissionRequest(user?.userHrCode ?? "0");
+                              .submitVacationRequest(user?.userHrCode ?? "0");
                         },
                         // formBloc.state.status.isValidated
                         //       ? () => formBloc.submitPermissionRequest()
@@ -144,8 +144,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                   },
                                   builder: (context, state) {
                                     return TextFormField(
-                                      key: const Key(
-                                          'loginForm_usernameInput_textField'),
+                                      key: UniqueKey(),
                                       initialValue: state.requestDate.value,
                                       enabled: false,
                                       decoration: InputDecoration(
@@ -327,9 +326,9 @@ class _VacationScreenState extends State<VacationScreen> {
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
                                         labelText: 'Vacation To Date',
-                                        errorText: state.vacationToDate.invalid ? (state.vacationToDate.error == VacationDateToError.empty
+                                        errorText: state.vacationToDate.invalid ? (state.vacationToDate.error == DateToError.empty
                                             ? "Empty Date To or Date From"
-                                            : (state.vacationToDate.error == VacationDateToError.isBefore)
+                                            : (state.vacationToDate.error == DateToError.isBefore)
                                         ? "Date From must be before Date To" : null) : null,
                                         prefixIcon: const Icon(
                                             Icons.date_range_outlined),

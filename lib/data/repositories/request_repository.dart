@@ -10,6 +10,8 @@ import '../../constants/request_service_id.dart';
 class RequestRepository {
   final RequestDataProviders requestDataProviders = RequestDataProviders();
 
+
+
   Future<RequestResponse> postPermissionRequest(
       {required String hrCode, required String requestDate, required String comments,
         required String dateFromAmpm, required String dateTo, required int type,
@@ -37,6 +39,57 @@ class RequestRepository {
         .getDurationVacation(type,dateFrom,dateTo);
     final json = await jsonDecode(rawPermission.body);
     final DurationResponse response = DurationResponse.fromJson(json);
+    return response;
+  }
+
+  Future<RequestResponse> postVacationRequest(
+      {required String hrCode, required String requestDate, required String comments,
+        required String dateTo, required String type,required String responsibleHRCode,required int noOfDays,
+        required String dateFrom}) async {
+    var bodyString = jsonEncode(<String, dynamic>{
+      "date": requestDate,
+      "comments": comments,
+      "requestHrCode": hrCode,
+      "dateFrom": dateFrom,
+      "dateTo": dateTo,
+      "serviceId": RequestServiceID.VacationServiceID,
+      "vacationType": type,
+      "responsible": responsibleHRCode,
+      "noOfDays": noOfDays,
+      "replacedWith": "",
+      "replacedWithTo": "",
+      // data.put("replacedWith",selectedReplaceFrom);
+      // data.put("replacedWithTo",selectedReplaceTo);
+    });
+    final http.Response rawPermission = await requestDataProviders
+        .postVacationRequest(bodyString);
+    final json = await jsonDecode(rawPermission.body);
+    final RequestResponse response = RequestResponse.fromJson(json);
+    return response;
+  }
+
+  Future<RequestResponse> postBusinessMission(
+      {required String hrCode, required String requestDate, required String comments,
+        required String dateTo, required String type, required String dateFromAmpm,required String dateToAmpm,
+        required String dateFrom,required String hourFrom,required String hourTo}) async {
+    var bodyString = jsonEncode(<String, dynamic>{
+      "serviceId": RequestServiceID.BusinessMissionServiceID,
+      "requestHrCode": hrCode,
+      "date": requestDate,
+      "comments": comments,
+      "dateFrom": dateFrom,
+      "dateTo": dateTo,
+      "dateFromAmpm": dateFromAmpm,
+      "dateToAmpm": dateToAmpm,
+      "hourFrom": hourFrom,
+      "hourTo": hourTo,
+      "missionLocation": type,
+
+    });
+    final http.Response rawRequest = await requestDataProviders
+        .postBusinessMissionRequest(bodyString);
+    final json = await jsonDecode(rawRequest.body);
+    final RequestResponse response = RequestResponse.fromJson(json);
     return response;
   }
 }
