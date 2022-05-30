@@ -1,16 +1,19 @@
-abstract class ContactsBlocStates {}
+part of 'contacts_cubit.dart';
 
-class BlocInitialState extends ContactsBlocStates {}
+@immutable
+abstract class ContactsStates {}
 
-class BlocGetContactsLoadingState extends ContactsBlocStates {}
+class BlocInitialState extends ContactsStates {}
 
-class BlocGetContactsSuccessState extends ContactsBlocStates {
+class BlocGetContactsLoadingState extends ContactsStates {}
+
+class BlocGetContactsSuccessState extends ContactsStates {
   List<dynamic> contacts;
 
   BlocGetContactsSuccessState(this.contacts);
 }
 
-class BlocGetContactsErrorState extends ContactsBlocStates {
+class BlocGetContactsErrorState extends ContactsStates {
   final String error;
   BlocGetContactsErrorState(this.error);
 }

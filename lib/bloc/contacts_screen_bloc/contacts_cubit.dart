@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/data_providers/general_dio/general_dio.dart';
-import 'contacts_bloc_states.dart';
 
-class ContactsCubit extends Cubit<ContactsBlocStates> {
+part 'contacts_states.dart';
+
+class ContactsCubit extends Cubit<ContactsStates> {
   ContactsCubit() : super(BlocInitialState());
 
   static ContactsCubit get(context) => BlocProvider.of(context);

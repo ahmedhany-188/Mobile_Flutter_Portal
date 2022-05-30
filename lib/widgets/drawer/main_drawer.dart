@@ -149,8 +149,8 @@ class _MainDrawerState extends State<MainDrawer> {
                         'Home',
                         Icons.home,
                         () {
-                          Navigator.of(context)
-                              .pushReplacementNamed(TapsScreen.routeName);
+                          Navigator
+                              .pushReplacementNamed(context,TapsScreen.routeName);
                         },
                       ),
                       buildDivider(),

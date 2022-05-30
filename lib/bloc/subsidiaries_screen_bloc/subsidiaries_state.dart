@@ -8,7 +8,7 @@ class SubsidiariesInitial extends SubsidiariesState {}
 class SubsidiariesLoadingState extends SubsidiariesState {}
 
 class SubsidiariesSuccessState extends SubsidiariesState {
-  Map<String,dynamic> subsidiariesList;
+  List<SubsidiariesData> subsidiariesList;
 
   SubsidiariesSuccessState(this.subsidiariesList);
 }
