@@ -2,7 +2,10 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
+import 'package:hassanallamportalflutter/data/data_providers/firebase_provider/FirebaseProvider.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
+import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
 
 import '../../screens/benefits_screen/benefits_screen.dart';
 import '../../screens/contacts_screen/contacts_screen.dart';
@@ -42,28 +45,39 @@ class _TapsScreenState extends State<TapsScreen> {
   // }
 
   @override
-  Widget build(BuildContext context) {
-    final user = context.select((AppBloc bloc) => bloc.state.userData.user);
+  Widget build(BuildContext mainContext) {
+    final user = mainContext.select((AppBloc bloc) => bloc.state.userData.user);
+    final firebaseProvider = FirebaseProvider(currentUser: user!);
     return DefaultTabController(
       length: 4,
       child: Scaffold(
-        backgroundColor: Colors.white, resizeToAvoidBottomInset: true,
+        backgroundColor: Colors.white,
+        resizeToAvoidBottomInset: true,
         drawer: MainDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          toolbarHeight: MediaQuery.of(context).size.height * 0.10,
+          toolbarHeight: MediaQuery
+              .of(context)
+              .size
+              .height * 0.10,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(bottomRight: Radius.circular(35)),
           ),
           elevation: 0,
           flexibleSpace: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
 
             ///new added
             child: ClipRRect(
               borderRadius:
-                  const BorderRadius.only(bottomRight: Radius.circular(35)),
+              const BorderRadius.only(bottomRight: Radius.circular(35)),
               child: Stack(
                 // alignment: Alignment.topCenter,
                 fit: StackFit.expand,
@@ -96,7 +110,12 @@ class _TapsScreenState extends State<TapsScreen> {
                     decoration: BoxDecoration(
                       color: Colors.transparent,
                       shape: BoxShape.circle,
-                      boxShadow: [BoxShadow(blurRadius: 1,color: Colors.black26, spreadRadius: 1,blurStyle: BlurStyle.normal,offset: Offset(-2.0, 3.0))],
+                      boxShadow: [BoxShadow(blurRadius: 1,
+                          color: Colors.black26,
+                          spreadRadius: 1,
+                          blurStyle: BlurStyle.normal,
+                          offset: Offset(-2.0, 3.0))
+                      ],
                     ),
                     child: CircleAvatar(
                       backgroundColor: Colors.white,
@@ -105,7 +124,8 @@ class _TapsScreenState extends State<TapsScreen> {
                         radius: 29,
                         // borderRadius: BorderRadius.circular(50),
                         backgroundImage: NetworkImage(
-                          'https://portal.hassanallam.com/Apps/images/Profile/${user!.userHRCode}.jpg',
+                          'https://portal.hassanallam.com/Apps/images/Profile/${user!
+                              .userHRCode}.jpg',
                         ),
                         onBackgroundImageError: (_, __) {
                           Image.asset(
@@ -124,80 +144,33 @@ class _TapsScreenState extends State<TapsScreen> {
           }),
           leadingWidth: 100,
           actions: [
-            // Stack(
-            //   children: [IconButton(
-            //     icon: const Icon(Icons.message),
-            //     onPressed: () {},
-            //   ),],
-            // ),
             Stack(
-              children: [Badge(
-                // borderRadius: BorderRadius.all(Radius.circular(10)),
-                toAnimate: true,
-                animationDuration: Duration(milliseconds: 1500),
-                animationType: BadgeAnimationType.scale,
-                badgeColor: Colors.red,
-                badgeContent: Text('2',style: TextStyle(color: Colors.white,fontSize: 12),),
-                position: BadgePosition(start: 5,top: 4,),
-                child: IconButton(
-                  icon: const Icon(Icons.notifications),
-                  onPressed: () {
-                    // showDialog(
-                    //     barrierDismissible: true,
-                    //     context: context,
-                    //     builder: (context) {
-                    //       return AlertDialog(
-                    //         backgroundColor:
-                    //             Theme.of(context).colorScheme.background,
-                    //         title: const Text('Add News'),
-                    //         elevation: 20,
-                    //         contentPadding: const EdgeInsets.all(10.0),
-                    //         content: Column(
-                    //           children: const <Widget>[
-                    //             SizedBox(
-                    //               height: 10,
-                    //             ),
-                    //             TextField(
-                    //               keyboardType: TextInputType.name,
-                    //               autofocus: true,
-                    //               decoration: InputDecoration(
-                    //                 border: OutlineInputBorder(),
-                    //                 labelText: 'Name',
-                    //                 hintText: 'eg. Hassan Allam',
-                    //               ),
-                    //             ),
-                    //             SizedBox(
-                    //               height: 10,
-                    //             ),
-                    //             TextField(
-                    //               maxLines: 3,
-                    //               keyboardType: TextInputType.multiline,
-                    //               decoration: InputDecoration(
-                    //                 border: OutlineInputBorder(),
-                    //                 labelText: 'Add News',
-                    //                 hintText:
-                    //                     'eg. hassan Allam construction release ...',
-                    //               ),
-                    //             ),
-                    //           ],
-                    //         ),
-                    //         actions: <Widget>[
-                    //           TextButton(
-                    //               child: const Text('CANCEL'),
-                    //               onPressed: () {
-                    //                 Navigator.pop(context);
-                    //               }),
-                    //           TextButton(
-                    //               child: const Text('Add'),
-                    //               onPressed: () {
-                    //                 Navigator.pop(context);
-                    //               }),
-                    //         ],
-                    //       );
-                    //     });
-                  },
+              children: [
+                BlocProvider.value(
+                  value: BlocProvider.of<UserNotificationBloc>(context),
+                  child: BlocBuilder<UserNotificationBloc,
+                      UserNotificationState>(
+                    builder: (context, state) {
+                      return Badge(
+                        toAnimate: true,
+                        animationDuration: Duration(milliseconds: 1000),
+                        animationType: BadgeAnimationType.scale,
+                        badgeColor: Colors.red,
+                        badgeContent: Text("${state.notifications.length}",
+                          style: TextStyle(color: Colors.white, fontSize: 12),),
+                        position: const BadgePosition(start: 5, top: 4,),
+                        child: IconButton(
+                          icon: const Icon(Icons.notifications),
+                          onPressed: () {
+                            Navigator.of(mainContext)
+                                .pushNamed(NotificationsScreen.routeName);
+                          },
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),],
+              ],
             ),
 
           ],
@@ -210,7 +183,7 @@ class _TapsScreenState extends State<TapsScreen> {
             unselectedLabelColor: Colors.white54,
             splashFactory: NoSplash.splashFactory,
             overlayColor: MaterialStateProperty.resolveWith(
-              (Set states) {
+                  (Set states) {
                 return states.contains(MaterialState.focused)
                     ? null
                     : Colors.transparent;
@@ -221,7 +194,10 @@ class _TapsScreenState extends State<TapsScreen> {
             labelPadding: EdgeInsets.only(bottom: 5),
             tabs: [
               Container(
-                width: ((MediaQuery.of(context).size.width - 20) / 3.5),
+                width: ((MediaQuery
+                    .of(context)
+                    .size
+                    .width - 20) / 3.5),
                 padding: EdgeInsets.only(left: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -238,7 +214,10 @@ class _TapsScreenState extends State<TapsScreen> {
                 ),
               ),
               Container(
-                width: ((MediaQuery.of(context).size.width - 20) / 3.5),
+                width: ((MediaQuery
+                    .of(context)
+                    .size
+                    .width - 20) / 3.5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -254,7 +233,10 @@ class _TapsScreenState extends State<TapsScreen> {
                 ),
               ),
               Container(
-                width: ((MediaQuery.of(context).size.width - 20) / 3.5),
+                width: ((MediaQuery
+                    .of(context)
+                    .size
+                    .width - 20) / 3.5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -271,7 +253,10 @@ class _TapsScreenState extends State<TapsScreen> {
               ),
               Container(
                 height: 35,
-                width: (MediaQuery.of(context).size.width -20) / 7,
+                width: (MediaQuery
+                    .of(context)
+                    .size
+                    .width - 20) / 7,
                 padding: EdgeInsets.only(),
                 // decoration: const BoxDecoration(
                 //     color: Colors.white,
@@ -279,16 +264,26 @@ class _TapsScreenState extends State<TapsScreen> {
                 child: CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.white,
-                    child: const Icon(Icons.menu, color: Colors.black,size: 25,)),
+                    child: const Icon(
+                      Icons.menu, color: Colors.black, size: 25,)),
               ),
             ],
           ),
         ),
         drawerEnableOpenDragGesture: true,
         body: Container(
-          height: MediaQuery.of(context).size.height -
-              (MediaQuery.of(context).size.height / 10),
-          width: MediaQuery.of(context).size.width,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height -
+              (MediaQuery
+                  .of(context)
+                  .size
+                  .height / 10),
+          width: MediaQuery
+              .of(context)
+              .size
+              .width,
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/home_cropped.jpg'),
@@ -297,7 +292,7 @@ class _TapsScreenState extends State<TapsScreen> {
           ),
           child: TabBarView(
             physics:
-                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               HomeScreen3(),
               HomeScreen(),

@@ -7,7 +7,9 @@ import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_n
 // import 'package:hassanallamportalflutter/bloc/hr_request_bloc/permission_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
+import 'package:hassanallamportalflutter/data/data_providers/firebase_provider/FirebaseProvider.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -69,6 +71,8 @@ class MyApp extends StatelessWidget {
     final AuthenticationRepository _authenticationRepository =
         AuthenticationRepository();
     _authenticationRepository.init();
+
+    // late final FirebaseProvider firebaseProvider = FirebaseProvider(currentUser: _authenticationRepository.currentUser.user);
     // final AuthenticationBloc authenticationBloc = AuthenticationBloc(authenticationRepository);
     // final Repositor = AuthenticationRepository();
     return MultiBlocProvider(
@@ -128,6 +132,10 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<VideosCubit>(
           create: (videosContext) => VideosCubit()..getVideos(),
+        ),
+        BlocProvider<UserNotificationBloc>(
+          lazy: true,
+          create: (userNotificationContext) => UserNotificationBloc(firebaseProvider: FirebaseProvider(currentUser: BlocProvider.of<AppBloc>(userNotificationContext).state.userData.user!)),
         ),
         // BlocProvider<PermissionCubit>(
         //   create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),

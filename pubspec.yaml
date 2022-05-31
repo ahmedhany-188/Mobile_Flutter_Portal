@@ -103,6 +103,7 @@ dependencies:
   html: ^0.15.0
   firebase_core: ^1.17.0
   firebase_auth: ^3.3.18
+  firebase_database: ^9.0.13
   dio: ^4.0.6
   heroicons: ^0.5.0
 

@@ -77,11 +77,6 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                           context.read<BusinessMissionCubit>()
                               .submitBusinessMissionRequest(user?.userHrCode ?? "0");
                         },
-                        // formBloc.state.status.isValidated
-                        //       ? () => formBloc.submitPermissionRequest()
-                        //       : null,
-                        // formBloc.submitPermissionRequest();
-
                         icon: const Icon(Icons.send),
                         label: const Text('SUBMIT'),
                       ),
