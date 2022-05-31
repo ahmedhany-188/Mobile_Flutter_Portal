@@ -34,7 +34,6 @@ class AppsCubit extends Cubit<AppsState> {
 
     GeneralDio.appsData(hrCode).then((value) {
       if(value.statusCode == 400){
-        print('object');
         emit(AppsErrorState('400'));
       }
       if (value.data != null) {

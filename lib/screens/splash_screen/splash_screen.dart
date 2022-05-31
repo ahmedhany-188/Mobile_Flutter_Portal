@@ -172,7 +172,7 @@ class _SplashScreenState extends State<SplashScreen>  with TickerProviderStateMi
                   context: context,
                   delayedDuration: 3000,
                   pageDirection: BlocBuilder<AppBloc, AppState>(
-                    builder: (context, state) {
+                    builder: (ctx, state) {
                       switch (state.status) {
                         case AppStatus.authenticated:
                           return const TapsScreen();

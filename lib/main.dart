@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
-// import 'package:hassanallamportalflutter/bloc/hr_request_bloc/permission_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
@@ -71,8 +70,6 @@ class MyApp extends StatelessWidget {
     final AuthenticationRepository _authenticationRepository =
         AuthenticationRepository();
     _authenticationRepository.init();
-
-    // late final FirebaseProvider firebaseProvider = FirebaseProvider(currentUser: _authenticationRepository.currentUser.user);
     // final AuthenticationBloc authenticationBloc = AuthenticationBloc(authenticationRepository);
     // final Repositor = AuthenticationRepository();
     return MultiBlocProvider(

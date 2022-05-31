@@ -5,6 +5,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../constants/url_links.dart';
 import '../../widgets/search/general_search.dart';
 import '../../data/helpers/download_pdf.dart';
 import '../../bloc/benefits_screen_bloc/benefits_cubit.dart';
@@ -199,8 +200,9 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                                   MediaQuery.of(context).devicePixelRatio.sp *
                                       25,
                               child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://portal.hassanallam.com/images/Benefits/${benefitsDataList[index]['benefitsId']}.jpg',
+                                imageUrl: benefitsLogosLink(
+                                    benefitsDataList[index]['benefitsId']
+                                        .toString()),
                                 placeholder: (c, m) => const Center(
                                     child: RefreshProgressIndicator()),
                                 errorWidget: (c, s, d) => Image.asset(
@@ -228,10 +230,8 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                             shrinkWrap: true,
                             data: benefitsDataList[index]['benefitsDescription']
                                 .toString(),
-                            onLinkTap: (String? url,
-                                RenderContext context,
-                                Map<String, String> attributes,
-                                _) async {
+                            onLinkTap: (String? url, RenderContext context,
+                                Map<String, String> attributes, _) async {
                               await DownloadPdfHelper(
                                   fileUrl: url!,
                                   fileName: url.substring(
@@ -255,8 +255,9 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                           GestureDetector(
                             onTap: () async {
                               await launchUrl(
-                                Uri.parse(
-                                    'https://portal.hassanallam.com/images/Benefits/${benefitsDataList[index]['benefitsId']}.pdf'),
+                                Uri.parse(benefitsLogosLink(
+                                    benefitsDataList[index]['benefitsId']
+                                        .toString())),
                                 mode: LaunchMode.externalApplication,
                               );
                             },

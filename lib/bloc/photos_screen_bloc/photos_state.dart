@@ -8,7 +8,7 @@ class PhotosInitial extends PhotosState {}
 class PhotosLoadingState extends PhotosState {}
 
 class PhotosSuccessState extends PhotosState {
-  Map<String,dynamic> photosList;
+  List<PhotosIdData> photosList;
 
   PhotosSuccessState(this.photosList);
 }
@@ -20,7 +20,7 @@ class PhotosErrorState extends PhotosState {
 
 
 class AlbumSuccessState extends PhotosState {
-  Map<String,dynamic> albumList;
+  List<AlbumData> albumList;
 
   AlbumSuccessState(this.albumList);
 }

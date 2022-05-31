@@ -4,7 +4,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../bloc/contacts_screen_bloc/contacts_bloc_states.dart';
 import '../../bloc/contacts_screen_bloc/contacts_cubit.dart';
 import '../../data/models/contacts_related_models/filters_categories.dart';
 import '../../screens/contacts_screen/search_for_contacts.dart';
@@ -105,7 +104,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
       backgroundColor: Colors.transparent,
       body: BlocProvider<ContactsCubit>(
         create: (context) => ContactsCubit()..getContacts(),
-        child: BlocConsumer<ContactsCubit, ContactsBlocStates>(
+        child: BlocConsumer<ContactsCubit, ContactsStates>(
           listener: (context, state) {
             if (state is BlocGetContactsSuccessState) {
               contactListFromApi = state.contacts;
