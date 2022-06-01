@@ -30,7 +30,7 @@ class PageTransitionAnimation {
   //   ),
   // );
 
-  Future<Widget> navigateWithFading() async {
+  Future<Widget> navigateWithFading() {
     return Future.delayed(Duration(milliseconds: delayedDuration), () async {
       return await Navigator.of(context).pushReplacement(PageTransition(
         type: PageTransitionType.fade,
@@ -39,7 +39,7 @@ class PageTransitionAnimation {
         alignment: Alignment.bottomCenter,
         duration: Duration(milliseconds: transitionDuration),
         reverseDuration: const Duration(milliseconds: 1500),
-      ));
+      )).catchError((err){});
     });
   }
 

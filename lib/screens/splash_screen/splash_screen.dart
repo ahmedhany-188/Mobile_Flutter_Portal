@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sprung/sprung.dart';
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
+import '../../data/helpers/assist_function.dart';
 import '../../screens/home_screen/taps_screen.dart';
 import '../../screens/login_screen/auth_screen.dart';
 import '../../widgets/animation/page_transition_animation.dart';
@@ -16,18 +17,22 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>  with TickerProviderStateMixin {
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
   AnimationController? animation;
   Animation<double>? _fadeInFadeOut;
 
   @override
   void initState() {
     super.initState();
-    animation = AnimationController(vsync: this, duration: const Duration(milliseconds: 1000),);
+    animation = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
     _fadeInFadeOut = Tween<double>(begin: 0.0, end: 1).animate(animation!);
 
-    animation!.addStatusListener((status){
-      if(status == AnimationStatus.completed){
+    animation!.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
         animation!.reverse();
       }
       // else if(status == AnimationStatus.dismissed){
@@ -69,91 +74,77 @@ class _SplashScreenState extends State<SplashScreen>  with TickerProviderStateMi
               splashIconSize: deviceHeight,
               splashTransition: SplashTransition.fadeTransition,
               animationDuration: const Duration(milliseconds: 1000),
-              splash: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Stack(
-                  children: [
-                    FadeTransition(
-                      opacity: _fadeInFadeOut!,
+              splash: Stack(
+                children: [
+                  Positioned(
+                    top: -40,
+                    left: -55,
+                    child: DelayedDisplay(
+                      delay: const Duration(milliseconds: 1500),
+                      slidingBeginOffset: const Offset(0, 0),
+                      // slidingCurve: Sprung.criticallyDamped,
                       child: SizedBox(
-                        child: Center(
-                          child: Image.asset(
-                              'assets/images/login_image_logo.png',
-                              fit: BoxFit.cover,scale: 2),
+                        width: deviceWidth,
+                        height: 300,
+                        child: Image.asset(
+                          'assets/images/login_image_light.png',
+                          alignment: Alignment.topLeft,
                         ),
                       ),
                     ),
-                    DelayedDisplay(
+                  ),
+                  FadeTransition(
+                    opacity: _fadeInFadeOut!,
+                    child: SizedBox(
+                      child: Center(
+                        child: Image.asset('assets/images/login_image_logo.png',
+                            fit: BoxFit.cover, scale: 2),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: DelayedDisplay(
                       delay: const Duration(milliseconds: 2500),
                       slidingCurve: Sprung.criticallyDamped,
                       slidingBeginOffset: const Offset(0.0, 0.05),
                       fadeIn: true,
                       fadingDuration: const Duration(milliseconds: 2000),
-                      child:
-                      Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: const [
-                          Flexible(
-                            child: Text(
-                              'Hello',
-                              style: TextStyle(
+                        children: [
+                          FittedBox(
+                              child: Text(
+                            checkTimeAmPm() ? 'Good Morning' : 'Good Evening',
+                            style: const TextStyle(
                                 color: Colors.white,
-                                fontSize: 80,
+                                fontSize: 70,
                                 letterSpacing: 4,
                                 fontWeight: FontWeight.bold,
-                                fontFamily: 'RobotoFlex'
-                              ),
-                            ),
-                          ),
-                          Flexible(
+                                fontFamily: 'RobotoFlex'),
+                          )),
+                          const Flexible(
                             child: Text(
                               'Welcome To Hassan Allam Portal',
                               style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 25,
-                                letterSpacing: 4,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'RobotoFlex'
-                              ),
+                                  color: Colors.white,
+                                  fontSize: 25,
+                                  letterSpacing: 4,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'RobotoFlex'),
                             ),
                           ),
-
-                          // DelayedDisplay(
-                          //   delay: const Duration(milliseconds: 2500),
-                          //   // slidingCurve: Sprung.underDamped,
-                          //   slidingBeginOffset: const Offset(0.0, 0.0),
-                          //   child: SizedBox(
-                          //     width: deviceWidth,
-                          //     child: DefaultTextStyle(
-                          //       style: const TextStyle(
-                          //         fontSize: 32.0,
-                          //         fontWeight: FontWeight.bold,
-                          //       ),
-                          //       child:  AnimatedTextKit(isRepeatingAnimation: false,
-                          //         animatedTexts: [
-                          //           FadeAnimatedText(' ',duration: Duration(milliseconds: 3000)),
-                          //           // FadeAnimatedText('Welcome to'),
-                          //           // FadeAnimatedText('Hassan Allam'),
-                          //           RotateAnimatedText('Hello'),
-                          //           RotateAnimatedText('Welcome to'),
-                          //           RotateAnimatedText('Hassan Allam'),
-                          //         ],
-                          //         onTap: () {
-                          //           print("Tap Event");
-                          //         },
-                          //       ),
-                          //     ),
-                          //   ),
-                          // ),
-                          SizedBox(height: 350,),
+                          const SizedBox(
+                            height: 350,
+                          ),
                         ],
                       ),
                     ),
-
-                  ],
-                ),
+                  ),
+                ],
               ),
+
               // nextScreen: BlocBuilder<AppBloc, AppState>(
               //   builder: (context, state) {
               //     switch (state.status) {
