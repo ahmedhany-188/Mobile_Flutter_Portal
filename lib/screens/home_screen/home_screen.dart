@@ -67,7 +67,7 @@ class HomeScreen extends StatelessWidget {
                                 heroProperties: heroProperties),
                           ),
                         )
-                      : const ShimmerHomeNews(),
+                      : const ShimmerHomeNewsSlider(),
                   _buildHomeScreenContent(context),
                 ],
               );
@@ -625,7 +625,7 @@ class HomeScreen2 extends StatelessWidget {
                                 heroProperties: heroProperties),
                           ),
                         )
-                      : const ShimmerHomeNews(),
+                      : const ShimmerHomeNewsSlider(),
                   _buildHomeScreenContent(context),
                 ],
               );
@@ -1252,93 +1252,121 @@ class HomeScreen3 extends StatelessWidget {
   @override
   // ignore: avoid_renaming_method_parameters
   Widget build(BuildContext homeScreenContext) {
+    List<AnimatedText> announcment = [];
     return BlocProvider<NewsCubit>(
-      create: (context) => NewsCubit()..getLatestNews(),
-      child: BlocConsumer<NewsCubit, NewsState>(
-        listener: (context, state) {},
-        buildWhen: (previous, current) {
-          if (current is LatestNewsSuccessState) {
-            current.latestNewsList
-                .add(Data(newsID: 0, newsBody: "Test", newsTitle: "Test"));
-            return current.latestNewsList.isNotEmpty;
-          } else {
-            return false;
-          }
-        },
-        builder: (context, state) {
-          List<ImageGalleryHeroProperties> heroProperties = [];
-          List<Widget> assets = [];
-          List<AnimatedText> announcment = [];
-          if (state is LatestNewsSuccessState) {
-            for (int i = 0; i < state.latestNewsList.length - 1; i++) {
-              announcment.add(
-                TyperAnimatedText(
-                  state.latestNewsList[i].newsDescription!.substring(
-                      0,
-                      (state.latestNewsList[i].newsDescription!.length < 150)
-                          ? state.latestNewsList[i].newsDescription!.length
-                          : 150),
-                  speed: const Duration(milliseconds: 100),
-                  textAlign: TextAlign.start,
-                  curve: Curves.linear,
-                  textStyle: const TextStyle(
-                      color: Color(0xFF174873),
-                      overflow: TextOverflow.clip,
-                      fontFamily: 'RobotoFlex',
-                      fontSize: 16),
-                ),
-              );
-            }
-          }
-
-          return Sizer(
-            builder: (c, or, dt) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  state is LatestNewsSuccessState
+      create: (context) => NewsCubit()
+        ..getLatestNews()
+        ..getNews(),
+      child: Sizer(
+        builder: (ctx, or, dt) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BlocConsumer<NewsCubit, NewsState>(
+                listener: (context, state) {},
+                buildWhen: (previous, current) {
+                  if (current is LatestNewsSuccessState) {
+                    current.latestNewsList.add(
+                        Data(newsID: 0, newsBody: "Test", newsTitle: "Test"));
+                    return current.latestNewsList.isNotEmpty;
+                  } else {
+                    return false;
+                  }
+                },
+                builder: (context, latestNewsstate) {
+                  List<ImageGalleryHeroProperties> heroProperties = [];
+                  List<Widget> assets = [];
+                  return latestNewsstate is LatestNewsSuccessState
                       ? Container(
-                    margin: EdgeInsets.only(top: 12.sp),
+                          margin: EdgeInsets.only(top: 12.sp),
                           width: 100.w,
                           height: 30.h,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: NewsSliderList(
-                                newsAllData: state.latestNewsList,
+                                newsAllData: latestNewsstate.latestNewsList,
                                 assets: assets,
                                 heroProperties: heroProperties),
                           ),
                         )
-                      : const ShimmerHomeNews(),
-                  Container(
-                    margin:(MediaQuery.of(context).size.height <= 750)?EdgeInsets.only(top:  5.sp,bottom: 5.sp): EdgeInsets.only(top:  10.sp,bottom: 10.sp),
+                      : const ShimmerHomeNewsSlider();
+                },
+              ),
+              BlocConsumer<NewsCubit, NewsState>(
+                listener: (context, state) {},
+                buildWhen: (pre, curr) {
+                  if (curr is NewsSuccessState) {
+                    for (int i = 0; i < curr.newsList.length - 1; i++) {
+                      if (curr.newsList[i].newsType == 1) {
+                        announcment.add(
+                          TyperAnimatedText(
+                            curr.newsList[i].newsDescription!,
+                            speed: const Duration(milliseconds: 100),
+                            textAlign: TextAlign.start,
+                            curve: Curves.linear,
+                            textStyle: const TextStyle(
+                                color: Color(0xFF174873),
+                                overflow: TextOverflow.clip,
+                                fontFamily: 'RobotoFlex',
+                                fontSize: 16),
+                          ),
+                        );
+                      }
+                    }
+                    return curr.newsList.isNotEmpty;
+                  } else {
+                    return false;
+                  }
+                },
+                builder: (context, state) {
+                  return Container(
+                    margin: (MediaQuery.of(context).size.height <= 750)
+                        ? EdgeInsets.only(top: 5.sp, bottom: 5.sp)
+                        : EdgeInsets.only(top: 10.sp, bottom: 10.sp),
                     color: Colors.grey.shade50,
                     padding: EdgeInsets.only(bottom: 1.sp, top: 1.sp),
-                    child: state is LatestNewsSuccessState
+                    child: state is NewsSuccessState
                         ? Padding(
-                          padding: EdgeInsets.only(top: 9.0.sp,bottom: 9.0.sp),
-                          child: SizedBox(
+                            padding:
+                                EdgeInsets.only(top: 9.0.sp, bottom: 9.0.sp),
+                            child: SizedBox(
                               height: 3.h,
                               width: 100.w,
                               child: Padding(
                                 padding: EdgeInsets.only(
                                     left: 14.0.sp, bottom: 0.sp, top: 0.sp),
-                                child: AnimatedTextKit(
-                                  isRepeatingAnimation: true,
-                                  pause: const Duration(milliseconds: 1000),
-                                  repeatForever: true,
-                                  displayFullTextOnTap: true,
-                                  animatedTexts: announcment,
-                                ),
+                                child: ListView(
+                                    reverse: true,
+                                    shrinkWrap: true,
+                                    children: [
+                                      AnimatedTextKit(
+                                        isRepeatingAnimation: true,
+                                        pause:
+                                            const Duration(milliseconds: 1000),
+                                        repeatForever: true,
+                                        displayFullTextOnTap: true,
+                                        animatedTexts: announcment.isEmpty ? [TyperAnimatedText(
+                                          'Checking for Announcement',
+                                          speed: const Duration(milliseconds: 100),
+                                          textAlign: TextAlign.start,
+                                          curve: Curves.linear,
+                                          textStyle: const TextStyle(
+                                              color: Color(0xFF174873),
+                                              overflow: TextOverflow.clip,
+                                              fontFamily: 'RobotoFlex',
+                                              fontSize: 16),
+                                        )] : announcment,
+                                      ),
+                                    ]),
                               ),
                             ),
-                        )
-                        : Container(),
-                  ),
-                  _buildHomeScreenContent(context),
-                ],
-              );
-            },
+                          )
+                        : const ShimmerAnnouncement(),
+                  );
+                },
+              ),
+              _buildHomeScreenContent(ctx),
+            ],
           );
         },
       ),
@@ -1360,7 +1388,8 @@ class HomeScreen3 extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 10.sp,
             mainAxisSpacing: 10.sp,
-            childAspectRatio: (MediaQuery.of(context).size.height <= 750)? 1.sp: 0.9.sp,
+            childAspectRatio:
+                (MediaQuery.of(context).size.height <= 750) ? 1.sp : 0.9.sp,
           ),
           children: [
             InkWell(
@@ -1828,8 +1857,8 @@ class NewsSliderList extends StatelessWidget {
   }
 }
 
-class ShimmerHomeNews extends StatelessWidget {
-  const ShimmerHomeNews({
+class ShimmerHomeNewsSlider extends StatelessWidget {
+  const ShimmerHomeNewsSlider({
     Key? key,
   }) : super(key: key);
 
@@ -1838,7 +1867,8 @@ class ShimmerHomeNews extends StatelessWidget {
     return Shimmer.fromColors(
       baseColor: Colors.grey.shade200,
       highlightColor: Colors.grey.shade50,
-      child: SizedBox(
+      child: Container(
+        margin: EdgeInsets.only(top: 12.sp),
         width: 100.w,
         height: 30.h,
         child: Padding(
@@ -1863,6 +1893,27 @@ class ShimmerHomeNews extends StatelessWidget {
               );
             },
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class ShimmerAnnouncement extends StatelessWidget {
+  const ShimmerAnnouncement({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade200,
+      highlightColor: Colors.grey.shade50,
+      child: Padding(
+        padding: EdgeInsets.only(top: 9.0.sp, bottom: 9.0.sp),
+        child: SizedBox(
+          height: 3.h,
+          width: 100.w,
         ),
       ),
     );
