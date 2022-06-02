@@ -1,0 +1,73 @@
+part of 'access_right_cubit.dart';
+
+@immutable
+abstract class AccessRightState {
+
+  const AccessRightState();
+
+  const AccessRightState.copywith({
+    required RequestDate requestItems ,required RequestDate fromDate
+    , required RequestDate toDate,required FormzStatus status});
+}
+
+class AccessRightInitial extends AccessRightState {
+  const AccessRightInitial({
+    this.requestDate,
+    this.requestType=1,
+    this.requestItems  = const RequestDate.pure(),
+    this.fromDate= const RequestDate.pure(),
+    this.toDate= const RequestDate.pure(),
+    this.permanent=false,
+    this.comments="",
+    this.filePDF="",
+    this.status = FormzStatus.pure,
+    this.errorMessage,
+    this.successMessage,
+  });
+
+
+
+  final String ?requestDate;
+  final int requestType;
+  final RequestDate requestItems;
+  final RequestDate fromDate;
+  final RequestDate toDate;
+  final bool permanent;
+  final String comments;
+  final String filePDF;
+  final FormzStatus status;
+  final String? errorMessage;
+  final String? successMessage;
+
+  @override
+  List<Object> get props => [requestItems,fromDate,toDate,status];
+
+  AccessRightInitial copyWith({
+    String ?requestDate,
+    int ?requestType,
+    RequestDate ?requestItems,
+     RequestDate ?fromDate,
+     RequestDate ?toDate,
+     bool ?permanent,
+    String ?comments,
+    String ?filePDF,
+    FormzStatus ?status,
+    String? errorMessage,
+    String? successMessage,
+  }) {
+    return AccessRightInitial(
+      requestDate: requestDate ?? this.requestDate,
+      requestType: requestType ?? this.requestType,
+      requestItems: requestItems ?? this.requestItems,
+      fromDate: fromDate ?? this.fromDate,
+      toDate: toDate ?? this.toDate,
+      permanent: permanent ?? this.permanent,
+      comments: comments ?? this.comments,
+      filePDF: filePDF ?? this.filePDF,
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
+      successMessage: successMessage ?? this.successMessage,
+    );
+  }
+
+}

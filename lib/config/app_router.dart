@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
+import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
 import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
@@ -10,6 +11,8 @@ import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
@@ -140,6 +143,23 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => VacationScreen(),
         );
+
+        case BusinessCardScreen.routeName:
+
+    return MaterialPageRoute(
+    builder: (_) => BusinessCardScreen(),
+    );
+
+      case EmailAndUserAccountScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => EmailAndUserAccountScreen(),
+        );
+
+      case AccessUserAccountScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => AccessUserAccountScreen(),
+        );
+
       case BusinessMissionScreen.routeName:
 
         return MaterialPageRoute(

@@ -5,6 +5,7 @@ import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart
 import 'package:hassanallamportalflutter/bloc/login_cubit/login_cubit.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
+import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
@@ -12,6 +13,8 @@ import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreen.dart';
@@ -204,6 +207,35 @@ class _MainDrawerState extends State<MainDrawer> {
                               .pushNamed(SubsidiariesScreen.routeName);
                         },
                       ),
+
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'it request user account',
+                        Icons.format_align_justify_outlined,
+                            () {
+                          Navigator.of(context)
+                              .pushNamed(EmailAndUserAccountScreen.routeName);
+                        },
+                      ),
+
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'it request access account',
+                        Icons.format_align_justify_outlined,
+                            () {
+                          Navigator.of(context)
+                              .pushNamed(AccessUserAccountScreen.routeName);
+                        },
+                      ),
+
                       const Divider(
                         thickness: 1,
                         indent: 10,
@@ -214,6 +246,20 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.waterfall_chart,
                             () {
                           Navigator.of(context).pushNamed(EconomyNewsScreen
+                              .routeName);
+                        },
+                      ),
+
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'BusinessCard',
+                        Icons.credit_card,
+                            () {
+                          Navigator.of(context).pushNamed(BusinessCardScreen
                               .routeName);
                         },
                       ),

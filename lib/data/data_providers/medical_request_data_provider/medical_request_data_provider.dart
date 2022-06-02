@@ -4,7 +4,6 @@ import 'package:http/http.dart' as http;
 
 class MedicalRequestDataProvider {
 
-
   RequestMedicalBenefit requestMedicalBenefit;
 
   MedicalRequestDataProvider(this.requestMedicalBenefit);
@@ -18,13 +17,13 @@ class MedicalRequestDataProvider {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        "ID": "1",
-        "HrCode": requestMedicalBenefit.hrCode,
-        "ServiceDate": requestMedicalBenefit.requestedDate,
-        "Beneficiaryname": requestMedicalBenefit.patientName,
-        "Servicetype": requestMedicalBenefit.serviceType,
-        "LabType": requestMedicalBenefit.lapType,
-        "InDate": requestMedicalBenefit.requestedDate
+        "id": "1",
+        "hrCode": requestMedicalBenefit.hrCode,
+        "serviceDate": requestMedicalBenefit.requestedDate,
+        "beneficiaryname": requestMedicalBenefit.patientName,
+        "servicetype": requestMedicalBenefit.serviceType,
+        "labType": requestMedicalBenefit.lapType,
+        "inDate": requestMedicalBenefit.requestedDate
       }),
     );
   }

@@ -45,8 +45,6 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
       // emit(BlocGetTheMedicalRequestLoadingState());
 
-
-
       print("--------"+selectedValueLab.value.toString());
       print("-,,----"+selectedValueService.value.toString());
 
@@ -82,14 +80,13 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
           MedicalRequestDataProvider(requestMedicalBenefit).getMedicalRequestMessage().then((value) {
             // emit(BlocgetTheMedicalRequestSuccesState("Success"));
 
+            print(value.body.toString());
             emit(
               state.copyWith(
                 successMessage: value.body.toString(),
                 status: FormzStatus.submissionSuccess,
               ),
             );
-
-
 
           }).catchError((error) {
             print(error.toString());
@@ -121,9 +118,6 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
         );
       }
     }
-
-
-
   }
 
   void patientName(String value) {
@@ -198,7 +192,6 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
   }
 
   void addSelectedLab(String lab1){
-
     final lab = RequestDate.dirty(lab1);
     emit(
       state.copyWith(
