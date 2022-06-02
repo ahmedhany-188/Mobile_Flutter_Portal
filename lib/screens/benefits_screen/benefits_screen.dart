@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:html/dom.dart' as dom;
 import 'package:sizer/sizer.dart';
+
+import '../../constants/url_links.dart';
 import '../../widgets/search/general_search.dart';
 import '../../data/helpers/download_pdf.dart';
 import '../../bloc/benefits_screen_bloc/benefits_cubit.dart';
@@ -138,7 +139,8 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                                 setState(() {
                                   searchResult =
                                       setBenefitsFilters(5, benefitsData);
-                                  textController.text = 'Banks, Schools and other';
+                                  textController.text =
+                                      'Banks, Schools and other';
                                 });
                               },
                             ),
@@ -198,8 +200,9 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                                   MediaQuery.of(context).devicePixelRatio.sp *
                                       25,
                               child: CachedNetworkImage(
-                                imageUrl:
-                                    'https://portal.hassanallam.com/images/Benefits/${benefitsDataList[index]['benefitsId']}.jpg',
+                                imageUrl: benefitsLogosLink(
+                                    benefitsDataList[index]['benefitsId']
+                                        .toString()),
                                 placeholder: (c, m) => const Center(
                                     child: RefreshProgressIndicator()),
                                 errorWidget: (c, s, d) => Image.asset(
@@ -227,16 +230,8 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                             shrinkWrap: true,
                             data: benefitsDataList[index]['benefitsDescription']
                                 .toString(),
-                            onLinkTap: (String? url,
-                                RenderContext context,
-                                Map<String, String> attributes,
-                                dom.Element? element) async {
-                              // if (await canLaunch(url!)) {
-                              //   launch(url);
-                              // } else {
-                              // var urlNameIndex = url!.lastIndexOf('/');
-                              // var urlName =
-                              //     url.substring(urlNameIndex + 1, url.length);
+                            onLinkTap: (String? url, RenderContext context,
+                                Map<String, String> attributes, _) async {
                               await DownloadPdfHelper(
                                   fileUrl: url!,
                                   fileName: url.substring(
@@ -245,7 +240,6 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                                   failed: () {
                                     showErrorSnackBar();
                                   }).download();
-                              // }
                             },
                             style: {
                               '#': Style(
@@ -260,11 +254,12 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              if (await canLaunchUrl( /// the canLaunch is deprecated TODO the link is not working on emulator
-                                  Uri.parse('https://portal.hassanallam.com/images/Benefits/${benefitsDataList[index]['benefitsId']}.pdf'))) {
-                                await launchUrl(
-                                    Uri.parse('https://portal.hassanallam.com/images/Benefits/${benefitsDataList[index]['benefitsId']}.pdf'));
-                              }
+                              await launchUrl(
+                                Uri.parse(benefitsExtraDataLink(
+                                    benefitsDataList[index]['benefitsId']
+                                        .toString())),
+                                mode: LaunchMode.externalApplication,
+                              );
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(bottom: 8.0),
@@ -272,8 +267,9 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                                 'Click Here for more details',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                    decoration: TextDecoration.underline,
-                                    color: Colors.blue),
+                                  decoration: TextDecoration.underline,
+                                  color: Colors.blue,
+                                ),
                               ),
                             ),
                           ),

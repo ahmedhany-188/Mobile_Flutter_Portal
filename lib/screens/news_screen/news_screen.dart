@@ -24,9 +24,10 @@ class _NewsScreenState extends State<NewsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: MainDrawer(),
-      appBar: basicAppBar(context, 'News'),
-      backgroundColor: Colors.cyan,
+      // drawer: MainDrawer(),
+      appBar:AppBar(title: Text("News"),),/// basicAppBar(context, 'News'),
+      backgroundColor: Colors.white,
+
       body: BlocProvider(
         create: (context) => NewsCubit()..getNews(),
         child: BlocConsumer<NewsCubit, NewsState>(

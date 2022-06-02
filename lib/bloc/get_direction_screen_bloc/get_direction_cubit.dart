@@ -5,14 +5,12 @@ import '../../data/data_providers/general_dio/general_dio.dart';
 part 'get_direction_state.dart';
 
 class GetDirectionCubit extends Cubit<GetDirectionState> {
-  GetDirectionCubit() : super(GetDirectionInitial()){
+  GetDirectionCubit() : super(GetDirectionInitial()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
         try {
-
           getDirection();
-
         } catch (e) {
           emit(GetDirectionErrorState(e.toString()));
         }
@@ -26,32 +24,21 @@ class GetDirectionCubit extends Cubit<GetDirectionState> {
   static GetDirectionCubit get(context) => BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();
 
-  List<dynamic> getDirectionList = [];
-
+  late List<dynamic> getDirectionList;
 
   void getDirection() {
     emit(GetDirectionLoadingState());
-    // connectivity.onConnectivityChanged.listen((connectivityResult) async {
-    //   if (connectivityResult == ConnectivityResult.wifi ||
-    //       connectivityResult == ConnectivityResult.mobile) {
-    //     try {
-          GeneralDio.getGetDirectionData().then((value) {
-            getDirectionList = value.data
-                .where((element) =>
-                    element['latitude'].toString().contains('.') &&
-                    element['longitude'].toString().contains('.'))
-                .toList();
 
-            emit(GetDirectionSuccessState(getDirectionList));
-          }).catchError((error) {
-            emit(GetDirectionErrorState(error.toString()));
-          });
-        // } catch (e) {
-        //   emit(GetDirectionErrorState(e.toString()));
-        // }
-    //   } else if (connectivityResult == ConnectivityResult.none) {
-    //     emit(GetDirectionErrorState("No internet Connection"));
-    //   }
-    // });
+    GeneralDio.getGetDirectionData().then((value) {
+      getDirectionList = value.data
+          .where((element) =>
+              element['latitude'].toString().contains('.') &&
+              element['longitude'].toString().contains('.'))
+          .toList();
+
+      emit(GetDirectionSuccessState(getDirectionList));
+    }).catchError((error) {
+      emit(GetDirectionErrorState(error.toString()));
+    });
   }
 }

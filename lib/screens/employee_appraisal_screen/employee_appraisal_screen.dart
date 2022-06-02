@@ -39,7 +39,7 @@ class EmployeeAppraisal_Screen extends StatefulWidget {
           centerTitle: true,
         ),
         resizeToAvoidBottomInset: false,
-        drawer: MainDrawer(),
+        // drawer: MainDrawer(),
 
         body: BlocProvider<EmployeeAppraisalBlocCubit>(
           create: (context) =>

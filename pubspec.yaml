@@ -38,10 +38,12 @@ dependencies:
   equatable: any
   flutter_bloc: any
   hydrated_bloc: any
-  path_provider: any
+  path_provider: ^2.0.10
   bloc: any
   json_annotation: any
   http: any
+  path: ^1.8.1
+  flutter_svg: ^1.1.0
 
 
   dropdown_button2: ^1.5.2
@@ -49,6 +51,7 @@ dependencies:
   video_player: ^2.4.2
   swipe_image_gallery: ^0.5.1
   animated_text_kit: ^4.2.1
+  url_launcher: ^6.1.2
 
 
 
@@ -98,8 +101,12 @@ dependencies:
   flutter_form_bloc: ^0.30.1
   flutter_multiselect: ^1.0.0
   flutter_html: any
+  html: ^0.15.0
   firebase_core: ^1.17.0
   firebase_auth: ^3.3.18
+  firebase_database: ^9.0.13
+  dio: ^4.0.6
+  heroicons: ^0.5.0
 
 #  flutter_native_splash: any
 #flutter_native_splash:
@@ -155,6 +162,11 @@ flutter:
     - assets/images/native_splash.png
     - assets/images/S_Background.png
     - assets/images/home_cropped.jpg
+    - assets/images/Benefits.png
+    - assets/images/Media.png
+    - assets/images/Subsidiaries.png
+    - assets/images/Values.png
+    - assets/images/Cover.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -168,6 +180,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
+     - family: RobotoFlex
+       fonts:
+         - asset: assets/fonts/RobotoFlex-Regular.ttf
      - family: RobotoCondensed
        fonts:
          - asset: assets/fonts/RobotoCondensed-Regular.ttf

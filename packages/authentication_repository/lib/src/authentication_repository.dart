@@ -21,7 +21,20 @@ class AuthenticationRepository {
   final firebase_auth.FirebaseAuth _firebaseAuth = firebase_auth.FirebaseAuth.instance;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   DatabaseReference _databaseReferenceUsers = FirebaseDatabase.instance.ref("Users");
-  Future<void> init() async {
+
+  static final AuthenticationRepository? _singleton = AuthenticationRepository();
+  static getInstance(){
+    if(_singleton != null){
+      return _singleton;
+    }else{
+      return AuthenticationRepository();
+    }
+  }
+  AuthenticationRepository(){
+    init();
+  }
+  Future  init() async {
+    print("init shared user");
     shared_User = await SharedPreferences.getInstance();
 
     try{
@@ -45,10 +58,10 @@ class AuthenticationRepository {
     // await Future<void>.delayed(const Duration(seconds: 1));
     try{
       if (_firebaseAuth.currentUser != null){
-        String? data = shared_User.getString(userCacheKey);
+        String? data = await shared_User.getString(userCacheKey);
         Map userMap = jsonDecode(data!);
         var user = getFromJson(userMap as Map<String, dynamic>);
-        String? dataEmployee = shared_User.getString(employeeCacheKey);
+        String? dataEmployee = await shared_User.getString(employeeCacheKey);
         Map employeeMap = jsonDecode(dataEmployee!);
         var employeeData = getEmployeeDataFromJson(employeeMap as Map<String, dynamic>);
         var mainUserData = MainUserData(user: user,employeeData: employeeData);
@@ -104,7 +117,7 @@ class AuthenticationRepository {
                   await _firebaseMessaging.getToken().then((token) async {
                     print("FCM --> $token");
                     await _databaseReferenceUsers.child(user.email.replaceAll(".", ",")).update({
-                      "device_token": token,
+                      // "device_token": token,
                       "hrcode": user.userHRCode,
                       "imgProfile": employeeData.imgProfile,
                       "managerCode":employeeData.managerCode,

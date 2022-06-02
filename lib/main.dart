@@ -10,7 +10,10 @@ import 'package:hassanallamportalflutter/bloc/it_request_bloc/email_useracount_r
 // import 'package:hassanallamportalflutter/bloc/hr_request_bloc/permission_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
+import 'package:hassanallamportalflutter/data/data_providers/firebase_provider/FirebaseProvider.dart';
+import 'package:hassanallamportalflutter/life_cycle_states.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -39,6 +42,7 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+
   final storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
@@ -55,9 +59,10 @@ void main() async {
 
   await GeneralDio.init();
   await AlbumDio.initAlbums();
+
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget{
   final AppRouter appRouter;
   final Connectivity connectivity;
 
@@ -68,18 +73,34 @@ class MyApp extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final platform = Theme.of(context).platform;
     final AuthenticationRepository _authenticationRepository =
-        AuthenticationRepository();
-    _authenticationRepository.init();
+        AuthenticationRepository.getInstance();
+    print("build");
+    // _authenticationRepository.init();
+
+    // LifeCycleStates(context);
+
     // final AuthenticationBloc authenticationBloc = AuthenticationBloc(authenticationRepository);
     // final Repositor = AuthenticationRepository();
     return MultiBlocProvider(
       providers: [
         BlocProvider<InternetCubit>(
           create: (internetCubitContext) =>
-              InternetCubit(connectivity: connectivity),
+              InternetCubit(connectivity: widget.connectivity),
         ),
         BlocProvider<CounterCubit>(
           create: (counterCubitContext) => CounterCubit(),
@@ -149,23 +170,28 @@ class MyApp extends StatelessWidget {
         BlocProvider<VideosCubit>(
           create: (videosContext) => VideosCubit()..getVideos(),
         ),
+        BlocProvider<UserNotificationBloc>(
+          lazy: true,
+          create: (userNotificationContext) => UserNotificationBloc(firebaseProvider: FirebaseProvider(BlocProvider.of<AppBloc>(userNotificationContext).state.userData.user!),),
+        ),
         // BlocProvider<PermissionCubit>(
         //   create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),
         // ),
       ],
-      child: MaterialApp(
-        title: 'Hassan Allam Portal',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: Color.fromRGBO(23, 72, 115, 1),
+      child: LifeCycleState(
+        child: MaterialApp(
+          title: 'Hassan Allam Portal',
+          debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+              seedColor: Color.fromRGBO(23, 72, 115, 1),
+            ),
+            // primarySwatch: Colors.accents,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          // primarySwatch: Colors.accents,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
+          onGenerateRoute: widget.appRouter.onGenerateRoute,
         ),
-        onGenerateRoute: appRouter.onGenerateRoute,
-      ),
-    );
+      ));
   }
 }
 

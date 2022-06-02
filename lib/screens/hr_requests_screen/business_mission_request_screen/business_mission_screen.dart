@@ -2,8 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
-import '../../../bloc/hr_request_bloc/business_mission_request/business_mission_cubit.dart';
+import '../../../bloc/hr_request_bloc/hr_request_export.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
 
@@ -19,8 +20,7 @@ class BusinessMissionScreen extends StatefulWidget {
 class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
   @override
   Widget build(BuildContext context) {
-    TextEditingController permissionDateController = TextEditingController();
-    TextEditingController permissionTimeController = TextEditingController();
+
     final user = context.select((AppBloc bloc) =>
     bloc.state.userData.employeeData);
 
@@ -75,13 +75,8 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                         heroTag: null,
                         onPressed: () {
                           context.read<BusinessMissionCubit>()
-                              .submitPermissionRequest(user?.userHrCode ?? "0");
+                              .submitBusinessMissionRequest(user?.userHrCode ?? "0");
                         },
-                        // formBloc.state.status.isValidated
-                        //       ? () => formBloc.submitPermissionRequest()
-                        //       : null,
-                        // formBloc.submitPermissionRequest();
-
                         icon: const Icon(Icons.send),
                         label: const Text('SUBMIT'),
                       ),
@@ -228,49 +223,83 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                   BusinessMissionInitial>(
                                 // buildWhen: (previous, current) => previous.permissionDate != current.permissionDate,
                                   buildWhen: (previous, current) {
-                                    return (previous.permissionDate !=
-                                        current.permissionDate) ||
+                                    return (previous.dateFrom !=
+                                        current.dateFrom) ||
                                         previous.status != current.status;
                                   },
                                   builder: (context, state) {
+                                    print(state.dateFrom.value);
                                     return TextFormField(
-                                      onChanged: (permissionDate) =>
+                                      key: UniqueKey(),
+                                      initialValue: state.dateFrom.value,
+                                      onChanged: (vacationDate) =>
                                           context
                                               .read<BusinessMissionCubit>()
-                                              .permissionDateChanged(
-                                              permissionDate),
+                                              .businessDateFromChanged(
+                                              context),
                                       readOnly: true,
-                                      controller: permissionDateController,
+
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
-                                        labelText: 'Permission Date',
-                                        errorText: state.permissionDate.invalid
-                                            ? 'invalid permission date'
+                                        labelText: 'Mission From Date',
+                                        errorText: state.dateFrom
+                                            .invalid
+                                            ? 'invalid date from'
                                             : null,
                                         prefixIcon: const Icon(
                                             Icons.date_range_outlined),
                                       ),
-                                      onTap: () async {
-                                        DateTime? date = DateTime.now();
-                                        FocusScope.of(context).requestFocus(
-                                            FocusNode());
-                                        date = await showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(2000),
-                                            lastDate: DateTime(2100));
-                                        var formatter = DateFormat(
-                                            'EEEE dd-MM-yyyy');
-                                        String formattedDate = formatter.format(
-                                            date ?? DateTime.now());
-                                        permissionDateController.text =
-                                            formattedDate;
+                                      onTap: () {
+
+                                        // vacationDateFromController.text =
+                                        //     formattedDate;
                                         // (permissionDate) =>
                                         context
                                             .read<BusinessMissionCubit>()
-                                            .permissionDateChanged(
-                                            formattedDate);
+                                            .businessDateFromChanged(
+                                            context);
+                                      },
+                                    );
+                                  }
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: BlocBuilder<
+                                  BusinessMissionCubit,
+                                  BusinessMissionInitial>(
+                                // buildWhen: (previous, current) => previous.permissionDate != current.permissionDate,
+                                  buildWhen: (previous, current) {
+                                    return (previous.dateTo !=
+                                        current.dateTo) ||
+                                        previous.status != current.status ||
+                                        previous.dateFrom !=
+                                            current.dateFrom;
+                                  },
+                                  builder: (context, state) {
+                                    return TextFormField(
+                                      key: UniqueKey(),
+                                      initialValue: state.dateTo.value,
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        floatingLabelAlignment:
+                                        FloatingLabelAlignment.start,
+                                        labelText: 'Mission To Date',
+                                        errorText: state.dateTo.invalid ? (state.dateTo.error == DateToError.empty
+                                            ? "Empty Date To or Date From"
+                                            : (state.dateTo.error == DateToError.isBefore)
+                                            ? "Date From must be before Date To" : null) : null,
+                                        prefixIcon: const Icon(
+                                            Icons.date_range_outlined),
+                                      ),
+                                      onTap: () {
+                                        context
+                                            .read<BusinessMissionCubit>()
+                                            .businessToDateChanged(
+                                            context);
                                       },
                                     );
                                   }
@@ -284,44 +313,62 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                   BusinessMissionCubit,
                                   BusinessMissionInitial>(
                                   buildWhen: (previous, current) =>
-                                  previous.permissionTime !=
-                                      current.permissionTime,
+                                  previous.timeFrom !=
+                                      current.timeFrom,
                                   builder: (context, state) {
                                     return TextFormField(
-                                      // onChanged: null,
+                                      key: UniqueKey(),
+                                      initialValue: state.timeFrom.value,
                                       readOnly: true,
-                                      controller: permissionTimeController,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
-                                        labelText: 'Permission Time',
-                                        errorText: state.permissionTime.invalid
+                                        labelText: 'Time From',
+                                        errorText: state.timeFrom.invalid
                                             ? 'invalid permission time'
                                             : null,
                                         prefixIcon: const Icon(
                                             Icons.access_time),
                                       ),
                                       onTap: () async {
-                                        TimeOfDay? time = TimeOfDay.now();
-                                        FocusScope.of(context).requestFocus(
-                                            FocusNode());
-                                        time =
-                                        await showTimePicker(context: context,
-                                            initialTime: TimeOfDay.now());
-                                        // if (time != null){
-                                        final localizations = MaterialLocalizations
-                                            .of(context);
-                                        final formattedTimeOfDay = localizations
-                                            .formatTimeOfDay(
-                                            time ?? TimeOfDay.now());
-                                        permissionTimeController.text =
-                                            formattedTimeOfDay;
                                         context
                                             .read<BusinessMissionCubit>()
-                                            .permissionTimeChanged(
-                                            formattedTimeOfDay);
-                                        // }
-
+                                            .businessTimeFromChanged(
+                                            context);
+                                      },
+                                    );
+                                  }
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: BlocBuilder<
+                                  BusinessMissionCubit,
+                                  BusinessMissionInitial>(
+                                  buildWhen: (previous, current) =>
+                                  previous.timeTo !=
+                                      current.timeTo,
+                                  builder: (context, state) {
+                                    return TextFormField(
+                                      key: UniqueKey(),
+                                      initialValue: state.timeTo.value,
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        floatingLabelAlignment:
+                                        FloatingLabelAlignment.start,
+                                        labelText: 'Time To',
+                                        errorText: state.timeTo.invalid
+                                            ? 'invalid time'
+                                            : null,
+                                        prefixIcon: const Icon(
+                                            Icons.access_time),
+                                      ),
+                                      onTap: () async {
+                                        context
+                                            .read<BusinessMissionCubit>()
+                                            .businessTimeToChanged(
+                                            context);
                                       },
                                     );
                                   }

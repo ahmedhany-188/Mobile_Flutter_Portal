@@ -13,14 +13,14 @@ class NewsCubit extends Cubit<NewsState> {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
-        try {
-
-          getNews();
-          getLatestNews();
-
-        } catch (e) {
-          emit(NewsErrorState(e.toString()));
-        }
+        // try {
+        //
+        //   // getNews();
+        //   // getLatestNews();
+        //
+        // } catch (e) {
+        //   emit(NewsErrorState(e.toString()));
+        // }
       } else if (connectivityResult == ConnectivityResult.none) {
         emit(NewsErrorState("No internet Connection"));
       }

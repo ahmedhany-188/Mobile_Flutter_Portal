@@ -14,8 +14,8 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        appBar: basicAppBar(context, 'About'),
-        drawer: MainDrawer(),
+        appBar: AppBar(), ///basicAppBar(context, 'About'),
+        // drawer: MainDrawer(),
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(

@@ -46,7 +46,7 @@ class _attendance_sreenState extends State<Attendance_Screen> {
       ),
       resizeToAvoidBottomInset: false,
 
-      drawer: MainDrawer(),
+      // drawer: MainDrawer(),
 
       body: BlocProvider<AttendanceCubit>(
         create: (context) => AttendanceCubit()..getAttendanceList(user.user!.userHRCode.toString(), monthNumber),

@@ -1,16 +1,15 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_bloc/flutter_form_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
-import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_date.dart';
-import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_type.dart';
+import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 
 import '../../../constants/enums.dart';
 import '../../../data/models/requests_form_models/request_date.dart';
-import '../../../data/models/requests_form_models/request_permission_time.dart';
+import '../../../data/models/requests_form_models/request_date_from.dart';
+import '../../../data/models/requests_form_models/request_time_from.dart';
+import '../../../data/models/requests_form_models/request_time_to.dart';
 
 part 'business_mission_state.dart';
 
@@ -31,7 +30,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
         state.copyWith(
           requestDate: requestDate,
           status: Formz.validate([requestDate,
-            state.permissionTime , state.permissionDate]),
+            state.timeFrom , state.dateFrom]),
           requestStatus: RequestStatus.newRequest
         ),
       );
@@ -41,19 +40,59 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
         state.copyWith(
             requestDate: requestDate,
             status: Formz.validate([requestDate,
-              state.permissionTime , state.permissionDate]),
+              state.timeFrom , state.dateFrom]),
             requestStatus: RequestStatus.oldRequest
         ),
       );
     }
   }
 
-  void permissionDateChanged(String value) {
-    final permissionDate = PermissionDate.dirty(value);
+  void businessDateFromChanged(BuildContext context) async{
+    DateTime? date = DateTime.now();
+    FocusScope.of(context).requestFocus(
+        FocusNode());
+    date = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100));
+    var formatter = DateFormat(
+        'EEEE dd-MM-yyyy');
+    String formattedDate = formatter.format(
+        date ?? DateTime.now());
+    final dateFrom = DateFrom.dirty(formattedDate);
+    final dateTo = DateTo.dirty(
+      dateFrom: dateFrom.value,
+      value: state.dateTo.value,
+    );
+    // final businessDateFrom = DateFrom.dirty(value);
     emit(
       state.copyWith(
-        permissionDate: permissionDate,
-        status: Formz.validate([state.requestDate,permissionDate, state.permissionTime]),
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+        status: Formz.validate([state.requestDate,dateFrom, state.timeFrom]),
+      ),
+    );
+  }
+
+  void businessToDateChanged(BuildContext context) async {
+    DateTime? date = DateTime.now();
+    FocusScope.of(context).requestFocus(
+        FocusNode());
+    date = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100));
+    var formatter = DateFormat(
+        'EEEE dd-MM-yyyy');
+    String formattedDate = formatter.format(
+        date ?? DateTime.now());
+    final dateTo = DateTo.dirty(dateFrom: state.dateFrom.value,value: formattedDate);
+    emit(
+      state.copyWith(
+        dateTo: dateTo,
+        status: Formz.validate([state.requestDate,state.dateFrom,dateTo]),
       ),
     );
   }
@@ -62,18 +101,52 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
     emit(
       state.copyWith(
         missionType: missionType,
-        status: Formz.validate([state.requestDate,state.permissionDate,state.permissionTime]),
+        status: Formz.validate([state.requestDate,state.dateFrom,state.timeFrom]),
       ),
     );
   }
-  void permissionTimeChanged(String value) {
+  void businessTimeFromChanged(BuildContext context) async{
+    TimeOfDay? time = TimeOfDay.now();
+    final localizations = MaterialLocalizations
+        .of(context);
+    FocusScope.of(context).requestFocus(
+        FocusNode());
+    time =
+        await showTimePicker(context: context,
+        initialTime: TimeOfDay.now());
+    // if (time != null){
 
-    final permissionTime = PermissionTime.dirty(value);
-    print(permissionTime.value);
+    final formattedTimeOfDay = localizations
+        .formatTimeOfDay(
+        time ?? TimeOfDay.now());
+    // permissionTimeController.text =
+    //     formattedTimeOfDay;
+    final timeFrom = TimeFrom.dirty(formattedTimeOfDay);
+    // print(permissionTime.value);
     emit(
       state.copyWith(
-        permissionTime: permissionTime,
-        status: Formz.validate([state.requestDate,state.permissionDate,permissionTime]),
+        timeFrom: timeFrom,
+        status: Formz.validate([state.requestDate,state.dateFrom,timeFrom]),
+      ),
+    );
+  }
+  void businessTimeToChanged(BuildContext context) async{
+    TimeOfDay? time = TimeOfDay.now();
+    final localizations = MaterialLocalizations
+        .of(context);
+    FocusScope.of(context).requestFocus(
+        FocusNode());
+    time =
+    await showTimePicker(context: context,
+        initialTime: TimeOfDay.now());
+    final formattedTimeOfDay = localizations
+        .formatTimeOfDay(
+        time ?? TimeOfDay.now());
+    final timeTo = TimeTo.dirty(formattedTimeOfDay);
+    emit(
+      state.copyWith(
+        timeTo: timeTo,
+        status: Formz.validate([state.requestDate,state.dateFrom,state.timeFrom,timeTo]),
       ),
     );
   }
@@ -84,112 +157,87 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
     emit(
       state.copyWith(
         comment: value,
-        status: Formz.validate([state.requestDate,state.permissionDate,state.permissionTime]),
+        status: Formz.validate([state.requestDate,state.dateFrom,state.timeFrom]),
       ),
     );
   }
 
-  Future<void> submitPermissionRequest(String hrCode) async {
+  Future<void> submitBusinessMissionRequest(String hrCode) async {
     print("submit permission");
     final requestDate = RequestDate.dirty(state.requestDate.value);
-    final permissionDate = PermissionDate.dirty(state.permissionDate.value);
-    final permissionTime = PermissionTime.dirty(state.permissionTime.value);
+    final dateFrom = DateFrom.dirty(state.dateFrom.value);
+    final dateTo = DateTo.dirty(value: state.dateTo.value,dateFrom: dateFrom.value);
+    final timeFrom = TimeFrom.dirty(state.timeFrom.value);
+    final timeTo = TimeTo.dirty(state.timeTo.value);
     emit(state.copyWith(
       requestDate: requestDate,
-      permissionDate: permissionDate,
-      permissionTime: permissionTime,
-      status: Formz.validate([requestDate, permissionDate]),
+      dateFrom: dateFrom,
+      dateTo: dateTo,
+      timeTo: timeTo,
+      timeFrom: timeFrom,
+      status: Formz.validate([requestDate, dateFrom,dateTo,timeFrom,timeTo]),
     ));
     if (state.status.isValidated) {
       // print("Done permission");
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
+      final DateFormat dateFormatViewed = DateFormat("EEEE dd-MM-yyyy");
+      final DateFormat dateFormatServer = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
       // "date" -> "2022-05-17T13:47:07"
-      // DateTime requestDateTemp = DateFormat("EEEE dd-MM-yyyy").parse(requestDate.value);
-      // final requestDateValue = DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(requestDateTemp);
-      // print("requestDateValue $requestDateValue");
-      //
-      // // "permissionDate" -> "2022-05-17T00:00:00"
-      // DateTime permissionDateTemp = DateFormat("EEEE dd-MM-yyyy").parse(permissionDate.value);
-      // final permissionDateValue = DateFormat("yyyy-MM-dd'T'HH:mm:ss").format(permissionDateTemp);
-      // print("permissionDateValue $permissionDateValue");
-      // // "comments" -> "Aaaaa"
-      // final comment = state.comment;
-      // print("comment $comment");
-      //
-      // // "dateFromAmpm" -> "PM"
-      // // "dateFrom" -> "1"
-      // DateTime date2= DateFormat("hh:mm a").parse(permissionTime.value);
-      // final dateFrom = DateFormat("hh").format(date2);
-      // print("dateFrom $dateFrom");
-      // final dateFromAmpm = DateFormat("a").format(date2);
-      // print("dateFromAmpm $dateFromAmpm");
-      //
-      //
-      // // final dateFrom = permissionTime.value.split(":")[0];
-      // // final dateFromAmpm = permissionTime.value.split(" ")[1];
-      // // print(permissionTime.value.split(":")[0]);
-      // // print(permissionTime.value.split(" ")[1]);
-      //
-      // // "dateTo" -> "3"
-      // // "dateToAmpm" -> "PM"
-      // final dateTo = DateFormat("hh").format(date2.add(Duration(hours: state.permissionType)));
-      // print("dateTo $dateTo");
-      //
-      // final dateToAmpm = DateFormat("a").format(date2.add(Duration(hours: state.permissionType)));
-      // print("dateToAmpm $dateToAmpm");
-      //
-      // final type = state.permissionType == 2 ? 0 : 1;
-      // print("type $type");
-      //
-      // print(hrCode);
-      //
-      // final permissionResponse = await _requestRepository.postPermissionRequest(hrCode: hrCode,comments: comment,
-      //     dateFrom: dateFrom,dateFromAmpm: dateFromAmpm,dateTo: dateTo,dateToAmpm: dateToAmpm,
-      //     permissionDate: permissionDateValue,requestDate: requestDateValue,type: type);
-      //
-      // if (permissionResponse.id == 0) {
-      //   // print(permissionResponse.requestNo);
-      //   emit(
-      //     state.copyWith(
-      //       errorMessage: permissionResponse.result,
-      //       status: FormzStatus.submissionFailure,
-      //     ),
-      //   );
-      // } else if (permissionResponse.id == 1){
-      //   // print(permissionResponse.requestNo);
-      //   emit(
-      //     state.copyWith(
-      //       successMessage: permissionResponse.requestNo,
-      //       status: FormzStatus.submissionSuccess,
-      //     ),
-      //   );
-      // }
-    }
+      DateTime requestDateTemp = dateFormatViewed.parse(requestDate.value);
+      final requestDateValue = dateFormatServer.format(requestDateTemp);
+      print("requestDateValue $requestDateValue");
 
-    // }
-    // try {
-    //   await _authenticationRepository.logIn(
-    //     username: state.username.value,
-    //     password: state.password.value,
-    //   );
-    //   emit(state.copyWith(status: FormzStatus.submissionSuccess));
-    // } on LogInWithEmailAndPasswordFailureApi catch (e) {
-    //   emit(
-    //     state.copyWith(
-    //       errorMessage: e.message,
-    //       status: FormzStatus.submissionFailure,
-    //     ),
-    //   );
-    // } on LogInWithEmailAndPasswordFailureFirebase catch (e) {
-    //   emit(
-    //     state.copyWith(
-    //       errorMessage: e.message,
-    //       status: FormzStatus.submissionFailure,
-    //     ),
-    //   );
-    // } catch (_) {
-    //   emit(state.copyWith(status: FormzStatus.submissionFailure));
-    // }
+      // "permissionDate" -> "2022-05-17T00:00:00"
+      DateTime dateFromTemp = dateFormatViewed.parse(dateFrom.value);
+      final dateFromValue = dateFormatServer.format(dateFromTemp);
+      print("dateFromValue $dateFromValue");
+
+      DateTime dateToTemp = dateFormatViewed.parse(dateTo.value);
+      final dateToValue = dateFormatServer.format(dateToTemp);
+      print("dateToValue $dateToValue");
+      // "comments" -> "Aaaaa"
+      final comment = state.comment;
+      print("comment $comment");
+
+
+      DateTime hourFromTemp= DateFormat("hh:mm a").parse(timeFrom.value);
+      final hourFromValue = DateFormat("hh").format(hourFromTemp);
+      print("hourFrom $hourFromValue");
+      final dateFromAmpm = DateFormat("a").format(hourFromTemp);
+      print("dateFromAmpm $dateFromAmpm");
+
+      DateTime hourToTemp= DateFormat("hh:mm a").parse(timeTo.value);
+      final hourToValue = DateFormat("hh").format(hourToTemp);
+      print("hourToValue $hourToValue");
+      final dateToAmpm = DateFormat("a").format(hourToTemp);
+      print("dateToAmpm $dateToAmpm");
+
+
+      final type = "${state.missionType}";
+      print("type $type");
+
+      print(hrCode);
+
+
+      final businessMissionResponse = await _requestRepository.postBusinessMission(hrCode: hrCode,comments: comment,
+          dateFrom: dateFromValue,dateTo: dateToValue,requestDate: requestDateValue,type: type, hourFrom: hourFromValue,hourTo: hourToValue, dateToAmpm: dateToAmpm,dateFromAmpm: dateFromAmpm);
+
+      if (businessMissionResponse.id == 1){
+        emit(
+          state.copyWith(
+            successMessage: businessMissionResponse.requestNo,
+            status: FormzStatus.submissionSuccess,
+          ),
+        );
+      }else{
+        emit(
+          state.copyWith(
+            errorMessage: businessMissionResponse.id == 0 ? businessMissionResponse.result : "An error occurred",
+            status: FormzStatus.submissionFailure,
+          ),
+        );
+      }
+    }
   }
 }

@@ -6,7 +6,9 @@ class AuthenticationProvider{
     http.Response rawAttendanceData = await http.get(
       Uri.parse(
           "https://api.hassanallam.com/api/Account/LoginToken?Email=$userName&Password=$password&Remember=true"),
-    );
+    )
+        // .timeout(Duration(seconds: 20))
+    ;
     print(rawAttendanceData.body);
     return rawAttendanceData;
   }

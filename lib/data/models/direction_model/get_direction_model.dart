@@ -1,17 +1,17 @@
-class ProjectDirectionDetails {
+class GetDirectionModel {
   String? projectName;
   String? city;
   double? latitude;
   double? longitude;
 
-  ProjectDirectionDetails({
+  GetDirectionModel({
     this.projectName,
     this.city,
     this.latitude,
     this.longitude,
   });
 
-  ProjectDirectionDetails.fromJson(Map<String, dynamic> json) {
+  GetDirectionModel.fromJson(Map<String, dynamic> json) {
     projectName = json['projectName'];
     city = json['city'];
     latitude = json['latitude'];
