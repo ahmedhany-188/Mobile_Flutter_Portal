@@ -56,35 +56,25 @@ class _TapsScreenState extends State<TapsScreen> {
         drawer: MainDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          toolbarHeight: MediaQuery
-              .of(context)
-              .size
-              .height * 0.10,
+          toolbarHeight: MediaQuery.of(context).size.height * 0.10,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(bottomRight: Radius.circular(35)),
           ),
           elevation: 0,
           flexibleSpace: SizedBox(
-            width: MediaQuery
-                .of(context)
-                .size
-                .width,
-            height: MediaQuery
-                .of(context)
-                .size
-                .height,
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
 
             ///new added
             child: ClipRRect(
               borderRadius:
-              const BorderRadius.only(bottomRight: Radius.circular(35)),
+                  const BorderRadius.only(bottomRight: Radius.circular(35)),
               child: Stack(
                 // alignment: Alignment.topCenter,
                 fit: StackFit.expand,
                 clipBehavior: Clip.hardEdge,
                 children: <Widget>[
-                  Image.asset('assets/images/Cover.png',
-                      fit: BoxFit.cover),
+                  Image.asset('assets/images/Cover.png', fit: BoxFit.cover),
                   Image.asset(
                     'assets/images/login_image_logo.png',
                     scale: 3.5,
@@ -107,14 +97,16 @@ class _TapsScreenState extends State<TapsScreen> {
                 height: 100,
                 child: Center(
                   child: Container(
-                    decoration: BoxDecoration(
+                    decoration: const BoxDecoration(
                       color: Colors.transparent,
                       shape: BoxShape.circle,
-                      boxShadow: [BoxShadow(blurRadius: 1,
-                          color: Colors.black26,
-                          spreadRadius: 1,
-                          blurStyle: BlurStyle.normal,
-                          offset: Offset(-2.0, 3.0))
+                      boxShadow: [
+                        BoxShadow(
+                            blurRadius: 1,
+                            color: Colors.black26,
+                            spreadRadius: 1,
+                            blurStyle: BlurStyle.normal,
+                            offset: Offset(-2.0, 3.0))
                       ],
                     ),
                     child: CircleAvatar(
@@ -148,17 +140,22 @@ class _TapsScreenState extends State<TapsScreen> {
               children: [
                 BlocProvider.value(
                   value: BlocProvider.of<UserNotificationBloc>(context),
-                  child: BlocBuilder<UserNotificationBloc,
-                      UserNotificationState>(
+                  child:
+                      BlocBuilder<UserNotificationBloc, UserNotificationState>(
                     builder: (context, state) {
                       return Badge(
                         toAnimate: true,
-                        animationDuration: Duration(milliseconds: 1000),
+                        animationDuration: const Duration(milliseconds: 1000),
                         animationType: BadgeAnimationType.scale,
                         badgeColor: Colors.red,
-                        badgeContent: Text("${state.notifications.length}",
-                          style: TextStyle(color: Colors.white, fontSize: 12),),
-                        position: const BadgePosition(start: 5, top: 4,),
+                        badgeContent: Text(
+                          "${state.notifications.length}",
+                          style: TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                        position: const BadgePosition(
+                          start: 5,
+                          top: 4,
+                        ),
                         child: IconButton(
                           icon: const Icon(Icons.notifications),
                           onPressed: () {
@@ -172,7 +169,6 @@ class _TapsScreenState extends State<TapsScreen> {
                 ),
               ],
             ),
-
           ],
           // title: Image.asset(
           //   'assets/images/login_image_logo.png',
@@ -183,7 +179,7 @@ class _TapsScreenState extends State<TapsScreen> {
             unselectedLabelColor: Colors.white54,
             splashFactory: NoSplash.splashFactory,
             overlayColor: MaterialStateProperty.resolveWith(
-                  (Set states) {
+              (Set states) {
                 return states.contains(MaterialState.focused)
                     ? null
                     : Colors.transparent;
@@ -194,10 +190,7 @@ class _TapsScreenState extends State<TapsScreen> {
             labelPadding: EdgeInsets.only(bottom: 5),
             tabs: [
               Container(
-                width: ((MediaQuery
-                    .of(context)
-                    .size
-                    .width - 20) / 3.5),
+                width: ((MediaQuery.of(context).size.width - 20) / 3.5),
                 padding: EdgeInsets.only(left: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -214,10 +207,7 @@ class _TapsScreenState extends State<TapsScreen> {
                 ),
               ),
               Container(
-                width: ((MediaQuery
-                    .of(context)
-                    .size
-                    .width - 20) / 3.5),
+                width: ((MediaQuery.of(context).size.width - 20) / 3.5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -233,10 +223,7 @@ class _TapsScreenState extends State<TapsScreen> {
                 ),
               ),
               Container(
-                width: ((MediaQuery
-                    .of(context)
-                    .size
-                    .width - 20) / 3.5),
+                width: ((MediaQuery.of(context).size.width - 20) / 3.5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -253,46 +240,37 @@ class _TapsScreenState extends State<TapsScreen> {
               ),
               Container(
                 height: 35,
-                width: (MediaQuery
-                    .of(context)
-                    .size
-                    .width - 20) / 7,
+                width: (MediaQuery.of(context).size.width - 20) / 7,
                 padding: EdgeInsets.only(),
                 // decoration: const BoxDecoration(
                 //     color: Colors.white,
                 //     borderRadius: BorderRadius.all(Radius.circular(50))),
-                child: CircleAvatar(
+                child: const CircleAvatar(
                     radius: 20,
                     backgroundColor: Colors.white,
-                    child: const Icon(
-                      Icons.menu, color: Colors.black, size: 25,)),
+                    child: Icon(
+                      Icons.menu,
+                      color: Colors.black,
+                      size: 25,
+                    )),
               ),
             ],
           ),
         ),
         drawerEnableOpenDragGesture: true,
         body: Container(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height -
-              (MediaQuery
-                  .of(context)
-                  .size
-                  .height / 10),
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          height: MediaQuery.of(context).size.height -
+              (MediaQuery.of(context).size.height / 10),
+          width: MediaQuery.of(context).size.width,
           decoration: const BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/home_cropped.jpg'),
               fit: BoxFit.fill,
             ),
           ),
-          child: TabBarView(
+          child: const TabBarView(
             physics:
-            BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               HomeScreen3(),
               HomeScreen(),

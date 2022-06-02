@@ -255,7 +255,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                           GestureDetector(
                             onTap: () async {
                               await launchUrl(
-                                Uri.parse(benefitsLogosLink(
+                                Uri.parse(benefitsExtraDataLink(
                                     benefitsDataList[index]['benefitsId']
                                         .toString())),
                                 mode: LaunchMode.externalApplication,

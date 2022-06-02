@@ -38,3 +38,15 @@ showErrorSnackBar(BuildContext context) {
     content: Text('Something went wrong'),
   ));
 }
+
+checkTimeAmPm(){
+  return DateTime.now().isBefore(
+    DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      12,
+      00,
+    ),
+  );
+}
