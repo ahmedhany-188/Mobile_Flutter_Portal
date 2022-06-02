@@ -5,6 +5,9 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
+import '../../data/data_providers/firebase_provider/FirebaseProvider.dart';
+import '../../life_cycle_states.dart';
+
 part 'app_event.dart';
 part 'app_state.dart';
 
@@ -27,6 +30,10 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   late final StreamSubscription<MainUserData> _userSubscription;
 
   Future<void> _onUserChanged(AppUserChanged event, Emitter<AppState> emit) async {
+    if(event.userData.isNotEmpty){
+      FirebaseProvider(event.userData.user!).updateUserOnline(AppLifecycleStatus.online);
+    }
+
     emit(
       event.userData.isNotEmpty
           ? AppState.authenticated(event.userData)
@@ -35,6 +42,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) {
+    if(_authenticationRepository.currentUser.isNotEmpty){
+      FirebaseProvider(_authenticationRepository.currentUser.user!).updateUserOnline(AppLifecycleStatus.offline);
+    }
     unawaited(_authenticationRepository.logOut());
   }
 
