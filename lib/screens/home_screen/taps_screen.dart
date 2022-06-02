@@ -46,8 +46,8 @@ class _TapsScreenState extends State<TapsScreen> {
 
   @override
   Widget build(BuildContext mainContext) {
-    final user = mainContext.select((AppBloc bloc) => bloc.state.userData.user);
-    final firebaseProvider = FirebaseProvider(currentUser: user!);
+    final user = mainContext.select((AppBloc bloc) => bloc.state.userData.employeeData);
+
     return DefaultTabController(
       length: 4,
       child: Scaffold(
@@ -116,7 +116,8 @@ class _TapsScreenState extends State<TapsScreen> {
                         radius: 29,
                         // borderRadius: BorderRadius.circular(50),
                         backgroundImage: NetworkImage(
-                          'https://portal.hassanallam.com/Apps/images/Profile/${user.userHRCode}.jpg',
+                          'https://portal.hassanallam.com/Apps/images/Profile/${user
+                              ?.imgProfile}',
                         ),
                         onBackgroundImageError: (_, __) {
                           Image.asset(

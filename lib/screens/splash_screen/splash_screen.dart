@@ -2,10 +2,12 @@ import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/life_cycle_states.dart';
 import 'package:sprung/sprung.dart';
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../data/helpers/assist_function.dart';
+import '../../data/data_providers/firebase_provider/FirebaseProvider.dart';
 import '../../screens/home_screen/taps_screen.dart';
 import '../../screens/login_screen/auth_screen.dart';
 import '../../widgets/animation/page_transition_animation.dart';
@@ -166,6 +168,7 @@ class _SplashScreenState extends State<SplashScreen>
                     builder: (ctx, state) {
                       switch (state.status) {
                         case AppStatus.authenticated:
+                          FirebaseProvider(state.userData.user!).updateUserOnline(AppLifecycleStatus.online);
                           return const TapsScreen();
                         case AppStatus.unauthenticated:
                           return const AuthScreen();
