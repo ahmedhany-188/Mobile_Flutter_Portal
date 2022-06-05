@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/business_card_request/business_card_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/embassy_letter_request/embassy_letter_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/it_request_bloc/access_right_request/access_right_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/it_request_bloc/email_useracount_request/email_useraccount_cubit.dart';
@@ -143,6 +144,11 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<EmailUseraccountCubit>(
           create: (emailUserAccountRequestContext) =>
               EmailUseraccountCubit(),
+        ),
+
+        BlocProvider<EmbassyLetterCubit>(
+          create: (embassyLetterContext) =>
+              EmbassyLetterCubit(),
         ),
 
         BlocProvider<BusinessCardCubit>(

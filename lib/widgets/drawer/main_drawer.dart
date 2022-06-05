@@ -6,6 +6,7 @@ import 'package:hassanallamportalflutter/bloc/login_cubit/login_cubit.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
+import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
@@ -258,10 +259,24 @@ class _MainDrawerState extends State<MainDrawer> {
                         endIndent: 10,
                       ),
                       buildListTile(
-                        'BusinessCard',
+                        'Business Card',
                         Icons.credit_card,
                             () {
                           Navigator.of(context).pushNamed(BusinessCardScreen
+                              .routeName);
+                        },
+                      ),
+
+                      const Divider(
+                        thickness: 1,
+                        indent: 10,
+                        endIndent: 10,
+                      ),
+                      buildListTile(
+                        'Embassy Letter',
+                        Icons.airplanemode_active,
+                            () {
+                          Navigator.of(context).pushNamed(EmbassyLetterScreen
                               .routeName);
                         },
                       ),
