@@ -91,6 +91,7 @@ dependencies:
   cached_network_image: any
   full_screen_image_null_safe: any
   shimmer: ^2.0.0
+  file_picker: ^4.6.1
 
   flutter_secure_storage: ^5.0.2
   authentication_repository:
@@ -98,7 +99,7 @@ dependencies:
   formz: ^0.4.1
 
   flutter_form_bloc: ^0.30.1
-
+  flutter_multiselect: ^1.0.0
   flutter_html: any
   html: ^0.15.0
   firebase_core: ^1.17.0
@@ -130,6 +131,9 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   json_serializable: any
   build_runner: ^2.1.11
+  url_launcher: ^6.0.0
+  flutter_web_browser: ^0.17.1
+  dio: ^4.0.6
 
 
 # For information on the generic Dart part of this file, see the

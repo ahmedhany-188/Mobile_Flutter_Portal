@@ -3,13 +3,20 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/business_card_request/business_card_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/embassy_letter_request/embassy_letter_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/travel_request/travel_request_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/it_request_bloc/access_right_request/access_right_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/it_request_bloc/email_useracount_request/email_useraccount_cubit.dart';
+// import 'package:hassanallamportalflutter/bloc/hr_request_bloc/permission_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
 import 'package:hassanallamportalflutter/data/data_providers/firebase_provider/FirebaseProvider.dart';
 import 'package:hassanallamportalflutter/life_cycle_states.dart';
+import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -134,6 +141,32 @@ class _MyAppState extends State<MyApp> {
           create: (subsidiariesCubitContext) =>
               SubsidiariesCubit()..getSubsidiaries(),
         ),
+
+        BlocProvider<EmailUseraccountCubit>(
+          create: (emailUserAccountRequestContext) =>
+              EmailUseraccountCubit(),
+        ),
+
+        BlocProvider<EmbassyLetterCubit>(
+          create: (embassyLetterContext) =>
+              EmbassyLetterCubit(),
+        ),
+
+        BlocProvider<BusinessCardCubit>(
+          create: (businessCardRequestContext) =>
+              BusinessCardCubit(),
+        ),
+
+        BlocProvider<AccessRightCubit>(
+          create: (accessRightAccountRequestContext) =>
+              AccessRightCubit(),
+        ),
+
+        BlocProvider<TravelRequestCubit>(
+          create: (travelRequestContext) =>
+              TravelRequestCubit(),
+        ),
+
         BlocProvider<AppBloc>(
           create: (authenticationContext) => AppBloc(
             authenticationRepository: _authenticationRepository,

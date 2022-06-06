@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
+import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
+import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
+import 'package:hassanallamportalflutter/screens/admin_request_screen/travel_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
@@ -10,6 +13,8 @@ import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
@@ -30,32 +35,32 @@ import '../screens/videos_screen/videos_screen.dart';
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-      // case '/':
-      //   return MaterialPageRoute(
-      //     builder: (_) => HomeScreen(
-      //       title: "Home Screen",
-      //       color: Colors.blueAccent,
-      //     ),
-      //   );
+    // case '/':
+    //   return MaterialPageRoute(
+    //     builder: (_) => HomeScreen(
+    //       title: "Home Screen",
+    //       color: Colors.blueAccent,
+    //     ),
+    //   );
       case '/':
         return MaterialPageRoute(
           builder: (_) => const SplashScreen(),
         );
 
-      // case '/second':
-      //   return MaterialPageRoute(
-      //     builder: (_) => SecondScreen(
-      //       title: "Second Screen",
-      //       color: Colors.redAccent,
-      //     ),
-      //   );
-      // case '/third':
-      //   return MaterialPageRoute(
-      //     builder: (_) => ThirdScreen(
-      //       title: "Thirst Screen",
-      //       color: Colors.greenAccent,
-      //     ),
-      //   );
+    // case '/second':
+    //   return MaterialPageRoute(
+    //     builder: (_) => SecondScreen(
+    //       title: "Second Screen",
+    //       color: Colors.redAccent,
+    //     ),
+    //   );
+    // case '/third':
+    //   return MaterialPageRoute(
+    //     builder: (_) => ThirdScreen(
+    //       title: "Thirst Screen",
+    //       color: Colors.greenAccent,
+    //     ),
+    //   );
       case '/settings':
         return MaterialPageRoute(
           builder: (_) => const SettingsScreen(),
@@ -71,7 +76,7 @@ class AppRouter {
       case ContactDetailScreen.routeName:
         final args = settings.arguments as ContactsDataFromApi;
         return MaterialPageRoute(
-         builder: (_) =>  ContactDetailScreen(selectedContactDataAsMap: args,),
+          builder: (_) => ContactDetailScreen(selectedContactDataAsMap: args,),
         );
       case GetDirectionScreen.routeName:
         return MaterialPageRoute(
@@ -80,7 +85,7 @@ class AppRouter {
 
       case Attendance_Screen.routeName:
         return MaterialPageRoute(
-            builder: (_) => const Attendance_Screen(),
+          builder: (_) => const Attendance_Screen(),
         );
 
       case EmployeeAppraisal_Screen.routeName:
@@ -109,69 +114,83 @@ class AppRouter {
         );
 
       case SubsidiariesScreen.routeName:
-
         return MaterialPageRoute(
           builder: (_) => const SubsidiariesScreen(),
         );
       case ValueScreen.routeName:
-
         return MaterialPageRoute(
           builder: (_) => const ValueScreen(),
         );
       case AboutScreen.routeName:
-
         return MaterialPageRoute(
           builder: (_) => const AboutScreen(),
         );
       case NewsScreen.routeName:
-
         return MaterialPageRoute(
           builder: (_) => const NewsScreen(),
         );
       case PhotosScreen.routeName:
-
         return MaterialPageRoute(
           builder: (_) => const PhotosScreen(),
         );
       case PermissionScreen.routeName:
-
         return MaterialPageRoute(
           builder: (_) => const PermissionScreen(),
         );
       case VacationScreen.routeName:
-
         return MaterialPageRoute(
           builder: (_) => VacationScreen(),
         );
-      case BusinessMissionScreen.routeName:
 
+      case BusinessCardScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => BusinessCardScreen(),
+        );
+
+      case EmbassyLetterScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => EmbassyLetterScreen(),
+        );
+
+      case EmailAndUserAccountScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => EmailAndUserAccountScreen(),
+        );
+
+      case AccessUserAccountScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => AccessUserAccountScreen(),
+        );
+
+      // case TravelRequestScreen.routeName:
+      //   return MaterialPageRoute(
+      //     builder: (_) => TravelRequestScreen(),
+      //   );
+
+      case BusinessMissionScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => BusinessMissionScreen(),
         );
       case PollsScreen.routeName:
-
         return MaterialPageRoute(
           builder: (_) => const PollsScreen(),
         );
       case VideosScreen.routeName:
-
         return MaterialPageRoute(
           builder: (_) => const VideosScreen(),
         );
       case BenefitsScreen.routeName:
-
         return MaterialPageRoute(
           builder: (_) => const BenefitsScreen(),
         );
 
       case AppsScreen.routeName:
-
         return MaterialPageRoute(
           builder: (_) => AppsScreen(),
         );
       case NotificationsScreen.routeName:
         return MaterialPageRoute(
-          builder: (context) => NotificationsScreen()
+            builder: (context) => NotificationsScreen()
         );
       default:
         return null;

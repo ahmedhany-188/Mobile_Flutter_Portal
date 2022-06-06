@@ -10,7 +10,7 @@ import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_medical_benefit.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_web_browser/flutter_web_browser.dart';
 
 // ignore: camel_case_types
 class MedicalRequestScreen extends StatefulWidget{
@@ -71,11 +71,7 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                 content: Text("Success"),
               ),
             );
-
-            print("---------,,--" +
-                jsonDecode(state.successMessage.toString())['link']);
-            launchUrl(
-                Uri.parse(jsonDecode(state.successMessage.toString())['link']));
+            _launchUrl(jsonDecode(state.successMessage.toString())['link']);
           }
           else if (state.status.isSubmissionInProgress) {
             ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -288,20 +284,6 @@ class _medical_request_state extends State<MedicalRequestScreen> {
                     FloatingActionButton.extended(
                       onPressed: () {
                         String HR_code = user.user!.userHRCode.toString();
-                        // if (selectedValueService == "" ||
-                        //     selectedValueLab == "" ||
-                        //     Patientname_MedicalRequest.text == "" ||
-                        //     HrUser_MedicalRequest.text == "") {
-                        //   Fluttertoast.showToast(
-                        //       msg: "Fill all the fields",
-                        //       toastLength: Toast.LENGTH_SHORT,
-                        //       gravity: ToastGravity.BOTTOM,
-                        //       timeInSecForIosWeb: 1,
-                        //       backgroundColor: Colors.grey,
-                        //       textColor: Colors.black,
-                        //       fontSize: 16.0
-                        //   );
-                        // } else {
                         context.read<MedicalRequestCubit>().getSuccessMessage(
                             HR_code);
                       },
@@ -351,14 +333,30 @@ class _medical_request_state extends State<MedicalRequestScreen> {
     );
   }
 
-  String textDate(String DateAdded) {
-    if (DateAdded
-        .toString()
-        .length > 0) {
-      return DateAdded.split(" ")[0];
-    } else {
-      return "Select ticket date";
-    }
-  }
+void _launchUrl(_url) async {
+
+  FlutterWebBrowser.openWebPage(
+    url: _url,
+    customTabsOptions: const CustomTabsOptions(
+      colorScheme: CustomTabsColorScheme.dark,
+      toolbarColor: Colors.blue,
+      secondaryToolbarColor: Colors.green,
+      navigationBarColor: Colors.amber,
+      shareState: CustomTabsShareState.on,
+      instantAppsEnabled: true,
+      showTitle: true,
+      urlBarHidingEnabled: true,
+    ),
+    safariVCOptions: const SafariViewControllerOptions(
+      barCollapsingEnabled: true,
+      preferredBarTintColor: Colors.green,
+      preferredControlTintColor: Colors.amber,
+      dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
+      modalPresentationCapturesStatusBarAppearance: true,
+    ),
+  );
+
+}
+
 
 
