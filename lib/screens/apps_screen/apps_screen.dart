@@ -23,7 +23,7 @@ class AppsScreen extends StatelessWidget {
       // appBar: AppBar(),
 
       /// basicAppBar(context, 'Subsidiaries'),
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       body: BlocProvider(
         create: (context) => AppsCubit()..getApps(hrCode: user!.userHrCode),
         child: BlocConsumer<AppsCubit, AppsState>(
@@ -70,7 +70,14 @@ class AppsScreen extends StatelessWidget {
                           margin: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: const Color(0xFF186597),
+                            gradient: const  LinearGradient(
+                                colors: [
+                                  Color(0xFF1a4c78),
+                                  Color(0xFF3772a6),
+                                ],
+                                begin: Alignment.bottomLeft,
+                                end: Alignment.topRight,
+                                tileMode: TileMode.clamp),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,

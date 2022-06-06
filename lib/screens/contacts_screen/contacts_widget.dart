@@ -31,7 +31,14 @@ class ContactsWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15.0),
-                      color: Theme.of(context).colorScheme.secondary,
+                      gradient: const  LinearGradient(
+                          colors: [
+                            Color(0xFF1a4c78),
+                            Color(0xFF3772a6),
+                          ],
+                          begin: Alignment.bottomLeft,
+                          end: Alignment.topRight,
+                          tileMode: TileMode.clamp),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.grey.withOpacity(0.4),
@@ -55,40 +62,14 @@ class ContactsWidget extends StatelessWidget {
                             fit: FlexFit.tight,
                             child: CircleAvatar(
                               radius: 40.sp,
-                              // width: 30.0.w,
-                              // height: 20.0.h,
-                              // decoration: BoxDecoration(
-                              //   borderRadius: BorderRadius.circular(
-                              //     60.0.sp,
-                              //   ),
-                              //   image: DecorationImage(
-                              //     image:fit: BoxFit.fitHeight,
-                              //   ),
-                              // ),
-                              foregroundImage: (listFromContactsScreen[index]
-                                              .imgProfile ==
-                                          null ||
-                                      listFromContactsScreen[index]
-                                          .imgProfile
-                                          .toString()
-                                          .isEmpty)
-                                  ? const  AssetImage('assets/images/logo.png')
-                                      as ImageProvider
-                                  : CachedNetworkImageProvider(
-                                      'https://portal.hassanallam.com/Apps/images/Profile/${listFromContactsScreen[index].imgProfile}'),
-                              // child: SizedBox(
-                              //   height: MediaQuery.of(context).devicePixelRatio * 15,
-                              //   width: MediaQuery.of(context).devicePixelRatio * 25,
-                              //   child: CachedNetworkImage(
-                              //     imageUrl:
-                              //         'https://portal.hassanallam.com/Apps/images/Profile/${listFromContactsScreen[index]['imgProfile']}',
-                              //     placeholder: (c, m) => RefreshProgressIndicator(),
-                              //     errorWidget: (c, s, d) => Image.asset(
-                              //       'assets/images/logo.png',
-                              //       scale: 7,
-                              //     ),
-                              //   ),
-                              // ),
+                              backgroundColor: Colors.transparent,
+                              foregroundImage: CachedNetworkImageProvider(
+                                  'https://portal.hassanallam.com/Apps/images/Profile/${listFromContactsScreen[index].imgProfile}'),
+                              child: Image.asset(
+                                'assets/images/logo.png',
+                                scale: 3,
+                                fit: BoxFit.fitHeight,
+                              ),
                             ),
                           ),
                           Expanded(
@@ -99,49 +80,57 @@ class ContactsWidget extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    '${listFromContactsScreen[index].name}'
-                                        .trim(),
-                                    style: const TextStyle(
-                                      fontSize: 17.0,
-                                      fontWeight: FontWeight.w600,
+                                  Flexible(
+                                    fit: FlexFit.loose,
+                                    child: Text(
+                                      '${listFromContactsScreen[index].name}'
+                                          .trim(),
+                                      style: const TextStyle(
+                                        fontSize: 17.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                      ),
+                                      maxLines: 2,
+                                      // overflow: TextOverflow.ellipsis,
                                     ),
-                                    maxLines: 2,
-                                    // overflow: TextOverflow.ellipsis,
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.all(5),
+                                    padding: const EdgeInsets.only(top: 5,bottom: 5),
                                     child: Container(
                                       width: double.infinity,
                                       height: 0.2.h,
-                                      color: Colors.black,
+                                      color: Colors.white,
                                     ),
                                   ),
-                                  Container(
-                                    clipBehavior: Clip.none,
-                                    alignment: Alignment.center,
-                                    child: Column(
-                                      children: [
-                                        Text(
-                                          '${listFromContactsScreen[index].titleName}'
-                                              .trim(),
-                                          style: const TextStyle(
-                                            fontSize: 14.0,
+                                  Flexible(
+                                    child: Container(
+                                      clipBehavior: Clip.none,
+                                      alignment: Alignment.center,
+                                      child: Column(
+                                        children: [
+                                          Text(
+                                            '${listFromContactsScreen[index].titleName}'
+                                                .trim(),
+                                            style: const TextStyle(
+                                              fontSize: 14.0,
+                                              color: Colors.white,
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.center,
                                           ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                        Text(
-                                          '${listFromContactsScreen[index].projectName}',
-                                          style: const TextStyle(
-                                            fontSize: 13.0,
+                                          Text(
+                                            '${listFromContactsScreen[index].projectName}',
+                                            style: const TextStyle(
+                                              fontSize: 13.0,
+                                              color: Colors.white,
+                                            ),
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            textAlign: TextAlign.center,
                                           ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          textAlign: TextAlign.center,
-                                        ),
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ],
