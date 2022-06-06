@@ -7,7 +7,6 @@ import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
-import 'package:hassanallamportalflutter/screens/admin_request_screen/travel_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
@@ -18,6 +17,7 @@ import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_req
 import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
+import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
@@ -260,15 +260,15 @@ class _MainDrawerState extends State<MainDrawer> {
                         },
                       ),
 
-                      // buildDivider(),
-                      // buildListTile(
-                      //   'Travel Request',
-                      //   Icons.airplanemode_active,
-                      //       () {
-                      //     Navigator.of(context)
-                      //         .pushNamed(TravelRequestScreen.routeName);
-                      //   },
-                      // ),
+                      buildDivider(),
+                      buildListTile(
+                        'My Requests',
+                        Icons.wallpaper,
+                            () {
+                          Navigator.of(context)
+                              .pushNamed(MyRequestsScreen.routeName);
+                        },
+                      ),
 
                       buildDivider(),
                       buildListTile(

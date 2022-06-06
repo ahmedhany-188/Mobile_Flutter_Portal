@@ -39,7 +39,6 @@ class AttendanceCubit extends Cubit<AttendanceState> {
       emit(BlocGetTheAttendanceErrorState(e.toString()));
     }
 
-
   }
 
   @override
