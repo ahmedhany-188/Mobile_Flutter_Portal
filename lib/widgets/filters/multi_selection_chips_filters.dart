@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
+
 class MultiSelectionChipsFilters extends StatefulWidget {
   List<dynamic> selectedFilterForRemove = [];
   List<dynamic> filtersList;
   String filterName;
-  String listKey;
+  // String listKey;
   List<dynamic> initialValue;
   ValueSetter<List<dynamic>>? filterData;
 
   MultiSelectionChipsFilters(
-      this.filtersList, this.filterName, this.listKey, this.initialValue,
+      this.filtersList, this.filterName,  this.initialValue,
       {Key? key, this.filterData})
       : super(key: key);
 

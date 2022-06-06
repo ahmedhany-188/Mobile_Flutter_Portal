@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
-import 'package:hassanallamportalflutter/data/data_providers/firebase_provider/FirebaseProvider.dart';
+import 'package:hassanallamportalflutter/screens/apps_screen/apps_screen.dart';
 import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
 
-import '../../screens/benefits_screen/benefits_screen.dart';
 import '../../screens/contacts_screen/contacts_screen.dart';
 import '../../widgets/drawer/main_drawer.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
@@ -273,9 +272,9 @@ class _TapsScreenState extends State<TapsScreen> {
                 BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             children: [
               HomeScreen3(),
-              HomeScreen(),
+              AppsScreen(),
               ContactsScreen(),
-              HomeScreen2(),
+              HomeScreen(),
             ],
           ),
         ),

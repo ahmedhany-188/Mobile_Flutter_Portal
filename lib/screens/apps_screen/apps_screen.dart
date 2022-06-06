@@ -16,16 +16,14 @@ class AppsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
     final user =
         context.select((AppBloc bloc) => bloc.state.userData.employeeData);
     return Scaffold(
       // drawer: MainDrawer(),
-      appBar: AppBar(),
+      // appBar: AppBar(),
 
       /// basicAppBar(context, 'Subsidiaries'),
-      backgroundColor: Colors.blueGrey,
+      backgroundColor: Colors.transparent,
       body: BlocProvider(
         create: (context) => AppsCubit()..getApps(hrCode: user!.userHrCode),
         child: BlocConsumer<AppsCubit, AppsState>(
@@ -69,24 +67,35 @@ class AppsScreen extends StatelessWidget {
                           }
                         },
                         child: Container(
+                          margin: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
+                            gradient: const  LinearGradient(
+                                colors: [
+                                  Color(0xFF1a4c78),
+                                  Color(0xFF3772a6),
+                                ],
+                                begin: Alignment.bottomLeft,
+                                end: Alignment.topRight,
+                                tileMode: TileMode.clamp),
                           ),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               createAngularIcon(
-                                  angularIcon: apps.angularIcon.toString(),
-                                  solid: false,
-                                  context: context,
-                                  size: 60),
+                                angularIcon: apps.angularIcon.toString(),
+                                solid: false,
+                                context: context,
+                                color: Colors.white,
+                                size: 60,
+                              ),
                               Text(
                                 '${apps.sysName}',
                                 style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w400,
+                                  color: Colors.white,
                                 ),
                               ),
                             ],

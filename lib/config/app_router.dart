@@ -26,6 +26,7 @@ import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dar
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
+import '../data/models/contacts_related_models/contacts_data_from_api.dart';
 import '../screens/apps_screen/apps_screen.dart';
 import '../screens/notification_screen/notifications_screen.dart';
 import '../screens/polls_screen/polls_screen.dart';
@@ -73,7 +74,7 @@ class AppRouter {
           builder: (_) => const TapsScreen(),
         );
       case ContactDetailScreen.routeName:
-        final args = settings.arguments as Map<String, dynamic>;
+        final args = settings.arguments as ContactsDataFromApi;
         return MaterialPageRoute(
           builder: (_) => ContactDetailScreen(selectedContactDataAsMap: args,),
         );

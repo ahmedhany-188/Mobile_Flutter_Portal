@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/data/models/contacts_related_models/contacts_data_from_api.dart';
 
 import '../../data/models/contacts_related_models/filters_categories.dart';
 import '../../widgets/filters/multi_selection_chips_filters.dart';
@@ -6,7 +7,7 @@ import '../../widgets/filters/multi_selection_chips_filters.dart';
 
 class DialogContactFilter extends StatefulWidget {
   static const routeName = 'dialog';
-  List<dynamic> contactListFromApi;
+  List<ContactsDataFromApi> contactListFromApi;
 
   DialogContactFilter(this.contactListFromApi, {Key? key}) : super(key: key);
 
@@ -16,35 +17,36 @@ class DialogContactFilter extends StatefulWidget {
 
 class _DialogContactFilterState extends State<DialogContactFilter> {
   List<dynamic> companiesFilterResultsList = [];
-  var companiesNamesFromApiMap = <String>{};
+  var companiesNamesFromApiMap = <String?>{};
 
   List<dynamic> projectFilterResultsList = [];
-  var projectNamesFromApiMap = <String>{};
+  var projectNamesFromApiMap = <String?>{};
 
   List<dynamic> titleFilterResultsList = [];
-  var titleNamesFromApiMap = <String>{};
+  var titleNamesFromApiMap = <String?>{};
 
   List<dynamic> departmentFilterResultsList = [];
-  var departmentNamesFromApiMap = <String>{};
+  var departmentNamesFromApiMap = <String?>{};
 
   void companiesNamesData() {
     companiesFilterResultsList = widget.contactListFromApi
         .where(
-            (element) => companiesNamesFromApiMap.add(element['companyName']))
+            (element) => companiesNamesFromApiMap.add(element.companyName))
         .toList();
     companiesFilterResultsList = companiesNamesFromApiMap.toList();
+
   }
 
   void projectNamesData() {
     projectFilterResultsList = widget.contactListFromApi
-        .where((element) => projectNamesFromApiMap.add(element['projectName']))
+        .where((element) => projectNamesFromApiMap.add(element.projectName))
         .toList();
     projectFilterResultsList = projectNamesFromApiMap.toList();
   }
 
   void titleNamesData() {
     titleFilterResultsList = widget.contactListFromApi
-        .where((element) => titleNamesFromApiMap.add(element['titleName']))
+        .where((element) => titleNamesFromApiMap.add(element.titleName))
         .toList();
     titleFilterResultsList = titleNamesFromApiMap.toList();
   }
@@ -52,7 +54,7 @@ class _DialogContactFilterState extends State<DialogContactFilter> {
   void departmentNamesData() {
     departmentFilterResultsList = widget.contactListFromApi
         .where((element) =>
-            departmentNamesFromApiMap.add(element['mainDepartment']))
+            departmentNamesFromApiMap.add(element.mainDepartment))
         .toList();
     departmentFilterResultsList = departmentNamesFromApiMap.toList();
   }
@@ -100,6 +102,10 @@ class _DialogContactFilterState extends State<DialogContactFilter> {
                     onPressed: () {
                       Navigator.pop(context, []);
                     },
+                    splashColor: Theme.of(context)
+                        .colorScheme
+                        .background
+                        .withOpacity(0.01),
                     child: const Text(
                       'Cancel',
                       style: TextStyle(
@@ -107,10 +113,6 @@ class _DialogContactFilterState extends State<DialogContactFilter> {
                         decoration: TextDecoration.underline,
                       ),
                     ),
-                    splashColor: Theme.of(context)
-                        .colorScheme
-                        .background
-                        .withOpacity(0.01),
                   ),
                   actions: [
                     MaterialButton(
@@ -123,6 +125,12 @@ class _DialogContactFilterState extends State<DialogContactFilter> {
                           filtersFromExpandedList.titleFilter,
                         ]);
                       },
+                      textColor: Colors.white,
+                      splashColor: Theme.of(context)
+                          .colorScheme
+                          .background
+                          .withOpacity(0.01),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       child: const Text(
                         'Done',
                         style: TextStyle(
@@ -130,12 +138,6 @@ class _DialogContactFilterState extends State<DialogContactFilter> {
                           color: Colors.white,
                         ),
                       ),
-                      textColor: Colors.white,
-                      splashColor: Theme.of(context)
-                          .colorScheme
-                          .background
-                          .withOpacity(0.01),
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     )
                   ],
                 ),
@@ -152,7 +154,7 @@ class _DialogContactFilterState extends State<DialogContactFilter> {
                           child: MultiSelectionChipsFilters(
                             companiesFilterResultsList,
                             'Company',
-                            'companyName',
+                            // 'companyName',
                             filtersFromExpandedList.companiesFilter,
                             filterData: (newFilter) {
                               filtersFromExpandedList.companiesFilter =
@@ -165,7 +167,7 @@ class _DialogContactFilterState extends State<DialogContactFilter> {
                           child: MultiSelectionChipsFilters(
                             projectFilterResultsList,
                             'Project',
-                            'projectName',
+                            // 'projectName',
                             filtersFromExpandedList.projectsFilter,
                             filterData: (newFilter) {
                               filtersFromExpandedList.projectsFilter =
@@ -178,7 +180,7 @@ class _DialogContactFilterState extends State<DialogContactFilter> {
                           child: MultiSelectionChipsFilters(
                             departmentFilterResultsList,
                             'Department',
-                            'mainDepartment',
+                            // 'mainDepartment',
                             filtersFromExpandedList.departmentFilter,
                             filterData: (newFilter) {
                               filtersFromExpandedList.departmentFilter =
@@ -191,7 +193,7 @@ class _DialogContactFilterState extends State<DialogContactFilter> {
                           child: MultiSelectionChipsFilters(
                             titleFilterResultsList,
                             'Title',
-                            'titleName',
+                            // 'titleName',
                             filtersFromExpandedList.titleFilter,
                             filterData: (newFilter) {
                               filtersFromExpandedList.titleFilter = newFilter;
