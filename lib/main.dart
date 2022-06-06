@@ -211,6 +211,7 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
     if (kDebugMode) {
+      FocusManager.instance.primaryFocus?.unfocus();
       print("Change --> $bloc");
     }
     super.onChange(bloc, change);
