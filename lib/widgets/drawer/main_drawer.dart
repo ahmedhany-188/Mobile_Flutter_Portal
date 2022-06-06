@@ -7,6 +7,7 @@ import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
+import 'package:hassanallamportalflutter/screens/admin_request_screen/travel_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
@@ -210,11 +211,6 @@ class _MainDrawerState extends State<MainDrawer> {
                       ),
                       buildDivider(),
 
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
                       buildListTile(
                         'it request user account',
                         Icons.format_align_justify_outlined,
@@ -224,11 +220,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         },
                       ),
 
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'it request access account',
                         Icons.format_align_justify_outlined,
@@ -238,11 +230,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         },
                       ),
 
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'EconomyNews',
                         Icons.waterfall_chart,
@@ -253,11 +241,6 @@ class _MainDrawerState extends State<MainDrawer> {
                       ),
                       buildDivider(),
 
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
                       buildListTile(
                         'Business Card',
                         Icons.credit_card,
@@ -267,11 +250,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         },
                       ),
 
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      buildDivider(),
                       buildListTile(
                         'Embassy Letter',
                         Icons.airplanemode_active,
@@ -281,11 +260,17 @@ class _MainDrawerState extends State<MainDrawer> {
                         },
                       ),
 
-                      const Divider(
-                        thickness: 1,
-                        indent: 10,
-                        endIndent: 10,
-                      ),
+                      // buildDivider(),
+                      // buildListTile(
+                      //   'Travel Request',
+                      //   Icons.airplanemode_active,
+                      //       () {
+                      //     Navigator.of(context)
+                      //         .pushNamed(TravelRequestScreen.routeName);
+                      //   },
+                      // ),
+
+                      buildDivider(),
                       buildListTile(
                         'Appraisal',
                         Icons.quiz,

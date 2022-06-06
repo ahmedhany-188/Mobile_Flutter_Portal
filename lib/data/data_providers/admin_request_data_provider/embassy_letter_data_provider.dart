@@ -14,7 +14,7 @@ class EmbassyLetterRequestDataProvider {
 
   Future<http.Response> getEmbassyLetterRequest() async {
     return http.post(
-      Uri.parse(""),
+      Uri.parse("https://api.hassanallam.com/api/SelfService/AddEmbassyLetter"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },

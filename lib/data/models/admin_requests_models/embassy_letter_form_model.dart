@@ -1,17 +1,17 @@
 
 
-class EmbassyLetterFormModel{
+class EmbassyLetterFormModel {
 
 
-  String ?requestDate,purpose,embassy,dateFrom,dateTo,passportNo,comments,addSalary;
+  String ?requestDate, purpose, embassy, dateFrom, dateTo, passportNo, comments,
+      addSalary;
 
-  EmbassyLetterFormModel(
-      this.requestDate,
+  EmbassyLetterFormModel(this.requestDate,
       this.purpose,
       this.embassy,
       this.dateFrom,
       this.dateTo,
       this.passportNo,
-      this.comments,
-      this.addSalary);
+      this.addSalary,
+      this.comments);
 }

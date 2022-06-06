@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -19,7 +17,6 @@ class EmbassyLetterScreen extends StatefulWidget{
 
   @override
   State<EmbassyLetterScreen> createState() => _EmbassyLetterScreen();
-
 }
 
 class _EmbassyLetterScreen extends State<EmbassyLetterScreen>{
@@ -54,7 +51,6 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen>{
     "No"
   ];
 
-  String selectedPurpose="",selectedEmbassy="",selectedSalary="";
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +101,7 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen>{
 
         },
 
+
         child: Container(
           child: Padding(
             padding: const EdgeInsets.all(15),
@@ -133,11 +130,10 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen>{
                     BlocBuilder<EmbassyLetterCubit, EmbassyLetterInitial>(
                       builder: (context, state) {
                         return Container(
-                            decoration: outlineboxTypes(),
                             child: DropdownButtonHideUnderline(
                               child: DropdownButtonFormField(
                                 hint: Text(
-                                  selectedPurpose,
+                                  state.purpose,
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.black,
@@ -151,10 +147,10 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen>{
                                     )).toList(),
                                 onChanged: (value) {
                                   setState(() {
-                                    selectedPurpose = value.toString();
+                                    context.read<EmbassyLetterCubit>().addSelectedPurpose(
+                                        value.toString());
                                   });
-                                  context.read<EmbassyLetterCubit>().addSelectedPurpose(
-                                      selectedPurpose);
+
                                 },
                               ),
                             ),
@@ -166,11 +162,10 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen>{
                     BlocBuilder<EmbassyLetterCubit, EmbassyLetterInitial>(
                       builder: (context, state) {
                         return Container(
-                          decoration: outlineboxTypes(),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButtonFormField(
                               hint: Text(
-                                selectedEmbassy,
+                                state.embassy,
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.black,
@@ -184,10 +179,9 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen>{
                                   )).toList(),
                               onChanged: (value) {
                                 setState(() {
-                                  selectedEmbassy = value.toString();
+                                  context.read<EmbassyLetterCubit>().addSelectedEmbassy(
+                                      value.toString());
                                 });
-                                context.read<EmbassyLetterCubit>().addSelectedEmbassy(
-                                    selectedEmbassy);
                               },
                             ),
                           ),
@@ -245,6 +239,7 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen>{
                         );
                       },),
 
+                    Container(height: 10,),
 
                     BlocBuilder<EmbassyLetterCubit, EmbassyLetterInitial>(
                         builder: (context, state) {
@@ -253,16 +248,14 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen>{
                                 context.read<EmbassyLetterCubit>()
                                     .passportNo(value);
                               },
+                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(
+                                floatingLabelAlignment:
+                                FloatingLabelAlignment.start,
                                 labelText: "Passport NO",
-                                labelStyle: TextStyle(
-                                    color: Colors.white, fontSize: 15),
-                                prefixIcon: Icon(Icons.people),
-                                border: myinputborder(),
-                                enabledBorder: myinputborder(),
-                                focusedBorder: myfocusborder(),
+                                prefixIcon: Icon(Icons.book),
                                 errorText: state.passportNumber.invalid
-                                    ? 'invalid No'
+                                    ? 'invalid Passport NO'
                                     : null,
                               )
                           );
@@ -274,11 +267,10 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen>{
                     BlocBuilder<EmbassyLetterCubit, EmbassyLetterInitial>(
                       builder: (context, state) {
                         return Container(
-                          decoration: outlineboxTypes(),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButtonFormField(
                               hint: Text(
-                                selectedSalary,
+                                state.salary,
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.black,
@@ -292,10 +284,10 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen>{
                                   )).toList(),
                               onChanged: (value) {
                                 setState(() {
-                                  selectedSalary = value.toString();
+                                  context.read<EmbassyLetterCubit>().addSelectedSalary(
+                                      value.toString());
                                 });
-                                context.read<EmbassyLetterCubit>().addSelectedSalary(
-                                    selectedSalary);
+
                               },
                             ),
                           ),
@@ -313,17 +305,17 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen>{
                                     .comments(value);
                               },
                               decoration: InputDecoration(
+                                floatingLabelAlignment:
+                                FloatingLabelAlignment.start,
                                 labelText: "Comments",
-                                labelStyle: TextStyle(
-                                    color: Colors.white, fontSize: 15),
-                                prefixIcon: Icon(Icons.people),
+                                prefixIcon: Icon(Icons.comment),
                                 border: myinputborder(),
-                                enabledBorder: myinputborder(),
-                                focusedBorder: myfocusborder(),
                               )
                           );
                         }
                     ),
+
+                    Container(height: 10,),
 
                     FloatingActionButton.extended(
                       onPressed: () {

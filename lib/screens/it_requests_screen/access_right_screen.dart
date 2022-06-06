@@ -25,7 +25,6 @@ class AccessUserAccountScreen extends StatefulWidget{
 
 class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
 
-  TextEditingController requestDateItAccessRight = TextEditingController();
 
 
   @override

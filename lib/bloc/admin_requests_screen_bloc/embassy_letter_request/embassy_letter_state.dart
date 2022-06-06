@@ -12,25 +12,25 @@ abstract class EmbassyLetterState {
 
 class EmbassyLetterInitial extends EmbassyLetterState {
   const EmbassyLetterInitial({
-    this.purpose,
-    this.embassy,
+    this.purpose = "Tourism",
+    this.embassy = "Afghanistan",
     this.dateFrom = const RequestDate.pure(),
     this.dateTo = const RequestDate.pure(),
     this.passportNumber = const RequestDate.pure(),
-    this.salary,
+    this.salary = "Yes",
     this.comments,
     this.status = FormzStatus.pure,
     this.errorMessage,
     this.successMessage,
   });
 
-  final String ?purpose;
-  final String ?embassy;
+  final String purpose;
+  final String embassy;
 
   final RequestDate dateFrom;
   final RequestDate dateTo;
   final RequestDate passportNumber;
-  final String ?salary;
+  final String salary;
   final String ?comments;
 
   final FormzStatus status;
