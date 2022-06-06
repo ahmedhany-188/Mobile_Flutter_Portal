@@ -8,7 +8,7 @@ class BlocInitialState extends ContactsStates {}
 class BlocGetContactsLoadingState extends ContactsStates {}
 
 class BlocGetContactsSuccessState extends ContactsStates {
-  List<dynamic> contacts;
+  List<ContactsDataFromApi> contacts;
 
   BlocGetContactsSuccessState(this.contacts);
 }

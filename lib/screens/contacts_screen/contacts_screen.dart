@@ -1,10 +1,12 @@
 import 'dart:core';
+import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/contacts_screen_bloc/contacts_cubit.dart';
+import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 import '../../data/models/contacts_related_models/filters_categories.dart';
 import '../../screens/contacts_screen/search_for_contacts.dart';
 import '../../widgets/filters/dialog_contact_filter.dart';
@@ -23,10 +25,10 @@ class _ContactsScreenState extends State<ContactsScreen> {
   bool isTypingFilterSet = false;
   bool isFilterSet = false;
 
-  var contactListFromApi = [];
-  List<dynamic> contactSearchResultsList = [];
-  List<dynamic> filtersDataSavedFromDialog = [];
-  List<dynamic> filtersSearchListSaved = [];
+  List<ContactsDataFromApi> contactListFromApi = [];
+  List<ContactsDataFromApi> contactSearchResultsList = [];
+  List<ContactsDataFromApi> filtersDataSavedFromDialog = [];
+  List<ContactsDataFromApi> filtersSearchListSaved = [];
 
   FiltersCategories filtersCategoriesObject = FiltersCategories(
       companiesFilter: [],
@@ -43,8 +45,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
   //   super.initState();
   // }
 
-  _showDialogAndGetFiltersResults(BuildContext context) {
-    showDialog(
+  _showDialogAndGetFiltersResults(BuildContext context) async {
+    await showDialog(
       context: context,
       builder: (context) => DialogContactFilter(contactListFromApi),
     ).then((result) {
@@ -85,7 +87,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
       });
     }).whenComplete(() {
       filtersSearchListSaved = SearchForContacts().setSearchForFilters(
-        query: filtersCategoriesObject.titleFilter[0],
+        query: (filtersCategoriesObject.titleFilter[0] != null)?filtersCategoriesObject.titleFilter[0]:'',
         listKeyForCondition: 'titleName',
         listFromApi: contactListFromApi,
       );
@@ -100,7 +102,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
       body: BlocProvider<ContactsCubit>(
         create: (context) => ContactsCubit()..getContacts(),
@@ -114,8 +116,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
             return SizedBox(
               height: deviceSize.height,
               child: Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: SingleChildScrollView(
+                padding: const EdgeInsets.all(5.0),
+                child: SingleChildScrollView(clipBehavior: Clip.none,
                   physics: const BouncingScrollPhysics(
                       parent: NeverScrollableScrollPhysics()),
                   keyboardDismissBehavior:
@@ -124,7 +126,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(5.0),
+                        padding: const EdgeInsets.all(10.0),
                         child: TextField(
                           focusNode: searchTextFieldFocusNode,
                           controller: textController,
@@ -149,13 +151,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           },
                           decoration: const InputDecoration(
                               contentPadding: EdgeInsets.all(10),
-                              isCollapsed: false,
+                              isCollapsed: true,
+                              filled: true,
                               labelText: "Search contact",
                               hintText: "Search contact",
                               prefixIcon: Icon(Icons.search),
                               border: OutlineInputBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)))),
+                                      BorderRadius.all(Radius.circular(10.0)),borderSide: BorderSide.none)),
                         ),
                       ),
                       Row(

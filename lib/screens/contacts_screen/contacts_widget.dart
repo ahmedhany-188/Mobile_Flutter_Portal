@@ -3,10 +3,11 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 import './contact_detail_screen.dart';
 
 class ContactsWidget extends StatelessWidget {
-  final List<dynamic> listFromContactsScreen;
+  final List<ContactsDataFromApi> listFromContactsScreen;
   const ContactsWidget(this.listFromContactsScreen, {Key? key})
       : super(key: key);
 
@@ -43,6 +44,7 @@ class ContactsWidget extends StatelessWidget {
                     ),
                     child: InkWell(
                       onTap: () {
+                        // ContactDetailScreen(selectedContactDataAsMap: listFromContactsScreen[index],);
                         contactDetails(context, index);
                       },
                       child: Row(
@@ -64,16 +66,16 @@ class ContactsWidget extends StatelessWidget {
                               //   ),
                               // ),
                               foregroundImage: (listFromContactsScreen[index]
-                                              ['imgProfile'] ==
+                                              .imgProfile ==
                                           null ||
                                       listFromContactsScreen[index]
-                                              ['imgProfile']
+                                          .imgProfile
                                           .toString()
                                           .isEmpty)
                                   ? const  AssetImage('assets/images/logo.png')
                                       as ImageProvider
                                   : CachedNetworkImageProvider(
-                                      'https://portal.hassanallam.com/Apps/images/Profile/${listFromContactsScreen[index]['imgProfile']}'),
+                                      'https://portal.hassanallam.com/Apps/images/Profile/${listFromContactsScreen[index].imgProfile}'),
                               // child: SizedBox(
                               //   height: MediaQuery.of(context).devicePixelRatio * 15,
                               //   width: MediaQuery.of(context).devicePixelRatio * 25,
@@ -98,7 +100,7 @@ class ContactsWidget extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '${listFromContactsScreen[index]['name']}'
+                                    '${listFromContactsScreen[index].name}'
                                         .trim(),
                                     style: const TextStyle(
                                       fontSize: 17.0,
@@ -121,7 +123,7 @@ class ContactsWidget extends StatelessWidget {
                                     child: Column(
                                       children: [
                                         Text(
-                                          '${listFromContactsScreen[index]['titleName']}'
+                                          '${listFromContactsScreen[index].titleName}'
                                               .trim(),
                                           style: const TextStyle(
                                             fontSize: 14.0,
@@ -131,7 +133,7 @@ class ContactsWidget extends StatelessWidget {
                                           textAlign: TextAlign.center,
                                         ),
                                         Text(
-                                          '${listFromContactsScreen[index]['projectName']}',
+                                          '${listFromContactsScreen[index].projectName}',
                                           style: const TextStyle(
                                             fontSize: 13.0,
                                           ),

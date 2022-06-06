@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:html/dom.dart' as dom;
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'download_pdf.dart';
 
@@ -23,8 +23,8 @@ convertFromHtml(
       data: dataToConvert.toString(),
       onLinkTap: (String? url, RenderContext renderContext,
           Map<String, String> attributes, dom.Element? element) async {
-        if (await canLaunch(url!)) {
-          launch(url);
+        if (await canLaunchUrlString(url!)) {
+          launchUrlString(url);
         } else {
           var urlNameIndex = url.lastIndexOf('/');
           var urlName = url.substring(urlNameIndex + 1, url.length);

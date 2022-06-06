@@ -1306,7 +1306,7 @@ class HomeScreen3 extends StatelessWidget {
                             curve: Curves.linear,
                             textStyle: const TextStyle(
                                 color: Color(0xFF174873),
-                                overflow: TextOverflow.clip,
+                                overflow: TextOverflow.visible,
                                 fontFamily: 'RobotoFlex',
                                 fontSize: 16),
                           ),
@@ -1319,6 +1319,16 @@ class HomeScreen3 extends StatelessWidget {
                   }
                 },
                 builder: (context, state) {
+                  ScrollController src = ScrollController();
+                  _scrollTo() {
+                    // src.animateTo(src.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear,);
+                    (src.hasClients)
+                        ? src.jumpTo(src.position.maxScrollExtent)
+                        : null;
+                  }
+
+                  WidgetsBinding.instance
+                      .addPostFrameCallback((_) => _scrollTo());
                   return Container(
                     margin: (MediaQuery.of(context).size.height <= 750)
                         ? EdgeInsets.only(top: 5.sp, bottom: 5.sp)
@@ -1336,28 +1346,36 @@ class HomeScreen3 extends StatelessWidget {
                                 padding: EdgeInsets.only(
                                     left: 14.0.sp, bottom: 0.sp, top: 0.sp),
                                 child: ListView(
-                                    reverse: true,
-                                    shrinkWrap: true,
-                                    children: [
-                                      AnimatedTextKit(
-                                        isRepeatingAnimation: true,
-                                        pause:
-                                            const Duration(milliseconds: 1000),
-                                        repeatForever: true,
-                                        displayFullTextOnTap: true,
-                                        animatedTexts: announcment.isEmpty ? [TyperAnimatedText(
-                                          'Checking for Announcement',
-                                          speed: const Duration(milliseconds: 100),
-                                          textAlign: TextAlign.start,
-                                          curve: Curves.linear,
-                                          textStyle: const TextStyle(
-                                              color: Color(0xFF174873),
-                                              overflow: TextOverflow.clip,
-                                              fontFamily: 'RobotoFlex',
-                                              fontSize: 16),
-                                        )] : announcment,
-                                      ),
-                                    ]),
+                                  reverse: true,
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.horizontal,
+                                  controller: src,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  children: [
+                                    AnimatedTextKit(
+                                      isRepeatingAnimation: true,
+                                      pause: const Duration(milliseconds: 1000),
+                                      repeatForever: true,
+                                      displayFullTextOnTap: false,
+                                      animatedTexts: announcment.isEmpty
+                                          ? [
+                                              TyperAnimatedText(
+                                                'Checking for Announcement... ',
+                                                speed: const Duration(
+                                                    milliseconds: 100),
+                                                textAlign: TextAlign.center,
+                                                curve: Curves.ease,
+                                                textStyle: const TextStyle(
+                                                    color: Color(0xFF174873),
+                                                    overflow: TextOverflow.clip,
+                                                    fontFamily: 'RobotoFlex',
+                                                    fontSize: 16),
+                                              )
+                                            ]
+                                          : announcment,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           )
