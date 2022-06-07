@@ -48,7 +48,6 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       onTap: () {
         AuthForm.emailAddressFocusNode.unfocus();
         AuthForm.passwordFocusNode.unfocus();
-        AuthForm.keyboardSubscription;
       },
       child: Scaffold(
         backgroundColor: Colors.transparent,
@@ -192,7 +191,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                       child: DelayedDisplay(
                         delay: const Duration(milliseconds: 2000),
                         slidingCurve: Sprung.underDamped,
-                        child: const AuthForm(),
+                        child: AuthForm(),
                       ),
                     ),
                   ],

@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/contacts_screen_bloc/contacts_cubit.dart';
@@ -38,11 +39,16 @@ class _ContactsScreenState extends State<ContactsScreen> {
 
   // @override
   // void initState() {
-  //   // contactListFromApi;
-  //   textController;
-  //   searchTextFieldFocusNode;
-  //   // contactSearchResultsList;
+  //   FocusManager.instance.primaryFocus?.unfocus();
   //   super.initState();
+  // }
+  // @override
+  // void dispose(){
+  //   searchTextFieldFocusNode.removeListener(() { });
+  //   searchTextFieldFocusNode.unfocus();
+  //   searchTextFieldFocusNode.dispose();
+  //   // FocusManager.instance.primaryFocus?.dispose();
+  //   super.dispose();
   // }
 
   _showDialogAndGetFiltersResults(BuildContext context) async {
@@ -188,7 +194,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                 ? () {
                                     setState(() {
                                       textController.clear();
-                                      // searchTextFieldFocusNode.unfocus();
+                                      searchTextFieldFocusNode.unfocus();
                                       filtersDataSavedFromDialog.clear();
 
                                       filtersCategoriesObject.companiesFilter
