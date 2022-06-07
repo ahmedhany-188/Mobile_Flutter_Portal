@@ -2,10 +2,7 @@ import 'package:http/http.dart' as http;
 
 class MyRequestsDataProvider{
 
-
   MyRequestsDataProvider();
-
-
 
   Future<http.Response> getMyRequestsList(hrcode) async {
 

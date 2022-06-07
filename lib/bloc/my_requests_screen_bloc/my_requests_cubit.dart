@@ -9,12 +9,10 @@ part 'my_requests_state.dart';
 class MyRequestsCubit extends Cubit<MyRequestsState> {
   MyRequestsCubit() : super(MyRequestsInitial());
 
-
   static MyRequestsCubit get(context) =>BlocProvider.of(context);
   String myRequests ="";
 
   final Connectivity connectivity = Connectivity();
-
 
   void getRequests(userHRcode) async {
 
@@ -23,24 +21,18 @@ class MyRequestsCubit extends Cubit<MyRequestsState> {
       var connectivityResult = await connectivity.checkConnectivity();
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
-
         MyRequestsDataProvider().getMyRequestsList(userHRcode).then((value){
-
           myRequests = value.body;
-
-          // print("----------"+myAttendance);
           emit(BlocGetMyRequestsSuccesState(myRequests));
         }).catchError((error){
           emit(BlocGetMyRequestsErrorState(error.toString()));
         });
-
       }else{
         emit(BlocGetMyRequestsErrorState("No internet connection"));
       }
     }catch(e){
       emit(BlocGetMyRequestsErrorState(e.toString()));
     }
-
   }
 
   @override

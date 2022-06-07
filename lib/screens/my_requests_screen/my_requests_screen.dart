@@ -84,25 +84,20 @@ class _MyRequestsScreen extends State<MyRequestsScreen> {
           },
           builder: (context, state) {
             return Container(
-              child: SingleChildScrollView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: deviceSize.height -
-                            ((deviceSize.height * 0.24) -
-                                MediaQuery
-                                    .of(context)
-                                    .viewPadding
-                                    .top),
-                        child: MyReqyestsTicketWidget(MyRequestsListData),
-
-                      )
-                    ],
-                  )
+              child: Padding(
+                padding: EdgeInsets.all(15),
+                child: SingleChildScrollView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: deviceSize.height,
+                          child: MyReqyestsTicketWidget(MyRequestsListData),
+                        )
+                      ],
+                    )
+                ),
               ),
-
-
               decoration: const BoxDecoration(
                   image: DecorationImage(image: AssetImage(
                       "assets/images/S_Background.png"),

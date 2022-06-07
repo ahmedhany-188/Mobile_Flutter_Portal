@@ -5,7 +5,6 @@ abstract class MyRequestsState {}
 
 class MyRequestsInitial extends MyRequestsState {}
 
-
 class BlocGetMyRequestsLoadingState extends MyRequestsState{}
 
 class BlocGetMyRequestsSuccesState extends MyRequestsState{
