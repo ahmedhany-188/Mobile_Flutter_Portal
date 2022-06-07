@@ -1,19 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_form_bloc/flutter_form_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/data/models/contacts_related_models/contacts_data_from_api.dart';
-import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_date.dart';
-import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_type.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_from.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
+import 'package:intl/intl.dart';
 
 import '../../../constants/enums.dart';
 import '../../../data/models/requests_form_models/request_date.dart';
-import '../../../data/models/requests_form_models/request_permission_time.dart';
 
 part 'vacation_state.dart';
 

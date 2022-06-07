@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../bloc/contacts_screen_bloc/contacts_cubit.dart';
@@ -20,14 +21,14 @@ class ContactsScreen extends StatefulWidget {
 }
 
 class _ContactsScreenState extends State<ContactsScreen> {
-  FocusNode searchTextFieldFocusNode = FocusNode();
+  FocusNode searchTextFieldFocusNode = FocusNode(canRequestFocus: false);
   TextEditingController textController = TextEditingController();
   bool isTypingFilterSet = false;
   bool isFilterSet = false;
 
   List<ContactsDataFromApi> contactListFromApi = [];
   List<ContactsDataFromApi> contactSearchResultsList = [];
-  List<ContactsDataFromApi> filtersDataSavedFromDialog = [];
+  List<dynamic> filtersDataSavedFromDialog = [];
   List<ContactsDataFromApi> filtersSearchListSaved = [];
 
   FiltersCategories filtersCategoriesObject = FiltersCategories(
@@ -38,37 +39,42 @@ class _ContactsScreenState extends State<ContactsScreen> {
 
   // @override
   // void initState() {
-  //   // contactListFromApi;
-  //   textController;
-  //   searchTextFieldFocusNode;
-  //   // contactSearchResultsList;
+  //   FocusManager.instance.primaryFocus?.unfocus();
   //   super.initState();
+  // }
+  // @override
+  // void dispose(){
+  //   searchTextFieldFocusNode.removeListener(() { });
+  //   searchTextFieldFocusNode.unfocus();
+  //   searchTextFieldFocusNode.dispose();
+  //   // FocusManager.instance.primaryFocus?.dispose();
+  //   super.dispose();
   // }
 
   _showDialogAndGetFiltersResults(BuildContext context) async {
     await showDialog(
       context: context,
-      builder: (context) => DialogContactFilter(contactListFromApi),
+      builder: (c) => DialogContactFilter(contactListFromApi),
     ).then((result) {
       filtersDataSavedFromDialog = result;
       filtersCategoriesObject.companiesFilter = result[0];
       filtersCategoriesObject.projectsFilter = result[1];
       filtersCategoriesObject.departmentFilter = result[2];
       filtersCategoriesObject.titleFilter = result[3];
-
+    }).whenComplete(() {
       filtersSearchListSaved = SearchForContacts().setSearchForFilters(
         query: filtersCategoriesObject.companiesFilter[0],
-        listKeyForCondition: 'companyName',
+        listKeyForCondition: 0,
         listFromApi: contactListFromApi,
       );
       setState(() {
         isFilterSet = true;
         contactSearchResultsList = filtersSearchListSaved;
       });
-    }).then((_) {
+    }).whenComplete(() {
       filtersSearchListSaved = SearchForContacts().setSearchForFilters(
         query: filtersCategoriesObject.projectsFilter[0],
-        listKeyForCondition: 'projectName',
+        listKeyForCondition: 1,
         listFromApi: contactListFromApi,
       );
       setState(() {
@@ -78,7 +84,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
     }).whenComplete(() {
       filtersSearchListSaved = SearchForContacts().setSearchForFilters(
         query: filtersCategoriesObject.departmentFilter[0],
-        listKeyForCondition: 'mainDepartment',
+        listKeyForCondition: 2,
         listFromApi: contactListFromApi,
       );
       setState(() {
@@ -87,8 +93,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
       });
     }).whenComplete(() {
       filtersSearchListSaved = SearchForContacts().setSearchForFilters(
-        query: (filtersCategoriesObject.titleFilter[0] != null)?filtersCategoriesObject.titleFilter[0]:'',
-        listKeyForCondition: 'titleName',
+        query: filtersCategoriesObject.titleFilter[0],
+        listKeyForCondition: 3,
         listFromApi: contactListFromApi,
       );
       setState(() {
@@ -117,7 +123,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
               height: deviceSize.height,
               child: Padding(
                 padding: const EdgeInsets.all(5.0),
-                child: SingleChildScrollView(clipBehavior: Clip.none,
+                child: SingleChildScrollView(
+                  clipBehavior: Clip.none,
                   physics: const BouncingScrollPhysics(
                       parent: NeverScrollableScrollPhysics()),
                   keyboardDismissBehavior:
@@ -131,8 +138,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           focusNode: searchTextFieldFocusNode,
                           controller: textController,
                           onSubmitted: (searchValue) {
-                            searchTextFieldFocusNode.unfocus();
-                            setState(() {});
+                            // searchTextFieldFocusNode.unfocus();
+                            // setState(() {});
                           },
                           onChanged: (_) {
                             setState(() {
@@ -158,7 +165,8 @@ class _ContactsScreenState extends State<ContactsScreen> {
                               prefixIcon: Icon(Icons.search),
                               border: OutlineInputBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),borderSide: BorderSide.none)),
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide.none)),
                         ),
                       ),
                       Row(

@@ -1,14 +1,10 @@
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/myattendance_screen_bloc/attendance_cubit.dart';
-import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_widget.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_ticket_widget.dart';
-import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
 
 class Attendance_Screen extends StatefulWidget {

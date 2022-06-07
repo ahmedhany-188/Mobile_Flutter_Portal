@@ -29,7 +29,7 @@ class _PollsScreenState extends State<PollsScreen> {
       appBar: AppBar(),
       body: FlutterPolls(
         userToVote: userData.user!.token,
-        pollEndDate: DateTime.now(),
+        pollStartDate: DateTime.now(),
         pollId: 'Example',
         onVoted: (PollOption pollOption, int newTotalVotes) {
           switch (pollOption.id) {

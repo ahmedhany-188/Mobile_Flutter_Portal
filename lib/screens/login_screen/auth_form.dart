@@ -1,102 +1,71 @@
-import 'dart:async';
 import 'dart:core';
 
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/login_cubit/login_cubit.dart';
 import 'package:formz/formz.dart';
 import 'login_form_widgets.dart';
 
 class AuthForm extends StatefulWidget {
   const AuthForm();
-
+  static final FocusNode emailAddressFocusNode = FocusNode();
+  static final FocusNode passwordFocusNode = FocusNode();
   @override
   _AuthFormState createState() => _AuthFormState();
-  static FocusNode emailAddressFocusNode = FocusNode();
-  static FocusNode passwordFocusNode = FocusNode();
-  static late StreamSubscription<bool> keyboardSubscription;
 }
 
 class _AuthFormState extends State<AuthForm> {
   final _formKey = GlobalKey<FormState>();
 
   @override
-  void initState() {
-    var keyboardVisibilityController = KeyboardVisibilityController();
-
-    AuthForm.keyboardSubscription =
-        keyboardVisibilityController.onChange.listen((bool visible) {
-      if (!visible) {
-        AuthForm.emailAddressFocusNode.unfocus();
-        AuthForm.passwordFocusNode.unfocus();
-      }
-    });
-
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    AuthForm.keyboardSubscription.cancel();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
-    var sizedBoxHeight = .6 * deviceSize.height;
-    // BlocProvider<LoginCubit>(
-    //   create: (authenticationContext) =>
-    //       LoginCubit(_authenticationRepository),
-    // ),
-    // final authenticationRepository = context.read<AppBloc>().
+
     return GestureDetector(
-        onTap: () {
-          AuthForm.emailAddressFocusNode.unfocus();
-          AuthForm.passwordFocusNode.unfocus();
-        },
-        child: BlocListener<LoginCubit, LoginState>(
-          listener: (context, state) {
-            if (state.status.isSubmissionFailure) {
-              ScaffoldMessenger.of(context)
-                ..hideCurrentSnackBar()
-                ..showSnackBar(
-                  SnackBar(
-                    content: Text(state.errorMessage ?? 'Authentication Failure'),
-                  ),
-                );
-            }
-          },
-          child: Form(
-            key: _formKey,
-            child: SizedBox(
-              width: deviceSize.width / 1.3, ///oldValue 1.5
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    UsernameInput(
-                      emailAddressFocusNode: AuthForm.emailAddressFocusNode,
-                    ),
-                    const Padding(padding: EdgeInsets.all(8)),
-                    PasswordInput(passwordFocusNode: AuthForm.passwordFocusNode),
-                    const Padding(padding: EdgeInsets.all(8)),
-                    SizedBox(
-                      width: deviceSize.width / 1.3,
-                      child: const GradientButton(),
-                    ),
-                  ],
+      onTap: () {
+        AuthForm.emailAddressFocusNode.unfocus();
+        AuthForm.passwordFocusNode.unfocus();
+      },
+      child: BlocListener<LoginCubit, LoginState>(
+        listener: (context, state) {
+          if (state.status.isSubmissionFailure) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text(state.errorMessage ?? 'Authentication Failure'),
                 ),
+              );
+          }
+        },
+        child: Form(
+          key: _formKey,
+          child: SizedBox(
+            width: deviceSize.width / 1.3,
+
+            ///oldValue 1.5
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  UsernameInput(
+                    emailAddressFocusNode: AuthForm.emailAddressFocusNode,
+                  ),
+                  const Padding(padding: EdgeInsets.all(8)),
+                  PasswordInput(passwordFocusNode: AuthForm.passwordFocusNode),
+                  const Padding(padding: EdgeInsets.all(8)),
+                  SizedBox(
+                    width: deviceSize.width / 1.3,
+                    child: const GradientButton(),
+                  ),
+                ],
               ),
             ),
           ),
         ),
-      );
+      ),
+    );
   }
 }
 

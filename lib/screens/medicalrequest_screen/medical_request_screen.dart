@@ -1,15 +1,11 @@
 import 'dart:convert';
 
-import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
-import 'package:hassanallamportalflutter/data/models/requests_form_models/request_medical_benefit.dart';
-import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 
 // ignore: camel_case_types
