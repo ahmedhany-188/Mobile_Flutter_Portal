@@ -254,12 +254,21 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                           ),
                           GestureDetector(
                             onTap: () async {
-                              await launchUrl(
+                              // if(await canLaunchUrl(Uri.parse(benefitsExtraDataLink(
+                              //     benefitsDataList[index]['benefitsId']
+                              //         .toString())))){
+                              try {
+                                launchUrl(
                                 Uri.parse(benefitsExtraDataLink(
-                                    benefitsDataList[index]['benefitsId']
-                                        .toString())),
+                                benefitsDataList[index]['benefitsId']
+                                    .toString())),
                                 mode: LaunchMode.externalApplication,
-                              );
+                                );
+                              } catch (e, s) {
+                                print(s);
+                              }
+                              // }
+
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(bottom: 8.0),

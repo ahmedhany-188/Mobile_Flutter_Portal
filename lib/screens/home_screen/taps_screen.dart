@@ -45,13 +45,14 @@ class _TapsScreenState extends State<TapsScreen> {
 
   @override
   Widget build(BuildContext mainContext) {
-    final user = mainContext.select((AppBloc bloc) => bloc.state.userData.employeeData);
+    final user =
+        mainContext.select((AppBloc bloc) => bloc.state.userData.employeeData);
 
     return DefaultTabController(
       length: 4,
       child: Scaffold(
         backgroundColor: Colors.white,
-        resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: false,
         drawer: MainDrawer(),
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -115,8 +116,7 @@ class _TapsScreenState extends State<TapsScreen> {
                         radius: 29,
                         // borderRadius: BorderRadius.circular(50),
                         backgroundImage: NetworkImage(
-                          'https://portal.hassanallam.com/Apps/images/Profile/${user
-                              ?.imgProfile}',
+                          'https://portal.hassanallam.com/Apps/images/Profile/${user?.imgProfile}',
                         ),
                         onBackgroundImageError: (_, __) {
                           Image.asset(
@@ -149,7 +149,7 @@ class _TapsScreenState extends State<TapsScreen> {
                         badgeColor: Colors.red,
                         badgeContent: Text(
                           "${state.notifications.length}",
-                          style: TextStyle(color: Colors.white, fontSize: 12),
+                          style: const TextStyle(color: Colors.white, fontSize: 12),
                         ),
                         position: const BadgePosition(
                           start: 5,
@@ -185,12 +185,12 @@ class _TapsScreenState extends State<TapsScreen> {
               },
             ),
             isScrollable: true,
-            padding: EdgeInsets.only(left: 20),
-            labelPadding: EdgeInsets.only(bottom: 5),
+            padding: const EdgeInsets.only(left: 20),
+            labelPadding: const EdgeInsets.only(bottom: 5),
             tabs: [
               Container(
                 width: ((MediaQuery.of(context).size.width - 20) / 3.5),
-                padding: EdgeInsets.only(left: 20),
+                padding: const EdgeInsets.only(left: 20),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -205,7 +205,7 @@ class _TapsScreenState extends State<TapsScreen> {
                   ],
                 ),
               ),
-              Container(
+              SizedBox(
                 width: ((MediaQuery.of(context).size.width - 20) / 3.5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -221,7 +221,7 @@ class _TapsScreenState extends State<TapsScreen> {
                   ],
                 ),
               ),
-              Container(
+              SizedBox(
                 width: ((MediaQuery.of(context).size.width - 20) / 3.5),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -237,10 +237,10 @@ class _TapsScreenState extends State<TapsScreen> {
                   ],
                 ),
               ),
-              Container(
+              SizedBox(
                 height: 35,
                 width: (MediaQuery.of(context).size.width - 20) / 7,
-                padding: EdgeInsets.only(),
+                // padding: EdgeInsets.only(),
                 // decoration: const BoxDecoration(
                 //     color: Colors.white,
                 //     borderRadius: BorderRadius.all(Radius.circular(50))),
@@ -268,8 +268,7 @@ class _TapsScreenState extends State<TapsScreen> {
             ),
           ),
           child: const TabBarView(
-            physics:
-                BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            physics: BouncingScrollPhysics(),
             children: [
               HomeScreen3(),
               AppsScreen(),

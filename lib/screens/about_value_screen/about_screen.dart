@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../data/helpers/assist_function.dart';
 import '../../widgets/appbar/basic_appbar.dart';
@@ -46,10 +47,10 @@ class AboutScreen extends StatelessWidget {
                         text: 'See User Manual',
                         recognizer: TapGestureRecognizer()
                           ..onTap = () async {
-                            if (await canLaunch(
-                                'https://portal.hassanallam.com/Portal_Mobile_App_user_manual.pdf')) {
-                              launch(
-                                  'https://portal.hassanallam.com/Portal_Mobile_App_user_manual.pdf');
+                            if (await canLaunchUrl(
+                                Uri.parse('https://portal.hassanallam.com/Portal_Mobile_App_user_manual.pdf'))) {
+                              launchUrl(
+                                  Uri.parse('https://portal.hassanallam.com/Portal_Mobile_App_user_manual.pdf'),mode: LaunchMode.externalApplication);
                               Navigator.defaultRouteName;
                             } else {
                               showErrorSnackBar(context);

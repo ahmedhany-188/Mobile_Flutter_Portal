@@ -31,7 +31,7 @@ class ContactsWidget extends StatelessWidget {
                     padding: const EdgeInsets.all(10.0),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(15.0),
-                      gradient: const  LinearGradient(
+                      gradient: const LinearGradient(
                           colors: [
                             Color(0xFF1a4c78),
                             Color(0xFF3772a6),
@@ -51,7 +51,7 @@ class ContactsWidget extends StatelessWidget {
                     ),
                     child: InkWell(
                       onTap: () {
-                        // ContactDetailScreen(selectedContactDataAsMap: listFromContactsScreen[index],);
+                        FocusManager.instance.primaryFocus?.unfocus();
                         contactDetails(context, index);
                       },
                       child: Row(
@@ -63,8 +63,19 @@ class ContactsWidget extends StatelessWidget {
                             child: CircleAvatar(
                               radius: 40.sp,
                               backgroundColor: Colors.transparent,
-                              foregroundImage: CachedNetworkImageProvider(
-                                  'https://portal.hassanallam.com/Apps/images/Profile/${listFromContactsScreen[index].imgProfile}'),
+                              foregroundImage:
+                                  (listFromContactsScreen[index].imgProfile !=
+                                              null ||
+                                          listFromContactsScreen[index]
+                                                  .imgProfile !=
+                                              "")
+                                      ? CachedNetworkImageProvider(
+                                          'https://portal.hassanallam.com/Apps/images/Profile/${listFromContactsScreen[index].imgProfile}',
+                                        )
+                                      : null,
+                              onForegroundImageError: (o, t) {
+                                null;
+                              },
                               child: Image.asset(
                                 'assets/images/logo.png',
                                 scale: 3,
@@ -95,42 +106,41 @@ class ContactsWidget extends StatelessWidget {
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(top: 5,bottom: 5),
+                                    padding: const EdgeInsets.only(
+                                        top: 5, bottom: 5),
                                     child: Container(
                                       width: double.infinity,
                                       height: 0.2.h,
                                       color: Colors.white,
                                     ),
                                   ),
-                                  Flexible(
-                                    child: Container(
-                                      clipBehavior: Clip.none,
-                                      alignment: Alignment.center,
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            '${listFromContactsScreen[index].titleName}'
-                                                .trim(),
-                                            style: const TextStyle(
-                                              fontSize: 14.0,
-                                              color: Colors.white,
-                                            ),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.center,
+                                  Container(
+                                    clipBehavior: Clip.none,
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          '${listFromContactsScreen[index].titleName}'
+                                              .trim(),
+                                          style: const TextStyle(
+                                            fontSize: 14.0,
+                                            color: Colors.white,
                                           ),
-                                          Text(
-                                            '${listFromContactsScreen[index].projectName}',
-                                            style: const TextStyle(
-                                              fontSize: 13.0,
-                                              color: Colors.white,
-                                            ),
-                                            maxLines: 2,
-                                            overflow: TextOverflow.ellipsis,
-                                            textAlign: TextAlign.center,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        Text(
+                                          '${listFromContactsScreen[index].projectName}',
+                                          style: const TextStyle(
+                                            fontSize: 13.0,
+                                            color: Colors.white,
                                           ),
-                                        ],
-                                      ),
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],

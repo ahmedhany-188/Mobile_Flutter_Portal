@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/business_card_request/business_card_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/embassy_letter_request/embassy_letter_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/travel_request/travel_request_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/apps_screen_bloc/apps_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/it_request_bloc/access_right_request/access_right_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/it_request_bloc/email_useracount_request/email_useraccount_cubit.dart';
@@ -212,7 +213,11 @@ class _MyAppState extends State<MyApp> {
 class AppBlocObserver extends BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
+    if(bloc is AppsCubit || bloc is ContactsCubit || bloc is NewsCubit){
+      FocusManager.instance.primaryFocus?.unfocus();
+    }
     if (kDebugMode) {
+      // FocusManager.instance.primaryFocus?.unfocus();
       print("Change --> $bloc");
     }
     super.onChange(bloc, change);
