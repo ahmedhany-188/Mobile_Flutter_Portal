@@ -73,6 +73,7 @@ dependencies:
   firebase_core: ^1.17.0
   firebase_auth: ^3.3.18
   firebase_database: ^9.0.13
+  firebase_crashlytics: ^2.8.1
   dio: ^4.0.6
   url_launcher: ^6.1.2
 
@@ -96,6 +97,7 @@ dependencies:
   permission_handler: ^9.2.0
   open_file: ^3.2.1
   file_picker: ^4.6.1
+  package_info_plus: ^1.4.2
 
 
 #repositories
