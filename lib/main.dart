@@ -165,15 +165,10 @@ class _MyAppState extends State<MyApp> {
           //   create: (emailUserAccountRequestContext) =>
           //       EmailUserAccountCubit(),
           // ),
-          // BlocProvider<EmailUserAccountCubit>(
-          //   create: (emailUserAccountRequestContext) =>
-          //       EmailUserAccountCubit(),
-          // ),
           // BlocProvider<EmbassyLetterCubit>(
           //   create: (embassyLetterContext) =>
           //       EmbassyLetterCubit(),
           // ),
-          //
           // BlocProvider<BusinessCardCubit>(
           //   create: (businessCardRequestContext) =>
           //       BusinessCardCubit(),
@@ -182,10 +177,7 @@ class _MyAppState extends State<MyApp> {
           //   create: (accessRightAccountRequestContext) =>
           //       AccessRightCubit(),
           // ),
-          // BlocProvider<TravelRequestCubit>(
-          //   create: (travelRequestContext) =>
-          //       TravelRequestCubit(),
-          // ),
+
 
           BlocProvider<MyRequestsCubit>(
             create: (travelRequestContext) =>
