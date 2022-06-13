@@ -25,6 +25,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
     TextEditingController permissionTimeController = TextEditingController();
     final user = context.select((AppBloc bloc) =>
     bloc.state.userData.employeeData);
+    final userMainData = context.select((AppBloc bloc) =>
+    bloc.state.userData);
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -36,7 +38,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
       ),
       child: BlocProvider<PermissionCubit>(
         create: (permissionContext) =>
-        PermissionCubit(RequestRepository())
+        PermissionCubit(RequestRepository(userMainData))
           ..getRequestData(RequestStatus.newRequest),
         child: Builder(
             builder: (context) {

@@ -139,7 +139,7 @@ class AppRouter {
         );
       case VacationScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => VacationScreen(),
+          builder: (_) => VacationScreen(requestNo: settings.arguments),
         );
 
       case BusinessCardScreen.routeName:

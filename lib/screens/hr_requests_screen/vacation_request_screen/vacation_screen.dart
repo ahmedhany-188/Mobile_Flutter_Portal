@@ -13,8 +13,11 @@ import '../../../data/repositories/request_repository.dart';
 
 class VacationScreen extends StatefulWidget {
   static const routeName = 'vacation-page';
+  static const requestNoKey = 'request-No';
 
-  const VacationScreen({Key? key}) : super(key: key);
+  const VacationScreen({Key? key, this.requestNo}) : super(key: key);
+
+  final requestNo;
 
   @override
   State<VacationScreen> createState() => _VacationScreenState();
@@ -23,13 +26,13 @@ class VacationScreen extends StatefulWidget {
 class _VacationScreenState extends State<VacationScreen> {
   @override
   Widget build(BuildContext context) {
-    // final formBloc = context.select((PermissionFormBloc bloc) => bloc.state);
-
-    // TextEditingController vacationDateFromController = TextEditingController();
-    // TextEditingController vacationDateToController = TextEditingController();
-    // TextEditingController permissionTimeController = TextEditingController();
     final user = context.select((AppBloc bloc) =>
     bloc.state.userData.employeeData);
+
+    final userMainData = context.select((AppBloc bloc) =>
+    bloc.state.userData);
+
+    final currentRequestNo = widget.requestNo;
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -41,16 +44,20 @@ class _VacationScreenState extends State<VacationScreen> {
       ),
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<VacationCubit>(create: (permissionContext) =>
-          VacationCubit(RequestRepository())
-            ..getRequestData(RequestStatus.newRequest)),
+          BlocProvider<VacationCubit>(create: (vacationContext) =>
+          currentRequestNo == null ? (VacationCubit(RequestRepository(userMainData))..getRequestData(RequestStatus.newRequest, ""))
+              :(VacationCubit(RequestRepository(userMainData))..getRequestData(RequestStatus.oldRequest, currentRequestNo[VacationScreen.requestNoKey]))),
+            // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
           BlocProvider<ResponsibleVacationCubit>(
+            lazy: false,
               create: (_) =>
               ResponsibleVacationCubit()
                 ..fetchList()),
         ],
-        child: Builder(
-            builder: (context) {
+        child: BlocBuilder<VacationCubit,VacationInitial>(
+
+            builder: (context,state) {
+              print(currentRequestNo);
               return Scaffold(
                 appBar: AppBar(title: const Text('Vacation Request')),
                 floatingActionButton: Column(
@@ -88,7 +95,7 @@ class _VacationScreenState extends State<VacationScreen> {
                         heroTag: null,
                         onPressed: () {
                           context.read<VacationCubit>()
-                              .submitVacationRequest(user?.userHrCode ?? "0");
+                              .submitVacationRequest();
                         },
                         // formBloc.state.status.isValidated
                         //       ? () => formBloc.submitPermissionRequest()
@@ -131,6 +138,7 @@ class _VacationScreenState extends State<VacationScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: <Widget>[
+
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
@@ -408,6 +416,8 @@ class _VacationScreenState extends State<VacationScreen> {
                                   VacationInitial>(
                                   builder: (context, state) {
                                     return TextFormField(
+                                      key: UniqueKey(),
+                                      initialValue: state.comment,
                                       onChanged: (commentValue) =>
                                           context
                                               .read<VacationCubit>()
@@ -475,7 +485,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                 return const Center(
                                     child: Text('Oops something went wrong!'));
                               case ResponsibleListStatus.success:
-                                print("Successsssssss");
+                                // print("Successsssssss");
                                 return ItemView(items: state.items, scrollController: scrollController, bloc: bloc,);
                               case ResponsibleListStatus.successSearching:
                                 print(state.tempItems.length);

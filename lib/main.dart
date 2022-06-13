@@ -17,7 +17,6 @@ import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.dart';
-import 'package:hassanallamportalflutter/data/data_providers/firebase_provider/FirebaseProvider.dart';
 import 'package:hassanallamportalflutter/data/repositories/upgrader_repository.dart';
 import 'package:hassanallamportalflutter/life_cycle_states.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
