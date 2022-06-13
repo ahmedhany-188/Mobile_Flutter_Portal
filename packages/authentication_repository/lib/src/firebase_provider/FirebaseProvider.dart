@@ -3,11 +3,13 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:authentication_repository/src/extensions.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:hassanallamportalflutter/constants/extensions.dart';
-import 'package:hassanallamportalflutter/data/models/firebase_models/notification_model/Notification.dart';
-import 'package:hassanallamportalflutter/life_cycle_states.dart';
 
+enum AppLifecycleStatus{
+  online,
+  offline
+}
 class FirebaseProvider {
 
 
