@@ -33,7 +33,8 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
   Widget build(BuildContext context) {
     // TODO: implement build
     var deviceSize = MediaQuery
-        .of(context).size;
+        .of(context)
+        .size;
 
     final user = context.select((AppBloc bloc) => bloc.state.userData);
     var formatter = DateFormat('yyyy-MM-dd');
@@ -69,337 +70,373 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
       commentController.text = widget.accessRightModel.comments.toString();
     }
 
-    return Scaffold(
-        appBar: AppBar(
-          title: const Text("Access Right"),
-          centerTitle: true,
+
+    return Theme(
+      data: Theme.of(context).copyWith(
+        inputDecorationTheme: InputDecorationTheme(
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
         ),
-        resizeToAvoidBottomInset: false,
-        drawer: MainDrawer(),
+      ),
+      child: BlocProvider<AccessRightCubit>(
+        create: (accessRightContext) =>
+            AccessRightCubit(),
+        child: Builder(
+            builder: (context) {
+              return Scaffold(
+                  appBar: AppBar(
+                    title: const Text("Access Right"),
+                    centerTitle: true,
+                  ),
+                  resizeToAvoidBottomInset: false,
+                  drawer: MainDrawer(),
 
-        body: BlocListener<AccessRightCubit, AccessRightInitial>(
-          listener: (context, state) {
-            if (state.status.isSubmissionSuccess) {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Success"),
-                ),
-              );
+                  body: BlocListener<AccessRightCubit, AccessRightInitial>(
+                    listener: (context, state) {
+                      if (state.status.isSubmissionSuccess) {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Success"),
+                          ),
+                        );
+                      } else if (state.status.isSubmissionInProgress) {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("Loading"),
+                          ),
+                        );
+                      } else if (state.status.isSubmissionFailure) {
+                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(state.errorMessage.toString()),
+                          ),
+                        );
+                      }
+                    },
 
-            } else if (state.status.isSubmissionInProgress) {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text("Loading"),
-                ),
-              );
-            } else if (state.status.isSubmissionFailure) {
-              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.errorMessage.toString()),
-                ),
-              );
-            }
-          },
+                    child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Form(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
 
-          child: Padding(
-            padding: const EdgeInsets.all(10),
-            child: Form(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
+                              TextFormField(
+                                initialValue: (widget.objectValidation)
+                                    ? widget
+                                    .accessRightModel.requestDate
+                                    : formattedDate,
+                                key: UniqueKey(),
+                                readOnly: true,
+                                decoration: const InputDecoration(
+                                  floatingLabelAlignment:
+                                  FloatingLabelAlignment.start,
+                                  labelText: 'Request Date',
+                                  prefixIcon: Icon(
+                                      Icons.calendar_today),
+                                ),
+                              ),
+                              Container(height: 10),
 
-                    TextFormField(
-                      initialValue: (widget.objectValidation) ? widget
-                          .accessRightModel.requestDate : formattedDate,
-                      key: UniqueKey(),
-                      readOnly: true,
-                      decoration: const InputDecoration(
-                        floatingLabelAlignment:
-                        FloatingLabelAlignment.start,
-                        labelText: 'Request Date',
-                        prefixIcon: Icon(
-                            Icons.calendar_today),
+                              const Text("Request Type"),
+
+                              Container(height: 10),
+
+                              BlocBuilder<AccessRightCubit,
+                                  AccessRightInitial>(
+                                  builder: (context, state) {
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .center,
+                                      children: [
+                                        RadioListTile<int>(
+                                          value: 1,
+
+                                          title: const Text("Access Right"),
+                                          groupValue: (widget.objectValidation)
+                                              ? null
+                                              : state.requestType,
+
+                                          selected: (widget.accessRightModel
+                                              .requestType == 1) ? true : false,
+                                          onChanged: (permissionType) =>
+                                          {
+                                            context.read<AccessRightCubit>()
+                                                .accesRightChanged(1),
+                                          },
+                                        ),
+                                        RadioListTile<int>(
+                                          value: 2,
+                                          // dense: true,
+                                          title: const Text("Disable"),
+
+                                          groupValue: (widget.objectValidation)
+                                              ? null
+                                              : state.requestType,
+                                          selected: (widget.accessRightModel
+                                              .requestType == 2) ? true : false,
+                                          onChanged: (permissionType) =>
+                                          {
+                                            context.read<AccessRightCubit>()
+                                                .accesRightChanged(2),
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  }
+                              ),
+
+                              Container(height: 10,),
+
+                              BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                  builder: (context, state) {
+                                    return MultiSelect(
+                                        selectedOptionsBoxColor: Colors
+                                            .transparent,
+                                        //--------customization selection modal-----------
+                                        titleText: "Items",
+                                        checkBoxColor: Colors.black,
+                                        hintText: state.requestItems.valid
+                                            ? null
+                                            : "Tap to select one or more items",
+                                        // optional
+                                        buttonBarColor: Colors.blueGrey,
+                                        cancelButtonText: "Exit",
+
+                                        maxLengthIndicatorColor: Colors
+                                            .transparent,
+                                        maxLengthText: "",
+                                        maxLength: 5,
+                                        // optional
+                                        //--------end customization selection modal------------
+                                        validator: (dynamic value) {
+                                          if (value == null) {
+                                            return 'Please select one or more option(s)';
+                                          }
+                                          return null;
+                                        },
+                                        errorText: state.requestItems.invalid
+                                            ? 'invalid items'
+                                            : null,
+                                        dataSource: accountsTypesList,
+                                        textField: 'display',
+                                        valueField: 'value',
+                                        filterable: true,
+                                        required: true,
+
+
+                                        onSaved: (value) {
+                                          selectedTypes.clear();
+                                          if (value != null) {
+                                            for (int i = 0; i <
+                                                value.length; i++) {
+                                              selectedTypes.add(
+                                                  value[i].toString());
+                                            }
+                                          }
+                                          context.read<AccessRightCubit>().
+                                          getRequestValue(
+                                              selectedTypes.toString());
+                                        }
+
+                                    );
+                                  }),
+
+                              Container(height: 10,),
+
+                              const Text(
+                                "* If you choose a USB Exception please download this file Download and upload after signatuer",
+                                style: TextStyle(color: Colors.red),),
+
+                              Container(height: 10,),
+                              FloatingActionButton.extended(
+                                onPressed: () {
+                                  _launchUrl();
+                                },
+                                label: const Text(
+                                    'Download file', style: TextStyle(
+                                    color: Colors.black
+                                )),
+                                icon: const Icon(
+                                    Icons.cloud_download_sharp,
+                                    color: Colors.black),
+                                backgroundColor: Colors.white,),
+
+                              Container(height: 10,),
+
+                              BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                builder: (context, state) {
+                                  return
+                                    FloatingActionButton.extended(
+                                      onPressed: () async {
+                                        FilePickerResult? result = await FilePicker
+                                            .platform.pickFiles();
+
+                                        if (result != null) {
+                                          Uint8List? fileBytes = result.files
+                                              .first
+                                              .bytes;
+                                          String fileName = result.files.first
+                                              .name;
+
+                                          // Upload file
+                                          // await FirebaseStorage.instance.ref('uploads/$fileName').putData(fileBytes);
+                                        }
+                                      },
+                                      label: const Text(
+                                          'Upload', style: TextStyle(
+                                          color: Colors.black
+                                      )),
+                                      icon: const Icon(
+                                          Icons.cloud_upload_sharp,
+                                          color: Colors.black),
+                                      backgroundColor: Colors.white,);
+                                },),
+                              Container(height: 10,),
+                              BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                builder: (context, state) {
+                                  return TextFormField(
+                                    initialValue: (widget.objectValidation)
+                                        ? widget.accessRightModel.fromDate
+                                        .toString()
+                                        : state.fromDate.value,
+                                    key: UniqueKey(),
+                                    readOnly: true,
+                                    decoration: InputDecoration(
+                                      floatingLabelAlignment:
+                                      FloatingLabelAlignment.start,
+                                      labelText: 'From Date',
+                                      errorText: state.fromDate.invalid
+                                          ? 'invalid Date'
+                                          : null,
+                                      prefixIcon: const Icon(
+                                          Icons.calendar_today),
+                                    ),
+                                    onTap: () async {
+                                      if (!widget.objectValidation) {
+                                        context.read<AccessRightCubit>().
+                                        selectDate(context, "from");
+                                      }
+                                    },
+                                  );
+                                },),
+                              BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                builder: (context, state) {
+                                  return TextFormField(
+                                    initialValue: (widget.objectValidation)
+                                        ? widget.accessRightModel.toDate
+                                        .toString()
+                                        : state.toDate.value,
+                                    key: UniqueKey(),
+                                    readOnly: true,
+                                    decoration: InputDecoration(
+                                      floatingLabelAlignment:
+                                      FloatingLabelAlignment.start,
+                                      labelText: 'To Date',
+                                      errorText: state.toDate.invalid
+                                          ? 'invalid Date'
+                                          : null,
+                                      prefixIcon: const Icon(
+                                          Icons.calendar_today),
+                                    ),
+                                    onTap: () async {
+                                      if (!widget.objectValidation) {
+                                        context.read<AccessRightCubit>().
+                                        selectDate(context, "to");
+                                      }
+                                    },
+                                  );
+                                },),
+
+                              BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                builder: (context, state) {
+                                  return Card(
+                                    child: Row(
+                                      children: <Widget>[
+                                        const SizedBox(width: 10),
+                                        const Text(
+                                          'Permanent ',
+                                          style: TextStyle(fontSize: 17.0),
+                                        ), //Text
+                                        const SizedBox(width: 10), //SizedBox
+                                        /** Checkbox Widget **/
+                                        Checkbox(
+                                          value: (widget.objectValidation)
+                                              ? widget
+                                              .accessRightModel.permanent
+                                              : state
+                                              .permanent,
+                                          onChanged: (bool? value) {
+                                            if (!widget.objectValidation) {
+                                              context.read<AccessRightCubit>()
+                                                  .getPermanentValue(value!);
+                                            }
+                                          },
+                                        ), //Checkbox
+                                      ], //<Widget>[]
+                                    ),
+                                  );
+                                },),
+
+                              BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                builder: (context, state) {
+                                  return TextField(
+                                    controller: (widget.objectValidation)
+                                        ? commentController
+                                        : null,
+                                    onChanged: (commentValue) =>
+                                        context
+                                            .read<AccessRightCubit>()
+                                            .commentValueChanged(commentValue),
+                                    enabled: (widget.objectValidation)
+                                        ? false
+                                        : true,
+                                    decoration: const InputDecoration(
+                                      floatingLabelAlignment:
+                                      FloatingLabelAlignment.start,
+                                      labelText: 'Comments',
+                                      prefixIcon: Icon(
+                                          Icons.comment),
+                                    ),
+                                  );
+                                },
+                              ),
+                              Container(height: 10,),
+
+                              FloatingActionButton.extended(
+                                onPressed: () {
+                                  context.read<AccessRightCubit>()
+                                      .getSubmitAccessRight(
+                                      user, selectedTypes, formattedDate);
+                                },
+                                label: const Text('Submit', style: TextStyle(
+                                    color: Colors.black
+                                )),
+                                icon: const Icon(
+                                    Icons.thumb_up_alt_outlined,
+                                    color: Colors.black),
+                                backgroundColor: Colors.white,
+                              ),
+
+
+                              Container(height: 10,),
+
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                    Container(height: 10),
-
-                    const Text("Request Type"),
-
-                    Container(height: 10),
-
-                    BlocBuilder<AccessRightCubit,
-                        AccessRightInitial>(
-                        builder: (context, state) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment
-                                .start,
-                            mainAxisAlignment: MainAxisAlignment
-                                .center,
-                            children: [
-                              RadioListTile<int>(
-                                value: 1,
-
-                                title: const Text("Access Right"),
-                                groupValue: (widget.objectValidation)
-                                    ? null
-                                    : state.requestType,
-
-                                selected: (widget.accessRightModel
-                                    .requestType == 1) ? true : false,
-                                onChanged: (permissionType) =>
-                                {
-                                  context.read<AccessRightCubit>()
-                                      .accesRightChanged(1),
-                                },
-                              ),
-                              RadioListTile<int>(
-                                value: 2,
-                                // dense: true,
-                                title: const Text("Disable"),
-
-                                groupValue: (widget.objectValidation)
-                                    ? null
-                                    : state.requestType,
-                                selected: (widget.accessRightModel
-                                    .requestType == 2) ? true : false,
-                                onChanged: (permissionType) =>
-                                {
-                                  context.read<AccessRightCubit>()
-                                      .accesRightChanged(2),
-                                },
-                              ),
-                            ],
-                          );
-                        }
-                    ),
-
-                    Container(height: 10,),
-
-                    BlocBuilder<AccessRightCubit, AccessRightInitial>(
-                        builder: (context, state) {
-                          return MultiSelect(
-                              selectedOptionsBoxColor: Colors.transparent,
-                              //--------customization selection modal-----------
-                              titleText: "Items",
-                              checkBoxColor: Colors.black,
-                              hintText: state.requestItems.valid
-                                  ? null
-                                  : "Tap to select one or more items",
-                              // optional
-                              buttonBarColor: Colors.blueGrey,
-                              cancelButtonText: "Exit",
-
-                              maxLengthIndicatorColor: Colors.transparent,
-                              maxLengthText: "",
-                              maxLength: 5,
-                              // optional
-                              //--------end customization selection modal------------
-                              validator: (dynamic value) {
-                                if (value == null) {
-                                  return 'Please select one or more option(s)';
-                                }
-                                return null;
-                              },
-                              errorText: state.requestItems.invalid
-                                  ? 'invalid items'
-                                  : null,
-                              dataSource: accountsTypesList,
-                              textField: 'display',
-                              valueField: 'value',
-                              filterable: true,
-                              required: true,
-
-
-                              onSaved: (value) {
-                                selectedTypes.clear();
-                                if (value != null) {
-                                  for (int i = 0; i < value.length; i++) {
-                                    selectedTypes.add(value[i].toString());
-                                  }
-                                }
-                                context.read<AccessRightCubit>().
-                                getRequestValue(selectedTypes.toString());
-                              }
-
-                          );
-                        }),
-
-                    Container(height: 10,),
-
-                    const Text(
-                      "* If you choose a USB Exception please download this file Download and upload after signatuer",
-                      style: TextStyle(color: Colors.red),),
-
-                    Container(height: 10,),
-                    FloatingActionButton.extended(
-                      onPressed: () {
-                        _launchUrl();
-                      },
-                      label: const Text('Download file', style: TextStyle(
-                          color: Colors.black
-                      )),
-                      icon: const Icon(
-                          Icons.cloud_download_sharp, color: Colors.black),
-                      backgroundColor: Colors.white,),
-
-                    Container(height: 10,),
-
-                    BlocBuilder<AccessRightCubit, AccessRightInitial>(
-                      builder: (context, state) {
-                        return
-                          FloatingActionButton.extended(
-                            onPressed: () async {
-                              FilePickerResult? result = await FilePicker
-                                  .platform.pickFiles();
-
-                              if (result != null) {
-                                Uint8List? fileBytes = result.files.first
-                                    .bytes;
-                                String fileName = result.files.first.name;
-
-                                // Upload file
-                                // await FirebaseStorage.instance.ref('uploads/$fileName').putData(fileBytes);
-                              }
-                            },
-                            label: const Text('Upload', style: TextStyle(
-                                color: Colors.black
-                            )),
-                            icon: const Icon(
-                                Icons.cloud_upload_sharp,
-                                color: Colors.black),
-                            backgroundColor: Colors.white,);
-                      },),
-                    Container(height: 10,),
-                    BlocBuilder<AccessRightCubit, AccessRightInitial>(
-                      builder: (context, state) {
-                        return TextFormField(
-                          initialValue: (widget.objectValidation)
-                              ? widget.accessRightModel.fromDate
-                              .toString()
-                              : state.fromDate.value,
-                          key: UniqueKey(),
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            floatingLabelAlignment:
-                            FloatingLabelAlignment.start,
-                            labelText: 'From Date',
-                            errorText: state.fromDate.invalid
-                                ? 'invalid Date'
-                                : null,
-                            prefixIcon: const Icon(
-                                Icons.calendar_today),
-                          ),
-                          onTap: () async {
-                            if (!widget.objectValidation) {
-                              context.read<AccessRightCubit>().
-                              selectDate(context, "from");
-                            }
-                          },
-                        );
-                      },),
-                    BlocBuilder<AccessRightCubit, AccessRightInitial>(
-                      builder: (context, state) {
-                        return TextFormField(
-                          initialValue: (widget.objectValidation)
-                              ? widget.accessRightModel.toDate
-                              .toString()
-                              : state.toDate.value,
-                          key: UniqueKey(),
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            floatingLabelAlignment:
-                            FloatingLabelAlignment.start,
-                            labelText: 'To Date',
-                            errorText: state.toDate.invalid
-                                ? 'invalid Date'
-                                : null,
-                            prefixIcon: const Icon(
-                                Icons.calendar_today),
-                          ),
-                          onTap: () async {
-                            if (!widget.objectValidation) {
-                              context.read<AccessRightCubit>().
-                              selectDate(context, "to");
-                            }
-                          },
-                        );
-                      },),
-
-                    BlocBuilder<AccessRightCubit, AccessRightInitial>(
-                      builder: (context, state) {
-                        return Card(
-                          child: Row(
-                            children: <Widget>[
-                              const SizedBox(width: 10),
-                              const Text(
-                                'Permanent ',
-                                style: TextStyle(fontSize: 17.0),
-                              ), //Text
-                              const SizedBox(width: 10), //SizedBox
-                              /** Checkbox Widget **/
-                              Checkbox(
-                                value: (widget.objectValidation) ? widget
-                                    .accessRightModel.permanent : state
-                                    .permanent,
-                                onChanged: (bool? value) {
-                                  if (!widget.objectValidation) {
-                                    context.read<AccessRightCubit>()
-                                        .getPermanentValue(value!);
-                                  }
-                                },
-                              ), //Checkbox
-                            ], //<Widget>[]
-                          ),
-                        );
-                      },),
-
-                    BlocBuilder<AccessRightCubit, AccessRightInitial>(
-                      builder: (context, state) {
-                        return TextField(
-                          controller:  (widget.objectValidation)   ? commentController : null,
-                          onChanged: (commentValue) =>
-                              context
-                                  .read<AccessRightCubit>()
-                                  .commentValueChanged(commentValue),
-                          enabled: (widget.objectValidation) ? false : true,
-                          decoration: const InputDecoration(
-                            floatingLabelAlignment:
-                            FloatingLabelAlignment.start,
-                            labelText: 'Comments',
-                            prefixIcon: Icon(
-                                Icons.comment),
-                          ),
-                        );
-                      },
-                    ),
-                    Container(height: 10,),
-
-                    FloatingActionButton.extended(
-                      onPressed: () {
-                        context.read<AccessRightCubit>()
-                            .getSubmitAccessRight(
-                            user, selectedTypes, formattedDate);
-                      },
-                      label: const Text('Submit', style: TextStyle(
-                          color: Colors.black
-                      )),
-                      icon: const Icon(
-                          Icons.thumb_up_alt_outlined, color: Colors.black),
-                      backgroundColor: Colors.white,
-                    ),
-
-
-                    Container(height: 10,),
-
-                  ],
-                ),
-              ),
-            ),
-          ),
-        )
+                  )
+              );
+            }
+        ),
+      ),
     );
   }
 
