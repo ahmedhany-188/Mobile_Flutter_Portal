@@ -17,7 +17,9 @@ class EconomyNewsScreen extends StatefulWidget{
 
 class _economynews_screenState extends State<EconomyNewsScreen>{
 
+  // ignore: non_constant_identifier_names
   List<dynamic> EconomyNewsListData = [];
+  // ignore: non_constant_identifier_names
   String EconomyNewsStringData = "";
 
 
@@ -33,6 +35,7 @@ class _economynews_screenState extends State<EconomyNewsScreen>{
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: false,
+      drawer: MainDrawer(),
 
       body: BlocProvider<EconomyNewsCubit>(
         create: (context) =>
@@ -44,7 +47,6 @@ class _economynews_screenState extends State<EconomyNewsScreen>{
 
               EconomyNewsStringData = state.EconomyNewsList;
               EconomyNewsListData = jsonDecode(EconomyNewsStringData)["articles"];
-              print(EconomyNewsListData.length);
 
             }
             else if (state is BlocGetTheEconomyNewsLoadingState) {
@@ -65,31 +67,29 @@ class _economynews_screenState extends State<EconomyNewsScreen>{
             }
           },
           builder: (context, state) {
-            return Container(
-                child: Column(children: [
+            return Column(children: [
               SingleChildScrollView(
-                  physics: const NeverScrollableScrollPhysics(),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: deviceSize.height -
-                            ((deviceSize.height * 0.18) -
-                                MediaQuery
-                                    .of(context)
-                                    .viewPadding
-                                    .top),
-                        child: EconomyNewsTicketWidget(EconomyNewsListData),
-                        decoration: const BoxDecoration(
-                            image: DecorationImage(image: AssetImage(
-                                "assets/images/S_Background.png"),
-                                fit: BoxFit.cover)
-                        ),
-                      )
-                    ],
+              physics: const NeverScrollableScrollPhysics(),
+              child: Column(
+                children: [
+                  Container(
+                    height: deviceSize.height -
+                        ((deviceSize.height * 0.18) -
+                            MediaQuery
+                                .of(context)
+                                .viewPadding
+                                .top),
+                    decoration: const BoxDecoration(
+                        image: DecorationImage(image: AssetImage(
+                            "assets/images/S_Background.png"),
+                            fit: BoxFit.cover)
+                    ),
+                    child: EconomyNewsTicketWidget(EconomyNewsListData),
                   )
+                ],
+              )
               ),
             ]
-            )
             );
           },
 

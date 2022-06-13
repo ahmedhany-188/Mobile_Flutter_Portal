@@ -1,6 +1,6 @@
 
 
-class BusinessCardFormModel{
+class BusinessCardFormModelData{
 
 
   String requestNo, serviceId, requestHrCode, ownerHrCode,
@@ -8,7 +8,7 @@ class BusinessCardFormModel{
   nplusEmail, closedDate, cardNo, costCenter, cardName,
   faxNo, extNo, mobileNo, projectId;
 
-  BusinessCardFormModel(
+  BusinessCardFormModelData(
       this.requestNo,
       this.serviceId,
       this.requestHrCode,

@@ -1,13 +1,13 @@
 
 
-class MyRequestsFormModel {
+class MyRequestsFormModelData{
 
 
   int id, request_No, req_Status;
   String service_ID, service_Name, title_Name, imgProfile, req_Date, full_Req,
       request_HR_Code, status_Name, req_Name, responsbleperson, rDate;
 
-  MyRequestsFormModel(this.id,
+  MyRequestsFormModelData(this.id,
       this.request_No,
       this.req_Status,
       this.service_ID,

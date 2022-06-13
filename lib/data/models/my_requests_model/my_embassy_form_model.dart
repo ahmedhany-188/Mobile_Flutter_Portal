@@ -1,6 +1,6 @@
 
 
-class EmbassyFormModel{
+class EmbassyFormModelData{
 
 
   String requestNo, serviceId, requestHrCode,
@@ -9,7 +9,7 @@ class EmbassyFormModel{
   dateFrom, dateTo, purpose, embassyId,
   passportNo, addSalary, socialInsuranceNumber, projectId;
 
-  EmbassyFormModel(
+  EmbassyFormModelData(
       this.requestNo,
       this.serviceId,
       this.requestHrCode,

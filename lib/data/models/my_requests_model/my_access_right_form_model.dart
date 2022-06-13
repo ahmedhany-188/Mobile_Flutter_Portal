@@ -1,5 +1,5 @@
 
-class AccessRightFormModel {
+class AccessRightFormModelData {
 
   String ? requestNo, serviceId, projectId, requestHrCode,
   date, ownerHrCode, ownerFullName, ownerTitle,
@@ -10,7 +10,7 @@ class AccessRightFormModel {
   ipPhone, localAdmin, loginUserAccount, emailAccount,
       twebwfItrequestAccessRightD;
 
-  AccessRightFormModel(
+  AccessRightFormModelData(
       this.requestNo,
       this.serviceId,
       this.projectId,

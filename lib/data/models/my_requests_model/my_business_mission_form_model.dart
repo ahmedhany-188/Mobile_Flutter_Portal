@@ -1,31 +1,27 @@
 
 
-class BusinessMissionFormModel{
+class BusinessMissionFormModelData{
 
 
-  String ?requestNo, serviceId, requestHrCode, ownerHrCode,
-      date, newComer, approvalPathId,
-      status, comments, nplusEmail,
-      closedDate, type, dateFrom, dateTo, dateFromAmpm,
-      dateToAmpm, permissionDate, projectId;
+  int requestNo,status;
+  String  serviceId, requestHrCode,
+      date, comments,  missionLocation,
+      dateFrom, dateTo, hourFrom,
+      hourTo, dateFromAmpm, dateToAmpm;
 
-  BusinessMissionFormModel(
+
+  BusinessMissionFormModelData(
       this.requestNo,
       this.serviceId,
       this.requestHrCode,
-      this.ownerHrCode,
       this.date,
-      this.newComer,
-      this.approvalPathId,
       this.status,
       this.comments,
-      this.nplusEmail,
-      this.closedDate,
-      this.type,
+      this.missionLocation,
       this.dateFrom,
       this.dateTo,
+      this.hourFrom,
+      this.hourTo,
       this.dateFromAmpm,
-      this.dateToAmpm,
-      this.permissionDate,
-      this.projectId);
+      this.dateToAmpm);
 }

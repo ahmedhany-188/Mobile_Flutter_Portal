@@ -13,23 +13,23 @@ class EmployeeAppraisalBlocCubit extends Cubit<EmployeeAppraisalBlocState> {
   final Connectivity connectivity = Connectivity();
 
   void getEmployeeAppraisalList(String hrCode) async {
-    emit(BlocgetEmployeeAppraisalBlocInitialLoadingState());
+    emit(BlocGetEmployeeAppraisalBlocInitialLoadingState());
 
     try {
       var connectivityResult = await connectivity.checkConnectivity();
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
         EmployeeAppraisaleDataProvider(hrCode).getEmployeeApraisalList().then((value) {
-          emit(BlocgetEmployeeAppraisalBlocInitialSuccessState(value.body));
+          emit(BlocGetEmployeeAppraisalBlocInitialSuccessState(value.body));
         }).catchError((error) {
-          emit(BlocgetEmployeeAppraisalBlocInitialErrorState(error.toString()));
+          emit(BlocGetEmployeeAppraisalBlocInitialErrorState(error.toString()));
         });
       } else {
-        emit(BlocgetEmployeeAppraisalBlocInitialErrorState(
+        emit(BlocGetEmployeeAppraisalBlocInitialErrorState(
             "No internet connection"));
       }
     } catch (e) {
-      emit(BlocgetEmployeeAppraisalBlocInitialErrorState(e));
+      emit(BlocGetEmployeeAppraisalBlocInitialErrorState(e));
     }
   }
 

@@ -7,9 +7,10 @@ class MyRequestsInitial extends MyRequestsState {}
 
 class BlocGetMyRequestsLoadingState extends MyRequestsState{}
 
+// ignore: must_be_immutable
 class BlocGetMyRequestsSuccesState extends MyRequestsState{
-  String getMyrequests;
-  BlocGetMyRequestsSuccesState(this.getMyrequests);
+  String getMyRequests;
+  BlocGetMyRequestsSuccesState(this.getMyRequests);
 }
 
 class BlocGetMyRequestsErrorState extends MyRequestsState{

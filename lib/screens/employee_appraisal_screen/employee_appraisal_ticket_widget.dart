@@ -3,6 +3,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/data/models/appraisal_models/object_appraisal_model.dart';
 
+// ignore: must_be_immutable
 class EmployeeAppraisalTicketWidget extends StatelessWidget{
 
   List<ObjectAppraisalModel> employeeAppraisaleList;
@@ -35,13 +36,14 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget{
                 return  Container(
 
                   color: Colors.transparent,
+                  alignment: Alignment.center,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
 
                       Text(
                           employeeAppraisaleList[index].name,
-                          style: TextStyle(fontSize: 20,color: Colors.white)
+                          style: const TextStyle(fontSize: 20,color: Colors.white)
                       ),
 
                       CircularViewer(
@@ -58,7 +60,6 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget{
                       )
                     ],
                   ),
-                  alignment: Alignment.center,
                 );
               }
           ),

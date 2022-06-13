@@ -1,6 +1,6 @@
 
 
-class EmailAccountFormModel{
+class EmailAccountFormModelData{
 
   String requestNo, serviceId, projectId, requestHrCode,
   date, ownerHrCode, ownerFullName, ownerTitle,
@@ -10,7 +10,7 @@ class EmailAccountFormModel{
   endDate, isPermanent, usbException, vpnAccount, ipPhone, localAdmin, loginUserAccount,
   emailAccount, twebwfItrequestAccessRightD;
 
-  EmailAccountFormModel(
+  EmailAccountFormModelData(
       this.requestNo,
       this.serviceId,
       this.projectId,

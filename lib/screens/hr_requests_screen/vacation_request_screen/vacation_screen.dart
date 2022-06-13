@@ -5,6 +5,7 @@ import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/responsible_vacation_request/responsible_vacation_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/vacation_request/vacation_cubit.dart';
 import 'package:hassanallamportalflutter/data/models/contacts_related_models/contacts_data_from_api.dart';
+import 'package:hassanallamportalflutter/data/models/my_requests_model/my_vacation_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../constants/enums.dart';
@@ -12,9 +13,13 @@ import '../../../data/repositories/request_repository.dart';
 
 
 class VacationScreen extends StatefulWidget {
-  static const routeName = 'vacation-page';
 
-  const VacationScreen({Key? key}) : super(key: key);
+  static const routeName = 'vacation-page';
+  const VacationScreen({Key? key,required this.vacationRequestModel,required this.objectValidation}) : super(key: key);
+
+
+  final bool objectValidation;
+  final VacationModelFormData vacationRequestModel;
 
   @override
   State<VacationScreen> createState() => _VacationScreenState();
@@ -187,7 +192,11 @@ class _VacationScreenState extends State<VacationScreen> {
                                           RadioListTile<int>(
                                             value: 1,
                                             title: const Text("Annual"),
-                                            groupValue: state.vacationType,
+                                            groupValue: (widget.objectValidation)
+                                                ? null
+                                                : state.vacationType,
+                                            selected: (widget.vacationRequestModel
+                                                .vacationType == "1") ? true : false,
                                             onChanged: (vacationType) =>
                                                 context
                                                     .read<VacationCubit>()
@@ -198,50 +207,66 @@ class _VacationScreenState extends State<VacationScreen> {
                                             value: 2,
                                             // dense: true,
                                             title: const Text("Casual"),
-                                            groupValue: state.vacationType,
+                                            groupValue: (widget.objectValidation)
+                                                ? null
+                                                : state.vacationType,
+                                            selected: (widget.vacationRequestModel
+                                                .vacationType == "2") ? true : false,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
                                                 context
                                                     .read<VacationCubit>()
                                                     .vacationTypeChanged(
-                                                    vacationType ?? 1),
+                                                    vacationType ?? 2),
                                           ),
                                           RadioListTile<int>(
                                             value: 3,
                                             // dense: true,
                                             title: const Text(
                                                 "Holiday Replacement"),
-                                            groupValue: state.vacationType,
+                                            groupValue: (widget.objectValidation)
+                                                ? null
+                                                : state.vacationType,
+                                            selected: (widget.vacationRequestModel
+                                                .vacationType == "3") ? true : false,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
                                                 context
                                                     .read<VacationCubit>()
                                                     .vacationTypeChanged(
-                                                    vacationType ?? 1),
+                                                    vacationType ?? 3),
                                           ),
                                           RadioListTile<int>(
                                             value: 4,
                                             // dense: true,
                                             title: const Text("Maternity"),
-                                            groupValue: state.vacationType,
+                                            groupValue: (widget.objectValidation)
+                                                ? null
+                                                : state.vacationType,
+                                            selected: (widget.vacationRequestModel
+                                                .vacationType == "4") ? true : false,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
                                                 context
                                                     .read<VacationCubit>()
                                                     .vacationTypeChanged(
-                                                    vacationType ?? 1),
+                                                    vacationType ?? 4),
                                           ),
                                           RadioListTile<int>(
                                             value: 5,
                                             // dense: true,
                                             title: const Text("Haj"),
-                                            groupValue: state.vacationType,
+                                            groupValue: (widget.objectValidation)
+                                                ? null
+                                                : state.vacationType,
+                                            selected: (widget.vacationRequestModel
+                                                .vacationType == "5") ? true : false,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
                                                 context
                                                     .read<VacationCubit>()
                                                     .vacationTypeChanged(
-                                                    vacationType ?? 1),
+                                                    vacationType ?? 5),
                                           ),
                                         ],
                                       );
@@ -265,7 +290,10 @@ class _VacationScreenState extends State<VacationScreen> {
                                     print(state.vacationFromDate.value);
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue: state.vacationFromDate.value,
+                                      initialValue: (widget.objectValidation)
+                                          ? widget.vacationRequestModel.dateFrom
+                                          .toString()
+                                          : state.vacationFromDate.value,
                                       onChanged: (vacationDate) =>
                                           context
                                               .read<VacationCubit>()
@@ -286,13 +314,12 @@ class _VacationScreenState extends State<VacationScreen> {
                                       ),
                                       onTap: () {
 
-                                        // vacationDateFromController.text =
-                                        //     formattedDate;
-                                        // (permissionDate) =>
-                                        context
-                                            .read<VacationCubit>()
-                                            .vacationFromDateChanged(
-                                            context);
+    if (!widget.objectValidation) {
+      context
+          .read<VacationCubit>()
+          .vacationFromDateChanged(
+          context);
+    }
                                       },
                                     );
                                   }
@@ -315,7 +342,10 @@ class _VacationScreenState extends State<VacationScreen> {
                                   builder: (context, state) {
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue: state.vacationToDate.value,
+                                      initialValue: (widget.objectValidation)
+                                          ? widget.vacationRequestModel.dateTo
+                                          .toString()
+                                          : state.vacationToDate.value,
                                       // onChanged: (vacationDate) =>
                                       //     context
                                       //         .read<VacationCubit>()
@@ -334,10 +364,11 @@ class _VacationScreenState extends State<VacationScreen> {
                                             Icons.date_range_outlined),
                                       ),
                                       onTap: () {
-                                        context
-                                            .read<VacationCubit>()
-                                            .vacationToDateChanged(
-                                            context);
+    if (!widget.objectValidation) {
+      context.read<VacationCubit>()
+          .vacationToDateChanged(
+          context);
+    }
                                       },
                                     );
                                   }
@@ -361,7 +392,10 @@ class _VacationScreenState extends State<VacationScreen> {
                                         "from Screen${state.vacationDuration}");
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue: state.vacationDuration,
+                                      initialValue: (widget.objectValidation)
+                                          ? widget.vacationRequestModel.noOfDays
+                                          .toString()
+                                          : state.vacationDuration,
                                       readOnly: true,
                                       decoration: const InputDecoration(
                                         labelText: 'Vacation Duration',
@@ -385,8 +419,12 @@ class _VacationScreenState extends State<VacationScreen> {
                                   builder: (context, state) {
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue: state.responsiblePerson
-                                          .name,
+
+                                      initialValue: (widget.objectValidation)
+                                          ? widget.vacationRequestModel.responsible
+                                          .toString()
+                                          : state.responsiblePerson.name.toString()+state.responsiblePerson.email.toString(),
+
                                       readOnly: true,
                                       decoration: const InputDecoration(
                                         labelText: 'Responsible Person',
@@ -394,7 +432,9 @@ class _VacationScreenState extends State<VacationScreen> {
                                             Icons.date_range),
                                       ),
                                       onTap: () {
-                                        _showModal(context);
+                                        if (!widget.objectValidation) {
+                                          _showModal(context);
+                                        }
                                       },
                                     );
                                   }
@@ -408,6 +448,16 @@ class _VacationScreenState extends State<VacationScreen> {
                                   VacationInitial>(
                                   builder: (context, state) {
                                     return TextFormField(
+
+                                      initialValue: (widget.objectValidation)
+                                          ? widget.vacationRequestModel.comments
+                                          .toString()
+                                          : state.comment,
+
+                                      readOnly: (widget.objectValidation)
+                                          ? true
+                                          : false,
+
                                       onChanged: (commentValue) =>
                                           context
                                               .read<VacationCubit>()
@@ -638,6 +688,7 @@ class SuccessScreen extends StatelessWidget {
   const SuccessScreen({Key? key, required this.text}) : super(key: key);
   final String text;
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -654,8 +705,13 @@ class SuccessScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton.icon(
-              onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => const VacationScreen())),
+              onPressed: () =>
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (_) =>
+                              VacationScreen(
+                                  vacationRequestModel: VacationModelFormData(0, "", "", "", "", 0, "", "", "", "", 0),
+                                  objectValidation: false))),
               icon: const Icon(Icons.replay),
               label: const Text('Create Another Permission Request'),
             ),

@@ -16,12 +16,12 @@ class MyRequestsScreen extends StatefulWidget{
   const MyRequestsScreen({Key? key}) : super(key: key);
 
   @override
-  State<MyRequestsScreen> createState() => _MyRequestsScreen();
+  State<MyRequestsScreen> createState() => MyRequestsScreenClass();
 
 }
 
 
-class _MyRequestsScreen extends State<MyRequestsScreen> {
+class MyRequestsScreenClass extends State<MyRequestsScreen> {
 
 
   @override
@@ -29,8 +29,8 @@ class _MyRequestsScreen extends State<MyRequestsScreen> {
     var deviceSize = MediaQuery
         .of(context)
         .size;
-    bool loadingAttendanceData = false;
 
+    // ignore: non_constant_identifier_names
     List<dynamic> MyRequestsListData = [];
     String myRequestStringData = "";
 
@@ -44,7 +44,6 @@ class _MyRequestsScreen extends State<MyRequestsScreen> {
       resizeToAvoidBottomInset: false,
 
       drawer: MainDrawer(),
-
 
       body: BlocProvider<MyRequestsCubit>(
 
@@ -61,7 +60,7 @@ class _MyRequestsScreen extends State<MyRequestsScreen> {
                   content: Text("Success"),
                 ),
               );
-              myRequestStringData = state.getMyrequests;
+              myRequestStringData = state.getMyRequests;
               MyRequestsListData = jsonDecode(myRequestStringData);
             }
             else if (state is BlocGetMyRequestsLoadingState) {
@@ -84,24 +83,20 @@ class _MyRequestsScreen extends State<MyRequestsScreen> {
           },
           builder: (context, state) {
             return Container(
-              child: Padding(
-                padding: EdgeInsets.all(15),
-                child: SingleChildScrollView(
-                    physics: const NeverScrollableScrollPhysics(),
-                    child: Column(
-                      children: [
-                        Container(
-                          height: deviceSize.height,
-                          child: MyReqyestsTicketWidget(MyRequestsListData),
-                        )
-                      ],
-                    )
-                ),
-              ),
               decoration: const BoxDecoration(
-                  image: DecorationImage(image: AssetImage(
-                      "assets/images/S_Background.png"),
-                      fit: BoxFit.cover)
+                  // image: DecorationImage(
+                  //     image: AssetImage(
+                  //     "assets/images/S_Background.png"),
+                  //     fit: BoxFit.cover
+                  // )
+                color: Colors.white,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(15),
+                        child:SizedBox(
+                          height: deviceSize.height,
+                          child: MyReqyestsTicketWidget(MyRequestsListData,user.employeeData!.userHrCode!),
+                        )
               ),
             );
           },

@@ -3,27 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_userprofile.dart';
 
 
+// ignore: must_be_immutable
 class AttendanceTicketWidget extends StatelessWidget {
   List<dynamic> projectsDirectionData;
 
-  String time_in = "";
-  String time_in2 = "";
-  String time_out = "";
-  String time_out2 = "";
+  String timeIn = "";
+  String timeIn2 = "";
+  String timeOut = "";
+  String timeOut2 = "";
   String name = "";
   bool holiday = false;
   String vacation = "";
   String permission = "";
-  String BusinessMission = "";
+  String businessMission = "";
   String forget = "";
-  String month_period = "";
+  String monthPeriod = "";
   String deduction = "";
 
 
   AttendanceTicketWidget(this.projectsDirectionData, {Key? key})
       : super(key: key);
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -48,33 +47,48 @@ class AttendanceTicketWidget extends StatelessWidget {
               ),
               itemCount: projectsDirectionData.length,
               itemBuilder: (BuildContext context, int index) {
+
                 List<String> date = projectsDirectionData[index]["date"]
                     .toString().split('-');
 
-                time_in = projectsDirectionData[index]["time_IN"]
-                    .toString()
-                    .substring(0, 1);
-                time_in2 = projectsDirectionData[index]["time_IN"]
-                    .toString()
-                    .substring(2, 4);
+                print("----"+projectsDirectionData[index].toString()+"--");
 
-                time_out = projectsDirectionData[index]["time_OUT"]
-                    .toString()
-                    .substring(0, 1);
-                time_out2 = projectsDirectionData[index]["time_OUT"]
-                    .toString()
-                    .substring(2, 4);
+
+                if(projectsDirectionData[index]["time_IN"] !=null && projectsDirectionData[index]["time_OUT"] !=null){
+                  timeIn = projectsDirectionData[index]["time_IN"]
+                      .toString()
+                      .split(':')[0];
+                  timeIn2 = projectsDirectionData[index]["time_IN"]
+                      .toString()
+                      .split(':')[1];
+
+                  timeIn2=timeIn2.replaceAll("AM", "");
+                  timeIn2=timeIn2.replaceAll("PM", "");
+                  timeOut = projectsDirectionData[index]["time_OUT"]
+                      .toString()
+                      .split(':')[0];
+                  timeOut2 = projectsDirectionData[index]["time_OUT"]
+                      .toString()
+                      .split(':')[1];
+                  timeOut2=timeOut2.replaceAll("AM", "");
+                  timeOut2=timeOut2.replaceAll("PM", "");
+
+                  print("----"+timeIn+"--"+timeIn2+"--");
+                  print("----"+timeOut+"--"+timeOut2+"--");
+                }
+
+
 
                 holiday = projectsDirectionData[index]["holiday"];
                 vacation = projectsDirectionData[index]["vacation"].toString();
                 permission =
                     projectsDirectionData[index]["permission"].toString();
-                BusinessMission =
+                businessMission =
                     projectsDirectionData[index]["businessMission"].toString();
 
                 forget = projectsDirectionData[index]["forget"].toString();
 
-                month_period =
+                monthPeriod =
                     projectsDirectionData[index]["monthPeriod"].toString();
 
                 deduction =
@@ -84,35 +98,27 @@ class AttendanceTicketWidget extends StatelessWidget {
                     "null" &&
                     projectsDirectionData[index]["time_OUT"].toString() !=
                         "null") {
-                  if (((int.parse(time_out) >= 5) ||
-                      (int.parse(time_out) == 4 &&
-                          int.parse(time_out2) == 59)) &&
-                      ((int.parse(time_in) < 8) || (int.parse(time_in) == 8 &&
-                          int.parse(time_in2) < 31))) {
+                  if (((int.parse(timeOut) >= 5) ||
+                      (int.parse(timeOut) == 4 &&
+                          int.parse(timeOut2) == 59)) &&
+                      ((int.parse(timeIn) < 8) || (int.parse(timeIn) == 8 &&
+                          int.parse(timeIn2) < 31))) {
                     return SizedBox(
 
                       width: double.infinity,
                       child: InkWell(
                           onTap: () {
-                            Dialog_PopUp_UserProfile();
+                             DialogPopUpUserProfile();
                           },
 
                           child: Column(children: [
-                            Container(
-
-                              child: Text(
-                                  date[1] + "/" + date[2].substring(0, 2),
-                                  style: const TextStyle(color: Colors.white)),
-                            ),
+                            Text(
+                                "${date[1]}/${date[2].substring(0, 2)}",
+                                style: const TextStyle(color: Colors.white,)),
 
                             Container(
 
 
-                              child: Text(
-                                  projectsDirectionData[index]["time_IN"],
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 11,)),
                               decoration: const BoxDecoration(
                                 borderRadius: BorderRadius.only(
                                     topLeft: Radius.circular(5),
@@ -123,6 +129,13 @@ class AttendanceTicketWidget extends StatelessWidget {
                               width: double.infinity,
                               height: 30,
 
+
+                              child: Text(
+                                  projectsDirectionData[index]["time_IN"],
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11,)),
+
                             ),
 
                             Container(height: 5, color: Colors.white,),
@@ -130,17 +143,17 @@ class AttendanceTicketWidget extends StatelessWidget {
                               width: double.infinity,
                               alignment: Alignment.center,
                               height: 30,
-                              child: Text(
-                                  projectsDirectionData[index]["time_OUT"],
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 11,)),
                               decoration: const BoxDecoration(
                                 borderRadius: BorderRadius.only(
                                     bottomLeft: Radius.circular(5),
                                     bottomRight: Radius.circular(5)),
                                 color: Colors.lightGreen,
                               ),
+                              child: Text(
+                                  projectsDirectionData[index]["time_OUT"],
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 11,)),
                             ),
                           ])
 
@@ -150,30 +163,23 @@ class AttendanceTicketWidget extends StatelessWidget {
                   }
 
                   else if
-                  (((int.parse(time_out) >= 5) || (int.parse(time_out) == 4 &&
-                      int.parse(time_out2) == 59)) &&
-                      ((int.parse(time_in) > 8) || (int.parse(time_in) == 8 &&
-                          int.parse(time_in2) > 30))) {
+                  (((int.parse(timeOut) >= 5) || (int.parse(timeOut) == 4 &&
+                      int.parse(timeOut2) == 59)) &&
+                      ((int.parse(timeIn) > 8) || (int.parse(timeIn) == 8 &&
+                          int.parse(timeIn2) > 30))) {
                     return SizedBox(
                       width: double.infinity,
                         child: InkWell(
                           onTap: () {
-                            Dialog_PopUp_UserProfile();
+                             DialogPopUpUserProfile();
                           },
                       child: Column(children: [
 
-                        Container(
-
-                            child: Text(date[1] + "/" + date[2].substring(0, 2),
-                                style: const TextStyle(color: Colors.white))),
+                        Text("${date[1]}/${date[2].substring(0, 2)}",
+                            style: const TextStyle(color: Colors.white)),
 
                         Container(
                           height: 30,
-                          child: Text(projectsDirectionData[index]["time_IN"],
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                            )),
                           decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(5),
@@ -182,16 +188,16 @@ class AttendanceTicketWidget extends StatelessWidget {
                           ),
                           alignment: Alignment.center,
                           width: double.infinity,
+                          child: Text(projectsDirectionData[index]["time_IN"],
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                            )),
                         ),
                         Container(height: 5,color:Colors.white,),
 
                         Container(
                           height: 30,
-                          child: Text(projectsDirectionData[index]["time_OUT"],
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                            )),
                           decoration: const BoxDecoration(
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(5),
@@ -200,6 +206,11 @@ class AttendanceTicketWidget extends StatelessWidget {
                           ),
                           alignment: Alignment.center,
                           width: double.infinity,
+                          child: Text(projectsDirectionData[index]["time_OUT"],
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                            )),
 
                         ),
 
@@ -209,35 +220,28 @@ class AttendanceTicketWidget extends StatelessWidget {
                     );
                   }
                   else if
-                  ((int.parse(time_out) != 4 && int.parse(time_out2) != 59)
+                  ((int.parse(timeOut) != 4 && int.parse(timeOut2) != 59)
                       ||
-                      (int.parse(time_out) != 4 && int.parse(time_out2) < 59) ||
-                      (int.parse(time_out) < 5)
+                      (int.parse(timeOut) != 4 && int.parse(timeOut2) < 59) ||
+                      (int.parse(timeOut) < 5)
                           &&
-                          ((int.parse(time_in) < 8) ||
-                              (int.parse(time_in) == 8 &&
-                                  int.parse(time_in2) < 31))) {
+                          ((int.parse(timeIn) < 8) ||
+                              (int.parse(timeIn) == 8 &&
+                                  int.parse(timeIn2) < 31))) {
                     return SizedBox(
 
                       width: double.infinity,
                         child: InkWell(
                         onTap: () {
-                          Dialog_PopUp_UserProfile();
+                           DialogPopUpUserProfile();
                     },
                       child: Column(children: [
 
-                      Container(child:
-                      Text(date[1] + "/" + date[2].substring(0, 2),
-                          style: const TextStyle(color: Colors.white)),),
+                      Text("${date[1]}/${date[2].substring(0, 2)}",
+                          style: const TextStyle(color: Colors.white)),
 
                       Container(
                         height: 30,
-                        child: Text(
-                          projectsDirectionData[index]["time_IN"],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                          )),
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(5),
@@ -245,17 +249,17 @@ class AttendanceTicketWidget extends StatelessWidget {
                           color: Colors.lightGreen,
                         ),
                         alignment: Alignment.center,
-                        width: double.infinity,),
+                        width: double.infinity,
+                        child: Text(
+                          projectsDirectionData[index]["time_IN"],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                          )),),
                       Container(height: 5,color:Colors.white,),
 
                       Container(
                         height: 30,
-                        child: Text(
-                          projectsDirectionData[index]["time_OUT"],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                          )),
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(5),
@@ -263,7 +267,13 @@ class AttendanceTicketWidget extends StatelessWidget {
                           color: Colors.red,
                         ),
                         alignment: Alignment.center,
-                        width: double.infinity,),
+                        width: double.infinity,
+                        child: Text(
+                          projectsDirectionData[index]["time_OUT"],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                          )),),
 
 
                     ]),
@@ -275,21 +285,15 @@ class AttendanceTicketWidget extends StatelessWidget {
                       width: double.infinity,
                     child: InkWell(
                     onTap: () {
-                      Dialog_PopUp_UserProfile();
+                       DialogPopUpUserProfile();
                     },
                        child: Column(children: [
 
-                      Container(child: Text(
-                          date[1] + "/" + date[2].substring(0, 2),
-                          style: const TextStyle(color: Colors.white)),),
+                      Text(
+                          "${date[1]}/${date[2].substring(0, 2)}",
+                          style: const TextStyle(color: Colors.white)),
                       Container(
                         height: 30,
-                        child: Text(
-                          projectsDirectionData[index]["time_IN"],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                          )),
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(5),
@@ -297,18 +301,18 @@ class AttendanceTicketWidget extends StatelessWidget {
                           color: Colors.red,
                         ),
                         alignment: Alignment.center,
-                        width: double.infinity,),
+                        width: double.infinity,
+                        child: Text(
+                          projectsDirectionData[index]["time_IN"],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                          )),),
 
                       Container(height: 5,color:Colors.white,),
 
                       Container(
                         height: 30,
-                        child: Text(
-                          projectsDirectionData[index]["time_OUT"],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                          )),
                         decoration: const BoxDecoration(
                           borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(5),
@@ -316,7 +320,13 @@ class AttendanceTicketWidget extends StatelessWidget {
                           color: Colors.red,
                         ),
                         alignment: Alignment.center,
-                        width: double.infinity,),
+                        width: double.infinity,
+                        child: Text(
+                          projectsDirectionData[index]["time_OUT"],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                          )),),
                     ]),
                     ),
                     );
@@ -327,13 +337,11 @@ class AttendanceTicketWidget extends StatelessWidget {
                     width: double.infinity,
                   child: InkWell(
                   onLongPress: () {
-                    Dialog_PopUp_UserProfile();
+                    const DialogPopUpUserProfile();
                   },
                     child: Column(children: [
-                      Container(
-                        child: Text(date[1] + "/" + date[2].substring(0, 2),
-                            style: const TextStyle(color: Colors.white)),
-                      ),
+                      Text("${date[1]}/${date[2].substring(0, 2)}",
+                          style: const TextStyle(color: Colors.white)),
                       Container(
 
                         height: 65,

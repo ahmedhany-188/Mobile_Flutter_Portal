@@ -12,8 +12,7 @@ class EmployeeAppraisaleDataProvider {
   Future<http.Response> getEmployeeApraisalList() async {
     http.Response rawEmployeeAppraisalData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com/api/Portal/GetAppraisalByHrcode?Hrcode=" +
-              hrCode.toString()),
+          "https://api.hassanallam.com/api/Portal/GetAppraisalByHrcode?Hrcode=$hrCode"),
     );
 
     return rawEmployeeAppraisalData;

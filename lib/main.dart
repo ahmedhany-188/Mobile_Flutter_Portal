@@ -11,6 +11,7 @@ import 'package:hassanallamportalflutter/bloc/it_request_bloc/access_right_reque
 import 'package:hassanallamportalflutter/bloc/it_request_bloc/email_useracount_request/email_useraccount_cubit.dart';
 // import 'package:hassanallamportalflutter/bloc/hr_request_bloc/permission_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/my_requests_detail_screen_bloc/my_requests_detail_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/my_requests_screen_bloc/my_requests_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
@@ -131,6 +132,9 @@ class _MyAppState extends State<MyApp> {
         BlocProvider<EconomyNewsCubit>(
           create: (economyNewsCubitContext) => EconomyNewsCubit(),
         ),
+        BlocProvider<MyRequestsDetailCubit>(
+          create: (economyNewsCubitContext) => MyRequestsDetailCubit(),
+        ),
         BlocProvider<GetDirectionCubit>(
           create: (getDirectionCubitContext) =>
               GetDirectionCubit()..getDirection(),
@@ -143,9 +147,9 @@ class _MyAppState extends State<MyApp> {
               SubsidiariesCubit()..getSubsidiaries(),
         ),
 
-        BlocProvider<EmailUseraccountCubit>(
+        BlocProvider<EmailUserAccountCubit>(
           create: (emailUserAccountRequestContext) =>
-              EmailUseraccountCubit(),
+              EmailUserAccountCubit(),
         ),
 
         BlocProvider<EmbassyLetterCubit>(
@@ -173,6 +177,8 @@ class _MyAppState extends State<MyApp> {
             authenticationRepository: _authenticationRepository,
           ),
         ),
+
+
         BlocProvider<LoginCubit>(
           create: (authenticationContext) =>
               LoginCubit(_authenticationRepository),

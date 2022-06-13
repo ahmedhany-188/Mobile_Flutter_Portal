@@ -1,7 +1,7 @@
 
 
 class BusinessCardFormModel{
-  String ?requestDate,employeeNameCard,employeeMobil,employeeExt,faxNo,employeeComeents;
+  String ?requestDate,employeeNameCard,employeeMobil,employeeExt,faxNo,employeeComments;
   BusinessCardFormModel(this.requestDate, this.employeeNameCard,
-      this.employeeMobil, this.employeeExt, this.faxNo, this.employeeComeents);
+      this.employeeMobil, this.employeeExt, this.faxNo, this.employeeComments);
 }

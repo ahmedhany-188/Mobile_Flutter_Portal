@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
-import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
 import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_userprofile.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 
-class ProfileScreen extends StatefulWidget {
+class UserProfileScreen extends StatefulWidget {
 
   static const routeName = "/my-profile-screen";
 
-
-  const ProfileScreen({Key? key}) : super(key: key);
+  const UserProfileScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreen();
+  State<UserProfileScreen> createState() => UserProfileScreenClass();
 }
 
-class _ProfileScreen extends State<ProfileScreen> {
+class UserProfileScreenClass extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
@@ -36,10 +34,10 @@ class _ProfileScreen extends State<ProfileScreen> {
         title: const Text('Hassan Allam Holding'),
         centerTitle: true,
       ),
-      // drawer: MainDrawer(),
+      drawer: MainDrawer(),
       resizeToAvoidBottomInset: false,
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
 
           image: DecorationImage(
             image: AssetImage("assets/images/S_Background.png"),
@@ -48,47 +46,14 @@ class _ProfileScreen extends State<ProfileScreen> {
         ),
 
         child: SingleChildScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 40),
             child: Column(
               children: [
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     IconButton(
-                //       icon: const Icon(Icons.arrow_left),
-                //       iconSize: 40,
-                //       color: Colors.white,
-                //       onPressed: () {
-                //
-                //         Navigator.of(context).pushNamed(TapsScreen
-                //             .routeName);
-                //       },
-                //     ),
-                //
-                //     IconButton(
-                //       icon: const Icon(Icons.home),
-                //       iconSize: 30,
-                //       color: Colors.white,
-                //       onPressed: () {
-                //         Navigator.of(context).pushNamed(TapsScreen
-                //             .routeName);
-                //         },
-                //     ),
-                //   ],
-                // ),
-                // Text(
-                //   'Hassan Allam Holding',
-                //   textAlign: TextAlign.center,
-                //   style: TextStyle(
-                //     color: Colors.white,
-                //     fontSize: 23,
-                //     fontFamily: 'Nisebuschgardens',
-                //   ),
-                // ),
+
                 Container(
-                  height: height * 0.43,
+                  height: height * 0.45,
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       double innerHeight = constraints.maxHeight;
@@ -109,12 +74,12 @@ class _ProfileScreen extends State<ProfileScreen> {
                               ),
                               child: Column(
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 80,
                                   ),
                                   Text(
                                     user.employeeData!.name!,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Color.fromRGBO(39, 105, 171, 1),
                                       fontFamily: 'Nunito',
                                       fontSize: 20,
@@ -123,8 +88,8 @@ class _ProfileScreen extends State<ProfileScreen> {
                                   ),
 
                                   Text(
-                                    user.employeeData!.titleName! + "",
-                                    style: TextStyle(
+                                    user.employeeData!.titleName!.toString(),
+                                    style: const TextStyle(
                                       color: Color.fromRGBO(39, 105, 171, 1),
                                       fontFamily: 'Nunito',
                                       fontSize: 15,
@@ -146,9 +111,8 @@ class _ProfileScreen extends State<ProfileScreen> {
                                             ),
                                           ),
                                           Text(
-                                            user.employeeData!.userHrCode! +
-                                                "",
-                                            style: TextStyle(
+                                            user.employeeData!.userHrCode!.toString(),
+                                            style: const TextStyle(
                                               color: Color.fromRGBO(
                                                   39, 105, 171, 1),
                                               fontFamily: 'Nunito',
@@ -183,9 +147,8 @@ class _ProfileScreen extends State<ProfileScreen> {
                                             ),
                                           ),
                                           Text(
-                                            user.employeeData!.gradeName
-                                                .toString() + "",
-                                            style: TextStyle(
+                                            user.employeeData!.gradeName.toString(),
+                                            style: const TextStyle(
                                               color: Color.fromRGBO(
                                                   39, 105, 171, 1),
                                               fontFamily: 'Nunito',
@@ -210,7 +173,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                               onPressed: () {
                                 showDialog(context: context,
                                     builder: (BuildContext context) {
-                                      return Dialog_PopUp_UserProfile();
+                                      return const DialogPopUpUserProfile();
                                     }
                                 );
                               },
@@ -222,18 +185,12 @@ class _ProfileScreen extends State<ProfileScreen> {
                             left: 0,
                             right: 0,
                             child: Center(
-                              child: Container(
-                                  child:
+                              child: CircleAvatar(
+                                backgroundImage:
+                                NetworkImage(
+                                    "https://portal.hassanallam.com/Apps/images/Profile/${user.employeeData!.userHrCode!}.jpg"),
+                                radius: 70,
 
-                                  CircleAvatar(
-                                    backgroundImage:
-                                    NetworkImage(
-                                        "https://portal.hassanallam.com/Apps/images/Profile/" +
-                                            user.employeeData!.userHrCode! +
-                                            ".jpg"),
-                                    radius: 70,
-
-                                  )
                               ),
                             ),
                           ),
@@ -244,7 +201,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                     },
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 30,
                 ),
                 Container(
@@ -258,10 +215,10 @@ class _ProfileScreen extends State<ProfileScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Column(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 15,
                         ),
-                        Text(
+                        const Text(
                           'My Info',
                           style: TextStyle(
                             color: Color.fromRGBO(39, 105, 171, 1),
@@ -269,19 +226,19 @@ class _ProfileScreen extends State<ProfileScreen> {
                             fontFamily: 'Nunito',
                           ),
                         ),
-                        Divider(
+                        const Divider(
                           thickness: 2.5,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Container(
                           width: double.infinity,
                           height: height * 0.08,
                           child: Text(
-                            'Department: \n' +
-                                user.employeeData!.mainDepartment!,
-                            style: TextStyle(
+                            'Department: \n${user.employeeData!.mainDepartment!}',
+
+                            style: const TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),
 
                               fontSize: 16,
@@ -289,16 +246,15 @@ class _ProfileScreen extends State<ProfileScreen> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Container(
                           width: double.infinity,
                           height: height * 0.08,
                           child: Text(
-                            'Direct Manager: \n' +
-                                user.employeeData!.managerCode!,
-                            style: TextStyle(
+                            'Direct Manager: \n${user.employeeData!.managerCode!}',
+                            style: const TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),
                               fontSize: 16,
                               fontFamily: 'Nunito',
@@ -306,15 +262,15 @@ class _ProfileScreen extends State<ProfileScreen> {
                             textAlign: TextAlign.left,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Container(
                           width: double.infinity,
                           height: height * 0.08,
                           child: Text(
-                            'Email: \n' + user.employeeData!.email!,
-                            style: TextStyle(
+                            'Email: \n${user.employeeData!.email!}',
+                            style: const TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),
                               fontSize: 16,
                               fontFamily: 'Nunito',
@@ -322,7 +278,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                             textAlign: TextAlign.left,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Container(
@@ -330,7 +286,7 @@ class _ProfileScreen extends State<ProfileScreen> {
                           height: height * 0.08,
                           child: Text(
                             'Mobile Number: \n' + user.employeeData!.phone!,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),
                               fontSize: 16,
                               fontFamily: 'Nunito',
@@ -338,13 +294,13 @@ class _ProfileScreen extends State<ProfileScreen> {
                             textAlign: TextAlign.left,
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 5,
                         ),
                         Container(
                           width: double.infinity,
                           height: height * 0.08,
-                          child: Text(
+                          child: const Text(
                             'Ext: \n',
                             style: TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),

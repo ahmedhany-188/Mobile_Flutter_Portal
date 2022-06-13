@@ -1,4 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/data/models/admin_requests_models/business_card_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/my_requests_model/my_business_mission_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/my_requests_model/my_permission_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/my_requests_model/my_vacation_form_model.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
@@ -72,24 +79,24 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const TapsScreen(),
         );
-      case ContactDetailScreen.routeName:
-        final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
-          builder: (_) => ContactDetailScreen(selectedContactDataAsMap: args,),
-        );
+      // case ContactDetailScreen.routeName:
+      //   final args = settings.arguments as Map<String, dynamic>;
+      //   return MaterialPageRoute(
+      //     builder: (_) => ContactDetailScreen(selectedContactDataAsMap: args,),
+      //   );
       case GetDirectionScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => const GetDirectionScreen(),
         );
 
-      case Attendance_Screen.routeName:
+      case AttendanceScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => const Attendance_Screen(),
+          builder: (_) => const AttendanceScreen(),
         );
 
-      case EmployeeAppraisal_Screen.routeName:
+      case EmployeeAppraisalScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => const EmployeeAppraisal_Screen(),
+          builder: (_) => const EmployeeAppraisalScreen(),
         );
 
       case MedicalRequestScreen.routeName:
@@ -97,9 +104,9 @@ class AppRouter {
           builder: (_) => const MedicalRequestScreen(),
         );
 
-      case ProfileScreen.routeName:
+      case UserProfileScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => ProfileScreen(),
+          builder: (_) => const UserProfileScreen(),
         );
 
       case EconomyNewsScreen.routeName:
@@ -132,45 +139,49 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const PhotosScreen(),
         );
+
       case PermissionScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => const PermissionScreen(),
+          builder: (_) => PermissionScreen(permissionFormModelData: PermissionFormModelData(0,'','','',0,'',0,'','','','',''),objectValidation:false ),
         );
+
       case VacationScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => VacationScreen(),
+          builder: (_) => VacationScreen(vacationRequestModel: VacationModelFormData(0, '', '',
+              '', '', 0, '', '', '', '', 0),objectValidation: false),
         );
 
       case BusinessCardScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => BusinessCardScreen(),
+          builder: (_) => BusinessCardScreen(businessCardFormModel:BusinessCardFormModel('','','','','','') ,objectValidation: false ),
         );
 
       case EmbassyLetterScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => EmbassyLetterScreen(),
+          builder: (_) => EmbassyLetterScreen(embassyLetterFormModel:EmbassyLetterFormModel('','','','','','','','') ,objectValidation: false),
         );
 
       case EmailAndUserAccountScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => EmailAndUserAccountScreen(),
+          builder: (_) => EmailAndUserAccountScreen(emailUserAccount: EmailUserFormModel('',0,'',false),objectValidation: false),
         );
 
       case AccessUserAccountScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => AccessUserAccountScreen(),
+          builder: (_) => AccessUserAccountScreen(accessRightModel: AccessRightModel(0,false,false,false,false,false,'','','','','',[]),objectValidation: false),
         );
 
       case MyRequestsScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => MyRequestsScreen(),
+          builder: (_) => const MyRequestsScreen(),
         );
 
 
       case BusinessMissionScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => BusinessMissionScreen(),
+          builder: (_) => BusinessMissionScreen(businessMissionFormModelData: BusinessMissionFormModelData(0,'','','',0,'','','','','','','',''),objectValidation: false),
         );
+
       case PollsScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => const PollsScreen(),
@@ -186,11 +197,11 @@ class AppRouter {
 
       case AppsScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => AppsScreen(),
+          builder: (_) => const AppsScreen(),
         );
       case NotificationsScreen.routeName:
         return MaterialPageRoute(
-            builder: (context) => NotificationsScreen()
+            builder: (context) => const NotificationsScreen()
         );
       default:
         return null;

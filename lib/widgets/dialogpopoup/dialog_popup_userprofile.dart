@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
-class Dialog_PopUp_UserProfile extends StatefulWidget {
+class DialogPopUpUserProfile extends StatefulWidget {
+
+  const DialogPopUpUserProfile({Key? key}) : super(key: key);
 
   @override
-  _Dialog_PopUp_UserProfile createState() => _Dialog_PopUp_UserProfile();
+  DialogPopUpUserProfileClass createState() => DialogPopUpUserProfileClass();
 }
 
-class _Dialog_PopUp_UserProfile extends State<Dialog_PopUp_UserProfile> {
+class DialogPopUpUserProfileClass extends State<DialogPopUpUserProfile> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
