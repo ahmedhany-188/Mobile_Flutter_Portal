@@ -8,18 +8,16 @@ import 'package:http/http.dart' as http;
 class ItUserAccountRequestDataProvider {
 
 
-  EmailUserFormModel _emailUserFormModel;
+  EmailUserFormModel emailUserFormModel;
 
-  MainUserData _mainUserData;
+  MainUserData mainUserData;
 
 
-  ItUserAccountRequestDataProvider(this._emailUserFormModel,
-      this._mainUserData);
+  ItUserAccountRequestDataProvider(this.emailUserFormModel,
+      this.mainUserData);
 
 
   Future<http.Response> getuserAccountAccessRequest() async {
-
-    print("-----------"+_emailUserFormModel.requestDate.toString());
 
 
 
@@ -33,21 +31,21 @@ class ItUserAccountRequestDataProvider {
         // "RequestNo": 0,
         "ServiceId": "HAH-IT-FRM-04",
         "ProjectId": null,
-        "RequestHrCode": _mainUserData.user!.userHRCode,
-        "Date": _emailUserFormModel.requestDate!+"T10:43:37.994Z",
-        "OwnerHrCode": _mainUserData.user!.userHRCode,
-        "OwnerFullName": _mainUserData.employeeData!.name,
-        "OwnerTitle": _mainUserData.employeeData!.titleName,
-        "OwnerLocation": _mainUserData.employeeData!.companyName,
-        "OwnerMobile": _emailUserFormModel.userMobile,
-        "OwnerEmailDisabled": _mainUserData.user!.email,
+        "RequestHrCode": mainUserData.user!.userHRCode,
+        "Date": "${emailUserFormModel.requestDate!}T10:43:37.994Z",
+        "OwnerHrCode": mainUserData.user!.userHRCode,
+        "OwnerFullName": mainUserData.employeeData!.name,
+        "OwnerTitle": mainUserData.employeeData!.titleName,
+        "OwnerLocation": mainUserData.employeeData!.companyName,
+        "OwnerMobile": emailUserFormModel.userMobile,
+        "OwnerEmailDisabled": mainUserData.user!.email,
         "FilePdf": null,
         "Comments": null,
         "Status": 0,
         "RejectedHrCode": null,
         "ClosedDate": null,
         "ReRequestCode": 0,
-        "ReqType": _emailUserFormModel.requestType,
+        "ReqType": emailUserFormModel.requestType,
         "AnswerEmail": "string",
         "StartDate": null,
         "EndDate": null,
@@ -57,22 +55,8 @@ class ItUserAccountRequestDataProvider {
         "IPPhone": null,
         "LocalAdmin": null,
         "LoginUserAccount": null,
-        "EmailAccount": _emailUserFormModel.accountType,
-        // "TwebwfItrequestAccessRightD": [
-        //   {
-        //     "Id": 0,
-        //     "RequestNo": 0,
-        //     "AccessId": 0,
-        //     "Access": {
-        //       "AccessId": 0,
-        //       "AccessName": "string",
-        //       "IsUserAccount": true,
-        //       "TwebwfItrequestAccessRightD": [
-        //         null
-        //       ]
-        //     }
-        //   }
-        // ]
+        "EmailAccount": emailUserFormModel.accountType,
+
       }),
     );
   }

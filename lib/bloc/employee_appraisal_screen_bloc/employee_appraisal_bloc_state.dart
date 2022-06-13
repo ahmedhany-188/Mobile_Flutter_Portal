@@ -6,17 +6,18 @@ abstract class EmployeeAppraisalBlocState {}
 class EmployeeAppraisalBlocInitial extends EmployeeAppraisalBlocState {}
 
 
-class BlocgetEmployeeAppraisalBlocInitialLoadingState extends EmployeeAppraisalBlocState{}
+class BlocGetEmployeeAppraisalBlocInitialLoadingState extends EmployeeAppraisalBlocState{}
 
-class BlocgetEmployeeAppraisalBlocInitialSuccessState extends EmployeeAppraisalBlocState{
+// ignore: must_be_immutable
+class BlocGetEmployeeAppraisalBlocInitialSuccessState extends EmployeeAppraisalBlocState{
 
   String employeeAppraisaleList;
-  BlocgetEmployeeAppraisalBlocInitialSuccessState(this.employeeAppraisaleList);
+  BlocGetEmployeeAppraisalBlocInitialSuccessState(this.employeeAppraisaleList);
 
 }
 
-class BlocgetEmployeeAppraisalBlocInitialErrorState extends EmployeeAppraisalBlocState{
+class BlocGetEmployeeAppraisalBlocInitialErrorState extends EmployeeAppraisalBlocState{
   final error;
-BlocgetEmployeeAppraisalBlocInitialErrorState(this.error);
+BlocGetEmployeeAppraisalBlocInitialErrorState(this.error);
 
 }

@@ -1,18 +1,19 @@
 part of 'email_useraccount_cubit.dart';
 
 @immutable
-abstract class EmailUseraccountState {
+abstract class EmailUserAccountState {
 
-  const EmailUseraccountState();
+  const EmailUserAccountState();
 
-  const EmailUseraccountState.copywith({
+  const EmailUserAccountState.copywith({
+  // ignore: non_constant_identifier_names
   required RequestPhoneNumber,required FormzStatus status});
 }
 
 
-class EmailUseraccountInitial extends EmailUseraccountState {
+class EmailUserAccountInitial extends EmailUserAccountState {
 
-  const EmailUseraccountInitial({
+  const EmailUserAccountInitial({
 
     this.requestType=1,
     this.hrCodeUser,
@@ -44,7 +45,7 @@ class EmailUseraccountInitial extends EmailUseraccountState {
   @override
   List<Object> get props => [ userMobile, status,];
 
-  EmailUseraccountInitial copyWith({
+  EmailUserAccountInitial copyWith({
     int ?requestType,
     String ?hrCodeUser,
     String ?fullName,
@@ -58,7 +59,7 @@ class EmailUseraccountInitial extends EmailUseraccountState {
     String? successMessage,
 
   }) {
-    return EmailUseraccountInitial(
+    return EmailUserAccountInitial(
       requestType: requestType ?? this.requestType,
       hrCodeUser: hrCodeUser ?? this.hrCodeUser,
       fullName: fullName ?? this.fullName,

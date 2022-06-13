@@ -7,11 +7,11 @@ import 'package:http/http.dart' as http;
 class BusinessCardRequestDataProvider {
 
 
-  BusinessCardFormModel _businessCardFormModel;
-  MainUserData _mainUserData;
+  BusinessCardFormModel businessCardFormModel;
+  MainUserData mainUserData;
 
-  BusinessCardRequestDataProvider(this._businessCardFormModel,
-      this._mainUserData);
+  BusinessCardRequestDataProvider(this.businessCardFormModel,
+      this.mainUserData);
 
 
   Future<http.Response> getBusinessCardRequest() async {
@@ -22,28 +22,16 @@ class BusinessCardRequestDataProvider {
       },
 
       body: jsonEncode(<String, dynamic>{
-
-        // "requestNo": 0,
         "serviceId": "HAH-HR-FRM-06",
-        "requestHrCode": _mainUserData.employeeData!.userHrCode,
-        "ownerHrCode": _mainUserData.employeeData!.userHrCode,
-        "date": _businessCardFormModel.requestDate,
-        // "newComer": true,
-        // "approvalPathId": 0,
-        // "status": 0,
-        "comments": _businessCardFormModel.employeeComeents,
-        // "nplusEmail": "string",
-        // "closedDate": "2022-06-01T16:13:53.995Z",
-        // "cardNo": "string",
-        // "costCenter": "string",
-        "cardName": _businessCardFormModel.employeeNameCard,
-        "faxNo": _businessCardFormModel.faxNo,
-        "extNo": _businessCardFormModel.employeeExt,
-        "mobileNo": _businessCardFormModel.employeeMobil
-        // "projectId": "string"
-
+        "requestHrCode": mainUserData.employeeData!.userHrCode,
+        "ownerHrCode": mainUserData.employeeData!.userHrCode,
+        "date": businessCardFormModel.requestDate,
+        "comments": businessCardFormModel.employeeComments,
+        "cardName": businessCardFormModel.employeeNameCard,
+        "faxNo": businessCardFormModel.faxNo,
+        "extNo": businessCardFormModel.employeeExt,
+        "mobileNo": businessCardFormModel.employeeMobil
       }),
-
     );
   }
 

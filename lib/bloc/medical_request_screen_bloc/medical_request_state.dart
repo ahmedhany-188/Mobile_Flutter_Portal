@@ -4,10 +4,9 @@ part of 'medical_request_cubit.dart';
 abstract class MedicalRequestState {
   const MedicalRequestState();
 
-  const MedicalRequestState.copyWith({required RequestDate patientnameMedicalRequest,
+  const MedicalRequestState.copyWith({required RequestDate patientNameMedicalRequest,
     required RequestDate selectedValueLab, required RequestDate selectedValueService,
     required RequestDate requestDate, required FormzStatus status});
-
 
 }
 
@@ -15,7 +14,7 @@ abstract class MedicalRequestState {
 class MedicalRequestInitial extends MedicalRequestState {
 
   const MedicalRequestInitial({
-    this.patientnameMedicalRequest=const RequestDate.pure(),
+    this.patientNameMedicalRequest=const RequestDate.pure(),
     this.selectedValueLab=const RequestDate.pure(),
     this.selectedValueService=const RequestDate.pure(),
     this.requestDate =  const RequestDate.pure() ,
@@ -24,7 +23,7 @@ class MedicalRequestInitial extends MedicalRequestState {
     this.successMessage,
   });
 
-  final RequestDate patientnameMedicalRequest;
+  final RequestDate patientNameMedicalRequest;
   final RequestDate selectedValueLab;
   final RequestDate selectedValueService;
   final RequestDate requestDate;
@@ -34,12 +33,12 @@ class MedicalRequestInitial extends MedicalRequestState {
 
 
   @override
-  List<Object> get props => [patientnameMedicalRequest, selectedValueLab,
+  List<Object> get props => [patientNameMedicalRequest, selectedValueLab,
     selectedValueService, requestDate, status
   ];
   MedicalRequestInitial copyWith({
 
-    RequestDate ?patientnameMedicalRequest,
+    RequestDate ?patientNameMedicalRequest,
     RequestDate ?selectedValueLab,
     RequestDate ?selectedValueService,
     RequestDate? requestDate,
@@ -48,7 +47,7 @@ class MedicalRequestInitial extends MedicalRequestState {
     String? successMessage,
   }) {
     return MedicalRequestInitial(
-      patientnameMedicalRequest: patientnameMedicalRequest ?? this.patientnameMedicalRequest,
+      patientNameMedicalRequest: patientNameMedicalRequest ?? this.patientNameMedicalRequest,
       selectedValueLab: selectedValueLab ?? this.selectedValueLab,
       selectedValueService: selectedValueService ?? this.selectedValueService,
       requestDate: requestDate ?? this.requestDate,

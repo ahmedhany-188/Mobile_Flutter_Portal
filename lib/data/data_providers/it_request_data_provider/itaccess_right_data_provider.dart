@@ -5,11 +5,11 @@ import 'package:http/http.dart' as http;
 
 class ItAccessccountRequestDataProvide {
 
-  AccessRightModel _accessRightModel;
-  MainUserData _mainUserData;
+  AccessRightModel accessRightModel;
+  MainUserData mainUserData;
 
-  ItAccessccountRequestDataProvide(this._accessRightModel,
-      this._mainUserData);
+  ItAccessccountRequestDataProvide(this.accessRightModel,
+      this.mainUserData);
 
   Future<http.Response> getAccessAccountAccessRequest() async {
     return http.post(
@@ -22,29 +22,30 @@ class ItAccessccountRequestDataProvide {
         // "RequestNo": null,
         "ServiceId": "HAH-IT-FRM-07",
         "ProjectId": null,
-        "RequestHrCode": _mainUserData.employeeData!.userHrCode,
-        "Date": _accessRightModel.requestDate+"T10:43:37.994Z",
+        "RequestHrCode": mainUserData.employeeData!.userHrCode,
+        "Date": "${accessRightModel.requestDate}T10:43:37.994Z",
         "OwnerHrCode": null,
         "OwnerFullName": null,
         "OwnerTitle": null,
         "OwnerLocation": null,
         "OwnerMobile": null,
         "OwnerEmailDisabled": null,
-        "FilePdf": (_accessRightModel.filePDF != null)? _accessRightModel.filePDF : null,
-        "Comments": _accessRightModel.comments,
+        // ignore: unnecessary_null_comparison
+        "FilePdf": (accessRightModel.filePDF != null)? accessRightModel.filePDF : null,
+        "Comments": accessRightModel.comments,
         "Status": null,
         "RejectedHrCode": null,
         "ClosedDate": null,
         "ReRequestCode": null,
-        "ReqType": _accessRightModel.requestType,
+        "ReqType": accessRightModel.requestType,
         "AnswerEmail": null,
-        "StartDate": _accessRightModel.fromDate,
-        "EndDate": _accessRightModel.toDate,
-        "IsPermanent": _accessRightModel.permanent,
-        "USBException": (_accessRightModel.items.contains("USB Exception") ? true :false),
-        "VPNAccount": (_accessRightModel.items.contains("VPN Account") ? true :false),
-        "IPPhone": (_accessRightModel.items.contains("IP Phone") ? true :false),
-        "LocalAdmin": (_accessRightModel.items.contains("Local Admin") ? true :false),
+        "StartDate": accessRightModel.fromDate,
+        "EndDate": accessRightModel.toDate,
+        "IsPermanent": accessRightModel.permanent,
+        "USBException": (accessRightModel.items.contains("USB Exception") ? true :false),
+        "VPNAccount": (accessRightModel.items.contains("VPN Account") ? true :false),
+        "IPPhone": (accessRightModel.items.contains("IP Phone") ? true :false),
+        "LocalAdmin": (accessRightModel.items.contains("Local Admin") ? true :false),
         "LoginUserAccount":null,
         "EmailAccount": null,
         // "TwebwfItrequestAccessRightD": [

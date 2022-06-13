@@ -4,7 +4,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'package:hassanallamportalflutter/data/data_providers/it_request_data_provider/itemail_anduseraccount_data_provider.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
@@ -12,18 +11,18 @@ import 'package:meta/meta.dart';
 
 part 'email_useraccount_state.dart';
 
-class EmailUseraccountCubit extends Cubit<EmailUseraccountInitial> {
-  EmailUseraccountCubit() : super(EmailUseraccountInitial());
+class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
+  EmailUserAccountCubit() : super(const EmailUserAccountInitial());
 
   final Connectivity connectivity = Connectivity();
-  static EmailUseraccountCubit get(context) => BlocProvider.of(context);
+  static EmailUserAccountCubit get(context) => BlocProvider.of(context);
 
 
 
   void getSubmitEmailAndUserAccount(MainUserData user,String date) async {
     final userMobile = RequestDate.dirty(state.userMobile.value);
 
-    EmailUserFormModel _emailUserFormModel;
+    EmailUserFormModel emailUserFormModel;
 
     emit(state.copyWith(
         userMobile: userMobile,
@@ -32,7 +31,7 @@ class EmailUseraccountCubit extends Cubit<EmailUseraccountInitial> {
 
       if (state.status.isValidated) {
 
-        _emailUserFormModel=EmailUserFormModel(date,
+        emailUserFormModel=EmailUserFormModel(date,
             state.requestType, state.userMobile.value, state.accountType);
 
         //TODO: creation of Object;
@@ -41,7 +40,7 @@ class EmailUseraccountCubit extends Cubit<EmailUseraccountInitial> {
           var connectivityResult = await connectivity.checkConnectivity();
           if (connectivityResult == ConnectivityResult.wifi ||
               connectivityResult == ConnectivityResult.mobile) {
-            ItUserAccountRequestDataProvider(_emailUserFormModel,user)
+            ItUserAccountRequestDataProvider(emailUserFormModel,user)
                 .getuserAccountAccessRequest()
                 .then((value) {
               emit(
@@ -51,7 +50,6 @@ class EmailUseraccountCubit extends Cubit<EmailUseraccountInitial> {
                 ),
               );
             }).catchError((error) {
-              print(error.toString());
               // emit(BlocgetTheMedicalRequestErrorState(error.toString()));
               emit(
                 state.copyWith(

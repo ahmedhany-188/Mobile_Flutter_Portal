@@ -13,7 +13,7 @@ import 'package:intl/intl.dart';
 part 'access_right_state.dart';
 
 class AccessRightCubit extends Cubit<AccessRightInitial> {
-  AccessRightCubit() : super(AccessRightInitial());
+  AccessRightCubit() : super(const AccessRightInitial());
 
   final Connectivity connectivity = Connectivity();
   static AccessRightCubit get(context) => BlocProvider.of(context);
@@ -24,7 +24,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     final fromDate = RequestDate.dirty(state.fromDate.value);
     final toDate = RequestDate.dirty(state.toDate.value);
 
-    AccessRightModel _accessRightModel;
+    AccessRightModel accessRightModel;
 
     emit(state.copyWith(
         requestItems: requestItem,
@@ -36,15 +36,15 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     if (state.status.isValidated) {
 
 
-    _accessRightModel=AccessRightModel(state.requestType,
-        state.permanent, state.fromDate.value, state.toDate.value,date,
+      accessRightModel=AccessRightModel(state.requestType,
+        false,false,false,false,state.permanent, state.fromDate.value, state.toDate.value,date,
         state.filePDF, state.comments,items);
 
       try {
         var connectivityResult = await connectivity.checkConnectivity();
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
-          ItAccessccountRequestDataProvide(_accessRightModel,user)
+          ItAccessccountRequestDataProvide(accessRightModel,user)
               .getAccessAccountAccessRequest()
               .then((value) {
             emit(
@@ -54,7 +54,6 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
               ),
             );
           }).catchError((error) {
-            print(error.toString());
             // emit(BlocgetTheMedicalRequestErrorState(error.toString()));
             emit(
               state.copyWith(
@@ -154,21 +153,21 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     }
   }
 
-  void getpermanentValue(bool value){
+  void getPermanentValue(bool value){
     emit(state.copyWith(
       permanent: value,
       status: Formz.validate([state.requestItems,state.fromDate,state.toDate]),
     ));
   }
 
-  void getrequestValue(String value){
-    RequestDate _value =RequestDate.pure();
+  void getRequestValue(String value){
+    RequestDate valueNew =const RequestDate.pure();
     if(value!="[]"){
-      _value = RequestDate.dirty(value);
+      valueNew = RequestDate.dirty(value);
     }
     emit(state.copyWith(
-      requestItems: _value,
-      status: Formz.validate([_value,state.fromDate,state.toDate]),
+      requestItems: valueNew,
+      status: Formz.validate([valueNew,state.fromDate,state.toDate]),
     ));
   }
 
