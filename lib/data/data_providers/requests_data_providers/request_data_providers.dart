@@ -34,7 +34,7 @@ class RequestDataProviders {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: bodyString,
-    );
+    ).timeout(const Duration(seconds: 10));
     print(vacationFeedbackRequest.body);
     return vacationFeedbackRequest;
   }

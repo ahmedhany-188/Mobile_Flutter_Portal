@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +17,9 @@ import 'package:hassanallamportalflutter/bloc/my_requests_screen_bloc/my_request
 import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.dart';
 import 'package:hassanallamportalflutter/data/data_providers/firebase_provider/FirebaseProvider.dart';
+import 'package:hassanallamportalflutter/data/repositories/upgrader_repository.dart';
 import 'package:hassanallamportalflutter/life_cycle_states.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -55,6 +58,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform, //This line is necessary
   );
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   HydratedBlocOverrides.runZoned(
     () => runApp(MyApp(appRouter: AppRouter(), connectivity: Connectivity())),
     storage: storage,
@@ -101,6 +105,48 @@ class _MyAppState extends State<MyApp> {
     // final AuthenticationBloc authenticationBloc = AuthenticationBloc(authenticationRepository);
     // final Repositor = AuthenticationRepository();
     return MultiBlocProvider(
+        providers: [
+          BlocProvider<InternetCubit>(
+            create: (internetCubitContext) =>
+                InternetCubit(connectivity: widget.connectivity),
+          ),
+          BlocProvider<CounterCubit>(
+            create: (counterCubitContext) => CounterCubit(),
+          ),
+          BlocProvider<SettingsCubit>(
+            create: (counterCubitContext) => SettingsCubit(),
+          ),
+          BlocProvider<ContactsCubit>(
+            create: (contactsCubitContext) => ContactsCubit()..getContacts(),
+            // child: ContactsScreen(),
+          ),
+          BlocProvider<WeatherBloc>(
+            create: (weatherBlocContext) => WeatherBloc()..add(WeatherRequest()),
+          ),
+          BlocProvider<PayslipCubit>(
+            create: (payslipContext) => PayslipCubit(),
+          ),
+          BlocProvider<AttendanceCubit>(
+            create: (attendanceCubitContext) => AttendanceCubit(),
+          ),
+          BlocProvider<MedicalRequestCubit>(
+              create: (medicalRequestCubitContext) => MedicalRequestCubit()
+              // MedicalRequestCubit()..getSuccessMessage(),
+              ),
+          BlocProvider<EconomyNewsCubit>(
+            create: (economyNewsCubitContext) => EconomyNewsCubit(),
+          ),
+          BlocProvider<GetDirectionCubit>(
+            create: (getDirectionCubitContext) =>
+                GetDirectionCubit()..getDirection(),
+          ),
+          BlocProvider<BenefitsCubit>(
+            create: (benefitsCubitContext) => BenefitsCubit()..getBenefits(),
+          ),
+          BlocProvider<SubsidiariesCubit>(
+            create: (subsidiariesCubitContext) =>
+                SubsidiariesCubit()..getSubsidiaries(),
+          ),
       providers: [
         BlocProvider<InternetCubit>(
           create: (internetCubitContext) =>
@@ -147,31 +193,81 @@ class _MyAppState extends State<MyApp> {
               SubsidiariesCubit()..getSubsidiaries(),
         ),
 
+          BlocProvider<EmailUseraccountCubit>(
+            create: (emailUserAccountRequestContext) =>
+                EmailUseraccountCubit(),
+          ),
         BlocProvider<EmailUserAccountCubit>(
           create: (emailUserAccountRequestContext) =>
               EmailUserAccountCubit(),
         ),
 
-        BlocProvider<EmbassyLetterCubit>(
-          create: (embassyLetterContext) =>
-              EmbassyLetterCubit(),
-        ),
+          BlocProvider<EmbassyLetterCubit>(
+            create: (embassyLetterContext) =>
+                EmbassyLetterCubit(),
+          ),
 
-        BlocProvider<BusinessCardCubit>(
-          create: (businessCardRequestContext) =>
-              BusinessCardCubit(),
-        ),
+          BlocProvider<BusinessCardCubit>(
+            create: (businessCardRequestContext) =>
+                BusinessCardCubit(),
+          ),
 
-        BlocProvider<AccessRightCubit>(
-          create: (accessRightAccountRequestContext) =>
-              AccessRightCubit(),
-        ),
+          BlocProvider<AccessRightCubit>(
+            create: (accessRightAccountRequestContext) =>
+                AccessRightCubit(),
+          ),
 
+          BlocProvider<TravelRequestCubit>(
+            create: (travelRequestContext) =>
+                TravelRequestCubit(),
+          ),
         BlocProvider<MyRequestsCubit>(
           create: (travelRequestContext) =>
               MyRequestsCubit(),
         ),
 
+          BlocProvider<AppBloc>(
+            create: (authenticationContext) => AppBloc(
+              authenticationRepository: _authenticationRepository,
+            ),
+          ),
+          BlocProvider<LoginCubit>(
+            create: (authenticationContext) =>
+                LoginCubit(_authenticationRepository),
+          ),
+          BlocProvider<PhotosCubit>(
+            create: (photosContext) => PhotosCubit()..getPhotos(),
+          ),
+          BlocProvider<VideosCubit>(
+            create: (videosContext) => VideosCubit()..getVideos(),
+          ),
+          BlocProvider<UserNotificationBloc>(
+            lazy: true,
+            create: (userNotificationContext) => UserNotificationBloc(firebaseProvider: FirebaseProvider(BlocProvider.of<AppBloc>(userNotificationContext).state.userData.user!),),
+          ),
+          BlocProvider<AppUpgraderCubit>(
+            lazy: false,
+            create: (context) => AppUpgraderCubit(UpgraderRepository(),)..getUpgradeFromServer(context),
+          ),
+          // BlocProvider<PermissionCubit>(
+          //   create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),
+          // ),
+        ],
+        child: LifeCycleState(
+          child: MaterialApp(
+            title: 'Hassan Allam Portal',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Color.fromRGBO(23, 72, 115, 1),
+              ),
+              // primarySwatch: Colors.accents,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            onGenerateRoute: widget.appRouter.onGenerateRoute,
+          ),
+        )
+    );
         BlocProvider<AppBloc>(
           create: (authenticationContext) => AppBloc(
             authenticationRepository: _authenticationRepository,

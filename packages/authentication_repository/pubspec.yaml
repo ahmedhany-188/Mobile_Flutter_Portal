@@ -17,3 +17,4 @@ dependencies:
   firebase_messaging: ^11.3.0
   device_info: ^2.0.3
   firebase_database: ^9.0.13
+
