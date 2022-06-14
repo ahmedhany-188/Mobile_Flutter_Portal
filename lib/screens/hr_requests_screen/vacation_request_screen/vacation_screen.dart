@@ -26,8 +26,6 @@ class VacationScreen extends StatefulWidget {
 class _VacationScreenState extends State<VacationScreen> {
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AppBloc bloc) =>
-    bloc.state.userData.employeeData);
 
     final userMainData = context.select((AppBloc bloc) =>
     bloc.state.userData);
@@ -63,22 +61,20 @@ class _VacationScreenState extends State<VacationScreen> {
                 floatingActionButton: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    if(context
-                        .read<VacationCubit>()
-                        .state
+                    if(
+                        state
                         .requestStatus ==
-                        RequestStatus.oldRequest)FloatingActionButton.extended(
+                        RequestStatus.oldRequest && state.takeActionStatus == TakeActionStatus.takeAction )FloatingActionButton.extended(
                       heroTag: null,
                       onPressed: () {},
                       icon: const Icon(Icons.verified),
                       label: const Text('Accept'),
                     ),
                     const SizedBox(height: 12),
-                    if(context
-                        .read<VacationCubit>()
-                        .state
+                    if(
+                        state
                         .requestStatus ==
-                        RequestStatus.oldRequest)FloatingActionButton.extended(
+                        RequestStatus.oldRequest && state.takeActionStatus == TakeActionStatus.takeAction)FloatingActionButton.extended(
                       backgroundColor: Colors.red,
                       heroTag: null,
                       onPressed: () {},
@@ -138,6 +134,29 @@ class _VacationScreenState extends State<VacationScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: <Widget>[
+                            if(state.requestStatus == RequestStatus.oldRequest)Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: BlocBuilder<
+                                  VacationCubit,
+                                  VacationInitial>(
+
+                                  builder: (context, state) {
+                                    return Text(state.statusAction ?? "Pending",
+                                      // style: TextStyle(decoration: BoxDecoration(
+                                      //   // labelText: 'Request Date',
+                                      //   errorText: state.requestDate.invalid
+                                      //       ? 'invalid request date'
+                                      //       : null,
+                                      //   prefixIcon: const Icon(
+                                      //       Icons.date_range),
+                                      // ),),
+
+                                    );
+                                  }
+                              ),
+                            ),
+
 
                             Padding(
                               padding: const EdgeInsets.symmetric(
