@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:hassanallamportalflutter/data/data_providers/requests_data_providers/request_data_providers.dart';
+import 'package:hassanallamportalflutter/data/models/my_requests_model/my_vacation_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_duration_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_vacation_data_model.dart';
@@ -97,13 +98,14 @@ class RequestRepository {
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
   }
+
   Future<VacationRequestData> getVacationRequestData(String requestNo) async{
     final http.Response rawRequestData = await requestDataProviders
         .getVacationRequestData(userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final VacationRequestData response = VacationRequestData.fromJson(json[0]);
-    return response;
 
+    return response;
   }
 
 
