@@ -190,9 +190,7 @@ class MyReqyestsTicketWidget extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        AccessUserAccountScreen(
-                            accessRightModel: accessRightModel,
-                            objectValidation: true),
+                        AccessUserAccountScreen(),
                   ));
             }
 

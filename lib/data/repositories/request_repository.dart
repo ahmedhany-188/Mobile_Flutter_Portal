@@ -1,7 +1,10 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:hassanallamportalflutter/data/data_providers/requests_data_providers/request_data_providers.dart';
+import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_vacation_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_duration_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_response.dart';
@@ -40,6 +43,42 @@ class RequestRepository {
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
   }
+
+  Future<RequestResponse> postAccessRightRequest(
+      {required AccessRightModel accessRightModel}) async {
+    var bodyString = jsonEncode(<String, dynamic>
+    {
+      "ServiceId": "HAH-IT-FRM-07",
+      "RequestHrCode": userData.employeeData!.userHrCode,
+      "Date": "${accessRightModel.requestDate}T10:43:37.994Z",
+      "FilePdf": (accessRightModel.filePDF != null)
+          ? accessRightModel.filePDF
+          : null,
+      "Comments": accessRightModel.comments,
+      "ReqType": accessRightModel.requestType,
+      "StartDate": accessRightModel.fromDate,
+      "EndDate": accessRightModel.toDate,
+      "IsPermanent": accessRightModel.permanent,
+      "USBException": (accessRightModel.items.contains("USB Exception")
+          ? true
+          : false),
+      "VPNAccount": (accessRightModel.items.contains("VPN Account")
+          ? true
+          : false),
+      "IPPhone": (accessRightModel.items.contains("IP Phone") ? true : false),
+      "LocalAdmin": (accessRightModel.items.contains("Local Admin")
+          ? true
+          : false),
+    });
+    final http.Response rawAccess = await requestDataProviders
+        .getAccessAccountAccessRequest(bodyString);
+    final json = await jsonDecode(rawAccess.body);
+    final RequestResponse response = RequestResponse.fromJson(json);
+    return response;
+  }
+
+
+
   Future<DurationResponse> getDurationVacation(int type,String dateFrom,String dateTo) async{
     final http.Response rawPermission = await requestDataProviders
         .getDurationVacation(type,dateFrom,dateTo);

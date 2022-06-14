@@ -6,14 +6,13 @@ abstract class AccessRightState extends Equatable{
   const AccessRightState();
 
   const AccessRightState.copyWith({
-    required RequestDate requestItems ,required RequestDate fromDate
-    , required RequestDate toDate,required FormzStatus status,required });
+    required RequestDate requestItems,required FormzStatus status,required });
 }
 
 class AccessRightInitial extends Equatable {
   const AccessRightInitial({
     this.requestStatus = RequestStatus.newRequest,
-    this.requestDate,
+    this.requestDate = const RequestDate.pure(),
     this.requestType=1,
     this.requestItems  = const RequestDate.pure(),
     this.fromDate= const RequestDate.pure(),
@@ -26,9 +25,7 @@ class AccessRightInitial extends Equatable {
     this.successMessage,
   });
 
-
-
-  final String ?requestDate;
+  final RequestDate requestDate;
   final int requestType;
   final RequestDate requestItems;
   final RequestDate fromDate;
@@ -42,10 +39,10 @@ class AccessRightInitial extends Equatable {
   final RequestStatus? requestStatus;
 
   @override
-  List<Object> get props => [requestItems,fromDate,toDate,status];
+  List<Object> get props => [requestDate,requestItems,fromDate,toDate,status];
 
   AccessRightInitial copyWith({
-    String ?requestDate,
+    RequestDate ?requestDate,
     int ?requestType,
     RequestDate ?requestItems,
      RequestDate ?fromDate,

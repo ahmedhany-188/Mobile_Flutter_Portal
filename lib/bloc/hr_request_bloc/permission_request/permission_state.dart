@@ -31,8 +31,10 @@ class PermissionInitial extends PermissionState {
   final String comment;
 
   @override
-  List<Object> get props => [requestDate, permissionDate,
-    permissionType,permissionTime, status,comment];
+  List<Object> get props =>
+      [requestDate, permissionDate,
+        permissionType, permissionTime, status, comment];
+
   PermissionInitial copyWith({
     RequestDate? requestDate,
     PermissionDate? permissionDate,
