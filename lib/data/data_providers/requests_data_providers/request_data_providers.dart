@@ -16,6 +16,16 @@ class RequestDataProviders {
     return permissionFeedbackRequest;
   }
 
+  Future<http.Response> getAccessAccountAccessRequest(String bodyString) async {
+    return http.post(
+      Uri.parse("https://api.hassanallam.com/api/SelfService/AddITAccessRight"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: bodyString,
+    );
+  }
+
   Future<http.Response> getDurationVacation(int type,String dateFrom,String dateTo) async{
     http.Response rawDurationData = await http.get(
       Uri.parse(

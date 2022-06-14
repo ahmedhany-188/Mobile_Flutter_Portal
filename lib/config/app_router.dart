@@ -167,7 +167,7 @@ class AppRouter {
 
       case AccessUserAccountScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => AccessUserAccountScreen(accessRightModel: AccessRightModel(0,false,false,false,false,false,'','','','','',[]),objectValidation: false),
+          builder: (_) => AccessUserAccountScreen(requestNo: settings.arguments),
         );
 
       case MyRequestsScreen.routeName:

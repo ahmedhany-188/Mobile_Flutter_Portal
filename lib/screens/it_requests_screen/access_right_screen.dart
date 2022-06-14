@@ -1,4 +1,3 @@
-
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/it_request_bloc/access_right_request/access_right_cubit.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
+import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
@@ -15,14 +15,16 @@ import 'package:file_picker/file_picker.dart';
 
 import '../../constants/enums.dart';
 
-class AccessUserAccountScreen extends StatefulWidget{
+class AccessUserAccountScreen extends StatefulWidget {
 
   static const routeName = "/access-user-account-screen";
-  const AccessUserAccountScreen({Key? key,required this.accessRightModel,required this.objectValidation}) : super(key: key);
+  static const requestNoKey = 'request-No';
 
+  const AccessUserAccountScreen(
+      {Key? key,this.requestNo})
+      : super(key: key);
 
-  final bool objectValidation;
-  final AccessRightModel accessRightModel;
+  final requestNo;
 
   @override
   State<AccessUserAccountScreen> createState() => _AccessUserAccountScreen();
@@ -33,14 +35,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    var deviceSize = MediaQuery
-        .of(context)
-        .size;
-
     final user = context.select((AppBloc bloc) => bloc.state.userData);
-    // var formatter = DateFormat('yyyy-MM-dd');
-    // String formattedDate = formatter.format(DateTime.now());
     final TextEditingController commentController = TextEditingController();
 
     List<String> selectedTypes = [];
@@ -68,10 +63,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
       },
     ];
 
-    // if (widget.objectValidation) {
-    //   commentController.text = widget.accessRightModel.comments.toString();
-    // }
-
+    final currentRequestNo = widget.requestNo;
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -81,25 +73,30 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
           ),
         ),
       ),
-      child: BlocProvider<AccessRightCubit>(
-        create: (accessRightContext) =>
-            AccessRightCubit(),
-        child: Builder(
-            builder: (context) {
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider<AccessRightCubit>(create: (vacationContext) =>
+          currentRequestNo == null ? (AccessRightCubit(RequestRepository(user))..getRequestData(RequestStatus.newRequest, ""))
+              :(AccessRightCubit(RequestRepository(user))..getRequestData(RequestStatus.oldRequest, currentRequestNo[AccessUserAccountScreen.requestNoKey]))),
+          // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
+        ],
+        child: BlocBuilder<AccessRightCubit,AccessRightInitial>(
+            builder: (context,state) {
               return Scaffold(
                   appBar: AppBar(
                     title: const Text("Access Right"),
                     centerTitle: true,
                   ),
                   // resizeToAvoidBottomInset: false,
-                  floatingActionButton:  Column(
+                  floatingActionButton: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       if(context
                           .read<AccessRightCubit>()
                           .state
                           .requestStatus ==
-                          RequestStatus.oldRequest)FloatingActionButton.extended(
+                          RequestStatus.oldRequest)FloatingActionButton
+                          .extended(
                         heroTag: null,
                         onPressed: () {},
                         icon: const Icon(Icons.verified),
@@ -110,7 +107,8 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                           .read<AccessRightCubit>()
                           .state
                           .requestStatus ==
-                          RequestStatus.oldRequest)FloatingActionButton.extended(
+                          RequestStatus.oldRequest)FloatingActionButton
+                          .extended(
                         backgroundColor: Colors.red,
                         heroTag: null,
                         onPressed: () {},
@@ -127,8 +125,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                           heroTag: null,
                           onPressed: () {
                             context.read<AccessRightCubit>()
-                                    .getSubmitAccessRight(
-                                    user, selectedTypes);
+                                .getSubmitAccessRight(selectedTypes);
                           },
                           // formBloc.state.status.isValidated
                           //       ? () => formBloc.submitPermissionRequest()
@@ -177,27 +174,34 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                           child: Column(
                             children: [
 
-                              TextFormField(
-                                initialValue: (widget.objectValidation)
-                                    ? widget
-                                    .accessRightModel.requestDate
-                                    : "",
-                                key: UniqueKey(),
-                                readOnly: true,
-                                decoration: const InputDecoration(
-                                  floatingLabelAlignment:
-                                  FloatingLabelAlignment.start,
-                                  labelText: 'Request Date',
-                                  prefixIcon: Icon(
-                                      Icons.calendar_today),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                  buildWhen: (previous, current) {
+                                    return (previous.requestDate !=
+                                        current.requestDate) ||
+                                        previous.status != current.status;
+                                  },
+                                  builder: (context, state) {
+                                    return TextFormField(
+                                      initialValue: state.requestDate.value,
+                                      key: UniqueKey(),
+                                      enabled: false,
+                                      decoration: const InputDecoration(
+                                        floatingLabelAlignment:
+                                        FloatingLabelAlignment.start,
+                                        labelText: 'Request Date',
+                                        prefixIcon: Icon(
+                                            Icons.calendar_today),
+                                      ),
+                                    );
+                                  },
                                 ),
                               ),
 
-                              Container(height: 10),
 
                               const Text("Request Type"),
 
-                              Container(height: 10),
 
                               BlocBuilder<AccessRightCubit,
                                   AccessRightInitial>(
@@ -210,34 +214,28 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                       children: [
                                         RadioListTile<int>(
                                           value: 1,
-
                                           title: const Text("Access Right"),
-                                          groupValue: (widget.objectValidation)
-                                              ? null
-                                              : state.requestType,
-
-                                          selected: (widget.accessRightModel
-                                              .requestType == 1) ? true : false,
-                                          onChanged: (permissionType) =>
+                                          groupValue: state.requestType,
+                                          // selected: (state.requestType == 1) ? true : false,
+                                          onChanged: (accessType) =>
                                           {
+                                            // state.requestStatus == RequestStatus.newRequest ?
                                             context.read<AccessRightCubit>()
-                                                .accessRightChanged(1),
+                                                .accessRightChanged(
+                                                accessType!),
                                           },
                                         ),
                                         RadioListTile<int>(
                                           value: 2,
-                                          // dense: true,
                                           title: const Text("Disable"),
-
-                                          groupValue: (widget.objectValidation)
-                                              ? null
-                                              : state.requestType,
-                                          selected: (widget.accessRightModel
-                                              .requestType == 2) ? true : false,
-                                          onChanged: (permissionType) =>
+                                          groupValue: state.requestType,
+                                          // selected: (state.requestType == 2) ? true : false,
+                                          onChanged: (accessType) =>
                                           {
+                                            // state.requestStatus == RequestStatus.newRequest ?
                                             context.read<AccessRightCubit>()
-                                                .accessRightChanged(2),
+                                                .accessRightChanged(
+                                                accessType!),
                                           },
                                         ),
                                       ],
@@ -245,230 +243,228 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                   }
                               ),
 
-                              Container(height: 10,),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                    builder: (context, state) {
+                                      return MultiSelect(
+                                          selectedOptionsBoxColor: Colors
+                                              .transparent,
+                                          //--------customization selection modal-----------
+                                          titleText: "Items",
+                                          checkBoxColor: Colors.black,
+                                          hintText: state.requestItems.valid
+                                              ? null
+                                              : "Tap to select one or more items",
+                                          // optional
+                                          buttonBarColor: Colors.blueGrey,
+                                          cancelButtonText: "Exit",
 
-                              BlocBuilder<AccessRightCubit, AccessRightInitial>(
-                                  builder: (context, state) {
-                                    return MultiSelect(
-                                        selectedOptionsBoxColor: Colors
-                                            .transparent,
-                                        //--------customization selection modal-----------
-                                        titleText: "Items",
-                                        checkBoxColor: Colors.black,
-                                        hintText: state.requestItems.valid
-                                            ? null
-                                            : "Tap to select one or more items",
-                                        // optional
-                                        buttonBarColor: Colors.blueGrey,
-                                        cancelButtonText: "Exit",
-
-                                        maxLengthIndicatorColor: Colors
-                                            .transparent,
-                                        maxLengthText: "",
-                                        maxLength: 5,
-                                        // optional
-                                        //--------end customization selection modal------------
-                                        validator: (dynamic value) {
-                                          if (value == null) {
-                                            return 'Please select one or more option(s)';
-                                          }
-                                          return null;
-                                        },
-                                        errorText: state.requestItems.invalid
-                                            ? 'invalid items'
-                                            : null,
-                                        dataSource: accountsTypesList,
-                                        textField: 'display',
-                                        valueField: 'value',
-                                        filterable: true,
-                                        required: true,
-
-
-                                        onSaved: (value) {
-
-                                          selectedTypes.clear();
-                                          if (value != null) {
-                                            for (int i = 0; i <
-                                                value.length; i++) {
-                                              selectedTypes.add(
-                                                  value[i].toString());
+                                          maxLengthIndicatorColor: Colors
+                                              .transparent,
+                                          maxLengthText: "",
+                                          maxLength: 5,
+                                          // optional
+                                          //--------end customization selection modal------------
+                                          validator: (dynamic value) {
+                                            if (value == null) {
+                                              return 'Please select one or more option(s)';
                                             }
-                                            context.read<AccessRightCubit>().
-                                            getRequestValue(
-                                                selectedTypes.toString());
+                                            return null;
+                                          },
+                                          errorText: state.requestItems.invalid
+                                              ? 'invalid items'
+                                              : null,
+                                          dataSource: accountsTypesList,
+                                          textField: 'display',
+                                          valueField: 'value',
+                                          filterable: true,
+                                          required: true,
+
+
+                                          onSaved: (value) {
+                                            selectedTypes.clear();
+                                            if (value != null) {
+                                              for (int i = 0; i <
+                                                  value.length; i++) {
+                                                selectedTypes.add(
+                                                    value[i].toString());
+                                              }
+                                              context.read<AccessRightCubit>().
+                                              getRequestValue(
+                                                  selectedTypes.toString());
+                                            }
                                           }
 
-                                        }
+                                      );
+                                    }),
+                              ),
 
-                                    );
-                                  }),
-
-                              Container(height: 10,),
 
                               const Text(
                                 "* If you choose a USB Exception please download this file Download and upload after signatuer",
                                 style: TextStyle(color: Colors.red),),
 
-                              Container(height: 10,),
 
-                              FloatingActionButton.extended(
-                                onPressed: () {
-                                  _launchUrl();
-                                },
-                                label: const Text(
-                                    'Download file', style: TextStyle(
-                                    color: Colors.black
-                                )),
-                                icon: const Icon(
-                                    Icons.cloud_download_sharp,
-                                    color: Colors.black),
-                                backgroundColor: Colors.white,),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: FloatingActionButton.extended(
+                                  onPressed: () {
+                                    _launchUrl();
+                                  },
+                                  label: const Text(
+                                      'Download file', style: TextStyle(
+                                      color: Colors.black
+                                  )),
+                                  icon: const Icon(
+                                      Icons.cloud_download_sharp,
+                                      color: Colors.black),
+                                  backgroundColor: Colors.white,),
+                              ),
 
-                              Container(height: 10,),
 
-                              BlocBuilder<AccessRightCubit, AccessRightInitial>(
-                                builder: (context, state) {
-                                  return
-                                    FloatingActionButton.extended(
-                                      onPressed: () async {
-                                        FilePickerResult? result = await FilePicker
-                                            .platform.pickFiles();
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                  builder: (context, state) {
+                                    return
+                                      FloatingActionButton.extended(
+                                        onPressed: () async {
+                                          FilePickerResult? result = await FilePicker
+                                              .platform.pickFiles();
 
-                                        if (result != null) {
-                                          Uint8List? fileBytes = result.files
-                                              .first
-                                              .bytes;
-                                          String fileName = result.files.first
-                                              .name;
+                                          if (result != null) {
+                                            Uint8List? fileBytes = result.files
+                                                .first
+                                                .bytes;
+                                            String fileName = result.files.first
+                                                .name;
 
-                                          // Upload file
-                                          // await FirebaseStorage.instance.ref('uploads/$fileName').putData(fileBytes);
+                                            // Upload file
+                                            // await FirebaseStorage.instance.ref('uploads/$fileName').putData(fileBytes);
+                                          }
+                                        },
+                                        label: const Text(
+                                            'Upload', style: TextStyle(
+                                            color: Colors.black
+                                        )),
+                                        icon: const Icon(
+                                            Icons.cloud_upload_sharp,
+                                            color: Colors.black),
+                                        backgroundColor: Colors.white,);
+                                  },),
+                              ),
+
+
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                  builder: (context, state) {
+                                    return TextFormField(
+                                      initialValue: state.fromDate.value,
+                                      key: UniqueKey(),
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        floatingLabelAlignment:
+                                        FloatingLabelAlignment.start,
+                                        labelText: 'From Date',
+                                        errorText: state.fromDate.invalid
+                                            ? 'invalid Date'
+                                            : null,
+                                        prefixIcon: const Icon(
+                                            Icons.calendar_today),
+                                      ),
+                                      onTap: () async {
+                                        if ((state.requestStatus == RequestStatus.newRequest) ? false : true) {
+                                          context.read<AccessRightCubit>().
+                                          selectDate(context, "from");
                                         }
                                       },
-                                      label: const Text(
-                                          'Upload', style: TextStyle(
-                                          color: Colors.black
-                                      )),
-                                      icon: const Icon(
-                                          Icons.cloud_upload_sharp,
-                                          color: Colors.black),
-                                      backgroundColor: Colors.white,);
-                                },),
-
-                              Container(height: 10,),
-                              BlocBuilder<AccessRightCubit, AccessRightInitial>(
-                                builder: (context, state) {
-                                  return TextFormField(
-                                    initialValue: (widget.objectValidation)
-                                        ? widget.accessRightModel.fromDate
-                                        .toString()
-                                        : state.fromDate.value,
-                                    key: UniqueKey(),
-                                    readOnly: true,
-                                    decoration: InputDecoration(
-                                      floatingLabelAlignment:
-                                      FloatingLabelAlignment.start,
-                                      labelText: 'From Date',
-                                      errorText: state.fromDate.invalid
-                                          ? 'invalid Date'
-                                          : null,
-                                      prefixIcon: const Icon(
-                                          Icons.calendar_today),
-                                    ),
-                                    onTap: () async {
-                                      if (!widget.objectValidation) {
-                                        context.read<AccessRightCubit>().
-                                        selectDate(context, "from");
-                                      }
-                                    },
-                                  );
-                                },),
-                              BlocBuilder<AccessRightCubit, AccessRightInitial>(
-                                builder: (context, state) {
-                                  return TextFormField(
-                                    initialValue: (widget.objectValidation)
-                                        ? widget.accessRightModel.toDate
-                                        .toString()
-                                        : state.toDate.value,
-                                    key: UniqueKey(),
-                                    readOnly: true,
-                                    decoration: InputDecoration(
-                                      floatingLabelAlignment:
-                                      FloatingLabelAlignment.start,
-                                      labelText: 'To Date',
-                                      errorText: state.toDate.invalid
-                                          ? 'invalid Date'
-                                          : null,
-                                      prefixIcon: const Icon(
-                                          Icons.calendar_today),
-                                    ),
-                                    onTap: () async {
-                                      if (!widget.objectValidation) {
-                                        context.read<AccessRightCubit>().
-                                        selectDate(context, "to");
-                                      }
-                                    },
-                                  );
-                                },),
-
-                              BlocBuilder<AccessRightCubit, AccessRightInitial>(
-                                builder: (context, state) {
-                                  return Card(
-                                    child: Row(
-                                      children: <Widget>[
-                                        const SizedBox(width: 10),
-                                        const Text(
-                                          'Permanent ',
-                                          style: TextStyle(fontSize: 17.0),
-                                        ), //Text
-                                        const SizedBox(width: 10), //SizedBox
-                                        /** Checkbox Widget **/
-                                        Checkbox(
-                                          value: (widget.objectValidation)
-                                              ? widget
-                                              .accessRightModel.permanent
-                                              : state
-                                              .permanent,
-                                          onChanged: (bool? value) {
-                                            if (!widget.objectValidation) {
-                                              context.read<AccessRightCubit>()
-                                                  .getPermanentValue(value!);
-                                            }
-                                          },
-                                        ), //Checkbox
-                                      ], //<Widget>[]
-                                    ),
-                                  );
-                                },),
-
-                              BlocBuilder<AccessRightCubit, AccessRightInitial>(
-                                builder: (context, state) {
-                                  return TextField(
-                                    controller: (widget.objectValidation)
-                                        ? commentController
-                                        : null,
-                                    onChanged: (commentValue) =>
-                                        context
-                                            .read<AccessRightCubit>()
-                                            .commentValueChanged(commentValue),
-                                    enabled: (widget.objectValidation)
-                                        ? false
-                                        : true,
-                                    decoration: const InputDecoration(
-                                      floatingLabelAlignment:
-                                      FloatingLabelAlignment.start,
-                                      labelText: 'Comments',
-                                      prefixIcon: Icon(
-                                          Icons.comment),
-                                    ),
-                                  );
-                                },
+                                    );
+                                  },),
                               ),
-                              Container(height: 10,),
 
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                  builder: (context, state) {
+                                    return TextFormField(
+                                      initialValue:state.toDate.value,
+                                      key: UniqueKey(),
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                        floatingLabelAlignment:
+                                        FloatingLabelAlignment.start,
+                                        labelText: 'To Date',
+                                        errorText: state.toDate.invalid
+                                            ? 'invalid Date'
+                                            : null,
+                                        prefixIcon: const Icon(
+                                            Icons.calendar_today),
+                                      ),
+                                      onTap: () async {
+                                        if ((state.requestStatus == RequestStatus.newRequest)
+                                            ? false
+                                            : true) {
+                                          context.read<AccessRightCubit>().
+                                          selectDate(context, "to");
+                                        }
+                                      },
+                                    );
+                                  },),
+                              ),
 
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                  builder: (context, state) {
+                                    return Card(
+                                      child: Row(
+                                        children: <Widget>[
+                                          const SizedBox(width: 10),
+                                          const Text(
+                                            'Permanent ',
+                                            style: TextStyle(fontSize: 17.0),
+                                          ), //Text
+                                          const SizedBox(width: 10), //SizedBox
+                                          /** Checkbox Widget **/
+                                          Checkbox(
+                                            value: state.permanent,
+                                            onChanged: (bool? value) {
+                                                context.read<AccessRightCubit>()
+                                                    .getPermanentValue(value!);
+                                            },
+                                          ), //Checkbox
+                                        ], //<Widget>[]
+                                      ),
+                                    );
+                                  },),
+                              ),
 
-                              Container(height: 10,),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                  builder: (context, state) {
+                                    return TextField(
+                                      onChanged: (commentValue) =>
+                                          context
+                                              .read<AccessRightCubit>()
+                                              .commentValueChanged(commentValue),
+                                      enabled: (state.requestStatus == RequestStatus.newRequest)
+                                          ? false
+                                          : true,
+                                      decoration: const InputDecoration(
+                                        floatingLabelAlignment:
+                                        FloatingLabelAlignment.start,
+                                        labelText: 'Comments',
+                                        prefixIcon: Icon(
+                                            Icons.comment),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+
 
                             ],
                           ),

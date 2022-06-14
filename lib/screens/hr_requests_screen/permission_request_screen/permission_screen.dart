@@ -25,10 +25,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // final formBloc = context.select((PermissionFormBloc bloc) => bloc.state);
 
-    TextEditingController permissionDateController = TextEditingController();
-    TextEditingController permissionTimeController = TextEditingController();
     final user = context.select((AppBloc bloc) =>
     bloc.state.userData.employeeData);
     final userMainData = context.select((AppBloc bloc) =>
@@ -161,6 +158,8 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                   }
                               ),
                             ),
+
+
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
