@@ -147,8 +147,7 @@ class AppRouter {
 
       case VacationScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => VacationScreen(vacationRequestModel: VacationModelFormData(0, '', '',
-              '', '', 0, '', '', '', '', 0),objectValidation: false),
+          builder: (_) => VacationScreen(requestNo: settings.arguments),
         );
 
       case BusinessCardScreen.routeName:

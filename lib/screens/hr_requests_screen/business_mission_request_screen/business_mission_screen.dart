@@ -32,6 +32,8 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
       commentController.text =
           widget.businessMissionFormModelData.comments.toString();
     }
+    final userMainData = context.select((AppBloc bloc) =>
+    bloc.state.userData);
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -43,7 +45,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
       ),
       child: BlocProvider<BusinessMissionCubit>(
         create: (permissionContext) =>
-        BusinessMissionCubit(RequestRepository())
+        BusinessMissionCubit(RequestRepository(userMainData))
           ..getRequestData(RequestStatus.newRequest),
         child: Builder(
             builder: (context) {

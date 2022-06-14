@@ -1,9 +1,9 @@
 import 'dart:async';
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hassanallamportalflutter/data/data_providers/firebase_provider/FirebaseProvider.dart';
-import 'package:hassanallamportalflutter/data/models/firebase_models/notification_model/Notification.dart';
+
 
 part 'user_notification_event.dart';
 part 'user_notification_state.dart';

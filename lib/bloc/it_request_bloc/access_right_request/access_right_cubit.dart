@@ -1,10 +1,13 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
+import 'package:hassanallamportalflutter/constants/enums.dart';
 import 'package:hassanallamportalflutter/data/data_providers/it_request_data_provider/itaccess_right_data_provider.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
@@ -18,8 +21,23 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
   final Connectivity connectivity = Connectivity();
   static AccessRightCubit get(context) => BlocProvider.of(context);
 
+  void getRequestData(RequestStatus requestStatus , String? requestNo) async {
+    if (requestStatus == RequestStatus.newRequest){
+      var now = DateTime.now();
+      String formattedDate = GlobalConstants.dateFormatViewed.format(now);
+      final requestDate = RequestDate.dirty(formattedDate);
+      emit(
+        state.copyWith(
+            requestDate: requestDate.value,
+            requestStatus: RequestStatus.newRequest
+        ),
+      );
+    }else{
+    }
+  }
 
-  void getSubmitAccessRight(MainUserData user,List<String> items,String date,) async {
+
+  void getSubmitAccessRight(MainUserData user,List<String> items) async {
     final requestItem = RequestDate.dirty(state.requestItems.value);
     final fromDate = RequestDate.dirty(state.fromDate.value);
     final toDate = RequestDate.dirty(state.toDate.value);
@@ -37,7 +55,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
 
 
       accessRightModel=AccessRightModel(state.requestType,
-        false,false,false,false,state.permanent, state.fromDate.value, state.toDate.value,date,
+        false,false,false,false,state.permanent, state.fromDate.value, state.toDate.value,state.requestDate!,
         state.filePDF, state.comments,items);
 
       try {
@@ -81,10 +99,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     }
   }
 
-
-
-
-  void accesRightChanged(int value) {
+  void accessRightChanged(int value) {
     emit(state.copyWith(
       requestType: value,
       status: Formz.validate([state.requestItems,state.fromDate,state.toDate]),

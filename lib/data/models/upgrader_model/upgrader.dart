@@ -11,12 +11,12 @@ class Upgrader {
   ios = json['ios'] != null ? Android.fromJson(json['ios']) : null;
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.android != null) {
-      data['android'] = this.android!.toJson();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    if (android != null) {
+      data['android'] = android!.toJson();
     }
-    if (this.ios != null) {
-      data['ios'] = this.ios!.toJson();
+    if (ios != null) {
+      data['ios'] = ios!.toJson();
     }
     return data;
   }

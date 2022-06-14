@@ -4,5 +4,5 @@ enum ConnectionType {
 }
 enum RequestStatus {
   newRequest,
-  oldRequest,
+  oldRequest
 }

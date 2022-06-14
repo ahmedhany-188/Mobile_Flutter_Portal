@@ -1,26 +1,31 @@
 import 'dart:convert';
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:hassanallamportalflutter/data/data_providers/requests_data_providers/request_data_providers.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_duration_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_response.dart';
+import 'package:hassanallamportalflutter/data/models/requests_form_models/request_vacation_data_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants/request_service_id.dart';
 
 class RequestRepository {
   final RequestDataProviders requestDataProviders = RequestDataProviders();
+  final MainUserData userData;
+
+  RequestRepository(this.userData);
 
 
 
   Future<RequestResponse> postPermissionRequest(
-      {required String hrCode, required String requestDate, required String comments,
+      {required String requestDate, required String comments,
         required String dateFromAmpm, required String dateTo, required int type,
         required String dateFrom, required String dateToAmpm, required String permissionDate}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "date": requestDate,
       "comments": comments,
       "dateFromAmpm": dateFromAmpm,
-      "requestHrCode": hrCode,
+      "requestHrCode": userData.user?.userHRCode!,
       "dateTo": dateTo,
       "serviceId": RequestServiceID.PermissionServiceID,
       "type": type,
@@ -43,13 +48,13 @@ class RequestRepository {
   }
 
   Future<RequestResponse> postVacationRequest(
-      {required String hrCode, required String requestDate, required String comments,
+      { required String requestDate, required String comments,
         required String dateTo, required String type,required String responsibleHRCode,required int noOfDays,
         required String dateFrom}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "date": requestDate,
       "comments": comments,
-      "requestHrCode": hrCode,
+      "requestHrCode": userData.user?.userHRCode!,
       "dateFrom": dateFrom,
       "dateTo": dateTo,
       "serviceId": RequestServiceID.VacationServiceID,
@@ -69,12 +74,12 @@ class RequestRepository {
   }
 
   Future<RequestResponse> postBusinessMission(
-      {required String hrCode, required String requestDate, required String comments,
+      { required String requestDate, required String comments,
         required String dateTo, required String type, required String dateFromAmpm,required String dateToAmpm,
         required String dateFrom,required String hourFrom,required String hourTo}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": RequestServiceID.BusinessMissionServiceID,
-      "requestHrCode": hrCode,
+      "requestHrCode": userData.user?.userHRCode!,
       "date": requestDate,
       "comments": comments,
       "dateFrom": dateFrom,
@@ -92,4 +97,16 @@ class RequestRepository {
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
   }
+  Future<VacationRequestData> getVacationRequestData(String requestNo) async{
+    final http.Response rawRequestData = await requestDataProviders
+        .getVacationRequestData(userData.user?.userHRCode ?? "",requestNo);
+    final json = await jsonDecode(rawRequestData.body);
+    final VacationRequestData response = VacationRequestData.fromJson(json[0]);
+    return response;
+
+  }
+
+
+
+
 }

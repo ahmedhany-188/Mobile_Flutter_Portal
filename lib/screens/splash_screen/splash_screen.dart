@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +12,6 @@ import 'package:sprung/sprung.dart';
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../data/helpers/assist_function.dart';
-import '../../data/data_providers/firebase_provider/FirebaseProvider.dart';
 import '../../screens/home_screen/taps_screen.dart';
 import '../../screens/login_screen/auth_screen.dart';
 import '../../widgets/animation/page_transition_animation.dart';

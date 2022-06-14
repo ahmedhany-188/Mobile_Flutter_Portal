@@ -1,17 +1,18 @@
 part of 'access_right_cubit.dart';
 
 @immutable
-abstract class AccessRightState {
+abstract class AccessRightState extends Equatable{
 
   const AccessRightState();
 
-  const AccessRightState.copywith({
+  const AccessRightState.copyWith({
     required RequestDate requestItems ,required RequestDate fromDate
-    , required RequestDate toDate,required FormzStatus status});
+    , required RequestDate toDate,required FormzStatus status,required });
 }
 
-class AccessRightInitial extends AccessRightState {
+class AccessRightInitial extends Equatable {
   const AccessRightInitial({
+    this.requestStatus = RequestStatus.newRequest,
     this.requestDate,
     this.requestType=1,
     this.requestItems  = const RequestDate.pure(),
@@ -38,6 +39,7 @@ class AccessRightInitial extends AccessRightState {
   final FormzStatus status;
   final String? errorMessage;
   final String? successMessage;
+  final RequestStatus? requestStatus;
 
   @override
   List<Object> get props => [requestItems,fromDate,toDate,status];
@@ -54,6 +56,7 @@ class AccessRightInitial extends AccessRightState {
     FormzStatus ?status,
     String? errorMessage,
     String? successMessage,
+    RequestStatus? requestStatus,
   }) {
     return AccessRightInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -67,6 +70,7 @@ class AccessRightInitial extends AccessRightState {
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       successMessage: successMessage ?? this.successMessage,
+      requestStatus: requestStatus ?? this.requestStatus,
     );
   }
 

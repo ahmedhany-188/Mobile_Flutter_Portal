@@ -13,6 +13,7 @@ class CounterState {
   });
 
   Map<String, dynamic> toMap() {
+
     return {
       'counterValue': counterValue,
       'wasIncremented': wasIncremented,

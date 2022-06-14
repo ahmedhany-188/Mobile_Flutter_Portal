@@ -25,6 +25,15 @@ class RequestDataProviders {
     return rawDurationData;
   }
 
+  Future<http.Response> getVacationRequestData(String hrCode,String requestNo) async{
+    http.Response rawDurationData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/GetVacation?HRCode=$hrCode&requestno=$requestNo"),
+    );
+    print(rawDurationData.body);
+    return rawDurationData;
+  }
+
   Future<http.Response> postVacationRequest(String bodyString) async {
     http.Response vacationFeedbackRequest = await http.post(
       Uri.parse(

@@ -54,9 +54,7 @@ class MyReqyestsTicketWidget extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) =>
-                        VacationScreen(
-                            vacationRequestModel: vacationModelFormData,
-                            objectValidation: true),
+                        VacationScreen(requestNo: "",),
                   ));
             }
 

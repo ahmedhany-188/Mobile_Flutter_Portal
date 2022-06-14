@@ -15,7 +15,6 @@ class ResponsibleVacationCubit extends Cubit<ResponsibleVacationInitial> {
       final contacts = List<ContactsDataFromApi>.from(
           value.data.map((model) => ContactsDataFromApi.fromJson(model)));
       emit(ResponsibleVacationInitial.success(contacts));
-      // print(contacts);
     }).catchError((error) {
       print(error.toString());
       emit(const ResponsibleVacationInitial.failure());
@@ -41,15 +40,6 @@ class ResponsibleVacationCubit extends Cubit<ResponsibleVacationInitial> {
     }catch(_){
       emit(const ResponsibleVacationInitial.failure());
     }
-    // GeneralDio.getContactListData().then((value) async {
-    //   final contacts = List<ContactsDataFromApi>.from(
-    //       value.data.map((model) => ContactsDataFromApi.fromJson(model)));
-    //   emit(ResponsibleVacationInitial.success(contacts));
-    //   // print(contacts);
-    // }).catchError((error) {
-    //   print(error.toString());
-    //   emit(const ResponsibleVacationInitial.failure());
-    // });
   }
 
   Future<List<ContactsDataFromApi>> fetchItems() async {

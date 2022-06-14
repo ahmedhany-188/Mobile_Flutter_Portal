@@ -197,10 +197,10 @@ class _VacationScreenState extends State<VacationScreen> {
                                             title: const Text("Annual"),
                                             groupValue: state.vacationType,
                                             onChanged: (vacationType) =>
-                                                context
+                                                state.requestStatus == RequestStatus.newRequest ? context
                                                     .read<VacationCubit>()
                                                     .vacationTypeChanged(
-                                                    vacationType ?? 1),
+                                                    vacationType ?? 1) : null,
                                           ),
                                           RadioListTile<int>(
                                             value: 2,
@@ -209,10 +209,10 @@ class _VacationScreenState extends State<VacationScreen> {
                                             groupValue: state.vacationType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
-                                                context
+                                            state.requestStatus == RequestStatus.newRequest ?  context
                                                     .read<VacationCubit>()
                                                     .vacationTypeChanged(
-                                                    vacationType ?? 1),
+                                                    vacationType ?? 1) : null,
                                           ),
                                           RadioListTile<int>(
                                             value: 3,
@@ -222,10 +222,10 @@ class _VacationScreenState extends State<VacationScreen> {
                                             groupValue: state.vacationType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
-                                                context
+                                            state.requestStatus == RequestStatus.newRequest ? context
                                                     .read<VacationCubit>()
                                                     .vacationTypeChanged(
-                                                    vacationType ?? 1),
+                                                    vacationType ?? 1) : null,
                                           ),
                                           RadioListTile<int>(
                                             value: 4,
@@ -234,10 +234,10 @@ class _VacationScreenState extends State<VacationScreen> {
                                             groupValue: state.vacationType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
-                                                context
+                                            state.requestStatus == RequestStatus.newRequest ? context
                                                     .read<VacationCubit>()
                                                     .vacationTypeChanged(
-                                                    vacationType ?? 1),
+                                                    vacationType ?? 1) : null,
                                           ),
                                           RadioListTile<int>(
                                             value: 5,
@@ -246,10 +246,10 @@ class _VacationScreenState extends State<VacationScreen> {
                                             groupValue: state.vacationType,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (vacationType) =>
-                                                context
+                                            state.requestStatus == RequestStatus.newRequest ? context
                                                     .read<VacationCubit>()
                                                     .vacationTypeChanged(
-                                                    vacationType ?? 1),
+                                                    vacationType ?? 1) : null,
                                           ),
                                         ],
                                       );
@@ -274,12 +274,14 @@ class _VacationScreenState extends State<VacationScreen> {
                                     return TextFormField(
                                       key: UniqueKey(),
                                       initialValue: state.vacationFromDate.value,
+
                                       onChanged: (vacationDate) =>
                                           context
                                               .read<VacationCubit>()
                                               .vacationFromDateChanged(
                                               context),
                                       readOnly: true,
+                                      enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
 
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
@@ -324,12 +326,8 @@ class _VacationScreenState extends State<VacationScreen> {
                                     return TextFormField(
                                       key: UniqueKey(),
                                       initialValue: state.vacationToDate.value,
-                                      // onChanged: (vacationDate) =>
-                                      //     context
-                                      //         .read<VacationCubit>()
-                                      //         .vacationToDateChanged(
-                                      //         context),
                                       readOnly: true,
+                                      enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
@@ -358,19 +356,20 @@ class _VacationScreenState extends State<VacationScreen> {
                                   VacationCubit,
                                   VacationInitial>(
                                   buildWhen: (previous, current) {
-                                    print(previous.vacationDuration);
-                                    print(current.vacationDuration);
+                                    // print(previous.vacationDuration);
+                                    // print(current.vacationDuration);
 
                                     return (previous.vacationDuration !=
                                         current.vacationDuration);
                                   },
                                   builder: (context, state) {
-                                    print(
-                                        "from Screen${state.vacationDuration}");
+                                    // print(
+                                    //     "from Screen${state.vacationDuration}");
                                     return TextFormField(
                                       key: UniqueKey(),
                                       initialValue: state.vacationDuration,
                                       readOnly: true,
+                                      enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
                                       decoration: const InputDecoration(
                                         labelText: 'Vacation Duration',
                                         prefixIcon: Icon(
@@ -396,6 +395,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                       initialValue: state.responsiblePerson
                                           .name,
                                       readOnly: true,
+                                      enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
                                       decoration: const InputDecoration(
                                         labelText: 'Responsible Person',
                                         prefixIcon: Icon(
@@ -414,10 +414,15 @@ class _VacationScreenState extends State<VacationScreen> {
                               child: BlocBuilder<
                                   VacationCubit,
                                   VacationInitial>(
+                                  buildWhen: (previous, current) {
+                                    return (previous.comment !=
+                                        current.comment);
+                                  },
                                   builder: (context, state) {
                                     return TextFormField(
-                                      key: UniqueKey(),
-                                      initialValue: state.comment,
+                                      key: state.requestStatus == RequestStatus.oldRequest ? UniqueKey() : null,
+                                      initialValue: state.requestStatus == RequestStatus.oldRequest ? state.comment :"",
+                                      enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
                                       onChanged: (commentValue) =>
                                           context
                                               .read<VacationCubit>()

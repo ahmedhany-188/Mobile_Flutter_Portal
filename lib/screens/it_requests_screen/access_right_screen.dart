@@ -13,6 +13,8 @@ import 'package:intl/intl.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:file_picker/file_picker.dart';
 
+import '../../constants/enums.dart';
+
 class AccessUserAccountScreen extends StatefulWidget{
 
   static const routeName = "/access-user-account-screen";
@@ -37,8 +39,8 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
         .size;
 
     final user = context.select((AppBloc bloc) => bloc.state.userData);
-    var formatter = DateFormat('yyyy-MM-dd');
-    String formattedDate = formatter.format(DateTime.now());
+    // var formatter = DateFormat('yyyy-MM-dd');
+    // String formattedDate = formatter.format(DateTime.now());
     final TextEditingController commentController = TextEditingController();
 
     List<String> selectedTypes = [];
@@ -66,9 +68,9 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
       },
     ];
 
-    if (widget.objectValidation) {
-      commentController.text = widget.accessRightModel.comments.toString();
-    }
+    // if (widget.objectValidation) {
+    //   commentController.text = widget.accessRightModel.comments.toString();
+    // }
 
 
     return Theme(
@@ -89,9 +91,57 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                     title: const Text("Access Right"),
                     centerTitle: true,
                   ),
-                  resizeToAvoidBottomInset: false,
-                  drawer: MainDrawer(),
+                  // resizeToAvoidBottomInset: false,
+                  floatingActionButton:  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      if(context
+                          .read<AccessRightCubit>()
+                          .state
+                          .requestStatus ==
+                          RequestStatus.oldRequest)FloatingActionButton.extended(
+                        heroTag: null,
+                        onPressed: () {},
+                        icon: const Icon(Icons.verified),
+                        label: const Text('Accept'),
+                      ),
+                      const SizedBox(height: 12),
+                      if(context
+                          .read<AccessRightCubit>()
+                          .state
+                          .requestStatus ==
+                          RequestStatus.oldRequest)FloatingActionButton.extended(
+                        backgroundColor: Colors.red,
+                        heroTag: null,
+                        onPressed: () {},
+                        icon: const Icon(Icons.dangerous),
 
+                        label: const Text('Reject'),
+                      ),
+                      const SizedBox(height: 12),
+                      if(context
+                          .read<AccessRightCubit>()
+                          .state
+                          .requestStatus == RequestStatus.newRequest)
+                        FloatingActionButton.extended(
+                          heroTag: null,
+                          onPressed: () {
+                            context.read<AccessRightCubit>()
+                                    .getSubmitAccessRight(
+                                    user, selectedTypes);
+                          },
+                          // formBloc.state.status.isValidated
+                          //       ? () => formBloc.submitPermissionRequest()
+                          //       : null,
+                          // formBloc.submitPermissionRequest();
+
+                          icon: const Icon(Icons.send),
+                          label: const Text('SUBMIT'),
+                        ),
+                      const SizedBox(height: 12),
+                    ],
+                  ),
+                  drawer: MainDrawer(),
                   body: BlocListener<AccessRightCubit, AccessRightInitial>(
                     listener: (context, state) {
                       if (state.status.isSubmissionSuccess) {
@@ -101,14 +151,16 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                             content: Text("Success"),
                           ),
                         );
-                      } else if (state.status.isSubmissionInProgress) {
+                      }
+                      else if (state.status.isSubmissionInProgress) {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text("Loading"),
                           ),
                         );
-                      } else if (state.status.isSubmissionFailure) {
+                      }
+                      else if (state.status.isSubmissionFailure) {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -119,7 +171,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                     },
 
                     child: Padding(
-                      padding: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
                       child: Form(
                         child: SingleChildScrollView(
                           child: Column(
@@ -129,7 +181,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                 initialValue: (widget.objectValidation)
                                     ? widget
                                     .accessRightModel.requestDate
-                                    : formattedDate,
+                                    : "",
                                 key: UniqueKey(),
                                 readOnly: true,
                                 decoration: const InputDecoration(
@@ -140,6 +192,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                       Icons.calendar_today),
                                 ),
                               ),
+
                               Container(height: 10),
 
                               const Text("Request Type"),
@@ -168,7 +221,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                           onChanged: (permissionType) =>
                                           {
                                             context.read<AccessRightCubit>()
-                                                .accesRightChanged(1),
+                                                .accessRightChanged(1),
                                           },
                                         ),
                                         RadioListTile<int>(
@@ -184,7 +237,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                           onChanged: (permissionType) =>
                                           {
                                             context.read<AccessRightCubit>()
-                                                .accesRightChanged(2),
+                                                .accessRightChanged(2),
                                           },
                                         ),
                                       ],
@@ -232,6 +285,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
 
 
                                         onSaved: (value) {
+
                                           selectedTypes.clear();
                                           if (value != null) {
                                             for (int i = 0; i <
@@ -239,10 +293,11 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                               selectedTypes.add(
                                                   value[i].toString());
                                             }
+                                            context.read<AccessRightCubit>().
+                                            getRequestValue(
+                                                selectedTypes.toString());
                                           }
-                                          context.read<AccessRightCubit>().
-                                          getRequestValue(
-                                              selectedTypes.toString());
+
                                         }
 
                                     );
@@ -255,6 +310,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                 style: TextStyle(color: Colors.red),),
 
                               Container(height: 10,),
+
                               FloatingActionButton.extended(
                                 onPressed: () {
                                   _launchUrl();
@@ -298,6 +354,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                           color: Colors.black),
                                       backgroundColor: Colors.white,);
                                 },),
+
                               Container(height: 10,),
                               BlocBuilder<AccessRightCubit, AccessRightInitial>(
                                 builder: (context, state) {
@@ -409,20 +466,6 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                               ),
                               Container(height: 10,),
 
-                              FloatingActionButton.extended(
-                                onPressed: () {
-                                  context.read<AccessRightCubit>()
-                                      .getSubmitAccessRight(
-                                      user, selectedTypes, formattedDate);
-                                },
-                                label: const Text('Submit', style: TextStyle(
-                                    color: Colors.black
-                                )),
-                                icon: const Icon(
-                                    Icons.thumb_up_alt_outlined,
-                                    color: Colors.black),
-                                backgroundColor: Colors.white,
-                              ),
 
 
                               Container(height: 10,),
