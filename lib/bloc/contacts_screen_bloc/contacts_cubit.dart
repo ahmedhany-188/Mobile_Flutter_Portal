@@ -1,30 +1,82 @@
-import 'package:flutter/foundation.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
 import '../../data/data_providers/general_dio/general_dio.dart';
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 
 part 'contacts_states.dart';
 
-class ContactsCubit extends Cubit<ContactsStates> {
-  ContactsCubit() : super(BlocInitialState());
+class ContactsCubit extends Cubit<ContactCubitStates> {
+  ContactsCubit() : super(const ContactCubitStates()) {
+    connectivity.onConnectivityChanged.listen((connectivityResult) async {
+      if (connectivityResult == ConnectivityResult.wifi ||
+          connectivityResult == ConnectivityResult.mobile) {
+        try {
+          getContacts();
+        } catch (e) {
+          emit(state.copyWith(
+            contactStates: ContactsEnumStates.failed,
+          ));
+        }
+      } else if (connectivityResult == ConnectivityResult.none) {
+        emit(state.copyWith(
+          contactStates: ContactsEnumStates.failed,
+        ));
+      }
+    });
+  }
+  final Connectivity connectivity = Connectivity();
 
   static ContactsCubit get(context) => BlocProvider.of(context);
 
-  List<ContactsDataFromApi> contacts = [];
-
   void getContacts() {
-    emit(BlocGetContactsLoadingState());
-
+    emit(state.copyWith(
+      contactStates: ContactsEnumStates.initial,
+    ));
     GeneralDio.getContactListData().then((value) {
       if (value.data != null) {
+        List<ContactsDataFromApi> contacts;
         contacts = List<ContactsDataFromApi>.from(
             value.data.map((model) => ContactsDataFromApi.fromJson(model)));
 
-        emit(BlocGetContactsSuccessState(contacts));
+        var apiMap = <String>{};
+
+        contacts.where((element) => apiMap.add(element.companyName!)).toList();
+        List<String> companiesFilters = apiMap.toList();
+        apiMap.clear();
+
+        contacts.where((element) => apiMap.add(element.projectName!)).toList();
+        List<String> projectFilters = apiMap.toList();
+        apiMap.clear();
+
+        contacts
+            .where((element) => apiMap.add(element.mainDepartment!))
+            .toList();
+        List<String> departmentFilters = apiMap.toList();
+        apiMap.clear();
+
+        contacts.where((element) => apiMap.add(element.titleName!)).toList();
+        List<String> titleFilters = apiMap.toList();
+        apiMap.clear();
+
+        emit(state.copyWith(
+            contactStates: ContactsEnumStates.success,
+            listContacts: contacts,
+            companiesFilter: companiesFilters,
+            projectsFilter: projectFilters,
+            departmentFilter: departmentFilters,
+            titleFilter: titleFilters));
       }
     }).catchError((error) {
-      print(error.toString());
-      emit(BlocGetContactsErrorState(error.toString()));
+      emit(state.copyWith(contactStates: ContactsEnumStates.failed));
     });
+  }
+
+  void updateContacts(List<ContactsDataFromApi> updatedList) {
+    emit(state.copyWith(
+      contactStates: ContactsEnumStates.filtered,
+      tempList: updatedList,
+    ));
   }
 }

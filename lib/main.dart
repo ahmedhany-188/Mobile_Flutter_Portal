@@ -20,6 +20,7 @@ import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.d
 import 'package:hassanallamportalflutter/data/repositories/upgrader_repository.dart';
 import 'package:hassanallamportalflutter/life_cycle_states.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
+import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -47,7 +48,6 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-
   final storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
@@ -65,10 +65,9 @@ void main() async {
 
   await GeneralDio.init();
   await AlbumDio.initAlbums();
-
 }
 
-class MyApp extends StatefulWidget{
+class MyApp extends StatefulWidget {
   final AppRouter appRouter;
   final Connectivity connectivity;
 
@@ -83,7 +82,6 @@ class MyApp extends StatefulWidget{
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -120,7 +118,7 @@ class _MyAppState extends State<MyApp> {
             create: (contactsCubitContext) =>
             ContactsCubit()
               ..getContacts(),
-            // child: ContactsScreen(),
+            lazy: false,
           ),
           BlocProvider<WeatherBloc>(
             create: (weatherBlocContext) =>
@@ -254,11 +252,7 @@ class _MyAppState extends State<MyApp> {
 class AppBlocObserver extends BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
-    if (bloc is AppsCubit || bloc is ContactsCubit || bloc is NewsCubit) {
-      FocusManager.instance.primaryFocus?.unfocus();
-    }
     if (kDebugMode) {
-      // FocusManager.instance.primaryFocus?.unfocus();
       print("Change --> $bloc");
     }
     super.onChange(bloc, change);
