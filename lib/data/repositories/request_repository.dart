@@ -17,6 +17,7 @@ import 'package:http/http.dart' as http;
 
 import '../../constants/request_service_id.dart';
 import '../models/requests_form_models/request_business_mission_data_model.dart';
+import '../models/requests_form_models/request_permission_data_model.dart';
 
 class RequestRepository {
   final RequestDataProviders requestDataProviders = RequestDataProviders();
@@ -243,6 +244,14 @@ return response;
         .getBusinessMissionRequestData(userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final BusinessMissionRequestData response = BusinessMissionRequestData.fromJson(json[0]);
+
+    return response;
+  }
+  Future<PermissionRequestData> getPermissionRequestData(String requestNo) async{
+    final http.Response rawRequestData = await requestDataProviders
+        .getPermissionRequestData(userData.user?.userHRCode ?? "",requestNo);
+    final json = await jsonDecode(rawRequestData.body);
+    final PermissionRequestData response = PermissionRequestData.fromJson(json[0]);
 
     return response;
   }

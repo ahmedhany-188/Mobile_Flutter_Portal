@@ -105,11 +105,19 @@ class RequestDataProviders {
   }
 
   Future<http.Response> getBusinessMissionRequestData(String hrCode,String requestNo) async{
-    http.Response rawDurationData = await http.get(
+    http.Response rawData = await http.get(
       Uri.parse(
           "https://api.hassanallam.com/api/SelfService/GetBusinessMission?HRCode=$hrCode&requestno=$requestNo"),
     );
-    print(rawDurationData.body);
-    return rawDurationData;
+    print(rawData.body);
+    return rawData;
+  }
+  Future<http.Response> getPermissionRequestData(String hrCode,String requestNo) async{
+    http.Response rawData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/GetPermission?HRCode=$hrCode&requestno=$requestNo"),
+    );
+    print(rawData.body);
+    return rawData;
   }
 }
