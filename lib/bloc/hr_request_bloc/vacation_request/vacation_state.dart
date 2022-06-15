@@ -19,7 +19,9 @@ class VacationInitial extends Equatable {
     this.requestStatus,
     this.comment = "",
     this.responsiblePerson = ContactsDataFromApi.empty,
-    this.vacationDuration = "0"
+    this.vacationDuration = "0",
+    this.takeActionStatus,
+    this.statusAction,
   });
 
   final RequestDate requestDate;
@@ -33,6 +35,8 @@ class VacationInitial extends Equatable {
   final ContactsDataFromApi responsiblePerson;
   final String comment;
   final String vacationDuration;
+  final TakeActionStatus? takeActionStatus;
+  final String? statusAction;
 
   @override
   List<Object> get props => [requestDate, vacationFromDate,vacationToDate,vacationType, status,comment,vacationDuration,responsiblePerson];
@@ -49,6 +53,8 @@ class VacationInitial extends Equatable {
     String? comment,
     String? vacationDuration,
     ContactsDataFromApi? responsiblePerson,
+    TakeActionStatus? takeActionStatus,
+    String? statusAction
   }) {
     return VacationInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -62,7 +68,8 @@ class VacationInitial extends Equatable {
       comment: comment ?? this.comment,
       responsiblePerson: responsiblePerson ?? this.responsiblePerson,
       vacationDuration: vacationDuration ?? this.vacationDuration,
-
+      takeActionStatus: takeActionStatus ?? this.takeActionStatus,
+      statusAction: statusAction ?? this.statusAction
     );
   }
 }

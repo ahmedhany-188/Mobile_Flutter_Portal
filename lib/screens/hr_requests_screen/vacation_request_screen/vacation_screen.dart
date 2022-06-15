@@ -26,8 +26,6 @@ class VacationScreen extends StatefulWidget {
 class _VacationScreenState extends State<VacationScreen> {
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AppBloc bloc) =>
-    bloc.state.userData.employeeData);
 
     final userMainData = context.select((AppBloc bloc) =>
     bloc.state.userData);
@@ -63,22 +61,18 @@ class _VacationScreenState extends State<VacationScreen> {
                 floatingActionButton: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    if(context
-                        .read<VacationCubit>()
-                        .state
+                    if(
+                        state
                         .requestStatus ==
-                        RequestStatus.oldRequest)FloatingActionButton.extended(
+                        RequestStatus.oldRequest && state.takeActionStatus == TakeActionStatus.takeAction )FloatingActionButton.extended(
                       heroTag: null,
                       onPressed: () {},
                       icon: const Icon(Icons.verified),
                       label: const Text('Accept'),
                     ),
                     const SizedBox(height: 12),
-                    if(context
-                        .read<VacationCubit>()
-                        .state
-                        .requestStatus ==
-                        RequestStatus.oldRequest)FloatingActionButton.extended(
+                    if(state.requestStatus ==
+                        RequestStatus.oldRequest && state.takeActionStatus == TakeActionStatus.takeAction)FloatingActionButton.extended(
                       backgroundColor: Colors.red,
                       heroTag: null,
                       onPressed: () {},
@@ -138,7 +132,28 @@ class _VacationScreenState extends State<VacationScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: <Widget>[
+                            if(state.requestStatus == RequestStatus.oldRequest)Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: BlocBuilder<
+                                  VacationCubit,
+                                  VacationInitial>(
 
+                                  builder: (context, state) {
+                                    return Text(state.statusAction ?? "Pending",
+                                      // style: TextStyle(decoration: BoxDecoration(
+                                      //   // labelText: 'Request Date',
+                                      //   errorText: state.requestDate.invalid
+                                      //       ? 'invalid request date'
+                                      //       : null,
+                                      //   prefixIcon: const Icon(
+                                      //       Icons.date_range),
+                                      // ),),
+
+                                    );
+                                  }
+                              ),
+                            ),
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
@@ -510,7 +525,9 @@ class _VacationScreenState extends State<VacationScreen> {
 }
 
 class ItemView extends StatelessWidget {
-  const ItemView({Key? key, required this.items, required this.scrollController, required this.bloc,}) : super(key: key);
+  const ItemView(
+      {Key? key, required this.items, required this.scrollController, required this.bloc,})
+      : super(key: key);
 
   final ScrollController scrollController;
   final List<ContactsDataFromApi> items;
@@ -518,8 +535,8 @@ class ItemView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final ResponsibleVacationCubit responsibleVacationCubit = BlocProvider.of<ResponsibleVacationCubit>(context);
+    final ResponsibleVacationCubit responsibleVacationCubit = BlocProvider.of<
+        ResponsibleVacationCubit>(context);
     return Column(children: [
       Padding(
           padding: const EdgeInsets.all(8),
@@ -539,9 +556,9 @@ class ItemView extends StatelessWidget {
                       responsibleVacationCubit.searchForContacts(value);
                     })),
             CloseButton(
-              
-                // icon: Icon(Icons.close),
-                // color: Color(0xFF1F91E7),
+
+              // icon: Icon(Icons.close),
+              // color: Color(0xFF1F91E7),
                 onPressed: () {
                   responsibleVacationCubit.clearAll();
                   Navigator.of(context).pop();
@@ -596,8 +613,6 @@ class ItemView extends StatelessWidget {
     ]);
 
 
-
-
     // return items.isEmpty
     //     ? const Center(child: Text('no content'))
     //     : ListView.builder(
@@ -612,9 +627,12 @@ class ItemView extends StatelessWidget {
     //   itemCount: items.length,
     // );
   }
-  Widget _showBottomSheetWithSearch(int index, List<ContactsDataFromApi> listOfCities) {
+
+  Widget _showBottomSheetWithSearch(int index,
+      List<ContactsDataFromApi> listOfCities) {
     return Text(listOfCities[index].name ?? "",
-        style: const TextStyle(color: Colors.black, fontSize: 16),textAlign: TextAlign.center);
+        style: const TextStyle(color: Colors.black, fontSize: 16),
+        textAlign: TextAlign.center);
   }
 }
 

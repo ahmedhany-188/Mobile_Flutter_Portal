@@ -165,9 +165,11 @@ class _MyAppState extends State<MyApp> {
           //       AccessRightCubit(),
           // ),
 
-          BlocProvider<MyRequestsCubit>(
-            create: (travelRequestContext) => MyRequestsCubit(),
-          ),
+
+          // BlocProvider<MyRequestsCubit>(
+          //   create: (travelRequestContext) =>
+          //       MyRequestsCubit(),
+          // ),
 
           BlocProvider<AppBloc>(
             create: (authenticationContext) => AppBloc(
