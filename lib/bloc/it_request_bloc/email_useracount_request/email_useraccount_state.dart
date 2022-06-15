@@ -41,7 +41,6 @@ class EmailUserAccountInitial extends EmailUserAccountState {
   final String? errorMessage;
   final String? successMessage;
 
-
   @override
   List<Object> get props => [ userMobile, status,];
 

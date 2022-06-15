@@ -178,10 +178,10 @@ class _MyAppState extends State<MyApp> {
           // ),
 
 
-          BlocProvider<MyRequestsCubit>(
-            create: (travelRequestContext) =>
-                MyRequestsCubit(),
-          ),
+          // BlocProvider<MyRequestsCubit>(
+          //   create: (travelRequestContext) =>
+          //       MyRequestsCubit(),
+          // ),
 
           BlocProvider<AppBloc>(
             create: (authenticationContext) =>
@@ -225,8 +225,6 @@ class _MyAppState extends State<MyApp> {
                   authenticationRepository: _authenticationRepository,
                 ),
           ),
-
-
 
 
           // BlocProvider<PermissionCubit>(

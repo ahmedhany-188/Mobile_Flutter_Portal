@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/my_requests_screen_bloc/my_requests_cubit.dart';
+import 'package:hassanallamportalflutter/data/models/my_requests_model/my_requests_model_form.dart';
+import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_ticket_widget.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 
@@ -31,7 +33,6 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
         .size;
 
     // ignore: non_constant_identifier_names
-    List<dynamic> MyRequestsListData = [];
 
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
@@ -42,32 +43,27 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
       ),
       resizeToAvoidBottomInset: false,
 
-      drawer: MainDrawer(),
-
       body: BlocProvider<MyRequestsCubit>(
 
         create: (context) =>
-        MyRequestsCubit()
+        MyRequestsCubit(RequestRepository(user))
           ..getRequests(user.user!.userHRCode.toString()),
 
         child: BlocConsumer<MyRequestsCubit, MyRequestsState>(
           listener: (context, state) {
-            if (state is BlocGetMyRequestsSuccesState) {
+            if (state is BlocGetMyRequestsSuccessState) {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("Success"),
                 ),
               );
-
-              MyRequestsListData =  state.getMyRequests;
             }
             else if (state is BlocGetMyRequestsLoadingState) {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("Loading"),
-
                 ),
               );
             }
@@ -83,20 +79,21 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
           builder: (context, state) {
             return Container(
               decoration: const BoxDecoration(
-                  // image: DecorationImage(
-                  //     image: AssetImage(
-                  //     "assets/images/S_Background.png"),
-                  //     fit: BoxFit.cover
-                  // )
+                // image: DecorationImage(
+                //     image: AssetImage(
+                //     "assets/images/S_Background.png"),
+                //     fit: BoxFit.cover
+                // )
                 color: Colors.white,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(15),
-                        child:SizedBox(
-                          height: deviceSize.height,
-                          child: MyReqyestsTicketWidget(MyRequestsListData,user.employeeData!.userHrCode!),
-                        )
-              ),
+              child: state is BlocGetMyRequestsSuccessState ? Padding(
+                  padding: const EdgeInsets.all(15),
+                  child: SizedBox(
+                    height: deviceSize.height,
+                    child: MyReqyestsTicketWidget(
+                        state.getMyRequests, user.employeeData!.userHrCode!),
+                  )
+              ) : Container(),
             );
           },
         ),

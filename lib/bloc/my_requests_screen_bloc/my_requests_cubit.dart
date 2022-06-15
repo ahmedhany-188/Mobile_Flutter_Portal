@@ -3,18 +3,21 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/data/data_providers/my_requests_data_provider/my_requests_data_provider.dart';
+import 'package:hassanallamportalflutter/data/models/my_requests_model/my_requests_model_form.dart';
+import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:meta/meta.dart';
 
 part 'my_requests_state.dart';
 
 class MyRequestsCubit extends Cubit<MyRequestsState> {
-  MyRequestsCubit() : super(MyRequestsInitial());
+  MyRequestsCubit(this.requestRepository) : super(MyRequestsInitial());
 
   static MyRequestsCubit get(context) =>BlocProvider.of(context);
-  List<dynamic> myRequests=[];
+  List<MyRequestsModelData> myRequests=[];
 
   final Connectivity connectivity = Connectivity();
+
+  final RequestRepository requestRepository;
 
   void getRequests(userHRcode) async {
 
@@ -23,12 +26,32 @@ class MyRequestsCubit extends Cubit<MyRequestsState> {
       var connectivityResult = await connectivity.checkConnectivity();
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
-        MyRequestsDataProvider().getMyRequestsList(userHRcode).then((value){
-          myRequests =jsonDecode(value.body);
-          emit(BlocGetMyRequestsSuccesState(myRequests));
+
+        requestRepository.getMyrequestsData(userHRCode:userHRcode)
+            .then((value)async{
+
+          myRequests = await jsonDecode(value.body);
+          print("-----oo-----"+myRequests.toString());
+          print("-----o8-----"+value.body);
+
+          // myRequests = value.body;
+
+          emit(BlocGetMyRequestsSuccessState(myRequests));
         }).catchError((error){
+          print(error.toString()+"0000000000");
           emit(BlocGetMyRequestsErrorState(error.toString()));
         });
+
+        // final MyRequestsResponse = await requestRepository.getMyrequestsData(userHRCode:userHRcode);
+        // if (MyRequestsResponse!=null) {
+        //   myRequests=MyRequestsResponse as List<MyRequestsModelData>;
+        //   myRequests= List<MyRequestsModelData>.from(
+        //       MyRequestsResponse((model) => MyRequestsModelData.fromJson(model)));
+        //   print("---0.-+"+myRequests.toString());
+        //   emit(BlocGetMyRequestsSuccessState(myRequests));
+        // }else{
+        //   emit(BlocGetMyRequestsErrorState(MyRequestsResponse.result!));
+        // }
       }else{
         emit(BlocGetMyRequestsErrorState("No internet connection"));
       }
@@ -43,4 +66,5 @@ class MyRequestsCubit extends Cubit<MyRequestsState> {
     // connectivityStreamSubscription?.cancel();
     return super.close();
   }
+
 }

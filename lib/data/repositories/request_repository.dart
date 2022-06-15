@@ -113,6 +113,22 @@ class RequestRepository {
     return response;
   }
 
+  Future<http.Response> getMyrequestsData(
+      {required String userHRCode}) async {
+
+    var bodyString= "https://api.hassanallam.com/api/SelfService/GetMyRequests?HRCode=$userHRCode";
+     http.Response rawMyRequests = await requestDataProviders
+        .getMyRequestsList(bodyString);
+    // final json = await jsonDecode(rawMyRequests.body);
+    print("----.-+"+rawMyRequests.body.toString());
+    // // final RequestResponse response = RequestResponse.fromJson(json);
+    // // print("--.---+"+json);
+    // // return response;
+
+    return rawMyRequests;
+
+  }
+
 
   Future<RequestResponse> postEmailUserAccount({required EmailUserFormModel emailUserFormModel})async {
 
