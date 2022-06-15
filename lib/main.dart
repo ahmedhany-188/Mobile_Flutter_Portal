@@ -20,6 +20,7 @@ import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.d
 import 'package:hassanallamportalflutter/data/repositories/upgrader_repository.dart';
 import 'package:hassanallamportalflutter/life_cycle_states.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
+import 'package:hassanallamportalflutter/screens/apps_screen/apps_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -90,11 +91,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final platform = Theme
-        .of(context)
-        .platform;
+    final platform = Theme.of(context).platform;
     final AuthenticationRepository _authenticationRepository =
-    AuthenticationRepository.getInstance();
+        AuthenticationRepository.getInstance();
     print("build");
     // _authenticationRepository.init();
 
@@ -115,15 +114,13 @@ class _MyAppState extends State<MyApp> {
             create: (counterCubitContext) => SettingsCubit(),
           ),
           BlocProvider<ContactsCubit>(
-            create: (contactsCubitContext) =>
-            ContactsCubit()
-              ..getContacts(),
+            create: (contactsCubitContext) => ContactsCubit()..getContacts(),
             lazy: false,
           ),
+
           BlocProvider<WeatherBloc>(
             create: (weatherBlocContext) =>
-            WeatherBloc()
-              ..add(WeatherRequest()),
+                WeatherBloc()..add(WeatherRequest()),
           ),
           BlocProvider<PayslipCubit>(
             create: (payslipContext) => PayslipCubit(),
@@ -137,22 +134,15 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider<GetDirectionCubit>(
             create: (getDirectionCubitContext) =>
-            GetDirectionCubit()
-              ..getDirection(),
+                GetDirectionCubit()..getDirection(),
           ),
           BlocProvider<BenefitsCubit>(
-            create: (benefitsCubitContext) =>
-            BenefitsCubit()
-              ..getBenefits(),
+            create: (benefitsCubitContext) => BenefitsCubit()..getBenefits(),
           ),
           BlocProvider<SubsidiariesCubit>(
             create: (subsidiariesCubitContext) =>
-            SubsidiariesCubit()
-              ..getSubsidiaries(),
+                SubsidiariesCubit()..getSubsidiaries(),
           ),
-
-
-
 
           // BlocProvider<MedicalRequestCubit>(
           //     create: (medicalRequestCubitContext) => MedicalRequestCubit()
@@ -175,57 +165,57 @@ class _MyAppState extends State<MyApp> {
           //       AccessRightCubit(),
           // ),
 
-
           BlocProvider<MyRequestsCubit>(
-            create: (travelRequestContext) =>
-                MyRequestsCubit(),
+            create: (travelRequestContext) => MyRequestsCubit(),
           ),
 
           BlocProvider<AppBloc>(
-            create: (authenticationContext) =>
-                AppBloc(
-                  authenticationRepository: _authenticationRepository,
-                ),
+            create: (authenticationContext) => AppBloc(
+              authenticationRepository: _authenticationRepository,
+            ),
           ),
+
           BlocProvider<LoginCubit>(
             create: (authenticationContext) =>
                 LoginCubit(_authenticationRepository),
           ),
           BlocProvider<PhotosCubit>(
-            create: (photosContext) =>
-            PhotosCubit()
-              ..getPhotos(),
+            create: (photosContext) => PhotosCubit()..getPhotos(),
           ),
           BlocProvider<VideosCubit>(
-            create: (videosContext) =>
-            VideosCubit()
-              ..getVideos(),
+            create: (videosContext) => VideosCubit()..getVideos(),
           ),
           BlocProvider<UserNotificationBloc>(
             lazy: true,
             create: (userNotificationContext) => UserNotificationBloc(
-              firebaseProvider: FirebaseProvider(BlocProvider
-                  .of<AppBloc>(userNotificationContext)
-                  .state
-                  .userData
-                  .user!),),
+              firebaseProvider: FirebaseProvider(
+                  BlocProvider.of<AppBloc>(userNotificationContext)
+                      .state
+                      .userData
+                      .user!),
+            ),
           ),
           BlocProvider<AppUpgraderCubit>(
             lazy: false,
-            create: (context) =>
-            AppUpgraderCubit(UpgraderRepository(),)
-              ..getUpgradeFromServer(context),
+            create: (context) => AppUpgraderCubit(
+              UpgraderRepository(),
+            )..getUpgradeFromServer(context),
           ),
 
           BlocProvider<AppBloc>(
-            create: (authenticationContext) =>
-                AppBloc(
-                  authenticationRepository: _authenticationRepository,
-                ),
+            create: (authenticationContext) => AppBloc(
+              authenticationRepository: _authenticationRepository,
+            ),
           ),
-
-
-
+          BlocProvider<AppsCubit>(
+            create: (contactsCubitContext) => AppsCubit()
+              ..getApps(
+                  hrCode: BlocProvider.of<AppBloc>(contactsCubitContext)
+                      .state
+                      .userData
+                      .user!
+                      .userHRCode),
+          ),
 
           // BlocProvider<PermissionCubit>(
           //   create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),
@@ -244,8 +234,7 @@ class _MyAppState extends State<MyApp> {
             ),
             onGenerateRoute: widget.appRouter.onGenerateRoute,
           ),
-        )
-    );
+        ));
   }
 }
 
