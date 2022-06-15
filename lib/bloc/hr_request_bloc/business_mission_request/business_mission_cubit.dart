@@ -221,7 +221,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
       print(hrCode);
 
 
-      final businessMissionResponse = await _requestRepository.postBusinessMission(hrCode: hrCode,comments: comment,
+      final businessMissionResponse = await _requestRepository.postBusinessMission(comments: comment,
           dateFrom: dateFromValue,dateTo: dateToValue,requestDate: requestDateValue,type: type, hourFrom: hourFromValue,hourTo: hourToValue, dateToAmpm: dateToAmpm,dateFromAmpm: dateFromAmpm);
 
       if (businessMissionResponse.id == 1){

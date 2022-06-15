@@ -3,10 +3,13 @@ import 'dart:collection';
 import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:authentication_repository/src/extensions.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:hassanallamportalflutter/data/models/firebase_models/notification_model/Notification.dart';
-import 'package:hassanallamportalflutter/life_cycle_states.dart';
 
+enum AppLifecycleStatus{
+  online,
+  offline
+}
 class FirebaseProvider {
 
 
@@ -18,15 +21,7 @@ class FirebaseProvider {
     _inst.currentUser = currentUser;
     return _inst;
   }
-  // static final FirebaseProvider? _singleton = null;
-  // static getInstance(User currentUser){
-  //   if(_singleton != null){
-  //     return _singleton;
-  //   }else{
-  //     return FirebaseProvider(currentUser: currentUser);
-  //   }
-  // }
-  // FirebaseProvider({required this.currentUser});
+
   User? currentUser;
   final DatabaseReference _mainReference =
   FirebaseDatabase.instance.ref();
@@ -35,16 +30,19 @@ class FirebaseProvider {
   late DatabaseReference notificationReference = _mainReference.child("Notifications");
 
   Stream<List<FirebaseUserNotification>> getNotificationsData() =>
-      notificationReference.child(currentUser?.email.replaceAll(".", ",") ?? "").onValue.map((event){
+      notificationReference.child(currentUser?.email.encodeEmail() ?? "").onValue.map((event){
           return event.snapshot.children
               .map((e) =>FirebaseUserNotification.fromJson(Map<String, dynamic>.from(e.value as dynamic)))
               .toList();
       });
 
   void updateUserOnline(AppLifecycleStatus status)async{
-    await _databaseReferenceUsers.child(currentUser?.email.replaceAll(".", ",")??"").update({
-      "online": status == AppLifecycleStatus.online ? true : ServerValue.timestamp,
-    });
+    final currentUser = this.currentUser;
+    if(currentUser != null && currentUser.email.isNotEmpty){
+      await _databaseReferenceUsers.child(currentUser.email.encodeEmail()).update({
+        "online": status == AppLifecycleStatus.online ? true : ServerValue.timestamp,
+      });
+    }
   }
 
   // StreamSubscription<List<Notification>> getNotificationsData(String email)  {

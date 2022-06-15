@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/contacts_related_models/contacts_data_from_api.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_from.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
@@ -20,7 +23,7 @@ class VacationCubit extends Cubit<VacationInitial> {
   final RequestRepository _requestRepository;
 
 
-  void getRequestData(RequestStatus requestStatus) {
+  void getRequestData(RequestStatus requestStatus , String? requestNo) async {
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
       var formatter = DateFormat('EEEE dd-MM-yyyy');
@@ -35,10 +38,23 @@ class VacationCubit extends Cubit<VacationInitial> {
         ),
       );
     }else{
-      final requestDate = RequestDate.dirty("requestDate");
+
+
+      final requestData = await _requestRepository.getVacationRequestData(requestNo!);
+      requestData.comments = "Ahmed test";
+
+      final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.date!)));
+      final requestFromDate = DateFrom.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateFrom!)));
+      final requestToDate = DateTo.dirty(value: GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateTo!)), dateFrom: requestFromDate.value);
       emit(
         state.copyWith(
             requestDate: requestDate,
+            vacationType: int.parse(requestData.vacationType ?? "1"),
+            vacationFromDate: requestFromDate,
+            vacationToDate: requestToDate,
+            vacationDuration: requestData.noOfDays.toString(),
+            responsiblePerson: ContactsDataFromApi(email: requestData.responsible,name: requestData.responsible),
+            comment: requestData.comments,
             status: Formz.validate([requestDate,
                state.vacationFromDate,state.vacationToDate]),
             requestStatus: RequestStatus.oldRequest
@@ -172,7 +188,7 @@ class VacationCubit extends Cubit<VacationInitial> {
 
   }
 
-  Future<void> submitVacationRequest(String hrCode) async {
+  Future<void> submitVacationRequest() async {
     print("submit permission");
     final requestDate = RequestDate.dirty(state.requestDate.value);
     final vacationFromDate = DateFrom.dirty(state.vacationFromDate.value);
@@ -185,23 +201,23 @@ class VacationCubit extends Cubit<VacationInitial> {
     ));
     if (state.status.isValidated) {
       // print("Done permission");
-      final DateFormat dateFormatViewed = DateFormat("EEEE dd-MM-yyyy");
-      final DateFormat dateFormatServer = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
+      // final DateFormat dateFormatViewed = DateFormat("EEEE dd-MM-yyyy");
+      // final DateFormat dateFormatServer = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
       // "date" -> "2022-05-17T13:47:07"
-      DateTime requestDateTemp = dateFormatViewed.parse(requestDate.value);
-      final requestDateValue = dateFormatServer.format(requestDateTemp);
+      DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(requestDate.value);
+      final requestDateValue = GlobalConstants.dateFormatServer.format(requestDateTemp);
       print("requestDateValue $requestDateValue");
 
       // "date" -> "2022-05-17T13:47:07"
-      DateTime dateFromTemp = dateFormatViewed.parse(vacationFromDate.value);
-      final dateFromValue = dateFormatServer.format(dateFromTemp);
+      DateTime dateFromTemp = GlobalConstants.dateFormatViewed.parse(vacationFromDate.value);
+      final dateFromValue = GlobalConstants.dateFormatServer.format(dateFromTemp);
       print("dateFromValue $dateFromValue");
 
       // "dateTo" -> "2022-05-17T13:47:07"
-      DateTime dateToTemp = dateFormatViewed.parse(vacationToDate.value);
-      final dateToValue = dateFormatServer.format(dateToTemp);
+      DateTime dateToTemp = GlobalConstants.dateFormatViewed.parse(vacationToDate.value);
+      final dateToValue = GlobalConstants.dateFormatServer.format(dateToTemp);
       print("dateToValue $dateToValue");
 
       String responsibleHRCode = state.responsiblePerson.userHrCode ?? "";
@@ -222,9 +238,9 @@ class VacationCubit extends Cubit<VacationInitial> {
       final type = "${state.vacationType}";
       print("type $type");
 
-      print(hrCode);
+      // print(hrCode);
 
-      final vacationResponse = await _requestRepository.postVacationRequest(hrCode: hrCode,comments: comment,
+      final vacationResponse = await _requestRepository.postVacationRequest(comments: comment,
           dateFrom: dateFromValue,dateTo: dateToValue,requestDate: requestDateValue,type: type, responsibleHRCode: responsibleHRCode, noOfDays: noOfDays);
 
 

@@ -1,5 +1,5 @@
 
-class Economynews_Model{
+class EconomyNewsModel {
 
   String? author;
   String? title;
@@ -9,18 +9,18 @@ class Economynews_Model{
   String? publishedAt;
   String? content;
 
-  Economynews_Model(this.author, this.title, this.description, this.url,
+  EconomyNewsModel(this.author, this.title, this.description, this.url,
       this.urlToImage, this.publishedAt, this.content);
 
 
-  Economynews_Model.fromJson(Map<String, dynamic> json) {
-    author=json['author'];
-    title=json['title'];
-    description=json['description'];
-    url=json['url'];
-    urlToImage=json['urlToImage'];
-    publishedAt=json['publishedAt'];
-    content=json['content'];
+  EconomyNewsModel.fromJson(Map<String, dynamic> json) {
+    author = json['author'];
+    title = json['title'];
+    description = json['description'];
+    url = json['url'];
+    urlToImage = json['urlToImage'];
+    publishedAt = json['publishedAt'];
+    content = json['content'];
   }
 
 }

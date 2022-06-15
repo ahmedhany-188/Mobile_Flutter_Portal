@@ -3,10 +3,13 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class EconomyNewsTicketWidget extends StatelessWidget {
 
+  // ignore: non_constant_identifier_names
   List<dynamic> EconomyNewsTicketWidgetData;
 
+  // ignore: prefer_typing_uninitialized_variables
   var deviceSize;
 
   EconomyNewsTicketWidget(this.EconomyNewsTicketWidgetData, {Key? key})
@@ -49,12 +52,12 @@ class EconomyNewsTicketWidget extends StatelessWidget {
 
                     child: Container(
                       width: double.infinity,
-                      color: Color.fromARGB(100, 22, 44, 33),
-                      margin: EdgeInsets.all(10),
-                      padding: EdgeInsets.all(10),
+                      color: const Color.fromARGB(100, 22, 44, 33),
+                      margin: const EdgeInsets.all(10),
+                      padding: const EdgeInsets.all(10),
                       child: Text(
                         EconomyNewsTicketWidgetData[index]["title"],
-                        style: TextStyle(fontSize: 16, color: Colors.white),),
+                        style: const TextStyle(fontSize: 16, color: Colors.white),),
                     ),
                   );
                 }
@@ -71,7 +74,7 @@ class EconomyNewsTicketWidget extends StatelessWidget {
         image: NetworkImage(
             EconomyNewsTicketWidgetData[index]["urlToImage"]),
         fit: BoxFit.cover,
-        colorFilter: new ColorFilter.mode(
+        colorFilter:  ColorFilter.mode(
             Colors.black.withOpacity(0.7), BlendMode.dstIn),
       );
     }
@@ -79,7 +82,7 @@ class EconomyNewsTicketWidget extends StatelessWidget {
       return DecorationImage(
         image: const AssetImage("assets/images/S_Background.png"),
         fit: BoxFit.cover,
-        colorFilter: new ColorFilter.mode(
+        colorFilter: ColorFilter.mode(
             Colors.black.withOpacity(0.0), BlendMode.dstIn),
       );
     }

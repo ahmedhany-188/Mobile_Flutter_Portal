@@ -10,19 +10,19 @@ import 'package:hassanallamportalflutter/data/models/appraisal_models/object_app
 import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_ticket_widget.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 
-class EmployeeAppraisal_Screen extends StatefulWidget {
+class EmployeeAppraisalScreen extends StatefulWidget {
 
   static const routeName = "/employee-appraisal-list";
-  const EmployeeAppraisal_Screen({Key? key}) : super(key: key);
+  const EmployeeAppraisalScreen({Key? key}) : super(key: key);
 
   @override
-  State<EmployeeAppraisal_Screen> createState() => _EmployeeAppraisal_ScreenState();
+  State<EmployeeAppraisalScreen> createState() => EmployeeAppraisalScreenState();
 }
-  class _EmployeeAppraisal_ScreenState extends State<EmployeeAppraisal_Screen> {
+  class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
 
-    List<dynamic> ?employeeAppraisaleList;
+    List<dynamic> ?employeeAppraisalList;
     List <ObjectAppraisalModel> appraisalDataList = [];
-    EmployeeAppraisalModel ?employee_appraisal_model;
+    EmployeeAppraisalModel ?employeeAppraisalModel;
 
     @override
     Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class EmployeeAppraisal_Screen extends StatefulWidget {
           centerTitle: true,
         ),
         resizeToAvoidBottomInset: false,
-        // drawer: MainDrawer(),
+        drawer: MainDrawer(),
 
         body: BlocProvider<EmployeeAppraisalBlocCubit>(
           create: (context) =>
@@ -50,7 +50,7 @@ class EmployeeAppraisal_Screen extends StatefulWidget {
               EmployeeAppraisalBlocCubit,
               EmployeeAppraisalBlocState>(
             listener: (context, state) {
-              if (state is BlocgetEmployeeAppraisalBlocInitialSuccessState) {
+              if (state is BlocGetEmployeeAppraisalBlocInitialSuccessState) {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -58,19 +58,17 @@ class EmployeeAppraisal_Screen extends StatefulWidget {
                   ),
                 );
 
-                employeeAppraisaleList = jsonDecode(state.employeeAppraisaleList)["data"];
-                print("------------"+employeeAppraisaleList.toString());
+                employeeAppraisalList = jsonDecode(state.employeeAppraisaleList)["data"];
 
                 // employee_appraisal_model!.overallscore = employeeAppraisaleList!.elementAt(0)["overallscore"];
 
-                appraisalDataList.add(new ObjectAppraisalModel("Company", employeeAppraisaleList!.elementAt(0)["companyScore"]));
-                appraisalDataList.add(new ObjectAppraisalModel("Department", employeeAppraisaleList!.elementAt(0)["departmentScore"]));
-                appraisalDataList.add(new ObjectAppraisalModel("Individual", employeeAppraisaleList!.elementAt(0)["individualScore"]));
-                appraisalDataList.add(new ObjectAppraisalModel("Competence", employeeAppraisaleList!.elementAt(0)["competencescore"]));
+                appraisalDataList.add(ObjectAppraisalModel("Company", employeeAppraisalList!.elementAt(0)["companyScore"]));
+                appraisalDataList.add( ObjectAppraisalModel("Department", employeeAppraisalList!.elementAt(0)["departmentScore"]));
+                appraisalDataList.add( ObjectAppraisalModel("Individual", employeeAppraisalList!.elementAt(0)["individualScore"]));
+                appraisalDataList.add( ObjectAppraisalModel("Competence", employeeAppraisalList!.elementAt(0)["competencescore"]));
 
-                print("------------"+appraisalDataList.toString());
               } else
-              if (state is BlocgetEmployeeAppraisalBlocInitialErrorState) {
+              if (state is BlocGetEmployeeAppraisalBlocInitialErrorState) {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -78,7 +76,7 @@ class EmployeeAppraisal_Screen extends StatefulWidget {
                   ),
                 );
               } else
-              if (state is BlocgetEmployeeAppraisalBlocInitialLoadingState) {
+              if (state is BlocGetEmployeeAppraisalBlocInitialLoadingState) {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
@@ -98,10 +96,7 @@ class EmployeeAppraisal_Screen extends StatefulWidget {
                   ),
                   child: Column(
                     children: [
-                      Container(
-                        child: EmployeeAppraisalTicketWidget(appraisalDataList),
-
-                      )
+                      EmployeeAppraisalTicketWidget(appraisalDataList)
 
                     ],),
                 );

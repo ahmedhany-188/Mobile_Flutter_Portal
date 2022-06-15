@@ -211,7 +211,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
 
       print(hrCode);
 
-      final permissionResponse = await _requestRepository.postPermissionRequest(hrCode: hrCode,comments: comment,
+      final permissionResponse = await _requestRepository.postPermissionRequest(comments: comment,
           dateFrom: dateFrom,dateFromAmpm: dateFromAmpm,dateTo: dateTo,dateToAmpm: dateToAmpm,
           permissionDate: permissionDateValue,requestDate: requestDateValue,type: type);
 

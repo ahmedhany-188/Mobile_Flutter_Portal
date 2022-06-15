@@ -1,6 +1,7 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/data/data_providers/firebase_provider/FirebaseProvider.dart';
+
 
 import 'bloc/auth_app_status_bloc/app_bloc.dart';
 
@@ -60,7 +61,4 @@ class _LifeCycleStateState extends State<LifeCycleState> with WidgetsBindingObse
 
   }
 }
-enum AppLifecycleStatus{
-  online,
-  offline
-}
+

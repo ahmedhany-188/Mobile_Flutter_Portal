@@ -5,18 +5,19 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_ticket_widget.dart';
+import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
 
-class Attendance_Screen extends StatefulWidget {
+class AttendanceScreen extends StatefulWidget {
 
   static const routeName = '/myattendance-list-screen';
-  const Attendance_Screen({Key? key}) : super(key: key);
+  const AttendanceScreen({Key? key}) : super(key: key);
 
   @override
-  State<Attendance_Screen> createState() => _attendance_sreenState();
+  State<AttendanceScreen> createState() => AttendanceScreenStateClass();
 }
 
-class _attendance_sreenState extends State<Attendance_Screen> {
+class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
   bool loadingAttendanceData=false;
   int monthNumber = DateTime
@@ -42,10 +43,11 @@ class _attendance_sreenState extends State<Attendance_Screen> {
       ),
       resizeToAvoidBottomInset: false,
 
-      // drawer: MainDrawer(),
+      drawer: MainDrawer(),
 
       body: BlocProvider<AttendanceCubit>(
         create: (context) => AttendanceCubit()..getAttendanceList(user.user!.userHRCode.toString(), monthNumber),
+
         child:  BlocConsumer<AttendanceCubit, AttendanceState>(
           listener: (context, state) {
             if (state is BlocGetTheAttendanceSuccesState) {
@@ -63,7 +65,6 @@ class _attendance_sreenState extends State<Attendance_Screen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("Loading"),
-
                 ),
               );
             }
@@ -77,43 +78,47 @@ class _attendance_sreenState extends State<Attendance_Screen> {
             }
           },
           builder: (context, state) {
-            return Container(child: Column(children: [
-              Container(
-                child: Row(children: [
-                  Row(children: [
-                    RaisedButton(
-                      onPressed: () {
-                        monthNumber--;
-                        if (monthNumber < 1) {
-                          monthNumber = 12;
-                        }
-                        BlocProvider.of<AttendanceCubit>(context)
-                            .getAttendanceList(
-                            user.user!.userHRCode, monthNumber);
-                      },
-                      child: Text('prev'),
-                    ),
-                  ],
-                  ),
-                  Row(children: [
-                    RaisedButton(
-                      onPressed: () {
-                        monthNumber++;
-                        if (monthNumber > 12) {
-                          monthNumber = 1;
-                        }
-                        BlocProvider.of<AttendanceCubit>(context)
-                            .getAttendanceList(
-                            user.user!.userHRCode, monthNumber);
-                      },
-                      child: Text('next'),
-                    ),
-                  ],
-                    mainAxisAlignment: MainAxisAlignment.end,
+            return Container(
+              decoration: const BoxDecoration(
+                  image: DecorationImage(image: AssetImage(
+                      "assets/images/S_Background.png"),
+                      fit: BoxFit.cover)
+              ),
+              child: Column(children: [
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
+                Row(children: [
+                  // ignore: deprecated_member_use
+                  RaisedButton(
+                    onPressed: () {
+                      monthNumber--;
+                      if (monthNumber < 1) {
+                        monthNumber = 12;
+                      }
+                      BlocProvider.of<AttendanceCubit>(context)
+                          .getAttendanceList(
+                          user.user!.userHRCode, monthNumber);
+                    },
+                    child: Text('prev'),
                   ),
                 ],
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 ),
+                Row(mainAxisAlignment: MainAxisAlignment.end,children: [
+                  // ignore: deprecated_member_use
+                  RaisedButton(
+                    onPressed: () {
+                      monthNumber++;
+                      if (monthNumber > 12) {
+                        monthNumber = 1;
+                      }
+                      BlocProvider.of<AttendanceCubit>(context)
+                          .getAttendanceList(
+                          user.user!.userHRCode, monthNumber);
+                    },
+                    child: Text('next'),
+                  ),
+                ],
+                ),
+              ],
               ),
 
 
@@ -139,14 +144,10 @@ class _attendance_sreenState extends State<Attendance_Screen> {
               )
             ],
             ),
-              decoration: const BoxDecoration(
-                  image: DecorationImage(image: AssetImage(
-                      "assets/images/S_Background.png"),
-                      fit: BoxFit.cover)
-              ),
             );
           },
         ),
+
       ),
 
     );

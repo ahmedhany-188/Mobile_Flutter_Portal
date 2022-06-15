@@ -1,18 +1,18 @@
 part of 'access_right_cubit.dart';
 
 @immutable
-abstract class AccessRightState {
+abstract class AccessRightState extends Equatable{
 
   const AccessRightState();
 
-  const AccessRightState.copywith({
-    required RequestDate requestItems ,required RequestDate fromDate
-    , required RequestDate toDate,required FormzStatus status});
+  const AccessRightState.copyWith({
+    required RequestDate requestItems,required FormzStatus status,required });
 }
 
-class AccessRightInitial extends AccessRightState {
+class AccessRightInitial extends Equatable {
   const AccessRightInitial({
-    this.requestDate,
+    this.requestStatus = RequestStatus.newRequest,
+    this.requestDate = const RequestDate.pure(),
     this.requestType=1,
     this.requestItems  = const RequestDate.pure(),
     this.fromDate= const RequestDate.pure(),
@@ -25,9 +25,7 @@ class AccessRightInitial extends AccessRightState {
     this.successMessage,
   });
 
-
-
-  final String ?requestDate;
+  final RequestDate requestDate;
   final int requestType;
   final RequestDate requestItems;
   final RequestDate fromDate;
@@ -38,12 +36,13 @@ class AccessRightInitial extends AccessRightState {
   final FormzStatus status;
   final String? errorMessage;
   final String? successMessage;
+  final RequestStatus? requestStatus;
 
   @override
-  List<Object> get props => [requestItems,fromDate,toDate,status];
+  List<Object> get props => [requestDate,requestItems,fromDate,toDate,status];
 
   AccessRightInitial copyWith({
-    String ?requestDate,
+    RequestDate ?requestDate,
     int ?requestType,
     RequestDate ?requestItems,
      RequestDate ?fromDate,
@@ -54,6 +53,7 @@ class AccessRightInitial extends AccessRightState {
     FormzStatus ?status,
     String? errorMessage,
     String? successMessage,
+    RequestStatus? requestStatus,
   }) {
     return AccessRightInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -67,6 +67,7 @@ class AccessRightInitial extends AccessRightState {
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       successMessage: successMessage ?? this.successMessage,
+      requestStatus: requestStatus ?? this.requestStatus,
     );
   }
 

@@ -6,7 +6,7 @@ abstract class PermissionState extends Equatable {
   PermissionState.copyWith({required RequestDate requestDate, required FormzStatus status}) {}
 }
 
-class VacationInitial extends PermissionState {
+class VacationInitial extends Equatable {
 
   const VacationInitial({
     this.requestDate = const RequestDate.pure(),

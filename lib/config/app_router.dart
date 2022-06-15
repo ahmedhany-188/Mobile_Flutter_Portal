@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
-import 'package:hassanallamportalflutter/screens/admin_request_screen/travel_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
@@ -17,6 +17,7 @@ import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right
 import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
+import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
@@ -26,7 +27,6 @@ import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dar
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
-import '../data/models/contacts_related_models/contacts_data_from_api.dart';
 import '../screens/apps_screen/apps_screen.dart';
 import '../screens/notification_screen/notifications_screen.dart';
 import '../screens/polls_screen/polls_screen.dart';
@@ -73,24 +73,24 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const TapsScreen(),
         );
-      case ContactDetailScreen.routeName:
-        final args = settings.arguments as ContactsDataFromApi;
-        return MaterialPageRoute(
-          builder: (_) => ContactDetailScreen(selectedContactDataAsMap: args,),
-        );
+    // case ContactDetailScreen.routeName:
+    //   final args = settings.arguments as Map<String, dynamic>;
+    //   return MaterialPageRoute(
+    //     builder: (_) => ContactDetailScreen(selectedContactDataAsMap: args,),
+    //   );
       case GetDirectionScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => const GetDirectionScreen(),
         );
 
-      case Attendance_Screen.routeName:
+      case AttendanceScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => const Attendance_Screen(),
+          builder: (_) => const AttendanceScreen(),
         );
 
-      case EmployeeAppraisal_Screen.routeName:
+      case EmployeeAppraisalScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => const EmployeeAppraisal_Screen(),
+          builder: (_) => const EmployeeAppraisalScreen(),
         );
 
       case MedicalRequestScreen.routeName:
@@ -98,9 +98,9 @@ class AppRouter {
           builder: (_) => const MedicalRequestScreen(),
         );
 
-      case ProfileScreen.routeName:
+      case UserProfileScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => ProfileScreen(),
+          builder: (_) => const UserProfileScreen(),
         );
 
       case EconomyNewsScreen.routeName:
@@ -133,23 +133,25 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const PhotosScreen(),
         );
+
       case PermissionScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => const PermissionScreen(),
+          builder: (_) => PermissionScreen(requestNo: settings.arguments),
         );
+
       case VacationScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => VacationScreen(),
+          builder: (_) => VacationScreen(requestNo: settings.arguments),
         );
 
       case BusinessCardScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => BusinessCardScreen(),
+          builder: (_) => BusinessCardScreen(requestNo: settings.arguments),
         );
 
       case EmbassyLetterScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => EmbassyLetterScreen(),
+          builder: (_) => EmbassyLetterScreen(requestNo: settings.arguments),
         );
 
       case EmailAndUserAccountScreen.routeName:
@@ -159,18 +161,21 @@ class AppRouter {
 
       case AccessUserAccountScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => AccessUserAccountScreen(),
+          builder: (_) =>
+              AccessUserAccountScreen(requestNo: settings.arguments),
         );
 
-      // case TravelRequestScreen.routeName:
-      //   return MaterialPageRoute(
-      //     builder: (_) => TravelRequestScreen(),
-      //   );
+      case MyRequestsScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const MyRequestsScreen(),
+        );
+
 
       case BusinessMissionScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => BusinessMissionScreen(),
+          builder: (_) => BusinessMissionScreen(requestNo: settings.arguments),
         );
+
       case PollsScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => const PollsScreen(),
@@ -186,11 +191,11 @@ class AppRouter {
 
       case AppsScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => AppsScreen(),
+          builder: (_) => const AppsScreen(),
         );
       case NotificationsScreen.routeName:
         return MaterialPageRoute(
-            builder: (context) => NotificationsScreen()
+            builder: (context) => const NotificationsScreen()
         );
       default:
         return null;

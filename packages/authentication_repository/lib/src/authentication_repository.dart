@@ -13,7 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 enum AuthenticationStatus {authenticated, unauthenticated}
 class AuthenticationRepository {
   late final AuthenticationProvider authenticationProvider = AuthenticationProvider();
-  final _controller = StreamController<MainUserData>();
+  final StreamController<MainUserData>_controller = StreamController<MainUserData>();
   static const userCacheKey = '__user_cache_key__';
   static const employeeCacheKey = '__employeeData__';
   // final CacheClient _cache = CacheClient();
@@ -76,7 +76,7 @@ class AuthenticationRepository {
 
 
     // yield _cache.read<User>(key: userCacheKey) ?? User.empty;;
-    yield* _controller.stream;
+    // yield* _controller.stream;
   }
 
   Future<void> logIn({

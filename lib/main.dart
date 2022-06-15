@@ -1,21 +1,23 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/business_card_request/business_card_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/embassy_letter_request/embassy_letter_cubit.dart';
-import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/travel_request/travel_request_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/apps_screen_bloc/apps_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/it_request_bloc/access_right_request/access_right_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/it_request_bloc/email_useracount_request/email_useraccount_cubit.dart';
-// import 'package:hassanallamportalflutter/bloc/hr_request_bloc/permission_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/my_requests_detail_screen_bloc/my_requests_detail_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/my_requests_screen_bloc/my_requests_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
-import 'package:hassanallamportalflutter/data/data_providers/firebase_provider/FirebaseProvider.dart';
+import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.dart';
+import 'package:hassanallamportalflutter/data/repositories/upgrader_repository.dart';
 import 'package:hassanallamportalflutter/life_cycle_states.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
@@ -54,6 +56,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform, //This line is necessary
   );
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   HydratedBlocOverrides.runZoned(
     () => runApp(MyApp(appRouter: AppRouter(), connectivity: Connectivity())),
     storage: storage,
@@ -87,9 +90,11 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final platform = Theme.of(context).platform;
+    final platform = Theme
+        .of(context)
+        .platform;
     final AuthenticationRepository _authenticationRepository =
-        AuthenticationRepository.getInstance();
+    AuthenticationRepository.getInstance();
     print("build");
     // _authenticationRepository.init();
 
@@ -109,9 +114,16 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<SettingsCubit>(
             create: (counterCubitContext) => SettingsCubit(),
           ),
+          BlocProvider<ContactsCubit>(
+            create: (contactsCubitContext) =>
+            ContactsCubit()
+              ..getContacts(),
+            lazy: false,
+          ),
           BlocProvider<WeatherBloc>(
             create: (weatherBlocContext) =>
-                WeatherBloc()..add(WeatherRequest()),
+            WeatherBloc()
+              ..add(WeatherRequest()),
           ),
           BlocProvider<PayslipCubit>(
             create: (payslipContext) => PayslipCubit(),
@@ -119,74 +131,102 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<AttendanceCubit>(
             create: (attendanceCubitContext) => AttendanceCubit(),
           ),
-          BlocProvider<MedicalRequestCubit>(
-              create: (medicalRequestCubitContext) => MedicalRequestCubit()
-              // MedicalRequestCubit()..getSuccessMessage(),
-              ),
+
           BlocProvider<EconomyNewsCubit>(
             create: (economyNewsCubitContext) => EconomyNewsCubit(),
           ),
           BlocProvider<GetDirectionCubit>(
             create: (getDirectionCubitContext) =>
-                GetDirectionCubit()..getDirection(),
+            GetDirectionCubit()
+              ..getDirection(),
           ),
           BlocProvider<BenefitsCubit>(
-            create: (benefitsCubitContext) => BenefitsCubit()..getBenefits(),
+            create: (benefitsCubitContext) =>
+            BenefitsCubit()
+              ..getBenefits(),
           ),
           BlocProvider<SubsidiariesCubit>(
             create: (subsidiariesCubitContext) =>
-                SubsidiariesCubit()..getSubsidiaries(),
+            SubsidiariesCubit()
+              ..getSubsidiaries(),
           ),
 
-          BlocProvider<EmailUseraccountCubit>(
-            create: (emailUserAccountRequestContext) => EmailUseraccountCubit(),
-          ),
 
-          BlocProvider<EmbassyLetterCubit>(
-            create: (embassyLetterContext) => EmbassyLetterCubit(),
-          ),
 
-          BlocProvider<BusinessCardCubit>(
-            create: (businessCardRequestContext) => BusinessCardCubit(),
-          ),
 
-          BlocProvider<AccessRightCubit>(
-            create: (accessRightAccountRequestContext) => AccessRightCubit(),
-          ),
+          // BlocProvider<MedicalRequestCubit>(
+          //     create: (medicalRequestCubitContext) => MedicalRequestCubit()
+          //   // MedicalRequestCubit()..getSuccessMessage(),
+          // ),
+          // BlocProvider<EmailUserAccountCubit>(
+          //   create: (emailUserAccountRequestContext) =>
+          //       EmailUserAccountCubit(),
+          // ),
+          // BlocProvider<EmbassyLetterCubit>(
+          //   create: (embassyLetterContext) =>
+          //       EmbassyLetterCubit(),
+          // ),
+          // BlocProvider<BusinessCardCubit>(
+          //   create: (businessCardRequestContext) =>
+          //       BusinessCardCubit(),
+          // ),
+          // BlocProvider<AccessRightCubit>(
+          //   create: (accessRightAccountRequestContext) =>
+          //       AccessRightCubit(),
+          // ),
 
-          BlocProvider<TravelRequestCubit>(
-            create: (travelRequestContext) => TravelRequestCubit(),
+
+          BlocProvider<MyRequestsCubit>(
+            create: (travelRequestContext) =>
+                MyRequestsCubit(),
           ),
 
           BlocProvider<AppBloc>(
-            create: (authenticationContext) => AppBloc(
-              authenticationRepository: _authenticationRepository,
-            ),
+            create: (authenticationContext) =>
+                AppBloc(
+                  authenticationRepository: _authenticationRepository,
+                ),
           ),
           BlocProvider<LoginCubit>(
             create: (authenticationContext) =>
                 LoginCubit(_authenticationRepository),
           ),
           BlocProvider<PhotosCubit>(
-            create: (photosContext) => PhotosCubit()..getPhotos(),
+            create: (photosContext) =>
+            PhotosCubit()
+              ..getPhotos(),
           ),
           BlocProvider<VideosCubit>(
-            create: (videosContext) => VideosCubit()..getVideos(),
+            create: (videosContext) =>
+            VideosCubit()
+              ..getVideos(),
           ),
           BlocProvider<UserNotificationBloc>(
             lazy: true,
             create: (userNotificationContext) => UserNotificationBloc(
-              firebaseProvider: FirebaseProvider(
-                  BlocProvider.of<AppBloc>(userNotificationContext)
-                      .state
-                      .userData
-                      .user!),
-            ),
+              firebaseProvider: FirebaseProvider(BlocProvider
+                  .of<AppBloc>(userNotificationContext)
+                  .state
+                  .userData
+                  .user!),),
           ),
-          BlocProvider<ContactsCubit>(
-            create: (contactsContext) => ContactsCubit()..getContacts(),
+          BlocProvider<AppUpgraderCubit>(
             lazy: false,
+            create: (context) =>
+            AppUpgraderCubit(UpgraderRepository(),)
+              ..getUpgradeFromServer(context),
           ),
+
+          BlocProvider<AppBloc>(
+            create: (authenticationContext) =>
+                AppBloc(
+                  authenticationRepository: _authenticationRepository,
+                ),
+          ),
+
+
+
+
           // BlocProvider<PermissionCubit>(
           //   create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),
           // ),
@@ -204,7 +244,8 @@ class _MyAppState extends State<MyApp> {
             ),
             onGenerateRoute: widget.appRouter.onGenerateRoute,
           ),
-        ));
+        )
+    );
   }
 }
 

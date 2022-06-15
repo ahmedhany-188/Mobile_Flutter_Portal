@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
-import '../../data/data_providers/firebase_provider/FirebaseProvider.dart';
 import '../../life_cycle_states.dart';
 
 part 'app_event.dart';

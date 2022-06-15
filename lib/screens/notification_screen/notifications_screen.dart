@@ -1,6 +1,7 @@
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
-import 'package:hassanallamportalflutter/data/models/firebase_models/notification_model/Notification.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,28 +51,31 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         FirebaseUserNotification notification = state.notifications[index];
                         return InkWell(
                           onTap: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  backgroundColor:
-                                      Theme.of(context).colorScheme.background,
-                                  title: Text(notification.from ?? ""),
-                                  elevation: 20,
-                                  contentPadding: const EdgeInsets.all(10.0),
-                                  content: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        Text(notification.requestNo ?? ""),
-                                        Text(notification.type ?? ""),
-                                        Text(notification.requestType ?? ""),
-
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
+                            // notification.
+                            Navigator.of(context)
+                                .pushNamed(VacationScreen.routeName,arguments: {VacationScreen.requestNoKey: notification.requestNo});
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (context) {
+                            //     return AlertDialog(
+                            //       backgroundColor:
+                            //           Theme.of(context).colorScheme.background,
+                            //       title: Text(notification.from ?? ""),
+                            //       elevation: 20,
+                            //       contentPadding: const EdgeInsets.all(10.0),
+                            //       content: SingleChildScrollView(
+                            //         child: Column(
+                            //           children: [
+                            //             Text(notification.requestNo ?? ""),
+                            //             Text(notification.type ?? ""),
+                            //             Text(notification.requestType ?? ""),
+                            //
+                            //           ],
+                            //         ),
+                            //       ),
+                            //     );
+                            //   },
+                            // );
                           },
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
