@@ -41,11 +41,23 @@ class VacationCubit extends Cubit<VacationInitial> {
 
 
       final requestData = await _requestRepository.getVacationRequestData(requestNo!);
-      requestData.comments = "Ahmed test";
 
+
+
+      final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
+      final responsiblePerson  = ContactsDataFromApi(email: requestData.responsible!.contains("null") ? "No Data" : requestData.responsible,name: requestData.responsible!.contains("null") ? "No Data" : requestData.responsible);
       final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.date!)));
       final requestFromDate = DateFrom.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateFrom!)));
       final requestToDate = DateTo.dirty(value: GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateTo!)), dateFrom: requestFromDate.value);
+      var status = "Pending";
+      if(requestData.status == 0){
+        status = "Pending";
+      }else if (requestData.status == 1){
+        status = "Approved";
+      }else if (requestData.status == 2){
+        status = "Rejected";
+      }
+
       emit(
         state.copyWith(
             requestDate: requestDate,
@@ -53,11 +65,13 @@ class VacationCubit extends Cubit<VacationInitial> {
             vacationFromDate: requestFromDate,
             vacationToDate: requestToDate,
             vacationDuration: requestData.noOfDays.toString(),
-            responsiblePerson: ContactsDataFromApi(email: requestData.responsible,name: requestData.responsible),
-            comment: requestData.comments,
+            responsiblePerson: responsiblePerson,
+            comment: comments,
             status: Formz.validate([requestDate,
                state.vacationFromDate,state.vacationToDate]),
-            requestStatus: RequestStatus.oldRequest
+            requestStatus: RequestStatus.oldRequest,
+          statusAction: status,
+          takeActionStatus: (_requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
         ),
       );
     }

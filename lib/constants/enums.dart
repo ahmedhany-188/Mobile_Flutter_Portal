@@ -6,3 +6,7 @@ enum RequestStatus {
   newRequest,
   oldRequest
 }
+enum TakeActionStatus {
+  takeAction,
+  view
+}

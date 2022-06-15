@@ -1,6 +1,7 @@
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
@@ -52,8 +53,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         return InkWell(
                           onTap: () {
                             // notification.
-                            Navigator.of(context)
-                                .pushNamed(VacationScreen.routeName,arguments: {VacationScreen.requestNoKey: notification.requestNo});
+
+                            _pushForRequestDetail(notification);
+
                             // showDialog(
                             //   context: context,
                             //   builder: (context) {
@@ -131,5 +133,19 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           },
         ),
       );
+  }
+
+  _pushForRequestDetail(FirebaseUserNotification notification){
+    if(notification.requestType!.contains("Vacation")){
+      Navigator.of(context)
+          .pushNamed(VacationScreen.routeName,arguments: {VacationScreen.requestNoKey: notification.requestNo});
+    }else if(notification.requestType!.contains("Business Mission")){
+      Navigator.of(context)
+          .pushNamed(BusinessMissionScreen.routeName,arguments: {BusinessMissionScreen.requestNoKey: notification.requestNo});
+    }else if (notification.requestType!.contains("Permission")){
+
+    }else if (notification.requestType!.contains("")){
+
+    }
   }
 }

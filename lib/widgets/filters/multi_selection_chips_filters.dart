@@ -1,46 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
+class MultiSelectionChipsFilters extends StatelessWidget {
+  final List<String> filtersList;
+  final String filterName;
+  final List<String> initialValue;
+  final Function(List<Object?>) onConfirm;
+  final Function(Object?) onTap;
 
-class MultiSelectionChipsFilters extends StatefulWidget {
-  List<dynamic> selectedFilterForRemove = [];
-  List<dynamic> filtersList;
-  String filterName;
-  // String listKey;
-  List<dynamic> initialValue;
-  ValueSetter<List<dynamic>>? filterData;
+  const MultiSelectionChipsFilters({
+    Key? key,
+    required this.filtersList,
+    required this.filterName,
+    required this.initialValue,
+    required this.onConfirm,
+    required this.onTap,
+  }) : super(key: key);
 
-  MultiSelectionChipsFilters(
-      this.filtersList, this.filterName,  this.initialValue,
-      {Key? key, this.filterData})
-      : super(key: key);
-
-  @override
-  State<MultiSelectionChipsFilters> createState() =>
-      _ExpandedListViewForFilters();
-}
-
-class _ExpandedListViewForFilters extends State<MultiSelectionChipsFilters> {
   @override
   Widget build(BuildContext context) {
-    final _items = widget.filtersList
+    final items = filtersList
         .map((string) => MultiSelectItem(string, string))
         .toList();
 
     return MultiSelectBottomSheetField(
-      items: _items,
-      onSaved: (itemsListSelected) {},
-      title: Text(widget.filterName.toUpperCase()),
+      key: GlobalKey(),
+      items: items,
+      onConfirm: onConfirm,
+      initialValue: initialValue,
       searchable: true,
-      listType: MultiSelectListType.CHIP,
+      listType: MultiSelectListType.LIST,
+      title: Text(filterName.toUpperCase()),
       chipDisplay: MultiSelectChipDisplay(
         scrollBar: HorizontalScrollBar(isAlwaysShown: true),
         scroll: true,
-        onTap: (item) {
-          setState(() {
-            widget.selectedFilterForRemove.remove(item);
-          });
-        },
+        onTap: onTap,
         icon: const Icon(
           Icons.clear,
           color: Colors.red,
@@ -56,18 +50,12 @@ class _ExpandedListViewForFilters extends State<MultiSelectionChipsFilters> {
         Icons.filter_list_alt,
       ),
       buttonText: Text(
-        "Filter by ${widget.filterName.toLowerCase()}...",
+        "Filter by ${filterName.toLowerCase()}...",
         style: const TextStyle(
           fontSize: 16,
         ),
       ),
-      onConfirm: (selectedFilters) {
-        widget.selectedFilterForRemove = selectedFilters;
-        if (selectedFilters.isNotEmpty) {
-          widget.filterData!(selectedFilters);
-        } else {}
-      },
-      initialValue: widget.initialValue,
+
     );
   }
 }

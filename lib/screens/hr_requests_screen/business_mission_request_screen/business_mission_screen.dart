@@ -23,14 +23,14 @@ class BusinessMissionScreen extends StatefulWidget {
 class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
   @override
   Widget build(BuildContext context) {
-    final user = context.select((AppBloc bloc) =>
-    bloc.state.userData.employeeData);
-    final TextEditingController commentController = TextEditingController();
-
-
+    // final user = context.select((AppBloc bloc) =>
+    // bloc.state.userData.employeeData);
+    // final TextEditingController commentController = TextEditingController();
 
     final userMainData = context.select((AppBloc bloc) =>
     bloc.state.userData);
+
+    final currentRequestNo = widget.requestNo;
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -41,32 +41,36 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
         ),
       ),
       child: BlocProvider<BusinessMissionCubit>(
-        create: (permissionContext) =>
-        BusinessMissionCubit(RequestRepository(userMainData))
-          ..getRequestData(RequestStatus.newRequest),
-        child: Builder(
-            builder: (context) {
+        create: (businessMissionContext) =>
+        currentRequestNo == null ? (BusinessMissionCubit(
+            RequestRepository(userMainData))
+          ..getRequestData(RequestStatus.newRequest, ""))
+            : (BusinessMissionCubit(RequestRepository(userMainData))
+          ..getRequestData(RequestStatus.oldRequest,
+              currentRequestNo[BusinessMissionScreen.requestNoKey])),
+        child: BlocBuilder<BusinessMissionCubit, BusinessMissionInitial>(
+            builder: (context, state) {
               return Scaffold(
                 appBar: AppBar(title: const Text('Business Mission Request')),
                 floatingActionButton: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    if(context
-                        .read<BusinessMissionCubit>()
-                        .state
+                    if(state
                         .requestStatus ==
-                        RequestStatus.oldRequest)FloatingActionButton.extended(
+                        RequestStatus.oldRequest && state.takeActionStatus ==
+                        TakeActionStatus.takeAction)FloatingActionButton
+                        .extended(
                       heroTag: null,
                       onPressed: () {},
                       icon: const Icon(Icons.verified),
                       label: const Text('Accept'),
                     ),
                     const SizedBox(height: 12),
-                    if(context
-                        .read<BusinessMissionCubit>()
-                        .state
+                    if(state
                         .requestStatus ==
-                        RequestStatus.oldRequest)FloatingActionButton.extended(
+                        RequestStatus.oldRequest && state.takeActionStatus ==
+                        TakeActionStatus.takeAction)FloatingActionButton
+                        .extended(
                       backgroundColor: Colors.red,
                       heroTag: null,
                       onPressed: () {},
@@ -75,16 +79,13 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                       label: const Text('Reject'),
                     ),
                     const SizedBox(height: 12),
-                    if(context
-                        .read<BusinessMissionCubit>()
-                        .state
+                    if(state
                         .requestStatus == RequestStatus.newRequest)
                       FloatingActionButton.extended(
                         heroTag: null,
                         onPressed: () {
                           context.read<BusinessMissionCubit>()
-                              .submitBusinessMissionRequest(
-                              user?.userHrCode ?? "0");
+                              .submitBusinessMissionRequest();
                         },
                         icon: const Icon(Icons.send),
                         label: const Text('SUBMIT'),
@@ -101,8 +102,10 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                     if (state.status.isSubmissionSuccess) {
                       LoadingDialog.hide(context);
                       Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (_) => SuccessScreen(
-                            text: state.successMessage ?? "Error Number",)));
+                          MaterialPageRoute(builder: (_) =>
+                              SuccessScreen(
+                                text: state.successMessage ??
+                                    "Error Number",)));
                     }
                     if (state.status.isSubmissionFailure) {
                       LoadingDialog.hide(context);
@@ -122,6 +125,30 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: <Widget>[
+                            if(state.requestStatus ==
+                                RequestStatus.oldRequest)Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: BlocBuilder<
+                                  BusinessMissionCubit,
+                                  BusinessMissionInitial>(
+
+                                  builder: (context, state) {
+                                    return Text(state.statusAction ?? "Pending",
+                                      // style: TextStyle(decoration: BoxDecoration(
+                                      //   // labelText: 'Request Date',
+                                      //   errorText: state.requestDate.invalid
+                                      //       ? 'invalid request date'
+                                      //       : null,
+                                      //   prefixIcon: const Icon(
+                                      //       Icons.date_range),
+                                      // ),),
+
+                                    );
+                                  }
+                              ),
+                            ),
+
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
@@ -134,7 +161,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                   builder: (context, state) {
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue:state.requestDate.value,
+                                      initialValue: state.requestDate.value,
                                       enabled: false,
                                       decoration: InputDecoration(
                                         labelText: 'Request Date',
@@ -174,77 +201,49 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                             .center,
                                         children: [
                                           RadioListTile<int>(
+
                                             value: 1,
                                             title: Text("Meeting"),
-
-
-                                            groupValue:state.missionType,
-                                            // selected: (widget
-                                            //     .businessMissionFormModelData
-                                            //     .missionLocation == "1")
-                                            //     ? true
-                                            //     : false,
-
+                                            groupValue: state.missionType,
                                             onChanged: (permissionType) =>
-                                                context
+                                            state.requestStatus == RequestStatus.newRequest ? context
                                                     .read<
                                                     BusinessMissionCubit>()
                                                     .missionTypeChanged(
-                                                    permissionType!),
+                                                    permissionType!) : null,
                                           ),
                                           RadioListTile<int>(
                                             value: 2,
-                                            // dense: true,
                                             title: Text("Site Visit"),
-                                            groupValue:state.missionType,
-                                            // selected: (widget
-                                            //     .businessMissionFormModelData
-                                            //     .missionLocation == "2")
-                                            //     ? true
-                                            //     : false,
-                                            // radioClickState: (mstate) => mstate.value),
-                                            onChanged: (permissionType) =>
-                                                context
+                                            groupValue: state.missionType,
+                                            onChanged: (missionType) =>
+                                            state.requestStatus == RequestStatus.newRequest ? context
                                                     .read<
                                                     BusinessMissionCubit>()
                                                     .missionTypeChanged(
-                                                    permissionType!),
+                                                    missionType!) : null,
                                           ),
                                           RadioListTile<int>(
                                             value: 3,
-                                            // dense: true,
                                             title: Text("Training"),
-                                            groupValue:state.missionType,
-                                            // selected: (widget
-                                            //     .businessMissionFormModelData
-                                            //     .missionLocation == "3")
-                                            //     ? true
-                                            //     : false,
-                                            // radioClickState: (mstate) => mstate.value),
-                                            onChanged: (permissionType) =>
-                                                context
+                                            groupValue: state.missionType,
+                                            onChanged: (missionType) =>
+                                            state.requestStatus == RequestStatus.newRequest ? context
                                                     .read<
                                                     BusinessMissionCubit>()
                                                     .missionTypeChanged(
-                                                    permissionType!),
+                                                    missionType!):null,
                                           ),
                                           RadioListTile<int>(
                                             value: 4,
-                                            // dense: true,
-                                            title: Text("Others"),
-                                            groupValue:state.missionType,
-                                            // selected: (widget
-                                            //     .businessMissionFormModelData
-                                            //     .missionLocation == "4")
-                                            //     ? true
-                                            //     : false,
-                                            // radioClickState: (mstate) => mstate.value),
-                                            onChanged: (permissionType) =>
-                                                context
+                                            title: const Text("Others"),
+                                            groupValue: state.missionType,
+                                            onChanged: (missionType) =>
+                                            state.requestStatus == RequestStatus.newRequest ? context
                                                     .read<
                                                     BusinessMissionCubit>()
                                                     .missionTypeChanged(
-                                                    permissionType!),
+                                                    missionType!):null,
                                           ),
                                         ],
                                       );
@@ -268,14 +267,14 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                     print(state.dateFrom.value);
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue:state.dateFrom.value,
+                                      initialValue: state.dateFrom.value,
                                       onChanged: (vacationDate) =>
                                           context
                                               .read<BusinessMissionCubit>()
                                               .businessDateFromChanged(
                                               context),
                                       readOnly: true,
-
+                                      enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
@@ -288,15 +287,10 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                             Icons.date_range_outlined),
                                       ),
                                       onTap: () {
-                                        // vacationDateFromController.text =
-                                        //     formattedDate;
-                                        // (permissionDate) =>
-                                        // if (!widget.objectValidation) {
-                                        //   context
-                                        //       .read<BusinessMissionCubit>()
-                                        //       .businessDateFromChanged(
-                                        //       context);
-                                        // }
+                                        context
+                                            .read<BusinessMissionCubit>()
+                                            .businessDateFromChanged(
+                                            context);
                                       },
                                     );
                                   }
@@ -320,8 +314,9 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                   builder: (context, state) {
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue:state.dateTo.value,
+                                      initialValue: state.dateTo.value,
                                       readOnly: true,
+                                      enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
@@ -337,12 +332,10 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                             Icons.date_range_outlined),
                                       ),
                                       onTap: () {
-                                        // if (!widget.objectValidation) {
-                                        //   context
-                                        //       .read<BusinessMissionCubit>()
-                                        //       .businessToDateChanged(
-                                        //       context);
-                                        // }
+                                        context
+                                            .read<BusinessMissionCubit>()
+                                            .businessToDateChanged(
+                                            context);
                                       },
                                     );
                                   }
@@ -361,8 +354,9 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                   builder: (context, state) {
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue:state.timeFrom.value,
+                                      initialValue: state.timeFrom.value,
                                       readOnly: true,
+                                      enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
@@ -375,10 +369,10 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                       ),
                                       onTap: () async {
                                         // if (!widget.objectValidation) {
-                                        //   context
-                                        //       .read<BusinessMissionCubit>()
-                                        //       .businessTimeFromChanged(
-                                        //       context);
+                                        context
+                                            .read<BusinessMissionCubit>()
+                                            .businessTimeFromChanged(
+                                            context);
                                         // }
                                       },
                                     );
@@ -397,8 +391,9 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                   builder: (context, state) {
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue:state.timeTo.value,
+                                      initialValue: state.timeTo.value,
                                       readOnly: true,
+                                      enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
@@ -411,10 +406,10 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                       ),
                                       onTap: () async {
                                         // if (!widget.objectValidation) {
-                                        //   context
-                                        //       .read<BusinessMissionCubit>()
-                                        //       .businessTimeToChanged(
-                                        //       context);
+                                        context
+                                            .read<BusinessMissionCubit>()
+                                            .businessTimeToChanged(
+                                            context);
                                         // }
                                       },
                                     );
@@ -429,9 +424,17 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                   BusinessMissionInitial>(
                                   builder: (context, state) {
                                     return TextFormField(
-                                      // controller: (widget.objectValidation)
-                                      //     ? commentController
-                                      //     : null,
+                                      key: state.requestStatus ==
+                                          RequestStatus.oldRequest
+                                          ? UniqueKey()
+                                          : null,
+                                      initialValue: state.requestStatus ==
+                                          RequestStatus.oldRequest ? state
+                                          .comment : "",
+                                      enabled: state.requestStatus ==
+                                          RequestStatus.newRequest
+                                          ? true
+                                          : false,
                                       onChanged: (commentValue) =>
                                           context
                                               .read<BusinessMissionCubit>()
