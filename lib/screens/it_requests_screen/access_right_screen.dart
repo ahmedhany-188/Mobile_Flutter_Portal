@@ -138,7 +138,6 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                       const SizedBox(height: 12),
                     ],
                   ),
-                  drawer: MainDrawer(),
                   body: BlocListener<AccessRightCubit, AccessRightInitial>(
                     listener: (context, state) {
                       if (state.status.isSubmissionSuccess) {
@@ -200,47 +199,53 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                               ),
 
 
-                              const Text("Request Type"),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Text("Request Type"),
+                              ),
 
 
-                              BlocBuilder<AccessRightCubit,
-                                  AccessRightInitial>(
-                                  builder: (context, state) {
-                                    return Column(
-                                      crossAxisAlignment: CrossAxisAlignment
-                                          .start,
-                                      mainAxisAlignment: MainAxisAlignment
-                                          .center,
-                                      children: [
-                                        RadioListTile<int>(
-                                          value: 1,
-                                          title: const Text("Access Right"),
-                                          groupValue: state.requestType,
-                                          // selected: (state.requestType == 1) ? true : false,
-                                          onChanged: (accessType) =>
-                                          {
-                                            // state.requestStatus == RequestStatus.newRequest ?
-                                            context.read<AccessRightCubit>()
-                                                .accessRightChanged(
-                                                accessType!),
-                                          },
-                                        ),
-                                        RadioListTile<int>(
-                                          value: 2,
-                                          title: const Text("Disable"),
-                                          groupValue: state.requestType,
-                                          // selected: (state.requestType == 2) ? true : false,
-                                          onChanged: (accessType) =>
-                                          {
-                                            // state.requestStatus == RequestStatus.newRequest ?
-                                            context.read<AccessRightCubit>()
-                                                .accessRightChanged(
-                                                accessType!),
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  }
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: BlocBuilder<AccessRightCubit,
+                                    AccessRightInitial>(
+                                    builder: (context, state) {
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start,
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .center,
+                                        children: [
+                                          RadioListTile<int>(
+                                            value: 1,
+                                            title: const Text("Access Right"),
+                                            groupValue: state.requestType,
+                                            // selected: (state.requestType == 1) ? true : false,
+                                            onChanged: (accessType) =>
+                                            {
+                                              // state.requestStatus == RequestStatus.newRequest ?
+                                              context.read<AccessRightCubit>()
+                                                  .accessRightChanged(
+                                                  accessType!),
+                                            },
+                                          ),
+                                          RadioListTile<int>(
+                                            value: 2,
+                                            title: const Text("Disable"),
+                                            groupValue: state.requestType,
+                                            // selected: (state.requestType == 2) ? true : false,
+                                            onChanged: (accessType) =>
+                                            {
+                                              // state.requestStatus == RequestStatus.newRequest ?
+                                              context.read<AccessRightCubit>()
+                                                  .accessRightChanged(
+                                                  accessType!),
+                                            },
+                                          ),
+                                        ],
+                                      );
+                                    }
+                                ),
                               ),
 
                               Padding(
@@ -301,9 +306,12 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                               ),
 
 
-                              const Text(
-                                "* If you choose a USB Exception please download this file Download and upload after signatuer",
-                                style: TextStyle(color: Colors.red),),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: const Text(
+                                  "* If you choose a USB Exception please download this file Download and upload after signatuer",
+                                  style: TextStyle(color: Colors.red),),
+                              ),
 
 
                               Padding(

@@ -5,20 +5,22 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:hassanallamportalflutter/data/data_providers/admin_request_data_provider/embassy_letter_data_provider.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
+import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 
 part 'embassy_letter_state.dart';
 
 class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
-  EmbassyLetterCubit() : super(EmbassyLetterInitial());
+  EmbassyLetterCubit(this.requestRepository) : super(EmbassyLetterInitial());
 
   final Connectivity connectivity = Connectivity();
 
   static EmbassyLetterCubit get(context) => BlocProvider.of(context);
+
+  final RequestRepository requestRepository;
 
 
   void getSubmitEmbassyLetter(MainUserData user, String date) async {
@@ -27,7 +29,7 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
     final passportNO = RequestDate.dirty(state.passportNumber.value);
 
 
-    EmbassyLetterFormModel _embassyLetterFormModel;
+    EmbassyLetterFormModel embassyLetterFormModel;
 
     emit(state.copyWith(
       dateFrom: fromDate,
@@ -36,7 +38,7 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
       status: Formz.validate([fromDate, toDate, passportNO]),
     ));
     if (state.status.isValidated) {
-      _embassyLetterFormModel = EmbassyLetterFormModel(date, state.purpose, state.embassy,
+      embassyLetterFormModel = EmbassyLetterFormModel(date, state.purpose, state.embassy,
           state.dateFrom.value,
           state.dateTo.value,
           state.passportNumber.value,
@@ -45,24 +47,21 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
         var connectivityResult = await connectivity.checkConnectivity();
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
-          EmbassyLetterRequestDataProvider(_embassyLetterFormModel, user)
-              .getEmbassyLetterRequest()
-              .then((value) {
+          final embassyLetterResponse = await requestRepository.postEmbassyLetter(embassyLetterFormModel: embassyLetterFormModel);
+          if (embassyLetterResponse.id == 1) {
             emit(
               state.copyWith(
-                successMessage: value.body.toString(),
+                successMessage: embassyLetterResponse.requestNo,
                 status: FormzStatus.submissionSuccess,
               ),
             );
-          }).catchError((error) {
-            print(error.toString());
-            emit(
-              state.copyWith(
-                errorMessage: error.toString(),
-                status: FormzStatus.submissionFailure,
+          }else{
+                emit(state.copyWith(errorMessage: embassyLetterResponse.id == 1
+                    ? embassyLetterResponse.result
+                    : "An error occurred", status: FormzStatus.submissionFailure,
               ),
             );
-          });
+          };
         } else {
           emit(
             state.copyWith(

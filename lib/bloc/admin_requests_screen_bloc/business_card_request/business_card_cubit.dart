@@ -3,18 +3,21 @@ import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
-import 'package:hassanallamportalflutter/data/data_providers/admin_request_data_provider/business_card_data_provider.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/business_card_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
+import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:meta/meta.dart';
 
 part 'business_card_state.dart';
 
 class BusinessCardCubit extends Cubit<BusinessCardInitial> {
-  BusinessCardCubit() : super(BusinessCardInitial());
+  BusinessCardCubit(this.requestRepository) : super(BusinessCardInitial());
 
   final Connectivity connectivity = Connectivity();
   static BusinessCardCubit get(context) => BlocProvider.of(context);
+
+  final RequestRepository requestRepository;
+
 
   void getSubmitBusinessCard(MainUserData user,String date) async{
 
@@ -22,7 +25,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
     final employeeName = RequestDate.dirty(state.employeeNameCard.value);
     final employeeMobile = RequestDate.dirty(state.employeeMobile.value);
 
-    BusinessCardFormModel _businessCardFormModel;
+    BusinessCardFormModel businessCardFormModel;
 
     emit(state.copyWith(
       employeeNameCard: employeeName,
@@ -32,7 +35,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
 
     if(state.status.isValidated){
 
-      _businessCardFormModel=BusinessCardFormModel(date, employeeName.value,
+      businessCardFormModel=BusinessCardFormModel(date, employeeName.value,
           employeeMobile.value, state.employeeExt, state.employeeFaxNO, state.comment);
 
 
@@ -41,24 +44,20 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
 
-          BusinessCardRequestDataProvider(_businessCardFormModel,user)
-              .getBusinessCardRequest()
-              .then((value){
-            emit(
-              state.copyWith(
-                successMessage: value.body.toString(),
-                status: FormzStatus.submissionSuccess,
-              ),
+          final accessBusinessCardResponse = await requestRepository
+              .postBusinessCard(businessCardFormModel: businessCardFormModel);
+          if (accessBusinessCardResponse.id == 1) {
+            emit(state.copyWith(successMessage: accessBusinessCardResponse.requestNo,
+              status: FormzStatus.submissionSuccess,
+            ),
             );
-          }).catchError((error) {
-            print(error.toString());
-            emit(
-              state.copyWith(
-                errorMessage: error.toString(),
-                status: FormzStatus.submissionFailure,
-              ),
+          } else {
+            emit(state.copyWith(errorMessage: accessBusinessCardResponse.id == 1
+                ? accessBusinessCardResponse.result
+                : "An error occurred", status: FormzStatus.submissionFailure,
+            ),
             );
-          });
+          }
         } else {
           emit(
             state.copyWith(

@@ -1,6 +1,6 @@
 class PermissionFormModelData{
-  int requestNo,status,type;
-  String  serviceId, requestHrCode,
+ final int? requestNo,status,type;
+  final String?  serviceId, requestHrCode,
    date,
   comments,
   dateFrom,
@@ -22,4 +22,9 @@ class PermissionFormModelData{
       this.dateToAmpm,
       this.permissionDate,
       );
+
+
+
+
+
 }

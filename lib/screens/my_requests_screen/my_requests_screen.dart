@@ -32,7 +32,6 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
 
     // ignore: non_constant_identifier_names
     List<dynamic> MyRequestsListData = [];
-    String myRequestStringData = "";
 
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
@@ -60,8 +59,8 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                   content: Text("Success"),
                 ),
               );
-              myRequestStringData = state.getMyRequests;
-              MyRequestsListData = jsonDecode(myRequestStringData);
+
+              MyRequestsListData =  state.getMyRequests;
             }
             else if (state is BlocGetMyRequestsLoadingState) {
               ScaffoldMessenger.of(context).hideCurrentSnackBar();

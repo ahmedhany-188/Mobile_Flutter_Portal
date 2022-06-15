@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,7 +12,7 @@ class MyRequestsCubit extends Cubit<MyRequestsState> {
   MyRequestsCubit() : super(MyRequestsInitial());
 
   static MyRequestsCubit get(context) =>BlocProvider.of(context);
-  String myRequests ="";
+  List<dynamic> myRequests=[];
 
   final Connectivity connectivity = Connectivity();
 
@@ -22,7 +24,7 @@ class MyRequestsCubit extends Cubit<MyRequestsState> {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
         MyRequestsDataProvider().getMyRequestsList(userHRcode).then((value){
-          myRequests = value.body;
+          myRequests =jsonDecode(value.body);
           emit(BlocGetMyRequestsSuccesState(myRequests));
         }).catchError((error){
           emit(BlocGetMyRequestsErrorState(error.toString()));

@@ -1,12 +1,22 @@
 
 class EmailUserFormModel {
 
-  String ?requestDate, userMobile;
-  int ?requestType;
+  final String ?requestDate, userMobile;
+  final int ?requestType;
 
-  bool ?accountType,valid;
+  final bool ?accountType, valid;
 
   EmailUserFormModel(this.requestDate, this.requestType, this.userMobile,
-      this.accountType);
+      this.accountType, this.valid);
+
+
+  EmailUserFormModel.fromJson(Map<String, dynamic> json):
+
+        requestDate= json["date"],
+        requestType=json["reqType"],
+        userMobile=json["ownerMobile"],
+        valid =json["valid"],
+        accountType=json["emailAccount"];
+
 }
 
