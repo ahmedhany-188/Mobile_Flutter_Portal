@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:intl/intl.dart';
@@ -16,12 +17,10 @@ part 'business_mission_state.dart';
 
 class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
   BusinessMissionCubit(this._requestRepository) : super(const BusinessMissionInitial());
-  // LoginCubit(this._authenticationRepository) : super(const LoginState());
-
   final RequestRepository _requestRepository;
 
 
-  void getRequestData(RequestStatus requestStatus) {
+  void getRequestData(RequestStatus requestStatus, String? requestNo) async{
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
       var formatter = DateFormat('EEEE dd-MM-yyyy');
@@ -36,13 +35,37 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
         ),
       );
     }else{
-      final requestDate = RequestDate.dirty("requestDate");
+      final requestData = await _requestRepository.getBusinessMissionRequestData(requestNo!);
+
+      final requestFromDate = DateFrom.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateFrom!)));
+      final requestToDate = DateTo.dirty(value: GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateTo!)), dateFrom: requestFromDate.value);
+      final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.date!)));
+      final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
+      final hoursFrom  = TimeFrom.dirty("${requestData.hourFrom} ${requestData.dateFromAmpm}");
+      final hoursTo  = TimeTo.dirty("${requestData.hourTo} ${requestData.dateToAmpm}");
+      var status = "Pending";
+      if(requestData.status == 0){
+        status = "Pending";
+      }else if (requestData.status == 1){
+        status = "Approved";
+      }else if (requestData.status == 2){
+        status = "Rejected";
+      }
+
       emit(
         state.copyWith(
             requestDate: requestDate,
+            dateFrom: requestFromDate,
+            dateTo: requestToDate,
+            missionType: int.parse(requestData.missionLocation ?? "1"),
+            comment: comments,
+            timeFrom: hoursFrom,
+            timeTo: hoursTo,
             status: Formz.validate([requestDate,
               state.timeFrom , state.dateFrom]),
-            requestStatus: RequestStatus.oldRequest
+            requestStatus: RequestStatus.oldRequest,
+            statusAction: status,
+            takeActionStatus: (_requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
         ),
       );
     }
@@ -152,9 +175,6 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
     );
   }
   void commentChanged(String value) {
-
-    // final permissionTime = PermissionTime.dirty(value);
-    // print(permissionTime.value);
     emit(
       state.copyWith(
         comment: value,
@@ -163,7 +183,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
     );
   }
 
-  Future<void> submitBusinessMissionRequest(String hrCode) async {
+  Future<void> submitBusinessMissionRequest() async {
     print("submit permission");
     final requestDate = RequestDate.dirty(state.requestDate.value);
     final dateFrom = DateFrom.dirty(state.dateFrom.value);
@@ -182,20 +202,20 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
       // print("Done permission");
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
-      final DateFormat dateFormatViewed = DateFormat("EEEE dd-MM-yyyy");
-      final DateFormat dateFormatServer = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
+      // final DateFormat dateFormatViewed = DateFormat("EEEE dd-MM-yyyy");
+      // final DateFormat dateFormatServer = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
       // "date" -> "2022-05-17T13:47:07"
-      DateTime requestDateTemp = dateFormatViewed.parse(requestDate.value);
-      final requestDateValue = dateFormatServer.format(requestDateTemp);
+      DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(requestDate.value);
+      final requestDateValue = GlobalConstants.dateFormatServer.format(requestDateTemp);
       print("requestDateValue $requestDateValue");
 
       // "permissionDate" -> "2022-05-17T00:00:00"
-      DateTime dateFromTemp = dateFormatViewed.parse(dateFrom.value);
-      final dateFromValue = dateFormatServer.format(dateFromTemp);
+      DateTime dateFromTemp = GlobalConstants.dateFormatViewed.parse(dateFrom.value);
+      final dateFromValue = GlobalConstants.dateFormatServer.format(dateFromTemp);
       print("dateFromValue $dateFromValue");
 
-      DateTime dateToTemp = dateFormatViewed.parse(dateTo.value);
-      final dateToValue = dateFormatServer.format(dateToTemp);
+      DateTime dateToTemp = GlobalConstants.dateFormatViewed.parse(dateTo.value);
+      final dateToValue = GlobalConstants.dateFormatServer.format(dateToTemp);
       print("dateToValue $dateToValue");
       // "comments" -> "Aaaaa"
       final comment = state.comment;
@@ -218,7 +238,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
       final type = "${state.missionType}";
       print("type $type");
 
-      print(hrCode);
+      // print(hrCode);
 
 
       final businessMissionResponse = await _requestRepository.postBusinessMission(comments: comment,

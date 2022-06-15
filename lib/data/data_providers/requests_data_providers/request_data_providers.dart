@@ -103,4 +103,13 @@ class RequestDataProviders {
     print(businessMissionFeedbackRequest.body);
     return businessMissionFeedbackRequest;
   }
+
+  Future<http.Response> getBusinessMissionRequestData(String hrCode,String requestNo) async{
+    http.Response rawDurationData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/GetBusinessMission?HRCode=$hrCode&requestno=$requestNo"),
+    );
+    print(rawDurationData.body);
+    return rawDurationData;
+  }
 }

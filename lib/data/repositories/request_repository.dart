@@ -8,6 +8,7 @@ import 'package:hassanallamportalflutter/data/models/admin_requests_models/busin
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/my_requests_model/my_business_mission_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_vacation_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_duration_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_response.dart';
@@ -15,6 +16,7 @@ import 'package:hassanallamportalflutter/data/models/requests_form_models/reques
 import 'package:http/http.dart' as http;
 
 import '../../constants/request_service_id.dart';
+import '../models/requests_form_models/request_business_mission_data_model.dart';
 
 class RequestRepository {
   final RequestDataProviders requestDataProviders = RequestDataProviders();
@@ -233,6 +235,14 @@ return response;
         .getVacationRequestData(userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final VacationRequestData response = VacationRequestData.fromJson(json[0]);
+
+    return response;
+  }
+  Future<BusinessMissionRequestData> getBusinessMissionRequestData(String requestNo) async{
+    final http.Response rawRequestData = await requestDataProviders
+        .getBusinessMissionRequestData(userData.user?.userHRCode ?? "",requestNo);
+    final json = await jsonDecode(rawRequestData.body);
+    final BusinessMissionRequestData response = BusinessMissionRequestData.fromJson(json[0]);
 
     return response;
   }

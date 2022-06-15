@@ -20,6 +20,8 @@ class BusinessMissionInitial extends BusinessMissionState {
     this.successMessage,
     this.requestStatus,
     this.comment = "",
+    this.statusAction,
+    this.takeActionStatus,
   });
 
   final RequestDate requestDate;
@@ -33,6 +35,8 @@ class BusinessMissionInitial extends BusinessMissionState {
   final String? successMessage;
   final RequestStatus? requestStatus;
   final String comment;
+  final TakeActionStatus? takeActionStatus;
+  final String? statusAction;
 
   @override
   List<Object> get props => [requestDate, dateFrom,dateTo,missionType,timeFrom,timeTo, status,comment];
@@ -49,6 +53,8 @@ class BusinessMissionInitial extends BusinessMissionState {
     String? successMessage,
     RequestStatus? requestStatus,
     String? comment,
+    TakeActionStatus? takeActionStatus,
+    String? statusAction
   }) {
     return BusinessMissionInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -62,6 +68,8 @@ class BusinessMissionInitial extends BusinessMissionState {
       successMessage: successMessage ?? this.successMessage,
       requestStatus: requestStatus ?? this.requestStatus,
       comment: comment ?? this.comment,
+      statusAction: statusAction ?? this.statusAction,
+      takeActionStatus: takeActionStatus ?? this.takeActionStatus,
 
     );
   }
