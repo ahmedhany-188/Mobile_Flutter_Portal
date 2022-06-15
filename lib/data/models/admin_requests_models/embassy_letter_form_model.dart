@@ -3,10 +3,11 @@
 class EmbassyLetterFormModel {
 
 
-  String ?requestDate, purpose, embassy, dateFrom, dateTo, passportNo, comments,
+  final String ?requestDate, purpose, embassy, dateFrom, dateTo, passportNo,
+      comments,
       addSalary;
 
-  EmbassyLetterFormModel(this.requestDate,
+  const EmbassyLetterFormModel(this.requestDate,
       this.purpose,
       this.embassy,
       this.dateFrom,
@@ -14,4 +15,19 @@ class EmbassyLetterFormModel {
       this.passportNo,
       this.addSalary,
       this.comments);
+
+
+  EmbassyLetterFormModel.fromJson(Map<String, dynamic>json)
+      :
+
+        requestDate=json["date"],
+        purpose=json["purpose"],
+        embassy=json["embassyId"],
+        dateFrom=json["dateFrom"],
+        dateTo=json["dateTo"],
+        passportNo=json["passportNo"],
+        addSalary=json["addSalary"],
+        comments=json["comments"];
+
+
 }

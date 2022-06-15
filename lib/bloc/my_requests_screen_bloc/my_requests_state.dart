@@ -9,7 +9,7 @@ class BlocGetMyRequestsLoadingState extends MyRequestsState{}
 
 // ignore: must_be_immutable
 class BlocGetMyRequestsSuccesState extends MyRequestsState{
-  String getMyRequests;
+  List<dynamic> getMyRequests;
   BlocGetMyRequestsSuccesState(this.getMyRequests);
 }
 

@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/constants/enums.dart';
-import 'package:hassanallamportalflutter/data/data_providers/it_request_data_provider/itaccess_right_data_provider.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
@@ -17,13 +15,13 @@ import 'package:intl/intl.dart';
 part 'access_right_state.dart';
 
 class AccessRightCubit extends Cubit<AccessRightInitial> {
-  AccessRightCubit(this._requestRepository) : super(const AccessRightInitial());
+  AccessRightCubit(this.requestRepository) : super(const AccessRightInitial());
 
   final Connectivity connectivity = Connectivity();
 
   static AccessRightCubit get(context) => BlocProvider.of(context);
 
-  final RequestRepository _requestRepository;
+  final RequestRepository requestRepository;
 
   void getRequestData(RequestStatus requestStatus, String? requestNo) async {
     if (requestStatus == RequestStatus.newRequest) {
@@ -74,18 +72,18 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
           false,
           false,
           state.permanent,
-          state.fromDate.value,
-          state.toDate.value,
           state.requestDate.value,
+        state.fromDate.value,
+        state.toDate.value,
           state.filePDF,
           state.comments,
-          items);
+          );
 
       try {
         var connectivityResult = await connectivity.checkConnectivity();
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
-          final accessResponse = await _requestRepository
+          final accessResponse = await requestRepository
               .postAccessRightRequest(accessRightModel: accessRightModel);
           if (accessResponse.id == 1) {
             emit(state.copyWith(successMessage: accessResponse.requestNo,

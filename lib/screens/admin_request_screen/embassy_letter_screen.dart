@@ -7,6 +7,7 @@ import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/embassy_letter_request/embassy_letter_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
+import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
@@ -14,11 +15,11 @@ import 'package:intl/intl.dart';
 class EmbassyLetterScreen extends StatefulWidget{
 
   static const routeName = "/embassy-letter-screen";
+  static const requestNoKey = 'request-No';
 
-  const EmbassyLetterScreen({Key? key,required this.embassyLetterFormModel,required this.objectValidation}) : super(key: key);
+  const EmbassyLetterScreen({Key? key,this.requestNo}) : super(key: key);
 
-  final EmbassyLetterFormModel embassyLetterFormModel;
-  final bool objectValidation;
+  final requestNo;
 
   @override
   State<EmbassyLetterScreen> createState() => _EmbassyLetterScreen();
@@ -265,13 +266,6 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
     final TextEditingController passportController = TextEditingController();
     final TextEditingController commentController = TextEditingController();
 
-    if (widget.objectValidation) {
-      passportController.text =
-          widget.embassyLetterFormModel.passportNo.toString();
-      commentController.text =
-          widget.embassyLetterFormModel.comments.toString();
-    }
-
     return Theme(
       data: Theme.of(context).copyWith(
         inputDecorationTheme: InputDecorationTheme(
@@ -282,7 +276,7 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
       ),
       child: BlocProvider<EmbassyLetterCubit>(
         create: (embassyLetterContext) =>
-            EmbassyLetterCubit(),
+            EmbassyLetterCubit(RequestRepository(user)),
         child: Builder(
             builder: (context) {
               return Scaffold(
@@ -292,7 +286,58 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                 ),
                 resizeToAvoidBottomInset: false,
 
-                drawer: MainDrawer(),
+                /*
+                floatingActionButton: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      if(context
+                          .read<AccessRightCubit>()
+                          .state
+                          .requestStatus ==
+                          RequestStatus.oldRequest)FloatingActionButton
+                          .extended(
+                        heroTag: null,
+                        onPressed: () {},
+                        icon: const Icon(Icons.verified),
+                        label: const Text('Accept'),
+                      ),
+                      const SizedBox(height: 12),
+                      if(context
+                          .read<AccessRightCubit>()
+                          .state
+                          .requestStatus ==
+                          RequestStatus.oldRequest)FloatingActionButton
+                          .extended(
+                        backgroundColor: Colors.red,
+                        heroTag: null,
+                        onPressed: () {},
+                        icon: const Icon(Icons.dangerous),
+
+                        label: const Text('Reject'),
+                      ),
+                      const SizedBox(height: 12),
+                      if(context
+                          .read<AccessRightCubit>()
+                          .state
+                          .requestStatus == RequestStatus.newRequest)
+                        FloatingActionButton.extended(
+                          heroTag: null,
+                          onPressed: () {
+                            context.read<AccessRightCubit>()
+                                .getSubmitAccessRight(selectedTypes);
+                          },
+                          // formBloc.state.status.isValidated
+                          //       ? () => formBloc.submitPermissionRequest()
+                          //       : null,
+                          // formBloc.submitPermissionRequest();
+
+                          icon: const Icon(Icons.send),
+                          label: const Text('SUBMIT'),
+                        ),
+                      const SizedBox(height: 12),
+                    ],
+                  ),
+                 */
 
 
                 body: BlocListener<EmbassyLetterCubit, EmbassyLetterInitial>(
@@ -334,260 +379,246 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                         child: Column(
                           children: [
 
-                            TextFormField(
-                              initialValue: (widget.objectValidation)
-                                  ? widget
-                                  .embassyLetterFormModel.requestDate
-                                  : formattedDate,
-                              key: UniqueKey(),
-                              readOnly: true,
-                              decoration: const InputDecoration(
-                                floatingLabelAlignment:
-                                FloatingLabelAlignment.start,
-                                labelText: 'Request Date',
-                                prefixIcon: Icon(
-                                    Icons.calendar_today),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                initialValue:formattedDate,
+                                key: UniqueKey(),
+                                readOnly: true,
+                                decoration: const InputDecoration(
+                                  floatingLabelAlignment:
+                                  FloatingLabelAlignment.start,
+                                  labelText: 'Request Date',
+                                  prefixIcon: Icon(
+                                      Icons.calendar_today),
+                                ),
+                              ),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<EmbassyLetterCubit,
+                                  EmbassyLetterInitial>(
+                                builder: (context, state) {
+                                  return DropdownButtonHideUnderline(
+
+                                    child: DropdownButtonFormField(
+
+
+                                      hint: Text(
+                                        state.purpose,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      items: purposeList.map((item) =>
+                                          DropdownMenuItem<String>(
+                                            value: item, child: Text(item,
+                                            style: const TextStyle(fontSize: 14,),
+                                          ),
+                                          )).toList(),
+
+                                      onChanged: (value) {
+                                        setState(() {
+                                          context.read<EmbassyLetterCubit>()
+                                              .addSelectedPurpose(
+                                              value.toString());
+                                        });
+                                      },
+                                    ),
+                                  );
+                                },),
+                            ),
+
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<EmbassyLetterCubit,
+                                  EmbassyLetterInitial>(
+                                builder: (context, state) {
+                                  return DropdownButtonHideUnderline(
+                                    child: DropdownButtonFormField(
+                                      hint: Text(state.embassy,
+
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+
+                                      items: embassyList.map((item) =>
+                                          DropdownMenuItem<String>(
+                                            value: item, child: Text(item,
+                                            style: const TextStyle(fontSize: 14,),
+                                          ),
+                                          )).toList(),
+
+                                      onChanged: (value) {
+                                        setState(() {
+                                          context.read<EmbassyLetterCubit>()
+                                              .addSelectedEmbassy(
+                                              value.toString());
+                                        });
+                                      },
+                                    ),
+                                  );
+                                },),
+                            ),
+
+
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<EmbassyLetterCubit,
+                                  EmbassyLetterInitial>(
+                                builder: (context, state) {
+                                  return TextFormField(
+
+                                    initialValue:state.dateFrom.value,
+
+                                    key: UniqueKey(),
+                                    readOnly: true,
+                                    decoration: InputDecoration(
+                                      floatingLabelAlignment:
+                                      FloatingLabelAlignment.start,
+                                      labelText: 'From Date',
+                                      errorText: state.dateFrom.invalid
+                                          ? 'invalid Date'
+                                          : null,
+                                      prefixIcon: const Icon(
+                                          Icons.calendar_today),
+                                    ),
+                                    onTap: () async {
+
+                                        context.read<EmbassyLetterCubit>().
+                                        selectDate(context, "from");
+
+                                    },
+                                  );
+                                },),
+                            ),
+
+
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<EmbassyLetterCubit,
+                                  EmbassyLetterInitial>(
+                                builder: (context, state) {
+                                  return TextFormField(
+                                    initialValue:state.dateTo.value,
+
+                                    key: UniqueKey(),
+                                    readOnly: true,
+                                    decoration: InputDecoration(
+                                      floatingLabelAlignment:
+                                      FloatingLabelAlignment.start,
+                                      labelText: 'To Date',
+                                      errorText: state.dateTo.invalid
+                                          ? 'invalid Date'
+                                          : null,
+                                      prefixIcon: const Icon(
+                                          Icons.calendar_today),
+                                    ),
+                                    onTap: () async {
+                                      // if (!widget.objectValidation) {
+                                      //   context.read<EmbassyLetterCubit>().
+                                      //   selectDate(context, "to");
+                                      // }
+                                    },
+                                  );
+                                },),
+                            ),
+
+
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<EmbassyLetterCubit,
+                                  EmbassyLetterInitial>(
+                                  builder: (context, state) {
+                                    return TextField(
+                                        controller: passportController,
+                                        onChanged: (value) {
+                                          context.read<EmbassyLetterCubit>()
+                                              .passportNo(value);
+                                        },
+                                        // enabled: (widget.objectValidation)
+                                        //     ? false
+                                        //     : true,
+                                        keyboardType: TextInputType.number,
+                                        decoration: InputDecoration(
+
+                                          floatingLabelAlignment:
+                                          FloatingLabelAlignment.start,
+                                          labelText: "Passport NO",
+                                          prefixIcon: const Icon(Icons.book),
+
+                                          errorText: state.passportNumber.invalid
+                                              ? 'invalid Passport NO'
+                                              : null,
+                                        )
+                                    );
+                                  }
                               ),
                             ),
 
 
-                            Container(height: 10),
-
-                            BlocBuilder<EmbassyLetterCubit,
-                                EmbassyLetterInitial>(
-                              builder: (context, state) {
-                                return DropdownButtonHideUnderline(
-
-                                  child: DropdownButtonFormField(
-
-
-                                    hint: Text(
-                                      (widget.objectValidation)
-                                          ? widget.embassyLetterFormModel
-                                          .purpose
-                                          .toString()
-                                          : state.purpose,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    items: (widget.objectValidation) ? null :
-                                    purposeList.map((item) =>
-                                        DropdownMenuItem<String>(
-                                          value: item, child: Text(item,
-                                          style: const TextStyle(fontSize: 14,),
-                                        ),
-                                        )).toList(),
-
-                                    onChanged: (value) {
-                                      setState(() {
-                                        context.read<EmbassyLetterCubit>()
-                                            .addSelectedPurpose(
-                                            value.toString());
-                                      });
-                                    },
-                                  ),
-                                );
-                              },),
-
-                            Container(height: 10,),
-
-                            BlocBuilder<EmbassyLetterCubit,
-                                EmbassyLetterInitial>(
-                              builder: (context, state) {
-                                return DropdownButtonHideUnderline(
-                                  child: DropdownButtonFormField(
-                                    hint: Text(
-                                      (widget.objectValidation)
-                                          ? widget.embassyLetterFormModel
-                                          .embassy
-                                          .toString()
-                                          : state.embassy,
-
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-
-                                    items: (widget.objectValidation) ? null :
-                                    embassyList.map((item) =>
-                                        DropdownMenuItem<String>(
-                                          value: item, child: Text(item,
-                                          style: const TextStyle(fontSize: 14,),
-                                        ),
-                                        )).toList(),
-
-                                    onChanged: (value) {
-                                      setState(() {
-                                        context.read<EmbassyLetterCubit>()
-                                            .addSelectedEmbassy(
-                                            value.toString());
-                                      });
-                                    },
-                                  ),
-                                );
-                              },),
-
-                            Container(height: 10,),
-
-
-                            BlocBuilder<EmbassyLetterCubit,
-                                EmbassyLetterInitial>(
-                              builder: (context, state) {
-                                return TextFormField(
-
-                                  initialValue: (widget.objectValidation)
-                                      ? widget.embassyLetterFormModel.dateFrom
-                                      .toString()
-                                      : state.dateFrom.value,
-
-                                  key: UniqueKey(),
-                                  readOnly: true,
-                                  decoration: InputDecoration(
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    labelText: 'From Date',
-                                    errorText: state.dateFrom.invalid
-                                        ? 'invalid Date'
-                                        : null,
-                                    prefixIcon: const Icon(
-                                        Icons.calendar_today),
-                                  ),
-                                  onTap: () async {
-                                    if (!widget.objectValidation) {
-                                      context.read<EmbassyLetterCubit>().
-                                      selectDate(context, "from");
-                                    }
-                                  },
-                                );
-                              },),
-
-                            Container(height: 10,),
-
-                            BlocBuilder<EmbassyLetterCubit,
-                                EmbassyLetterInitial>(
-                              builder: (context, state) {
-                                return TextFormField(
-                                  initialValue: (widget.objectValidation)
-                                      ? widget.embassyLetterFormModel.dateFrom
-                                      .toString()
-                                      : state.dateTo.value,
-
-                                  key: UniqueKey(),
-                                  readOnly: true,
-                                  decoration: InputDecoration(
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    labelText: 'To Date',
-                                    errorText: state.dateTo.invalid
-                                        ? 'invalid Date'
-                                        : null,
-                                    prefixIcon: const Icon(
-                                        Icons.calendar_today),
-                                  ),
-                                  onTap: () async {
-                                    if (!widget.objectValidation) {
-                                      context.read<EmbassyLetterCubit>().
-                                      selectDate(context, "to");
-                                    }
-                                  },
-                                );
-                              },),
-
-                            Container(height: 10,),
-
-                            BlocBuilder<EmbassyLetterCubit,
-                                EmbassyLetterInitial>(
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<EmbassyLetterCubit,
+                                  EmbassyLetterInitial>(
                                 builder: (context, state) {
-                                  return TextField(
-                                      controller: passportController,
+                                  return DropdownButtonHideUnderline(
+                                    child: DropdownButtonFormField(
+                                      hint: Text(state.salary,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      items: addSalaryList.map((item) =>
+                                          DropdownMenuItem<String>(
+                                            value: item, child: Text(item,
+                                            style: const TextStyle(fontSize: 14,),
+                                          ),
+                                          )).toList(),
                                       onChanged: (value) {
-                                        context.read<EmbassyLetterCubit>()
-                                            .passportNo(value);
+                                        setState(() {
+                                          context.read<EmbassyLetterCubit>()
+                                              .addSelectedSalary(
+                                              value.toString());
+                                        });
                                       },
-                                      enabled: (widget.objectValidation)
-                                          ? false
-                                          : true,
-                                      keyboardType: TextInputType.number,
-                                      decoration: InputDecoration(
-
-                                        floatingLabelAlignment:
-                                        FloatingLabelAlignment.start,
-                                        labelText: "Passport NO",
-                                        prefixIcon: const Icon(Icons.book),
-
-                                        errorText: state.passportNumber.invalid
-                                            ? 'invalid Passport NO'
-                                            : null,
-                                      )
+                                    ),
                                   );
-                                }
+                                },),
                             ),
 
-                            Container(height: 10,),
 
-                            BlocBuilder<EmbassyLetterCubit,
-                                EmbassyLetterInitial>(
-                              builder: (context, state) {
-                                return DropdownButtonHideUnderline(
-                                  child: DropdownButtonFormField(
-                                    hint: Text(
-                                      (widget.objectValidation) ? widget
-                                          .embassyLetterFormModel.addSalary
-                                          .toString()
-                                          : state.salary,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    items: (widget.objectValidation) ? null :
-                                    addSalaryList.map((item) =>
-                                        DropdownMenuItem<String>(
-                                          value: item, child: Text(item,
-                                          style: const TextStyle(fontSize: 14,),
-                                        ),
-                                        )).toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        context.read<EmbassyLetterCubit>()
-                                            .addSelectedSalary(
-                                            value.toString());
-                                      });
-                                    },
-                                  ),
-                                );
-                              },),
-
-                            Container(height: 10,),
-
-
-                            BlocBuilder<EmbassyLetterCubit,
-                                EmbassyLetterInitial>(
-                                builder: (context, state) {
-                                  return TextField(
-                                      controller: commentController,
-                                      onChanged: (value) {
-                                        context.read<EmbassyLetterCubit>()
-                                            .comments(value);
-                                      },
-                                      enabled: (widget.objectValidation)
-                                          ? false
-                                          : true,
-                                      decoration: InputDecoration(
-                                        floatingLabelAlignment:
-                                        FloatingLabelAlignment.start,
-                                        labelText: "Comments",
-                                        prefixIcon: const Icon(Icons.comment),
-                                        border: myinputborder(),
-                                      )
-                                  );
-                                }
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<EmbassyLetterCubit,
+                                  EmbassyLetterInitial>(
+                                  builder: (context, state) {
+                                    return TextField(
+                                        controller: commentController,
+                                        onChanged: (value) {
+                                          context.read<EmbassyLetterCubit>()
+                                              .comments(value);
+                                        },
+                                        // enabled: (widget.objectValidation)
+                                        //     ? false
+                                        //     : true,
+                                        decoration: InputDecoration(
+                                          floatingLabelAlignment:
+                                          FloatingLabelAlignment.start,
+                                          labelText: "Comments",
+                                          prefixIcon: const Icon(Icons.comment),
+                                          border: myinputborder(),
+                                        )
+                                    );
+                                  }
+                              ),
                             ),
 
-                            Container(height: 10,),
 
                             FloatingActionButton.extended(
 
@@ -604,7 +635,6 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                   color: Colors.black),
                               backgroundColor: Colors.white,),
 
-                            Container(height: 10,),
 
                           ],
                         ),

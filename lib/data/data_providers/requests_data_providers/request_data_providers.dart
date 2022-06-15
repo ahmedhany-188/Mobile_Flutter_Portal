@@ -26,6 +26,39 @@ class RequestDataProviders {
     );
   }
 
+  Future<http.Response> getEmailUserAccount(String bodyString) async {
+
+    return http.post(
+      Uri.parse("https://api.hassanallam.com/api/SelfService/AddITUserAccount"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: bodyString,
+
+    );
+  }
+  Future<http.Response> getBusinessCardRequest(String bodyString) async {
+    return http.post(
+        Uri.parse("https://api.hassanallam.com/api/SelfService/AddBusinessCard"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: bodyString
+    );
+  }
+
+
+  Future<http.Response> getEmbassyLetterRequest(String bodyString) async {
+    return http.post(
+      Uri.parse("https://api.hassanallam.com/api/SelfService/AddEmbassyLetter"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body:bodyString
+    );
+  }
+
+
   Future<http.Response> getDurationVacation(int type,String dateFrom,String dateTo) async{
     http.Response rawDurationData = await http.get(
       Uri.parse(

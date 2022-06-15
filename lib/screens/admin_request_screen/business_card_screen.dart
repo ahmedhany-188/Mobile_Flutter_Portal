@@ -4,17 +4,20 @@ import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/business_card_request/business_card_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/business_card_form_model.dart';
+import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
 
 class BusinessCardScreen extends StatefulWidget{
 
   static const routeName = "/business-account-screen";
-  const BusinessCardScreen({Key? key,required this.businessCardFormModel,required this.objectValidation}) : super(key: key);
+  static const requestNoKey = 'request-No';
+
+  const BusinessCardScreen({Key? key,this.requestNo}) : super(key: key);
 
 
-  final BusinessCardFormModel businessCardFormModel;
-  final bool objectValidation;
+  final requestNo;
+
   @override
   State<BusinessCardScreen> createState() => _BusinessCardScreen();
 
@@ -40,16 +43,7 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
     final TextEditingController commentsController = TextEditingController();
 
 
-    if (widget.objectValidation) {
-      nameCardController.text =
-          widget.businessCardFormModel.employeeNameCard.toString();
-      mobileController.text =
-          widget.businessCardFormModel.employeeMobil.toString();
-      extController.text = widget.businessCardFormModel.employeeExt.toString();
-      faxNoController.text = widget.businessCardFormModel.faxNo.toString();
-      commentsController.text =
-          widget.businessCardFormModel.employeeComments.toString();
-    }
+
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -61,7 +55,7 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
       ),
       child: BlocProvider<BusinessCardCubit>(
         create: (businessCardContext) =>
-            BusinessCardCubit(),
+            BusinessCardCubit(RequestRepository(user)),
         child: Builder(
             builder: (context) {
               return Scaffold(
@@ -72,7 +66,58 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                 resizeToAvoidBottomInset: false,
 
 
-                drawer: MainDrawer(),
+                /*
+                floatingActionButton: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      if(context
+                          .read<AccessRightCubit>()
+                          .state
+                          .requestStatus ==
+                          RequestStatus.oldRequest)FloatingActionButton
+                          .extended(
+                        heroTag: null,
+                        onPressed: () {},
+                        icon: const Icon(Icons.verified),
+                        label: const Text('Accept'),
+                      ),
+                      const SizedBox(height: 12),
+                      if(context
+                          .read<AccessRightCubit>()
+                          .state
+                          .requestStatus ==
+                          RequestStatus.oldRequest)FloatingActionButton
+                          .extended(
+                        backgroundColor: Colors.red,
+                        heroTag: null,
+                        onPressed: () {},
+                        icon: const Icon(Icons.dangerous),
+
+                        label: const Text('Reject'),
+                      ),
+                      const SizedBox(height: 12),
+                      if(context
+                          .read<AccessRightCubit>()
+                          .state
+                          .requestStatus == RequestStatus.newRequest)
+                        FloatingActionButton.extended(
+                          heroTag: null,
+                          onPressed: () {
+                            context.read<AccessRightCubit>()
+                                .getSubmitAccessRight(selectedTypes);
+                          },
+                          // formBloc.state.status.isValidated
+                          //       ? () => formBloc.submitPermissionRequest()
+                          //       : null,
+                          // formBloc.submitPermissionRequest();
+
+                          icon: const Icon(Icons.send),
+                          label: const Text('SUBMIT'),
+                        ),
+                      const SizedBox(height: 12),
+                    ],
+                  ),
+                 */
 
                 body: BlocListener<BusinessCardCubit, BusinessCardInitial>(
                   listener: (context, state) {
@@ -108,156 +153,168 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                         child: Column(
                           children: [
 
-                            TextFormField(
-                              initialValue: formattedDate,
-                              key: UniqueKey(),
-                              readOnly: true,
-                              decoration: const InputDecoration(
-                                floatingLabelAlignment:
-                                FloatingLabelAlignment.start,
-                                labelText: 'Request Date',
-                                prefixIcon: Icon(
-                                    Icons.calendar_today),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                initialValue: formattedDate,
+                                key: UniqueKey(),
+                                readOnly: true,
+                                decoration: const InputDecoration(
+                                  floatingLabelAlignment:
+                                  FloatingLabelAlignment.start,
+                                  labelText: 'Request Date',
+                                  prefixIcon: Icon(
+                                      Icons.calendar_today),
+                                ),
                               ),
                             ),
 
-                            Container(height: 10),
 
-                            BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
-                              builder: (context, state) {
-                                return TextField(
-                                  controller: nameCardController,
-                                  enabled: (widget.objectValidation)
-                                      ? false
-                                      : true,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
+                                builder: (context, state) {
+                                  return TextField(
+                                    controller: nameCardController,
+                                    // enabled: (widget.objectValidation)
+                                    //     ? false
+                                    //     : true,
 
-                                  onChanged: (value) =>
-                                      context.read<BusinessCardCubit>()
-                                          .nameCard(value),
-                                  // initialValue: state.userMobile.value,
-                                  keyboardType: TextInputType.text,
-                                  decoration: InputDecoration(
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    labelText: 'Employee Name on Card',
-                                    prefixIcon: const Icon(
-                                        Icons.person),
-                                    errorText: state.employeeNameCard.invalid
-                                        ? 'invalid Name'
-                                        : null,
-                                  ),
-                                );
-                              },
+                                    onChanged: (value) =>
+                                        context.read<BusinessCardCubit>()
+                                            .nameCard(value),
+                                    // initialValue: state.userMobile.value,
+                                    keyboardType: TextInputType.text,
+                                    decoration: InputDecoration(
+                                      floatingLabelAlignment:
+                                      FloatingLabelAlignment.start,
+                                      labelText: 'Employee Name on Card',
+                                      prefixIcon: const Icon(
+                                          Icons.person),
+                                      errorText: state.employeeNameCard.invalid
+                                          ? 'invalid Name'
+                                          : null,
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
 
-                            Container(height: 10),
 
-                            BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
-                              builder: (context, state) {
-                                return TextField(
-                                  enabled: (widget.objectValidation)
-                                      ? false
-                                      : true,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
+                                builder: (context, state) {
+                                  return TextField(
+                                    // enabled: (widget.objectValidation)
+                                    //     ? false
+                                    //     : true,
 
-                                  controller: mobileController,
-                                  onChanged: (value) =>
-                                      context.read<BusinessCardCubit>()
-                                          .employeeMobile(value),
-                                  // initialValue: state.userMobile.value,
-                                  keyboardType: TextInputType.phone,
-                                  decoration: InputDecoration(
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    labelText: 'Mobile',
-                                    prefixIcon: const Icon(
-                                        Icons.mobile_friendly),
-                                    errorText: state.employeeMobile.invalid
-                                        ? 'invalid Phone Number'
-                                        : null,
-                                  ),
-                                );
-                              },
+                                    controller: mobileController,
+                                    onChanged: (value) =>
+                                        context.read<BusinessCardCubit>()
+                                            .employeeMobile(value),
+                                    // initialValue: state.userMobile.value,
+                                    keyboardType: TextInputType.phone,
+                                    decoration: InputDecoration(
+                                      floatingLabelAlignment:
+                                      FloatingLabelAlignment.start,
+                                      labelText: 'Mobile',
+                                      prefixIcon: const Icon(
+                                          Icons.mobile_friendly),
+                                      errorText: state.employeeMobile.invalid
+                                          ? 'invalid Phone Number'
+                                          : null,
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
 
-                            Container(height: 10),
 
-                            BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
-                              builder: (context, state) {
-                                return TextField(
-                                  enabled: (widget.objectValidation)
-                                      ? false
-                                      : true,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
+                                builder: (context, state) {
+                                  return TextField(
+                                    // enabled: (widget.objectValidation)
+                                    //     ? false
+                                    //     : true,
 
-                                  controller: extController,
-                                  onChanged: (value) =>
-                                      context.read<BusinessCardCubit>()
-                                          .employeeExt(value),
-                                  // initialValue: state.userMobile.value,
-                                  keyboardType: TextInputType.text,
-                                  decoration: const InputDecoration(
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    labelText: 'Ext #',
-                                    prefixIcon: Icon(
-                                        Icons.phone),
-                                  ),
-                                );
-                              },
+                                    controller: extController,
+                                    onChanged: (value) =>
+                                        context.read<BusinessCardCubit>()
+                                            .employeeExt(value),
+                                    // initialValue: state.userMobile.value,
+                                    keyboardType: TextInputType.text,
+                                    decoration: const InputDecoration(
+                                      floatingLabelAlignment:
+                                      FloatingLabelAlignment.start,
+                                      labelText: 'Ext #',
+                                      prefixIcon: Icon(
+                                          Icons.phone),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
 
-                            Container(height: 10),
 
-                            BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
-                              builder: (context, state) {
-                                return TextField(
-                                  enabled: (widget.objectValidation)
-                                      ? false
-                                      : true,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
+                                builder: (context, state) {
+                                  return TextField(
+                                    // enabled: (widget.objectValidation)
+                                    //     ? false
+                                    //     : true,
 
-                                  controller: faxNoController,
-                                  onChanged: (value) =>
-                                      context.read<BusinessCardCubit>()
-                                          .employeeFaxNO(value),
-                                  // initialValue: state.userMobile.value,
-                                  keyboardType: TextInputType.text,
-                                  decoration: const InputDecoration(
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    labelText: 'FAX NO',
-                                    prefixIcon: Icon(
-                                        Icons.fax),
-                                  ),
-                                );
-                              },
+                                    controller: faxNoController,
+                                    onChanged: (value) =>
+                                        context.read<BusinessCardCubit>()
+                                            .employeeFaxNO(value),
+                                    // initialValue: state.userMobile.value,
+                                    keyboardType: TextInputType.text,
+                                    decoration: const InputDecoration(
+                                      floatingLabelAlignment:
+                                      FloatingLabelAlignment.start,
+                                      labelText: 'FAX NO',
+                                      prefixIcon: Icon(
+                                          Icons.fax),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
 
-                            Container(height: 10),
 
-                            BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
-                              builder: (context, state) {
-                                return TextField(
-                                  enabled: (widget.objectValidation)
-                                      ? false
-                                      : true,
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
+                                builder: (context, state) {
+                                  return TextField(
+                                    // enabled: (widget.objectValidation)
+                                    //     ? false
+                                    //     : true,
 
-                                  controller: commentsController,
-                                  onChanged: (value) =>
-                                      context.read<BusinessCardCubit>()
-                                          .EemployeeComment(value),
-                                  // initialValue: state.userMobile.value,
-                                  keyboardType: TextInputType.text,
-                                  decoration: const InputDecoration(
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    labelText: 'Comments',
-                                    prefixIcon: Icon(
-                                        Icons.comment),
-                                  ),
-                                );
-                              },
+                                    controller: commentsController,
+                                    onChanged: (value) =>
+                                        context.read<BusinessCardCubit>()
+                                            .EemployeeComment(value),
+                                    // initialValue: state.userMobile.value,
+                                    keyboardType: TextInputType.text,
+                                    decoration: const InputDecoration(
+                                      floatingLabelAlignment:
+                                      FloatingLabelAlignment.start,
+                                      labelText: 'Comments',
+                                      prefixIcon: Icon(
+                                          Icons.comment),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
 
-                            Container(height: 10),
 
                             FloatingActionButton.extended(
                               onPressed: () {
@@ -273,7 +330,7 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                                   color: Colors.black),
                               backgroundColor: Colors.white,),
 
-                            Container(height: 10,),
+
 
                           ],
                         ),

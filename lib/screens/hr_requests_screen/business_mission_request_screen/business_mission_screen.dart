@@ -10,11 +10,11 @@ import '../../../data/repositories/request_repository.dart';
 
 class BusinessMissionScreen extends StatefulWidget {
   static const routeName = 'business-mission-page';
+  static const requestNoKey = 'request-No';
 
-  const BusinessMissionScreen({Key? key,required this.businessMissionFormModelData,required this.objectValidation}) : super(key: key);
+  const BusinessMissionScreen({Key? key, this.requestNo}) : super(key: key);
 
-  final BusinessMissionFormModelData businessMissionFormModelData;
-  final bool objectValidation;
+  final requestNo;
 
 @override
   State<BusinessMissionScreen> createState() => _BusinessMissionScreenState();
@@ -28,10 +28,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
     final TextEditingController commentController = TextEditingController();
 
 
-    if (widget.objectValidation) {
-      commentController.text =
-          widget.businessMissionFormModelData.comments.toString();
-    }
+
     final userMainData = context.select((AppBloc bloc) =>
     bloc.state.userData);
 
@@ -137,11 +134,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                   builder: (context, state) {
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue: (widget.objectValidation)
-                                          ? widget.businessMissionFormModelData
-                                          .date
-                                          .toString()
-                                          : state.requestDate.value,
+                                      initialValue:state.requestDate.value,
                                       enabled: false,
                                       decoration: InputDecoration(
                                         labelText: 'Request Date',
@@ -185,15 +178,12 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                             title: Text("Meeting"),
 
 
-                                            groupValue: (widget
-                                                .objectValidation)
-                                                ? null
-                                                : state.missionType,
-                                            selected: (widget
-                                                .businessMissionFormModelData
-                                                .missionLocation == "1")
-                                                ? true
-                                                : false,
+                                            groupValue:state.missionType,
+                                            // selected: (widget
+                                            //     .businessMissionFormModelData
+                                            //     .missionLocation == "1")
+                                            //     ? true
+                                            //     : false,
 
                                             onChanged: (permissionType) =>
                                                 context
@@ -206,15 +196,12 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                             value: 2,
                                             // dense: true,
                                             title: Text("Site Visit"),
-                                            groupValue: (widget
-                                                .objectValidation)
-                                                ? null
-                                                : state.missionType,
-                                            selected: (widget
-                                                .businessMissionFormModelData
-                                                .missionLocation == "2")
-                                                ? true
-                                                : false,
+                                            groupValue:state.missionType,
+                                            // selected: (widget
+                                            //     .businessMissionFormModelData
+                                            //     .missionLocation == "2")
+                                            //     ? true
+                                            //     : false,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (permissionType) =>
                                                 context
@@ -227,15 +214,12 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                             value: 3,
                                             // dense: true,
                                             title: Text("Training"),
-                                            groupValue: (widget
-                                                .objectValidation)
-                                                ? null
-                                                : state.missionType,
-                                            selected: (widget
-                                                .businessMissionFormModelData
-                                                .missionLocation == "3")
-                                                ? true
-                                                : false,
+                                            groupValue:state.missionType,
+                                            // selected: (widget
+                                            //     .businessMissionFormModelData
+                                            //     .missionLocation == "3")
+                                            //     ? true
+                                            //     : false,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (permissionType) =>
                                                 context
@@ -248,15 +232,12 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                             value: 4,
                                             // dense: true,
                                             title: Text("Others"),
-                                            groupValue: (widget
-                                                .objectValidation)
-                                                ? null
-                                                : state.missionType,
-                                            selected: (widget
-                                                .businessMissionFormModelData
-                                                .missionLocation == "4")
-                                                ? true
-                                                : false,
+                                            groupValue:state.missionType,
+                                            // selected: (widget
+                                            //     .businessMissionFormModelData
+                                            //     .missionLocation == "4")
+                                            //     ? true
+                                            //     : false,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (permissionType) =>
                                                 context
@@ -287,11 +268,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                     print(state.dateFrom.value);
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue: (widget.objectValidation)
-                                          ? widget.businessMissionFormModelData
-                                          .dateFrom
-                                          .toString()
-                                          : state.dateFrom.value,
+                                      initialValue:state.dateFrom.value,
                                       onChanged: (vacationDate) =>
                                           context
                                               .read<BusinessMissionCubit>()
@@ -314,12 +291,12 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                         // vacationDateFromController.text =
                                         //     formattedDate;
                                         // (permissionDate) =>
-                                        if (!widget.objectValidation) {
-                                          context
-                                              .read<BusinessMissionCubit>()
-                                              .businessDateFromChanged(
-                                              context);
-                                        }
+                                        // if (!widget.objectValidation) {
+                                        //   context
+                                        //       .read<BusinessMissionCubit>()
+                                        //       .businessDateFromChanged(
+                                        //       context);
+                                        // }
                                       },
                                     );
                                   }
@@ -343,11 +320,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                   builder: (context, state) {
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue: (widget.objectValidation)
-                                          ? widget.businessMissionFormModelData
-                                          .dateTo
-                                          .toString()
-                                          : state.dateTo.value,
+                                      initialValue:state.dateTo.value,
                                       readOnly: true,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
@@ -364,12 +337,12 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                             Icons.date_range_outlined),
                                       ),
                                       onTap: () {
-                                        if (!widget.objectValidation) {
-                                          context
-                                              .read<BusinessMissionCubit>()
-                                              .businessToDateChanged(
-                                              context);
-                                        }
+                                        // if (!widget.objectValidation) {
+                                        //   context
+                                        //       .read<BusinessMissionCubit>()
+                                        //       .businessToDateChanged(
+                                        //       context);
+                                        // }
                                       },
                                     );
                                   }
@@ -388,12 +361,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                   builder: (context, state) {
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue: (widget.objectValidation)
-                                          ? widget.businessMissionFormModelData
-                                          .hourFrom +
-                                          widget.businessMissionFormModelData
-                                              .dateFromAmpm
-                                          : state.timeFrom.value,
+                                      initialValue:state.timeFrom.value,
                                       readOnly: true,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
@@ -406,12 +374,12 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                             Icons.access_time),
                                       ),
                                       onTap: () async {
-                                        if (!widget.objectValidation) {
-                                          context
-                                              .read<BusinessMissionCubit>()
-                                              .businessTimeFromChanged(
-                                              context);
-                                        }
+                                        // if (!widget.objectValidation) {
+                                        //   context
+                                        //       .read<BusinessMissionCubit>()
+                                        //       .businessTimeFromChanged(
+                                        //       context);
+                                        // }
                                       },
                                     );
                                   }
@@ -429,12 +397,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                   builder: (context, state) {
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue: (widget.objectValidation)
-                                          ? widget.businessMissionFormModelData
-                                          .hourTo
-                                          + widget.businessMissionFormModelData
-                                              .dateToAmpm
-                                          : state.timeTo.value,
+                                      initialValue:state.timeTo.value,
                                       readOnly: true,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
@@ -447,12 +410,12 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                             Icons.access_time),
                                       ),
                                       onTap: () async {
-                                        if (!widget.objectValidation) {
-                                          context
-                                              .read<BusinessMissionCubit>()
-                                              .businessTimeToChanged(
-                                              context);
-                                        }
+                                        // if (!widget.objectValidation) {
+                                        //   context
+                                        //       .read<BusinessMissionCubit>()
+                                        //       .businessTimeToChanged(
+                                        //       context);
+                                        // }
                                       },
                                     );
                                   }
@@ -466,9 +429,9 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                   BusinessMissionInitial>(
                                   builder: (context, state) {
                                     return TextFormField(
-                                      controller: (widget.objectValidation)
-                                          ? commentController
-                                          : null,
+                                      // controller: (widget.objectValidation)
+                                      //     ? commentController
+                                      //     : null,
                                       onChanged: (commentValue) =>
                                           context
                                               .read<BusinessMissionCubit>()
@@ -561,21 +524,7 @@ class SuccessScreen extends StatelessWidget {
               onPressed: () =>
                   Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (_) =>
-                          BusinessMissionScreen(
-                            businessMissionFormModelData: BusinessMissionFormModelData(
-                                0,
-                                "",
-                                "",
-                                "",
-                                0,
-                                "",
-                                "",
-                                "",
-                                "",
-                                "",
-                                "",
-                                "",
-                                ""), objectValidation: false,))),
+                          BusinessMissionScreen())),
               icon: const Icon(Icons.replay),
               label: const Text('Create Another Permission Request'),
             ),

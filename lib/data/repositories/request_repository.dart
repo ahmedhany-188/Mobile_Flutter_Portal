@@ -4,7 +4,10 @@ import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:hassanallamportalflutter/data/data_providers/requests_data_providers/request_data_providers.dart';
+import 'package:hassanallamportalflutter/data/models/admin_requests_models/business_card_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_vacation_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_duration_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_response.dart';
@@ -59,16 +62,16 @@ class RequestRepository {
       "StartDate": accessRightModel.fromDate,
       "EndDate": accessRightModel.toDate,
       "IsPermanent": accessRightModel.permanent,
-      "USBException": (accessRightModel.items.contains("USB Exception")
-          ? true
-          : false),
-      "VPNAccount": (accessRightModel.items.contains("VPN Account")
-          ? true
-          : false),
-      "IPPhone": (accessRightModel.items.contains("IP Phone") ? true : false),
-      "LocalAdmin": (accessRightModel.items.contains("Local Admin")
-          ? true
-          : false),
+      // "USBException": (accessRightModel.items.contains("USB Exception")
+      //     ? true
+      //     : false),
+      // "VPNAccount": (accessRightModel.items.contains("VPN Account")
+      //     ? true
+      //     : false),
+      // "IPPhone": (accessRightModel.items.contains("IP Phone") ? true : false),
+      // "LocalAdmin": (accessRightModel.items.contains("Local Admin")
+      //     ? true
+      //     : false),
     });
     final http.Response rawAccess = await requestDataProviders
         .getAccessAccountAccessRequest(bodyString);
@@ -85,6 +88,93 @@ class RequestRepository {
     final json = await jsonDecode(rawPermission.body);
     final DurationResponse response = DurationResponse.fromJson(json);
     return response;
+  }
+
+
+
+  Future<RequestResponse> postBusinessCard(
+        {required BusinessCardFormModel businessCardFormModel}) async {
+
+    var bodyString=jsonEncode(<String, dynamic>{
+      "serviceId": "HAH-HR-FRM-06",
+      "requestHrCode": userData.employeeData!.userHrCode,
+      "ownerHrCode": userData.employeeData!.userHrCode,
+      "date": businessCardFormModel.requestDate,
+      "comments": businessCardFormModel.employeeComments,
+      "cardName": businessCardFormModel.employeeNameCard,
+      "faxNo": businessCardFormModel.faxNo,
+      "extNo": businessCardFormModel.employeeExt,
+      "mobileNo": businessCardFormModel.employeeMobil
+    });
+    final http.Response rawBusinessCard = await requestDataProviders
+        .getBusinessCardRequest(bodyString);
+    final json = await jsonDecode(rawBusinessCard.body);
+    final RequestResponse response = RequestResponse.fromJson(json);
+    return response;
+  }
+
+
+  Future<RequestResponse> postEmailUserAccount({required EmailUserFormModel emailUserFormModel})async {
+
+    var bodyString = jsonEncode(<String, dynamic>{
+      "ServiceId": "HAH-IT-FRM-04",
+      "RequestHrCode": userData.user!.userHRCode,
+      "Date": "${emailUserFormModel.requestDate!}T10:43:37.994Z",
+      "OwnerHrCode": userData.user!.userHRCode,
+      "OwnerFullName": userData.employeeData!.name,
+      "OwnerTitle": userData.employeeData!.titleName,
+      "OwnerLocation": userData.employeeData!.companyName,
+      "OwnerMobile": emailUserFormModel.userMobile,
+      "OwnerEmailDisabled": userData.user!.email,
+      "Status": 0,
+      "ReRequestCode": 0,
+      "ReqType": emailUserFormModel.requestType,
+      "AnswerEmail": "string",
+      "EmailAccount": emailUserFormModel.accountType,
+    });
+
+final http.Response rawEmailUserAccount = await requestDataProviders
+    .getEmailUserAccount(bodyString);
+final json = await jsonDecode(rawEmailUserAccount.body);
+final RequestResponse response = RequestResponse.fromJson(json);
+return response;
+}
+
+
+  Future<RequestResponse> postEmbassyLetter({required EmbassyLetterFormModel embassyLetterFormModel}) async{
+
+    var bodyString=jsonEncode(<String, dynamic>
+    {
+
+      // "RequestNo": 0,
+      "ServiceId": "HAH-HR-FRM-07",
+      "RequestHrCode": userData.employeeData!.userHrCode,
+      "OwnerHrCode": userData.employeeData!.userHrCode,
+      "Date": "${embassyLetterFormModel.requestDate!}T11:20:14.519Z",
+      // "NewComer": true,
+      // "ApprovalPathId": 0,
+      // "Status": 0,
+      "Comments": embassyLetterFormModel.comments,
+      // "NplusEmail": "string",
+      // "ClosedDate": "2022-06-02T11:20:14.519Z",
+      "DateFrom": "${embassyLetterFormModel.dateFrom!}T11:20:14.519Z",
+      "DateTo": "${embassyLetterFormModel.dateTo!}T11:20:14.519Z",
+      "Purpose": embassyLetterFormModel.purpose,
+      "EmbassyId": embassyLetterFormModel.embassy,
+      "PassportNo": embassyLetterFormModel.passportNo,
+      "AddSalary": embassyLetterFormModel.addSalary,
+      // "SocialInsuranceNumber": "string",
+      // "ProjectId": "string"
+
+    });
+
+        final http.Response rawEmbassyLetter = await requestDataProviders
+            .getEmbassyLetterRequest(bodyString);
+    final json = await jsonDecode(rawEmbassyLetter.body);
+    final RequestResponse response = RequestResponse.fromJson(json);
+    return response;
+
+
   }
 
   Future<RequestResponse> postVacationRequest(
@@ -146,6 +236,9 @@ class RequestRepository {
 
     return response;
   }
+
+
+
 
 
 

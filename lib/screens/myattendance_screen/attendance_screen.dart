@@ -65,7 +65,6 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text("Loading"),
-
                 ),
               );
             }

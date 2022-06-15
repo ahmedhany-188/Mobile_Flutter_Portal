@@ -11,11 +11,12 @@ import '../../../data/repositories/request_repository.dart';
 class PermissionScreen extends StatefulWidget {
 
   static const routeName = 'permission-page';
-  const PermissionScreen({Key? key,required this.permissionFormModelData,required this.objectValidation}) : super(key: key);
+  static const requestNoKey = 'request-No';
 
+  const PermissionScreen({Key? key,this.requestNo}) : super(key: key);
 
-  final bool objectValidation;
-  final PermissionFormModelData permissionFormModelData;
+  final requestNo;
+
 
   @override
   State<PermissionScreen> createState() => _PermissionScreenState();
@@ -33,9 +34,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
 
     final TextEditingController commentController = TextEditingController();
 
-    if (widget.objectValidation) {
-      commentController.text = widget.permissionFormModelData.comments.toString();
-    }
+
     return Theme(
       data: Theme.of(context).copyWith(
         inputDecorationTheme: InputDecorationTheme(
@@ -175,10 +174,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                     print(state.permissionDate.value);
                                     return TextFormField(
                                       key: UniqueKey(),
-                                      initialValue: (widget.objectValidation)
-                                          ? widget.permissionFormModelData.permissionDate
-                                          .toString()
-                                          : state.permissionDate.value,
+                                      initialValue:state.permissionDate.value,
                                       readOnly: true,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
@@ -226,12 +222,10 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                           RadioListTile<int>(
                                             value: 2,
                                             title: const Text("2 hours"),
-                                            groupValue: (widget.objectValidation)
-                                                ? null
-                                                : state.permissionType,
+                                            groupValue:state.permissionType,
 
-                                            selected: (widget.permissionFormModelData
-                                                .type == 1) ? true : false,
+                                            // selected: (widget.permissionFormModelData
+                                            //     .type == 1) ? true : false,
 
                                             onChanged: (permissionType) =>
                                                 context
@@ -243,11 +237,9 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                             value: 4,
                                             // dense: true,
                                             title: const Text("4 hours"),
-                                            groupValue: (widget.objectValidation)
-                                                ? null
-                                                : state.permissionType,
-                                            selected: (widget.permissionFormModelData.type== 2)
-                                                ? true : false,
+                                            groupValue:state.permissionType,
+                                            // selected: (widget.permissionFormModelData.type== 2)
+                                            //     ? true : false,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (permissionType) =>
                                                 context
@@ -273,11 +265,11 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                   builder: (context, state) {
                                     return TextFormField(
 
-                                      initialValue: (widget.objectValidation)
-                                          ? "From:"+widget.permissionFormModelData.dateFrom+
-                                          widget.permissionFormModelData.dateFromAmpm+
-                                          ", To:"+widget.permissionFormModelData.dateTo+widget.permissionFormModelData.dateFromAmpm
-                                          : state.permissionTime.value,
+                                      // initialValue: (widget.objectValidation)
+                                      //     ? "From:"+widget.permissionFormModelData.dateFrom+
+                                      //     widget.permissionFormModelData.dateFromAmpm+
+                                      //     ", To:"+widget.permissionFormModelData.dateTo+widget.permissionFormModelData.dateFromAmpm
+                                      //     : state.permissionTime.value,
 
                                       key: UniqueKey(),
                                       readOnly: true,
@@ -315,7 +307,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                               .read<PermissionCubit>()
                                               .commentChanged(commentValue),
                                       keyboardType: TextInputType.multiline,
-                                      enabled: (widget.objectValidation) ? false : true,
+                                      // enabled: (widget.objectValidation) ? false : true,
                                       maxLines: null,
                                       decoration: InputDecoration(
                                         border: OutlineInputBorder(
@@ -401,7 +393,7 @@ class SuccessScreen extends StatelessWidget {
             ElevatedButton.icon(
               onPressed: () => Navigator.of(context).pushReplacement(
 
-                  MaterialPageRoute(builder: (_) =>  PermissionScreen(permissionFormModelData: PermissionFormModelData(0,"","","",0,"",0,"","","","",""),objectValidation: false,))),
+                  MaterialPageRoute(builder: (_) =>  PermissionScreen())),
               icon: const Icon(Icons.replay),
               label: const Text('Create Another Permission Request'),
             ),

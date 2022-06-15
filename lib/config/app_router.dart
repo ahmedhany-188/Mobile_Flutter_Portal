@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hassanallamportalflutter/data/models/admin_requests_models/business_card_form_model.dart';
-import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
-import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
-import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
-import 'package:hassanallamportalflutter/data/models/my_requests_model/my_business_mission_form_model.dart';
-import 'package:hassanallamportalflutter/data/models/my_requests_model/my_permission_form_model.dart';
-import 'package:hassanallamportalflutter/data/models/my_requests_model/my_vacation_form_model.dart';
+
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
@@ -79,11 +73,11 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const TapsScreen(),
         );
-      // case ContactDetailScreen.routeName:
-      //   final args = settings.arguments as Map<String, dynamic>;
-      //   return MaterialPageRoute(
-      //     builder: (_) => ContactDetailScreen(selectedContactDataAsMap: args,),
-      //   );
+    // case ContactDetailScreen.routeName:
+    //   final args = settings.arguments as Map<String, dynamic>;
+    //   return MaterialPageRoute(
+    //     builder: (_) => ContactDetailScreen(selectedContactDataAsMap: args,),
+    //   );
       case GetDirectionScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => const GetDirectionScreen(),
@@ -142,7 +136,7 @@ class AppRouter {
 
       case PermissionScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => PermissionScreen(permissionFormModelData: PermissionFormModelData(0,'','','',0,'',0,'','','','',''),objectValidation:false ),
+          builder: (_) => PermissionScreen(requestNo: settings.arguments),
         );
 
       case VacationScreen.routeName:
@@ -152,22 +146,23 @@ class AppRouter {
 
       case BusinessCardScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => BusinessCardScreen(businessCardFormModel:BusinessCardFormModel('','','','','','') ,objectValidation: false ),
+          builder: (_) => BusinessCardScreen(requestNo: settings.arguments),
         );
 
       case EmbassyLetterScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => EmbassyLetterScreen(embassyLetterFormModel:EmbassyLetterFormModel('','','','','','','','') ,objectValidation: false),
+          builder: (_) => EmbassyLetterScreen(requestNo: settings.arguments),
         );
 
       case EmailAndUserAccountScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => EmailAndUserAccountScreen(emailUserAccount: EmailUserFormModel('',0,'',false),objectValidation: false),
+          builder: (_) => EmailAndUserAccountScreen(),
         );
 
       case AccessUserAccountScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => AccessUserAccountScreen(requestNo: settings.arguments),
+          builder: (_) =>
+              AccessUserAccountScreen(requestNo: settings.arguments),
         );
 
       case MyRequestsScreen.routeName:
@@ -178,7 +173,7 @@ class AppRouter {
 
       case BusinessMissionScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => BusinessMissionScreen(businessMissionFormModelData: BusinessMissionFormModelData(0,'','','',0,'','','','','','','',''),objectValidation: false),
+          builder: (_) => BusinessMissionScreen(requestNo: settings.arguments),
         );
 
       case PollsScreen.routeName:
