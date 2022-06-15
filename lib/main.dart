@@ -18,6 +18,7 @@ import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.da
 import 'package:hassanallamportalflutter/data/data_providers/firebase_provider/FirebaseProvider.dart';
 import 'package:hassanallamportalflutter/life_cycle_states.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
+import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -45,7 +46,6 @@ import 'firebase_options.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-
   final storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
@@ -62,10 +62,9 @@ void main() async {
 
   await GeneralDio.init();
   await AlbumDio.initAlbums();
-
 }
 
-class MyApp extends StatefulWidget{
+class MyApp extends StatefulWidget {
   final AppRouter appRouter;
   final Connectivity connectivity;
 
@@ -80,7 +79,6 @@ class MyApp extends StatefulWidget{
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     // TODO: implement initState
@@ -100,122 +98,120 @@ class _MyAppState extends State<MyApp> {
     // final AuthenticationBloc authenticationBloc = AuthenticationBloc(authenticationRepository);
     // final Repositor = AuthenticationRepository();
     return MultiBlocProvider(
-      providers: [
-        BlocProvider<InternetCubit>(
-          create: (internetCubitContext) =>
-              InternetCubit(connectivity: widget.connectivity),
-        ),
-        BlocProvider<CounterCubit>(
-          create: (counterCubitContext) => CounterCubit(),
-        ),
-        BlocProvider<SettingsCubit>(
-          create: (counterCubitContext) => SettingsCubit(),
-        ),
-        BlocProvider<ContactsCubit>(
-          create: (contactsCubitContext) => ContactsCubit()..getContacts(),
-          // child: ContactsScreen(),
-        ),
-        BlocProvider<WeatherBloc>(
-          create: (weatherBlocContext) => WeatherBloc()..add(WeatherRequest()),
-        ),
-        BlocProvider<PayslipCubit>(
-          create: (payslipContext) => PayslipCubit(),
-        ),
-        BlocProvider<AttendanceCubit>(
-          create: (attendanceCubitContext) => AttendanceCubit(),
-        ),
-        BlocProvider<MedicalRequestCubit>(
-            create: (medicalRequestCubitContext) => MedicalRequestCubit()
-            // MedicalRequestCubit()..getSuccessMessage(),
-            ),
-        BlocProvider<EconomyNewsCubit>(
-          create: (economyNewsCubitContext) => EconomyNewsCubit(),
-        ),
-        BlocProvider<GetDirectionCubit>(
-          create: (getDirectionCubitContext) =>
-              GetDirectionCubit()..getDirection(),
-        ),
-        BlocProvider<BenefitsCubit>(
-          create: (benefitsCubitContext) => BenefitsCubit()..getBenefits(),
-        ),
-        BlocProvider<SubsidiariesCubit>(
-          create: (subsidiariesCubitContext) =>
-              SubsidiariesCubit()..getSubsidiaries(),
-        ),
-
-        BlocProvider<EmailUseraccountCubit>(
-          create: (emailUserAccountRequestContext) =>
-              EmailUseraccountCubit(),
-        ),
-
-        BlocProvider<EmbassyLetterCubit>(
-          create: (embassyLetterContext) =>
-              EmbassyLetterCubit(),
-        ),
-
-        BlocProvider<BusinessCardCubit>(
-          create: (businessCardRequestContext) =>
-              BusinessCardCubit(),
-        ),
-
-        BlocProvider<AccessRightCubit>(
-          create: (accessRightAccountRequestContext) =>
-              AccessRightCubit(),
-        ),
-
-        BlocProvider<TravelRequestCubit>(
-          create: (travelRequestContext) =>
-              TravelRequestCubit(),
-        ),
-
-        BlocProvider<AppBloc>(
-          create: (authenticationContext) => AppBloc(
-            authenticationRepository: _authenticationRepository,
+        providers: [
+          BlocProvider<InternetCubit>(
+            create: (internetCubitContext) =>
+                InternetCubit(connectivity: widget.connectivity),
           ),
-        ),
-        BlocProvider<LoginCubit>(
-          create: (authenticationContext) =>
-              LoginCubit(_authenticationRepository),
-        ),
-        BlocProvider<PhotosCubit>(
-          create: (photosContext) => PhotosCubit()..getPhotos(),
-        ),
-        BlocProvider<VideosCubit>(
-          create: (videosContext) => VideosCubit()..getVideos(),
-        ),
-        BlocProvider<UserNotificationBloc>(
-          lazy: true,
-          create: (userNotificationContext) => UserNotificationBloc(firebaseProvider: FirebaseProvider(BlocProvider.of<AppBloc>(userNotificationContext).state.userData.user!),),
-        ),
-        // BlocProvider<PermissionCubit>(
-        //   create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),
-        // ),
-      ],
-      child: LifeCycleState(
-        child: MaterialApp(
-          title: 'Hassan Allam Portal',
-          debugShowCheckedModeBanner: false,
-          theme: ThemeData(
-            colorScheme: ColorScheme.fromSeed(
-              seedColor: Color.fromRGBO(23, 72, 115, 1),
-            ),
-            // primarySwatch: Colors.accents,
-            visualDensity: VisualDensity.adaptivePlatformDensity,
+          BlocProvider<CounterCubit>(
+            create: (counterCubitContext) => CounterCubit(),
           ),
-          onGenerateRoute: widget.appRouter.onGenerateRoute,
-        ),
-      ));
+          BlocProvider<SettingsCubit>(
+            create: (counterCubitContext) => SettingsCubit(),
+          ),
+          BlocProvider<WeatherBloc>(
+            create: (weatherBlocContext) =>
+                WeatherBloc()..add(WeatherRequest()),
+          ),
+          BlocProvider<PayslipCubit>(
+            create: (payslipContext) => PayslipCubit(),
+          ),
+          BlocProvider<AttendanceCubit>(
+            create: (attendanceCubitContext) => AttendanceCubit(),
+          ),
+          BlocProvider<MedicalRequestCubit>(
+              create: (medicalRequestCubitContext) => MedicalRequestCubit()
+              // MedicalRequestCubit()..getSuccessMessage(),
+              ),
+          BlocProvider<EconomyNewsCubit>(
+            create: (economyNewsCubitContext) => EconomyNewsCubit(),
+          ),
+          BlocProvider<GetDirectionCubit>(
+            create: (getDirectionCubitContext) =>
+                GetDirectionCubit()..getDirection(),
+          ),
+          BlocProvider<BenefitsCubit>(
+            create: (benefitsCubitContext) => BenefitsCubit()..getBenefits(),
+          ),
+          BlocProvider<SubsidiariesCubit>(
+            create: (subsidiariesCubitContext) =>
+                SubsidiariesCubit()..getSubsidiaries(),
+          ),
+
+          BlocProvider<EmailUseraccountCubit>(
+            create: (emailUserAccountRequestContext) => EmailUseraccountCubit(),
+          ),
+
+          BlocProvider<EmbassyLetterCubit>(
+            create: (embassyLetterContext) => EmbassyLetterCubit(),
+          ),
+
+          BlocProvider<BusinessCardCubit>(
+            create: (businessCardRequestContext) => BusinessCardCubit(),
+          ),
+
+          BlocProvider<AccessRightCubit>(
+            create: (accessRightAccountRequestContext) => AccessRightCubit(),
+          ),
+
+          BlocProvider<TravelRequestCubit>(
+            create: (travelRequestContext) => TravelRequestCubit(),
+          ),
+
+          BlocProvider<AppBloc>(
+            create: (authenticationContext) => AppBloc(
+              authenticationRepository: _authenticationRepository,
+            ),
+          ),
+          BlocProvider<LoginCubit>(
+            create: (authenticationContext) =>
+                LoginCubit(_authenticationRepository),
+          ),
+          BlocProvider<PhotosCubit>(
+            create: (photosContext) => PhotosCubit()..getPhotos(),
+          ),
+          BlocProvider<VideosCubit>(
+            create: (videosContext) => VideosCubit()..getVideos(),
+          ),
+          BlocProvider<UserNotificationBloc>(
+            lazy: true,
+            create: (userNotificationContext) => UserNotificationBloc(
+              firebaseProvider: FirebaseProvider(
+                  BlocProvider.of<AppBloc>(userNotificationContext)
+                      .state
+                      .userData
+                      .user!),
+            ),
+          ),
+          BlocProvider<ContactsCubit>(
+            create: (contactsContext) => ContactsCubit()..getContacts(),
+            lazy: false,
+          ),
+          // BlocProvider<PermissionCubit>(
+          //   create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),
+          // ),
+        ],
+        child: LifeCycleState(
+          child: MaterialApp(
+            title: 'Hassan Allam Portal',
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: Color.fromRGBO(23, 72, 115, 1),
+              ),
+              // primarySwatch: Colors.accents,
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            onGenerateRoute: widget.appRouter.onGenerateRoute,
+          ),
+        ));
   }
 }
 
 class AppBlocObserver extends BlocObserver {
   @override
   void onChange(BlocBase bloc, Change change) {
-    if(bloc is AppsCubit || bloc is ContactsCubit || bloc is NewsCubit){
-      FocusManager.instance.primaryFocus?.unfocus();
-    }
     if (kDebugMode) {
-      // FocusManager.instance.primaryFocus?.unfocus();
       print("Change --> $bloc");
     }
     super.onChange(bloc, change);

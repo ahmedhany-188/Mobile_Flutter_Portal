@@ -5,7 +5,6 @@ class SearchForContacts {
 
   List<ContactsDataFromApi> setSearchFromApiList({
     required String query,
-    required String listKeyForCondition,
     required List<ContactsDataFromApi> listFromApi,
   }) {
     var splitQuery = query.toLowerCase().trim().split(' ');
