@@ -58,6 +58,13 @@ class RequestDataProviders {
     );
   }
 
+  Future<http.Response> getMyRequestsList(String bodyString) async {
+    http.Response rawAttendanceData = await http.get(
+      Uri.parse(bodyString),
+    );
+    return rawAttendanceData;
+  }
+
 
   Future<http.Response> getDurationVacation(int type,String dateFrom,String dateTo) async{
     http.Response rawDurationData = await http.get(

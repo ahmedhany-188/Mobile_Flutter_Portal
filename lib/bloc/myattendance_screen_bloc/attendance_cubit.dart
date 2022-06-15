@@ -19,7 +19,8 @@ class AttendanceCubit extends Cubit<AttendanceState> {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
 
-        AttendanceDataProvider().getAttendanceList(userHRcode,monthNumber).then((value){
+        AttendanceDataProvider().getAttendanceList(userHRcode,monthNumber)
+            .then((value){
 
           myAttendance = value.body;
 

@@ -8,14 +8,17 @@ class MyRequestsInitial extends MyRequestsState {}
 class BlocGetMyRequestsLoadingState extends MyRequestsState{}
 
 // ignore: must_be_immutable
-class BlocGetMyRequestsSuccesState extends MyRequestsState{
-  List<dynamic> getMyRequests;
-  BlocGetMyRequestsSuccesState(this.getMyRequests);
+class BlocGetMyRequestsSuccessState extends MyRequestsState{
+
+  List<MyRequestsModelData> getMyRequests;
+  BlocGetMyRequestsSuccessState(this.getMyRequests);
+
 }
 
 class BlocGetMyRequestsErrorState extends MyRequestsState{
   final String error;
   BlocGetMyRequestsErrorState(this.error);
+
 }
 
 
