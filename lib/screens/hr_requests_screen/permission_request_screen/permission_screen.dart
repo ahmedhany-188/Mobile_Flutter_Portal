@@ -27,12 +27,13 @@ class _PermissionScreenState extends State<PermissionScreen> {
   @override
   Widget build(BuildContext context) {
 
-    final user = context.select((AppBloc bloc) =>
-    bloc.state.userData.employeeData);
+    // final user = context.select((AppBloc bloc) =>
+    // bloc.state.userData.employeeData);
     final userMainData = context.select((AppBloc bloc) =>
     bloc.state.userData);
 
-    final TextEditingController commentController = TextEditingController();
+    // final TextEditingController commentController = TextEditingController();
+    final currentRequestNo = widget.requestNo;
 
 
     return Theme(
@@ -45,31 +46,33 @@ class _PermissionScreenState extends State<PermissionScreen> {
       ),
       child: BlocProvider<PermissionCubit>(
         create: (permissionContext) =>
-        PermissionCubit(RequestRepository(userMainData))
-          ..getRequestData(RequestStatus.newRequest),
-        child: Builder(
-            builder: (context) {
+        currentRequestNo == null ? (PermissionCubit(
+            RequestRepository(userMainData))
+          ..getRequestData(RequestStatus.newRequest, ""))
+            : (PermissionCubit(RequestRepository(userMainData))
+          ..getRequestData(RequestStatus.oldRequest,
+              currentRequestNo[PermissionScreen.requestNoKey])),
+        child: BlocBuilder<PermissionCubit,PermissionInitial>(
+            builder: (context,state) {
               return Scaffold(
                 appBar: AppBar(title: const Text('Permission Request')),
                 floatingActionButton: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    if(context
-                        .read<PermissionCubit>()
-                        .state
+                    if(state
                         .requestStatus ==
-                        RequestStatus.oldRequest)FloatingActionButton.extended(
+                        RequestStatus.oldRequest && state.takeActionStatus ==
+                        TakeActionStatus.takeAction)FloatingActionButton.extended(
                       heroTag: null,
                       onPressed: () {},
                       icon: const Icon(Icons.verified),
                       label: const Text('Accept'),
                     ),
                     const SizedBox(height: 12),
-                    if(context
-                        .read<PermissionCubit>()
-                        .state
+                    if(state
                         .requestStatus ==
-                        RequestStatus.oldRequest)FloatingActionButton.extended(
+                        RequestStatus.oldRequest && state.takeActionStatus ==
+                        TakeActionStatus.takeAction)FloatingActionButton.extended(
                       backgroundColor: Colors.red,
                       heroTag: null,
                       onPressed: () {},
@@ -78,20 +81,14 @@ class _PermissionScreenState extends State<PermissionScreen> {
                       label: const Text('Reject'),
                     ),
                     const SizedBox(height: 12),
-                    if(context
-                        .read<PermissionCubit>()
-                        .state
+                    if(state
                         .requestStatus == RequestStatus.newRequest)
                       FloatingActionButton.extended(
                         heroTag: null,
                         onPressed: () {
                           context.read<PermissionCubit>()
-                              .submitPermissionRequest(user?.userHrCode ?? "0");
+                              .submitPermissionRequest();
                         },
-                        // formBloc.state.status.isValidated
-                        //       ? () => formBloc.submitPermissionRequest()
-                        //       : null,
-                        // formBloc.submitPermissionRequest();
                         icon: const Icon(Icons.send),
                         label: const Text('SUBMIT'),
                       ),
@@ -128,6 +125,31 @@ class _PermissionScreenState extends State<PermissionScreen> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: <Widget>[
+                            if(state.requestStatus ==
+                                RequestStatus.oldRequest)Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: BlocBuilder<
+                                  PermissionCubit,
+                                  PermissionInitial>(
+
+                                  builder: (context, state) {
+                                    return Text(state.statusAction ?? "Pending",
+                                      // style: TextStyle(decoration: BoxDecoration(
+                                      //   // labelText: 'Request Date',
+                                      //   errorText: state.requestDate.invalid
+                                      //       ? 'invalid request date'
+                                      //       : null,
+                                      //   prefixIcon: const Icon(
+                                      //       Icons.date_range),
+                                      // ),),
+
+                                    );
+                                  }
+                              ),
+                            ),
+
+
                             Padding(
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 8, vertical: 8),
@@ -143,7 +165,6 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                     return TextFormField(
                                       key: UniqueKey(),
                                       initialValue: state.requestDate.value,
-
                                       enabled: false,
                                       decoration: InputDecoration(
                                         labelText: 'Request Date',
@@ -175,6 +196,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                     return TextFormField(
                                       key: UniqueKey(),
                                       initialValue:state.permissionDate.value,
+                                      enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
                                       readOnly: true,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
@@ -220,21 +242,17 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                             .center,
                                         children: [
                                           RadioListTile<int>(
-                                            value: 2,
+                                            value: 0,
                                             title: const Text("2 hours"),
                                             groupValue:state.permissionType,
-
-                                            // selected: (widget.permissionFormModelData
-                                            //     .type == 1) ? true : false,
-
                                             onChanged: (permissionType) =>
-                                                context
+                                            state.requestStatus == RequestStatus.newRequest ?context
                                                     .read<PermissionCubit>()
                                                     .permissionTypeChanged(
-                                                    permissionType!),
+                                                    permissionType!):null,
                                           ),
                                           RadioListTile<int>(
-                                            value: 4,
+                                            value: 1,
                                             // dense: true,
                                             title: const Text("4 hours"),
                                             groupValue:state.permissionType,
@@ -242,10 +260,10 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                             //     ? true : false,
                                             // radioClickState: (mstate) => mstate.value),
                                             onChanged: (permissionType) =>
-                                                context
+                                            state.requestStatus == RequestStatus.newRequest ?context
                                                     .read<PermissionCubit>()
                                                     .permissionTypeChanged(
-                                                    permissionType!),
+                                                    permissionType!):null,
                                           ),
                                         ],
                                       );
@@ -264,15 +282,10 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                       current.permissionTime,
                                   builder: (context, state) {
                                     return TextFormField(
-
-                                      // initialValue: (widget.objectValidation)
-                                      //     ? "From:"+widget.permissionFormModelData.dateFrom+
-                                      //     widget.permissionFormModelData.dateFromAmpm+
-                                      //     ", To:"+widget.permissionFormModelData.dateTo+widget.permissionFormModelData.dateFromAmpm
-                                      //     : state.permissionTime.value,
-
+                                      initialValue: state.permissionTime.value,
                                       key: UniqueKey(),
                                       readOnly: true,
+                                      enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
@@ -301,7 +314,18 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                   PermissionInitial>(
                                   builder: (context, state) {
                                     return TextFormField(
-                                      controller: commentController,
+                                      // controller: commentController,
+                                      key: state.requestStatus ==
+                                          RequestStatus.oldRequest
+                                          ? UniqueKey()
+                                          : null,
+                                      initialValue: state.requestStatus ==
+                                          RequestStatus.oldRequest ? state
+                                          .comment : "",
+                                      enabled: state.requestStatus ==
+                                          RequestStatus.newRequest
+                                          ? true
+                                          : false,
                                       onChanged: (commentValue) =>
                                           context
                                               .read<PermissionCubit>()

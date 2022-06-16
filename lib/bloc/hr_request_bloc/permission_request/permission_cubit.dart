@@ -7,6 +7,7 @@ import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_date.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:intl/intl.dart';
+import '../../../constants/constants.dart';
 import '../../../constants/enums.dart';
 import '../../../data/models/requests_form_models/request_date.dart';
 import '../../../data/models/requests_form_models/request_permission_time.dart';
@@ -19,28 +20,62 @@ class PermissionCubit extends Cubit<PermissionInitial> {
   final RequestRepository _requestRepository;
 
 
-  void getRequestData(RequestStatus requestStatus) {
-    if (requestStatus == RequestStatus.newRequest){
+  void getRequestData(RequestStatus requestStatus, String? requestNo) async {
+    if (requestStatus == RequestStatus.newRequest) {
       var now = DateTime.now();
       var formatter = DateFormat('EEEE dd-MM-yyyy');
       String formattedDate = formatter.format(now);
       final requestDate = RequestDate.dirty(formattedDate);
       emit(
         state.copyWith(
-          requestDate: requestDate,
-          status: Formz.validate([requestDate,
-            state.permissionTime , state.permissionDate]),
-          requestStatus: RequestStatus.newRequest
+            requestDate: requestDate,
+            status: Formz.validate([requestDate,
+              state.permissionTime, state.permissionDate]),
+            requestStatus: RequestStatus.newRequest
         ),
       );
-    }else{
-      const requestDate = RequestDate.dirty("requestDate");
+    } else {
+      final requestData = await _requestRepository.getPermissionRequestData(
+          requestNo!);
+
+      final permissionDate = PermissionDate.dirty(
+          GlobalConstants.dateFormatViewed.format(
+              GlobalConstants.dateFormatServer.parse(
+                  requestData.permissionDate!)));
+      // final requestToDate = DateTo.dirty(value: GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateTo!)), dateFrom: requestFromDate.value);
+      final requestDate = RequestDate.dirty(
+          GlobalConstants.dateFormatViewed.format(
+              GlobalConstants.dateFormatServer.parse(requestData.date!)));
+      final comments = requestData.comments!.isEmpty
+          ? "No Comment"
+          : requestData.comments;
+      // final hoursFrom  = TimeFrom.dirty("${requestData.hourFrom} ${requestData.dateFromAmpm}");
+      // final hoursTo  = TimeTo.dirty("${requestData.hourTo} ${requestData.dateToAmpm}");
+      final permissionTime = PermissionTime.dirty(
+          "${requestData.dateFrom} ${requestData.dateFromAmpm}");
+
+      var status = "Pending";
+      if (requestData.status == 0) {
+        status = "Pending";
+      } else if (requestData.status == 1) {
+        status = "Approved";
+      } else if (requestData.status == 2) {
+        status = "Rejected";
+      }
       emit(
         state.copyWith(
             requestDate: requestDate,
+            permissionDate: permissionDate,
+            permissionType: requestData.type,
+            permissionTime: permissionTime,
+
             status: Formz.validate([requestDate,
-              state.permissionTime , state.permissionDate]),
-            requestStatus: RequestStatus.oldRequest
+              state.permissionTime, state.permissionDate]),
+            requestStatus: RequestStatus.oldRequest,
+            comment: comments,
+            statusAction: status,
+            takeActionStatus: (_requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
+
         ),
       );
     }
@@ -154,7 +189,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
     );
   }
 
-  Future<void> submitPermissionRequest(String hrCode) async {
+  Future<void> submitPermissionRequest() async {
     print("submit permission");
     final requestDate = RequestDate.dirty(state.requestDate.value);
     final permissionDate = PermissionDate.dirty(state.permissionDate.value);
@@ -206,10 +241,10 @@ class PermissionCubit extends Cubit<PermissionInitial> {
       final dateToAmpm = DateFormat("a").format(date2.add(Duration(hours: state.permissionType)));
       print("dateToAmpm $dateToAmpm");
 
-      final type = state.permissionType == 2 ? 0 : 1;
+      final type = state.permissionType;
       print("type $type");
 
-      print(hrCode);
+      // print(hrCode);
 
       final permissionResponse = await _requestRepository.postPermissionRequest(comments: comment,
           dateFrom: dateFrom,dateFromAmpm: dateFromAmpm,dateTo: dateTo,dateToAmpm: dateToAmpm,
