@@ -3,12 +3,14 @@
 import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/data_providers/requests_data_providers/request_data_providers.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/business_card_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_business_mission_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/my_requests_model/my_requests_model_form.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_vacation_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_duration_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_response.dart';
@@ -24,8 +26,6 @@ class RequestRepository {
   final MainUserData userData;
 
   RequestRepository(this.userData);
-
-
 
   Future<RequestResponse> postPermissionRequest(
       {required String requestDate, required String comments,
@@ -54,9 +54,11 @@ class RequestRepository {
       {required AccessRightModel accessRightModel}) async {
     var bodyString = jsonEncode(<String, dynamic>
     {
-      "ServiceId": "HAH-IT-FRM-07",
+      "ServiceId": RequestServiceID.AccessRightServiceID,
       "RequestHrCode": userData.employeeData!.userHrCode,
-      "Date": "${accessRightModel.requestDate}T10:43:37.994Z",
+      "Date": GlobalConstants.dateFormatServer.format(
+          GlobalConstants.dateFormatViewed.parse(
+              accessRightModel.requestDate!)),
       "FilePdf": (accessRightModel.filePDF != null)
           ? accessRightModel.filePDF
           : null,
@@ -99,7 +101,7 @@ class RequestRepository {
         {required BusinessCardFormModel businessCardFormModel}) async {
 
     var bodyString=jsonEncode(<String, dynamic>{
-      "serviceId": "HAH-HR-FRM-06",
+      "serviceId": RequestServiceID.BusinessCardServiceID,
       "requestHrCode": userData.employeeData!.userHrCode,
       "ownerHrCode": userData.employeeData!.userHrCode,
       "date": businessCardFormModel.requestDate,
@@ -116,29 +118,25 @@ class RequestRepository {
     return response;
   }
 
-  Future<http.Response> getMyrequestsData(
-      {required String userHRCode}) async {
-
-    var bodyString= "https://api.hassanallam.com/api/SelfService/GetMyRequests?HRCode=$userHRCode";
+  Future<List<MyRequestsModelData>> getMyRequestsData() async {
      http.Response rawMyRequests = await requestDataProviders
-        .getMyRequestsList(bodyString);
-    // final json = await jsonDecode(rawMyRequests.body);
-    print("----.-+"+rawMyRequests.body.toString());
-    // // final RequestResponse response = RequestResponse.fromJson(json);
-    // // print("--.---+"+json);
-    // // return response;
+        .getMyRequestsData(userData.user?.userHRCode ?? "");
+     final json = await jsonDecode(rawMyRequests.body);
 
-    return rawMyRequests;
+     List<MyRequestsModelData> myRequestsData = List<MyRequestsModelData>.from(
+         json.map((model) => MyRequestsModelData.fromJson(model)));
+    return myRequestsData;
 
   }
 
 
-  Future<RequestResponse> postEmailUserAccount({required EmailUserFormModel emailUserFormModel})async {
-
+  Future<RequestResponse> postEmailUserAccount({required EmailUserFormModel emailUserFormModel}) async {
     var bodyString = jsonEncode(<String, dynamic>{
-      "ServiceId": "HAH-IT-FRM-04",
+      "ServiceId": RequestServiceID.EmailUserAccountServiceID,
       "RequestHrCode": userData.user!.userHRCode,
-      "Date": "${emailUserFormModel.requestDate!}T10:43:37.994Z",
+      "Date": GlobalConstants.dateFormatServer.format(
+          GlobalConstants.dateFormatViewed.parse(
+              emailUserFormModel.requestDate!)),
       "OwnerHrCode": userData.user!.userHRCode,
       "OwnerFullName": userData.employeeData!.name,
       "OwnerTitle": userData.employeeData!.titleName,
@@ -152,48 +150,41 @@ class RequestRepository {
       "EmailAccount": emailUserFormModel.accountType,
     });
 
-final http.Response rawEmailUserAccount = await requestDataProviders
-    .getEmailUserAccount(bodyString);
-final json = await jsonDecode(rawEmailUserAccount.body);
-final RequestResponse response = RequestResponse.fromJson(json);
-return response;
-}
+    final http.Response rawEmailUserAccount = await requestDataProviders
+        .getEmailUserAccount(bodyString);
+    final json = await jsonDecode(rawEmailUserAccount.body);
+    final RequestResponse response = RequestResponse.fromJson(json);
+    return response;
+  }
 
 
-  Future<RequestResponse> postEmbassyLetter({required EmbassyLetterFormModel embassyLetterFormModel}) async{
-
-    var bodyString=jsonEncode(<String, dynamic>
+  Future<RequestResponse> postEmbassyLetter({required EmbassyLetterFormModel embassyLetterFormModel}) async {
+    var bodyString = jsonEncode(<String, dynamic>
     {
-
-      // "RequestNo": 0,
-      "ServiceId": "HAH-HR-FRM-07",
+      "ServiceId": RequestServiceID.EmbassyServiceID,
       "RequestHrCode": userData.employeeData!.userHrCode,
       "OwnerHrCode": userData.employeeData!.userHrCode,
-      "Date": "${embassyLetterFormModel.requestDate!}T11:20:14.519Z",
-      // "NewComer": true,
-      // "ApprovalPathId": 0,
-      // "Status": 0,
+      "Date": GlobalConstants.dateFormatServer.format(
+          GlobalConstants.dateFormatViewed.parse(
+              embassyLetterFormModel.requestDate!)),
       "Comments": embassyLetterFormModel.comments,
-      // "NplusEmail": "string",
-      // "ClosedDate": "2022-06-02T11:20:14.519Z",
-      "DateFrom": "${embassyLetterFormModel.dateFrom!}T11:20:14.519Z",
-      "DateTo": "${embassyLetterFormModel.dateTo!}T11:20:14.519Z",
+      "DateFrom": GlobalConstants.dateFormatServer.format(
+          GlobalConstants.dateFormatViewed.parse(
+              embassyLetterFormModel.dateFrom!)),
+      "DateTo": GlobalConstants.dateFormatServer.format(
+          GlobalConstants.dateFormatViewed.parse(
+              embassyLetterFormModel.dateTo!)),
       "Purpose": embassyLetterFormModel.purpose,
       "EmbassyId": embassyLetterFormModel.embassy,
       "PassportNo": embassyLetterFormModel.passportNo,
       "AddSalary": embassyLetterFormModel.addSalary,
-      // "SocialInsuranceNumber": "string",
-      // "ProjectId": "string"
-
     });
 
-        final http.Response rawEmbassyLetter = await requestDataProviders
-            .getEmbassyLetterRequest(bodyString);
+    final http.Response rawEmbassyLetter = await requestDataProviders
+        .getEmbassyLetterRequest(bodyString);
     final json = await jsonDecode(rawEmbassyLetter.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
-
-
   }
 
   Future<RequestResponse> postVacationRequest(

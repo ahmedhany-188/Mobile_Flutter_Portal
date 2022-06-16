@@ -14,12 +14,11 @@ import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 class MyRequestsScreen extends StatefulWidget{
 
 
-  static const routeName = "/my-requests-screen";
+  static const routeName = "my-requests-screen";
   const MyRequestsScreen({Key? key}) : super(key: key);
 
   @override
   State<MyRequestsScreen> createState() => MyRequestsScreenClass();
-
 }
 
 
@@ -42,13 +41,10 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
         centerTitle: true,
       ),
       resizeToAvoidBottomInset: false,
-
       body: BlocProvider<MyRequestsCubit>(
-
         create: (context) =>
         MyRequestsCubit(RequestRepository(user))
-          ..getRequests(user.user!.userHRCode.toString()),
-
+          ..getRequests(),
         child: BlocConsumer<MyRequestsCubit, MyRequestsState>(
           listener: (context, state) {
             if (state is BlocGetMyRequestsSuccessState) {
@@ -79,21 +75,16 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
           builder: (context, state) {
             return Container(
               decoration: const BoxDecoration(
-                // image: DecorationImage(
-                //     image: AssetImage(
-                //     "assets/images/S_Background.png"),
-                //     fit: BoxFit.cover
-                // )
                 color: Colors.white,
               ),
               child: state is BlocGetMyRequestsSuccessState ? Padding(
                   padding: const EdgeInsets.all(15),
                   child: SizedBox(
                     height: deviceSize.height,
-                    child: MyReqyestsTicketWidget(
-                        state.getMyRequests, user.employeeData!.userHrCode!),
+                    child: MyRequestsItemWidget(
+                        state.getMyRequests),
                   )
-              ) : Container(),
+              ) : const Center(child: CircularProgressIndicator(),),
             );
           },
         ),

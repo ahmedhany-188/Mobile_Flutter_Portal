@@ -155,7 +155,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.home,
                         () {
                           Navigator
-                              .pushReplacementNamed(context,TapsScreen.routeName);
+                              .pushNamed(context,TapsScreen.routeName);
                         },
                       ),
                       buildDivider(),
@@ -164,7 +164,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.person,
                         () {
                           Navigator
-                              .pushReplacementNamed(context,UserProfileScreen.routeName);
+                              .pushNamed(context,UserProfileScreen.routeName);
                         },
                       ),
                       buildDivider(),
@@ -183,14 +183,14 @@ class _MainDrawerState extends State<MainDrawer> {
                         () {
 
                           Navigator
-                              .pushReplacementNamed(context,AttendanceScreen.routeName);
+                              .pushNamed(context,AttendanceScreen.routeName);
                         },
                       ),
                       buildDivider(),
                       buildListTile('Medical Request', Icons.medical_services,
                           () {
                         Navigator
-                            .pushReplacementNamed(context,MedicalRequestScreen.routeName);
+                            .pushNamed(context,MedicalRequestScreen.routeName);
                       }),
                       buildDivider(),
                       buildListTile(
@@ -218,7 +218,7 @@ class _MainDrawerState extends State<MainDrawer> {
                             () {
 
                           Navigator
-                              .pushReplacementNamed(context,EmailAndUserAccountScreen.routeName);
+                              .pushNamed(context,EmailAndUserAccountScreen.routeName);
 
                         },
                       ),
@@ -230,7 +230,7 @@ class _MainDrawerState extends State<MainDrawer> {
                             () {
 
                           Navigator
-                              .pushReplacementNamed(context,AccessUserAccountScreen.routeName);
+                              .pushNamed(context,AccessUserAccountScreen.routeName);
                         },
                       ),
 
@@ -240,7 +240,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.waterfall_chart,
                         () {
                           Navigator
-                              .pushReplacementNamed(context,EconomyNewsScreen.routeName);
+                              .pushNamed(context,EconomyNewsScreen.routeName);
                         },
                       ),
                       buildDivider(),
@@ -251,7 +251,7 @@ class _MainDrawerState extends State<MainDrawer> {
                             () {
 
                           Navigator
-                              .pushReplacementNamed(context,BusinessCardScreen.routeName);
+                              .pushNamed(context,BusinessCardScreen.routeName);
                         },
                       ),
 
@@ -261,7 +261,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.airplanemode_active,
                             () {
                           Navigator
-                              .pushReplacementNamed(context,EmbassyLetterScreen.routeName);
+                              .pushNamed(context,EmbassyLetterScreen.routeName);
                         },
                       ),
 
@@ -270,8 +270,10 @@ class _MainDrawerState extends State<MainDrawer> {
                         'My Requests',
                         Icons.wallpaper,
                             () {
-                          Navigator
-                              .pushReplacementNamed(context,MyRequestsScreen.routeName);
+                              Navigator.of(context)
+                                  .pushNamed(MyRequestsScreen.routeName);
+                          // Navigator
+                          //     .pushNamed(context,MyRequestsScreen.routeName);
                         },
                       ),
 
@@ -281,7 +283,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.quiz,
                         () {
                           Navigator
-                              .pushReplacementNamed(context,EmployeeAppraisalScreen.routeName);
+                              .pushNamed(context,EmployeeAppraisalScreen.routeName);
                         },
                       ),
                       buildDivider(),
