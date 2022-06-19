@@ -190,12 +190,10 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<UserNotificationBloc>(
             lazy: true,
             create: (userNotificationContext) => UserNotificationBloc(
-              firebaseProvider: FirebaseProvider(
-                  BlocProvider.of<AppBloc>(userNotificationContext)
-                      .state
-                      .userData
-                      .user!),
-            ),
+              firebaseProvider: FirebaseProvider(BlocProvider
+                  .of<AppBloc>(userNotificationContext)
+                  .state
+                  .userData),),
           ),
           BlocProvider<AppUpgraderCubit>(
             lazy: false,

@@ -13,7 +13,7 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 enum AuthenticationStatus {authenticated, unauthenticated}
 class AuthenticationRepository {
   late final AuthenticationProvider authenticationProvider = AuthenticationProvider();
-  final StreamController<MainUserData>_controller = StreamController<MainUserData>();
+  final StreamController<MainUserData>_controller = StreamController<MainUserData>.broadcast();
   static const userCacheKey = '__user_cache_key__';
   static const employeeCacheKey = '__employeeData__';
   // final CacheClient _cache = CacheClient();
@@ -60,23 +60,26 @@ class AuthenticationRepository {
       if (_firebaseAuth.currentUser != null){
         String? data = await shared_User.getString(userCacheKey);
         Map userMap = jsonDecode(data!);
-        var user = getFromJson(userMap as Map<String, dynamic>);
+        var user = User.fromJson(userMap as Map<String, dynamic>);
         String? dataEmployee = await shared_User.getString(employeeCacheKey);
         Map employeeMap = jsonDecode(dataEmployee!);
-        var employeeData = getEmployeeDataFromJson(employeeMap as Map<String, dynamic>);
+        var employeeData = EmployeeData.fromJson(employeeMap as Map<String, dynamic>);
         var mainUserData = MainUserData(user: user,employeeData: employeeData);
-        yield mainUserData;
+        // yield mainUserData;
+        _controller.add(mainUserData);
       }else{
-        yield MainUserData.empty;
+        _controller.add(MainUserData.empty);
+        // yield MainUserData.empty;
       }
 
     }catch(e){
-      yield MainUserData.empty;
+      _controller.add(MainUserData.empty);
+      // yield MainUserData.empty;
     }
 
 
     // yield _cache.read<User>(key: userCacheKey) ?? User.empty;;
-    // yield* _controller.stream;
+    yield* _controller.stream;
   }
 
   Future<void> logIn({
@@ -90,7 +93,7 @@ class AuthenticationRepository {
           if (value.statusCode == 200) {
             final loginTokenDataJson = await jsonDecode(value.body);
             try {
-              User user = getFromJson(loginTokenDataJson[0]);
+              User user = User.fromJson(loginTokenDataJson[0]);
               String userData = jsonEncode(loginTokenDataJson[0]);
               await logInWithEmailAndPassword(email: user.email,password: "12345678");
               shared_User.setString(userCacheKey, userData);
@@ -110,23 +113,13 @@ class AuthenticationRepository {
                 print(value);
                 if (value.statusCode == 200) {
                   final employeeDataJson = await jsonDecode(value.body);
-                  EmployeeData employeeData = getEmployeeDataFromJson(employeeDataJson[0]);
+                  EmployeeData employeeData = EmployeeData.fromJson(employeeDataJson[0]);
                   String employeeDataString = jsonEncode(employeeDataJson[0]);
                   shared_User.setString(employeeCacheKey, employeeDataString);
                   print(employeeData.toString());
                   await _firebaseMessaging.getToken().then((token) async {
                     print("FCM --> $token");
-                    await _databaseReferenceUsers.child(user.email.replaceAll(".", ",")).update({
-                      // "device_token": token,
-                      "hrcode": user.userHRCode,
-                      "imgProfile": employeeData.imgProfile,
-                      "managerCode":employeeData.managerCode,
-                      // "managerEmail":,
-                      "title":employeeData.titleName,
-                      "userID":_firebaseAuth.currentUser?.uid,
-                      "username":employeeData.name,
-
-                    });
+                    await FirebaseProvider(MainUserData(employeeData: employeeData,user: user)).updateUserWithData(token!);
                   });
                   _controller.add(MainUserData(employeeData: employeeData,user: user));
                 }
@@ -177,62 +170,6 @@ class AuthenticationRepository {
     }
   }
 
-
-  User getFromJson(Map<String, dynamic> json) {
-    return User(email: json['email'],
-        userHRCode: json['userHRCode'],
-        token: json['token'],
-        expiration: json['expiration']);
-  }
-  EmployeeData getEmployeeDataFromJson(Map<String, dynamic> json) {
-    return EmployeeData(userHrCode : json['userHrCode'],
-      applications : json['applications'],
-      fingerPrintGroup : json['fingerPrintGroup'],
-      departmentId : json['departmentId'],
-      locationId : json['locationId'],
-      mainDepartmentID : json['mainDepartmentID'],
-      mainDepartment : json['mainDepartment'],
-      mainFunction : json['mainFunction'],
-      projectName : json['projectName'],
-      titleName : json['titleName'],
-      gradeName : json['grade_Name'],
-      companyName : json['companyName'],
-      name : json['name'],
-      arabicName : json['arabicName'],
-      stName : json['stName'],
-      middleName : json['middleName'],
-      lastName : json['lastName'],
-      managerCode : json['managerCode'],
-      titleId : json['titleId'],
-      email : json['email'],
-      deskPhone : json['deskPhone'],
-      phone : json['phone'],
-      mobile : json['mobile'],
-      mobile1 : json['mobile1'],
-      hireDate : json['hireDate'],
-      projectId : json['projectId'],
-      status : json['status'],
-      linkedIn : json['linkedIn'],
-      skype : json['skype'],
-      imgProfile : json['imgProfile'],
-      birthdate : json['birthdate'],
-      cv : json['cv'],
-      nationalId : json['nationalId'],
-      address : json['address'],
-      country : json['country'],
-      city : json['city'],
-      area : json['area'],
-      street : json['street'],
-      isActive : json['isActive'],
-      interviewId : json['interviewId'],
-      inDate : json['inDate'],
-      inUser : json['inUser'],
-      isTopManagement : json['isTopManagement'],
-      isCEO : json['isCEO'],
-      isLessonLearned : json['isLessonLearned']);
-
-  }
-
   Future<void> logOut() async {
     try {
       _controller.add(MainUserData.empty);
@@ -267,10 +204,10 @@ class AuthenticationRepository {
 
         String? data = shared_User.getString(userCacheKey);
         Map userMap = jsonDecode(data!);
-        var user = getFromJson(userMap as Map<String, dynamic>);
+        var user = User.fromJson(userMap as Map<String, dynamic>);
         String? dataEmployee = shared_User.getString(employeeCacheKey);
         Map employeeMap = jsonDecode(dataEmployee!);
-        var employeeData = getEmployeeDataFromJson(employeeMap as Map<String, dynamic>);
+        var employeeData = EmployeeData.fromJson(employeeMap as Map<String, dynamic>);
         var mainUserData = MainUserData(user: user,employeeData: employeeData);
         return mainUserData;
       // }else{

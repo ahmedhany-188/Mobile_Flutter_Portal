@@ -11,13 +11,12 @@ class User extends Equatable {
    const User({this.userHRCode, required this.email, this.token, this.expiration});
 
 
-  // User.fromJson(Map<String, dynamic> json) {
-  //   // return User(email: json['email'],userHRCode: json['userHRCode'],token: json['token'],expiration: json['expiration']);
-  //   userHRCode = json['userHRCode'];
-  //   email = json['email'];
-  //   token = json['token'];
-  //   expiration = json['expiration'];
-  // }
+  User.fromJson(Map<String, dynamic> json):
+    userHRCode = json['userHRCode'],
+    email = json['email'],
+    token = json['token'],
+    expiration = json['expiration'];
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();

@@ -231,7 +231,7 @@ class _SplashScreenState extends State<SplashScreen>
                               builder: (ctx, state) {
                                 switch (state.status) {
                                   case AppStatus.authenticated:
-                                    FirebaseProvider(state.userData.user!)
+                                    FirebaseProvider(state.userData)
                                         .updateUserOnline(
                                             AppLifecycleStatus.online);
                                     return const TapsScreen();

@@ -96,53 +96,53 @@ class EmployeeData extends Equatable {
         this.isCEO,
         this.isLessonLearned});
 
-  // EmployeeData.fromJson(Map<String, dynamic> json) {
-  //   userHrCode = json['userHrCode'];
-  //   applications = json['applications'];
-  //   fingerPrintGroup = json['fingerPrintGroup'];
-  //   departmentId = json['departmentId'];
-  //   locationId = json['locationId'];
-  //   mainDepartmentID = json['mainDepartmentID'];
-  //   mainDepartment = json['mainDepartment'];
-  //   mainFunction = json['mainFunction'];
-  //   projectName = json['projectName'];
-  //   titleName = json['titleName'];
-  //   gradeName = json['grade_Name'];
-  //   companyName = json['companyName'];
-  //   name = json['name'];
-  //   arabicName = json['arabicName'];
-  //   stName = json['stName'];
-  //   middleName = json['middleName'];
-  //   lastName = json['lastName'];
-  //   managerCode = json['managerCode'];
-  //   titleId = json['titleId'];
-  //   email = json['email'];
-  //   deskPhone = json['deskPhone'];
-  //   phone = json['phone'];
-  //   mobile = json['mobile'];
-  //   mobile1 = json['mobile1'];
-  //   hireDate = json['hireDate'];
-  //   projectId = json['projectId'];
-  //   status = json['status'];
-  //   linkedIn = json['linkedIn'];
-  //   skype = json['skype'];
-  //   imgProfile = json['imgProfile'];
-  //   birthdate = json['birthdate'];
-  //   cv = json['cv'];
-  //   nationalId = json['nationalId'];
-  //   address = json['address'];
-  //   country = json['country'];
-  //   city = json['city'];
-  //   area = json['area'];
-  //   street = json['street'];
-  //   isActive = json['isActive'];
-  //   interviewId = json['interviewId'];
-  //   inDate = json['inDate'];
-  //   inUser = json['inUser'];
-  //   isTopManagement = json['isTopManagement'];
-  //   isCEO = json['isCEO'];
-  //   isLessonLearned = json['isLessonLearned'];
-  // }
+  EmployeeData.fromJson(Map<String, dynamic> json):
+    userHrCode = json['userHrCode'],
+    applications = json['applications'],
+    fingerPrintGroup = json['fingerPrintGroup'],
+    departmentId = json['departmentId'],
+    locationId = json['locationId'],
+    mainDepartmentID = json['mainDepartmentID'],
+    mainDepartment = json['mainDepartment'],
+    mainFunction = json['mainFunction'],
+    projectName = json['projectName'],
+    titleName = json['titleName'],
+    gradeName = json['grade_Name'],
+    companyName = json['companyName'],
+    name = json['name'],
+    arabicName = json['arabicName'],
+    stName = json['stName'],
+    middleName = json['middleName'],
+    lastName = json['lastName'],
+    managerCode = json['managerCode'],
+    titleId = json['titleId'],
+    email = json['email'],
+    deskPhone = json['deskPhone'],
+    phone = json['phone'],
+    mobile = json['mobile'],
+    mobile1 = json['mobile1'],
+    hireDate = json['hireDate'],
+    projectId = json['projectId'],
+    status = json['status'],
+    linkedIn = json['linkedIn'],
+    skype = json['skype'],
+    imgProfile = json['imgProfile'],
+    birthdate = json['birthdate'],
+    cv = json['cv'],
+    nationalId = json['nationalId'],
+    address = json['address'],
+    country = json['country'],
+    city = json['city'],
+    area = json['area'],
+    street = json['street'],
+    isActive = json['isActive'],
+    interviewId = json['interviewId'],
+    inDate = json['inDate'],
+    inUser = json['inUser'],
+    isTopManagement = json['isTopManagement'],
+    isCEO = json['isCEO'],
+    isLessonLearned = json['isLessonLearned'];
+
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
