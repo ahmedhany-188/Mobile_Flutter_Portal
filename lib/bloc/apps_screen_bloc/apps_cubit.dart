@@ -41,13 +41,10 @@ class AppsCubit extends Cubit<AppsState> {
         if (appsResponse.data != null) {
           appsList = appsResponse.data!;
           emit(AppsSuccessState(appsList));
+        }else{
+          emit(AppsErrorState('noAppsFound'));
         }
       }
-    }).timeout(Duration(minutes: 1)).catchError((error) {
-      if (kDebugMode) {
-        print(error.toString());
-      }
-      emit(AppsErrorState(error.toString()));
     });
   }
 }

@@ -38,12 +38,12 @@ class _AppsScreenState extends State<AppsScreen> {
       resizeToAvoidBottomInset: false,
       body: BlocProvider<AppsCubit>.value(
         value: AppsCubit.get(context),
-        child: BlocConsumer<AppsCubit, AppsState>(
-          listener: (context, state) {
-            if (state is AppsErrorState) {
-              showErrorSnackBar(context);
-            }
-          },
+        child: BlocBuilder<AppsCubit, AppsState>(
+          // listener: (context, state) {
+          //   if (state is AppsErrorState) {
+          //     showErrorSnackBar(context);
+          //   }
+          // },
           buildWhen: (pre, cur) {
             if (cur is AppsSuccessState) {
               return cur.appsList.isNotEmpty;
@@ -97,8 +97,8 @@ class _AppsScreenState extends State<AppsScreen> {
                   );
                 },
               );
-            } else {
-              return buildNoAppsFound(context);
+            } else{
+              return (state is AppsErrorState)? buildNoAppsFound() : const Center(child: CircularProgressIndicator());
             }
           },
         ),
@@ -167,19 +167,41 @@ class _AppsScreenState extends State<AppsScreen> {
                 ),
               );
             })
-        : buildNoAppsFound(context);
+        : (AppsCubit.get(context).appsList.isEmpty)
+            ? buildNoAppsFound()
+            : buildNoSearchFound();
   }
 
-  buildNoAppsFound(BuildContext noAppscontext) {
+  buildNoAppsFound() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Image.asset('assets/images/logo.png', scale: 4.sp),
-          // SizedBox(child: ),
           const Text(
             'No applications to be shown\nContact HR',
+            softWrap: true,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontFamily: 'RobotoFlex',
+              fontSize: 20,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  buildNoSearchFound() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Image.asset('assets/images/logo.png', scale: 4.sp),
+          const Text(
+            'Unfortunately, \nyou have no Application with this name',
             softWrap: true,
             textAlign: TextAlign.center,
             style: TextStyle(

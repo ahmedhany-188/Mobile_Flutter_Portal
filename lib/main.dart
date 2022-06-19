@@ -218,6 +218,10 @@ class _MyAppState extends State<MyApp> {
                       .user!
                       .userHRCode),
           ),
+          BlocProvider<NewsCubit>(
+            create: (newsContext) => NewsCubit()..getNews()..getLatestNews(),
+            lazy: true,
+          ),
 
           // BlocProvider<PermissionCubit>(
           //   create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),
