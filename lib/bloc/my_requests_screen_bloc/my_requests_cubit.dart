@@ -13,13 +13,13 @@ class MyRequestsCubit extends Cubit<MyRequestsState> {
   MyRequestsCubit(this.requestRepository) : super(MyRequestsInitial());
 
   static MyRequestsCubit get(context) =>BlocProvider.of(context);
-  List<MyRequestsModelData> myRequests=[];
+
 
   final Connectivity connectivity = Connectivity();
 
   final RequestRepository requestRepository;
 
-  void getRequests(userHRcode) async {
+  void getRequests() async {
 
     emit(BlocGetMyRequestsLoadingState());
     try {
@@ -27,31 +27,12 @@ class MyRequestsCubit extends Cubit<MyRequestsState> {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
 
-        requestRepository.getMyrequestsData(userHRCode:userHRcode)
+        requestRepository.getMyRequestsData()
             .then((value)async{
-
-          myRequests = await jsonDecode(value.body);
-          print("-----oo-----"+myRequests.toString());
-          print("-----o8-----"+value.body);
-
-          // myRequests = value.body;
-
-          emit(BlocGetMyRequestsSuccessState(myRequests));
+          emit(BlocGetMyRequestsSuccessState(value));
         }).catchError((error){
-          print(error.toString()+"0000000000");
           emit(BlocGetMyRequestsErrorState(error.toString()));
         });
-
-        // final MyRequestsResponse = await requestRepository.getMyrequestsData(userHRCode:userHRcode);
-        // if (MyRequestsResponse!=null) {
-        //   myRequests=MyRequestsResponse as List<MyRequestsModelData>;
-        //   myRequests= List<MyRequestsModelData>.from(
-        //       MyRequestsResponse((model) => MyRequestsModelData.fromJson(model)));
-        //   print("---0.-+"+myRequests.toString());
-        //   emit(BlocGetMyRequestsSuccessState(myRequests));
-        // }else{
-        //   emit(BlocGetMyRequestsErrorState(MyRequestsResponse.result!));
-        // }
       }else{
         emit(BlocGetMyRequestsErrorState("No internet connection"));
       }

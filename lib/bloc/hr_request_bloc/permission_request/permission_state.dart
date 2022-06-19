@@ -18,6 +18,8 @@ class PermissionInitial extends PermissionState {
     this.successMessage,
     this.requestStatus,
     this.comment = "",
+    this.statusAction,
+    this.takeActionStatus,
   });
 
   final RequestDate requestDate;
@@ -29,6 +31,8 @@ class PermissionInitial extends PermissionState {
   final String? successMessage;
   final RequestStatus? requestStatus;
   final String comment;
+  final TakeActionStatus? takeActionStatus;
+  final String? statusAction;
 
   @override
   List<Object> get props =>
@@ -45,6 +49,8 @@ class PermissionInitial extends PermissionState {
     String? successMessage,
     RequestStatus? requestStatus,
     String? comment,
+    TakeActionStatus? takeActionStatus,
+    String? statusAction
   }) {
     return PermissionInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -56,6 +62,8 @@ class PermissionInitial extends PermissionState {
       successMessage: successMessage ?? this.successMessage,
       requestStatus: requestStatus ?? this.requestStatus,
       comment: comment ?? this.comment,
+      statusAction: statusAction ?? this.statusAction,
+      takeActionStatus: takeActionStatus ?? this.takeActionStatus,
     );
   }
 }

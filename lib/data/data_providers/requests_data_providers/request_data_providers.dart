@@ -58,12 +58,6 @@ class RequestDataProviders {
     );
   }
 
-  Future<http.Response> getMyRequestsList(String bodyString) async {
-    http.Response rawAttendanceData = await http.get(
-      Uri.parse(bodyString),
-    );
-    return rawAttendanceData;
-  }
 
 
   Future<http.Response> getDurationVacation(int type,String dateFrom,String dateTo) async{
@@ -112,9 +106,26 @@ class RequestDataProviders {
   }
 
   Future<http.Response> getBusinessMissionRequestData(String hrCode,String requestNo) async{
-    http.Response rawDurationData = await http.get(
+    http.Response rawData = await http.get(
       Uri.parse(
           "https://api.hassanallam.com/api/SelfService/GetBusinessMission?HRCode=$hrCode&requestno=$requestNo"),
+    );
+    print(rawData.body);
+    return rawData;
+  }
+  Future<http.Response> getPermissionRequestData(String hrCode,String requestNo) async{
+    http.Response rawData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/GetPermission?HRCode=$hrCode&requestno=$requestNo"),
+    );
+    print(rawData.body);
+    return rawData;
+  }
+
+  Future<http.Response> getMyRequestsData(String hrCode) async{
+    http.Response rawDurationData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/GetMyRequests?HRCode=$hrCode"),
     );
     print(rawDurationData.body);
     return rawDurationData;

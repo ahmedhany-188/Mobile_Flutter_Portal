@@ -6,15 +6,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/embassy_letter_request/embassy_letter_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
 
+import '../../constants/enums.dart';
+
 class EmbassyLetterScreen extends StatefulWidget{
 
-  static const routeName = "/embassy-letter-screen";
+  static const routeName = "embassy-letter-screen";
   static const requestNoKey = 'request-No';
 
   const EmbassyLetterScreen({Key? key,this.requestNo}) : super(key: key);
@@ -29,223 +32,8 @@ class EmbassyLetterScreen extends StatefulWidget{
 class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
 
 
-  List<String> purposeList = [
-    "Tourism",
-    "Business",
-  ];
-  List<String> embassyList = [
-    "Afghanistan",
-    "Albania",
-    "Algeria",
-    "Andorra",
-    "Angola",
-    "Anguilla",
-    "Antigua",
-    "Barbuda",
-    "Argentina",
-    "Armenia",
-    "Aruba",
-    "Australia",
-    "Austria",
-    "Azerbaijan",
-    "Bahamas",
-    "Bahrain",
-    "Bangladesh",
-    "Barbados",
-    "Belarus",
-    "Belgium",
-    "Belize",
-    "Benin",
-    "Bermuda",
-    "Bhutan",
-    "Bolivia",
-    "Bosnia",
-    "Herzegovina",
-    "Botswana",
-    "Brazil",
-    "British Virgin Islands",
-    "Brunei",
-    "Bulgaria",
-    "Burkina Faso",
-    "Burundi",
-    "Cambodia",
-    "Cameroon",
-    "Cape Verde",
-    "Cayman Islands",
-    "Chad",
-    "Chile",
-    "China",
-    "Colombia",
-    "Congo",
-    "Cook Islands",
-    "Costa Rica",
-    "Cote D Ivoire",
-    "Croatia",
-    "Cruise Ship",
-    "Cuba",
-    "Cyprus",
-    "Czech Republic",
-    "Denmark",
-    "Djibouti",
-    "Dominica",
-    "Dominican Republic",
-    "Ecuador",
-    "Egypt",
-    "El Salvador",
-    "Equatorial Guinea",
-    "Estonia",
-    "Ethiopia",
-    "Falkland Islands",
-    "Faroe Islands",
-    "Fiji",
-    "Finland",
-    "France",
-    "French Polynesia",
-    "French West Indies",
-    "Gabon",
-    "Gambia",
-    "Georgia",
-    "Germany",
-    "Ghana",
-    "Gibraltar",
-    "Greece",
-    "Greenland",
-    "Grenada",
-    "Guam",
-    "Guatemala",
-    "Guernsey",
-    "Guinea",
-    "Guinea Bissau",
-    "Guyana",
-    "Haiti",
-    "Honduras",
-    "Hong Kong",
-    "Hungary",
-    "Iceland",
-    "India",
-    "Indonesia",
-    "Iran",
-    "Iraq",
-    "Ireland",
-    "Isle of Man",
-    "Italy",
-    "Jamaica",
-    "Japan",
-    "Jersey",
-    "Jordan",
-    "Kazakhstan",
-    "Kenya",
-    "Kuwait",
-    "Kyrgyz Republic",
-    "Laos",
-    "Latvia",
-    "Lebanon",
-    "Lesotho",
-    "Liberia",
-    "Libya",
-    "Liechtenstein",
-    "Lithuania",
-    "Luxembourg",
-    "Macau",
-    "Macedonia",
-    "Madagascar",
-    "Malawi",
-    "Malaysia",
-    "Maldives",
-    "Mali",
-    "Malta",
-    "Mauritania",
-    "Mauritius",
-    "Mexico",
-    "Moldova",
-    "Monaco",
-    "Mongolia",
-    "Montenegro",
-    "Montserrat",
-    "Morocco",
-    "Mozambique",
-    "Namibia",
-    "Nepal",
-    "Netherlands",
-    "Netherlands Antilles",
-    "New Caledonia",
-    "New Zealand",
-    "Nicaragua",
-    "Niger",
-    "Nigeria",
-    "Norway",
-    "Oman",
-    "Pakistan",
-    "Palestine",
-    "Panama",
-    "Papua New Guinea",
-    "Paraguay",
-    "Peru",
-    "Philippines",
-    "Poland",
-    "Portugal",
-    "Puerto Rico",
-    "Qatar",
-    "Reunion",
-    "Romania",
-    "Russia",
-    "Rwanda",
-    "Saint Pierre",
-    "Miquelon",
-    "Samoa",
-    "San Marino",
-    "Satellite",
-    "Saudi Arabia",
-    "Senegal",
-    "Serbia",
-    "Seychelles",
-    "Sierra Leone",
-    "Singapore",
-    "Slovakia",
-    "Slovenia",
-    "South Africa",
-    "South Korea",
-    "Spain",
-    "Sri Lanka",
-    "St Kitts",
-    "Nevis",
-    "St Lucia",
-    "St Vincent",
-    "St. Lucia",
-    "Sudan",
-    "Suriname",
-    "Swaziland",
-    "Sweden",
-    "Switzerland",
-    "Syria",
-    "Taiwan",
-    "Tajikistan",
-    "Tanzania",
-    "Thailand",
-    "Timor L'Este",
-    "Togo",
-    "Tonga",
-    "Trinidad",
-    "Tobago",
-    "Tunisia",
-    "Turkey",
-    "Turkmenistan",
-    "Turks",
-    "Caicos",
-    "Uganda",
-    "Ukraine",
-    "United Arab Emirates",
-    "United Kingdom",
-    "Uruguay",
-    "Uzbekistan",
-    "Venezuela",
-    "Vietnam",
-    "Virgin Islands (US)",
-    "Yemen",
-    "Zambia",
-    "Zimbabwe"
 
-  ];
+
   List<String> addSalaryList = [
     "Yes",
     "No"
@@ -259,9 +47,12 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
         .size;
 
 
-    final user = context.select((AppBloc bloc) => bloc.state.userData);
-    var formatter = DateFormat('yyyy-MM-dd');
-    String formattedDate = formatter.format(DateTime.now());
+    final userMainData = context.select((AppBloc bloc) =>
+    bloc.state.userData);
+
+    final currentRequestNo = widget.requestNo;
+    // var formatter = DateFormat('yyyy-MM-dd');
+    // String formattedDate = formatter.format(DateTime.now());
 
     final TextEditingController passportController = TextEditingController();
     final TextEditingController commentController = TextEditingController();
@@ -275,25 +66,24 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
         ),
       ),
       child: BlocProvider<EmbassyLetterCubit>(
-        create: (embassyLetterContext) =>
-            EmbassyLetterCubit(RequestRepository(user)),
-        child: Builder(
-            builder: (context) {
+        create: (embassyContext) =>
+        currentRequestNo == null ? (EmbassyLetterCubit(
+            RequestRepository(userMainData))
+          ..getRequestData(RequestStatus.newRequest, ""))
+            : (EmbassyLetterCubit(RequestRepository(userMainData))
+          ..getRequestData(RequestStatus.oldRequest,
+              currentRequestNo[EmbassyLetterScreen.requestNoKey])),
+        child: BlocBuilder<EmbassyLetterCubit,EmbassyLetterInitial>(
+            builder: (context,state) {
               return Scaffold(
                 appBar: AppBar(
                   title: const Text("Embassy Letter"),
                   centerTitle: true,
                 ),
-                resizeToAvoidBottomInset: false,
-
-                /*
                 floatingActionButton: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      if(context
-                          .read<AccessRightCubit>()
-                          .state
-                          .requestStatus ==
+                      if(state.requestStatus ==
                           RequestStatus.oldRequest)FloatingActionButton
                           .extended(
                         heroTag: null,
@@ -302,10 +92,7 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                         label: const Text('Accept'),
                       ),
                       const SizedBox(height: 12),
-                      if(context
-                          .read<AccessRightCubit>()
-                          .state
-                          .requestStatus ==
+                      if(state.requestStatus ==
                           RequestStatus.oldRequest)FloatingActionButton
                           .extended(
                         backgroundColor: Colors.red,
@@ -316,15 +103,12 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                         label: const Text('Reject'),
                       ),
                       const SizedBox(height: 12),
-                      if(context
-                          .read<AccessRightCubit>()
-                          .state
-                          .requestStatus == RequestStatus.newRequest)
+                      if(state.requestStatus == RequestStatus.newRequest)
                         FloatingActionButton.extended(
                           heroTag: null,
                           onPressed: () {
-                            context.read<AccessRightCubit>()
-                                .getSubmitAccessRight(selectedTypes);
+                            context.read<EmbassyLetterCubit>()
+                                .submitEmbassyLetter();
                           },
                           // formBloc.state.status.isValidated
                           //       ? () => formBloc.submitPermissionRequest()
@@ -337,7 +121,7 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                       const SizedBox(height: 12),
                     ],
                   ),
-                 */
+
 
 
                 body: BlocListener<EmbassyLetterCubit, EmbassyLetterInitial>(
@@ -374,17 +158,41 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(15),
                     child: Form(
-
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
+                            if(state.requestStatus ==
+                                RequestStatus.oldRequest)Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: BlocBuilder<
+                                  EmbassyLetterCubit,
+                                  EmbassyLetterInitial>(
+
+                                  builder: (context, state) {
+                                    return Text(state.statusAction ?? "Pending",
+                                      // style: TextStyle(decoration: BoxDecoration(
+                                      //   // labelText: 'Request Date',
+                                      //   errorText: state.requestDate.invalid
+                                      //       ? 'invalid request date'
+                                      //       : null,
+                                      //   prefixIcon: const Icon(
+                                      //       Icons.date_range),
+                                      // ),),
+
+                                    );
+                                  }
+                              ),
+                            ),
+
 
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
-                                initialValue:formattedDate,
+                                initialValue:state.requestDate.value,
                                 key: UniqueKey(),
                                 readOnly: true,
+                                enabled: false,
                                 decoration: const InputDecoration(
                                   floatingLabelAlignment:
                                   FloatingLabelAlignment.start,
@@ -394,87 +202,85 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                 ),
                               ),
                             ),
-
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: BlocBuilder<EmbassyLetterCubit,
                                   EmbassyLetterInitial>(
                                 builder: (context, state) {
                                   return DropdownButtonHideUnderline(
-
-                                    child: DropdownButtonFormField(
-
-
-                                      hint: Text(
-                                        state.purpose,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
+                                    child: IgnorePointer(
+                                      ignoring: state.requestStatus == RequestStatus.oldRequest ? true :false,
+                                      child: DropdownButtonFormField(
+                                        decoration: const InputDecoration(
+                                          floatingLabelAlignment:
+                                          FloatingLabelAlignment.start,
+                                          labelText: 'Purpose',
+                                          prefixIcon: Icon(
+                                              Icons.calendar_today),
                                         ),
+                                        value: state.purpose,
+                                        items: GlobalConstants.embassyLetterPurposeList.map((item) =>
+                                            DropdownMenuItem<String>(
+                                              value: item, child: Text(item,
+                                              style: const TextStyle(fontSize: 14,),
+                                            ),
+                                            )).toList(),
+                                        onChanged: (value) => context.read<EmbassyLetterCubit>()
+                                                .addSelectedPurpose(
+                                                value.toString()),
                                       ),
-                                      items: purposeList.map((item) =>
-                                          DropdownMenuItem<String>(
-                                            value: item, child: Text(item,
-                                            style: const TextStyle(fontSize: 14,),
-                                          ),
-                                          )).toList(),
-
-                                      onChanged: (value) {
-                                        setState(() {
-                                          context.read<EmbassyLetterCubit>()
-                                              .addSelectedPurpose(
-                                              value.toString());
-                                        });
-                                      },
                                     ),
                                   );
                                 },),
                             ),
-
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: BlocBuilder<EmbassyLetterCubit,
                                   EmbassyLetterInitial>(
                                 builder: (context, state) {
                                   return DropdownButtonHideUnderline(
-                                    child: DropdownButtonFormField(
-                                      hint: Text(state.embassy,
-
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
+                                    child: IgnorePointer(
+                                      ignoring: state.requestStatus == RequestStatus.oldRequest ? true :false,
+                                      child: DropdownButtonFormField(
+                                        decoration: const InputDecoration(
+                                          floatingLabelAlignment:
+                                          FloatingLabelAlignment.start,
+                                          labelText: 'Embassy',
+                                          prefixIcon: Icon(
+                                              Icons.calendar_today),
                                         ),
-                                      ),
+                                        value: state.embassy,
+                                        hint: Text(state.embassy,
 
-                                      items: embassyList.map((item) =>
-                                          DropdownMenuItem<String>(
-                                            value: item, child: Text(item,
-                                            style: const TextStyle(fontSize: 14,),
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                            color: Colors.black,
                                           ),
-                                          )).toList(),
+                                        ),
 
-                                      onChanged: (value) {
-                                        setState(() {
-                                          context.read<EmbassyLetterCubit>()
-                                              .addSelectedEmbassy(
-                                              value.toString());
-                                        });
-                                      },
+                                        items: GlobalConstants.embassyLetterList.map((item) =>
+                                            DropdownMenuItem<String>(
+                                              value: item, child: Text(item,
+                                              style: const TextStyle(fontSize: 14,),
+                                            ),
+                                            )).toList(),
+                                        onChanged: (value) {
+                                            context.read<EmbassyLetterCubit>()
+                                                .addSelectedEmbassy(
+                                                value.toString());
+                                        },
+                                      ),
                                     ),
                                   );
                                 },),
                             ),
-
-
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: BlocBuilder<EmbassyLetterCubit,
                                   EmbassyLetterInitial>(
                                 builder: (context, state) {
                                   return TextFormField(
-
                                     initialValue:state.dateFrom.value,
-
                                     key: UniqueKey(),
                                     readOnly: true,
                                     decoration: InputDecoration(
@@ -488,16 +294,12 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                           Icons.calendar_today),
                                     ),
                                     onTap: () async {
-
                                         context.read<EmbassyLetterCubit>().
                                         selectDate(context, "from");
-
                                     },
                                   );
                                 },),
                             ),
-
-
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: BlocBuilder<EmbassyLetterCubit,
@@ -505,7 +307,6 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                 builder: (context, state) {
                                   return TextFormField(
                                     initialValue:state.dateTo.value,
-
                                     key: UniqueKey(),
                                     readOnly: true,
                                     decoration: InputDecoration(
@@ -519,38 +320,27 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                           Icons.calendar_today),
                                     ),
                                     onTap: () async {
-                                      // if (!widget.objectValidation) {
-                                      //   context.read<EmbassyLetterCubit>().
-                                      //   selectDate(context, "to");
-                                      // }
+                                        context.read<EmbassyLetterCubit>().
+                                        selectDate(context, "to");
                                     },
                                   );
                                 },),
                             ),
-
-
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: BlocBuilder<EmbassyLetterCubit,
                                   EmbassyLetterInitial>(
                                   builder: (context, state) {
                                     return TextField(
-                                        controller: passportController,
                                         onChanged: (value) {
                                           context.read<EmbassyLetterCubit>()
                                               .passportNo(value);
                                         },
-                                        // enabled: (widget.objectValidation)
-                                        //     ? false
-                                        //     : true,
-                                        keyboardType: TextInputType.number,
                                         decoration: InputDecoration(
-
                                           floatingLabelAlignment:
                                           FloatingLabelAlignment.start,
                                           labelText: "Passport NO",
                                           prefixIcon: const Icon(Icons.book),
-
                                           errorText: state.passportNumber.invalid
                                               ? 'invalid Passport NO'
                                               : null,
@@ -559,8 +349,6 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                   }
                               ),
                             ),
-
-
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: BlocBuilder<EmbassyLetterCubit,
@@ -568,45 +356,45 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                 builder: (context, state) {
                                   return DropdownButtonHideUnderline(
                                     child: DropdownButtonFormField(
-                                      hint: Text(state.salary,
-                                        style: const TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
+                                      // hint: Text(state.salary,
+                                      //   style: const TextStyle(
+                                      //     fontSize: 14,
+                                      //     color: Colors.black,
+                                      //   ),
+                                      // ),
+                                        decoration: const InputDecoration(
+                                          floatingLabelAlignment:
+                                          FloatingLabelAlignment.start,
+                                          labelText: "Add Salary",
+                                          prefixIcon: Icon(Icons.money),
                                         ),
-                                      ),
                                       items: addSalaryList.map((item) =>
                                           DropdownMenuItem<String>(
                                             value: item, child: Text(item,
                                             style: const TextStyle(fontSize: 14,),
                                           ),
                                           )).toList(),
+                                      value: state.salary,
                                       onChanged: (value) {
-                                        setState(() {
                                           context.read<EmbassyLetterCubit>()
                                               .addSelectedSalary(
                                               value.toString());
-                                        });
                                       },
                                     ),
                                   );
                                 },),
                             ),
-
-
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: BlocBuilder<EmbassyLetterCubit,
                                   EmbassyLetterInitial>(
                                   builder: (context, state) {
                                     return TextField(
-                                        controller: commentController,
+                                        // controller: commentController,
                                         onChanged: (value) {
                                           context.read<EmbassyLetterCubit>()
                                               .comments(value);
                                         },
-                                        // enabled: (widget.objectValidation)
-                                        //     ? false
-                                        //     : true,
                                         decoration: InputDecoration(
                                           floatingLabelAlignment:
                                           FloatingLabelAlignment.start,
@@ -618,24 +406,6 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                   }
                               ),
                             ),
-
-
-                            FloatingActionButton.extended(
-
-                              onPressed: () {
-                                context.read<EmbassyLetterCubit>()
-                                    .getSubmitEmbassyLetter(
-                                    user, formattedDate);
-                              },
-                              label: const Text('Submit', style: TextStyle(
-                                  color: Colors.black
-                              )),
-                              icon: const Icon(
-                                  Icons.thumb_up_alt_outlined,
-                                  color: Colors.black),
-                              backgroundColor: Colors.white,),
-
-
                           ],
                         ),
                       ),

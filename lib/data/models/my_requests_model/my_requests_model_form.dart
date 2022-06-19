@@ -1,3 +1,5 @@
+import '../../../constants/constants.dart';
+
 class MyRequestsModelData {
   int? id;
   int? requestNo;
@@ -44,7 +46,7 @@ class MyRequestsModelData {
     statusName = json['status_Name'];
     reqName = json['req_Name'];
     responsbleperson = json['responsbleperson'];
-    rDate = json['rDate'];
+    rDate = GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(json['rDate'] ?? ""));
   }
 
   Map<String, dynamic> toJson() {

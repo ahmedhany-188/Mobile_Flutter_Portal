@@ -2,6 +2,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
@@ -143,7 +144,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       Navigator.of(context)
           .pushNamed(BusinessMissionScreen.routeName,arguments: {BusinessMissionScreen.requestNoKey: notification.requestNo});
     }else if (notification.requestType!.contains("Permission")){
-
+      Navigator.of(context)
+          .pushNamed(PermissionScreen.routeName,arguments: {PermissionScreen.requestNoKey: notification.requestNo});
     }else if (notification.requestType!.contains("")){
 
     }
