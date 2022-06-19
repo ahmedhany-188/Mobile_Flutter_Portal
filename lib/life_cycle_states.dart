@@ -57,7 +57,7 @@ class _LifeCycleStateState extends State<LifeCycleState> with WidgetsBindingObse
   updateFirebaseWithStatus(AppLifecycleStatus appLifecycleStatus){
 
     FirebaseProvider(context
-        .read<AppBloc>().state.userData.user!).updateUserOnline(appLifecycleStatus);
+        .read<AppBloc>().state.userData).updateUserOnline(appLifecycleStatus);
 
   }
 }
