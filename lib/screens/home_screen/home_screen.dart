@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/screens/videos_screen/videos_screen.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 import 'package:swipe_image_gallery/swipe_image_gallery.dart';
@@ -1273,14 +1274,16 @@ class HomeScreen3 extends StatelessWidget {
                 builder: (context, latestNewsstate) {
                   List<ImageGalleryHeroProperties> heroProperties = [];
                   List<Widget> assets = [];
-                  return NewsCubit.get(context).latestNewsList.isNotEmpty? Container(
+                  return NewsCubit.get(context).latestNewsList.isNotEmpty
+                      ? Container(
                           margin: EdgeInsets.only(top: 12.sp),
                           width: 100.w,
                           height: 30.h,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: NewsSliderList(
-                                newsAllData: NewsCubit.get(context).latestNewsList,
+                                newsAllData:
+                                    NewsCubit.get(context).latestNewsList,
                                 assets: assets,
                                 heroProperties: heroProperties),
                           ),
@@ -1328,7 +1331,9 @@ class HomeScreen3 extends StatelessWidget {
                                       pause: const Duration(milliseconds: 1000),
                                       repeatForever: true,
                                       displayFullTextOnTap: false,
-                                      animatedTexts: NewsCubit.get(context).announcment.isEmpty
+                                      animatedTexts: NewsCubit.get(context)
+                                              .announcment
+                                              .isEmpty
                                           ? [
                                               TyperAnimatedText(
                                                 'Checking for Announcement... ',
@@ -1450,10 +1455,15 @@ class HomeScreen3 extends StatelessWidget {
                 ),
               ),
             ),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(PhotosScreen.routeName);
-              },
+            PopupMenuButton(
+              color: const Color(0xFF9695ed),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  bottomRight: Radius.circular(20.0),
+                ),
+              ),
+              elevation: 50,
               child: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
@@ -1519,6 +1529,22 @@ class HomeScreen3 extends StatelessWidget {
                   ),
                 ),
               ),
+              itemBuilder: (context) {
+                return [
+                  const PopupMenuItem(
+                    value: 1,
+                    child: Text('Photo Gallery'),
+                  ),
+                  const PopupMenuItem(
+                    value: 2,
+                    child: Text('Videos'),
+                  )
+                ];
+              },
+              onSelected: (index) => Navigator.of(context).pushNamed(
+                  (index == 1)
+                      ? PhotosScreen.routeName
+                      : VideosScreen.routeName),
             ),
             InkWell(
               onTap: () {

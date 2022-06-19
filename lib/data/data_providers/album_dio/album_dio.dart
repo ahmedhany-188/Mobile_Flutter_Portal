@@ -33,11 +33,12 @@ class AlbumDio {
     );
   }
 
-  // static Future<Response> getVideosById(
-  //     {required String videoId}) async {
-  //   String url = 'Portal_Videos/GetByID?ID=$videoId';
-  //   return await dio!.get(
-  //     url,
-  //   );
-  // }
+  static Future<Response> getSingleVideo({required String id}) async {
+    String url = 'portal/Portal_Videos/GetByID?ID=$id';
+    return await dio!.get(
+      url,
+    );
+  }
+
+
 }

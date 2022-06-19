@@ -8,7 +8,7 @@ class VideosInitial extends VideosState {}
 class VideosLoadingState extends VideosState {}
 
 class VideosSuccessState extends VideosState {
-  Map<String,dynamic> videosList;
+  List<VideosIdData> videosList;
 
   VideosSuccessState(this.videosList);
 }

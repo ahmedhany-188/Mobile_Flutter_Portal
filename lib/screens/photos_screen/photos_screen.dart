@@ -91,8 +91,8 @@ Widget albumSwiper(String albumId) {
                     return FullScreenWidget(
                       disposeLevel: DisposeLevel.Low,
                       child: Hero(
-                        key: Key('HeroKey$index'),
-                        tag: "customTag${index * Random(1).nextInt(5000)}",
+                        key: Key('${state.albumList[index].photoName.toString()}$index'),
+                        tag: "${state.albumList[index].photoName.toString()}${index * Random(1).nextInt(5000)}",
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(15),
                           child: CachedNetworkImage(

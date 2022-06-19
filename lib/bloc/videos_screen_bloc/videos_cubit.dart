@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../data/data_providers/album_dio/album_dio.dart';
+import '../../data/models/videos_model/videos_id_model.dart';
 
 part 'videos_state.dart';
 
@@ -26,15 +27,19 @@ class VideosCubit extends Cubit<VideosState> {
 
   static VideosCubit get(context) => BlocProvider.of(context);
 
-  Map<String, dynamic> videosList = {};
+  List<VideosIdData> videosList = [];
 
   void getVideos() {
     emit(VideosLoadingState());
 
     AlbumDio.getVideos().then((value) {
-      videosList = value.data;
-
-      emit(VideosSuccessState(videosList));
+      VideosIdModel videosResponse = VideosIdModel.fromJson(value.data);
+      if (videosResponse.data!.isNotEmpty) {
+        videosList = videosResponse.data!;
+        emit(VideosSuccessState(videosList));
+      } else {
+        emit(VideosErrorState('noVideosFound'));
+      }
     }).catchError((error) {
       if (kDebugMode) {
         print(error.toString());
