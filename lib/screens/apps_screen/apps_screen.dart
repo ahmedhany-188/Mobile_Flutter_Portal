@@ -6,51 +6,20 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/models/apps_model/apps_model.dart';
 import '../../bloc/apps_screen_bloc/apps_cubit.dart';
-import '../../bloc/auth_app_status_bloc/app_bloc.dart';
-import '../../data/helpers/assist_function.dart';
 import '../../widgets/icons/angular_icon.dart';
 
-class AppsScreen extends StatefulWidget {
+class AppsScreen extends StatelessWidget {
   const AppsScreen({Key? key}) : super(key: key);
   static const routeName = 'apps-screen';
 
   @override
-  State<AppsScreen> createState() => _AppsScreenState();
-}
-
-class _AppsScreenState extends State<AppsScreen> {
-  FocusNode searchTextFieldFocusNode = FocusNode(canRequestFocus: false);
-  TextEditingController textController = TextEditingController();
-  List<AppsData> searchResultsList = [];
-  // @override
-  // void initState() {
-  //   FocusManager.instance.primaryFocus?.unfocus();
-  //   super.initState();
-  // }
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // drawer: MainDrawer(),
-      // appBar: AppBar(),
-
-      /// basicAppBar(context, 'Subsidiaries'),
       backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
       body: BlocProvider<AppsCubit>.value(
         value: AppsCubit.get(context),
         child: BlocBuilder<AppsCubit, AppsState>(
-          // listener: (context, state) {
-          //   if (state is AppsErrorState) {
-          //     showErrorSnackBar(context);
-          //   }
-          // },
-          buildWhen: (pre, cur) {
-            if (cur is AppsSuccessState) {
-              return cur.appsList.isNotEmpty;
-            } else {
-              return false;
-            }
-          },
           builder: (context, state) {
             if (state is AppsSuccessState) {
               return Sizer(
@@ -63,14 +32,8 @@ class _AppsScreenState extends State<AppsScreen> {
                         height: 10.h,
                         width: 100.w,
                         child: TextField(
-                          focusNode: searchTextFieldFocusNode,
-                          controller: textController,
-                          onChanged: (_) {
-                            setState(() {
-                              searchResultsList = setGeneralSearch(
-                                  textController.text.toString(),
-                                  state.appsList);
-                            });
+                          onChanged: (searchText) {
+                            AppsCubit.get(context).updateApps(searchText);
                           },
                           decoration: const InputDecoration(
                               contentPadding: EdgeInsets.all(10),
@@ -89,16 +52,16 @@ class _AppsScreenState extends State<AppsScreen> {
                         height: 87.5.h,
                         width: 100.w,
                         margin: EdgeInsets.only(left: 4.w, right: 4.w),
-                        child: (textController.text.isNotEmpty)
-                            ? buildApps(searchResultsList, context)
-                            : buildApps(state.appsList, context),
+                        child: buildApps(state.appsList, context),
                       ),
                     ],
                   );
                 },
               );
-            } else{
-              return (state is AppsErrorState)? buildNoAppsFound() : const Center(child: CircularProgressIndicator());
+            } else {
+              return (state is AppsErrorState)
+                  ? buildNoAppsFound()
+                  : const Center(child: CircularProgressIndicator());
             }
           },
         ),
@@ -167,7 +130,7 @@ class _AppsScreenState extends State<AppsScreen> {
                 ),
               );
             })
-        : (AppsCubit.get(context).appsList.isEmpty)
+        : (AppsCubit.get(appsContext).appsList.isEmpty)
             ? buildNoAppsFound()
             : buildNoSearchFound();
   }
@@ -193,6 +156,7 @@ class _AppsScreenState extends State<AppsScreen> {
       ),
     );
   }
+
   buildNoSearchFound() {
     return Center(
       child: Column(
@@ -214,20 +178,4 @@ class _AppsScreenState extends State<AppsScreen> {
       ),
     );
   }
-}
-
-List<AppsData> setGeneralSearch(
-  String query,
-  List<AppsData> listFromApi,
-) {
-  var splitQuery = query.toLowerCase().trim().split(' ');
-  return listFromApi
-      .where((element) => splitQuery.every(
-            (singleSplitElement) => element.sysName
-                .toString()
-                .toLowerCase()
-                .trim()
-                .contains(singleSplitElement),
-          ))
-      .toList();
 }

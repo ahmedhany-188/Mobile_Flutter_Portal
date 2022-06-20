@@ -130,7 +130,7 @@ class AppRouter {
         );
       case NewsScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => NewsScreen(),
+          builder: (_) => const NewsScreen(),
         );
       case PhotosScreen.routeName:
         return MaterialPageRoute(
@@ -159,7 +159,7 @@ class AppRouter {
 
       case EmailAndUserAccountScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => EmailAndUserAccountScreen(),
+          builder: (_) => const EmailAndUserAccountScreen(),
         );
 
       case AccessUserAccountScreen.routeName:
