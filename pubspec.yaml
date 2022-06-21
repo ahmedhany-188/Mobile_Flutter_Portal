@@ -44,7 +44,7 @@ dependencies:
 
 
   #design libiraries
-  heroicons: ^0.5.0
+  heroicons: ^0.5.0 #this is responsible for angular icons as the icons assets are in this libirary
   shimmer: ^2.0.0
   entry: ^0.0.6
   sprung: ^3.0.0
@@ -58,6 +58,7 @@ dependencies:
   flutter_svg: ^1.1.0
   flutter_polls: ^0.0.6
   circular: ^0.0.5
+  dropdown_search: ^5.0.2
 
   #Animation libiraries
   animated_splash_screen: ^1.2.0

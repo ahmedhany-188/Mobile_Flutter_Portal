@@ -165,7 +165,6 @@ class _MyAppState extends State<MyApp> {
           //       AccessRightCubit(),
           // ),
 
-
           // BlocProvider<MyRequestsCubit>(
           //   create: (travelRequestContext) =>
           //       MyRequestsCubit(),
@@ -190,10 +189,11 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<UserNotificationBloc>(
             lazy: true,
             create: (userNotificationContext) => UserNotificationBloc(
-              firebaseProvider: FirebaseProvider(BlocProvider
-                  .of<AppBloc>(userNotificationContext)
-                  .state
-                  .userData),),
+              firebaseProvider: FirebaseProvider(
+                  BlocProvider.of<AppBloc>(userNotificationContext)
+                      .state
+                      .userData),
+            ),
           ),
           BlocProvider<AppUpgraderCubit>(
             lazy: false,
@@ -208,16 +208,14 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
           BlocProvider<AppsCubit>(
-            create: (contactsCubitContext) => AppsCubit()
-              ..getApps(
-                  hrCode: BlocProvider.of<AppBloc>(contactsCubitContext)
-                      .state
-                      .userData
-                      .user!
-                      .userHRCode),
+            create: (contactsCubitContext) => AppsCubit(GeneralDio(
+                BlocProvider.of<AppBloc>(contactsCubitContext).state.userData))
+              ..getApps(),
           ),
           BlocProvider<NewsCubit>(
-            create: (newsContext) => NewsCubit()..getNews()..getLatestNews(),
+            create: (newsContext) => NewsCubit()
+              ..getNews()
+              ..getLatestNews(),
             lazy: true,
           ),
 

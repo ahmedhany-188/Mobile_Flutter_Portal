@@ -1,36 +1,40 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
-import 'package:hassanallamportalflutter/bloc/login_cubit/login_cubit.dart';
-import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
-import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
-import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
-import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
-import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
-import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
-import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
-import 'package:hassanallamportalflutter/screens/home_screen/taps_screen.dart';
-import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
-import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
-import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
-import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
-import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
-import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
-import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_screen.dart';
-import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
-import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreen.dart';
-import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
-import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
-import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
-import 'package:hassanallamportalflutter/screens/polls_screen/polls_screen.dart';
-import 'package:provider/src/provider.dart';
-import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../bloc/auth_app_status_bloc/app_bloc.dart';
+import '../../bloc/login_cubit/login_cubit.dart';
+import '../../screens/about_value_screen/about_screen.dart';
+import '../../screens/about_value_screen/value_screen.dart';
+import '../../screens/admin_request_screen/business_card_screen.dart';
+import '../../screens/admin_request_screen/embassy_letter_screen.dart';
+import '../../screens/economy_news_screen/economy_news_screen.dart';
+import '../../screens/employee_appraisal_screen/employee_appraisal_screen.dart';
+import '../../screens/get_direction_screen/get_direction_screen.dart';
+import '../../screens/home_screen/taps_screen.dart';
+import '../../screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
+import '../../screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
+import '../../screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
+import '../../screens/it_requests_screen/access_right_screen.dart';
+import '../../screens/it_requests_screen/email_and_useraccount_screen.dart';
+import '../../screens/medicalrequest_screen/medical_request_screen.dart';
+import '../../screens/my_requests_screen/my_requests_screen.dart';
+import '../../screens/myattendance_screen/attendance_screen.dart';
+import '../../screens/myprofile_screen/ProfileScreen.dart';
+import '../../screens/news_screen/news_screen.dart';
+import '../../screens/payslip_screen/payslip_screen.dart';
+import '../../screens/photos_screen/photos_screen.dart';
+import '../../screens/polls_screen/polls_screen.dart';
+import '../../screens/subsidiaries_screen/subsidiaries_screen.dart';
 import '../../screens/apps_screen/apps_screen.dart';
+import '../../screens/it_requests_screen/equipments_request.dart';
 import '../../screens/videos_screen/videos_screen.dart';
 
 class MainDrawer extends StatefulWidget {
+  const MainDrawer({Key? key}) : super(key: key);
+
   @override
   State<MainDrawer> createState() => _MainDrawerState();
 }
@@ -52,6 +56,58 @@ class _MainDrawerState extends State<MainDrawer> {
             color: Colors.white),
       ),
       onTap: tapHandler,
+    );
+  }
+
+  Widget buildExpansionTile() {
+    return ExpansionTile(
+      leading: const Icon(
+        Icons.abc,
+        size: 25,
+        color: Colors.white,
+      ),
+      title: const Text(
+        'News Letter',
+        style: TextStyle(
+            fontFamily: 'RobotoCondensed',
+            fontSize: 22,
+            fontWeight: FontWeight.normal,
+            color: Colors.white),
+      ),
+      children: [
+        TextButton(
+          onPressed: () {
+            launchUrl(
+                Uri.parse(
+                    'https://portal.hassanallam.com/NewsLatter/index-ar.html'),
+                mode: LaunchMode.platformDefault);
+          },
+          child: const Text(
+            'عربي',
+            style: TextStyle(
+                fontFamily: 'RobotoCondensed',
+                fontSize: 22,
+                fontWeight: FontWeight.normal,
+                color: Colors.white),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            launchUrl(
+                Uri.parse(
+                    'https://portal.hassanallam.com/NewsLatter/index.html'),
+                mode: LaunchMode.platformDefault);
+          },
+          child: const Text(
+            'English',
+            style: TextStyle(
+                fontFamily: 'RobotoCondensed',
+                fontSize: 22,
+                fontWeight: FontWeight.normal,
+                color: Colors.white),
+          ),
+        ),
+      ],
     );
   }
 
@@ -120,18 +176,8 @@ class _MainDrawerState extends State<MainDrawer> {
                         ),
                       ),
                     ),
-                    // const Text(
-                    //   'welcome',
-                    //   style: TextStyle(
-                    //     fontWeight: FontWeight.w900,
-                    //     fontSize: 25,
-                    //     color: Colors.white,
-                    //     // Theme.of(context).primaryColor,
-                    //   ),
-                    // ),
                     Flexible(
-                        child: Text(
-                            user.name!.split(' ').take(3).join(' '),
+                        child: Text(user.name!.split(' ').take(3).join(' '),
                             style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -154,8 +200,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         'Home',
                         Icons.home,
                         () {
-                          Navigator
-                              .pushNamed(context,TapsScreen.routeName);
+                          Navigator.pushNamed(context, TapsScreen.routeName);
                         },
                       ),
                       buildDivider(),
@@ -163,8 +208,8 @@ class _MainDrawerState extends State<MainDrawer> {
                         'My Profile',
                         Icons.person,
                         () {
-                          Navigator
-                              .pushNamed(context,UserProfileScreen.routeName);
+                          Navigator.pushNamed(
+                              context, UserProfileScreen.routeName);
                         },
                       ),
                       buildDivider(),
@@ -181,16 +226,15 @@ class _MainDrawerState extends State<MainDrawer> {
                         'Attendance',
                         Icons.fingerprint,
                         () {
-
-                          Navigator
-                              .pushNamed(context,AttendanceScreen.routeName);
+                          Navigator.pushNamed(
+                              context, AttendanceScreen.routeName);
                         },
                       ),
                       buildDivider(),
                       buildListTile('Medical Request', Icons.medical_services,
                           () {
-                        Navigator
-                            .pushNamed(context,MedicalRequestScreen.routeName);
+                        Navigator.pushNamed(
+                            context, MedicalRequestScreen.routeName);
                       }),
                       buildDivider(),
                       buildListTile(
@@ -215,11 +259,9 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'it request user account',
                         Icons.format_align_justify_outlined,
-                            () {
-
-                          Navigator
-                              .pushNamed(context,EmailAndUserAccountScreen.routeName);
-
+                        () {
+                          Navigator.pushNamed(
+                              context, EmailAndUserAccountScreen.routeName);
                         },
                       ),
 
@@ -227,10 +269,18 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'it request access account',
                         Icons.format_align_justify_outlined,
-                            () {
+                        () {
+                          Navigator.pushNamed(
+                              context, AccessUserAccountScreen.routeName);
+                        },
+                      ),
 
-                          Navigator
-                              .pushNamed(context,AccessUserAccountScreen.routeName);
+                      buildDivider(),
+                      buildListTile(
+                        'IT Equipments Request',
+                        Icons.format_align_justify_outlined,
+                            () {
+                          Navigator.of(context).pushNamed(EquipmentsRequest.routeName);
                         },
                       ),
 
@@ -239,8 +289,8 @@ class _MainDrawerState extends State<MainDrawer> {
                         'EconomyNews',
                         Icons.waterfall_chart,
                         () {
-                          Navigator
-                              .pushNamed(context,EconomyNewsScreen.routeName);
+                          Navigator.pushNamed(
+                              context, EconomyNewsScreen.routeName);
                         },
                       ),
                       buildDivider(),
@@ -248,10 +298,9 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Business Card',
                         Icons.credit_card,
-                            () {
-
-                          Navigator
-                              .pushNamed(context,BusinessCardScreen.routeName);
+                        () {
+                          Navigator.pushNamed(
+                              context, BusinessCardScreen.routeName);
                         },
                       ),
 
@@ -259,9 +308,9 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'Embassy Letter',
                         Icons.airplanemode_active,
-                            () {
-                          Navigator
-                              .pushNamed(context,EmbassyLetterScreen.routeName);
+                        () {
+                          Navigator.pushNamed(
+                              context, EmbassyLetterScreen.routeName);
                         },
                       ),
 
@@ -269,9 +318,9 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildListTile(
                         'My Requests',
                         Icons.wallpaper,
-                            () {
-                              Navigator.of(context)
-                                  .pushNamed(MyRequestsScreen.routeName);
+                        () {
+                          Navigator.of(context)
+                              .pushNamed(MyRequestsScreen.routeName);
                           // Navigator
                           //     .pushNamed(context,MyRequestsScreen.routeName);
                         },
@@ -282,8 +331,8 @@ class _MainDrawerState extends State<MainDrawer> {
                         'Appraisal',
                         Icons.quiz,
                         () {
-                          Navigator
-                              .pushNamed(context,EmployeeAppraisalScreen.routeName);
+                          Navigator.pushNamed(
+                              context, EmployeeAppraisalScreen.routeName);
                         },
                       ),
                       buildDivider(),
@@ -293,7 +342,6 @@ class _MainDrawerState extends State<MainDrawer> {
                         () {
                           Navigator.of(context)
                               .pushNamed(ValueScreen.routeName);
-
                         },
                       ),
                       buildDivider(),
@@ -372,15 +420,25 @@ class _MainDrawerState extends State<MainDrawer> {
                         'Apps',
                         Icons.apps,
                         () {
-                          Navigator.of(context)
-                              .pushNamed(AppsScreen.routeName);
+                          Navigator.of(context).pushNamed(AppsScreen.routeName);
                         },
                       ),
+                      buildDivider(),
+                      buildExpansionTile(),
+                      // buildListTile(
+                      //   'News Letter',
+                      //   Icons.apps,
+                      //       () {
+                      //     Navigator.of(context)
+                      //         .pushNamed(NewsLetterScreen.routeName);
+                      //   },
+                      // ),
+
                       buildDivider(),
                       buildListTile(
                         'Logout',
                         Icons.logout,
-                            () {
+                        () {
                           context.read<AppBloc>().add(AppLogoutRequested());
                           context.read<LoginCubit>().clearCubit();
                         },

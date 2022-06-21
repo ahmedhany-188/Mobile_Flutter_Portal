@@ -1,7 +1,11 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:dio/dio.dart';
 
 class GeneralDio {
   static Dio? dio;
+  MainUserData userData;
+
+  GeneralDio(this.userData);
 
   static init() {
     dio = Dio(
@@ -53,20 +57,22 @@ class GeneralDio {
     );
   }
 
-  static Future<Response> appsData(String? hrCode) async {
-    String url = 'portal/UserData/GetApplications?HRCode=$hrCode';
+  Future<Response> appsData() async {
+    String url =
+        'portal/UserData/GetApplications?HRCode=${userData.user!.userHRCode}';
 
-    if (hrCode!.isNotEmpty) {
+    if (userData.user!.userHRCode!.isNotEmpty) {
       return await dio!
           .get(
             url,
           )
-          .timeout(Duration(minutes:5))
+          .timeout(const Duration(minutes: 5))
           .catchError((err) {
         print(err);
       });
     } else {
-      return dio!.delete(url);
+      throw Exception;
+      // return dio!.delete(url);
     }
   }
 }

@@ -10,19 +10,21 @@ part 'contacts_states.dart';
 class ContactsCubit extends Cubit<ContactCubitStates> {
   ContactsCubit() : super(const ContactCubitStates()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
-      if (connectivityResult == ConnectivityResult.wifi ||
-          connectivityResult == ConnectivityResult.mobile) {
-        try {
-          getContacts();
-        } catch (e) {
+      if (state.contactStates == ContactsEnumStates.failed) {
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          try {
+            getContacts();
+          } catch (e) {
+            emit(state.copyWith(
+              contactStates: ContactsEnumStates.failed,
+            ));
+          }
+        } else if (connectivityResult == ConnectivityResult.none) {
           emit(state.copyWith(
             contactStates: ContactsEnumStates.failed,
           ));
         }
-      } else if (connectivityResult == ConnectivityResult.none) {
-        emit(state.copyWith(
-          contactStates: ContactsEnumStates.failed,
-        ));
       }
     });
   }

@@ -20,6 +20,14 @@ class AppsScreen extends StatelessWidget {
       body: BlocProvider<AppsCubit>.value(
         value: AppsCubit.get(context),
         child: BlocBuilder<AppsCubit, AppsState>(
+          buildWhen: (pre,curr){
+            if(pre != curr){
+              return true;
+            }
+            else{
+              return false;
+            }
+          },
           builder: (context, state) {
             if (state is AppsSuccessState) {
               return Sizer(

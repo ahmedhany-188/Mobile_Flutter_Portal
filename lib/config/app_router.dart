@@ -15,11 +15,13 @@ import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_r
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreen.dart';
+import 'package:hassanallamportalflutter/screens/news_screen/news_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
@@ -197,7 +199,16 @@ class AppRouter {
         );
       case NotificationsScreen.routeName:
         return MaterialPageRoute(
-            builder: (context) => const NotificationsScreen());
+            builder: (_) => const NotificationsScreen());
+
+      case NewsLetterScreen.routeName:
+        return MaterialPageRoute(
+            builder: (_) => const NewsLetterScreen());
+
+      case EquipmentsRequest.routeName:
+        return MaterialPageRoute(
+            builder: (_) => const EquipmentsRequest());
+
       default:
         return null;
     }
