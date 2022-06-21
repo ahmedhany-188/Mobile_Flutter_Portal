@@ -30,7 +30,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   Future<void> _onUserChanged(AppUserChanged event, Emitter<AppState> emit) async {
     if(event.userData.isNotEmpty){
-      FirebaseProvider(event.userData.user!).updateUserOnline(AppLifecycleStatus.online);
+      FirebaseProvider(event.userData).updateUserOnline(AppLifecycleStatus.online);
     }
 
     emit(
@@ -42,7 +42,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
   void _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) {
     if(_authenticationRepository.currentUser.isNotEmpty){
-      FirebaseProvider(_authenticationRepository.currentUser.user!).updateUserOnline(AppLifecycleStatus.offline);
+      FirebaseProvider(_authenticationRepository.currentUser).updateUserOnline(AppLifecycleStatus.offline);
     }
     unawaited(_authenticationRepository.logOut());
   }
@@ -50,6 +50,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   @override
   Future<void> close() {
     _userSubscription.cancel();
+    // _authenticationRepository.controller.close();
     _authenticationRepository.dispose();
     return super.close();
   }

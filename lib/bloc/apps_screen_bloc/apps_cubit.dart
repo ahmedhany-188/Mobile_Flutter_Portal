@@ -9,18 +9,21 @@ part 'apps_state.dart';
 
 class AppsCubit extends Cubit<AppsState> {
   final Connectivity connectivity = Connectivity();
+  final GeneralDio _generalDio;
 
-  AppsCubit() : super(AppsInitial()) {
+  AppsCubit(this._generalDio) : super(AppsInitial()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
-      if (connectivityResult == ConnectivityResult.wifi ||
-          connectivityResult == ConnectivityResult.mobile) {
-        try {
-          getApps();
-        } catch (e) {
-          emit(AppsErrorState(e.toString()));
+      if (state is AppsErrorState) {
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          try {
+            getApps();
+          } catch (e) {
+            emit(AppsErrorState(e.toString()));
+          }
+        } else if (connectivityResult == ConnectivityResult.none) {
+          emit(AppsErrorState("No internet Connection"));
         }
-      } else if (connectivityResult == ConnectivityResult.none) {
-        emit(AppsErrorState("No internet Connection"));
       }
     });
   }
@@ -29,11 +32,10 @@ class AppsCubit extends Cubit<AppsState> {
 
   List<AppsData> appsList = [];
 
-  void getApps({String? hrCode}) {
+  void getApps() {
     emit(AppsLoadingState());
-
-    GeneralDio.appsData(hrCode).then((value) {
-      if(value.statusCode == 400){
+    _generalDio.appsData().then((value) {
+      if (value.statusCode == 400) {
         emit(AppsErrorState('400'));
       }
       if (value.data != null) {
@@ -41,13 +43,27 @@ class AppsCubit extends Cubit<AppsState> {
         if (appsResponse.data != null) {
           appsList = appsResponse.data!;
           emit(AppsSuccessState(appsList));
+        } else {
+          emit(AppsErrorState('noAppsFound'));
         }
       }
-    }).timeout(Duration(minutes: 1)).catchError((error) {
-      if (kDebugMode) {
-        print(error.toString());
-      }
-      emit(AppsErrorState(error.toString()));
+    }).catchError((e) {
+      emit(AppsErrorState('rrrrrrrrrrrrr'));
     });
+  }
+
+  void updateApps(String searchString) {
+    var splitQuery = searchString.toLowerCase().trim().split(' ');
+    var temp = appsList
+        .where((element) => splitQuery.every(
+              (singleSplitElement) => element.sysName
+                  .toString()
+                  .toLowerCase()
+                  .trim()
+                  .contains(singleSplitElement),
+            ))
+        .toList();
+
+    emit(AppsSuccessState(temp));
   }
 }

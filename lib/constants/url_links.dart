@@ -13,3 +13,7 @@ benefitsExtraDataLink(String benefitsId){
 subsidiariesIconLink(String subIcon){
   return 'https://portal.hassanallam.com/images/subsidiaries/$subIcon';
 }
+
+videosLinks(String videoName) {
+  return 'https://portal.hassanallam.com/Public/Videos/Video/$videoName';
+}

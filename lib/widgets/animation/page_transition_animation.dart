@@ -42,16 +42,16 @@ class PageTransitionAnimation {
       )).catchError((err){});
     });
   }
-
-  Future<Widget> navigateFromBottomToTopJoined(Widget currentPage) async {
-    return Future.delayed(Duration(milliseconds: delayedDuration), () async {
-      return await Navigator.of(context).pushReplacement(PageTransition(
-        type: PageTransitionType.bottomToTopJoined,
-        child: pageDirection,
-        childCurrent: currentPage,
-        duration: Duration(milliseconds: transitionDuration),
-        // reverseDuration: const Duration(milliseconds: 1500),
-      ));
-    });
-  }
+  //
+  // Future<Widget> navigateFromBottomToTopJoined(Widget currentPage) async {
+  //   return Future.delayed(Duration(milliseconds: delayedDuration), () async {
+  //     return await Navigator.of(context).pushReplacement(PageTransition(
+  //       type: PageTransitionType.bottomToTopJoined,
+  //       child: pageDirection,
+  //       childCurrent: currentPage,
+  //       duration: Duration(milliseconds: transitionDuration),
+  //       // reverseDuration: const Duration(milliseconds: 1500),
+  //     ));
+  //   });
+  // }
 }

@@ -2,6 +2,7 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/screens/videos_screen/videos_screen.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 import 'package:swipe_image_gallery/swipe_image_gallery.dart';
@@ -1252,18 +1253,15 @@ class HomeScreen3 extends StatelessWidget {
   @override
   // ignore: avoid_renaming_method_parameters
   Widget build(BuildContext homeScreenContext) {
-    List<AnimatedText> announcment = [];
-    return BlocProvider<NewsCubit>(
-      create: (context) => NewsCubit()
-        ..getLatestNews()
-        ..getNews(),
+    // List<AnimatedText> announcment = [];
+    return BlocProvider<NewsCubit>.value(
+      value: NewsCubit.get(homeScreenContext),
       child: Sizer(
         builder: (ctx, or, dt) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              BlocConsumer<NewsCubit, NewsState>(
-                listener: (context, state) {},
+              BlocBuilder<NewsCubit, NewsState>(
                 buildWhen: (previous, current) {
                   if (current is LatestNewsSuccessState) {
                     current.latestNewsList.add(
@@ -1276,7 +1274,7 @@ class HomeScreen3 extends StatelessWidget {
                 builder: (context, latestNewsstate) {
                   List<ImageGalleryHeroProperties> heroProperties = [];
                   List<Widget> assets = [];
-                  return latestNewsstate is LatestNewsSuccessState
+                  return NewsCubit.get(context).latestNewsList.isNotEmpty
                       ? Container(
                           margin: EdgeInsets.only(top: 12.sp),
                           width: 100.w,
@@ -1284,7 +1282,8 @@ class HomeScreen3 extends StatelessWidget {
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: NewsSliderList(
-                                newsAllData: latestNewsstate.latestNewsList,
+                                newsAllData:
+                                    NewsCubit.get(context).latestNewsList,
                                 assets: assets,
                                 heroProperties: heroProperties),
                           ),
@@ -1292,50 +1291,25 @@ class HomeScreen3 extends StatelessWidget {
                       : const ShimmerHomeNewsSlider();
                 },
               ),
-              BlocConsumer<NewsCubit, NewsState>(
-                listener: (context, state) {},
-                buildWhen: (pre, curr) {
-                  if (curr is NewsSuccessState) {
-                    for (int i = 0; i < curr.newsList.length - 1; i++) {
-                      if (curr.newsList[i].newsType == 1) {
-                        announcment.add(
-                          TyperAnimatedText(
-                            curr.newsList[i].newsDescription!,
-                            speed: const Duration(milliseconds: 100),
-                            textAlign: TextAlign.start,
-                            curve: Curves.linear,
-                            textStyle: const TextStyle(
-                                color: Color(0xFF174873),
-                                overflow: TextOverflow.visible,
-                                fontFamily: 'RobotoFlex',
-                                fontSize: 16),
-                          ),
-                        );
-                      }
-                    }
-                    return curr.newsList.isNotEmpty;
-                  } else {
-                    return false;
-                  }
-                },
+              BlocBuilder<NewsCubit, NewsState>(
                 builder: (context, state) {
-                  ScrollController src = ScrollController();
-                  _scrollTo() {
-                    // src.animateTo(src.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear,);
-                    (src.hasClients)
-                        ? src.jumpTo(src.position.maxScrollExtent)
-                        : null;
-                  }
+                  // ScrollController src = ScrollController();
+                  // _scrollTo() {
+                  //   // src.animateTo(src.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear,);
+                  //   (src.hasClients)
+                  //       ? src.jumpTo(src.position.maxScrollExtent)
+                  //       : null;
+                  // }
+                  // WidgetsBinding.instance
+                  //     .addPostFrameCallback((_) => _scrollTo());
 
-                  WidgetsBinding.instance
-                      .addPostFrameCallback((_) => _scrollTo());
                   return Container(
                     margin: (MediaQuery.of(context).size.height <= 750)
                         ? EdgeInsets.only(top: 5.sp, bottom: 5.sp)
                         : EdgeInsets.only(top: 10.sp, bottom: 10.sp),
                     color: Colors.grey.shade50,
                     padding: EdgeInsets.only(bottom: 1.sp, top: 1.sp),
-                    child: state is NewsSuccessState
+                    child: NewsCubit.get(context).announcment.isNotEmpty
                         ? Padding(
                             padding:
                                 EdgeInsets.only(top: 9.0.sp, bottom: 9.0.sp),
@@ -1348,8 +1322,8 @@ class HomeScreen3 extends StatelessWidget {
                                 child: ListView(
                                   reverse: true,
                                   shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  controller: src,
+                                  // scrollDirection: Axis.horizontal,
+                                  // controller: src,
                                   physics: const NeverScrollableScrollPhysics(),
                                   children: [
                                     AnimatedTextKit(
@@ -1357,7 +1331,9 @@ class HomeScreen3 extends StatelessWidget {
                                       pause: const Duration(milliseconds: 1000),
                                       repeatForever: true,
                                       displayFullTextOnTap: false,
-                                      animatedTexts: announcment.isEmpty
+                                      animatedTexts: NewsCubit.get(context)
+                                              .announcment
+                                              .isEmpty
                                           ? [
                                               TyperAnimatedText(
                                                 'Checking for Announcement... ',
@@ -1372,7 +1348,7 @@ class HomeScreen3 extends StatelessWidget {
                                                     fontSize: 16),
                                               )
                                             ]
-                                          : announcment,
+                                          : NewsCubit.get(context).announcment,
                                     ),
                                   ],
                                 ),
@@ -1479,10 +1455,15 @@ class HomeScreen3 extends StatelessWidget {
                 ),
               ),
             ),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(PhotosScreen.routeName);
-              },
+            PopupMenuButton(
+              color: const Color(0xFF9695ed),
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20.0),
+                  bottomRight: Radius.circular(20.0),
+                ),
+              ),
+              elevation: 50,
               child: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
@@ -1548,6 +1529,22 @@ class HomeScreen3 extends StatelessWidget {
                   ),
                 ),
               ),
+              itemBuilder: (context) {
+                return [
+                  const PopupMenuItem(
+                    value: 1,
+                    child: Text('Photo Gallery'),
+                  ),
+                  const PopupMenuItem(
+                    value: 2,
+                    child: Text('Videos'),
+                  )
+                ];
+              },
+              onSelected: (index) => Navigator.of(context).pushNamed(
+                  (index == 1)
+                      ? PhotosScreen.routeName
+                      : VideosScreen.routeName),
             ),
             InkWell(
               onTap: () {

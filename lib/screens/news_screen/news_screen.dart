@@ -1,4 +1,3 @@
-
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,47 +6,51 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import '../../bloc/news_screen_bloc/news_cubit.dart';
 import '../../data/helpers/convert_from_html.dart';
 import '../../data/models/response_news.dart';
-import '../../widgets/appbar/basic_appbar.dart';
-import '../../widgets/drawer/main_drawer.dart';
 
-class NewsScreen extends StatefulWidget {
+class NewsScreen extends StatelessWidget {
   static const routeName = 'news-screen';
   const NewsScreen({Key? key}) : super(key: key);
 
-  @override
-  State<NewsScreen> createState() => _NewsScreenState();
-}
-
-class _NewsScreenState extends State<NewsScreen> {
-  List<Data> newsAllData = [];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       // drawer: MainDrawer(),
-      appBar:AppBar(title: Text("News"),),/// basicAppBar(context, 'News'),
+      appBar: AppBar(
+        title: const Text("News"),
+      ),
+
+      /// basicAppBar(context, 'News'),
       backgroundColor: Colors.white,
 
-      body: BlocProvider(
-        create: (context) => NewsCubit()..getNews(),
-        child: BlocConsumer<NewsCubit, NewsState>(
-          listener: (context, state) {
-            if (state is NewsSuccessState) {
-              newsAllData = state.newsList;
-              setState(() {});
-            }
-          },
+      body: BlocProvider<NewsCubit>.value(
+        value:NewsCubit.get(context),
+        child: BlocBuilder<NewsCubit, NewsState>(
+          // listener: (context, state) {
+          //   if (state is NewsSuccessState) {
+          //     newsAllData = state.newsList;
+          //     setState(() {});
+          //   }
+          // },
+          // buildWhen: (previous, curreny) {
+          //   if (curreny is NewsSuccessState) {
+          //     newsAllData = curreny.newsList;
+          //     return newsAllData.isNotEmpty;
+          //   } else {
+          //     return false;
+          //   }
+          // },
           builder: (context, state) {
             return Sizer(builder: (ctx, ori, dt) {
               return ConditionalBuilder(
-                condition: newsAllData.isNotEmpty,
+                condition: NewsCubit.get(context).newsList.isNotEmpty,
                 builder: (context) {
                   // List<Data> newsList = newsAllData;
                   return Padding(
                     padding: EdgeInsets.all(5.0.sp),
                     child: GridView.builder(
                       physics: const BouncingScrollPhysics(),
-                      itemCount: newsAllData.length,
+                      itemCount: NewsCubit.get(context).newsList.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 1,
                         childAspectRatio: 1.sp,
@@ -55,7 +58,7 @@ class _NewsScreenState extends State<NewsScreen> {
                         mainAxisSpacing: 9.sp,
                       ),
                       itemBuilder: (ctx, index) {
-                        Data news = newsAllData[index];
+                        Data news = NewsCubit.get(context).newsList[index];
                         return InkWell(
                           onTap: () {
                             showDialog(
@@ -90,21 +93,23 @@ class _NewsScreenState extends State<NewsScreen> {
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(20),
                             child: GridTile(
+                              footer: GridTileBar(
+                                title: Text(
+                                  news.newsTitle ?? "Tap to see more details",
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                backgroundColor: Colors.black54,
+                              ),
                               child: FadeInImage(
-                                placeholder: const AssetImage('assets/images/logo.png'),
+                                placeholder:
+                                    const AssetImage('assets/images/logo.png'),
                                 image: NetworkImage(
                                   'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg',
                                 ),
                                 fit: BoxFit.fill,
-                              ),
-                              footer: GridTileBar(
-                                title:Text( news.newsTitle ?? "Tap to see more details",
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 18,
-                                            ),
-                                          ),
-                                backgroundColor: Colors.black54,
                               ),
                             ),
                           ),

@@ -15,11 +15,13 @@ import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_r
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreen.dart';
+import 'package:hassanallamportalflutter/screens/news_screen/news_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
@@ -27,6 +29,7 @@ import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dar
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
+import '../data/models/contacts_related_models/contacts_data_from_api.dart';
 import '../screens/apps_screen/apps_screen.dart';
 import '../screens/notification_screen/notifications_screen.dart';
 import '../screens/polls_screen/polls_screen.dart';
@@ -35,32 +38,32 @@ import '../screens/videos_screen/videos_screen.dart';
 class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
-    // case '/':
-    //   return MaterialPageRoute(
-    //     builder: (_) => HomeScreen(
-    //       title: "Home Screen",
-    //       color: Colors.blueAccent,
-    //     ),
-    //   );
+      // case '/':
+      //   return MaterialPageRoute(
+      //     builder: (_) => HomeScreen(
+      //       title: "Home Screen",
+      //       color: Colors.blueAccent,
+      //     ),
+      //   );
       case '/':
         return MaterialPageRoute(
           builder: (_) => const SplashScreen(),
         );
 
-    // case '/second':
-    //   return MaterialPageRoute(
-    //     builder: (_) => SecondScreen(
-    //       title: "Second Screen",
-    //       color: Colors.redAccent,
-    //     ),
-    //   );
-    // case '/third':
-    //   return MaterialPageRoute(
-    //     builder: (_) => ThirdScreen(
-    //       title: "Thirst Screen",
-    //       color: Colors.greenAccent,
-    //     ),
-    //   );
+      // case '/second':
+      //   return MaterialPageRoute(
+      //     builder: (_) => SecondScreen(
+      //       title: "Second Screen",
+      //       color: Colors.redAccent,
+      //     ),
+      //   );
+      // case '/third':
+      //   return MaterialPageRoute(
+      //     builder: (_) => ThirdScreen(
+      //       title: "Thirst Screen",
+      //       color: Colors.greenAccent,
+      //     ),
+      //   );
       case '/settings':
         return MaterialPageRoute(
           builder: (_) => const SettingsScreen(),
@@ -73,11 +76,13 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const TapsScreen(),
         );
-    // case ContactDetailScreen.routeName:
-    //   final args = settings.arguments as Map<String, dynamic>;
-    //   return MaterialPageRoute(
-    //     builder: (_) => ContactDetailScreen(selectedContactDataAsMap: args,),
-    //   );
+      case ContactDetailScreen.routeName:
+        final args = settings.arguments as ContactsDataFromApi;
+        return MaterialPageRoute(
+          builder: (_) => ContactDetailScreen(
+            selectedContactDataAsMap: args,
+          ),
+        );
       case GetDirectionScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => const GetDirectionScreen(),
@@ -156,7 +161,7 @@ class AppRouter {
 
       case EmailAndUserAccountScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => EmailAndUserAccountScreen(),
+          builder: (_) => const EmailAndUserAccountScreen(),
         );
 
       case AccessRightScreen.routeName:
@@ -169,7 +174,6 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const MyRequestsScreen(),
         );
-
 
       case BusinessMissionScreen.routeName:
         return MaterialPageRoute(
@@ -195,8 +199,16 @@ class AppRouter {
         );
       case NotificationsScreen.routeName:
         return MaterialPageRoute(
-            builder: (context) => const NotificationsScreen()
-        );
+            builder: (_) => const NotificationsScreen());
+
+      case NewsLetterScreen.routeName:
+        return MaterialPageRoute(
+            builder: (_) => const NewsLetterScreen());
+
+      case EquipmentsRequest.routeName:
+        return MaterialPageRoute(
+            builder: (_) => const EquipmentsRequest());
+
       default:
         return null;
     }
