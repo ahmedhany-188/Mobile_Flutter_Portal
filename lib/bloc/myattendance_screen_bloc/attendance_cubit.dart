@@ -1,17 +1,18 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/data/data_providers/attendance_data_provider/attendance_data_provider.dart';
+import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
+import 'package:hassanallamportalflutter/data/repositories/attendance_repository.dart';
 part 'attendance_state.dart';
 
 class AttendanceCubit extends Cubit<AttendanceState> {
   AttendanceCubit() : super(AttendanceInitial());
 
   static AttendanceCubit get(context) =>BlocProvider.of(context);
-  String myAttendance ="";
 
   final Connectivity connectivity = Connectivity();
 
-  void getAttendanceList(userHRcode,monthNumber) async {
+  void getAttendanceList(userHRCode,monthNumber) async {
 
     emit(BlocGetTheAttendanceLoadingState());
     try {
@@ -19,14 +20,15 @@ class AttendanceCubit extends Cubit<AttendanceState> {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
 
-        AttendanceDataProvider().getAttendanceList(userHRcode,monthNumber)
+        AttendanceRepository().getAttendanceData(userHRCode, monthNumber)
+        // AttendanceDataProvider().getAttendanceList(userHRcode,monthNumber)
             .then((value){
 
-          myAttendance = value.body;
-
           // print("----------"+myAttendance);
-          emit(BlocGetTheAttendanceSuccesState(myAttendance));
+          emit(BlocGetTheAttendanceSuccessState(value));
         }).catchError((error){
+
+          print("Err0r: "+error.toString());
           emit(BlocGetTheAttendanceErrorState(error.toString()));
         });
 
@@ -34,6 +36,7 @@ class AttendanceCubit extends Cubit<AttendanceState> {
         emit(BlocGetTheAttendanceErrorState("No internet connection"));
       }
     }catch(e){
+      print("Err0r2: "+e.toString());
       emit(BlocGetTheAttendanceErrorState(e.toString()));
     }
 

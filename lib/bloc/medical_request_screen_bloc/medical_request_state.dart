@@ -1,7 +1,7 @@
 part of 'medical_request_cubit.dart';
 
 @immutable
-abstract class MedicalRequestState {
+abstract class MedicalRequestState extends Equatable{
   const MedicalRequestState();
 
   const MedicalRequestState.copyWith({required RequestDate patientNameMedicalRequest,
@@ -11,7 +11,7 @@ abstract class MedicalRequestState {
 }
 
 
-class MedicalRequestInitial extends MedicalRequestState {
+class MedicalRequestInitial extends Equatable {
 
   const MedicalRequestInitial({
     this.patientNameMedicalRequest=const RequestDate.pure(),
@@ -59,20 +59,6 @@ class MedicalRequestInitial extends MedicalRequestState {
 
 }
 
-
-
-// class BlocGetTheMedicalRequestLoadingState extends MedicalRequestState{
-// }
-//
-// class BlocgetTheMedicalRequestSuccesState extends MedicalRequestState{
-//   String getMedicalRequestMessage;
-//   BlocgetTheMedicalRequestSuccesState(this.getMedicalRequestMessage);
-// }
-//
-// class BlocgetTheMedicalRequestErrorState extends MedicalRequestState{
-//   String errorMedicalRequestMessage;
-//   BlocgetTheMedicalRequestErrorState(this.errorMedicalRequestMessage);
-// }
 
 
 

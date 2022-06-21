@@ -5,7 +5,9 @@ class EmbassyLetterFormModel {
 
   final String ?requestDate, purpose, embassy, dateFrom, dateTo, passportNo,
       comments,
-      addSalary;
+      addSalary, requestHrCode;
+
+  final int ?status;
 
   const EmbassyLetterFormModel(this.requestDate,
       this.purpose,
@@ -14,7 +16,9 @@ class EmbassyLetterFormModel {
       this.dateTo,
       this.passportNo,
       this.addSalary,
-      this.comments);
+      this.comments,
+      this.status,
+      this.requestHrCode);
 
 
   EmbassyLetterFormModel.fromJson(Map<String, dynamic>json)
@@ -27,7 +31,9 @@ class EmbassyLetterFormModel {
         dateTo=json["dateTo"],
         passportNo=json["passportNo"],
         addSalary=json["addSalary"],
-        comments=json["comments"];
+        comments=json["comments"],
+        status=json["status"],
+        requestHrCode=json["requestHrCode"];
 
 
 }

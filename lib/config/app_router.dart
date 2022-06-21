@@ -159,10 +159,10 @@ class AppRouter {
           builder: (_) => EmailAndUserAccountScreen(),
         );
 
-      case AccessUserAccountScreen.routeName:
+      case AccessRightScreen.routeName:
         return MaterialPageRoute(
           builder: (_) =>
-              AccessUserAccountScreen(requestNo: settings.arguments),
+              AccessRightScreen(requestNo: settings.arguments),
         );
 
       case MyRequestsScreen.routeName:

@@ -1,17 +1,17 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
 import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_userprofile.dart';
 
 
 // ignore: must_be_immutable
 class AttendanceTicketWidget extends StatelessWidget {
-  List<dynamic> projectsDirectionData;
+  List<MyAttendanceModel> attendanceListData;
 
   String timeIn = "";
   String timeIn2 = "";
   String timeOut = "";
   String timeOut2 = "";
-  String name = "";
   bool holiday = false;
   String vacation = "";
   String permission = "";
@@ -21,7 +21,7 @@ class AttendanceTicketWidget extends StatelessWidget {
   String deduction = "";
 
 
-  AttendanceTicketWidget(this.projectsDirectionData, {Key? key})
+  AttendanceTicketWidget(this.attendanceListData, {Key? key})
       : super(key: key);
 
   @override
@@ -30,7 +30,7 @@ class AttendanceTicketWidget extends StatelessWidget {
 
       maintainBottomViewPadding: true,
       child: ConditionalBuilder(
-        condition: projectsDirectionData.isNotEmpty,
+        condition: attendanceListData.isNotEmpty,
         builder: (context) =>
             GridView.builder(
 
@@ -45,29 +45,28 @@ class AttendanceTicketWidget extends StatelessWidget {
                 // height between items
                 mainAxisSpacing: 2,
               ),
-              itemCount: projectsDirectionData.length,
+              itemCount: attendanceListData.length,
               itemBuilder: (BuildContext context, int index) {
 
-                List<String> date = projectsDirectionData[index]["date"]
+                List<String> date = attendanceListData[index].date
                     .toString().split('-');
 
-                print("----"+projectsDirectionData[index].toString()+"--");
 
 
-                if(projectsDirectionData[index]["time_IN"] !=null && projectsDirectionData[index]["time_OUT"] !=null){
-                  timeIn = projectsDirectionData[index]["time_IN"]
+                if(attendanceListData[index].timeIN!=null && attendanceListData[index].timeOUT !=null){
+                  timeIn = attendanceListData[index].timeIN
                       .toString()
                       .split(':')[0];
-                  timeIn2 = projectsDirectionData[index]["time_IN"]
+                  timeIn2 = attendanceListData[index].timeIN
                       .toString()
                       .split(':')[1];
 
                   timeIn2=timeIn2.replaceAll("AM", "");
                   timeIn2=timeIn2.replaceAll("PM", "");
-                  timeOut = projectsDirectionData[index]["time_OUT"]
+                  timeOut = attendanceListData[index].timeOUT
                       .toString()
                       .split(':')[0];
-                  timeOut2 = projectsDirectionData[index]["time_OUT"]
+                  timeOut2 = attendanceListData[index].timeOUT
                       .toString()
                       .split(':')[1];
                   timeOut2=timeOut2.replaceAll("AM", "");
@@ -79,24 +78,23 @@ class AttendanceTicketWidget extends StatelessWidget {
 
 
 
-                holiday = projectsDirectionData[index]["holiday"];
-                vacation = projectsDirectionData[index]["vacation"].toString();
-                permission =
-                    projectsDirectionData[index]["permission"].toString();
-                businessMission =
-                    projectsDirectionData[index]["businessMission"].toString();
+                holiday = attendanceListData[index].holiday!;
+                vacation = attendanceListData[index].vacation.toString();
+                permission =attendanceListData[index].permission.toString();
 
-                forget = projectsDirectionData[index]["forget"].toString();
+                businessMission =attendanceListData[index].businessMission.toString();
+
+                forget = attendanceListData[index].forget.toString();
 
                 monthPeriod =
-                    projectsDirectionData[index]["monthPeriod"].toString();
+                    attendanceListData[index].monthPeriod.toString();
 
                 deduction =
-                    projectsDirectionData[index]["deduction"].toString();
+                    attendanceListData[index].deduction.toString();
 
-                if (projectsDirectionData[index]["time_IN"].toString() !=
+                if (attendanceListData[index].timeIN.toString() !=
                     "null" &&
-                    projectsDirectionData[index]["time_OUT"].toString() !=
+                    attendanceListData[index].timeOUT.toString() !=
                         "null") {
                   if (((int.parse(timeOut) >= 5) ||
                       (int.parse(timeOut) == 4 &&
@@ -131,7 +129,7 @@ class AttendanceTicketWidget extends StatelessWidget {
 
 
                               child: Text(
-                                  projectsDirectionData[index]["time_IN"],
+                                  attendanceListData[index].timeIN.toString(),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 11,)),
@@ -150,7 +148,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                                 color: Colors.lightGreen,
                               ),
                               child: Text(
-                                  projectsDirectionData[index]["time_OUT"],
+                                  attendanceListData[index].timeOUT.toString(),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 11,)),
@@ -188,7 +186,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                           ),
                           alignment: Alignment.center,
                           width: double.infinity,
-                          child: Text(projectsDirectionData[index]["time_IN"],
+                          child: Text(attendanceListData[index].timeIN.toString(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 11,
@@ -206,7 +204,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                           ),
                           alignment: Alignment.center,
                           width: double.infinity,
-                          child: Text(projectsDirectionData[index]["time_OUT"],
+                          child: Text(attendanceListData[index].timeOUT.toString(),
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 11,
@@ -251,7 +249,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                         alignment: Alignment.center,
                         width: double.infinity,
                         child: Text(
-                          projectsDirectionData[index]["time_IN"],
+                            attendanceListData[index].timeIN.toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 11,
@@ -269,7 +267,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                         alignment: Alignment.center,
                         width: double.infinity,
                         child: Text(
-                          projectsDirectionData[index]["time_OUT"],
+                            attendanceListData[index].timeOUT.toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 11,
@@ -303,7 +301,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                         alignment: Alignment.center,
                         width: double.infinity,
                         child: Text(
-                          projectsDirectionData[index]["time_IN"],
+                            attendanceListData[index].timeIN.toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 11,
@@ -322,7 +320,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                         alignment: Alignment.center,
                         width: double.infinity,
                         child: Text(
-                          projectsDirectionData[index]["time_OUT"],
+                            attendanceListData[index].timeOUT.toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 11,

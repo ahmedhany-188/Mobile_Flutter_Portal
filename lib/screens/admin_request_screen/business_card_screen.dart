@@ -3,29 +3,24 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/business_card_request/business_card_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
-import 'package:hassanallamportalflutter/data/models/admin_requests_models/business_card_form_model.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
+import 'package:hassanallamportalflutter/constants/enums.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
-import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
 
 class BusinessCardScreen extends StatefulWidget{
 
   static const routeName = "/business-account-screen";
   static const requestNoKey = 'request-No';
-
   const BusinessCardScreen({Key? key,this.requestNo}) : super(key: key);
-
-
   final requestNo;
 
   @override
   State<BusinessCardScreen> createState() => _BusinessCardScreen();
-
 }
 
 
 class _BusinessCardScreen extends State<BusinessCardScreen> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,16 +28,10 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
         .of(context)
         .size;
     final user = context.select((AppBloc bloc) => bloc.state.userData);
-    var formatter = DateFormat('yyyy-MM-dd');
+    var formatter = GlobalConstants.dateFormatViewed;
     String formattedDate = formatter.format(DateTime.now());
 
-    final TextEditingController nameCardController = TextEditingController();
-    final TextEditingController mobileController = TextEditingController();
-    final TextEditingController extController = TextEditingController();
-    final TextEditingController faxNoController = TextEditingController();
-    final TextEditingController commentsController = TextEditingController();
-
-
+    final currentRequestNo = widget.requestNo;
 
 
     return Theme(
@@ -53,6 +42,14 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
           ),
         ),
       ),
+
+    child: MultiBlocProvider(
+    providers: [
+    BlocProvider<BusinessCardCubit>(create: (businessCardContext) =>
+    currentRequestNo == null ? (BusinessCardCubit(RequestRepository(user))..getRequestData(RequestStatus.newRequest, ""))
+        :(BusinessCardCubit(RequestRepository(user))..getRequestData(RequestStatus.oldRequest, currentRequestNo[BusinessCardScreen.requestNoKey]))),
+    // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
+    ],
       child: BlocProvider<BusinessCardCubit>(
         create: (businessCardContext) =>
             BusinessCardCubit(RequestRepository(user)),
@@ -64,7 +61,6 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                   centerTitle: true,
                 ),
                 resizeToAvoidBottomInset: false,
-
 
                 /*
                 floatingActionButton: Column(
@@ -122,27 +118,24 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                 body: BlocListener<BusinessCardCubit, BusinessCardInitial>(
                   listener: (context, state) {
                     if (state.status.isSubmissionSuccess) {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Success"),
-                        ),
-                      );
+                      LoadingDialog.show(context);
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (_) =>
+                              SuccessScreen(text: state.successMessage ??
+                                  "Error Number",)));
                     } else if (state.status.isSubmissionInProgress) {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Loading"),
-                        ),
-                      );
+                      LoadingDialog.show(context);
                     }
                     else if (state.status.isSubmissionFailure) {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(state.errorMessage.toString()),
-                        ),
-                      );
+                      LoadingDialog.hide(context);
+                      ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                state.errorMessage ?? 'Request Failed'),
+                          ),
+                        );
                     }
                   },
 
@@ -174,8 +167,8 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
                                 builder: (context, state) {
-                                  return TextField(
-                                    controller: nameCardController,
+                                  return TextFormField(
+
                                     // enabled: (widget.objectValidation)
                                     //     ? false
                                     //     : true,
@@ -205,12 +198,12 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
                                 builder: (context, state) {
-                                  return TextField(
+                                  return TextFormField(
                                     // enabled: (widget.objectValidation)
                                     //     ? false
                                     //     : true,
 
-                                    controller: mobileController,
+
                                     onChanged: (value) =>
                                         context.read<BusinessCardCubit>()
                                             .employeeMobile(value),
@@ -236,12 +229,12 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
                                 builder: (context, state) {
-                                  return TextField(
+                                  return TextFormField(
                                     // enabled: (widget.objectValidation)
                                     //     ? false
                                     //     : true,
 
-                                    controller: extController,
+
                                     onChanged: (value) =>
                                         context.read<BusinessCardCubit>()
                                             .employeeExt(value),
@@ -264,12 +257,12 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
                                 builder: (context, state) {
-                                  return TextField(
+                                  return TextFormField(
                                     // enabled: (widget.objectValidation)
                                     //     ? false
                                     //     : true,
 
-                                    controller: faxNoController,
+
                                     onChanged: (value) =>
                                         context.read<BusinessCardCubit>()
                                             .employeeFaxNO(value),
@@ -292,12 +285,12 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
                                 builder: (context, state) {
-                                  return TextField(
+                                  return TextFormField(
                                     // enabled: (widget.objectValidation)
                                     //     ? false
                                     //     : true,
 
-                                    controller: commentsController,
+
                                     onChanged: (value) =>
                                         context.read<BusinessCardCubit>()
                                             .EemployeeComment(value),
@@ -329,23 +322,86 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                                   Icons.thumb_up_alt_outlined,
                                   color: Colors.black),
                               backgroundColor: Colors.white,),
-
-
-
                           ],
                         ),
                       ),
                     ),
-
                   ),
-
                 ),
-
               );
             }
         ),
       ),
+    )
     );
   }
 
+}
+
+
+class LoadingDialog extends StatelessWidget {
+  static void show(BuildContext context, {Key? key}) => showDialog<void>(
+    context: context,
+    useRootNavigator: false,
+    barrierDismissible: false,
+    builder: (_) => LoadingDialog(key: key),
+  ).then((_) => FocusScope.of(context).requestFocus(FocusNode()));
+
+  static void hide(BuildContext context) => Navigator.pop(context);
+
+  const LoadingDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Center(
+        child: Card(
+          child: Container(
+            width: 80,
+            height: 80,
+            padding: const EdgeInsets.all(12.0),
+            child: const CircularProgressIndicator(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SuccessScreen extends StatelessWidget {
+  const SuccessScreen({Key? key, required this.text}) : super(key: key);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Icon(Icons.tag_faces, size: 100),
+            const SizedBox(height: 10),
+            Text(
+              text,
+              style: const TextStyle(fontSize: 54, color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const BusinessCardScreen())),
+              icon: const Icon(Icons.replay),
+              label: const Text('Create Another Permission Request'),
+            ),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.close),
+              label: const Text('Close'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -43,7 +42,6 @@ class VacationCubit extends Cubit<VacationInitial> {
       final requestData = await _requestRepository.getVacationRequestData(requestNo!);
 
 
-
       final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
       final responsiblePerson  = ContactsDataFromApi(email: requestData.responsible!.contains("null") ? "No Data" : requestData.responsible,name: requestData.responsible!.contains("null") ? "No Data" : requestData.responsible);
       final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.date!)));
@@ -74,6 +72,7 @@ class VacationCubit extends Cubit<VacationInitial> {
           takeActionStatus: (_requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
         ),
       );
+
     }
   }
 
@@ -194,10 +193,6 @@ class VacationCubit extends Cubit<VacationInitial> {
     }else{
       return;
     }
-
-
-
-
 
 
   }

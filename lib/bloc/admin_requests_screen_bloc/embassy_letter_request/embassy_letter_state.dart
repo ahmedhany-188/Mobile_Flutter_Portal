@@ -5,9 +5,9 @@ abstract class EmbassyLetterState extends Equatable {
 
   const EmbassyLetterState();
 
-  const EmbassyLetterState.copywith({
+  const EmbassyLetterState.copyWith({
     required RequestDate dateFrom ,required RequestDate dateTo
-    , required RequestDate passortNumber, required FormzStatus status});
+    , required RequestDate passportNumber, required FormzStatus status});
 }
 
 class EmbassyLetterInitial extends EmbassyLetterState {

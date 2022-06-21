@@ -1,7 +1,7 @@
 part of 'business_card_cubit.dart';
 
 @immutable
-abstract class BusinessCardState {
+abstract class BusinessCardState  extends Equatable{
 
   const BusinessCardState();
   const BusinessCardState.copy({
@@ -10,9 +10,10 @@ abstract class BusinessCardState {
 
 }
 
-class BusinessCardInitial extends BusinessCardState {
+class BusinessCardInitial  extends Equatable {
   const BusinessCardInitial({
 
+    this.requestStatus = RequestStatus.newRequest,
     this.employeeNameCard = const RequestDate.pure(),
     this.employeeMobile = const RequestDate.pure(),
     this.employeeExt,
@@ -21,9 +22,15 @@ class BusinessCardInitial extends BusinessCardState {
     this.status = FormzStatus.pure,
     this.errorMessage,
     this.successMessage,
+    this.takeActionStatus,
+    this.statusAction,
+    this.requestDate = const RequestDate.pure(),
 
   });
-
+  final RequestDate requestDate;
+  final TakeActionStatus? takeActionStatus;
+  final String? statusAction;
+  final RequestStatus? requestStatus;
   final RequestDate employeeNameCard;
   final RequestDate employeeMobile;
   final String ?employeeExt;
@@ -47,10 +54,14 @@ class BusinessCardInitial extends BusinessCardState {
     FormzStatus ?status,
     String? errorMessage,
     String? successMessage,
+    RequestDate ?requestDate,
+    RequestStatus? requestStatus,
+    String? statusAction,
 
-}){
+
+  }){
     return BusinessCardInitial(
-
+      requestDate: requestDate ?? this.requestDate,
       employeeNameCard: employeeNameCard ?? this.employeeNameCard,
       employeeMobile: employeeMobile ?? this.employeeMobile,
       employeeExt: employeeExt ?? this.employeeExt,
@@ -59,6 +70,9 @@ class BusinessCardInitial extends BusinessCardState {
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       successMessage: successMessage ?? this.successMessage,
+        takeActionStatus: takeActionStatus ?? this.takeActionStatus,
+        statusAction: statusAction ?? this.statusAction,
+      requestStatus: requestStatus ?? this.requestStatus,
 
     );
   }

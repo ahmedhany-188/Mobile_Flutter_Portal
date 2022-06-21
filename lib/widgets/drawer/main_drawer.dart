@@ -230,7 +230,7 @@ class _MainDrawerState extends State<MainDrawer> {
                             () {
 
                           Navigator
-                              .pushNamed(context,AccessUserAccountScreen.routeName);
+                              .pushNamed(context,AccessRightScreen.routeName);
                         },
                       ),
 

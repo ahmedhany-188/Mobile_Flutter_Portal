@@ -9,7 +9,11 @@ import 'package:hassanallamportalflutter/data/models/admin_requests_models/busin
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/my_requests_model/my_access_right_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/my_requests_model/my_account_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/my_requests_model/my_business_card_model.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_business_mission_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/my_requests_model/my_embassy_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_requests_model_form.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_vacation_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_duration_response.dart';
@@ -56,30 +60,24 @@ class RequestRepository {
     {
       "ServiceId": RequestServiceID.AccessRightServiceID,
       "RequestHrCode": userData.employeeData!.userHrCode,
-      "Date": GlobalConstants.dateFormatServer.format(
-          GlobalConstants.dateFormatViewed.parse(
-              accessRightModel.requestDate!)),
+      "Date": accessRightModel.requestDate,
       "FilePdf": (accessRightModel.filePDF != null)
           ? accessRightModel.filePDF
           : null,
       "Comments": accessRightModel.comments,
+      "requestHrCode": userData.user?.userHRCode!,
+
       "ReqType": accessRightModel.requestType,
       "StartDate": accessRightModel.fromDate,
       "EndDate": accessRightModel.toDate,
       "IsPermanent": accessRightModel.permanent,
-      // "USBException": (accessRightModel.items.contains("USB Exception")
-      //     ? true
-      //     : false),
-      // "VPNAccount": (accessRightModel.items.contains("VPN Account")
-      //     ? true
-      //     : false),
-      // "IPPhone": (accessRightModel.items.contains("IP Phone") ? true : false),
-      // "LocalAdmin": (accessRightModel.items.contains("Local Admin")
-      //     ? true
-      //     : false),
+      "USBException": accessRightModel.usbException,
+      "VPNAccount": accessRightModel.vpnAccount,
+      "IPPhone": accessRightModel.ipPhone,
+      "LocalAdmin": accessRightModel.localAdmin,
     });
     final http.Response rawAccess = await requestDataProviders
-        .getAccessAccountAccessRequest(bodyString);
+        .postAccessAccountAccessRequest(bodyString);
     final json = await jsonDecode(rawAccess.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
@@ -95,6 +93,37 @@ class RequestRepository {
     return response;
   }
 
+  Future<BusinessCardFormModel> geBusinessCard(String requestNo) async{
+    final http.Response rawPermission = await requestDataProviders
+        .getBusinessCardRequestData(userData.user?.userHRCode ?? "",requestNo);
+    final json = await jsonDecode(rawPermission.body);
+    final BusinessCardFormModel response = BusinessCardFormModel.fromJson(json[0]);
+    return response;
+  }
+
+  Future<AccessRightModel> getAccessRight(String requestNo) async{
+    final http.Response rawPermission = await requestDataProviders
+        .getAccessRightRequestData(userData.user?.userHRCode ?? "",requestNo);
+    final json = await jsonDecode(rawPermission.body);
+    final AccessRightModel response = AccessRightModel.fromJson(json[0]);
+    return response;
+  }
+
+  Future<EmailUserFormModel> getEmailAccount(String requestNo) async{
+    final http.Response rawPermission = await requestDataProviders
+        .getEmailAccountRequestData(userData.user?.userHRCode ?? "",requestNo);
+    final json = await jsonDecode(rawPermission.body);
+    final EmailUserFormModel response = EmailUserFormModel.fromJson(json[0]);
+    return response;
+  }
+
+  Future<EmbassyLetterFormModel> getEmbassyLetter(String requestNo) async{
+    final http.Response rawPermission = await requestDataProviders
+        .getEmbassyLetterRequestData(userData.user?.userHRCode ?? "",requestNo);
+    final json = await jsonDecode(rawPermission.body);
+    final EmbassyLetterFormModel response = EmbassyLetterFormModel.fromJson(json[0]);
+    return response;
+  }
 
 
   Future<RequestResponse> postBusinessCard(
@@ -112,7 +141,7 @@ class RequestRepository {
       "mobileNo": businessCardFormModel.employeeMobil
     });
     final http.Response rawBusinessCard = await requestDataProviders
-        .getBusinessCardRequest(bodyString);
+        .postBusinessCardRequest(bodyString);
     final json = await jsonDecode(rawBusinessCard.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
@@ -134,9 +163,7 @@ class RequestRepository {
     var bodyString = jsonEncode(<String, dynamic>{
       "ServiceId": RequestServiceID.EmailUserAccountServiceID,
       "RequestHrCode": userData.user!.userHRCode,
-      "Date": GlobalConstants.dateFormatServer.format(
-          GlobalConstants.dateFormatViewed.parse(
-              emailUserFormModel.requestDate!)),
+      "Date": emailUserFormModel.requestDate,
       "OwnerHrCode": userData.user!.userHRCode,
       "OwnerFullName": userData.employeeData!.name,
       "OwnerTitle": userData.employeeData!.titleName,
@@ -151,7 +178,7 @@ class RequestRepository {
     });
 
     final http.Response rawEmailUserAccount = await requestDataProviders
-        .getEmailUserAccount(bodyString);
+        .postEmailUserAccount(bodyString);
     final json = await jsonDecode(rawEmailUserAccount.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
@@ -181,7 +208,7 @@ class RequestRepository {
     });
 
     final http.Response rawEmbassyLetter = await requestDataProviders
-        .getEmbassyLetterRequest(bodyString);
+        .postEmbassyLetterRequest(bodyString);
     final json = await jsonDecode(rawEmbassyLetter.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
@@ -259,7 +286,6 @@ class RequestRepository {
         .getPermissionRequestData(userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final PermissionRequestData response = PermissionRequestData.fromJson(json[0]);
-
     return response;
   }
 
