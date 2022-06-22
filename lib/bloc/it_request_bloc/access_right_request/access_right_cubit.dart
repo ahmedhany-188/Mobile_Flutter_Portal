@@ -32,9 +32,10 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
       emit(
         state.copyWith(
             requestDate: requestDate,
-            requestStatus: RequestStatus.newRequest,
+
             status: Formz.validate(
-                [state.requestItems, state.fromDate, state.toDate])
+                [state.requestItems, state.fromDate, state.toDate]),
+          requestStatus: RequestStatus.newRequest,
         ),
       );
     }
@@ -68,14 +69,15 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
       var status = "Pending";
       if (requestData.status== 0) {
         status = "Pending";
+        print("---------"+status);
+        print("---------"+requestData.status.toString());
       } else if (requestData.status == 1) {
         status = "Approved";
       } else if (requestData.status == 2) {
         status = "Rejected";
       }
 
-      emit(
-        state.copyWith(
+      emit(state.copyWith(
           requestDate: requestDate,
           requestType: requestType,
           localAdmin: localAdmin,

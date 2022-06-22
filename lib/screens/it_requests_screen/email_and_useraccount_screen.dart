@@ -20,6 +20,7 @@ class EmailAndUserAccountScreen  extends StatefulWidget{
 
 
   final requestNo;
+
   @override
   State<EmailAndUserAccountScreen> createState() => _EmailAndUserAccountScreen();
 
@@ -44,22 +45,21 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
         ),
       ),
 
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider<EmailUserAccountCubit>(create: (emailUserContext) =>
+
+       child:   BlocProvider<EmailUserAccountCubit>(create: (emailUserContext) =>
           currentRequestNo == null ? (EmailUserAccountCubit(
               RequestRepository(user))
             ..getRequestData(RequestStatus.newRequest, ""))
               : (EmailUserAccountCubit(RequestRepository(user))
             ..getRequestData(RequestStatus.oldRequest,
-                currentRequestNo[EmailAndUserAccountScreen.requestNoKey]))),
+                currentRequestNo[EmailAndUserAccountScreen.requestNoKey])),
           // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
           // BlocProvider<ResponsibleVacationCubit>(
           //     lazy: false,
           //     create: (_) =>
           //     ResponsibleVacationCubit()
           //       ..fetchList()),
-        ],
+
 
 
           child: BlocBuilder<EmailUserAccountCubit, EmailUserAccountInitial>(
@@ -76,8 +76,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
 
                     children: <Widget>[
                       if(
-                      state
-                          .requestStatus ==
+                      state.requestStatus ==
                           RequestStatus.oldRequest && state.takeActionStatus ==
                           TakeActionStatus.takeAction )FloatingActionButton
                           .extended(
@@ -154,18 +153,20 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                         child: SingleChildScrollView(
                           child: Column(
 
+
                             children: [
-                              if(state.requestStatus ==
-                                  RequestStatus.oldRequest)Padding(
+
+                              if(state.requestStatus == RequestStatus.oldRequest)Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 8),
+
                                 child: BlocBuilder<
                                     EmailUserAccountCubit,
                                     EmailUserAccountInitial>(
 
                                     builder: (context, state) {
                                       return Text(
-                                        state.statusAction ?? "Pending",
+                                        state.statusAction.toString(),
                                         // style: TextStyle(decoration: BoxDecoration(
                                         //   // labelText: 'Request Date',
                                         //   errorText: state.requestDate.invalid
@@ -450,7 +451,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                 );
               }
           ),
-        ),
+       ),
     );
   }
 }
