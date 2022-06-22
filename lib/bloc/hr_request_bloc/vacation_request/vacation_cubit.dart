@@ -23,7 +23,7 @@ class VacationCubit extends Cubit<VacationInitial> {
   final RequestRepository _requestRepository;
 
 
-  void getRequestData(RequestStatus requestStatus , String? requestNo) async {
+  void getRequestData({required RequestStatus requestStatus , String? requestNo,String? requesterHRCode}) async {
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
       var formatter = DateFormat('EEEE dd-MM-yyyy');
@@ -39,10 +39,7 @@ class VacationCubit extends Cubit<VacationInitial> {
       );
     }else{
 
-
       final requestData = await _requestRepository.getVacationRequestData(requestNo!);
-
-
 
       final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
       final responsiblePerson  = ContactsDataFromApi(email: requestData.responsible!.contains("null") ? "No Data" : requestData.responsible,name: requestData.responsible!.contains("null") ? "No Data" : requestData.responsible);
@@ -213,7 +210,7 @@ class VacationCubit extends Cubit<VacationInitial> {
       vacationToDate: vacationToDate,
       status: Formz.validate([requestDate, vacationFromDate,vacationToDate]),
     ));
-    if (state.status.isValidated) {
+    if (state.status.isValidated && int.parse(state.vacationDuration) > 0 ) {
       // print("Done permission");
       // final DateFormat dateFormatViewed = DateFormat("EEEE dd-MM-yyyy");
       // final DateFormat dateFormatServer = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -279,4 +276,9 @@ class VacationCubit extends Cubit<VacationInitial> {
       }
     }
   }
+
+  submitAction(bool takeAction) async{
+    final vacationResponse = await _requestRepository.postTakeActionRequest(takeAction);
+  }
+
 }

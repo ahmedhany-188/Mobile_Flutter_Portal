@@ -14,16 +14,25 @@ import '../../../data/repositories/request_repository.dart';
 class VacationScreen extends StatefulWidget {
   static const routeName = 'vacation-page';
   static const requestNoKey = 'request-No';
+  static const requesterHRCode = 'requester-HRCode';
 
   const VacationScreen({Key? key, this.requestNo}) : super(key: key);
 
-  final requestNo;
+  final dynamic requestNo;
 
   @override
   State<VacationScreen> createState() => _VacationScreenState();
 }
 
 class _VacationScreenState extends State<VacationScreen> {
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+
+
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
 
@@ -43,8 +52,8 @@ class _VacationScreenState extends State<VacationScreen> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<VacationCubit>(create: (vacationContext) =>
-          currentRequestNo == null ? (VacationCubit(RequestRepository(userMainData))..getRequestData(RequestStatus.newRequest, ""))
-              :(VacationCubit(RequestRepository(userMainData))..getRequestData(RequestStatus.oldRequest, currentRequestNo[VacationScreen.requestNoKey]))),
+          currentRequestNo == null ? (VacationCubit(RequestRepository(userMainData))..getRequestData(requestStatus: RequestStatus.newRequest))
+              :(VacationCubit(RequestRepository(userMainData))..getRequestData(requestStatus: RequestStatus.oldRequest, requestNo: currentRequestNo[VacationScreen.requestNoKey],requesterHRCode: currentRequestNo[VacationScreen.requesterHRCode]))),
             // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
           BlocProvider<ResponsibleVacationCubit>(
             lazy: false,
@@ -66,7 +75,10 @@ class _VacationScreenState extends State<VacationScreen> {
                         .requestStatus ==
                         RequestStatus.oldRequest && state.takeActionStatus == TakeActionStatus.takeAction )FloatingActionButton.extended(
                       heroTag: null,
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<VacationCubit>()
+                            .submitAction(true);
+                      },
                       icon: const Icon(Icons.verified),
                       label: const Text('Accept'),
                     ),
@@ -75,7 +87,9 @@ class _VacationScreenState extends State<VacationScreen> {
                         RequestStatus.oldRequest && state.takeActionStatus == TakeActionStatus.takeAction)FloatingActionButton.extended(
                       backgroundColor: Colors.red,
                       heroTag: null,
-                      onPressed: () {},
+                      onPressed: () {
+
+                      },
                       icon: const Icon(Icons.dangerous),
 
                       label: const Text('Reject'),
@@ -522,6 +536,7 @@ class _VacationScreenState extends State<VacationScreen> {
           );
         });
   }
+
 }
 
 class ItemView extends StatelessWidget {
@@ -627,6 +642,7 @@ class ItemView extends StatelessWidget {
     //   itemCount: items.length,
     // );
   }
+
 
   Widget _showBottomSheetWithSearch(int index,
       List<ContactsDataFromApi> listOfCities) {
