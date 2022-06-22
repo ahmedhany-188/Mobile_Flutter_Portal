@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -40,6 +39,7 @@ class VacationCubit extends Cubit<VacationInitial> {
     }else{
 
       final requestData = await _requestRepository.getVacationRequestData(requestNo!);
+
 
       final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
       final responsiblePerson  = ContactsDataFromApi(email: requestData.responsible!.contains("null") ? "No Data" : requestData.responsible,name: requestData.responsible!.contains("null") ? "No Data" : requestData.responsible);
@@ -191,10 +191,6 @@ class VacationCubit extends Cubit<VacationInitial> {
     }else{
       return;
     }
-
-
-
-
 
 
   }

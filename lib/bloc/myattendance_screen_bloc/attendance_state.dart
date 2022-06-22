@@ -6,9 +6,9 @@ class AttendanceInitial extends AttendanceState {}
 
 class BlocGetTheAttendanceLoadingState extends AttendanceState{}
 
-class BlocGetTheAttendanceSuccesState extends AttendanceState{
-   String getContactList;
-   BlocGetTheAttendanceSuccesState(this.getContactList);
+class BlocGetTheAttendanceSuccessState extends AttendanceState{
+   List<MyAttendanceModel> getAttendanceList;
+   BlocGetTheAttendanceSuccessState(this.getAttendanceList);
 }
 
 class BlocGetTheAttendanceErrorState extends AttendanceState{

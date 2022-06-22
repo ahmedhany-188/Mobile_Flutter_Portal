@@ -12,6 +12,7 @@ import '../../../data/repositories/request_repository.dart';
 
 
 class VacationScreen extends StatefulWidget {
+
   static const routeName = 'vacation-page';
   static const requestNoKey = 'request-No';
   static const requesterHRCode = 'requester-HRCode';

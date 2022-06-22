@@ -74,9 +74,6 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
           },
           builder: (context, state) {
             return Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
               child: state is BlocGetMyRequestsSuccessState ? Padding(
                   padding: const EdgeInsets.all(15),
                   child: SizedBox(

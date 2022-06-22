@@ -238,8 +238,10 @@ class _SplashScreenState extends State<SplashScreen>
                                   // return AlertUpgradeShow();
                                   case AppStatus.unauthenticated:
                                     return const AuthScreen();
+
                                   default:
                                     return const AuthScreen();
+
                                 }
                               },
                             ),

@@ -1,12 +1,15 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/data_providers/medical_request_data_provider/medical_request_data_provider.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_medical_benefit.dart';
+import 'package:hassanallamportalflutter/data/repositories/medical_request_repository.dart';
 import 'package:intl/intl.dart';
 part 'medical_request_state.dart';
 
@@ -23,7 +26,7 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
     final selectedValueLab = RequestDate.dirty(state.selectedValueLab.value);
     final selectedValueService = RequestDate.dirty(
         state.selectedValueService.value);
-    final requestDate = RequestDate.dirty(state.requestDate.value);
+     final requestDate = RequestDate.dirty(state.requestDate.value);
 
     emit(state.copyWith(
       patientNameMedicalRequest: patientNameMedicalRequest,
@@ -62,16 +65,19 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
           break;
       }
 
+      final dateData =GlobalConstants.dateFormatViewed.format(requestDate as DateTime);
+
       RequestMedicalBenefit requestMedicalBenefit = RequestMedicalBenefit(
           hrCode, patientNameMedicalRequest.value.toString(),
-          "${requestDate.value}T08:27:57.220Z", selectedLab, selectedService);
+          dateData, selectedLab, selectedService);
 
       try {
         var connectivityResult = await connectivity.checkConnectivity();
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
-          MedicalRequestDataProvider(requestMedicalBenefit)
-              .getMedicalRequestMessage()
+          MedicalRepository().getMedicalData(requestMedicalBenefit)
+          // MedicalRequestDataProvider(requestMedicalBenefit)
+          //     .getMedicalRequestMessage()
               .then((value) {
             emit(
               state.copyWith(
@@ -170,7 +176,7 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
     }
 
     // var formatter = DateFormat('EEEE dd-MM-yyyy');
-    var formatter = DateFormat('yyyy-MM-dd');
+    var formatter = GlobalConstants.dateFormatViewed;
     String formattedDate = formatter.format(
         currentDate ?? DateTime.now());
     final requestDate = RequestDate.dirty(formattedDate);

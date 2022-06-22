@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,8 +9,8 @@ import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
-import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
+import 'package:intl/intl.dart';
 
 import '../../../constants/enums.dart';
 import '../../../data/models/admin_requests_models/passport_form_model.dart';
@@ -31,7 +30,8 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
   void getRequestData(RequestStatus requestStatus, String? requestNo) async{
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
-      String formattedDate = GlobalConstants.dateFormatViewed.format(now);
+      var formatter = GlobalConstants.dateFormatViewed;
+      String formattedDate = formatter.format(now);
       final requestDate = RequestDate.dirty(formattedDate);
       emit(
         state.copyWith(
@@ -42,41 +42,44 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
         ),
       );
     }else{
-      final requestData = await _requestRepository.getBusinessMissionRequestData(requestNo!);
+      final requestData = await _requestRepository.getEmbassyLetter(requestNo!);
+      final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.requestDate!)));
+      final purpose = requestData.purpose;
+      final country = requestData.embassy;
+      final requestFromDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateFrom!)));
+      final requestToDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateTo!)));
+      final passportNumber = PassportNumber.dirty(requestData.passportNo.toString());
+      final salary = requestData.addSalary;
+      final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
 
-      // final requestFromDate = DateFrom.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateFrom!)));
-      // final requestToDate = DateTo.dirty(value: GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateTo!)), dateFrom: requestFromDate.value);
-      // final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.date!)));
-      // final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
-      // final hoursFrom  = TimeFrom.dirty("${requestData.hourFrom} ${requestData.dateFromAmpm}");
-      // final hoursTo  = TimeTo.dirty("${requestData.hourTo} ${requestData.dateToAmpm}");
-      // var status = "Pending";
 
+      var status = "Pending";
 
-      // if(requestData.status == 0){
-      //   status = "Pending";
-      // }else if (requestData.status == 1){
-      //   status = "Approved";
-      // }else if (requestData.status == 2){
-      //   status = "Rejected";
-      // }
-      //
-      // emit(
-      //   state.copyWith(
-      //       requestDate: requestDate,
-      //       dateFrom: requestFromDate,
-      //       dateTo: requestToDate,
-      //       missionType: int.parse(requestData.missionLocation ?? "1"),
-      //       comment: comments,
-      //       timeFrom: hoursFrom,
-      //       timeTo: hoursTo,
-      //       status: Formz.validate([requestDate,
-      //         state.timeFrom , state.dateFrom]),
-      //       requestStatus: RequestStatus.oldRequest,
-      //       statusAction: status,
-      //       takeActionStatus: (_requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
-      //   ),
-      // );
+      if(requestData.status == 0){
+        status = "Pending";
+      }else if (requestData.status == 1){
+        status = "Approved";
+      }else if (requestData.status == 2){
+        status = "Rejected";
+      }
+
+      emit(
+        state.copyWith(
+            requestDate: requestDate,
+            purpose: purpose,
+            embassy: country,
+            dateFrom: requestFromDate,
+            dateTo: requestToDate,
+            passportNumber: passportNumber,
+            salary: salary,
+            comments: comments,
+
+            status: Formz.validate([state.dateFrom, state.dateTo, state.passportNumber]),
+            requestStatus: RequestStatus.oldRequest,
+            statusAction: status,
+            takeActionStatus: (_requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
+        ),
+      );
     }
   }
 
@@ -104,7 +107,7 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
           state.dateTo.value,
           state.passportNumber.value,
           state.salary,
-          state.comments);
+          state.comments,0,"0");
       try {
         var connectivityResult = await connectivity.checkConnectivity();
         if (connectivityResult == ConnectivityResult.wifi ||

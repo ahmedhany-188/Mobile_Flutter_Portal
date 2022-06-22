@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/data/data_providers/economy_news_data_provider/economy_news_data_provider.dart';
+import 'package:hassanallamportalflutter/data/repositories/economy_news_repository.dart';
 import 'package:meta/meta.dart';
 part 'economy_news_state.dart';
 
@@ -11,7 +12,8 @@ class EconomyNewsCubit extends Cubit<EconomyNewsState> {
 
   void getEconomyNews() async {
     emit(BlocGetTheEconomyNewsLoadingState());
-    EconomyNewsDataProvider().getEconomyNews().then((value){
+    EconomyNewRepository().getEconomyNewData().then((value){
+    // EconomyNewsDataProvider().getEconomyNews().then((value){
       economyNews = value.body;
       print("----------"+economyNews);
       emit(BlocGetTheEconomyNewsSuccesState(economyNews));

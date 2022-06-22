@@ -281,6 +281,9 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.format_align_justify_outlined,
                             () {
                           Navigator.of(context).pushNamed(EquipmentsRequest.routeName);
+
+                          // Navigator
+                          //     .pushNamed(context,AccessRightScreen.routeName);
                         },
                       ),
 
