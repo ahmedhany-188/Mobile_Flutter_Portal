@@ -130,4 +130,21 @@ class RequestDataProviders {
     print(rawDurationData.body);
     return rawDurationData;
   }
+
+
+  Future<http.Response> postTakeActionOnRequest(String bodyString) async {
+    http.Response vacationFeedbackRequest = await http.post(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/TakeAction"
+      ),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: bodyString,
+    ).timeout(const Duration(seconds: 10));
+    print(vacationFeedbackRequest.body);
+    return vacationFeedbackRequest;
+  }
+
+
 }

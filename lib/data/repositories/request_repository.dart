@@ -264,6 +264,23 @@ class RequestRepository {
   }
 
 
+  Future<RequestResponse> postTakeActionRequest(bool takeAction) async{
+    var bodyString = jsonEncode(<String, dynamic>{
+      // "serviceId": serviceID,
+      // "reqno": requestNo,
+      // "Approve": takeAction? 1 : 2,
+      // "requesterhrcode": requesterHRCode ,
+      "mangerHrCode": userData.user?.userHRCode ?? "0",
+      "comment" :""
+    });
+    final http.Response rawPermission = await requestDataProviders
+        .postTakeActionOnRequest(bodyString);
+    final json = await jsonDecode(rawPermission.body);
+    final RequestResponse response = RequestResponse.fromJson(json);
+    return response;
+  }
+
+
 
 
 
