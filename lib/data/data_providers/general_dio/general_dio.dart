@@ -68,11 +68,35 @@ class GeneralDio {
           )
           .timeout(const Duration(minutes: 5))
           .catchError((err) {
-        print(err);
+        throw err;
       });
     } else {
       throw Exception;
       // return dio!.delete(url);
     }
+  }
+
+  static Future<Response> businessUnit() async {
+    String url = 'Lookup/GetBusinessUnit';
+
+    return await dio!.get(url).catchError((err) {
+      throw err;
+    });
+  }
+
+  static Future<Response> equipmentsLocation() async {
+    String url = 'Lookup/GetLocation';
+
+    return await dio!.get(url).catchError((err) {
+      throw err;
+    });
+  }
+
+  static Future<Response> equipmentsDepartment() async {
+    String url = 'Portal/GetDepartments';
+
+    return await dio!.get(url).catchError((err) {
+      throw err;
+    });
   }
 }
