@@ -265,9 +265,9 @@ class RequestRepository {
     return response;
   }
 
-  Future<VacationRequestData> getVacationRequestData(String requestNo) async{
+  Future<VacationRequestData> getVacationRequestData(String requestNo,String requesterHRCode) async{
     final http.Response rawRequestData = await requestDataProviders
-        .getVacationRequestData(userData.user?.userHRCode ?? "",requestNo);
+        .getVacationRequestData(requesterHRCode,requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final VacationRequestData response = VacationRequestData.fromJson(json[0]);
 

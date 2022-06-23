@@ -3,14 +3,16 @@ class FirebaseUserNotification {
   String? requestNo;
   String? requestType;
   String? type;
+  String? requesterHRCode;
 
-  FirebaseUserNotification({this.from, this.requestNo, this.requestType, this.type});
+  FirebaseUserNotification({this.from, this.requestNo, this.requestType, this.type,this.requesterHRCode});
 
   FirebaseUserNotification.fromJson(Map<String, dynamic> json) {
     from = json['from'];
     requestNo = json['requestNo'];
     requestType = json['requestType'];
     type = json['type'];
+    requesterHRCode = json['requesterHRCode'];
   }
 
   Map<String, dynamic> toJson() {
@@ -19,6 +21,7 @@ class FirebaseUserNotification {
     data['requestNo'] = requestNo;
     data['requestType'] = requestType;
     data['type'] = type;
+    data['requesterHRCode'] = requesterHRCode;
     return data;
   }
 }

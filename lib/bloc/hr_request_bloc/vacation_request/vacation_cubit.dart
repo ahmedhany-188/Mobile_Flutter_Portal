@@ -25,8 +25,7 @@ class VacationCubit extends Cubit<VacationInitial> {
   void getRequestData({required RequestStatus requestStatus , String? requestNo,String? requesterHRCode}) async {
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
-      var formatter = DateFormat('EEEE dd-MM-yyyy');
-      String formattedDate = formatter.format(now);
+      String formattedDate = GlobalConstants.dateFormatViewed.format(now);
       final requestDate = RequestDate.dirty(formattedDate);
       emit(
         state.copyWith(
@@ -38,14 +37,17 @@ class VacationCubit extends Cubit<VacationInitial> {
       );
     }else{
 
-      final requestData = await _requestRepository.getVacationRequestData(requestNo!);
+      final requestData = await _requestRepository.getVacationRequestData(requestNo!,requesterHRCode!);
 
 
       final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
-      final responsiblePerson  = ContactsDataFromApi(email: requestData.responsible!.contains("null") ? "No Data" : requestData.responsible,name: requestData.responsible!.contains("null") ? "No Data" : requestData.responsible);
+      final responsiblePerson  = ContactsDataFromApi(email: requestData.responsible!.contains("null") ? "No Data" : requestData.responsible,name: requestData.responsible!.contains("null") || requestData.responsible!.isEmpty? "No Data" : requestData.responsible);
       final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.date!)));
       final requestFromDate = DateFrom.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateFrom!)));
       final requestToDate = DateTo.dirty(value: GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateTo!)), dateFrom: requestFromDate.value);
+
+      print(requestToDate.value);
+
       var status = "Pending";
       if(requestData.status == 0){
         status = "Pending";
@@ -124,7 +126,7 @@ class VacationCubit extends Cubit<VacationInitial> {
     );
     await getVacationDuration();
   }
-  void vacationTypeChanged(int value) {
+  void vacationTypeChanged(int value) async{
     final vacationType = value;
     emit(
       state.copyWith(
@@ -132,6 +134,7 @@ class VacationCubit extends Cubit<VacationInitial> {
         status: Formz.validate([state.requestDate,state.vacationFromDate,state.vacationToDate]),
       ),
     );
+    await getVacationDuration();
   }
   void vacationResponsiblePersonChanged(ContactsDataFromApi value) {
     final responsiblePerson = value;
@@ -206,7 +209,7 @@ class VacationCubit extends Cubit<VacationInitial> {
       vacationToDate: vacationToDate,
       status: Formz.validate([requestDate, vacationFromDate,vacationToDate]),
     ));
-    if (state.status.isValidated && int.parse(state.vacationDuration) > 0 ) {
+    if (state.status.isValidated) {
       // print("Done permission");
       // final DateFormat dateFormatViewed = DateFormat("EEEE dd-MM-yyyy");
       // final DateFormat dateFormatServer = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
@@ -229,7 +232,7 @@ class VacationCubit extends Cubit<VacationInitial> {
 
       String responsibleHRCode = state.responsiblePerson.userHrCode ?? "";
 
-      int noOfDays = int.parse(state.vacationDuration);
+      int noOfDays = int.parse(state.vacationDuration?? "0");
 
 
 
