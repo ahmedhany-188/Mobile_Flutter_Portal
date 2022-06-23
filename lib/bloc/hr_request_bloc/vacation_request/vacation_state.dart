@@ -3,7 +3,7 @@ part of 'vacation_cubit.dart';
 abstract class PermissionState extends Equatable {
   const PermissionState();
 
-  PermissionState.copyWith({required RequestDate requestDate, required FormzStatus status}) {}
+  const PermissionState.copyWith({required RequestDate requestDate, required FormzStatus status});
 }
 
 class VacationInitial extends Equatable {
@@ -19,7 +19,7 @@ class VacationInitial extends Equatable {
     this.requestStatus,
     this.comment = "",
     this.responsiblePerson = ContactsDataFromApi.empty,
-    this.vacationDuration = "0",
+    this.vacationDuration ="",
     this.takeActionStatus,
     this.statusAction,
   });
@@ -39,7 +39,7 @@ class VacationInitial extends Equatable {
   final String? statusAction;
 
   @override
-  List<Object> get props => [requestDate, vacationFromDate,vacationToDate,vacationType, status,comment,vacationDuration,responsiblePerson];
+  List<Object> get props => [requestDate, vacationFromDate,vacationToDate,vacationType, status,comment,responsiblePerson,vacationDuration];
 
   VacationInitial copyWith({
     RequestDate? requestDate,

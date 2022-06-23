@@ -11,22 +11,22 @@ class RequestDataProviders {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: bodyString,
-    );
+    ).timeout(const Duration(seconds: 10));
     print(permissionFeedbackRequest.body);
     return permissionFeedbackRequest;
   }
 
-  Future<http.Response> getAccessAccountAccessRequest(String bodyString) async {
+  Future<http.Response> postAccessAccountAccessRequest(String bodyString) async {
     return http.post(
       Uri.parse("https://api.hassanallam.com/api/SelfService/AddITAccessRight"),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: bodyString,
-    );
+    ).timeout(const Duration(seconds: 10));
   }
 
-  Future<http.Response> getEmailUserAccount(String bodyString) async {
+  Future<http.Response> postEmailUserAccount(String bodyString) async {
 
     return http.post(
       Uri.parse("https://api.hassanallam.com/api/SelfService/AddITUserAccount"),
@@ -35,9 +35,9 @@ class RequestDataProviders {
       },
       body: bodyString,
 
-    );
+    ).timeout(const Duration(seconds: 10));
   }
-  Future<http.Response> getBusinessCardRequest(String bodyString) async {
+  Future<http.Response> postBusinessCardRequest(String bodyString) async {
     return http.post(
         Uri.parse("https://api.hassanallam.com/api/SelfService/AddBusinessCard"),
         headers: <String, String>{
@@ -48,7 +48,9 @@ class RequestDataProviders {
   }
 
 
-  Future<http.Response> getEmbassyLetterRequest(String bodyString) async {
+
+
+  Future<http.Response> postEmbassyLetterRequest(String bodyString) async {
     return http.post(
       Uri.parse("https://api.hassanallam.com/api/SelfService/AddEmbassyLetter"),
       headers: <String, String>{
@@ -78,6 +80,42 @@ class RequestDataProviders {
     return rawDurationData;
   }
 
+  Future<http.Response> getBusinessCardRequestData(String hrCode,String requestNo) async{
+    http.Response rawDurationData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/GetBusinessCard?HRCode=$hrCode&requestno=$requestNo"),
+    );
+    print(rawDurationData.body);
+    return rawDurationData;
+  }
+
+  Future<http.Response> getAccessRightRequestData(String hrCode,String requestNo) async{
+    http.Response rawDurationData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/GetAccessRight?HRCode=$hrCode&requestno=$requestNo"),
+    );
+    print(rawDurationData.body);
+    return rawDurationData;
+  }
+
+  Future<http.Response> getEmailAccountRequestData(String hrCode,String requestNo) async{
+    http.Response rawDurationData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/GetUserAccount?HRCode=$hrCode&requestno=$requestNo"),
+    );
+    print(rawDurationData.body);
+    return rawDurationData;
+  }
+
+  Future<http.Response> getEmbassyLetterRequestData(String hrCode,String requestNo) async{
+    http.Response rawDurationData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/GetEmbassy?HRCode=$hrCode&requestno=$requestNo"),
+    );
+    print(rawDurationData.body);
+    return rawDurationData;
+  }
+
   Future<http.Response> postVacationRequest(String bodyString) async {
     http.Response vacationFeedbackRequest = await http.post(
       Uri.parse(
@@ -100,7 +138,7 @@ class RequestDataProviders {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: bodyString,
-    );
+    ).timeout(const Duration(seconds: 10));
     print(businessMissionFeedbackRequest.body);
     return businessMissionFeedbackRequest;
   }
@@ -130,4 +168,21 @@ class RequestDataProviders {
     print(rawDurationData.body);
     return rawDurationData;
   }
+
+
+  Future<http.Response> postTakeActionOnRequest(String bodyString) async {
+    http.Response vacationFeedbackRequest = await http.post(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/TakeAction"
+      ),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: bodyString,
+    ).timeout(const Duration(seconds: 10));
+    print(vacationFeedbackRequest.body);
+    return vacationFeedbackRequest;
+  }
+
+
 }

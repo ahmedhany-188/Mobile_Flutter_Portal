@@ -23,7 +23,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
   void getRequestData(RequestStatus requestStatus, String? requestNo) async{
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
-      var formatter = DateFormat('EEEE dd-MM-yyyy');
+      var formatter = GlobalConstants.dateFormatViewed;
       String formattedDate = formatter.format(now);
       final requestDate = RequestDate.dirty(formattedDate);
       emit(

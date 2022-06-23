@@ -11,7 +11,7 @@ class PermissionInitial extends PermissionState {
   const PermissionInitial({
     this.requestDate = const RequestDate.pure(),
     this.permissionDate = const PermissionDate.pure(),
-    this.permissionType = 2,
+    this.permissionType = 0,
     this.permissionTime = const PermissionTime.pure(),
     this.status = FormzStatus.pure,
     this.errorMessage,

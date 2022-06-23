@@ -6,7 +6,7 @@ class PayslipDataProvider {
       Uri.parse(
           "http://api.hassanallam.com:3415/api/Portal/Payslip?Email=$email&Password=$password"),
     );
-    print(rawPayslipLink.body);
+    // print(rawPayslipLink.body);
     return rawPayslipLink;
   }
 }

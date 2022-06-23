@@ -26,36 +26,94 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
   void getRequestData(RequestStatus requestStatus, String? requestNo) async {
     if (requestStatus == RequestStatus.newRequest) {
       var now = DateTime.now();
-      String formattedDate = GlobalConstants.dateFormatViewed.format(now);
+      var formatter = GlobalConstants.dateFormatViewed;
+      String formattedDate = formatter.format(now);
       final requestDate = RequestDate.dirty(formattedDate);
       emit(
         state.copyWith(
             requestDate: requestDate,
-            requestStatus: RequestStatus.newRequest,
+
             status: Formz.validate(
-                [state.requestItems, state.fromDate, state.toDate])
-        ),
-      );
-    } else {
-      const requestDate = RequestDate.dirty("requestDate");
-      emit(
-        state.copyWith(
-          requestDate: requestDate,
-          status: Formz.validate(
-              [requestDate,state.requestItems, state.fromDate, state.toDate]),
-          requestStatus: RequestStatus.oldRequest,
+                [state.requestItems, state.fromDate, state.toDate]),
+          requestStatus: RequestStatus.newRequest,
         ),
       );
     }
+    else {
+
+
+      final requestData = await requestRepository.getAccessRight(requestNo!);
+
+      final requestDate = RequestDate.dirty(
+          GlobalConstants.dateFormatViewed.format(
+              GlobalConstants.dateFormatServer.parse(requestData.requestDate!)));
+
+      final requestType = requestData.requestType;
+      final usbException = requestData.usbException;
+      final vpnAccount = requestData.vpnAccount;
+      final ipPhone= requestData.ipPhone;
+      final localAdmin = requestData.localAdmin;
+
+      final fromDate = RequestDate.dirty(
+          GlobalConstants.dateFormatViewed.format(
+              GlobalConstants.dateFormatServer.parse(requestData.fromDate!)));
+
+      final toDate = RequestDate.dirty(
+          GlobalConstants.dateFormatViewed.format(
+              GlobalConstants.dateFormatServer.parse(requestData.toDate!)));
+
+      final permanent = requestData.permanent;
+
+      final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
+
+      var status = "Pending";
+      if (requestData.status== 0) {
+        status = "Pending";
+        print("---------"+status);
+        print("---------"+requestData.status.toString());
+      } else if (requestData.status == 1) {
+        status = "Approved";
+      } else if (requestData.status == 2) {
+        status = "Rejected";
+      }
+
+      emit(state.copyWith(
+          requestDate: requestDate,
+          requestType: requestType,
+          localAdmin: localAdmin,
+          vpnAccount: vpnAccount,
+          ipPhone: ipPhone,
+          usbException: usbException,
+          fromDate: fromDate,
+          toDate: toDate,
+          permanent: permanent,
+          comments: comments,
+
+            status: Formz.validate(
+                [state.requestDate,state.requestItems, state.fromDate, state.toDate]),
+          requestStatus: RequestStatus.oldRequest,
+          statusAction: status,
+            takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
+        ),
+      );
+    }
+
   }
 
 
-  void getSubmitAccessRight(List<String> items) async {
+  void getSubmitAccessRight() async {
     final requestItem = RequestDate.dirty(state.requestItems.value);
     final fromDate = RequestDate.dirty(state.fromDate.value);
     final toDate = RequestDate.dirty(state.toDate.value);
 
     AccessRightModel accessRightModel;
+
+    final requestDate = RequestDate.dirty(state.requestDate.value);
+
+    // "date" -> "2022-05-17T13:47:07"
+    DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(requestDate.value);
+    final requestDateValue = GlobalConstants.dateFormatServer.format(requestDateTemp);
+    print("requestDateValue $requestDateValue");
 
     emit(state.copyWith(
         requestItems: requestItem,
@@ -67,16 +125,18 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     if (state.status.isValidated) {
       accessRightModel = AccessRightModel(
           state.requestType,
-          false,
-          false,
-          false,
-          false,
+          0,
+          state.usbException,
+          state.vpnAccount,
+          state.ipPhone,
+          state.localAdmin,
           state.permanent,
-          state.requestDate.value,
+        requestDateValue,
         state.fromDate.value,
         state.toDate.value,
           state.filePDF,
           state.comments,
+        ""
           );
 
       try {
@@ -166,7 +226,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     }
 
     // var formatter = DateFormat('EEEE dd-MM-yyyy');
-    var formatter = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
+    var formatter = GlobalConstants.dateFormatServer;
     String formattedDate = formatter.format(
         currentDate ?? DateTime.now());
     final requestDate = RequestDate.dirty(formattedDate);
@@ -200,8 +260,23 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     if (value != "[]") {
       valueNew = RequestDate.dirty(value);
     }
+
+    print("---"+value);
+
+   print(value.contains("USB"));
+   print(value.contains("VPN"));
+    print(value.contains("IP"));
+    print(value.contains("Local"));
+
+
+
     emit(state.copyWith(
       requestItems: valueNew,
+      usbException: value.contains("USB"),
+      vpnAccount: value.contains("VPN"),
+      ipPhone: value.contains("IP"),
+      localAdmin: value.contains("Local"),
+
       status: Formz.validate([valueNew, state.fromDate, state.toDate]),
     ));
   }

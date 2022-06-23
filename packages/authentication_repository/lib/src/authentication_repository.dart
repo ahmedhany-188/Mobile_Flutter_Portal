@@ -95,6 +95,7 @@ class AuthenticationRepository {
             try {
               User user = User.fromJson(loginTokenDataJson[0]);
               String userData = jsonEncode(loginTokenDataJson[0]);
+              //TODO : Add Signup firebase if not sign in before
               await logInWithEmailAndPassword(email: user.email,password: "12345678");
               shared_User.setString(userCacheKey, userData);
 
@@ -114,9 +115,22 @@ class AuthenticationRepository {
                 if (value.statusCode == 200) {
                   final employeeDataJson = await jsonDecode(value.body);
                   EmployeeData employeeData = EmployeeData.fromJson(employeeDataJson[0]);
-                  String employeeDataString = jsonEncode(employeeDataJson[0]);
+
+
+                  var managerResponse = await authenticationProvider.getEmployeeData(employeeData.managerCode!);
+                  final managerDataJson = await jsonDecode(managerResponse.body);
+                  EmployeeData managerEmployeeData = EmployeeData.fromJson(managerDataJson[0]);
+
+                  //TODO : Add manager data in employee data
+
+
+
+
+                  String employeeDataString = jsonEncode(employeeData.toJson());
                   shared_User.setString(employeeCacheKey, employeeDataString);
                   print(employeeData.toString());
+
+                  //TODO : Add FirebaseMessaging for IOS
                   await _firebaseMessaging.getToken().then((token) async {
                     print("FCM --> $token");
                     await FirebaseProvider(MainUserData(employeeData: employeeData,user: user)).updateUserWithData(token!);
@@ -177,8 +191,8 @@ class AuthenticationRepository {
       await Future.wait([
         shared_User.remove(userCacheKey),
         shared_User.remove(employeeCacheKey),
-        shared_User.clear()
-        // _firebaseAuth.signOut(),
+        shared_User.clear(),
+        _firebaseAuth.signOut(),
       ]);
     } catch (_) {
       // throw LogOutFailure();

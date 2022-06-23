@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class DialogPopUpUserProfile extends StatefulWidget {
@@ -44,7 +45,23 @@ class DialogPopUpUserProfileClass extends State<DialogPopUpUserProfile> {
             height: 80,
               margin: const EdgeInsets.all(10),
               child: RaisedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  final result = await FilePicker.platform.pickFiles();
+
+                  PlatformFile? pickedFile;
+
+                  setState(() {
+                    pickedFile = result!.files.first;
+
+                    print(pickedFile!.path.toString()+"----");
+                    print(pickedFile!.name.toString()+"----");
+
+                    Navigator.of(context).pop();
+
+
+                  });
+
+                },
                 color: Theme.of(context).colorScheme.secondary,
                 child: Padding(
                   padding: const EdgeInsets.all(0),
@@ -72,7 +89,6 @@ class DialogPopUpUserProfileClass extends State<DialogPopUpUserProfile> {
             ),
         ),
 
-
         Positioned(
           left: 20,
           right: 20,
@@ -89,3 +105,4 @@ class DialogPopUpUserProfileClass extends State<DialogPopUpUserProfile> {
     );
   }
 }
+

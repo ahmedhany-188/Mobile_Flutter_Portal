@@ -6,6 +6,7 @@ import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 
 // ignore: camel_case_types
@@ -24,18 +25,10 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
 
   String selectedValueLab = "";
   String selectedValueService = "";
-  List<String> LabsType = [
-    "ELmokhtaber",
-    "ELBORG",
-  ];
-  List<String> ServiceTypeElborg = [
-    "Lab",
-    "Scan",
-  ];
-  List<String> ServiceTypeElmokhtabr = [
-    "Lab",
-  ];
+
   String DateAdded = "";
+
+  List<String> servicesListState =[];
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +57,28 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                   title: const Text("Medical Request"),
                   centerTitle: true,
                 ),
+
+                floatingActionButton: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[ FloatingActionButton.extended(
+                  onPressed: () {
+                    String hrCode = user.user!.userHRCode.toString();
+                    context.read<MedicalRequestCubit>()
+                        .getSuccessMessage(
+                        hrCode);
+                  },
+                  label: const Text('Submit', style: TextStyle(
+                      color: Colors.black
+                  )),
+                  icon: const Icon(
+                      Icons.thumb_up_alt_outlined,
+                      color: Colors.black),
+                  backgroundColor: Colors.white,),],),
+
                 resizeToAvoidBottomInset: false,
 
-                drawer: MainDrawer(),
+
+                // drawer: MainDrawer(),
 
                 body: BlocListener<MedicalRequestCubit, MedicalRequestInitial>(
                   listener: (context, state) {
@@ -200,7 +212,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    items: LabsType.map((item) =>
+                                    items: GlobalConstants.labsType.map((item) =>
                                         DropdownMenuItem<String>(
                                           value: item,
                                           child: Text(item,
@@ -213,6 +225,15 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                     onChanged: (value) {
                                       setState(() {
                                         selectedValueLab = value.toString();
+
+                                        if(selectedValueLab == "ELmokhtaber"){
+
+                                          servicesListState=GlobalConstants.serviceTypeElMokhtabr;
+                                        }else{
+                                          servicesListState=GlobalConstants.serviceTypeElBorg;
+
+                                        }
+
                                       });
                                       context.read<MedicalRequestCubit>()
                                           .addSelectedLab(selectedValueLab);
@@ -250,7 +271,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                         color: Colors.black,
                                       ),
                                     ),
-                                    items: ServiceTypeElborg
+                                    items: servicesListState
                                         .map((item) =>
                                         DropdownMenuItem<String>(
                                           value: item,
@@ -277,20 +298,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                             },),
                           Container(height: 20),
 
-                          FloatingActionButton.extended(
-                            onPressed: () {
-                              String hrCode = user.user!.userHRCode.toString();
-                              context.read<MedicalRequestCubit>()
-                                  .getSuccessMessage(
-                                  hrCode);
-                            },
-                            label: const Text('Submit', style: TextStyle(
-                                color: Colors.black
-                            )),
-                            icon: const Icon(
-                                Icons.thumb_up_alt_outlined,
-                                color: Colors.black),
-                            backgroundColor: Colors.white,),
+
                         ],
                       ),
                     ),

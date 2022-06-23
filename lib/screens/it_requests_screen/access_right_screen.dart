@@ -6,6 +6,7 @@ import 'package:flutter_multiselect/flutter_multiselect.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/it_request_bloc/access_right_request/access_right_cubit.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
@@ -15,53 +16,31 @@ import 'package:file_picker/file_picker.dart';
 
 import '../../constants/enums.dart';
 
-class AccessUserAccountScreen extends StatefulWidget {
+class AccessRightScreen extends StatefulWidget {
 
   static const routeName = "/access-user-account-screen";
   static const requestNoKey = 'request-No';
 
-  const AccessUserAccountScreen(
+  const AccessRightScreen(
       {Key? key,this.requestNo})
       : super(key: key);
 
   final requestNo;
 
   @override
-  State<AccessUserAccountScreen> createState() => _AccessUserAccountScreen();
+  State<AccessRightScreen> createState() => _AccessRightScreen();
 
 }
 
-class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
+class _AccessRightScreen extends State<AccessRightScreen> {
 
   @override
   Widget build(BuildContext context) {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
-    final TextEditingController commentController = TextEditingController();
 
     List<String> selectedTypes = [];
 
-    List<dynamic> accountsTypesList = [
-      {
-        "value": "USB Exception",
-        "display": "USB Exception",
-      },
-      {
-        "value": "VPN Account",
-        "display": "VPN Account",
-      },
-      {
-        "value": "IP Phone",
-        "display": "IP Phone",
-      },
-      {
-        "value": "Local Admin",
-        "display": "Local Admin",
-      },
-      {
-        "value": "Color Printing",
-        "display": "Color Printing",
-      },
-    ];
+
 
     final currentRequestNo = widget.requestNo;
 
@@ -75,9 +54,9 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
       ),
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<AccessRightCubit>(create: (vacationContext) =>
+          BlocProvider<AccessRightCubit>(create: (accessRightContext) =>
           currentRequestNo == null ? (AccessRightCubit(RequestRepository(user))..getRequestData(RequestStatus.newRequest, ""))
-              :(AccessRightCubit(RequestRepository(user))..getRequestData(RequestStatus.oldRequest, currentRequestNo[AccessUserAccountScreen.requestNoKey]))),
+              :(AccessRightCubit(RequestRepository(user))..getRequestData(RequestStatus.oldRequest, currentRequestNo[AccessRightScreen.requestNoKey]))),
           // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
         ],
         child: BlocBuilder<AccessRightCubit,AccessRightInitial>(
@@ -91,25 +70,19 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                   floatingActionButton: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      if(context
-                          .read<AccessRightCubit>()
-                          .state
+                      if(
+                          state
                           .requestStatus ==
-                          RequestStatus.oldRequest)FloatingActionButton
-                          .extended(
+                      RequestStatus.oldRequest && state.takeActionStatus == TakeActionStatus.takeAction )FloatingActionButton.extended(
                         heroTag: null,
                         onPressed: () {},
                         icon: const Icon(Icons.verified),
                         label: const Text('Accept'),
                       ),
                       const SizedBox(height: 12),
-                      if(context
-                          .read<AccessRightCubit>()
-                          .state
+                      if(state
                           .requestStatus ==
-                          RequestStatus.oldRequest)FloatingActionButton
-                          .extended(
-                        backgroundColor: Colors.red,
+                          RequestStatus.oldRequest && state.takeActionStatus == TakeActionStatus.takeAction )FloatingActionButton.extended(
                         heroTag: null,
                         onPressed: () {},
                         icon: const Icon(Icons.dangerous),
@@ -125,7 +98,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                           heroTag: null,
                           onPressed: () {
                             context.read<AccessRightCubit>()
-                                .getSubmitAccessRight(selectedTypes);
+                                .getSubmitAccessRight();
                           },
                           // formBloc.state.status.isValidated
                           //       ? () => formBloc.submitPermissionRequest()
@@ -141,28 +114,26 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                   body: BlocListener<AccessRightCubit, AccessRightInitial>(
                     listener: (context, state) {
                       if (state.status.isSubmissionSuccess) {
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Success"),
-                          ),
-                        );
+                        LoadingDialog.show(context);
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (_) =>
+                                SuccessScreen(text: state.successMessage ??
+                                    "Error Number",)));
                       }
                       else if (state.status.isSubmissionInProgress) {
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text("Loading"),
-                          ),
-                        );
+                        LoadingDialog.show(context);
+
                       }
                       else if (state.status.isSubmissionFailure) {
-                        ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(state.errorMessage.toString()),
-                          ),
-                        );
+                        LoadingDialog.hide(context);
+                        ScaffoldMessenger.of(context)
+                          ..hideCurrentSnackBar()
+                          ..showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  state.errorMessage ?? 'Request Failed'),
+                            ),
+                          );
                       }
                     },
 
@@ -173,42 +144,76 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                           child: Column(
                             children: [
 
+                              if(state.requestStatus == RequestStatus.oldRequest)Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 8),
+                                child: BlocBuilder<
+                                    AccessRightCubit,
+                                    AccessRightInitial>(
+
+                                    builder: (context, state) {
+                                      return Text(state.statusAction ?? "Pending",
+                                        // style: TextStyle(decoration: BoxDecoration(
+                                        //   // labelText: 'Request Date',
+                                        //   errorText: state.requestDate.invalid
+                                        //       ? 'invalid request date'
+                                        //       : null,
+                                        //   prefixIcon: const Icon(
+                                        //       Icons.date_range),
+                                        // ),),
+
+                                      );
+                                    }
+                                ),
+                              ),
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
-                                  buildWhen: (previous, current) {
-                                    return (previous.requestDate !=
-                                        current.requestDate) ||
-                                        previous.status != current.status;
-                                  },
-                                  builder: (context, state) {
-                                    return TextFormField(
-                                      initialValue: state.requestDate.value,
-                                      key: UniqueKey(),
-                                      enabled: false,
-                                      decoration: const InputDecoration(
-                                        floatingLabelAlignment:
-                                        FloatingLabelAlignment.start,
-                                        labelText: 'Request Date',
-                                        prefixIcon: Icon(
-                                            Icons.calendar_today),
-                                      ),
-                                    );
-                                  },
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 8),
+                                child: BlocBuilder<
+                                    AccessRightCubit,
+                                    AccessRightInitial>(
+                                    buildWhen: (previous, current) {
+                                      return (previous.requestDate !=
+                                          current.requestDate) ||
+                                          previous.status != current.status;
+                                    },
+                                    builder: (context, state) {
+                                      return TextFormField(
+                                        key: UniqueKey(),
+                                        initialValue: state.requestDate.value,
+                                        enabled: false,
+                                        decoration: InputDecoration(
+                                          labelText: 'Request Date',
+                                          errorText: state.requestDate.invalid
+                                              ? 'invalid request date'
+                                              : null,
+                                          prefixIcon: const Icon(
+                                              Icons.date_range),
+                                        ),
+                                      );
+                                    }
                                 ),
                               ),
 
 
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: const Text("Request Type"),
-                              ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
 
-
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
+                          child: InputDecorator(
+                            decoration: const InputDecoration(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 0, vertical: 5),
+                              labelText: 'Request Type',
+                              floatingLabelAlignment:
+                              FloatingLabelAlignment.start,
+                              prefixIcon: Icon(Icons.event),
+                            ),
                                 child: BlocBuilder<AccessRightCubit,
                                     AccessRightInitial>(
+                                    buildWhen: (previous, current) {
+                                      return (previous.requestType !=
+                                          current.requestType);
+                                    },
                                     builder: (context, state) {
                                       return Column(
                                         crossAxisAlignment: CrossAxisAlignment
@@ -223,10 +228,10 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                             // selected: (state.requestType == 1) ? true : false,
                                             onChanged: (accessType) =>
                                             {
-                                              // state.requestStatus == RequestStatus.newRequest ?
-                                              context.read<AccessRightCubit>()
+                                              state.requestStatus == RequestStatus.newRequest ? context
+                                                  .read<AccessRightCubit>()
                                                   .accessRightChanged(
-                                                  accessType!),
+                                                  accessType ?? 1) : null,
                                             },
                                           ),
                                           RadioListTile<int>(
@@ -236,21 +241,27 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                             // selected: (state.requestType == 2) ? true : false,
                                             onChanged: (accessType) =>
                                             {
-                                              // state.requestStatus == RequestStatus.newRequest ?
-                                              context.read<AccessRightCubit>()
+                                              state.requestStatus == RequestStatus.newRequest ? context
+                                                  .read<AccessRightCubit>()
                                                   .accessRightChanged(
-                                                  accessType!),
+                                                  accessType ?? 2) : null,
                                             },
                                           ),
                                         ],
                                       );
                                     }
                                 ),
+                          ),
                               ),
 
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                    buildWhen: (previous, current) {
+                                      return (previous.requestDate !=
+                                          current.requestDate) ||
+                                          previous.status != current.status;
+                                    },
                                     builder: (context, state) {
                                       return MultiSelect(
                                           selectedOptionsBoxColor: Colors
@@ -280,7 +291,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                           errorText: state.requestItems.invalid
                                               ? 'invalid items'
                                               : null,
-                                          dataSource: accountsTypesList,
+                                          dataSource: GlobalConstants.accountsTypesList,
                                           textField: 'display',
                                           valueField: 'value',
                                           filterable: true,
@@ -306,10 +317,10 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                               ),
 
 
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: const Text(
-                                  "* If you choose a USB Exception please download this file Download and upload after signatuer",
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  "* If you choose a USB Exception please download this file and upload after signatuer",
                                   style: TextStyle(color: Colors.red),),
                               ),
 
@@ -367,6 +378,12 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                  // buildWhen: (previous, current) {
+                                  //   return (previous.requestDate !=
+                                  //       current.requestDate) ||
+                                  //       previous.status != current.status;
+                                  // },
+
                                   builder: (context, state) {
                                     return TextFormField(
                                       initialValue: state.fromDate.value,
@@ -383,7 +400,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                             Icons.calendar_today),
                                       ),
                                       onTap: () async {
-                                        if ((state.requestStatus == RequestStatus.newRequest) ? false : true) {
+                                        if (state.requestStatus == RequestStatus.newRequest) {
                                           context.read<AccessRightCubit>().
                                           selectDate(context, "from");
                                         }
@@ -395,6 +412,11 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                                  // buildWhen: (previous, current) {
+                                  //   return (previous.requestDate !=
+                                  //       current.requestDate) ||
+                                  //       previous.status != current.status;
+                                  // },
                                   builder: (context, state) {
                                     return TextFormField(
                                       initialValue:state.toDate.value,
@@ -411,9 +433,7 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                             Icons.calendar_today),
                                       ),
                                       onTap: () async {
-                                        if ((state.requestStatus == RequestStatus.newRequest)
-                                            ? false
-                                            : true) {
+                                        if (state.requestStatus == RequestStatus.newRequest) {
                                           context.read<AccessRightCubit>().
                                           selectDate(context, "to");
                                         }
@@ -458,13 +478,13 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                           context
                                               .read<AccessRightCubit>()
                                               .commentValueChanged(commentValue),
-                                      enabled: (state.requestStatus == RequestStatus.newRequest)
+                                      enabled: (state.requestStatus != RequestStatus.newRequest)
                                           ? false
                                           : true,
                                       decoration: const InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
-                                        labelText: 'Comments',
+                                        labelText: 'Comment',
                                         prefixIcon: Icon(
                                             Icons.comment),
                                       ),
@@ -472,8 +492,6 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
                                   },
                                 ),
                               ),
-
-
                             ],
                           ),
                         ),
@@ -511,4 +529,72 @@ class _AccessUserAccountScreen extends State<AccessUserAccountScreen> {
   }
 
 
+}
+
+
+class LoadingDialog extends StatelessWidget {
+  static void show(BuildContext context, {Key? key}) => showDialog<void>(
+    context: context,
+    useRootNavigator: false,
+    barrierDismissible: false,
+    builder: (_) => LoadingDialog(key: key),
+  ).then((_) => FocusScope.of(context).requestFocus(FocusNode()));
+
+  static void hide(BuildContext context) => Navigator.pop(context);
+
+  const LoadingDialog({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return WillPopScope(
+      onWillPop: () async => false,
+      child: Center(
+        child: Card(
+          child: Container(
+            width: 80,
+            height: 80,
+            padding: const EdgeInsets.all(12.0),
+            child: const CircularProgressIndicator(),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SuccessScreen extends StatelessWidget {
+  const SuccessScreen({Key? key, required this.text}) : super(key: key);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Icon(Icons.tag_faces, size: 100),
+            const SizedBox(height: 10),
+            Text(
+              text,
+              style: const TextStyle(fontSize: 54, color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => const AccessRightScreen())),
+              icon: const Icon(Icons.replay),
+              label: const Text('Create Another Permission Request'),
+            ),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.close),
+              label: const Text('Close'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }

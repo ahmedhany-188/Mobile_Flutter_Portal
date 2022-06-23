@@ -230,7 +230,7 @@ class MyRequestsItemWidget extends StatelessWidget {
       case RequestServiceID.VacationServiceID:
         {
           Navigator.of(context)
-              .pushNamed(VacationScreen.routeName,arguments: {VacationScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
+              .pushNamed(VacationScreen.routeName,arguments: {VacationScreen.requestNoKey: myRequestsModelData.requestNo.toString(),VacationScreen.requesterHRCode: myRequestsModelData.requestHRCode});
           break;
         }
       case RequestServiceID.PermissionServiceID:
@@ -252,51 +252,25 @@ class MyRequestsItemWidget extends StatelessWidget {
               .pushNamed(EmbassyLetterScreen.routeName,arguments: {EmbassyLetterScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
           break;
         }
-      // case "Embassy Letter":
-      //   {
-      //     Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //           builder: (context) =>
-      //               EmbassyLetterScreen(
-      //                 requestNo: myRequestsModelData.requestNo,),
-      //         ));
-      //     break;
-      //   }
-      // case "Email Account":
-      //   {
-      //     Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //           builder: (context) =>
-      //               EmailAndUserAccountScreen(
-      //                 requestNo: myRequestsModelData.requestNo,),
-      //         ));
-      //
-      //     break;
-      //   }
-      // case "Business Card Request":
-      //   {
-      //     Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //           builder: (context) =>
-      //               BusinessCardScreen(
-      //                 requestNo: myRequestsModelData.requestNo,),
-      //         ));
-      //     break;
-      //   }
-      // case "Access Right IT" :
-      //   {
-      //     Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //           builder: (context) =>
-      //               AccessUserAccountScreen(
-      //                 requestNo: myRequestsModelData.requestNo,),
-      //         ));
-      //     break;
-      //   }
+      case RequestServiceID.AccessRightServiceID:
+        {
+          Navigator.of(context)
+              .pushNamed(AccessRightScreen.routeName,arguments: {AccessRightScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
+          break;
+        }
+      case RequestServiceID.EmailUserAccountServiceID:
+        {
+          Navigator.of(context)
+              .pushNamed(EmailAndUserAccountScreen.routeName,arguments: {EmailAndUserAccountScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
+          break;
+        }
+      case RequestServiceID.BusinessCardServiceID:
+        {
+          Navigator.of(context)
+              .pushNamed(BusinessCardScreen.routeName,arguments: {BusinessCardScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
+          break;
+        }
+
     }
   }
 }
