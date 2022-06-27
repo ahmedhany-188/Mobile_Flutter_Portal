@@ -198,7 +198,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                             builder: (context, state) {
                               return
                                 Container(
-                                  width: 200,
+
                                   child: DropdownButtonFormField(
                                     decoration: InputDecoration(
                                       errorText: state.selectedValueLab.invalid
@@ -255,7 +255,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                             builder: (context, state) {
                               return
                                 Container(
-                                  width: 200,
+
                                   child: DropdownButtonFormField(
 
                                     decoration: InputDecoration(

@@ -9,6 +9,7 @@ import 'package:hassanallamportalflutter/data/models/it_requests_form_models/ema
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
+import 'package:sizer/sizer.dart';
 
 
 class EmailAndUserAccountScreen  extends StatefulWidget{
@@ -46,304 +47,130 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
       ),
 
 
-       child:   BlocProvider<EmailUserAccountCubit>(create: (emailUserContext) =>
-          currentRequestNo == null ? (EmailUserAccountCubit(
-              RequestRepository(user))
-            ..getRequestData(RequestStatus.newRequest, ""))
-              : (EmailUserAccountCubit(RequestRepository(user))
-            ..getRequestData(RequestStatus.oldRequest,
-                currentRequestNo[EmailAndUserAccountScreen.requestNoKey])),
-          // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
-          // BlocProvider<ResponsibleVacationCubit>(
-          //     lazy: false,
-          //     create: (_) =>
-          //     ResponsibleVacationCubit()
-          //       ..fetchList()),
+      child: BlocProvider<EmailUserAccountCubit>(create: (emailUserContext) =>
+      currentRequestNo == null ? (EmailUserAccountCubit(
+          RequestRepository(user))
+        ..getRequestData(RequestStatus.newRequest, ""))
+          : (EmailUserAccountCubit(RequestRepository(user))
+        ..getRequestData(RequestStatus.oldRequest,
+            currentRequestNo[EmailAndUserAccountScreen.requestNoKey])),
 
 
+        child: BlocBuilder<EmailUserAccountCubit, EmailUserAccountInitial>(
+            builder: (context, state) {
+              return Scaffold(
+                appBar: AppBar(
+                  title: const Text("Email Account"),
+                  centerTitle: true,
+                ),
 
-          child: BlocBuilder<EmailUserAccountCubit, EmailUserAccountInitial>(
-              builder: (context, state) {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: const Text("User Account"),
-                    centerTitle: true,
-                  ),
-                  resizeToAvoidBottomInset: false,
+                floatingActionButton: Column(
+                  mainAxisSize: MainAxisSize.min,
 
-                  floatingActionButton: Column(
-                    mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    if(
+                    state.requestStatus ==
+                        RequestStatus.oldRequest && state.takeActionStatus ==
+                        TakeActionStatus.takeAction )FloatingActionButton
+                        .extended(
+                      heroTag: null,
+                      onPressed: () {},
+                      icon: const Icon(Icons.verified),
+                      label: const Text('Accept'),
+                    ),
+                    const SizedBox(height: 12),
+                    if(state.requestStatus ==
+                        RequestStatus.oldRequest && state.takeActionStatus ==
+                        TakeActionStatus.takeAction)FloatingActionButton
+                        .extended(
+                      backgroundColor: Colors.red,
+                      heroTag: null,
+                      onPressed: () {},
+                      icon: const Icon(Icons.dangerous),
 
-                    children: <Widget>[
-                      if(
-                      state.requestStatus ==
-                          RequestStatus.oldRequest && state.takeActionStatus ==
-                          TakeActionStatus.takeAction )FloatingActionButton
-                          .extended(
+                      label: const Text('Reject'),
+                    ),
+                    const SizedBox(height: 12),
+                    if(context
+                        .read<EmailUserAccountCubit>()
+                        .state
+                        .requestStatus == RequestStatus.newRequest)
+                      FloatingActionButton.extended(
                         heroTag: null,
-                        onPressed: () {},
-                        icon: const Icon(Icons.verified),
-                        label: const Text('Accept'),
-                      ),
-                      const SizedBox(height: 12),
-                      if(state.requestStatus ==
-                          RequestStatus.oldRequest && state.takeActionStatus ==
-                          TakeActionStatus.takeAction)FloatingActionButton
-                          .extended(
-                        backgroundColor: Colors.red,
-                        heroTag: null,
-                        onPressed: () {},
-                        icon: const Icon(Icons.dangerous),
-
-                        label: const Text('Reject'),
-                      ),
-                      const SizedBox(height: 12),
-                      if(context
-                          .read<EmailUserAccountCubit>()
-                          .state
-                          .requestStatus == RequestStatus.newRequest)
-                        FloatingActionButton.extended(
-                          heroTag: null,
-                          onPressed: () {
+                        onPressed: () {
+                          if(user.employeeData!.userHrCode != state.hrCodeUser.value){
                             context.read<EmailUserAccountCubit>()
-                                .submitEmailAccount(user);
-                          },
-                          // formBloc.state.status.isValidated
-                          //       ? () => formBloc.submitPermis`sionRequest()
-                          //       : null,
-                          // formBloc.submitPermissionRequest();
+                                .submitEmailAccount();
 
-                          icon: const Icon(Icons.send),
-                          label: const Text('SUBMIT'),
-                        ),
-                      const SizedBox(height: 12),
-                    ],
+                          }else{
+                            print("----1---"+user.employeeData!.userHrCode.toString());
+                          }
+                        },
 
-                  ),
+                        icon: const Icon(Icons.send),
+                        label: const Text('SUBMIT'),
+                      ),
+                    const SizedBox(height: 12),
+                  ],
+                ),
 
-                  body: BlocListener<
-                      EmailUserAccountCubit,
-                      EmailUserAccountInitial>(
-                    listener: (context, state) {
-                      if (state.status.isSubmissionSuccess) {
-                        LoadingDialog.show(context);
-                        Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (_) =>
-                                SuccessScreen(text: state.successMessage ??
-                                    "Error Number",)));
-                      } else if (state.status.isSubmissionInProgress) {
-                        LoadingDialog.show(context);
-                      }
-                      else if (state.status.isSubmissionFailure) {
-                        LoadingDialog.hide(context);
-                        ScaffoldMessenger.of(context)
-                          ..hideCurrentSnackBar()
-                          ..showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                  state.errorMessage ?? 'Request Failed'),
+                body: BlocListener<
+                    EmailUserAccountCubit,
+                    EmailUserAccountInitial>(
+                  listener: (context, state) {
+                    if (state.status.isSubmissionInProgress) {
+                      LoadingDialog.show(context);
+                    }
+                    if (state.status.isSubmissionSuccess) {
+                      LoadingDialog.hide(context);
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (_) =>
+                              SuccessScreen(text: state.successMessage ??
+                                  "Error Number",)));
+                    }
+                     if (state.status.isSubmissionFailure) {
+                      LoadingDialog.hide(context);
+                      ScaffoldMessenger.of(context)
+                        ..hideCurrentSnackBar()
+                        ..showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                state.errorMessage ?? 'Request Failed'),
+                          ),
+                        );
+                    }
+                  },
+
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Form(
+                      child: SingleChildScrollView(
+                        child: Column(
+
+                          children: [
+
+                            if(state.requestStatus ==
+                                RequestStatus.oldRequest)Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+
+                              child: BlocBuilder<
+                                  EmailUserAccountCubit,
+                                  EmailUserAccountInitial>(
+
+                                  builder: (context, state) {
+                                    return Text(
+                                      state.statusAction ?? "Pending",
+                                    );
+                                  }
+                              ),
                             ),
-                          );
-                      }
-                    },
-
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Form(
-                        child: SingleChildScrollView(
-                          child: Column(
-
-
-                            children: [
-
-                              if(state.requestStatus == RequestStatus.oldRequest)Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 8),
-
-                                child: BlocBuilder<
-                                    EmailUserAccountCubit,
-                                    EmailUserAccountInitial>(
-
-                                    builder: (context, state) {
-                                      return Text(
-                                        state.statusAction.toString(),
-                                        // style: TextStyle(decoration: BoxDecoration(
-                                        //   // labelText: 'Request Date',
-                                        //   errorText: state.requestDate.invalid
-                                        //       ? 'invalid request date'
-                                        //       : null,
-                                        //   prefixIcon: const Icon(
-                                        //       Icons.date_range),
-                                        // ),),
-
-                                      );
-                                    }
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 8),
-                                child: BlocBuilder<
-                                    EmailUserAccountCubit,
-                                    EmailUserAccountInitial>(
-                                    buildWhen: (previous, current) {
-                                      return (previous.requestDate !=
-                                          current.requestDate) ||
-                                          previous.status != current.status;
-                                    },
-                                    builder: (context, state) {
-                                      return TextFormField(
-                                        key: UniqueKey(),
-                                        initialValue: state.requestDate.value,
-                                        enabled: false,
-                                        decoration: InputDecoration(
-                                          labelText: 'Request Date',
-                                          errorText: state.requestDate.invalid
-                                              ? 'invalid request date'
-                                              : null,
-                                          prefixIcon: const Icon(
-                                              Icons.date_range),
-                                        ),
-                                      );
-                                    }
-                                ),
-                              ),
-
-
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-
-                                child: InputDecorator(
-                                  decoration: const InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 0, vertical: 5),
-                                    labelText: 'Request Type',
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    prefixIcon: Icon(Icons.event),
-                                  ),
-                                  child: BlocBuilder<EmailUserAccountCubit,
-                                      EmailUserAccountInitial>(
-                                      buildWhen: (previous, current) {
-                                        return (previous.requestType !=
-                                            current.requestType);
-                                      },
-                                      builder: (context, state) {
-                                        return Column(
-                                          crossAxisAlignment: CrossAxisAlignment
-                                              .start,
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .center,
-                                          children: [
-                                            RadioListTile<int>(
-                                              value: 1,
-                                              title: const Text("Create"),
-                                              groupValue: state.requestType,
-                                              onChanged: (permissionType) =>
-                                              {
-
-                                                state.requestStatus == RequestStatus.newRequest ? context
-                                                    .read<EmailUserAccountCubit>()
-                                                    .accessRightChanged(
-                                                    permissionType ?? 1) : null,
-                                              },
-                                              // selected: (widget.emailUserAccount
-                                              //     .requestType == 1) ? true : false,
-                                            ),
-                                            RadioListTile<int>(
-                                              value: 2,
-                                              title: const Text("Disable"),
-                                              groupValue: state.requestType,
-                                              onChanged: (permissionType) =>
-                                              {
-                                                state.requestStatus == RequestStatus.newRequest ? context
-                                                    .read<EmailUserAccountCubit>()
-                                                    .accessRightChanged(
-                                                    permissionType ?? 2) : null,
-                                              },
-                                              // selected: (widget.emailUserAccount
-                                              //     .requestType == 2) ? true : false,
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                  ),
-                                ),),
-
-
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  initialValue: user.user!.userHRCode,
-                                  key: UniqueKey(),
-                                  readOnly: true,
-                                  decoration: const InputDecoration(
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    prefixIcon: Icon(
-                                        Icons.qr_code),
-                                    labelText: 'Hr Code',
-                                  ),
-                                ),
-                              ),
-
-
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  initialValue: user.employeeData!.name,
-                                  key: UniqueKey(),
-                                  readOnly: true,
-                                  decoration: const InputDecoration(
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    labelText: 'Full Name',
-                                    prefixIcon: Icon(
-                                        Icons.person),
-                                  ),
-                                ),
-                              ),
-
-
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  initialValue: user.employeeData!.titleName,
-                                  key: UniqueKey(),
-                                  readOnly: true,
-                                  decoration: const InputDecoration(
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    labelText: 'Title',
-                                    prefixIcon: Icon(
-                                        Icons.desk_outlined),
-                                  ),
-                                ),
-                              ),
-
-
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  initialValue: user.employeeData!.companyName,
-                                  key: UniqueKey(),
-                                  readOnly: true,
-                                  decoration: const InputDecoration(
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    labelText: 'Location',
-                                    prefixIcon: Icon(
-                                        Icons.business_center),
-                                  ),
-                                ),
-                              ),
-
-
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: BlocBuilder<
-                                    EmailUserAccountCubit,
-                                    EmailUserAccountInitial>(
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+                              child: BlocBuilder<
+                                  EmailUserAccountCubit,
+                                  EmailUserAccountInitial>(
                                   buildWhen: (previous, current) {
                                     return (previous.requestDate !=
                                         current.requestDate) ||
@@ -351,107 +178,332 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                   },
                                   builder: (context, state) {
                                     return TextFormField(
-                                      initialValue: state.userMobile.value,
-
-                                      onChanged: (phoneValue) =>
-                                      {
-                                        context.read<EmailUserAccountCubit>()
-                                            .phoneNumberChanged(phoneValue),
-                                      },
-
-                                      keyboardType: TextInputType.phone,
-
+                                      key: UniqueKey(),
+                                      initialValue: state.requestDate.value,
+                                      enabled: false,
                                       decoration: InputDecoration(
-                                        floatingLabelAlignment:
-                                        FloatingLabelAlignment.start,
-                                        labelText: 'Mobile',
-                                        prefixIcon: const Icon(
-                                            Icons.mobile_friendly),
-                                        errorText: state.userMobile.invalid
-                                            ? 'invalid Phone Number'
+                                        labelText: 'Request Date',
+                                        errorText: state.requestDate.invalid
+                                            ? 'invalid request date'
                                             : null,
+                                        prefixIcon: const Icon(
+                                            Icons.date_range),
                                       ),
                                     );
-                                  },
-                                ),
+                                  }
                               ),
+                            ),
 
 
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 8),
-                                child: InputDecorator(
-                                  decoration: const InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 0, vertical: 5),
-                                    labelText: 'Account Type',
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    prefixIcon: Icon(Icons.event),
-                                  ),
-                                  child: BlocBuilder<
-                                      EmailUserAccountCubit,
-                                      EmailUserAccountInitial>(
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+
+                              child: InputDecorator(
+                                decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 0, vertical: 5),
+                                  labelText: 'Request Type',
+                                  floatingLabelAlignment:
+                                  FloatingLabelAlignment.start,
+                                  prefixIcon: Icon(Icons.event),
+                                ),
+                                child: BlocBuilder<EmailUserAccountCubit,
+                                    EmailUserAccountInitial>(
+                                    buildWhen: (previous, current) {
+                                      return (previous.requestType !=
+                                          current.requestType);
+                                    },
                                     builder: (context, state) {
-                                      return Card(
-                                        child: Row(
-                                          children: <Widget>[
-                                            const SizedBox(width: 10),
-                                            const Text(
-                                              'Email Account ',
-                                              style: TextStyle(fontSize: 17.0),
-                                            ),
-                                            //Text
-                                            const SizedBox(width: 10),
-                                            //SizedBox
-                                            /** Checkbox Widget **/
-                                            Checkbox(
-                                              value: state.accountType,
-                                              onChanged: (bool? value) {
-                                                state.requestStatus ==
-                                                    RequestStatus.newRequest
-                                                    ?
-                                                context.read<
-                                                    EmailUserAccountCubit>()
-                                                    .getEmailValue(value!)
-                                                    : null;
-                                              },
-                                            ),
-                                            //Checkbox
-                                          ], //<Widget>[]
-                                        ),
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment
+                                            .start,
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .center,
+                                        children: [
+                                          RadioListTile<int>(
+                                            value: 1,
+                                            title: const Text("Create"),
+                                            groupValue: state.requestType,
+                                            onChanged: (permissionType) =>
+                                            {
+
+                                              state.requestStatus ==
+                                                  RequestStatus.newRequest
+                                                  ? context
+                                                  .read<EmailUserAccountCubit>()
+                                                  .accessRightChanged(
+                                                  permissionType ?? 1)
+                                                  : null,
+                                            },
+                                            // selected: (widget.emailUserAccount
+                                            //     .requestType == 1) ? true : false,
+                                          ),
+                                          RadioListTile<int>(
+                                            value: 2,
+                                            title: const Text("Disable"),
+                                            groupValue: state.requestType,
+                                            onChanged: (permissionType) =>
+                                            {
+                                              state.requestStatus ==
+                                                  RequestStatus.newRequest
+                                                  ? context
+                                                  .read<EmailUserAccountCubit>()
+                                                  .accessRightChanged(
+                                                  permissionType ?? 2)
+                                                  : null,
+                                            },
+                                            // selected: (widget.emailUserAccount
+                                            //     .requestType == 2) ? true : false,
+                                          ),
+                                        ],
                                       );
-                                    },),
+                                    }
                                 ),
                               ),
+                            ),
 
 
-                              // FloatingActionButton.extended(
-                              //   onPressed: () {
-                              //     context.read<EmailUserAccountCubit>()
-                              //         .getSubmitEmailAndUserAccount(
-                              //       user, formattedDate,);
-                              //   },
-                              //   label: const Text('Submit', style: TextStyle(
-                              //       color: Colors.black
-                              //   )),
-                              //   icon: const Icon(
-                              //       Icons.thumb_up_alt_outlined,
-                              //       color: Colors.black),
-                              //   backgroundColor: Colors.white,),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<
+                                  EmailUserAccountCubit,
+                                  EmailUserAccountInitial>(
+                                  buildWhen: (previous, current) {
+                                    return (previous.requestDate !=
+                                        current.requestDate) ||
+                                        previous.status != current.status;
+                                  },
+                                  builder: (context, state) {
+                                    return TextFormField(
+                                      initialValue: state.hrCodeUser.value,
+                                      onChanged: (hrCode) =>
+                                      {
+                                        context.read<EmailUserAccountCubit>()
+                                            .hrCodeChanged(hrCode),
+                                      },
+                                      onFieldSubmitted: (value)=>
+                                      {
+                                        // LoadingDialog.show(context),
+                                        context.read<EmailUserAccountCubit>()
+                                            .hrCodeSubmittedGetData(value.toString()),
+                                        //
+                                        // if(state.fullName!=null){
+                                        //   LoadingDialog.hide(context),
+                                        // }
+                                      },
+                                      keyboardType: TextInputType.phone,
+                                      readOnly: state.requestStatus == RequestStatus.oldRequest ? true : false,
+                                      decoration:  InputDecoration(
+                                        errorText: state.hrCodeUser.invalid
+                                      ? 'invalid Hr Code '
+                                          : null,
+                                        floatingLabelAlignment:
+                                        FloatingLabelAlignment.start,
+                                        prefixIcon: Icon(
+                                            Icons.qr_code),
+                                        labelText: 'Hr Code',
+                                      ),
+                                    );
+                                  }
+                              ),
+                            ),
+
+                            Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Column(children: [
+
+                                    Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: BlocBuilder<
+                                            EmailUserAccountCubit,
+                                            EmailUserAccountInitial>(
+                                          buildWhen: (previous, current) {
+                                            return (state.requestStatus == RequestStatus.newRequest) ;
+                                          },
+                                          builder: (context, state) {
+                                            return TextFormField(
+                                              initialValue: state.fullName,
+
+                                              key: UniqueKey(),
+                                              // state.requestStatus ==
+                                              //     RequestStatus.oldRequest
+                                              //     ? true: false,
+                                              readOnly:
+                                              state.requestStatus ==
+                                                  RequestStatus.oldRequest
+                                                  ? true : false,
+                                              decoration: const InputDecoration(
+                                                floatingLabelAlignment:
+                                                FloatingLabelAlignment.start,
+                                                labelText: 'Full Name',
+                                                prefixIcon: Icon(
+                                                    Icons.person),
+                                              ),
+                                            );
+                                          },)
+                                    ),
 
 
-                            ],
-                          ),
+                                    Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child:
+                                        BlocBuilder<EmailUserAccountCubit,
+                                            EmailUserAccountInitial>(
+                                          buildWhen: (previous, current) {
+                                            return (state.requestStatus == RequestStatus.newRequest) ;
+                                          },
+                                          builder: (context, state) {
+                                            return TextFormField(
+                                              initialValue: state.userTitle,
+                                              key: UniqueKey(),
+                                              // state.requestStatus ==
+                                              //     RequestStatus.oldRequest
+                                              //     ? true: false,
+                                              readOnly:
+                                              state.requestStatus ==
+                                                  RequestStatus.oldRequest
+                                                  ? true : false,
+                                              decoration: const InputDecoration(
+                                                floatingLabelAlignment:
+                                                FloatingLabelAlignment.start,
+                                                labelText: 'Title',
+                                                prefixIcon: Icon(
+                                                    Icons.desk_outlined),
+                                              ),
+                                            );
+                                          },)
+
+                                    ),
+
+
+                                    Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: BlocBuilder<
+                                            EmailUserAccountCubit,
+                                            EmailUserAccountInitial>(
+                                            buildWhen: (previous, current) {
+                                              return (state.requestStatus == RequestStatus.newRequest) ;
+                                            },
+                                            builder: (context, state) {
+                                              return TextFormField(
+                                                initialValue: state.userLocation,
+                                                key: UniqueKey(),
+                                                // state.requestStatus ==
+                                                //     RequestStatus.oldRequest
+                                                //     ? true: false,
+                                                readOnly:
+                                                state.requestStatus ==
+                                                    RequestStatus.oldRequest
+                                                    ? true : false,
+                                                decoration: const InputDecoration(
+                                                  floatingLabelAlignment:
+                                                  FloatingLabelAlignment.start,
+                                                  labelText: 'Location',
+                                                  prefixIcon: Icon(
+                                                      Icons.business_center),
+                                                ),
+                                              );
+                                            })
+                                    ),
+
+                                  ]),
+                                )
+
+                            ),
+
+
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: BlocBuilder<
+                                  EmailUserAccountCubit,
+                                  EmailUserAccountInitial>(
+                                buildWhen: (previous, current) {
+                                  return (previous.requestDate !=
+                                      current.requestDate) ||
+                                      previous.status != current.status;
+                                },
+                                builder: (context, state) {
+                                  return TextFormField(
+                                    initialValue: state.userMobile.value,
+                                    onChanged: (phoneValue) =>
+                                    {
+                                      context.read<EmailUserAccountCubit>()
+                                          .phoneNumberChanged(phoneValue),
+                                    },
+                                    keyboardType: TextInputType.phone,
+                                    readOnly:
+                                    state.requestStatus ==
+                                        RequestStatus.oldRequest
+                                        ? true : false,
+                                    decoration: InputDecoration(
+                                      floatingLabelAlignment:
+                                      FloatingLabelAlignment.start,
+                                      labelText: 'Mobile',
+                                      prefixIcon: const Icon(
+                                          Icons.mobile_friendly),
+                                      errorText: state.userMobile.invalid
+                                          ? 'invalid Phone Number'
+                                          : null,
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+
+
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0,
+                                  left: 8.0,
+                                  top: 8.0,
+                                  bottom: 80.0),
+                              child: InputDecorator(
+                                decoration: const InputDecoration(
+                                  contentPadding: EdgeInsets.symmetric(
+                                      horizontal: 0, vertical: 5),
+                                  labelText: 'Email Type ',
+                                  floatingLabelAlignment:
+                                  FloatingLabelAlignment.start,
+                                  prefixIcon: Icon(Icons.event),
+                                ),
+                                child: BlocBuilder<
+                                    EmailUserAccountCubit,
+                                    EmailUserAccountInitial>(
+                                  builder: (context, state) {
+                                    return Row(children: [
+                                      Text('Email Account'),
+                                      Checkbox(
+                                        value: state.accountType,
+                                        onChanged: (bool? value) {
+                                          state.requestStatus ==
+                                              RequestStatus.newRequest ?
+                                          context.read<EmailUserAccountCubit>()
+                                              .getEmailValue(value!)
+                                              : null;
+                                        },
+                                      )
+                                    ],); //Check
+                                  },),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
-
                   ),
-                );
-              }
-          ),
-       ),
+
+                ),
+              );
+            }
+        ),
+      ),
     );
   }
 }
@@ -506,8 +558,10 @@ class SuccessScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton.icon(
-              onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => const EmailAndUserAccountScreen())),
+              onPressed: () =>
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (_) => const EmailAndUserAccountScreen())),
               icon: const Icon(Icons.replay),
               label: const Text('Create Another Permission Request'),
             ),

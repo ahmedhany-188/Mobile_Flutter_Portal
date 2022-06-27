@@ -76,6 +76,7 @@ class RequestRepository {
       "IPPhone": accessRightModel.ipPhone,
       "LocalAdmin": accessRightModel.localAdmin,
     });
+
     final http.Response rawAccess = await requestDataProviders
         .postAccessAccountAccessRequest(bodyString);
     final json = await jsonDecode(rawAccess.body);
@@ -106,7 +107,10 @@ class RequestRepository {
         .getAccessRightRequestData(userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawPermission.body);
     final AccessRightModel response = AccessRightModel.fromJson(json[0]);
+
+    print("-.-.-."+json.toString());
     return response;
+
   }
 
   Future<EmailUserFormModel> getEmailAccount(String requestNo) async{
@@ -114,6 +118,15 @@ class RequestRepository {
         .getEmailAccountRequestData(userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawPermission.body);
     final EmailUserFormModel response = EmailUserFormModel.fromJson(json[0]);
+
+    return response;
+  }
+
+  Future<EmployeeData> getEmailData(String hrCode) async{
+    final http.Response rawPermission = await requestDataProviders
+        .getEmailAccountData(hrCode);
+    final json = await jsonDecode(rawPermission.body);
+    final EmployeeData response = EmployeeData.fromJson(json[0]);
     return response;
   }
 
@@ -164,10 +177,10 @@ class RequestRepository {
       "ServiceId": RequestServiceID.EmailUserAccountServiceID,
       "RequestHrCode": userData.user!.userHRCode,
       "Date": emailUserFormModel.requestDate,
-      "OwnerHrCode": userData.user!.userHRCode,
-      "OwnerFullName": userData.employeeData!.name,
-      "OwnerTitle": userData.employeeData!.titleName,
-      "OwnerLocation": userData.employeeData!.companyName,
+      "OwnerHrCode": emailUserFormModel.requestHrCode,
+      "OwnerFullName": emailUserFormModel.fullName,
+      "OwnerTitle": emailUserFormModel.title,
+      "OwnerLocation": emailUserFormModel.location,
       "OwnerMobile": emailUserFormModel.userMobile,
       "OwnerEmailDisabled": userData.user!.email,
       "Status": 0,
@@ -181,6 +194,7 @@ class RequestRepository {
         .postEmailUserAccount(bodyString);
     final json = await jsonDecode(rawEmailUserAccount.body);
     final RequestResponse response = RequestResponse.fromJson(json);
+
     return response;
   }
 

@@ -54,6 +54,21 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
       final ipPhone= requestData.ipPhone;
       final localAdmin = requestData.localAdmin;
 
+      List<String> requestItems=[];
+      if (usbException==true) {
+        requestItems.add("USB Exception");
+      }
+      if (vpnAccount == true) {
+        requestItems.add("VPN Account");
+      }
+      if (ipPhone == true) {
+        requestItems.add("IP Phone");
+      }
+      if (localAdmin == true) {
+        requestItems.add("Local Admin");
+      }
+
+
       final fromDate = RequestDate.dirty(
           GlobalConstants.dateFormatViewed.format(
               GlobalConstants.dateFormatServer.parse(requestData.fromDate!)));
@@ -64,13 +79,11 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
 
       final permanent = requestData.permanent;
 
-      final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
+      final comments = requestData.comments;
 
       var status = "Pending";
       if (requestData.status== 0) {
         status = "Pending";
-        print("---------"+status);
-        print("---------"+requestData.status.toString());
       } else if (requestData.status == 1) {
         status = "Approved";
       } else if (requestData.status == 2) {
@@ -88,6 +101,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
           toDate: toDate,
           permanent: permanent,
           comments: comments,
+            requestItemsList: requestItems,
 
             status: Formz.validate(
                 [state.requestDate,state.requestItems, state.fromDate, state.toDate]),
@@ -113,7 +127,6 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     // "date" -> "2022-05-17T13:47:07"
     DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(requestDate.value);
     final requestDateValue = GlobalConstants.dateFormatServer.format(requestDateTemp);
-    print("requestDateValue $requestDateValue");
 
     emit(state.copyWith(
         requestItems: requestItem,
@@ -255,18 +268,20 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     ));
   }
 
+  void chosenItemsOptions(List<String> chosenFilter) {
+
+    emit(state.copyWith(
+      requestItemsList: chosenFilter,
+      status: Formz.validate(
+          [state.requestItems, state.fromDate, state.toDate]),
+    ));
+  }
+
   void getRequestValue(String value) {
     RequestDate valueNew = const RequestDate.pure();
     if (value != "[]") {
       valueNew = RequestDate.dirty(value);
     }
-
-    print("---"+value);
-
-   print(value.contains("USB"));
-   print(value.contains("VPN"));
-    print(value.contains("IP"));
-    print(value.contains("Local"));
 
 
 

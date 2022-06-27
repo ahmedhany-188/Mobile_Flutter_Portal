@@ -2,8 +2,8 @@
 
 class BusinessCardFormModel {
   final String ?requestDate, employeeNameCard, employeeMobil,
-      employeeExt, faxNo, employeeComments;
-  int status, requestHrCode;
+      employeeExt, faxNo, employeeComments,requestHrCode;
+  int status;
 
   BusinessCardFormModel(this.requestDate, this.employeeNameCard,
       this.employeeMobil, this.employeeExt, this.faxNo, this.employeeComments,
