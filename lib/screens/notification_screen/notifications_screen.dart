@@ -140,7 +140,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   _pushForRequestDetail(FirebaseUserNotification notification){
     if(notification.requestType!.contains("Vacation")){
       Navigator.of(context)
-          .pushNamed(VacationScreen.routeName,arguments: {VacationScreen.requestNoKey: notification.requestNo});
+          .pushNamed(VacationScreen.routeName,arguments: {VacationScreen.requestNoKey: notification.requestNo,VacationScreen.requesterHRCode:notification.requesterHRCode});
     }else if(notification.requestType!.contains("Business Mission")){
       Navigator.of(context)
           .pushNamed(BusinessMissionScreen.routeName,arguments: {BusinessMissionScreen.requestNoKey: notification.requestNo});

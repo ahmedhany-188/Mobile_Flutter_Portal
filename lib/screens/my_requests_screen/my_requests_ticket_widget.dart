@@ -230,7 +230,7 @@ class MyRequestsItemWidget extends StatelessWidget {
       case RequestServiceID.VacationServiceID:
         {
           Navigator.of(context)
-              .pushNamed(VacationScreen.routeName,arguments: {VacationScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
+              .pushNamed(VacationScreen.routeName,arguments: {VacationScreen.requestNoKey: myRequestsModelData.requestNo.toString(),VacationScreen.requesterHRCode: myRequestsModelData.requestHRCode});
           break;
         }
       case RequestServiceID.PermissionServiceID:

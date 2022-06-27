@@ -15,23 +15,32 @@ class VacationScreen extends StatefulWidget {
 
   static const routeName = 'vacation-page';
   static const requestNoKey = 'request-No';
+  static const requesterHRCode = 'requester-HRCode';
 
-  const VacationScreen({Key? key, this.requestNo}) : super(key: key);
+  const VacationScreen({Key? key, this.requestData}) : super(key: key);
 
-  final requestNo;
+  final dynamic requestData;
 
   @override
   State<VacationScreen> createState() => _VacationScreenState();
 }
 
 class _VacationScreenState extends State<VacationScreen> {
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+
+
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
 
     final userMainData = context.select((AppBloc bloc) =>
     bloc.state.userData);
 
-    final currentRequestNo = widget.requestNo;
+    final currentRequestData = widget.requestData;
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -44,8 +53,8 @@ class _VacationScreenState extends State<VacationScreen> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<VacationCubit>(create: (vacationContext) =>
-          currentRequestNo == null ? (VacationCubit(RequestRepository(userMainData))..getRequestData(RequestStatus.newRequest, ""))
-              :(VacationCubit(RequestRepository(userMainData))..getRequestData(RequestStatus.oldRequest, currentRequestNo[VacationScreen.requestNoKey]))),
+          currentRequestData == null ? (VacationCubit(RequestRepository(userMainData))..getRequestData(requestStatus: RequestStatus.newRequest))
+              :(VacationCubit(RequestRepository(userMainData))..getRequestData(requestStatus: RequestStatus.oldRequest, requestNo: currentRequestData[VacationScreen.requestNoKey],requesterHRCode: currentRequestData[VacationScreen.requesterHRCode]))),
             // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
           BlocProvider<ResponsibleVacationCubit>(
             lazy: false,
@@ -56,18 +65,20 @@ class _VacationScreenState extends State<VacationScreen> {
         child: BlocBuilder<VacationCubit,VacationInitial>(
 
             builder: (context,state) {
-              print(currentRequestNo);
+              print(currentRequestData);
               return Scaffold(
                 appBar: AppBar(title: const Text('Vacation Request')),
                 floatingActionButton: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    if(
-                        state
-                        .requestStatus ==
-                        RequestStatus.oldRequest && state.takeActionStatus == TakeActionStatus.takeAction )FloatingActionButton.extended(
+                    if(state.requestStatus == RequestStatus.oldRequest &&
+                        state.takeActionStatus == TakeActionStatus.takeAction )
+                      FloatingActionButton.extended(
                       heroTag: null,
-                      onPressed: () {},
+                      onPressed: () {
+                        context.read<VacationCubit>()
+                            .submitAction(true);
+                      },
                       icon: const Icon(Icons.verified),
                       label: const Text('Accept'),
                     ),
@@ -76,7 +87,9 @@ class _VacationScreenState extends State<VacationScreen> {
                         RequestStatus.oldRequest && state.takeActionStatus == TakeActionStatus.takeAction)FloatingActionButton.extended(
                       backgroundColor: Colors.red,
                       heroTag: null,
-                      onPressed: () {},
+                      onPressed: () {
+
+                      },
                       icon: const Icon(Icons.dangerous),
 
                       label: const Text('Reject'),
@@ -291,11 +304,11 @@ class _VacationScreenState extends State<VacationScreen> {
                                       key: UniqueKey(),
                                       initialValue: state.vacationFromDate.value,
 
-                                      onChanged: (vacationDate) =>
-                                          context
-                                              .read<VacationCubit>()
-                                              .vacationFromDateChanged(
-                                              context),
+                                      // onChanged: (vacationDate) =>
+                                      //     context
+                                      //         .read<VacationCubit>()
+                                      //         .vacationFromDateChanged(
+                                      //         context),
                                       readOnly: true,
                                       enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
 
@@ -334,7 +347,8 @@ class _VacationScreenState extends State<VacationScreen> {
                                   buildWhen: (previous, current) {
                                     return (previous.vacationToDate !=
                                         current.vacationToDate) ||
-                                        previous.status != current.status ||
+                                        previous.status != current.status
+                                        ||
                                         previous.vacationFromDate !=
                                             current.vacationFromDate;
                                   },
@@ -355,6 +369,7 @@ class _VacationScreenState extends State<VacationScreen> {
                                         prefixIcon: const Icon(
                                             Icons.date_range_outlined),
                                       ),
+
                                       onTap: () {
                                         context
                                             .read<VacationCubit>()
@@ -523,6 +538,7 @@ class _VacationScreenState extends State<VacationScreen> {
           );
         });
   }
+
 }
 
 class ItemView extends StatelessWidget {
@@ -628,6 +644,7 @@ class ItemView extends StatelessWidget {
     //   itemCount: items.length,
     // );
   }
+
 
   Widget _showBottomSheetWithSearch(int index,
       List<ContactsDataFromApi> listOfCities) {

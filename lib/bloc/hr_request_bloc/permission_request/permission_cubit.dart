@@ -261,7 +261,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
       }else{
         emit(
           state.copyWith(
-            errorMessage: permissionResponse.id == 1 ? permissionResponse.result : "An error occurred",
+            errorMessage: permissionResponse.id == 0 ? permissionResponse.result : "An error occurred",
             status: FormzStatus.submissionFailure,
           ),
         );

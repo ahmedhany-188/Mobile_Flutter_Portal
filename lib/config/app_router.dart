@@ -143,10 +143,9 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => PermissionScreen(requestNo: settings.arguments),
         );
-
       case VacationScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => VacationScreen(requestNo: settings.arguments),
+          builder: (_) => VacationScreen(requestData: settings.arguments),
         );
 
       case BusinessCardScreen.routeName:

@@ -6,8 +6,7 @@ class RequestServiceID{
   static const String EmailUserAccountServiceID = "HAH-IT-FRM-04";
   static const String AccessRightServiceID = "HAH-IT-FRM-07";
   static const String BusinessCardServiceID = "HAH-HR-FRM-06";
-  // HAH-IT-FRM-07
-  // "HAH-HR-FRM-06"
+
 
 
 }

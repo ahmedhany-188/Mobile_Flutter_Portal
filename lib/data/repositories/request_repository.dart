@@ -279,9 +279,9 @@ class RequestRepository {
     return response;
   }
 
-  Future<VacationRequestData> getVacationRequestData(String requestNo) async{
+  Future<VacationRequestData> getVacationRequestData(String requestNo,String requesterHRCode) async{
     final http.Response rawRequestData = await requestDataProviders
-        .getVacationRequestData(userData.user?.userHRCode ?? "",requestNo);
+        .getVacationRequestData(requesterHRCode,requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final VacationRequestData response = VacationRequestData.fromJson(json[0]);
 
@@ -300,6 +300,23 @@ class RequestRepository {
         .getPermissionRequestData(userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final PermissionRequestData response = PermissionRequestData.fromJson(json[0]);
+    return response;
+  }
+
+
+  Future<RequestResponse> postTakeActionRequest(bool takeAction) async{
+    var bodyString = jsonEncode(<String, dynamic>{
+      // "serviceId": serviceID,
+      // "reqno": requestNo,
+      // "Approve": takeAction? 1 : 2,
+      // "requesterhrcode": requesterHRCode ,
+      "mangerHrCode": userData.user?.userHRCode ?? "0",
+      "comment" :""
+    });
+    final http.Response rawPermission = await requestDataProviders
+        .postTakeActionOnRequest(bodyString);
+    final json = await jsonDecode(rawPermission.body);
+    final RequestResponse response = RequestResponse.fromJson(json);
     return response;
   }
 
