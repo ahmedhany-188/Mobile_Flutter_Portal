@@ -40,6 +40,7 @@ import './bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import './bloc/payslip_screen_bloc/payslip_cubit.dart';
 import './bloc/subsidiaries_screen_bloc/subsidiaries_cubit.dart';
 import 'bloc/auth_app_status_bloc/app_bloc.dart';
+import 'bloc/it_request_bloc/equipments_request/equipments_cubit/equipments_cubit.dart';
 import 'bloc/login_cubit/login_cubit.dart';
 import 'bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'bloc/videos_screen_bloc/videos_cubit.dart';
@@ -217,6 +218,9 @@ class _MyAppState extends State<MyApp> {
               ..getNews()
               ..getLatestNews(),
             lazy: true,
+          ),
+          BlocProvider<EquipmentsCubit>(
+            create: (newsContext) => EquipmentsCubit()..getAll(),
           ),
 
           // BlocProvider<PermissionCubit>(

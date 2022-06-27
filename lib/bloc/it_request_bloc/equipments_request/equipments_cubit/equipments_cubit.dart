@@ -6,8 +6,9 @@ import '../../../../data/data_providers/general_dio/general_dio.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/business_unit_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/departments_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/equipments_location_model.dart';
+import '../../../../data/models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
 
-part 'business_unit_state.dart';
+part 'equipments_state.dart';
 
 class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   EquipmentsCubit() : super(const EquipmentsCubitStates()) {
@@ -30,9 +31,9 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       }
     });
   }
-  final Connectivity connectivity = Connectivity();
-
   static EquipmentsCubit get(context) => BlocProvider.of(context);
+
+  final Connectivity connectivity = Connectivity();
 
   void getAll() {
     getBusinessUnit();

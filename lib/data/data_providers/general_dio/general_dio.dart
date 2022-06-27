@@ -99,4 +99,20 @@ class GeneralDio {
       throw err;
     });
   }
+
+  static Future<Response> postEquipmentsRequest() async {
+    String url = 'SelfService/AddITEquipment_M';
+
+    return await dio!.post(url).catchError((err) {
+      throw err;
+    });
+  }
+
+  static Future<Response> getEquipmentsItems(String id) async {
+    String url = 'Lookup/GetItemsByCategory?Cond=$id';
+
+    return await dio!.get(url).catchError((err) {
+      throw err;
+    });
+  }
 }

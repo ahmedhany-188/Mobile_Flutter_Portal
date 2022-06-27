@@ -1,6 +1,6 @@
-part of 'business_unit_cubit.dart';
+part of 'equipments_cubit.dart';
 
-abstract class BusinessUnitState extends Equatable {}
+abstract class EquipmentsState extends Equatable {}
 
 enum EquipmentsEnumState { initial, success, failed }
 
@@ -11,6 +11,7 @@ class EquipmentsCubitStates extends Equatable {
   final List<BusinessUnitModel> listBusinessUnit;
   final List<EquipmentsLocationModel> listLocation;
   final List<DepartmentsModel> listDepartment;
+  final List<SelectedEquipmentsModel> chosenList;
   const EquipmentsCubitStates({
     this.businessUnitEnumStates = EquipmentsEnumState.initial,
     this.locationEnumStates = EquipmentsEnumState.initial,
@@ -18,6 +19,7 @@ class EquipmentsCubitStates extends Equatable {
     this.listBusinessUnit = const <BusinessUnitModel>[],
     this.listLocation = const <EquipmentsLocationModel>[],
     this.listDepartment = const <DepartmentsModel>[],
+    this.chosenList = const <SelectedEquipmentsModel>[],
   });
 
   EquipmentsCubitStates copyWith({
@@ -27,16 +29,17 @@ class EquipmentsCubitStates extends Equatable {
     List<BusinessUnitModel>? listBusinessUnit,
     List<EquipmentsLocationModel>? listLocation,
     List<DepartmentsModel>? listDepartment,
+    List<SelectedEquipmentsModel>? chosenList,
   }) {
     return EquipmentsCubitStates(
-      businessUnitEnumStates:
-          businessUnitEnumStates ?? this.businessUnitEnumStates,
-      locationEnumStates: locationEnumStates ?? this.locationEnumStates,
-      departmentEnumStates: departmentEnumStates ?? this.departmentEnumStates,
-      listBusinessUnit: listBusinessUnit ?? this.listBusinessUnit,
-      listLocation: listLocation ?? this.listLocation,
-      listDepartment: listDepartment ?? this.listDepartment,
-    );
+        businessUnitEnumStates:
+            businessUnitEnumStates ?? this.businessUnitEnumStates,
+        locationEnumStates: locationEnumStates ?? this.locationEnumStates,
+        departmentEnumStates: departmentEnumStates ?? this.departmentEnumStates,
+        listBusinessUnit: listBusinessUnit ?? this.listBusinessUnit,
+        listLocation: listLocation ?? this.listLocation,
+        listDepartment: listDepartment ?? this.listDepartment,
+        chosenList: chosenList ?? this.chosenList);
   }
 
   @override
@@ -47,5 +50,6 @@ class EquipmentsCubitStates extends Equatable {
         listBusinessUnit,
         listLocation,
         listDepartment,
+        chosenList,
       ];
 }
