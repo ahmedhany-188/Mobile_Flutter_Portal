@@ -48,10 +48,10 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
                   requestData.requestDate!)));
 
       final employeeName = RequestDate.dirty(requestData.employeeNameCard!);
-      final employeeComments = requestData.employeeComments;
-      final employeeMobile = RequestDate.dirty(requestData.employeeMobil!);
-      final faxNo = requestData.faxNo;
-      final employeeExt = requestData.employeeExt;
+      // final employeeComments = requestData.employeeComments;
+      // final employeeMobile = RequestDate.dirty(requestData.employeeMobil!);
+      // final faxNo = requestData.faxNo!;
+      // final employeeExt = requestData.employeeExt!;
 
 
       var status = "Pending";
@@ -67,10 +67,10 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
         state.copyWith(
           requestDate: requestDate,
           employeeNameCard: employeeName,
-          comment: employeeComments,
-          employeeMobile: employeeMobile,
-          employeeFaxNO: faxNo,
-          employeeExt: employeeExt,
+          // comment: employeeComments,
+          // employeeMobile: employeeMobile,
+          // employeeFaxNO: faxNo,
+          // employeeExt: employeeExt,
           status: Formz.validate(
               [state.employeeNameCard, state.employeeMobile]),
           requestStatus: RequestStatus.oldRequest,
@@ -81,7 +81,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
     }
   }
 
-  void getSubmitBusinessCard(MainUserData user, String date) async {
+  void getSubmitBusinessCard(MainUserData user) async {
     final employeeName = RequestDate.dirty(state.employeeNameCard.value);
     final employeeMobile = RequestDate.dirty(state.employeeMobile.value);
 
@@ -95,14 +95,14 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
 
     if (state.status.isValidated) {
       businessCardFormModel = BusinessCardFormModel(
-          date,
+          state.requestDate.value,
           employeeName.value,
           employeeMobile.value,
           state.employeeExt,
           state.employeeFaxNO,
           state.comment,
           0,
-          0);
+          "");
 
 
       try {

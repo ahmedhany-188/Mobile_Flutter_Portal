@@ -43,18 +43,19 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
         ),
       ),
 
-    child: MultiBlocProvider(
-    providers: [
-    BlocProvider<BusinessCardCubit>(create: (businessCardContext) =>
-    currentRequestNo == null ? (BusinessCardCubit(RequestRepository(user))..getRequestData(RequestStatus.newRequest, ""))
-        :(BusinessCardCubit(RequestRepository(user))..getRequestData(RequestStatus.oldRequest, currentRequestNo[BusinessCardScreen.requestNoKey]))),
-    // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
-    ],
-      child: BlocProvider<BusinessCardCubit>(
+      child:
+      BlocProvider<BusinessCardCubit>(
         create: (businessCardContext) =>
-            BusinessCardCubit(RequestRepository(user)),
-        child: Builder(
-            builder: (context) {
+        currentRequestNo == null ? (BusinessCardCubit(RequestRepository(user))
+          ..getRequestData(RequestStatus.newRequest, ""))
+            : (BusinessCardCubit(RequestRepository(user))
+          ..getRequestData(RequestStatus.oldRequest,
+              currentRequestNo[BusinessCardScreen.requestNoKey])),
+        // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])
+
+        child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
+
+            builder: (context, state) {
               return Scaffold(
                 appBar: AppBar(
                   title: const Text("Business Card"),
@@ -62,58 +63,56 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                 ),
                 resizeToAvoidBottomInset: false,
 
-                /*
                 floatingActionButton: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      if(context
-                          .read<AccessRightCubit>()
-                          .state
-                          .requestStatus ==
-                          RequestStatus.oldRequest)FloatingActionButton
-                          .extended(
-                        heroTag: null,
-                        onPressed: () {},
-                        icon: const Icon(Icons.verified),
-                        label: const Text('Accept'),
-                      ),
-                      const SizedBox(height: 12),
-                      if(context
-                          .read<AccessRightCubit>()
-                          .state
-                          .requestStatus ==
-                          RequestStatus.oldRequest)FloatingActionButton
-                          .extended(
-                        backgroundColor: Colors.red,
-                        heroTag: null,
-                        onPressed: () {},
-                        icon: const Icon(Icons.dangerous),
+                  mainAxisSize: MainAxisSize.min,
 
-                        label: const Text('Reject'),
-                      ),
-                      const SizedBox(height: 12),
-                      if(context
-                          .read<AccessRightCubit>()
-                          .state
-                          .requestStatus == RequestStatus.newRequest)
-                        FloatingActionButton.extended(
-                          heroTag: null,
-                          onPressed: () {
-                            context.read<AccessRightCubit>()
-                                .getSubmitAccessRight(selectedTypes);
-                          },
-                          // formBloc.state.status.isValidated
-                          //       ? () => formBloc.submitPermissionRequest()
-                          //       : null,
-                          // formBloc.submitPermissionRequest();
+                  children: <Widget>[
+                    if(
+                    state.requestStatus ==
+                        RequestStatus.oldRequest && state.takeActionStatus ==
+                        TakeActionStatus.takeAction )FloatingActionButton
+                        .extended(
+                      heroTag: null,
+                      onPressed: () {},
+                      icon: const Icon(Icons.verified),
+                      label: const Text('Accept'),
+                    ),
+                    const SizedBox(height: 12),
+                    if(state.requestStatus ==
+                        RequestStatus.oldRequest && state.takeActionStatus ==
+                        TakeActionStatus.takeAction)FloatingActionButton
+                        .extended(
+                      backgroundColor: Colors.red,
+                      heroTag: null,
+                      onPressed: () {},
+                      icon: const Icon(Icons.dangerous),
 
-                          icon: const Icon(Icons.send),
-                          label: const Text('SUBMIT'),
-                        ),
-                      const SizedBox(height: 12),
-                    ],
-                  ),
-                 */
+                      label: const Text('Reject'),
+                    ),
+                    const SizedBox(height: 12),
+                    if(context
+                        .read<BusinessCardCubit>()
+                        .state
+                        .requestStatus == RequestStatus.newRequest)
+                      FloatingActionButton.extended(
+                        heroTag: null,
+                        onPressed: () {
+                          context.read<BusinessCardCubit>()
+                              .getSubmitBusinessCard(user);
+                        },
+                        // formBloc.state.status.isValidated
+                        //       ? () => formBloc.submitPermis`sionRequest()
+                        //       : null,
+                        // formBloc.submitPermissionRequest();
+
+                        icon: const Icon(Icons.send),
+                        label: const Text('SUBMIT'),
+                      ),
+                    const SizedBox(height: 12),
+                  ],
+
+                ),
+
 
                 body: BlocListener<BusinessCardCubit, BusinessCardInitial>(
                   listener: (context, state) {
@@ -165,7 +164,9 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
 
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
+                              child: BlocBuilder<
+                                  BusinessCardCubit,
+                                  BusinessCardInitial>(
                                 builder: (context, state) {
                                   return TextFormField(
 
@@ -196,7 +197,9 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
 
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
+                              child: BlocBuilder<
+                                  BusinessCardCubit,
+                                  BusinessCardInitial>(
                                 builder: (context, state) {
                                   return TextFormField(
                                     // enabled: (widget.objectValidation)
@@ -227,7 +230,9 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
 
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
+                              child: BlocBuilder<
+                                  BusinessCardCubit,
+                                  BusinessCardInitial>(
                                 builder: (context, state) {
                                   return TextFormField(
                                     // enabled: (widget.objectValidation)
@@ -255,7 +260,9 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
 
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
+                              child: BlocBuilder<
+                                  BusinessCardCubit,
+                                  BusinessCardInitial>(
                                 builder: (context, state) {
                                   return TextFormField(
                                     // enabled: (widget.objectValidation)
@@ -283,7 +290,9 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
 
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
+                              child: BlocBuilder<
+                                  BusinessCardCubit,
+                                  BusinessCardInitial>(
                                 builder: (context, state) {
                                   return TextFormField(
                                     // enabled: (widget.objectValidation)
@@ -309,19 +318,19 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                             ),
 
 
-                            FloatingActionButton.extended(
-                              onPressed: () {
-                                context.read<BusinessCardCubit>()
-                                    .getSubmitBusinessCard(
-                                  user, formattedDate,);
-                              },
-                              label: const Text('Submit', style: TextStyle(
-                                  color: Colors.black
-                              )),
-                              icon: const Icon(
-                                  Icons.thumb_up_alt_outlined,
-                                  color: Colors.black),
-                              backgroundColor: Colors.white,),
+                            // FloatingActionButton.extended(
+                            //   onPressed: () {
+                            //     context.read<BusinessCardCubit>()
+                            //         .getSubmitBusinessCard(
+                            //       user,);
+                            //   },
+                            //   label: const Text('Submit', style: TextStyle(
+                            //       color: Colors.black
+                            //   )),
+                            //   icon: const Icon(
+                            //       Icons.thumb_up_alt_outlined,
+                            //       color: Colors.black),
+                            //   backgroundColor: Colors.white,),
                           ],
                         ),
                       ),
@@ -332,11 +341,12 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
             }
         ),
       ),
-    )
     );
   }
 
 }
+
+
 
 
 class LoadingDialog extends StatelessWidget {

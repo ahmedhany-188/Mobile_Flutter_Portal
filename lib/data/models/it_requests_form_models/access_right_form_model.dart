@@ -24,8 +24,7 @@ class AccessRightModel {
       this.requestHrCode,);
 
 
-  AccessRightModel.fromJson(Map<String, dynamic> json)
-      :
+  AccessRightModel.fromJson(Map<String, dynamic> json):
         requestType=json["reqType"],
         status = json['status'],
         usbException=json["usbException"],
@@ -39,6 +38,5 @@ class AccessRightModel {
         filePDF=json["filePdf"],
         comments=json["comments"],
         requestHrCode = json['requestHrCode'];
-
 
 }

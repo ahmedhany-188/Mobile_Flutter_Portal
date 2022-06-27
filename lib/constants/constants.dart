@@ -5,28 +5,38 @@ class GlobalConstants{
   static final DateFormat dateFormatServer = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
 
-  static final List<dynamic> accountsTypesList = [
-    {
-      "value": "USB Exception",
-      "display": "USB Exception",
-    },
-    {
-      "value": "VPN Account",
-      "display": "VPN Account",
-    },
-    {
-      "value": "IP Phone",
-      "display": "IP Phone",
-    },
-    {
-      "value": "Local Admin",
-      "display": "Local Admin",
-    },
-    {
-      "value": "Color Printing",
-      "display": "Color Printing",
-    },
-  ];
+  // static final List<dynamic> accountsTypesList = [
+  //   {
+  //     "value": "USB Exception",
+  //     "display": "USB Exception",
+  //   },
+  //   {
+  //     "value": "VPN Account",
+  //     "display": "VPN Account",
+  //   },
+  //   {
+  //     "value": "IP Phone",
+  //     "display": "IP Phone",
+  //   },
+  //   {
+  //     "value": "Local Admin",
+  //     "display": "Local Admin",
+  //   },
+  //   {
+  //     "value": "Color Printing",
+  //     "display": "Color Printing",
+  //   },
+  // ];
+
+  static final List<String> accountsTypesList = [
+
+     "USB Exception",
+
+    "VPN Account",
+"IP Phone",
+"Local Admin",
+"Color Printing",];
+
 
   static final  List<String> labsType = [
     "ELmokhtaber",

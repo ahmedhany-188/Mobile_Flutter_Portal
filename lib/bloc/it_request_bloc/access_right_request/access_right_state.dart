@@ -13,17 +13,18 @@ class AccessRightInitial extends Equatable {
   const AccessRightInitial({
     this.requestStatus = RequestStatus.newRequest,
     this.requestDate = const RequestDate.pure(),
-    this.requestType=1,
-    this.requestItems  = const RequestDate.pure(),
-    this.fromDate= const RequestDate.pure(),
-    this.toDate= const RequestDate.pure(),
-    this.permanent=false,
-    this.usbException=false,
-    this.vpnAccount=false,
-    this.ipPhone=false,
-    this.localAdmin=false,
-    this.comments="",
-    this.filePDF="",
+    this.requestType = 1,
+    this.requestItems = const RequestDate.pure(),
+    this.requestItemsList = const [],
+    this.fromDate = const RequestDate.pure(),
+    this.toDate = const RequestDate.pure(),
+    this.permanent = false,
+    this.usbException = false,
+    this.vpnAccount = false,
+    this.ipPhone = false,
+    this.localAdmin = false,
+    this.comments = "",
+    this.filePDF = "",
     this.status = FormzStatus.pure,
     this.errorMessage,
     this.successMessage,
@@ -35,6 +36,7 @@ class AccessRightInitial extends Equatable {
   final RequestDate requestDate;
   final int requestType;
   final RequestDate requestItems;
+  final List<String> requestItemsList;
   final RequestDate fromDate;
   final RequestDate toDate;
   final bool permanent;
@@ -54,15 +56,19 @@ class AccessRightInitial extends Equatable {
 
 
   @override
-  List<Object> get props => [requestDate,requestItems,fromDate,toDate,status,requestType,permanent,usbException,localAdmin,vpnAccount,ipPhone,comments];
+  List<Object> get props =>
+      [requestDate, requestItems, fromDate, toDate,
+        status, requestType, permanent, usbException,
+        localAdmin, vpnAccount, ipPhone, comments, requestItemsList];
 
   AccessRightInitial copyWith({
     RequestDate ?requestDate,
     int ?requestType,
     RequestDate ?requestItems,
-     RequestDate ?fromDate,
-     RequestDate ?toDate,
-     bool ?permanent,
+    List<String> ?requestItemsList,
+    RequestDate ?fromDate,
+    RequestDate ?toDate,
+    bool ?permanent,
     bool ?usbException,
     bool ?vpnAccount,
     bool ?ipPhone,
@@ -78,23 +84,24 @@ class AccessRightInitial extends Equatable {
 
   }) {
     return AccessRightInitial(
-      requestDate: requestDate ?? this.requestDate,
-      requestType: requestType ?? this.requestType,
-      requestItems: requestItems ?? this.requestItems,
-      fromDate: fromDate ?? this.fromDate,
-      toDate: toDate ?? this.toDate,
-      permanent: permanent ?? this.permanent,
+        requestDate: requestDate ?? this.requestDate,
+        requestType: requestType ?? this.requestType,
+        requestItems: requestItems ?? this.requestItems,
+        requestItemsList: requestItemsList ?? this.requestItemsList,
+        fromDate: fromDate ?? this.fromDate,
+        toDate: toDate ?? this.toDate,
+        permanent: permanent ?? this.permanent,
         usbException: usbException ?? this.usbException,
         vpnAccount: vpnAccount ?? this.vpnAccount,
         ipPhone: ipPhone ?? this.ipPhone,
         localAdmin: localAdmin ?? this.localAdmin,
-      comments: comments ?? this.comments,
-      filePDF: filePDF ?? this.filePDF,
-      status: status ?? this.status,
-      errorMessage: errorMessage ?? this.errorMessage,
-      successMessage: successMessage ?? this.successMessage,
-      requestStatus: requestStatus ?? this.requestStatus,
-      takeActionStatus: takeActionStatus ?? this.takeActionStatus,
+        comments: comments ?? this.comments,
+        filePDF: filePDF ?? this.filePDF,
+        status: status ?? this.status,
+        errorMessage: errorMessage ?? this.errorMessage,
+        successMessage: successMessage ?? this.successMessage,
+        requestStatus: requestStatus ?? this.requestStatus,
+        takeActionStatus: takeActionStatus ?? this.takeActionStatus,
         statusAction: statusAction ?? this.statusAction
 
     );

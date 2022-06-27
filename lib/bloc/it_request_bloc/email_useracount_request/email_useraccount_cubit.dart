@@ -24,7 +24,6 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
 
   final RequestRepository requestRepository;
 
-
   void getRequestData(RequestStatus requestStatus , String? requestNo) async {
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
@@ -34,21 +33,25 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
       emit(
         state.copyWith(
             requestDate: requestDate,
-            status: Formz.validate([state.userMobile]),
+            status: Formz.validate([state.userMobile,state.hrCodeUser]),
             requestStatus: RequestStatus.newRequest
         ),
       );
     }else{
       final requestData = await requestRepository.getEmailAccount(requestNo!);
-
       final requestDate = RequestDate.dirty(
           GlobalConstants.dateFormatViewed.format(
               GlobalConstants.dateFormatServer.parse(requestData.requestDate!)));
-
       final requestType = requestData.requestType;
+
       final accountType = requestData.accountType;
-      final userMobile = RequestDate.dirty(state.userMobile.value);
-      final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
+      final userMobile = RequestDate.dirty(requestData.userMobile.toString());
+      final hrCodeUser = RequestDate.dirty(requestData.requestHrCode.toString());
+      final fullName = requestData.fullName.toString();
+      final title = requestData.title.toString();
+      final location = requestData.location.toString();
+
+      final comments = requestData.comments ?? "No Comment";
       var status = "Pending";
       if (requestData.status== 0) {
         status = "Pending";
@@ -60,10 +63,14 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
       emit(state.copyWith(
           requestDate: requestDate,
           userMobile: userMobile,
+          hrCodeUser: hrCodeUser,
           requestType: requestType,
           accountType: accountType,
+          fullName: fullName,
+          userLocation: location,
+          userTitle: title,
           comments: comments,
-          status: Formz.validate([state.userMobile]),
+          status: Formz.validate([state.userMobile,state.hrCodeUser]),
           requestStatus: RequestStatus.oldRequest,
           statusAction: status,
           takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
@@ -72,10 +79,32 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
     }
   }
 
+  void hrCodeSubmittedGetData(String hrCode) async {
+    final requestData = await requestRepository.getEmailData(hrCode);
 
-    void submitEmailAccount(MainUserData userData) async{
+    final fullName = requestData.name.toString();
+    final titleEmployee =  requestData.titleName.toString();
+    final locationEmployee= requestData.projectName.toString();
+    final emailEmployee = requestData.email.toString();
+
+    emit(state.copyWith(
+      fullName: fullName,
+      userTitle: titleEmployee,
+      userLocation: locationEmployee,
+      email: emailEmployee,
+      status: Formz.validate([state.userMobile, state.hrCodeUser]),
+    ));
+  }
+
+
+    void submitEmailAccount() async{
 
       final userMobile = RequestDate.dirty(state.userMobile.value);
+      final hrCodeUser = RequestDate.dirty(state.hrCodeUser.value);
+      final fullName = RequestDate.dirty(state.fullName.toString());
+      final title =  RequestDate.dirty(state.userTitle.toString());
+      final location= RequestDate.dirty(state.userLocation.toString());
+      final email= RequestDate.dirty(state.email.toString());
       // var status = "Pending";
       // if(requestData.status == 0){
       //   status = "Pending";
@@ -90,27 +119,33 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
       // "date" -> "2022-05-17T13:47:07"
       DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(requestDate.value);
       final requestDateValue = GlobalConstants.dateFormatServer.format(requestDateTemp);
-      print("requestDateValue $requestDateValue");
 
 
     emit(state.copyWith(
         userMobile: userMobile,
-        status: Formz.validate([userMobile])
+        hrCodeUser:hrCodeUser,
+        status: Formz.validate([userMobile,hrCodeUser])
     ));
 
       if (state.status.isValidated) {
 
         emailUserFormModel=EmailUserFormModel(requestDateValue,
-            state.requestType, state.userMobile.value, state.accountType,false,0,0,"");
+            state.requestType, state.userMobile.value, state.accountType,false,state.hrCodeUser.value,0,"",location.value,
+            title.value,fullName.value,email.value);
         //TODO: creation of Object;
+
+        print("--....--");
 
         try {
           var connectivityResult = await connectivity.checkConnectivity();
           if (connectivityResult == ConnectivityResult.wifi ||
               connectivityResult == ConnectivityResult.mobile) {
 
+
             final accessEmailUserAccount = await requestRepository
                 .postEmailUserAccount(emailUserFormModel: emailUserFormModel);
+
+
             if (accessEmailUserAccount.id == 1) {
               emit(state.copyWith(successMessage: accessEmailUserAccount.requestNo,
                 status: FormzStatus.submissionSuccess,
@@ -118,7 +153,6 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
               );
             } else {
 
-              print("-------------i am here");
               emit(state.copyWith(errorMessage: accessEmailUserAccount.id == 1
                   ? accessEmailUserAccount.result
                   : "An error occurred", status: FormzStatus.submissionFailure,
@@ -149,14 +183,14 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
   void accessRightChanged(int value){
     emit(state.copyWith(
       requestType: value,
-      status: Formz.validate([state.userMobile]),
+      status: Formz.validate([state.userMobile,state.hrCodeUser]),
     ));
   }
 
   void getEmailValue(bool value){
     emit(state.copyWith(
       accountType: value,
-      status: Formz.validate([state.userMobile]),
+      status: Formz.validate([state.userMobile,state.hrCodeUser]),
     ));
   }
 
@@ -164,9 +198,20 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
     final userMobile = RequestDate.dirty(value);
     emit(state.copyWith(
       userMobile: userMobile,
-      status: Formz.validate([userMobile]),
+      status: Formz.validate([userMobile,state.hrCodeUser]),
     ));
   }
+
+
+
+  void hrCodeChanged(String value){
+    final hrCodeUser = RequestDate.dirty(value);
+    emit(state.copyWith(
+      hrCodeUser: hrCodeUser,
+      status: Formz.validate([state.userMobile,hrCodeUser]),
+    ));
+  }
+
 
 
   @override

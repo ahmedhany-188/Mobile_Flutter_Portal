@@ -107,6 +107,15 @@ class RequestDataProviders {
     return rawDurationData;
   }
 
+  Future<http.Response> getEmailAccountData(String hrCode) async{
+    http.Response rawDurationData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/Employee/GetEmployee?HRCode=$hrCode"),
+    );
+    print(rawDurationData.body);
+    return rawDurationData;
+  }
+
   Future<http.Response> getEmbassyLetterRequestData(String hrCode,String requestNo) async{
     http.Response rawDurationData = await http.get(
       Uri.parse(

@@ -257,7 +257,7 @@ class _MainDrawerState extends State<MainDrawer> {
                       buildDivider(),
 
                       buildListTile(
-                        'it request user account',
+                        'it request email account',
                         Icons.format_align_justify_outlined,
                         () {
                           Navigator.pushNamed(
@@ -267,7 +267,7 @@ class _MainDrawerState extends State<MainDrawer> {
 
                       buildDivider(),
                       buildListTile(
-                        'it request access account',
+                        'it request access right',
                         Icons.format_align_justify_outlined,
                         () {
                           Navigator.pushNamed(
