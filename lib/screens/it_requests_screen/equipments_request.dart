@@ -1,27 +1,40 @@
-import 'package:dropdown_search/dropdown_search.dart';
+import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/bloc/it_request_bloc/equipments_request/equipments_items_cubit/equipments_items_cubit.dart';
-import 'package:hassanallamportalflutter/data/models/it_requests_form_models/equipments_models/business_unit_model.dart';
-import 'package:hassanallamportalflutter/data/models/it_requests_form_models/equipments_models/equipments_items_model.dart';
-import 'package:hassanallamportalflutter/data/models/it_requests_form_models/equipments_models/equipments_location_model.dart';
 import 'package:heroicons/heroicons.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 
 import '../../bloc/contacts_screen_bloc/contacts_cubit.dart';
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
-import '../../bloc/it_request_bloc/equipments_request/equipments_cubit/equipments_cubit.dart';
 import '../../data/models/it_requests_form_models/equipments_models/departments_model.dart';
+import '../../bloc/it_request_bloc/equipments_request/equipments_cubit/equipments_cubit.dart';
+import '../../data/models/it_requests_form_models/equipments_models/business_unit_model.dart';
+import '../../data/models/it_requests_form_models/equipments_models/equipments_items_model.dart';
+import '../../data/models/it_requests_form_models/equipments_models/equipments_location_model.dart';
+import '../../data/models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
+import '../../bloc/it_request_bloc/equipments_request/equipments_items_cubit/equipments_items_cubit.dart';
 
 class EquipmentsRequest extends StatelessWidget {
-  const EquipmentsRequest({Key? key}) : super(key: key);
+  EquipmentsRequest({Key? key}) : super(key: key);
   static const routeName = 'request-equipments-screen';
+
+  final GlobalKey<DropdownSearchState<EquipmentsItemModel>> itemFormKey =
+      GlobalKey();
+
+  final TextEditingController controller = TextEditingController();
+
+  final GlobalKey<DropdownSearchState<ContactsDataFromApi>> ownerFormKey =
+      GlobalKey();
+
+  final GlobalKey<DropdownSearchState<String?>> requestForFormKey = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Equipments request')),
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.white,
       body: BlocProvider(
         create: (context) => EquipmentsCubit()..getAll(),
         child: Sizer(
@@ -109,79 +122,170 @@ class EquipmentsRequest extends StatelessWidget {
                       );
                     },
                   ),
-                  ElevatedButton(
-                    onPressed: () {
-                      showAddRequestDialog(sizerContext);
+                  BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+                    builder: (context, state) {
+                      return ElevatedButton(
+                        onPressed: () {
+                          showAddRequestDialog(context);
+                        },
+                        child: const Text('Add Request'),
+                      );
                     },
-                    child: const Text('Add Request'),
                   ),
                   SizedBox(
                     height: 60.h,
-                    child: ListView.builder(
-                        clipBehavior: Clip.hardEdge,
-                        itemCount: 1,
-                        itemBuilder: (listViewContext, index) {
-                          return Dismissible(
-                            key: UniqueKey(),
-                            direction: DismissDirection.endToStart,
-                            behavior: HitTestBehavior.deferToChild,
-                            background: Container(
-                                decoration: const BoxDecoration(
-                                  color: Colors.red,
+                    child: BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+                      buildWhen: (prev, current) {
+                        return prev.chosenList.length !=
+                            current.chosenList.length;
+                      },
+                      builder: (context, state) {
+                        return ListView.builder(
+                          clipBehavior: Clip.hardEdge,
+                          itemCount: state.chosenList.length,
+                          padding: EdgeInsets.all(5.sp),
+                          itemBuilder: (listViewContext, index) {
+                            return Dismissible(
+                              key: UniqueKey(),
+                              confirmDismiss: (dismissDirection) async {
+                                if (dismissDirection ==
+                                    DismissDirection.startToEnd) {
+                                  return false;
+                                } else {
+                                  return await showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return AlertDialog(
+                                        title: const Text('Caution',
+                                            style:
+                                                TextStyle(color: Colors.red)),
+                                        content: const Text(
+                                            'Are you sure you want to delete this item?',
+                                            style:
+                                                TextStyle(color: Colors.black)),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(false);
+                                            },
+                                            child: const Text(
+                                              'Cancel',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(true);
+                                            },
+                                            child: const Text(
+                                              'Delete',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: Colors.red),
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                }
+                              },
+                              onDismissed: (dismissDirection) {
+                                if (dismissDirection ==
+                                    DismissDirection.endToStart) {
+                                  state.chosenList.removeAt(index);
+                                }
+                              },
+                              secondaryBackground: Container(
+                                clipBehavior: Clip.none,
+                                margin: EdgeInsets.only(
+                                  bottom: 8.sp,
                                 ),
-                                padding: EdgeInsets.all(10.sp),
-                                margin:
-                                    EdgeInsets.only(bottom: 8.sp, top: 8.sp),
-                                child: Align(
-                                    alignment: Alignment.centerRight,
-                                    child: Icon(Icons.delete, size: 30.sp))),
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 8.sp, top: 8.sp),
-                              width: 100.w,
-                              height: 20.h,
-                              color: Colors.blueGrey,
-                              child: Padding(
                                 padding: EdgeInsets.all(10.0.sp),
+                                width: 100.w,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(25)),
+                                child: Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Icon(
+                                    Icons.delete,
+                                    size: 30.sp,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                              ),
+                              background: Container(
+                                clipBehavior: Clip.none,
+                                margin: EdgeInsets.only(
+                                  bottom: 8.sp,
+                                ),
+                                padding: EdgeInsets.all(10.0.sp),
+                                width: 100.w,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(25)),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Icon(
+                                    Icons.edit,
+                                    size: 30.sp,
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ),
+                              child: Container(
+                                key: Key('value$index'),
+                                margin: EdgeInsets.only(
+                                  bottom: 8.sp,
+                                ),
+                                padding: EdgeInsets.all(10.0.sp),
+                                width: 100.w,
+                                decoration: BoxDecoration(
+                                    color: Colors.blueGrey,
+                                    borderRadius: BorderRadius.circular(25)),
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Icon(Icons.laptop, size: 25.sp),
-                                        Text(
-                                          'Laptop',
-                                          softWrap: true,
-                                          style: TextStyle(fontSize: 18.sp),
-                                        ),
-                                        Text(
-                                          'replacement',
-                                          softWrap: true,
-                                          style: TextStyle(fontSize: 18.sp),
-                                        ),
-                                        Text(
-                                          'Qty: 1',
-                                          softWrap: true,
-                                          style: TextStyle(fontSize: 18.sp),
-                                        ),
-                                      ],
-                                    ),
-                                    Flexible(
-                                        child: Text(
-                                      'Responsible person: Omar Amir Elsayed mohammed hasan',
+                                    Center(
+                                        child: state.chosenList[index].icon!),
+                                    Text(
+                                      state.chosenList[index].selectedItem!
+                                          .hardWareItemName!
+                                          .trim(),
                                       softWrap: true,
                                       style: TextStyle(fontSize: 18.sp),
-                                    )),
-                                    // Text('Request for:  replacement'),
+                                    ),
+                                    Text(
+                                      state.chosenList[index].requestFor!
+                                          .trim(),
+                                      softWrap: true,
+                                      style: TextStyle(fontSize: 18.sp),
+                                    ),
+                                    Text(
+                                      'Qty: ${state.chosenList[index].quantity}',
+                                      softWrap: true,
+                                      style: TextStyle(fontSize: 18.sp),
+                                    ),
+                                    Text(
+                                      'Owner: ${state.chosenList[index].selectedContact!.name!.trim().toLowerCase()}',
+                                      softWrap: false,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(fontSize: 18.sp),
+                                    ),
                                   ],
                                 ),
                               ),
-                            ),
-                          );
-                        }),
-                  )
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
                 ],
               ),
             );
@@ -281,7 +385,7 @@ class EquipmentsRequest extends StatelessWidget {
       required String id}) {
     return InkWell(
       onTap: () {
-        showEquipmentsDialog(context: context, name: name, id: id);
+        showEquipmentsDialog(context: context, name: name, id: id, icon: icon);
       },
       child: Container(
         width: 20.w,
@@ -305,7 +409,8 @@ class EquipmentsRequest extends StatelessWidget {
   showEquipmentsDialog(
       {required BuildContext context,
       required String name,
-      required String id}) {
+      required String id,
+      required Widget icon}) {
     showDialog(
       context: context,
       useSafeArea: true,
@@ -327,6 +432,7 @@ class EquipmentsRequest extends StatelessWidget {
                 body: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    icon,
                     BlocProvider(
                       create: (context) =>
                           EquipmentsItemsCubit()..getEquipmentsItems(id: id),
@@ -334,35 +440,41 @@ class EquipmentsRequest extends StatelessWidget {
                           EquipmentsItemsInitial>(
                         builder: (context, state) {
                           return buildDynamicDropDownMenu(
-                              items: state.listEquipmentsItem,
-                              listName: 'Select Item');
+                            items: state.listEquipmentsItem,
+                            listName: 'Select Item',
+                            context: context,
+                          );
                         },
                       ),
                     ),
-                    buildTextFormField(),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: buildTextFormField(),
+                    ),
                     BlocBuilder<ContactsCubit, ContactCubitStates>(
                       builder: (context, state) {
                         return buildContactsDropDownMenu(
-                          listName: 'Owner Employee',
-                          items: ContactsCubit.get(context).state.listContacts,
-                        );
+                            listName: 'Owner Employee',
+                            items:
+                                ContactsCubit.get(context).state.listContacts,
+                            context: context);
                       },
                     ),
-                    buildDropDownMenu(items: [
-                      'New Hire',
-                      'Replacement',
-                      'Training',
-                      'Mobilization'
-                    ], listName: 'Request For'),
-                    BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
-                      builder: (context, state) {
-                        return ElevatedButton.icon(
-                          onPressed: () => onSubmitRequest(),
-                          label: const Text('Done'),
-                          icon: const Icon(Icons.done),
-                        );
-                      },
-                    )
+                    buildDropDownMenu(
+                      items: [
+                        'New Hire',
+                        'Replacement',
+                        'Training',
+                        'Mobilization'
+                      ],
+                      listName: 'Request For',
+                      context: context,
+                    ),
+                    ElevatedButton.icon(
+                      onPressed: () => onSubmitRequest(context, icon),
+                      label: const Text('Done'),
+                      icon: const Icon(Icons.done),
+                    ),
                   ],
                 ),
               ),
@@ -376,13 +488,15 @@ class EquipmentsRequest extends StatelessWidget {
   buildContactsDropDownMenu({
     required List<ContactsDataFromApi> items,
     required String listName,
+    required BuildContext context,
   }) {
     return Flexible(
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(5.0),
         child: DropdownSearch<ContactsDataFromApi>(
           items: items,
           itemAsString: (contactKey) => contactKey.name!.trim(),
+          key: ownerFormKey,
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
                 labelText: listName,
@@ -407,12 +521,21 @@ class EquipmentsRequest extends StatelessWidget {
   buildDynamicDropDownMenu(
       {required List<EquipmentsItemModel> items,
       required String listName,
+      required BuildContext context,
       bool showSearch = false}) {
     return Flexible(
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(5.0),
         child: DropdownSearch<EquipmentsItemModel>(
           items: items,
+          key: itemFormKey,
+          autoValidateMode: AutovalidateMode.onUserInteraction,
+          validator: (_) {
+            if (itemFormKey.currentState?.getSelectedItem == null) {
+              return 'Please chose an option';
+            }
+            return null;
+          },
           itemAsString: (equip) => equip.hardWareItemName!,
           dropdownDecoratorProps: DropDownDecoratorProps(
               dropdownSearchDecoration: InputDecoration(
@@ -432,12 +555,14 @@ class EquipmentsRequest extends StatelessWidget {
   buildDropDownMenu(
       {required List<String?> items,
       required String listName,
+      required BuildContext context,
       bool showSearch = false}) {
     return Flexible(
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(5.0),
         child: DropdownSearch<String?>(
           items: items,
+          key: requestForFormKey,
           dropdownDecoratorProps: DropDownDecoratorProps(
               dropdownSearchDecoration: InputDecoration(
                   labelText: listName,
@@ -454,7 +579,6 @@ class EquipmentsRequest extends StatelessWidget {
   }
 
   buildTextFormField() {
-    TextEditingController controller = TextEditingController();
     controller.text = '1';
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -506,5 +630,55 @@ class EquipmentsRequest extends StatelessWidget {
     );
   }
 
-  onSubmitRequest() {}
+  onSubmitRequest(
+    BuildContext context,
+    Widget icon,
+  ) {
+    if ((requestForFormKey.currentState!.getSelectedItem == null) ||
+        (ownerFormKey.currentState!.getSelectedItem == null) ||
+        (itemFormKey.currentState!.getSelectedItem == null)) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return const AlertDialog(
+              title: Text('Fill all the field',
+                  style: TextStyle(color: Colors.red)),
+            );
+          });
+    } else {
+      try {
+        EquipmentsCubit.get(context).setChosenList(
+          chosenObject: SelectedEquipmentsModel(
+            requestFor: requestForFormKey.currentState!.getSelectedItem,
+            selectedContact: ownerFormKey.currentState!.getSelectedItem,
+            quantity: int.parse(controller.text),
+            selectedItem: itemFormKey.currentState!.getSelectedItem,
+            icon: icon,
+          ),
+        );
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      } catch (_) {
+        showDialog(
+            context: context,
+            builder: (_) {
+              return AlertDialog(
+                title:
+                    const Text('Fuck you', style: TextStyle(color: Colors.red)),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text(
+                      'I Know',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
+              );
+            });
+      }
+    }
+  }
 }

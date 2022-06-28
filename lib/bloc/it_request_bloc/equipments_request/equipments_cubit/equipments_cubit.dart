@@ -1,6 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/data/helpers/assist_function.dart';
 
 import '../../../../data/data_providers/general_dio/general_dio.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/business_unit_model.dart';
@@ -34,6 +36,27 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   static EquipmentsCubit get(context) => BlocProvider.of(context);
 
   final Connectivity connectivity = Connectivity();
+
+  void setChosenList({
+    required SelectedEquipmentsModel chosenObject,
+  }) {
+    if (state.chosenList.isEmpty) {
+      emit(state.copyWith(
+        chosenList: [...state.chosenList, chosenObject],
+      ));
+    }
+
+    if (state.chosenList.any((element) =>
+        element.selectedItem?.hardWareItemName ==
+        chosenObject.selectedItem?.hardWareItemName)) {
+        throw 'ew3a';
+    } else {
+      emit(state.copyWith(
+        chosenList: [...state.chosenList, chosenObject],
+      ));
+
+    }
+  }
 
   void getAll() {
     getBusinessUnit();

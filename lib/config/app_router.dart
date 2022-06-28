@@ -206,7 +206,7 @@ class AppRouter {
 
       case EquipmentsRequest.routeName:
         return MaterialPageRoute(
-            builder: (_) => const EquipmentsRequest());
+            builder: (_) => EquipmentsRequest());
 
       default:
         return null;
