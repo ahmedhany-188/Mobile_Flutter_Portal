@@ -1,0 +1,91 @@
+{
+  "project_info": {
+    "project_number": "403496742640",
+    "firebase_url": "https://hassanallamportal-11076-default-rtdb.firebaseio.com",
+    "project_id": "hassanallamportal-11076",
+    "storage_bucket": "hassanallamportal-11076.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403496742640:android:b41c6dfc83eacc57915c35",
+        "android_client_info": {
+          "package_name": "com.hassanallam.hassanallamportalflutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "403496742640-h8d7312slo3f4hj4j9jgo7atv9l197gk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxteIUtdpYN1RRQwnClOZrVK0Gi0XEZLI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "403496742640-h8d7312slo3f4hj4j9jgo7atv9l197gk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "403496742640-89kg837bigciaj84eih56mkk3790asot.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hassanallam.HAHPortal"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403496742640:android:6354a9d506bc7220915c35",
+        "android_client_info": {
+          "package_name": "com.portal.hassanallamportal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "403496742640-k9feo7q6l20sgc6hpllv3l36vteusuao.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.portal.hassanallamportal",
+            "certificate_hash": "f91ea6b702113ab3e2a62e7817b6da566e061d09"
+          }
+        },
+        {
+          "client_id": "403496742640-h8d7312slo3f4hj4j9jgo7atv9l197gk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxteIUtdpYN1RRQwnClOZrVK0Gi0XEZLI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "403496742640-h8d7312slo3f4hj4j9jgo7atv9l197gk.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "403496742640-89kg837bigciaj84eih56mkk3790asot.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.hassanallam.HAHPortal"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

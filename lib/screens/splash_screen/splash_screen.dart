@@ -1,214 +1,286 @@
-import 'dart:ui';
+import 'dart:io';
 
-import 'package:badges/badges.dart';
-import 'package:entry/entry.dart';
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:delayed_display/delayed_display.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:sizer/sizer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.dart';
 import 'package:sprung/sprung.dart';
 
+import '../../bloc/auth_app_status_bloc/app_bloc.dart';
+import '../../data/helpers/assist_function.dart';
+import '../../screens/home_screen/taps_screen.dart';
+import '../../screens/login_screen/auth_screen.dart';
 import '../../widgets/animation/page_transition_animation.dart';
-import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 
-
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
 
-//   @override
-//   State<SplashScreen> createState() => _SplashScreenState();
-// }
-//
-// class _SplashScreenState extends State<SplashScreen>
-//     with TickerProviderStateMixin {
-//   // AnimationController? _controller;
-//   // Animation<Offset>? offset;
-//   //
-//   // @override
-//   // void initState() {
-//   //   super.initState();
-//   //   _controller =
-//   //       AnimationController(vsync: this, duration: const Duration(seconds: 1));
-//   //
-//   //   offset = Tween<Offset>(
-//   //       begin: Offset(Alignment.bottomCenter.x, Alignment.bottomCenter.y),
-//   //       end: Offset(Alignment.topCenter.x, Alignment.topCenter.y))
-//   //       .animate(_controller!);
-//   // }
-//   //
-//   // Future<void> loopOnce(BuildContext context)async{
-//   //   await _controller!.forward();
-//   //   await _controller!.reverse();
-//   //   //we can add duration here
-//   //   //await Future.delayed(Duration(seconds: 4));
-//   //   Navigator.of(context).push(MaterialPageRoute( // since this triggers when the animation is done, no duration is needed
-//   //     builder: (context) => AuthScreen(),
-//   //   ));
-//   // }
-//   AnimationController? _controller;
-//   Animation<double>? _animation;
-//   int state = 0;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     // _controller = AnimationController(
-//     //     vsync: this, duration: const Duration(milliseconds: 3000), value: 0);
-//
-//     // Future.delayed(Duration.zero, () async {
-//     //   FadeAnimation(AuthScreen(), context).navigate();
-//     // });
-//
-//   //   SchedulerBinding.instance!.addPostFrameCallback((_) => PageTransitionAnimation(
-//   //           pageDirection: AuthScreen(),
-//   //           context: context,
-//   //           delayedDuration: 3000,
-//   //           transitionDuration: 1500)
-//   //       .navigateFromBottom()); //i add this to access the context safely.
-//   }
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
+  late AnimationController animation;
+  Animation<double>? _fadeInFadeOut;
+
+  @override
+  void initState() {
+    super.initState();
+    animation = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+    _fadeInFadeOut = Tween<double>(begin: 0.0, end: 1).animate(animation);
+
+    animation.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        animation.reverse();
+      }
+      // else if(status == AnimationStatus.dismissed){
+      //   animation!.clearListeners();
+      // }
+    });
+    animation.forward();
+  }
+
+  @override
+  void dispose() {
+    animation.dispose(); /// must be before super.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    // FlutterNativeSplash.remove();
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+    //     overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   statusBarColor: Colors.transparent,
+    // ));
     final double deviceHeight = MediaQuery.of(context).size.height;
     final double deviceWidth = MediaQuery.of(context).size.width;
-    final double deviceTopPadding =MediaQueryData.fromWindow(window).padding.top;
-    final double resizeElements = deviceHeight * -0.09 - (deviceTopPadding) ;
-    final double resizeCar = deviceHeight * -0.132 - (deviceTopPadding);
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        body: AnimatedSplashScreen.withScreenFunction(
-          splashIconSize: deviceWidth,
-          curve: Sprung.criticallyDamped,
-          disableNavigation: true,
-          duration: 2000,
-          centered: true,
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      body: SafeArea(
+        child: Container(
+          width: deviceWidth,
+          height: deviceHeight,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/S_Background.png'),
+              fit: BoxFit.fill,
+            ),
+          ),
+          child: BlocConsumer<AppUpgraderCubit, AppUpgraderInitial>(
+            listener: (context, state) {
+              if (state.appUpgrader == AppUpgrader.needUpdate) {
+                showDialog(
+                    barrierDismissible: false,
+                    context: context,
+                    builder: (context) => Platform.isAndroid
+                        ? AlertDialog(
+                            content: Text(state.upgrader.android?.message ??
+                                "The update is really important"),
+                            title: const Text("HAH Portal New Version"),
+                            actions: [
+                              TextButton(
+                                child: const Text("Update"),
+                                onPressed: () {
+                                  BlocProvider.of<AppUpgraderCubit>(context)
+                                      .onUpdateAction();
+                                },
+                              ),
+                              if (!(state.upgrader.android?.force ?? false))
+                                TextButton(
+                                  child: const Text("Later"),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    BlocProvider.of<AppUpgraderCubit>(context)
+                                        .onLaterAction();
+                                  },
+                                ),
+                            ],
+                          )
+                        : CupertinoAlertDialog(
+                            title: const Text("HAH Portal New Version"),
+                            content: Text(state.upgrader.ios?.message ??
+                                "The update is really important"),
+                            actions: <Widget>[
+                              CupertinoDialogAction(
+                                isDefaultAction: true,
+                                child: const Text("Update"),
+                                onPressed: () {
+                                  BlocProvider.of<AppUpgraderCubit>(context)
+                                      .onUpdateAction();
+                                },
+                              ),
+                              if (!(state.upgrader.ios?.force ?? false))
+                                CupertinoDialogAction(
+                                  isDestructiveAction: true,
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    BlocProvider.of<AppUpgraderCubit>(context)
+                                        .onLaterAction();
+                                  },
+                                  child: const Text("Later"),
+                                ),
+                            ],
+                          ));
+              }
+            },
+            builder: (context, state) {
+              return BlocBuilder<AppUpgraderCubit, AppUpgraderInitial>(
+                builder: (context, state) {
+                  if (state.appUpgrader == AppUpgrader.noNeedUpdate ||
+                      state.appUpgrader == AppUpgrader.failure) {
+                    return AnimatedSplashScreen.withScreenFunction(
+                        centered: false,
+                        disableNavigation: true,
+                        backgroundColor: Colors.transparent,
+                        curve: Curves.linear,
+                        // duration: 2000,
+                        splashIconSize: deviceHeight,
+                        splashTransition: SplashTransition.fadeTransition,
+                        animationDuration: const Duration(milliseconds: 1000),
+                        splash: Stack(
+                          children: [
+                            Positioned(
+                              top: -40,
+                              left: -55,
+                              child: DelayedDisplay(
+                                delay: const Duration(milliseconds: 1500),
+                                slidingBeginOffset: const Offset(0, 0),
+                                // slidingCurve: Sprung.criticallyDamped,
+                                child: SizedBox(
+                                  width: deviceWidth,
+                                  height: 300,
+                                  child: Image.asset(
+                                    'assets/images/login_image_light.png',
+                                    alignment: Alignment.topLeft,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            FadeTransition(
+                              opacity: _fadeInFadeOut!,
+                              child: SizedBox(
+                                child: Center(
+                                  child: Image.asset(
+                                      'assets/images/login_image_logo.png',
+                                      fit: BoxFit.cover,
+                                      scale: 2),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(20.0),
+                              child: DelayedDisplay(
+                                delay: const Duration(milliseconds: 2500),
+                                slidingCurve: Sprung.criticallyDamped,
+                                slidingBeginOffset: const Offset(0.0, 0.05),
+                                fadeIn: true,
+                                fadingDuration:
+                                    const Duration(milliseconds: 2000),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    FittedBox(
+                                        child: Text(
+                                      checkTimeAmPm()
+                                          ? 'Good Morning'
+                                          : 'Good Evening',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 70,
+                                          letterSpacing: 4,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'RobotoFlex'),
+                                    )),
+                                    const Flexible(
+                                      child: Text(
+                                        'Welcome To Hassan Allam Portal',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 25,
+                                            letterSpacing: 4,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'RobotoFlex'),
+                                      ),
+                                    ),
+                                    const SizedBox(
+                                      height: 350,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        screenFunction: () {
+                          return PageTransitionAnimation(
+                            transitionDuration: 1500,
+                            context: context,
+                            delayedDuration: 3000,
+                            pageDirection: BlocBuilder<AppBloc, AppState>(
+                              builder: (ctx, state) {
+                                switch (state.status) {
+                                  case AppStatus.authenticated:
+                                    FirebaseProvider(state.userData)
+                                        .updateUserOnline(
+                                            AppLifecycleStatus.online);
+                                    return const TapsScreen();
+                                  // return AlertUpgradeShow();
+                                  case AppStatus.unauthenticated:
+                                    return const AuthScreen();
 
-          splash: Sizer(
-            builder: (BuildContext context, Orientation orientation,
-                DeviceType deviceType) {
-              return SizedBox(
-                height: deviceHeight.h - deviceTopPadding.h,
-                child: Stack(
-                  fit: StackFit.expand,
-                  clipBehavior: Clip.none,
-                  // alignment: Alignment.bottomCenter,
-                  children: [
-                    Positioned(
-                      left: 20.sp,
-                      bottom: 250.sp,
-                      // height: 100,
-                      child: Image.asset(
-                        'assets/images/fulllogoblue.png',
-                        scale: 1.sp,
-                      ),
-                    ),
-                    Positioned(
-                      bottom: resizeElements.sp,
-                      // height: 100,
-                      child: Entry.all(
-                        opacity: 1,
-                        curve: Sprung.criticallyDamped,
-                        delay: const Duration(milliseconds: 1000),
-                        duration: const Duration(milliseconds: 1500),
+                                  default:
+                                    return const AuthScreen();
+
+                                }
+                              },
+                            ),
+                          ).navigateWithFading();
+                        });
+                  } else {
+                    return SizedBox(
+                      child: Center(
                         child: Image.asset(
-                          'assets/images/far.png',
-                          width: deviceWidth,
-                          height: deviceHeight.h * 0.1.sp,
-                          fit: BoxFit.fill,
-                        ),
+                            'assets/images/login_image_logo.png',
+                            fit: BoxFit.cover,
+                            scale: 2),
                       ),
-                    ),
-                    Positioned(
-                      bottom: resizeElements.sp,
-                      child: Entry.offset(
-                        // opacity: 1,
-                        curve: Sprung.overDamped,
-                        delay: const Duration(milliseconds: 1000),
-                        duration: const Duration(milliseconds: 1500),
-                        child: Image.asset(
-                          'assets/images/close.png',
-                          width: deviceWidth,
-                          height: deviceHeight.h * 0.1.sp,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                    Positioned(
-                      bottom: resizeCar,
-                      left: 10,
-                      child: Entry.offset(
-                        xOffset: -280,
-                        yOffset: 0,
-                        curve: Curves.bounceIn,
-                        delay: const Duration(milliseconds: 1500),
-                        duration: const Duration(milliseconds: 2000),
-                        child: Badge(
-                          elevation: 0,
-                          badgeColor: Colors.transparent,
-                          position: BadgePosition.topStart(
-                            top: 0.sp * (MediaQuery.of(context).size.aspectRatio *0.7),
-                            start: 10.sp,
-                          ),
-                          animationDuration: Duration(milliseconds: 2000),
-                          animationType: BadgeAnimationType.slide,
-                          badgeContent: Image.asset(
-                            'assets/images/1.png',
-                            scale: 10,
-                          ),
-                          child: Container(
-                            height: 60,
-                            width: 100,
-                            color: Colors.transparent,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                    );
+                  }
+                },
               );
             },
           ),
-          // Column(verticalDirection: VerticalDirection.down, mainAxisSize: MainAxisSize.min,
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-          //   children: [
-          //     Image(
-          //       image: AssetImage('assets/images/logo.png'),
-          //       fit: BoxFit.cover,
-          //       width: deviceWidth * 0.3,
-          //       height: deviceHeight * 0.4,
-          //     ),
-          //     SizedBox(
-          //       height: 10,
-          //     ),
-          //     Text(
-          //       'Hassan Allam Holding',
-          //       style: TextStyle(
-          //           fontSize: 30,
-          //           fontWeight: FontWeight.w900,
-          //           fontFamily: 'assets/fonts/RobotoCondensed-Bold.ttf',
-          //           letterSpacing: 2,
-          //           color: Theme.of(context).colorScheme.primary),
-          //     ),
-          //   ],
-          // ),
-          // pageTransitionType: PageTransitionType.bottomToTop,
-          animationDuration: const Duration(milliseconds: 3000),
-          backgroundColor: Colors.transparent,
-          // nextScreen: AuthScreen(),
-          screenFunction: () {
-            return PageTransitionAnimation(
-                    pageDirection: AuthScreen(),
-                    context: context,
-                    delayedDuration: 500,
-                    transitionDuration: 1300)
-                .navigateFromBottom();
-          },
         ),
       ),
     );
   }
 }
 
-/// PageTransitionAnimation(pageDirection: AuthScreen(), context: context, delayedDuration: 2000, transitionDuration: 3000).navigateFromBottom()
+class AlertUpgradeShow extends StatelessWidget {
+  const AlertUpgradeShow({Key? key}) : super(key: key);
+  // Wrapper Widget
+  @override
+  Widget build(BuildContext context) {
+    Future.delayed(Duration.zero, () => showAlert(context));
+    return Container();
+  }
+
+  void showAlert(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+              content: Text("hi"),
+            ));
+  }
+}

@@ -1,16 +1,10 @@
-import 'dart:io';
-import 'dart:isolate';
 
-import 'package:android_path_provider/android_path_provider.dart';
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:device_info/device_info.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:hassanallamportalflutter/data/helpers/download_pdf.dart';
 import 'package:hassanallamportalflutter/data/repositories/payslip_repository.dart';
 import 'package:intl/intl.dart';
-import 'package:meta/meta.dart';
 
 part 'payslip_state.dart';
 
@@ -32,10 +26,10 @@ class PayslipCubit extends Cubit<PayslipState> {
                   .parse(response)
                   .isAbsolute;
 
-              downloadPdf(response);
-              // _validURL ? downloadPdf(response) : emit(
-              //     PayslipErrorState(
-              //         response));
+              // downloadPdf(response);
+              _validURL ? downloadPdf(response) : emit(
+                  PayslipErrorState(
+                      response));
             }else {
             PayslipErrorState("No internet Connection");
           }

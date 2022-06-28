@@ -1,7 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:hassanallamportalflutter/bloc/internet_connectivity_bloc/internet_cubit.dart';
-import 'package:hassanallamportalflutter/constants/enums.dart';
 import 'package:hassanallamportalflutter/data/models/weather.dart';
 import 'package:hassanallamportalflutter/data/repositories/weather_repository.dart';
 import 'dart:async';

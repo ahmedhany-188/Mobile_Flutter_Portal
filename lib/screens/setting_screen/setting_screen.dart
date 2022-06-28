@@ -37,7 +37,7 @@ class SettingsScreen extends StatelessWidget {
                           .read<SettingsCubit>()
                           .toggleAppNotifications(newValue);
                     },
-                    title: Text('App Notifications'),
+                    title: const Text('App Notifications'),
                   ),
                   SwitchListTile(
                     value: state.emailNotifications,
@@ -46,7 +46,7 @@ class SettingsScreen extends StatelessWidget {
                           .read<SettingsCubit>()
                           .toggleEmailNotifications(newValue);
                     },
-                    title: Text('Email Notifications'),
+                    title: const Text('Email Notifications'),
                   ),
                 ],
               ),
