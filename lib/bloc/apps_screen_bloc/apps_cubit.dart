@@ -52,6 +52,10 @@ class AppsCubit extends Cubit<AppsState> {
     });
   }
 
+  void getAllApps() {
+    emit(AppsSuccessState(appsList));
+  }
+
   void updateApps(String searchString) {
     var splitQuery = searchString.toLowerCase().trim().split(' ');
     var temp = appsList

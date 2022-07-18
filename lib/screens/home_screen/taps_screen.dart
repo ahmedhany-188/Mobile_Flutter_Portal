@@ -181,7 +181,11 @@ class _TapsScreenState extends State<TapsScreen> {
               indicatorColor: Colors.transparent,
               unselectedLabelColor: Colors.white54,
               splashFactory: NoSplash.splashFactory,
-              onTap: (_) => FocusManager.instance.primaryFocus?.unfocus(),
+              onTap: (index) {
+                FocusScope.of(context).requestFocus(FocusNode());
+                // FocusManager.instance.primaryFocus!.unfocus();
+                // SystemChannels.textInput.invokeMethod('TextInput.hide');
+              },
               overlayColor: MaterialStateProperty.resolveWith(
                 (Set states) {
                   return states.contains(MaterialState.focused)

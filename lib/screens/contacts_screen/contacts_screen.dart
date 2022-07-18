@@ -17,7 +17,7 @@ class ContactsScreen extends StatefulWidget {
 }
 
 class _ContactsScreenState extends State<ContactsScreen> {
-  static final UniqueKey uniqueKey = UniqueKey();
+  // static final UniqueKey uniqueKey = UniqueKey();
   TextEditingController textController = TextEditingController();
   FocusNode textFoucus = FocusNode();
 
@@ -223,6 +223,9 @@ class _ContactsScreenState extends State<ContactsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if(textController.text.isEmpty){
+      ContactsCubit.get(context).getAllContacts();
+    }
     var deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -259,13 +262,14 @@ class _ContactsScreenState extends State<ContactsScreen> {
                               }
                             },
                             builder: (ctx, state) {
+
                               return Column(
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: TextFormField(
                                       focusNode: textFoucus,
-                                      key: uniqueKey,
+                                      // key: uniqueKey,
                                       controller: textController,
                                       onChanged: (text) {
                                         ContactsFiltersCubit.get(ctx)
