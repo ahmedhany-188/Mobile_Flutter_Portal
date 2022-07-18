@@ -41,7 +41,7 @@ class RequestRepository {
       "dateFromAmpm": dateFromAmpm,
       "requestHrCode": userData.user?.userHRCode!,
       "dateTo": dateTo,
-      "serviceId": RequestServiceID.PermissionServiceID,
+      "serviceId": RequestServiceID.permissionServiceID,
       "type": type,
       "dateFrom": dateFrom,
       "dateToAmpm": dateToAmpm,
@@ -58,7 +58,7 @@ class RequestRepository {
       {required AccessRightModel accessRightModel}) async {
     var bodyString = jsonEncode(<String, dynamic>
     {
-      "ServiceId": RequestServiceID.AccessRightServiceID,
+      "ServiceId": RequestServiceID.accessRightServiceID,
       "RequestHrCode": userData.employeeData!.userHrCode,
       "Date": accessRightModel.requestDate,
       "FilePdf": (accessRightModel.filePDF != null)
@@ -143,7 +143,7 @@ class RequestRepository {
         {required BusinessCardFormModel businessCardFormModel}) async {
 
     var bodyString=jsonEncode(<String, dynamic>{
-      "serviceId": RequestServiceID.BusinessCardServiceID,
+      "serviceId": RequestServiceID.businessCardServiceID,
       "requestHrCode": userData.employeeData!.userHrCode,
       "ownerHrCode": userData.employeeData!.userHrCode,
       "date": businessCardFormModel.requestDate,
@@ -174,7 +174,7 @@ class RequestRepository {
 
   Future<RequestResponse> postEmailUserAccount({required EmailUserFormModel emailUserFormModel}) async {
     var bodyString = jsonEncode(<String, dynamic>{
-      "ServiceId": RequestServiceID.EmailUserAccountServiceID,
+      "ServiceId": RequestServiceID.emailUserAccountServiceID,
       "RequestHrCode": userData.user!.userHRCode,
       "Date": emailUserFormModel.requestDate,
       "OwnerHrCode": emailUserFormModel.requestHrCode,
@@ -202,7 +202,7 @@ class RequestRepository {
   Future<RequestResponse> postEmbassyLetter({required EmbassyLetterFormModel embassyLetterFormModel}) async {
     var bodyString = jsonEncode(<String, dynamic>
     {
-      "ServiceId": RequestServiceID.EmbassyServiceID,
+      "ServiceId": RequestServiceID.embassyServiceID,
       "RequestHrCode": userData.employeeData!.userHrCode,
       "OwnerHrCode": userData.employeeData!.userHrCode,
       "Date": GlobalConstants.dateFormatServer.format(
@@ -238,7 +238,7 @@ class RequestRepository {
       "requestHrCode": userData.user?.userHRCode!,
       "dateFrom": dateFrom,
       "dateTo": dateTo,
-      "serviceId": RequestServiceID.VacationServiceID,
+      "serviceId": RequestServiceID.vacationServiceID,
       "vacationType": type,
       "responsible": responsibleHRCode,
       "noOfDays": noOfDays,
@@ -259,7 +259,7 @@ class RequestRepository {
         required String dateTo, required String type, required String dateFromAmpm,required String dateToAmpm,
         required String dateFrom,required String hourFrom,required String hourTo}) async {
     var bodyString = jsonEncode(<String, dynamic>{
-      "serviceId": RequestServiceID.BusinessMissionServiceID,
+      "serviceId": RequestServiceID.businessMissionServiceID,
       "requestHrCode": userData.user?.userHRCode!,
       "date": requestDate,
       "comments": comments,

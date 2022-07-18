@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:dio/dio.dart';
 
@@ -100,18 +103,40 @@ class GeneralDio {
     });
   }
 
-  static Future<Response> postEquipmentsRequest() async {
-    String url = 'SelfService/AddITEquipment_M';
-
-    return await dio!.post(url).catchError((err) {
-      throw err;
-    });
-  }
-
   static Future<Response> getEquipmentsItems(String id) async {
     String url = 'Lookup/GetItemsByCategory?Cond=$id';
 
     return await dio!.get(url).catchError((err) {
+      throw err;
+    });
+  }
+
+  static Future<Response> postMasterEquipmentsRequest(
+      dynamic dataToPost) async {
+    String url = 'SelfService/AddITEquipment_M';
+
+    return await dio!
+        .post(url,
+            options: Options(headers: {
+              HttpHeaders.contentTypeHeader: "application/json-patch+json",
+            }),
+            data: dataToPost)
+        .catchError((err) {
+      throw err;
+    });
+  }
+
+  static Future<Response> postDetailEquipmentsRequest(
+      dynamic dataToPost) async {
+    String url = 'SelfService/AddITEquipment_D';
+
+    return await dio!
+        .post(url,
+            options: Options(headers: {
+              HttpHeaders.contentTypeHeader: "application/json-patch+json",
+            }),
+            data: dataToPost)
+        .catchError((err) {
       throw err;
     });
   }

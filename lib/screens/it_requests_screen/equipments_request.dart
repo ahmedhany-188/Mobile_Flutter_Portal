@@ -5,6 +5,7 @@ import 'package:heroicons/heroicons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
+import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/contacts_screen_bloc/contacts_cubit.dart';
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 import '../../data/models/it_requests_form_models/equipments_models/departments_model.dart';
@@ -28,16 +29,26 @@ class EquipmentsRequest extends StatelessWidget {
       GlobalKey();
 
   final GlobalKey<DropdownSearchState<String?>> requestForFormKey = GlobalKey();
+  final GlobalKey<DropdownSearchState<BusinessUnitModel>> businessUnitFormKey =
+      GlobalKey();
+  final GlobalKey<DropdownSearchState<EquipmentsLocationModel>>
+      locationFormKey = GlobalKey();
+  final GlobalKey<DropdownSearchState<DepartmentsModel>> departmentFormKey =
+      GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Equipments request')),
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
-      body: BlocProvider(
-        create: (context) => EquipmentsCubit()..getAll(),
-        child: Sizer(
+    final user =
+        context.select((AppBloc bloc) => bloc.state.userData.employeeData);
+    return BlocProvider(
+      create: (context) => EquipmentsCubit()..getAll(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Equipments request'),
+        ),
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.white,
+        body: Sizer(
           builder: (sizerContext, orientation, deviceType) {
             return SizedBox(
               width: 100.w,
@@ -52,6 +63,7 @@ class EquipmentsRequest extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: DropdownSearch<BusinessUnitModel>(
+                              key: businessUnitFormKey,
                               items: state.listBusinessUnit,
                               itemAsString: (bussinessUnit) =>
                                   bussinessUnit.departmentName!,
@@ -72,6 +84,7 @@ class EquipmentsRequest extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: DropdownSearch<EquipmentsLocationModel>(
+                            key: locationFormKey,
                             items: state.listLocation,
                             itemAsString: (loc) => loc.projectName!,
                             dropdownDecoratorProps:
@@ -100,6 +113,7 @@ class EquipmentsRequest extends StatelessWidget {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: DropdownSearch<DepartmentsModel>(
+                            key: departmentFormKey,
                             items: state.listDepartment,
                             itemAsString: (dept) => dept.departmentName!,
                             dropdownDecoratorProps:
@@ -124,11 +138,15 @@ class EquipmentsRequest extends StatelessWidget {
                   ),
                   BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
                     builder: (context, state) {
-                      return ElevatedButton(
+                      return ElevatedButton.icon(
                         onPressed: () {
                           showAddRequestDialog(context);
                         },
-                        child: const Text('Add Request'),
+                        icon: const Icon(Icons.add),
+                        label: const Text('Request Item'),
+                        style: ElevatedButton.styleFrom(
+                            tapTargetSize: MaterialTapTargetSize.padded,
+                            primary: Colors.amberAccent),
                       );
                     },
                   ),
@@ -288,6 +306,63 @@ class EquipmentsRequest extends StatelessWidget {
                   ),
                 ],
               ),
+            );
+          },
+        ),
+        floatingActionButton:
+            BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+          builder: (context, state) {
+            return FloatingActionButton.extended(
+              label: Row(
+                children: const [
+                  Icon(Icons.save),
+                  Text(' Save Request'),
+                ],
+              ),
+              onPressed: () {
+                if (businessUnitFormKey.currentState!.getSelectedItem == null ||
+                    locationFormKey.currentState!.getSelectedItem == null ||
+                    departmentFormKey.currentState!.getSelectedItem == null) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const AlertDialog(
+                          title: Text('Fill all the field',
+                              style: TextStyle(color: Colors.red)),
+                        );
+                      });
+                } else if (EquipmentsCubit.get(context)
+                    .state
+                    .chosenList
+                    .isEmpty) {
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const AlertDialog(
+                          title: Text('Add items to request IDIOT',
+                              style: TextStyle(color: Colors.red)),
+                        );
+                      });
+                } else {
+                  EquipmentsCubit.get(context).postEquipmentsRequest(
+                    departmentObject:
+                        departmentFormKey.currentState!.getSelectedItem!,
+                    businessUnitObject:
+                        businessUnitFormKey.currentState!.getSelectedItem!,
+                    locationObject:
+                        locationFormKey.currentState!.getSelectedItem!,
+                    userHrCode: user!.userHrCode!,
+                    selectedItem: state.chosenList,
+                  );
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (_) =>
+                          const EquipmentSuccessScreen(text: 'Success')));
+                }
+              },
+              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+              tooltip: 'Save Request',
+              backgroundColor: Colors.green,
+              clipBehavior: Clip.none,
             );
           },
         ),
@@ -463,7 +538,7 @@ class EquipmentsRequest extends StatelessWidget {
                     buildDropDownMenu(
                       items: [
                         'New Hire',
-                        'Replacement',
+                        'Replacement / New Item',
                         'Training',
                         'Mobilization'
                       ],
@@ -680,5 +755,43 @@ class EquipmentsRequest extends StatelessWidget {
             });
       }
     }
+  }
+}
+
+class EquipmentSuccessScreen extends StatelessWidget {
+  const EquipmentSuccessScreen({Key? key, required this.text})
+      : super(key: key);
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Icon(Icons.tag_faces, size: 100),
+            const SizedBox(height: 10),
+            Text(
+              text,
+              style: const TextStyle(fontSize: 54, color: Colors.black),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (_) => EquipmentsRequest())),
+              icon: const Icon(Icons.replay),
+              label: const Text('Create Another Equipment Request'),
+            ),
+            ElevatedButton.icon(
+              onPressed: () => Navigator.pop(context),
+              icon: const Icon(Icons.close),
+              label: const Text('Close'),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

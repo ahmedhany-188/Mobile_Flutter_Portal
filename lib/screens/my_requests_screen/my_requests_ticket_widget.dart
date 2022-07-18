@@ -227,44 +227,44 @@ class MyRequestsItemWidget extends StatelessWidget {
   _pushForRequestDetail(BuildContext context,MyRequestsModelData myRequestsModelData){
     switch (myRequestsModelData.serviceID)
     {
-      case RequestServiceID.VacationServiceID:
+      case RequestServiceID.vacationServiceID:
         {
           Navigator.of(context)
               .pushNamed(VacationScreen.routeName,arguments: {VacationScreen.requestNoKey: myRequestsModelData.requestNo.toString(),VacationScreen.requesterHRCode: myRequestsModelData.requestHRCode});
           break;
         }
-      case RequestServiceID.PermissionServiceID:
+      case RequestServiceID.permissionServiceID:
         {
           Navigator.of(context)
               .pushNamed(PermissionScreen.routeName,arguments: {PermissionScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
 
           break;
         }
-      case RequestServiceID.BusinessMissionServiceID:
+      case RequestServiceID.businessMissionServiceID:
         {
           Navigator.of(context)
               .pushNamed(BusinessMissionScreen.routeName,arguments: {BusinessMissionScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
           break;
         }
-      case RequestServiceID.EmbassyServiceID:
+      case RequestServiceID.embassyServiceID:
         {
           Navigator.of(context)
               .pushNamed(EmbassyLetterScreen.routeName,arguments: {EmbassyLetterScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
           break;
         }
-      case RequestServiceID.AccessRightServiceID:
+      case RequestServiceID.accessRightServiceID:
         {
           Navigator.of(context)
               .pushNamed(AccessRightScreen.routeName,arguments: {AccessRightScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
           break;
         }
-      case RequestServiceID.EmailUserAccountServiceID:
+      case RequestServiceID.emailUserAccountServiceID:
         {
           Navigator.of(context)
               .pushNamed(EmailAndUserAccountScreen.routeName,arguments: {EmailAndUserAccountScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
           break;
         }
-      case RequestServiceID.BusinessCardServiceID:
+      case RequestServiceID.businessCardServiceID:
         {
           Navigator.of(context)
               .pushNamed(BusinessCardScreen.routeName,arguments: {BusinessCardScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
