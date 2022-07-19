@@ -1,10 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_widget.dart';
 import 'package:hassanallamportalflutter/widgets/search/general_search.dart';
 import 'package:hassanallamportalflutter/bloc/get_direction_screen_bloc/get_direction_cubit.dart';
-import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 
 class GetDirectionScreen extends StatefulWidget {
   static const routeName = 'get-direction';
@@ -27,16 +25,13 @@ class _GetDirectionScreenState extends State<GetDirectionScreen> {
 
     return Scaffold(
       appBar: AppBar(),
-      // drawer: MainDrawer(),
       body: BlocProvider(
         create: (context) => GetDirectionCubit()..getDirection(),
         child: BlocConsumer<GetDirectionCubit, GetDirectionState>(
           listener: (context, state) {
             if (state is GetDirectionSuccessState) {
               projectsDirectionData = state.getDirectionList;
-              setState(() {
-
-              });
+              setState(() {});
             }
           },
           builder: (context, state) {
@@ -79,16 +74,21 @@ class _GetDirectionScreenState extends State<GetDirectionScreen> {
                               ((deviceSize.height * 0.24) -
                                   MediaQuery.of(context).viewPadding.top),
                           color: Colors.grey,
-                          child: (projectsSearchResult.isNotEmpty ||
-                                  textController.text.isNotEmpty)
+                          child: (projectsSearchResult.isNotEmpty)
                               ? GetDirectionWidget(projectsSearchResult)
-                              : GetDirectionWidget(projectsDirectionData),
+                              : (textController.text.isEmpty)
+                                  ? GetDirectionWidget(projectsDirectionData)
+                                  : const Center(
+                                      child: Text('No data found'),
+                                    ),
                         )
                       ],
                     ),
                   )
                 : const AlertDialog(
-                    title: Text('Something went wrong!'), content: Text('Kindly check your internet connection'),);
+                    title: Text('Something went wrong!'),
+                    content: Text('Kindly check your internet connection'),
+                  );
           },
         ),
       ),
