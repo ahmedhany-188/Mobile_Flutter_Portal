@@ -6,7 +6,7 @@ Future<void> openMap(double latitude, double longitude) async {
   String appleUrl =
       'https://maps.apple.com/?saddr=30.1074108,31.3818438&daddr=$latitude,$longitude';
   String googleUrl =
-      'https://www.google.com/maps/dir/?api=1&origin=30.1074108,31.3818438&destination=$latitude,$longitude&travelmode=driving&dir_action=navigate';
+      'https://www.google.com/maps/dir/?api=1&destination=$latitude,$longitude&travelmode=driving&dir_action=navigate';
 
   // if (Platform.isIOS) {
   //   if (await canLaunch(appleUrl)) {
@@ -25,10 +25,10 @@ Future<void> openMap(double latitude, double longitude) async {
 
   /// other way to be done
   //  String goo = 'comgooglemaps://?center=$latitude, $longitude';
-  if (await canLaunch(googleUrl)) {
-    await launch(googleUrl);
-  } else if (await canLaunch(appleUrl)) {
-    await launch(appleUrl);
+  if (await canLaunchUrl(Uri.parse(googleUrl))) {
+    await launchUrl(Uri.parse(googleUrl),mode: LaunchMode.externalApplication);
+  } else if (await canLaunchUrl(Uri.parse(appleUrl))) {
+    await launchUrl(Uri.parse(appleUrl),mode: LaunchMode.externalApplication);
   } else {
     throw 'Could not launch url';
   }

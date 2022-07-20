@@ -32,13 +32,14 @@ class ContactsCubit extends Cubit<ContactCubitStates> {
 
   static ContactsCubit get(context) => BlocProvider.of(context);
 
+  List<ContactsDataFromApi> contacts = [];
+
   void getContacts() {
     emit(state.copyWith(
       contactStates: ContactsEnumStates.initial,
     ));
     GeneralDio.getContactListData().then((value) {
       if (value.data != null) {
-        List<ContactsDataFromApi> contacts;
         contacts = List<ContactsDataFromApi>.from(
             value.data.map((model) => ContactsDataFromApi.fromJson(model)));
 
@@ -73,6 +74,13 @@ class ContactsCubit extends Cubit<ContactCubitStates> {
     }).catchError((error) {
       emit(state.copyWith(contactStates: ContactsEnumStates.failed));
     });
+  }
+
+  void getAllContacts(){
+    emit(state.copyWith(
+      contactStates: ContactsEnumStates.success,
+      listContacts: contacts,
+    ));
   }
 
   void updateContacts(List<ContactsDataFromApi> updatedList) {

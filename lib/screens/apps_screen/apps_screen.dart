@@ -14,17 +14,17 @@ class AppsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppsCubit.get(context).getApps();
     return Scaffold(
       backgroundColor: Colors.transparent,
       resizeToAvoidBottomInset: false,
       body: BlocProvider<AppsCubit>.value(
         value: AppsCubit.get(context),
         child: BlocBuilder<AppsCubit, AppsState>(
-          buildWhen: (pre,curr){
-            if(pre != curr){
+          buildWhen: (pre, curr) {
+            if (pre != curr) {
               return true;
-            }
-            else{
+            } else {
               return false;
             }
           },

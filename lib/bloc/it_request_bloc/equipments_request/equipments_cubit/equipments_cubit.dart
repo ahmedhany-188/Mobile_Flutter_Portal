@@ -1,13 +1,15 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:hassanallamportalflutter/constants/request_service_id.dart';
 
 import '../../../../data/data_providers/general_dio/general_dio.dart';
-import '../../../../data/models/it_requests_form_models/equipments_models/business_unit_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/departments_model.dart';
+import '../../../../data/models/it_requests_form_models/equipments_models/business_unit_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/equipments_location_model.dart';
+import '../../../../data/models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
 
-part 'business_unit_state.dart';
+part 'equipments_state.dart';
 
 class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   EquipmentsCubit() : super(const EquipmentsCubitStates()) {
@@ -30,9 +32,89 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       }
     });
   }
+  static EquipmentsCubit get(context) => BlocProvider.of(context);
+
   final Connectivity connectivity = Connectivity();
 
-  static EquipmentsCubit get(context) => BlocProvider.of(context);
+  void postEquipmentsRequest({
+    required DepartmentsModel departmentObject,
+    required BusinessUnitModel businessUnitObject,
+    required EquipmentsLocationModel locationObject,
+    required String userHrCode,
+    required List<SelectedEquipmentsModel> selectedItem,
+  }) {
+    var masterDataPost = {
+      "requestNo": 0,
+      "serviceId": RequestServiceID.equipmentServiceID,
+      "departmentId": businessUnitObject.departmentId,
+      "projectId": '',
+      "locationId": locationObject.projectId.toString(),
+      "requestHrCode": userHrCode,
+      "date": DateTime.now().toString(),
+      "comments": "",
+      "newComer": true,
+      "approvalPathId": 0,
+      "status": 0,
+      "nplusEmail": "",
+      "closedDate": DateTime.now().toString(),
+      "reRequestCode": 0
+    };
+    GeneralDio.postMasterEquipmentsRequest(masterDataPost).then((value) {
+      for (int i = 0; i < selectedItem.length; i++) {
+        int type = 1;
+        switch (selectedItem[i].requestFor) {
+          case 'New Hire':
+            type = 1;
+            break;
+          case 'Replacement / New Item':
+            type = 2;
+            break;
+          case 'Training':
+            type = 3;
+            break;
+          case 'Mobilization':
+            type = 4;
+            break;
+        }
+        Map<String, dynamic> detailedDataPost = {
+          "requestNo": int.parse(value.data['requestNo']),
+          "hardWareItemId":
+              selectedItem[i].selectedItem!.hardWareItemId.toString(),
+          "ownerHrCode": selectedItem[i].selectedContact!.userHrCode.toString(),
+          "type": type,
+          "qty": selectedItem[i].quantity,
+          "chk": true,
+          "estimatePrice": 0,
+          "approved": true,
+          "rejectedHrCode": ""
+        };
+        GeneralDio.postDetailEquipmentsRequest(detailedDataPost)
+            .catchError((e) {
+          throw e;
+        });
+      }
+    }).catchError((e) {
+      throw e;
+    });
+  }
+
+  void setChosenList({
+    required SelectedEquipmentsModel chosenObject,
+  }) {
+    if (state.chosenList.isEmpty) {
+      emit(state.copyWith(
+        chosenList: [...state.chosenList, chosenObject],
+      ));
+    } else if (state.chosenList.any((element) =>
+        element.selectedItem?.hardWareItemName ==
+        chosenObject.selectedItem?.hardWareItemName)) {
+      throw 'ew3a';
+    } else {
+      emit(state.copyWith(
+        chosenList: [...state.chosenList, chosenObject],
+      ));
+    }
+  }
 
   void getAll() {
     getBusinessUnit();
@@ -65,7 +147,6 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       List<EquipmentsLocationModel> location;
       location = List<EquipmentsLocationModel>.from(
           value.data.map((model) => EquipmentsLocationModel.fromJson(model)));
-
       emit(state.copyWith(
           locationEnumStates: EquipmentsEnumState.success,
           listLocation: location));
