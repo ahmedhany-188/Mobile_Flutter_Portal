@@ -90,11 +90,11 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         };
         GeneralDio.postDetailEquipmentsRequest(detailedDataPost)
             .catchError((e) {
-          print('----------- $e');
+          throw e;
         });
       }
     }).catchError((e) {
-      print('---------- $e');
+      throw e;
     });
   }
 
@@ -147,7 +147,6 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       List<EquipmentsLocationModel> location;
       location = List<EquipmentsLocationModel>.from(
           value.data.map((model) => EquipmentsLocationModel.fromJson(model)));
-
       emit(state.copyWith(
           locationEnumStates: EquipmentsEnumState.success,
           listLocation: location));

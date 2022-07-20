@@ -80,7 +80,7 @@ class EquipmentsRequest extends StatelessWidget {
                   ),
                   BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
                     builder: (context, state) {
-                      return Flexible(
+                      return  Flexible(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: DropdownSearch<EquipmentsLocationModel>(
@@ -94,7 +94,7 @@ class EquipmentsRequest extends StatelessWidget {
                             popupProps: PopupProps.bottomSheet(
                               showSearchBox: true,
                               title: AppBar(
-                                  title: const Text('Choose fuckin Name'),
+                                  title: const Text('Choose location'),
                                   shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(20),
@@ -123,7 +123,7 @@ class EquipmentsRequest extends StatelessWidget {
                             popupProps: PopupProps.bottomSheet(
                               showSearchBox: true,
                               title: AppBar(
-                                  title: const Text('Choose fuckin Name'),
+                                  title: const Text('Choose department'),
                                   shape: const RoundedRectangleBorder(
                                       borderRadius: BorderRadius.only(
                                           topLeft: Radius.circular(20),
