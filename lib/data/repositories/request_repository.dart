@@ -205,10 +205,7 @@ class RequestRepository {
       "ServiceId": RequestServiceID.embassyServiceID,
       "RequestHrCode": userData.employeeData!.userHrCode,
       "OwnerHrCode": userData.employeeData!.userHrCode,
-      "Date": GlobalConstants.dateFormatServer.format(
-      "serviceId": RequestServiceID.EmbassyServiceID,
-      "requestHrCode": userData.employeeData!.userHrCode,
-      "ownerHrCode": userData.employeeData!.userHrCode,
+
       "date": GlobalConstants.dateFormatServer.format(
           GlobalConstants.dateFormatViewed.parse(
               embassyLetterFormModel.requestDate!)),
