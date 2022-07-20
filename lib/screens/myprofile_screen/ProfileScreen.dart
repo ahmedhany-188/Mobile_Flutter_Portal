@@ -52,7 +52,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hassan Allam Holding'),
+        title: const Text('My Profile'),
         centerTitle: true,
       ),
 
@@ -76,7 +76,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
               children: [
 
                 Container(
-                  height: height * 0.70,
+                  height: height * 0.55,
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       double innerHeight = constraints.maxHeight;
@@ -213,7 +213,6 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                               },
                             ),
                           ),
-
                           Positioned(
                             top: 0,
                             left: 0,
@@ -334,7 +333,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                           width: double.infinity,
                           height: height * 0.08,
                           child: Text(
-                            'Mobile Number: \n' + user.employeeData!.phone!,
+                            'Mobile Number: \n${user.employeeData!.mobile!}',
                             style: const TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),
                               fontSize: 16,
