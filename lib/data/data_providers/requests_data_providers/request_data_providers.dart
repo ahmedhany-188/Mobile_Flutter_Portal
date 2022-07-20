@@ -48,8 +48,6 @@ class RequestDataProviders {
   }
 
 
-
-
   Future<http.Response> postEmbassyLetterRequest(String bodyString) async {
     return http.post(
       Uri.parse("https://api.hassanallam.com/api/SelfService/AddEmbassyLetter"),

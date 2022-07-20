@@ -2,7 +2,7 @@
 
 class BusinessCardFormModel {
   final String ?requestDate, employeeNameCard, employeeMobil,
-      employeeExt, faxNo, employeeComments,requestHrCode;
+      employeeExt, faxNo, employeeComments, requestHrCode;
   int status;
 
   BusinessCardFormModel(this.requestDate, this.employeeNameCard,
@@ -10,12 +10,11 @@ class BusinessCardFormModel {
       this.status, this.requestHrCode);
 
 
-  BusinessCardFormModel.fromJson(Map<String, dynamic>json)
-      :
+  BusinessCardFormModel.fromJson(Map<String, dynamic>json):
 
         requestDate=json["date"],
         employeeNameCard=json["cardName"],
-        employeeMobil=json["employeeMobil"],
+        employeeMobil=json["mobileNo"],
         employeeExt= json["extNo"],
         faxNo=json["faxNo"],
         employeeComments=json["comments"],

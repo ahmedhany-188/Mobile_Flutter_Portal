@@ -2,7 +2,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
 import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_userprofile.dart';
-
+import '../../widgets/dialogpopoup/dialog_popup_attendance.dart';
 
 // ignore: must_be_immutable
 class AttendanceTicketWidget extends StatelessWidget {
@@ -12,14 +12,6 @@ class AttendanceTicketWidget extends StatelessWidget {
   String timeIn2 = "";
   String timeOut = "";
   String timeOut2 = "";
-  bool holiday = false;
-  String vacation = "";
-  String permission = "";
-  String businessMission = "";
-  String forget = "";
-  String monthPeriod = "";
-  String deduction = "";
-
 
   AttendanceTicketWidget(this.attendanceListData, {Key? key})
       : super(key: key);
@@ -33,13 +25,12 @@ class AttendanceTicketWidget extends StatelessWidget {
         condition: attendanceListData.isNotEmpty,
         builder: (context) =>
             GridView.builder(
-
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               shrinkWrap: true,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 7,
                 // childAspectRatio: (1 / .4),
-                 mainAxisExtent: 90, // here set custom Height You Want
+                mainAxisExtent: 90, // here set custom Height You Want
                 // width between items
                 crossAxisSpacing: 2,
                 // height between items
@@ -47,13 +38,12 @@ class AttendanceTicketWidget extends StatelessWidget {
               ),
               itemCount: attendanceListData.length,
               itemBuilder: (BuildContext context, int index) {
-
                 List<String> date = attendanceListData[index].date
                     .toString().split('-');
 
-
-
-                if(attendanceListData[index].timeIN!=null && attendanceListData[index].timeOUT !=null){
+                if (attendanceListData[index].timeIN != null &&
+                    attendanceListData[index].timeOUT != null
+                ) {
                   timeIn = attendanceListData[index].timeIN
                       .toString()
                       .split(':')[0];
@@ -61,36 +51,17 @@ class AttendanceTicketWidget extends StatelessWidget {
                       .toString()
                       .split(':')[1];
 
-                  timeIn2=timeIn2.replaceAll("AM", "");
-                  timeIn2=timeIn2.replaceAll("PM", "");
+                  timeIn2 = timeIn2.replaceAll("AM", "");
+                  timeIn2 = timeIn2.replaceAll("PM", "");
                   timeOut = attendanceListData[index].timeOUT
                       .toString()
                       .split(':')[0];
                   timeOut2 = attendanceListData[index].timeOUT
                       .toString()
                       .split(':')[1];
-                  timeOut2=timeOut2.replaceAll("AM", "");
-                  timeOut2=timeOut2.replaceAll("PM", "");
-
-                  print("----"+timeIn+"--"+timeIn2+"--");
-                  print("----"+timeOut+"--"+timeOut2+"--");
+                  timeOut2 = timeOut2.replaceAll("AM", "");
+                  timeOut2 = timeOut2.replaceAll("PM", "");
                 }
-
-
-
-                holiday = attendanceListData[index].holiday!;
-                vacation = attendanceListData[index].vacation.toString();
-                permission =attendanceListData[index].permission.toString();
-
-                businessMission =attendanceListData[index].businessMission.toString();
-
-                forget = attendanceListData[index].forget.toString();
-
-                monthPeriod =
-                    attendanceListData[index].monthPeriod.toString();
-
-                deduction =
-                    attendanceListData[index].deduction.toString();
 
                 if (attendanceListData[index].timeIN.toString() !=
                     "null" &&
@@ -102,64 +73,30 @@ class AttendanceTicketWidget extends StatelessWidget {
                       ((int.parse(timeIn) < 8) || (int.parse(timeIn) == 8 &&
                           int.parse(timeIn2) < 31))) {
                     return SizedBox(
-
                       width: double.infinity,
                       child: InkWell(
                           onTap: () {
-                             DialogPopUpUserProfile();
+                            showDialog(context: context,
+                                builder: (BuildContext context) {
+                                  return DialogPopUpAttendance(
+                                      attendanceListData: attendanceListData[index]);
+                                }
+                            );
                           },
-
                           child: Column(children: [
                             Text(
                                 "${date[1]}/${date[2].substring(0, 2)}",
                                 style: const TextStyle(color: Colors.white,)),
 
-                            Container(
-
-
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(5),
-                                    topRight: Radius.circular(5)),
-                                color: Colors.lightGreen,
-                              ),
-                              alignment: Alignment.center,
-                              width: double.infinity,
-                              height: 30,
-
-
-                              child: Text(
-                                  attendanceListData[index].timeIN.toString(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 11,)),
-
-                            ),
-
+                            attendanceContainer(attendanceListData[index]
+                                .timeIN.toString(), "in", "green"),
                             Container(height: 5, color: Colors.white,),
-                            Container(
-                              width: double.infinity,
-                              alignment: Alignment.center,
-                              height: 30,
-                              decoration: const BoxDecoration(
-                                borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(5),
-                                    bottomRight: Radius.circular(5)),
-                                color: Colors.lightGreen,
-                              ),
-                              child: Text(
-                                  attendanceListData[index].timeOUT.toString(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 11,)),
-                            ),
+                            attendanceContainer(attendanceListData[index]
+                                .timeOUT.toString(), "out", "green"),
                           ])
-
                       ),
-
                     );
                   }
-
                   else if
                   (((int.parse(timeOut) >= 5) || (int.parse(timeOut) == 4 &&
                       int.parse(timeOut2) == 59)) &&
@@ -167,54 +104,25 @@ class AttendanceTicketWidget extends StatelessWidget {
                           int.parse(timeIn2) > 30))) {
                     return SizedBox(
                       width: double.infinity,
-                        child: InkWell(
-                          onTap: () {
-                             DialogPopUpUserProfile();
-                          },
-                      child: Column(children: [
-
-                        Text("${date[1]}/${date[2].substring(0, 2)}",
-                            style: const TextStyle(color: Colors.white)),
-
-                        Container(
-                          height: 30,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(5),
-                                topRight: Radius.circular(5)),
-                            color: Colors.red,
-                          ),
-                          alignment: Alignment.center,
-                          width: double.infinity,
-                          child: Text(attendanceListData[index].timeIN.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                            )),
-                        ),
-                        Container(height: 5,color:Colors.white,),
-
-                        Container(
-                          height: 30,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(5),
-                                bottomRight: Radius.circular(5)),
-                            color: Colors.lightGreen,
-                          ),
-                          alignment: Alignment.center,
-                          width: double.infinity,
-                          child: Text(attendanceListData[index].timeOUT.toString(),
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 11,
-                            )),
-
-                        ),
-
-
-                      ]),
-                        ),
+                      child: InkWell(
+                        onTap: () {
+                          showDialog(context: context,
+                              builder: (BuildContext context) {
+                                return DialogPopUpAttendance(
+                                    attendanceListData: attendanceListData[index]);
+                              }
+                          );
+                        },
+                        child: Column(children: [
+                          Text("${date[1]}/${date[2].substring(0, 2)}",
+                              style: const TextStyle(color: Colors.white)),
+                          attendanceContainer(attendanceListData[index]
+                              .timeIN.toString(), "in", "red"),
+                          Container(height: 5, color: Colors.white,),
+                          attendanceContainer(attendanceListData[index]
+                              .timeOUT.toString(), "out", "green"),
+                        ]),
+                      ),
                     );
                   }
                   else if
@@ -227,139 +135,173 @@ class AttendanceTicketWidget extends StatelessWidget {
                               (int.parse(timeIn) == 8 &&
                                   int.parse(timeIn2) < 31))) {
                     return SizedBox(
-
                       width: double.infinity,
-                        child: InkWell(
+                      child: InkWell(
                         onTap: () {
-                           DialogPopUpUserProfile();
-                    },
-                      child: Column(children: [
-
-                      Text("${date[1]}/${date[2].substring(0, 2)}",
-                          style: const TextStyle(color: Colors.white)),
-
-                      Container(
-                        height: 30,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(5),
-                              topRight: Radius.circular(5)),
-                          color: Colors.lightGreen,
-                        ),
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        child: Text(
-                            attendanceListData[index].timeIN.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                          )),),
-                      Container(height: 5,color:Colors.white,),
-
-                      Container(
-                        height: 30,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(5),
-                              bottomRight: Radius.circular(5)),
-                          color: Colors.red,
-                        ),
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        child: Text(
-                            attendanceListData[index].timeOUT.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                          )),),
-
-
-                    ]),
-                        ),
+                          showDialog(context: context,
+                              builder: (BuildContext context) {
+                                return DialogPopUpAttendance(
+                                    attendanceListData: attendanceListData[index]);
+                              }
+                          );
+                        },
+                        child: Column(children: [
+                          Text("${date[1]}/${date[2].substring(0, 2)}",
+                              style: const TextStyle(color: Colors.white)),
+                          attendanceContainer(
+                              attendanceListData[index].timeIN.toString(),
+                              "in", "green"),
+                          Container(height: 5, color: Colors.white,),
+                          attendanceContainer(
+                              attendanceListData[index].timeOUT.toString(),
+                              "out", "red"),
+                        ]),
+                      ),
                     );
                   }
                   else {
                     return SizedBox(
                       width: double.infinity,
-                    child: InkWell(
-                    onTap: () {
-                       DialogPopUpUserProfile();
-                    },
-                       child: Column(children: [
+                      child: InkWell(
+                        onTap: () {
+                          showDialog(context: context,
+                              builder: (BuildContext context) {
+                                return DialogPopUpAttendance(
+                                    attendanceListData: attendanceListData[index]);
+                              }
+                          );
+                        },
+                        child: Column(children: [
 
-                      Text(
-                          "${date[1]}/${date[2].substring(0, 2)}",
-                          style: const TextStyle(color: Colors.white)),
-                      Container(
-                        height: 30,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(5),
-                              topRight: Radius.circular(5)),
-                          color: Colors.red,
-                        ),
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        child: Text(
-                            attendanceListData[index].timeIN.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                          )),),
-
-                      Container(height: 5,color:Colors.white,),
-
-                      Container(
-                        height: 30,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.only(
-                              bottomLeft: Radius.circular(5),
-                              bottomRight: Radius.circular(5)),
-                          color: Colors.red,
-                        ),
-                        alignment: Alignment.center,
-                        width: double.infinity,
-                        child: Text(
-                            attendanceListData[index].timeOUT.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 11,
-                          )),),
-                    ]),
-                    ),
+                          Text(
+                              "${date[1]}/${date[2].substring(0, 2)}",
+                              style: const TextStyle(color: Colors.white)),
+                          attendanceContainer(
+                              attendanceListData[index].timeIN.toString(),
+                              "in", "red"),
+                          Container(height: 5, color: Colors.white,),
+                          attendanceContainer(
+                              attendanceListData[index].timeOUT.toString(),
+                              "out", "red"),
+                        ]),
+                      ),
                     );
                   }
+                }
+                else if (attendanceListData[index].timeIN.toString() !=
+                    "null" &&
+                    attendanceListData[index].timeOUT.toString() ==
+                        "null" || attendanceListData[index].timeIN.toString() ==
+                    "null" &&
+                    attendanceListData[index].timeOUT.toString() !=
+                        "null") {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(context: context,
+                            builder: (BuildContext context) {
+                              return DialogPopUpAttendance(attendanceListData: attendanceListData[index]);});},
+                      child: Column(children: [
+                        Text(
+                            "${date[1]}/${date[2].substring(0, 2)}",
+                            style: const TextStyle(color: Colors.white)),
+                        attendanceContainer(
+                            attendanceListData[index].timeIN.toString(),
+                            "in", "red"),
+                        Container(height: 5, color: Colors.white,),
+                        attendanceContainer(attendanceListData[index].timeOUT.toString(), "out", "red"),]),),);
                 }
                 else {
                   return SizedBox(
                     width: double.infinity,
-                  child: InkWell(
-                  onLongPress: () {
-                    const DialogPopUpUserProfile();
-                  },
-                    child: Column(children: [
-                      Text("${date[1]}/${date[2].substring(0, 2)}",
-                          style: const TextStyle(color: Colors.white)),
-                      Container(
-
-                        height: 65,
-                        decoration: const BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                              Radius.circular(5)),
-                          color: Colors.grey,
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(context: context,
+                            builder: (BuildContext context) {return DialogPopUpAttendance(attendanceListData: attendanceListData[index]);});},
+                      child: Column(children: [
+                        Text("${date[1]}/${date[2].substring(0, 2)}",
+                            style: const TextStyle(color: Colors.white)),
+                        Container(
+                            height: 30,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(5),
+                                  topRight: Radius.circular(5)),
+                              color: Colors.grey,
+                            ),
+                            alignment: Alignment.center,
+                            width: double.infinity,
                         ),
-                        alignment: Alignment.center,
-                        width: double.infinity,),
-                    ]),
-                  ),
+                        Container(height: 5, color: Colors.white,),
+                        Container(
+                            height: 30,
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(5),
+                                  bottomLeft: Radius.circular(5)),
+                              color: Colors.grey,
+                            ),
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                        ),
+                      ]),
+                    ),
                   );
                 }
               },
-
             ),
-        fallback: (context) => const Center(child: LinearProgressIndicator()),
+        fallback:  null,   //(context) => const Center(child: LinearProgressIndicator()),
+      ),
+    );
+  }
+}
+
+  Container attendanceContainer(String timeText,String action, String color) {
+    return Container(
+      height: 30,
+      decoration: BoxDecoration(
+        borderRadius: action == "in" ? const BorderRadius.only(
+            topLeft: Radius.circular(5),
+            topRight: Radius.circular(5)) : const BorderRadius.only(
+            bottomLeft: Radius.circular(5),
+            bottomRight: Radius.circular(5)),
+        color: color == "green" ? Colors.lightGreen : Colors.red,
+      ),
+      alignment: Alignment.center,
+      width: double.infinity,
+      child: Text(
+          timeText,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 11,
+          )
       ),
     );
   }
 
+IconButton iconContainer(MyAttendanceModel attendanceModel) {
+  if (attendanceModel.vacation != null) {
+    return IconButton(icon: const Icon(
+        Icons.beach_access
+    ), onPressed: () {},);
+  } else if (attendanceModel.businessMission != null) {
+    return IconButton(icon: const Icon(
+        Icons.hail
+    ), onPressed: () {},);
+  } else if (attendanceModel.permission != null) {
+    return IconButton(icon: const Icon(
+        Icons.hail
+    ), onPressed: () {},);
+  } else if (attendanceModel.forget != null) {
+    return IconButton(icon: const Icon(
+        Icons.timelapse
+    ), onPressed: () {},);
+  }
+  else {
+    return IconButton(icon: const Icon(
+      Icons.free_cancellation
+
+    ), onPressed: () {},);
+  }
 }

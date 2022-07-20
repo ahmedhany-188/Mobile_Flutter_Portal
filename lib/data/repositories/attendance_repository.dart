@@ -14,13 +14,10 @@ class AttendanceRepository {
     final http.Response rawAttendance = await attendanceDataProvider.getAttendanceList(hrCode,monthNumber);
     // final attendanceData = rawWeather.body.toString();
     // final WeatherData weather = WeatherData.fromJson(json);
-    print("-------step2");
     // return attendanceData;
     final json = await jsonDecode(rawAttendance.body);
-    print("-------step3");
     List<MyAttendanceModel> myAttendanceData = List<MyAttendanceModel>.from(
         json.map((model) => MyAttendanceModel.fromJson(model)));
-    print("-------step4");
     return myAttendanceData;
   }
 

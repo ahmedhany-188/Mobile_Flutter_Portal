@@ -22,10 +22,17 @@ class VacationCubit extends Cubit<VacationInitial> {
   final RequestRepository _requestRepository;
 
 
-  void getRequestData({required RequestStatus requestStatus , String? requestNo,String? requesterHRCode}) async {
+  void getRequestData({required RequestStatus requestStatus , String? requestNo,String? requesterHRCode,String? date}) async {
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
       String formattedDate = GlobalConstants.dateFormatViewed.format(now);
+
+      if(date!=null){
+        formattedDate = GlobalConstants.dateFormatViewed.format(DateTime.parse(date));
+      }else{
+        formattedDate = GlobalConstants.dateFormatViewed.format(now);
+      }
+
       final requestDate = RequestDate.dirty(formattedDate);
       emit(
         state.copyWith(

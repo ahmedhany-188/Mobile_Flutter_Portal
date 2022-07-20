@@ -12,8 +12,11 @@ class BusinessCardScreen extends StatefulWidget{
 
   static const routeName = "/business-account-screen";
   static const requestNoKey = 'request-No';
-  const BusinessCardScreen({Key? key,this.requestNo}) : super(key: key);
+  static const requestHrCode = 'request-HrCode';
+
+  const BusinessCardScreen({Key? key,this.requestNo,this.requestedHrCode}) : super(key: key);
   final requestNo;
+  final requestedHrCode;
 
   @override
   State<BusinessCardScreen> createState() => _BusinessCardScreen();
@@ -43,12 +46,11 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
         ),
       ),
 
-      child:
-      BlocProvider<BusinessCardCubit>(
+      child: BlocProvider<BusinessCardCubit>(
         create: (businessCardContext) =>
         currentRequestNo == null ? (BusinessCardCubit(RequestRepository(user))
-          ..getRequestData(RequestStatus.newRequest, ""))
-            : (BusinessCardCubit(RequestRepository(user))
+          ..getRequestData(RequestStatus.newRequest, "")) : (BusinessCardCubit(
+            RequestRepository(user))
           ..getRequestData(RequestStatus.oldRequest,
               currentRequestNo[BusinessCardScreen.requestNoKey])),
         // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])
@@ -145,11 +147,27 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                         child: Column(
                           children: [
 
+                            if(state.requestStatus ==
+                                RequestStatus.oldRequest)Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 8, vertical: 8),
+
+                              child: BlocBuilder<
+                                  BusinessCardCubit,
+                                  BusinessCardInitial>(
+
+                                  builder: (context, state) {
+                                    return Text(
+                                      state.statusAction ?? "Pending",
+                                    );
+                                  }
+                              ),
+                            ),
+
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
-                                initialValue: formattedDate,
-                                key: UniqueKey(),
+                                initialValue: state.requestDate.value,
                                 readOnly: true,
                                 decoration: const InputDecoration(
                                   floatingLabelAlignment:
@@ -167,17 +185,18 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               child: BlocBuilder<
                                   BusinessCardCubit,
                                   BusinessCardInitial>(
+                                // buildWhen: (previous, current) {
+                                //   return (state.requestStatus ==
+                                //       RequestStatus.newRequest);
+                                // },
                                 builder: (context, state) {
                                   return TextFormField(
-
-                                    // enabled: (widget.objectValidation)
-                                    //     ? false
-                                    //     : true,
-
+                                    initialValue: state.employeeNameCard.value,
+                                    readOnly: state.requestStatus ==
+                                        RequestStatus.oldRequest ? true : false,
                                     onChanged: (value) =>
                                         context.read<BusinessCardCubit>()
                                             .nameCard(value),
-                                    // initialValue: state.userMobile.value,
                                     keyboardType: TextInputType.text,
                                     decoration: InputDecoration(
                                       floatingLabelAlignment:
@@ -194,23 +213,28 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               ),
                             ),
 
-
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: BlocBuilder<
                                   BusinessCardCubit,
                                   BusinessCardInitial>(
+                                buildWhen: (previous, current) {
+                                  return (state.requestStatus ==
+                                      RequestStatus.newRequest);
+                                },
                                 builder: (context, state) {
                                   return TextFormField(
                                     // enabled: (widget.objectValidation)
                                     //     ? false
                                     //     : true,
+                                    initialValue: state.employeeMobile.value,
 
+                                    readOnly: state.requestStatus ==
+                                        RequestStatus.oldRequest ? true : false,
 
                                     onChanged: (value) =>
                                         context.read<BusinessCardCubit>()
                                             .employeeMobile(value),
-                                    // initialValue: state.userMobile.value,
                                     keyboardType: TextInputType.phone,
                                     decoration: InputDecoration(
                                       floatingLabelAlignment:
@@ -233,18 +257,24 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               child: BlocBuilder<
                                   BusinessCardCubit,
                                   BusinessCardInitial>(
+                                buildWhen: (previous, current) {
+                                  return (state.requestStatus ==
+                                      RequestStatus.newRequest);
+                                },
                                 builder: (context, state) {
                                   return TextFormField(
                                     // enabled: (widget.objectValidation)
                                     //     ? false
                                     //     : true,
+                                    initialValue: state.employeeExt,
 
+                                    readOnly: state.requestStatus ==
+                                        RequestStatus.oldRequest ? true : false,
 
                                     onChanged: (value) =>
                                         context.read<BusinessCardCubit>()
                                             .employeeExt(value),
-                                    // initialValue: state.userMobile.value,
-                                    keyboardType: TextInputType.text,
+                                    keyboardType: TextInputType.number,
                                     decoration: const InputDecoration(
                                       floatingLabelAlignment:
                                       FloatingLabelAlignment.start,
@@ -263,18 +293,23 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               child: BlocBuilder<
                                   BusinessCardCubit,
                                   BusinessCardInitial>(
+                                buildWhen: (previous, current) {
+                                  return (state.requestStatus ==
+                                      RequestStatus.newRequest);
+                                },
                                 builder: (context, state) {
                                   return TextFormField(
                                     // enabled: (widget.objectValidation)
                                     //     ? false
                                     //     : true,
+                                    initialValue: state.employeeFaxNO,
 
-
+                                    readOnly: state.requestStatus ==
+                                        RequestStatus.oldRequest ? true : false,
                                     onChanged: (value) =>
                                         context.read<BusinessCardCubit>()
                                             .employeeFaxNO(value),
-                                    // initialValue: state.userMobile.value,
-                                    keyboardType: TextInputType.text,
+                                    keyboardType: TextInputType.number,
                                     decoration: const InputDecoration(
                                       floatingLabelAlignment:
                                       FloatingLabelAlignment.start,
@@ -293,17 +328,22 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               child: BlocBuilder<
                                   BusinessCardCubit,
                                   BusinessCardInitial>(
+                                buildWhen: (previous, current) {
+                                  return (state.requestStatus ==
+                                      RequestStatus.newRequest);
+                                },
                                 builder: (context, state) {
                                   return TextFormField(
                                     // enabled: (widget.objectValidation)
                                     //     ? false
                                     //     : true,
+                                    initialValue: state.comment,
 
-
+                                    readOnly: state.requestStatus ==
+                                        RequestStatus.oldRequest ? true : false,
                                     onChanged: (value) =>
                                         context.read<BusinessCardCubit>()
                                             .EemployeeComment(value),
-                                    // initialValue: state.userMobile.value,
                                     keyboardType: TextInputType.text,
                                     decoration: const InputDecoration(
                                       floatingLabelAlignment:
@@ -316,21 +356,6 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                                 },
                               ),
                             ),
-
-
-                            // FloatingActionButton.extended(
-                            //   onPressed: () {
-                            //     context.read<BusinessCardCubit>()
-                            //         .getSubmitBusinessCard(
-                            //       user,);
-                            //   },
-                            //   label: const Text('Submit', style: TextStyle(
-                            //       color: Colors.black
-                            //   )),
-                            //   icon: const Icon(
-                            //       Icons.thumb_up_alt_outlined,
-                            //       color: Colors.black),
-                            //   backgroundColor: Colors.white,),
                           ],
                         ),
                       ),
@@ -350,12 +375,13 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
 
 
 class LoadingDialog extends StatelessWidget {
-  static void show(BuildContext context, {Key? key}) => showDialog<void>(
-    context: context,
-    useRootNavigator: false,
-    barrierDismissible: false,
-    builder: (_) => LoadingDialog(key: key),
-  ).then((_) => FocusScope.of(context).requestFocus(FocusNode()));
+  static void show(BuildContext context, {Key? key}) =>
+      showDialog<void>(
+        context: context,
+        useRootNavigator: false,
+        barrierDismissible: false,
+        builder: (_) => LoadingDialog(key: key),
+      ).then((_) => FocusScope.of(context).requestFocus(FocusNode()));
 
   static void hide(BuildContext context) => Navigator.pop(context);
 
@@ -399,8 +425,10 @@ class SuccessScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             ElevatedButton.icon(
-              onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => const BusinessCardScreen())),
+              onPressed: () =>
+                  Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                          builder: (_) => const BusinessCardScreen())),
               icon: const Icon(Icons.replay),
               label: const Text('Create Another Permission Request'),
             ),

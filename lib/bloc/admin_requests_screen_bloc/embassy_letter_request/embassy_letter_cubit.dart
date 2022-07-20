@@ -99,6 +99,8 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
       passportNumber: passportNO,
       status: Formz.validate([fromDate, toDate, passportNO]),
     ));
+
+    print("salary:   "+state.salary+  "     "+state.comments.toString());
     if (state.status.isValidated) {
       embassyLetterFormModel = EmbassyLetterFormModel(state.requestDate.value,
           state.purpose,
@@ -113,6 +115,9 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
           final embassyLetterResponse = await _requestRepository.postEmbassyLetter(embassyLetterFormModel: embassyLetterFormModel);
+
+          print("-------"+embassyLetterResponse.requestNo.toString());
+
           if (embassyLetterResponse.id == 1) {
             emit(
               state.copyWith(

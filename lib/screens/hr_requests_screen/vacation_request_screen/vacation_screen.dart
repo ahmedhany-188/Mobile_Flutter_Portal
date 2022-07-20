@@ -15,11 +15,12 @@ class VacationScreen extends StatefulWidget {
 
   static const routeName = 'vacation-page';
   static const requestNoKey = 'request-No';
+  static const requestDateAttendance = 'date-Attendance';
   static const requesterHRCode = 'requester-HRCode';
 
   const VacationScreen({Key? key, this.requestData}) : super(key: key);
 
-  final dynamic requestData;
+  final  requestData;
 
   @override
   State<VacationScreen> createState() => _VacationScreenState();
@@ -53,7 +54,8 @@ class _VacationScreenState extends State<VacationScreen> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<VacationCubit>(create: (vacationContext) =>
-          currentRequestData == null ? (VacationCubit(RequestRepository(userMainData))..getRequestData(requestStatus: RequestStatus.newRequest))
+          currentRequestData[VacationScreen.requestNoKey] == "0" ?
+          (VacationCubit(RequestRepository(userMainData))..getRequestData(requestStatus: RequestStatus.newRequest,date:currentRequestData[VacationScreen.requestDateAttendance]))
               :(VacationCubit(RequestRepository(userMainData))..getRequestData(requestStatus: RequestStatus.oldRequest, requestNo: currentRequestData[VacationScreen.requestNoKey],requesterHRCode: currentRequestData[VacationScreen.requesterHRCode]))),
             // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
           BlocProvider<ResponsibleVacationCubit>(
@@ -71,6 +73,8 @@ class _VacationScreenState extends State<VacationScreen> {
                 floatingActionButton: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
+
+
                     if(state.requestStatus == RequestStatus.oldRequest &&
                         state.takeActionStatus == TakeActionStatus.takeAction )
                       FloatingActionButton.extended(

@@ -4,7 +4,7 @@ part of 'business_card_cubit.dart';
 abstract class BusinessCardState  extends Equatable{
 
   const BusinessCardState();
-  const BusinessCardState.copy({
+  const BusinessCardState.copyWith({
     required RequestDate employeeNameCard,required RequestDate employeeMobile,
     required FormzStatus status});
 
@@ -16,9 +16,9 @@ class BusinessCardInitial  extends Equatable {
     this.requestStatus = RequestStatus.newRequest,
     this.employeeNameCard = const RequestDate.pure(),
     this.employeeMobile = const RequestDate.pure(),
-    this.employeeExt,
-    this.employeeFaxNO,
-    this.comment,
+    this.employeeExt="",
+    this.employeeFaxNO="",
+    this.comment="",
     this.status = FormzStatus.pure,
     this.errorMessage,
     this.successMessage,
@@ -33,15 +33,15 @@ class BusinessCardInitial  extends Equatable {
   final RequestStatus? requestStatus;
   final RequestDate employeeNameCard;
   final RequestDate employeeMobile;
-  final String ?employeeExt;
-  final String ?employeeFaxNO;
-  final String ?comment;
+  final String employeeExt;
+  final String employeeFaxNO;
+  final String comment;
   final FormzStatus status;
   final String? errorMessage;
   final String? successMessage;
 
   @override
-  List<Object> get props => [employeeNameCard,employeeMobile,status];
+  List<Object> get props => [employeeNameCard,employeeMobile,employeeFaxNO,employeeExt,comment,status];
 
 
 

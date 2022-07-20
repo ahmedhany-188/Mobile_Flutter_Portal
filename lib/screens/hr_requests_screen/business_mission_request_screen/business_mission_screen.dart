@@ -9,12 +9,15 @@ import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
 
 class BusinessMissionScreen extends StatefulWidget {
+
   static const routeName = 'business-mission-page';
   static const requestNoKey = 'request-No';
+  static const requestDateAttendance = 'date-attendance';
+  static const requesterHRCode = 'requester-HRCode';
 
-  const BusinessMissionScreen({Key? key, this.requestNo}) : super(key: key);
+  const BusinessMissionScreen({Key? key, this.requestData}) : super(key: key);
 
-  final requestNo;
+  final requestData;
 
 @override
   State<BusinessMissionScreen> createState() => _BusinessMissionScreenState();
@@ -23,14 +26,11 @@ class BusinessMissionScreen extends StatefulWidget {
 class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
   @override
   Widget build(BuildContext context) {
-    // final user = context.select((AppBloc bloc) =>
-    // bloc.state.userData.employeeData);
-    // final TextEditingController commentController = TextEditingController();
 
     final userMainData = context.select((AppBloc bloc) =>
     bloc.state.userData);
 
-    final currentRequestNo = widget.requestNo;
+    final currentRequestData = widget.requestData;
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -42,12 +42,9 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
       ),
       child: BlocProvider<BusinessMissionCubit>(
         create: (businessMissionContext) =>
-        currentRequestNo == null ? (BusinessMissionCubit(
-            RequestRepository(userMainData))
-          ..getRequestData(RequestStatus.newRequest, ""))
-            : (BusinessMissionCubit(RequestRepository(userMainData))
-          ..getRequestData(RequestStatus.oldRequest,
-              currentRequestNo[BusinessMissionScreen.requestNoKey])),
+        currentRequestData[BusinessMissionScreen.requestNoKey] == "0"?
+        (BusinessMissionCubit(RequestRepository(userMainData))..getRequestData(requestStatus:RequestStatus.newRequest, date:currentRequestData[BusinessMissionScreen.requestDateAttendance])) :
+        (BusinessMissionCubit(RequestRepository(userMainData))..getRequestData(requestStatus:RequestStatus.oldRequest, requestNo:currentRequestData[BusinessMissionScreen.requestNoKey])),
         child: BlocBuilder<BusinessMissionCubit, BusinessMissionInitial>(
             builder: (context, state) {
               return Scaffold(

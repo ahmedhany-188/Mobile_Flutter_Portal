@@ -28,6 +28,8 @@ class GlobalConstants{
   //   },
   // ];
 
+  static final List<String> daysInWeek=['Mon', 'Tue','Wed','Thu','Fri','Sat','Sun',];
+
   static final List<String> accountsTypesList = [
 
      "USB Exception",

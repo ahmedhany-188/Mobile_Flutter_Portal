@@ -8,6 +8,7 @@ import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medica
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ignore: camel_case_types
 class MedicalRequestScreen extends StatefulWidget{
@@ -89,8 +90,16 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                           content: Text("Success"),
                         ),
                       );
-                      _launchUrl(
-                          jsonDecode(state.successMessage.toString())['link']);
+
+                      try {
+                        launchUrl(
+                            Uri.parse(jsonDecode(state.successMessage.toString())['link']),
+                          mode: LaunchMode.externalApplication,
+                        );
+
+                      } catch (e, s) {
+                        print(s);
+                      }
                     }
                     else if (state.status.isSubmissionInProgress) {
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -342,29 +351,6 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
     );
   }
 
-void _launchUrl(_url) async {
-  FlutterWebBrowser.openWebPage(
-    url: _url,
-    customTabsOptions: const CustomTabsOptions(
-      colorScheme: CustomTabsColorScheme.dark,
-      // toolbarColor: Colors.blue,
-      // secondaryToolbarColor: Colors.green,
-      // navigationBarColor: Colors.amber,
-      shareState: CustomTabsShareState.on,
-      instantAppsEnabled: true,
-      showTitle: true,
-      urlBarHidingEnabled: true,
-    ),
-    safariVCOptions: const SafariViewControllerOptions(
-      barCollapsingEnabled: true,
-      preferredBarTintColor: Colors.green,
-      preferredControlTintColor: Colors.amber,
-      dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
-      modalPresentationCapturesStatusBarAppearance: true,
-    ),
-  );
-
-}
 
 
 

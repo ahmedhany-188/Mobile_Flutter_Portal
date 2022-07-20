@@ -19,7 +19,7 @@ class EmbassyLetterInitial extends EmbassyLetterState {
     this.dateTo = const RequestDate.pure(),
     this.passportNumber = const PassportNumber.pure(),
     this.salary = "Yes",
-    this.comments,
+    this.comments="",
     this.status = FormzStatus.pure,
     this.errorMessage,
     this.successMessage,
@@ -37,7 +37,7 @@ class EmbassyLetterInitial extends EmbassyLetterState {
   final RequestDate dateTo;
   final PassportNumber passportNumber;
   final String salary;
-  final String? comments;
+  final String comments;
 
   final FormzStatus status;
   final String? errorMessage;
@@ -48,7 +48,7 @@ class EmbassyLetterInitial extends EmbassyLetterState {
   final RequestStatus? requestStatus;
 
   @override
-  List<Object> get props => [requestDate,dateFrom, dateTo, passportNumber, status];
+  List<Object> get props => [requestDate,dateFrom, dateTo, passportNumber, status,embassy,salary,comments];
 
 
   EmbassyLetterInitial copyWith({

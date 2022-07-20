@@ -20,11 +20,18 @@ class PermissionCubit extends Cubit<PermissionInitial> {
   final RequestRepository _requestRepository;
 
 
-  void getRequestData(RequestStatus requestStatus, String? requestNo) async {
+  void getRequestData({required RequestStatus requestStatus,String ?requestNo,String ?date})
+  async {
     if (requestStatus == RequestStatus.newRequest) {
       var now = DateTime.now();
-      var formatter = DateFormat('EEEE dd-MM-yyyy');
-      String formattedDate = formatter.format(now);
+      String formattedDate = GlobalConstants.dateFormatViewed.format(now);
+
+      if(date!=null){
+         formattedDate = GlobalConstants.dateFormatViewed.format(DateTime.parse(date));
+      }else{
+         formattedDate = GlobalConstants.dateFormatViewed.format(now);
+      }
+
       final requestDate = RequestDate.dirty(formattedDate);
       emit(
         state.copyWith(
@@ -34,7 +41,9 @@ class PermissionCubit extends Cubit<PermissionInitial> {
             requestStatus: RequestStatus.newRequest
         ),
       );
+
     } else {
+
       final requestData = await _requestRepository.getPermissionRequestData(
           requestNo!);
 

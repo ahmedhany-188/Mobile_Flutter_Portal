@@ -379,7 +379,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.add_a_photo,
                         () {
                           Navigator.of(context)
-                              .pushNamed(PermissionScreen.routeName);
+                              .pushNamed(PermissionScreen.routeName,arguments: {PermissionScreen.requestNoKey:"0"});
                         },
                       ),
                       buildDivider(),
@@ -388,7 +388,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.add_a_photo,
                         () {
                           Navigator.of(context)
-                              .pushNamed(VacationScreen.routeName);
+                              .pushNamed(VacationScreen.routeName,arguments: {VacationScreen.requestNoKey:"0"});
                         },
                       ),
                       buildDivider(),
@@ -397,7 +397,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         Icons.add_a_photo,
                         () {
                           Navigator.of(context)
-                              .pushNamed(BusinessMissionScreen.routeName);
+                              .pushNamed(BusinessMissionScreen.routeName,arguments: {BusinessMissionScreen.requestNoKey:"0"});
                         },
                       ),
                       buildDivider(),
