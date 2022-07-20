@@ -111,6 +111,14 @@ class GeneralDio {
     });
   }
 
+  Future<Response> getStatistics() async {
+    String url = 'SelfService/GetStatistics?HRCode=${userData.user!.userHRCode}';
+
+    return await dio!.get(url).catchError((err) {
+      throw err;
+    });
+  }
+
   static Future<Response> postMasterEquipmentsRequest(
       dynamic dataToPost) async {
     String url = 'SelfService/AddITEquipment_M';

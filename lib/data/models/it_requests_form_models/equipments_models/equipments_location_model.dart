@@ -15,7 +15,7 @@ class EquipmentsLocationModel {
   String? hrAssWages;
   int? subGroupId;
   int? groupPolicyId;
-  String? areaId;
+  int? areaId;
   String? workDays;
   double? latitude;
   double? longitude;

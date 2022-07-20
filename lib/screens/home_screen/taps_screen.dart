@@ -56,7 +56,7 @@ class _TapsScreenState extends State<TapsScreen> {
         child: Scaffold(
           backgroundColor: Colors.white,
           resizeToAvoidBottomInset: false,
-          drawer: MainDrawer(),
+          drawer: const MainDrawer(),
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             toolbarHeight: MediaQuery.of(context).size.height * 0.10,

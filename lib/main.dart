@@ -16,6 +16,7 @@ import 'package:hassanallamportalflutter/bloc/my_requests_screen_bloc/my_request
 import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/statistics_bloc/statistics_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.dart';
 import 'package:hassanallamportalflutter/data/repositories/upgrader_repository.dart';
 import 'package:hassanallamportalflutter/life_cycle_states.dart';
@@ -212,6 +213,13 @@ class _MyAppState extends State<MyApp> {
             create: (contactsCubitContext) => AppsCubit(GeneralDio(
                 BlocProvider.of<AppBloc>(contactsCubitContext).state.userData))
               ..getApps(),
+          ),
+          BlocProvider<StatisticsCubit>(
+            create: (statisticsCubitContext) => StatisticsCubit(GeneralDio(
+                BlocProvider.of<AppBloc>(statisticsCubitContext)
+                    .state
+                    .userData))
+              ..getStatistics(),
           ),
           BlocProvider<NewsCubit>(
             create: (newsContext) => NewsCubit()

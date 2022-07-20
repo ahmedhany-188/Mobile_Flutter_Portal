@@ -5,8 +5,8 @@ import '../../widgets/map/open_map.dart';
 import '../../constants/google_map_api_key.dart';
 
 class GetDirectionWidget extends StatelessWidget {
-  List<dynamic> projectsDirectionData;
-  GetDirectionWidget(this.projectsDirectionData, {Key? key}) : super(key: key);
+  final List<dynamic> projectsDirectionData;
+  const GetDirectionWidget(this.projectsDirectionData, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +30,23 @@ class GetDirectionWidget extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: GridTile(
+                  footer: GridTileBar(
+                    backgroundColor: Colors.black87,
+                    title: Text(
+                      projectsDirectionData[index]['projectName'],
+                      textAlign: TextAlign.left,
+                    ),
+                    subtitle: Text(
+                      projectsDirectionData[index]['city'],
+                      textAlign: TextAlign.center,
+                    ),
+                    trailing: IconButton(
+                        onPressed: () {
+                          openMap(projectsDirectionData[index]['latitude'],
+                              projectsDirectionData[index]['longitude']);
+                        },
+                        icon: const Icon(Icons.directions)),
+                  ),
                   child: Hero(
                     tag: 'tag$index',
                     child: GestureDetector(
@@ -49,23 +66,6 @@ class GetDirectionWidget extends StatelessWidget {
                         fit: BoxFit.cover,
                       ),
                     ),
-                  ),
-                  footer: GridTileBar(
-                    backgroundColor: Colors.black87,
-                    title: Text(
-                      projectsDirectionData[index]['projectName'],
-                      textAlign: TextAlign.left,
-                    ),
-                    subtitle: Text(
-                      projectsDirectionData[index]['city'],
-                      textAlign: TextAlign.center,
-                    ),
-                    trailing: IconButton(
-                        onPressed: () {
-                          openMap(projectsDirectionData[index]['latitude'],
-                              projectsDirectionData[index]['longitude']);
-                        },
-                        icon: const Icon(Icons.directions)),
                   ),
                 ),
               ),
