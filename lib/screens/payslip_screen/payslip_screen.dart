@@ -1,6 +1,7 @@
 import 'dart:isolate';
 import 'dart:ui';
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -21,6 +22,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
   final _passwordController = TextEditingController();
 
   final ReceivePort _port = ReceivePort();
+  bool showPassword = true;
 
   @override
   void initState() {
@@ -30,21 +32,9 @@ class _PayslipScreenState extends State<PayslipScreen> {
     IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
     _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
       setState(() {});
     });
     FlutterDownloader.registerCallback(downloadCallback);
-
-    // _prepare();
-    // _checkPermission();
-    //  _checkPermission();
-    //
-    // if (_permissionReady) {
-    //   // await _prepareSaveDir();
-    // }
-
   }
 
   @override
@@ -73,6 +63,8 @@ class _PayslipScreenState extends State<PayslipScreen> {
   @override
   Widget build(BuildContext context) {
     final user = context.select((AppBloc bloc) => bloc.state.userData.user);
+
+    final FocusNode passwordFocusNode=FocusNode();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -121,22 +113,73 @@ class _PayslipScreenState extends State<PayslipScreen> {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             child: Column(
-
               children: [
+                const SizedBox(height: 10,),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    MaterialButton(
+                      padding: const EdgeInsets.all(0),
+                      onPressed: () {
+                        BlocProvider.of<PayslipCubit>(context).openResetLink();
+                      },
+                      child:  Text("Reset Payslip Password",style: TextStyle(
+                        decoration: TextDecoration.underline,
+                        color: Theme.of(context).primaryColor,
+                      ),),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 20,),
                 TextFormField(
-                  controller: _passwordController,
-                  decoration: const InputDecoration(
-                    hintText: "Enter Password",
-                    border: OutlineInputBorder(),
+                  style: const TextStyle(color: Color(0xFF174873)),
+                  focusNode: passwordFocusNode,
+                  cursorColor: Colors.white,
+                  key: const Key('loginForm_passwordInput_textField'),
+                  obscureText: showPassword,
+                  decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        setState(() {
+                          showPassword = !showPassword;
+                        });
+                      },
+                      icon: showPassword
+                          ? Icon(
+                        Icons.visibility,
+                        color: (passwordFocusNode.hasFocus)
+                            ? const Color(0xFF186597)
+                            : const Color(0xFF174873),
+                      )
+                          : Icon(Icons.visibility_off,
+                          color: (passwordFocusNode.hasFocus)
+                              ? const Color(0xFF186597)
+                              : const Color(0xFF174873)),
+                    ),
+                    prefixIcon: Icon(
+                      Icons.key,
+                      color: (passwordFocusNode.hasFocus)
+                          ? const Color(0xFF186597)
+                          : const Color(0xFF174873),
+                    ),
+                    filled: true,
+                    fillColor: const Color(0xFFcfdeec),
+                    hintText: 'Payslip Password',
+                    hintStyle: const TextStyle(color: Color(0xFFa2b6c9)),
+                    contentPadding: const EdgeInsets.all(15),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25),
+                        borderSide: BorderSide.none),
+                    // errorText: state.password.invalid ? 'invalid password' : null,
                   ),
+                  controller: _passwordController,
                 ),
                 const SizedBox(height: 10,),
                 ElevatedButton(
                   onPressed: () {
                     if (_passwordController.text.isNotEmpty) {
                       BlocProvider.of<PayslipCubit>(context).getPdfLink(
-                          user?.email ?? "", _passwordController.text.toString());
+                          user ?? User.empty, _passwordController.text.toString());
                       // context.read<PayslipCubit>().getPdfLink("ahmed.elghandour@hassanallam.com", _passwordController.text.toString());
                     }
                   },

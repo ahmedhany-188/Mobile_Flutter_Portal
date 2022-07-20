@@ -232,7 +232,7 @@ class VacationCubit extends Cubit<VacationInitial> {
 
       String responsibleHRCode = state.responsiblePerson.userHrCode ?? "";
 
-      int noOfDays = int.parse(state.vacationDuration?? "0");
+      int noOfDays = int.parse(state.vacationDuration);
 
 
 
