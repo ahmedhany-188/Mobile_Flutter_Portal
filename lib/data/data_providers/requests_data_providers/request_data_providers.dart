@@ -50,8 +50,6 @@ class RequestDataProviders {
   }
 
 
-
-
   Future<http.Response> postEmbassyLetterRequest(String bodyString) async {
     return http.post(
       Uri.parse(addEmbassyLetterLink()),

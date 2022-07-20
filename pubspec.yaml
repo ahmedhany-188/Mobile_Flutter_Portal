@@ -79,13 +79,15 @@ dependencies:
   dio: ^4.0.6
   url_launcher: ^6.1.2
 
-
   #Bloc libiraries
   flutter_bloc: any
   hydrated_bloc: any
   bloc: any
   connectivity_plus: any
 
+  # QR code
+  qr_flutter: ^4.0.0
+  vcard_maintained: any
 
   #functionality helper
   formz: ^0.4.1

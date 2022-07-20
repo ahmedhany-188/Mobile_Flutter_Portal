@@ -1,10 +1,12 @@
+import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
+import 'package:hassanallamportalflutter/screens/myattendance_screen/DaysOfTheWeek.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_ticket_widget.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
@@ -13,19 +15,21 @@ class AttendanceScreen extends StatefulWidget {
 
   static const routeName = '/myattendance-list-screen';
   const AttendanceScreen({Key? key}) : super(key: key);
-
   @override
   State<AttendanceScreen> createState() => AttendanceScreenStateClass();
+
 }
 
 class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
-  bool loadingAttendanceData = false;
   int monthNumber = DateTime
       .now()
       .month;
 
-  var formatter = new DateFormat('MMMM');
+  bool transition = false;
+  int selectedPage = DateTime
+      .now()
+      .month - 1;
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +37,7 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
         .of(context)
         .size;
 
+    var pageController = PageController(initialPage: selectedPage);
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
     return Scaffold(
@@ -42,32 +47,15 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
         ),
         resizeToAvoidBottomInset: false,
 
-        // drawer: MainDrawer(),
-
         body: BlocProvider<AttendanceCubit>(
             create: (context) =>
             AttendanceCubit()
               ..getAttendanceList(
                   user.user!.userHRCode.toString(), monthNumber),
-
             child: BlocConsumer<AttendanceCubit, AttendanceState>(
                 listener: (context, state) {
-                  if (state is BlocGetTheAttendanceSuccessState) {
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Success"),
-                      ),
-                    );
-                  }
-                  else if (state is BlocGetTheAttendanceLoadingState) {
-                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Loading"),
-                      ),
-                    );
-                  }
+                  if (state is BlocGetTheAttendanceSuccessState) {}
+                  else if (state is BlocGetTheAttendanceLoadingState) {}
                   else if (state is BlocGetTheAttendanceErrorState) {
                     ScaffoldMessenger.of(context).hideCurrentSnackBar();
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -79,90 +67,160 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                 },
                 builder: (context, state) {
                   return Container(
+                      height: double.infinity,
                       decoration: const BoxDecoration(
                           image: DecorationImage(image: AssetImage(
                               "assets/images/S_Background.png"),
                               fit: BoxFit.cover)
                       ),
-                      child: Column(children: [
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      child: SingleChildScrollView(child: Column(
+
                           children: [
-                            Row(children: [
-                              // ignore: deprecated_member_use
-                              RaisedButton(
-                                onPressed: () {
-                                  monthNumber--;
-                                  if (monthNumber < 1) {
-                                    monthNumber = 12;
-                                  }
-                                  BlocProvider.of<AttendanceCubit>(context)
-                                      .getAttendanceList(
-                                      user.user!.userHRCode, monthNumber);
+                            Container(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton.icon(onPressed:
+                                      () {
+                                    if (!transition) {
+                                      transition = true;
+                                      monthNumber--;
+                                      pageController.jumpToPage(monthNumber - 1);
 
-                                  if(state is BlocGetTheAttendanceErrorState){
-                                    AttendanceTicketWidget(const []);
-
-                                  }else if (state is BlocGetTheAttendanceLoadingState){
-                                    AttendanceTicketWidget(const []);
-                                  }
-                                },
-                                child: Text('prev'),
-
-                              ),
-                            ],
-                            ),
-                            Row(mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                // ignore: deprecated_member_use
-                                RaisedButton(
-                                  onPressed: () {
-                                    monthNumber++;
-                                    if (monthNumber > 12) {
-                                      monthNumber = 1;
-                                    }
-                                    BlocProvider.of<AttendanceCubit>(context)
-                                        .getAttendanceList(
-                                        user.user!.userHRCode, monthNumber);
-                                    if(state is BlocGetTheAttendanceErrorState){
-                                      AttendanceTicketWidget(const []);
-
-                                    }else if (state is BlocGetTheAttendanceLoadingState){
-                                      AttendanceTicketWidget(const []);
+                                      if (monthNumber < 1) {
+                                        monthNumber = 12;
+                                        pageController.jumpToPage(11);
+                                      }
+                                      BlocProvider.of<AttendanceCubit>(context)
+                                          .getAttendanceList(
+                                          user.user!.userHRCode, monthNumber);
+                                      if (state is BlocGetTheAttendanceErrorState) {
+                                        AttendanceTicketWidget(const []);
+                                      } else
+                                      if (state is BlocGetTheAttendanceLoadingState) {
+                                        AttendanceTicketWidget(const []);
+                                      }
+                                    } else {
+                                      null;
                                     }
                                   },
-                                  child: Text('next'),
-                                ),
-                              ],
+                                      icon: Icon(Icons.arrow_back_ios,
+                                        color: Colors.white,),
+                                      label: Text("")),
+                                  Text(
+                                    DateFormat('MMMM').format(
+                                        DateTime(0, monthNumber)),
+                                    style: TextStyle(
+                                        fontSize: 25, color: Colors.white),),
+                                  TextButton.icon(onPressed:
+                                      () {
+                                    if (!transition) {
+                                      transition = true;
+                                      monthNumber++;
+                                      pageController.jumpToPage(monthNumber - 1);
+
+                                      if (monthNumber > 12) {
+                                        monthNumber = 1;
+                                        pageController.jumpToPage(0);
+                                      }
+                                      BlocProvider.of<AttendanceCubit>(
+                                          context)
+                                          .getAttendanceList(
+                                          user.user!.userHRCode, monthNumber);
+                                      if (state is BlocGetTheAttendanceErrorState) {
+                                        AttendanceTicketWidget(const []);
+                                      } else
+                                      if (state is BlocGetTheAttendanceLoadingState) {
+                                        AttendanceTicketWidget(const []);
+                                      }
+                                    } else {
+                                      null;
+                                    }
+                                  },
+                                      icon: Icon(Icons.arrow_forward_ios,
+                                        color: Colors.white,),
+                                      label: Text("")
+                                  )
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
 
 
-                        Text(
-                          DateFormat('MMMM').format(DateTime(0, monthNumber)),
-                          style: TextStyle(fontSize: 20, color: Colors.black),),
+                            SafeArea(child:
+                            Container(
+                              height: deviceSize.height,
+                              child: PageView(
+                                onPageChanged: (index) {
+                                  setState(() {
+                                    Timer timer = Timer(
+                                        const Duration(milliseconds: 1000), () {
+                                      setState(() {
+                                        BlocProvider.of<AttendanceCubit>(
+                                            context)
+                                            .getAttendanceList(
+                                            user.user!.userHRCode, index + 1);
+                                        monthNumber = index + 1;
+                                        if (state is BlocGetTheAttendanceErrorState) {
+                                          AttendanceTicketWidget(const []);
+                                        } else
+                                        if (state is BlocGetTheAttendanceLoadingState) {
+                                          AttendanceTicketWidget(const []);
+                                        } else
+                                        if (state is BlocGetTheAttendanceSuccessState) {
+                                          transition = false;
+                                        }
+                                      });
+                                    });
+                                  });
+                                },
+                                controller: pageController,
+                                children: [
+                                  getMonth(state),
+                                  getMonth(state),
+                                  getMonth(state),
+                                  getMonth(state),
+                                  getMonth(state),
+                                  getMonth(state),
+                                  getMonth(state),
+                                  getMonth(state),
+                                  getMonth(state),
+                                  getMonth(state),
+                                  getMonth(state),
+                                  getMonth(state),
+                                ],
+                              ),
+                            ),
+                            )
 
-                        SafeArea(child: Container(
-                          child: state is BlocGetTheAttendanceSuccessState
-                              ? Padding(
-                              padding: const EdgeInsets.all(5),
-                              child: SizedBox(
-                                height: deviceSize.height,
-                                child: AttendanceTicketWidget(state.getAttendanceList),
-                              )
-                          )
-                              : const Center(
-                            child: CircularProgressIndicator(),),
-                        )
-                        ),
-
-                      ])
+                          ]),)
                   );
                 }
             )
         )
     );
   }
+
+  Container getMonth(AttendanceState state) {
+    return Container(
+      child: state is BlocGetTheAttendanceSuccessState
+          ? Padding(
+          padding: const EdgeInsets.all(5),
+          child: Column(children: [
+            SizedBox(
+              child: DayOfTheWeek(state.getAttendanceList),
+            ),
+            SizedBox(
+              child: AttendanceTicketWidget(state.getAttendanceList),
+            ),
+          ],)
+      )
+          : const Center(
+        child: CircularProgressIndicator(),),
+    );
+  }
 }
+
+
+
 
 

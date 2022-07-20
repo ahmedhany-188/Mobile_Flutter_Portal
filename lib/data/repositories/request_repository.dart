@@ -206,19 +206,23 @@ class RequestRepository {
       "RequestHrCode": userData.employeeData!.userHrCode,
       "OwnerHrCode": userData.employeeData!.userHrCode,
       "Date": GlobalConstants.dateFormatServer.format(
+      "serviceId": RequestServiceID.EmbassyServiceID,
+      "requestHrCode": userData.employeeData!.userHrCode,
+      "ownerHrCode": userData.employeeData!.userHrCode,
+      "date": GlobalConstants.dateFormatServer.format(
           GlobalConstants.dateFormatViewed.parse(
               embassyLetterFormModel.requestDate!)),
-      "Comments": embassyLetterFormModel.comments,
-      "DateFrom": GlobalConstants.dateFormatServer.format(
+      "comments": embassyLetterFormModel.comments,
+      "dateFrom": GlobalConstants.dateFormatServer.format(
           GlobalConstants.dateFormatViewed.parse(
               embassyLetterFormModel.dateFrom!)),
-      "DateTo": GlobalConstants.dateFormatServer.format(
+      "dateTo": GlobalConstants.dateFormatServer.format(
           GlobalConstants.dateFormatViewed.parse(
               embassyLetterFormModel.dateTo!)),
-      "Purpose": embassyLetterFormModel.purpose,
-      "EmbassyId": embassyLetterFormModel.embassy,
-      "PassportNo": embassyLetterFormModel.passportNo,
-      "AddSalary": embassyLetterFormModel.addSalary,
+      "purpose": embassyLetterFormModel.purpose,
+      "embassyId": embassyLetterFormModel.embassy,
+      "passportNo": embassyLetterFormModel.passportNo,
+      "addSalary": embassyLetterFormModel.addSalary,
     });
 
     final http.Response rawEmbassyLetter = await requestDataProviders

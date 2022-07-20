@@ -44,9 +44,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
 
       final requestData = await requestRepository.getAccessRight(requestNo!);
 
-      final requestDate = RequestDate.dirty(
-          GlobalConstants.dateFormatViewed.format(
-              GlobalConstants.dateFormatServer.parse(requestData.requestDate!)));
+
 
       final requestType = requestData.requestType;
       final usbException = requestData.usbException;
@@ -68,6 +66,9 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
         requestItems.add("Local Admin");
       }
 
+      final requestDate = RequestDate.dirty(
+          GlobalConstants.dateFormatViewed.format(
+              GlobalConstants.dateFormatServer.parse(requestData.requestDate!)));
 
       final fromDate = RequestDate.dirty(
           GlobalConstants.dateFormatViewed.format(
@@ -79,7 +80,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
 
       final permanent = requestData.permanent;
 
-      final comments = requestData.comments;
+      final comments = requestData.comments ?? "No Comment";
 
       var status = "Pending";
       if (requestData.status== 0) {
@@ -238,11 +239,12 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
       }
     }
 
-    // var formatter = DateFormat('EEEE dd-MM-yyyy');
-    var formatter = GlobalConstants.dateFormatServer;
+    var formatter = GlobalConstants.dateFormatViewed;
     String formattedDate = formatter.format(
         currentDate ?? DateTime.now());
     final requestDate = RequestDate.dirty(formattedDate);
+
+
 
     if (datetype == "from") {
       emit(state.copyWith(

@@ -16,11 +16,13 @@ class EmailAndUserAccountScreen  extends StatefulWidget{
 
   static const routeName = "/email-user-account-screen";
   static const requestNoKey = 'request-No';
+  static const requestHrCode = 'request-HrCode';
 
-  const EmailAndUserAccountScreen({Key? key,this.requestNo }) : super(key: key);
+  const EmailAndUserAccountScreen({Key? key,this.requestNo ,this.requestedHrCode}) : super(key: key);
 
 
   final requestNo;
+  final requestedHrCode;
 
   @override
   State<EmailAndUserAccountScreen> createState() => _EmailAndUserAccountScreen();
