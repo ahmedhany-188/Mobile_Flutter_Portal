@@ -1,11 +1,13 @@
 import 'package:http/http.dart' as http;
 
+import '../../../constants/url_links.dart';
+
 class RequestDataProviders {
 
   Future<http.Response> postPermissionRequest(String bodyString) async {
     http.Response permissionFeedbackRequest = await http.post(
       Uri.parse(
-          "https://api.hassanallam.com/api/SelfService/AddPermission"
+          addPermissionLink()
       ),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
@@ -18,7 +20,7 @@ class RequestDataProviders {
 
   Future<http.Response> postAccessAccountAccessRequest(String bodyString) async {
     return http.post(
-      Uri.parse("https://api.hassanallam.com/api/SelfService/AddITAccessRight"),
+      Uri.parse(addITAccessRightLink()),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -29,7 +31,7 @@ class RequestDataProviders {
   Future<http.Response> postEmailUserAccount(String bodyString) async {
 
     return http.post(
-      Uri.parse("https://api.hassanallam.com/api/SelfService/AddITUserAccount"),
+      Uri.parse(addITUserAccountLink()),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -39,7 +41,7 @@ class RequestDataProviders {
   }
   Future<http.Response> postBusinessCardRequest(String bodyString) async {
     return http.post(
-        Uri.parse("https://api.hassanallam.com/api/SelfService/AddBusinessCard"),
+        Uri.parse(addBusinessCardLink()),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -52,7 +54,7 @@ class RequestDataProviders {
 
   Future<http.Response> postEmbassyLetterRequest(String bodyString) async {
     return http.post(
-      Uri.parse("https://api.hassanallam.com/api/SelfService/AddEmbassyLetter"),
+      Uri.parse(addEmbassyLetterLink()),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -65,7 +67,7 @@ class RequestDataProviders {
   Future<http.Response> getDurationVacation(int type,String dateFrom,String dateTo) async{
     http.Response rawDurationData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com/api/SelfService/GetVacationDuration?VacationType=$type&FromDate=$dateFrom&ToDate=$dateTo"),
+          getVacationDurationLink(type,dateFrom,dateTo)),
     );
     print(rawDurationData.body);
     return rawDurationData;
@@ -73,8 +75,7 @@ class RequestDataProviders {
 
   Future<http.Response> getVacationRequestData(String hrCode,String requestNo) async{
     http.Response rawDurationData = await http.get(
-      Uri.parse(
-          "https://api.hassanallam.com/api/SelfService/GetVacation?HRCode=$hrCode&requestno=$requestNo"),
+      Uri.parse(getVacationRequestLink(hrCode,requestNo)),
     );
     print(rawDurationData.body);
     return rawDurationData;
@@ -82,8 +83,7 @@ class RequestDataProviders {
 
   Future<http.Response> getBusinessCardRequestData(String hrCode,String requestNo) async{
     http.Response rawDurationData = await http.get(
-      Uri.parse(
-          "https://api.hassanallam.com/api/SelfService/GetBusinessCard?HRCode=$hrCode&requestno=$requestNo"),
+      Uri.parse(getBusinessCardLink(hrCode,requestNo)),
     );
     print(rawDurationData.body);
     return rawDurationData;
@@ -91,8 +91,7 @@ class RequestDataProviders {
 
   Future<http.Response> getAccessRightRequestData(String hrCode,String requestNo) async{
     http.Response rawDurationData = await http.get(
-      Uri.parse(
-          "https://api.hassanallam.com/api/SelfService/GetAccessRight?HRCode=$hrCode&requestno=$requestNo"),
+      Uri.parse(getAccessRightLink(hrCode,requestNo)),
     );
     print(rawDurationData.body);
     return rawDurationData;
