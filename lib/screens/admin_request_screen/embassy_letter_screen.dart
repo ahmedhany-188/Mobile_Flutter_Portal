@@ -402,7 +402,7 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                           FloatingLabelAlignment.start,
                                           labelText: "Comments",
                                           prefixIcon: const Icon(Icons.comment),
-                                          border: myinputborder(),
+                                          border: myInputBorder(),
                                         )
                                     );
                                   }
