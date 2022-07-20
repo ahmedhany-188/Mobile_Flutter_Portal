@@ -8,6 +8,8 @@ import 'package:hassanallamportalflutter/data/repositories/payslip_repository.da
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../constants/url_links.dart';
+
 part 'payslip_state.dart';
 
 class PayslipCubit extends Cubit<PayslipState> {
@@ -60,7 +62,7 @@ class PayslipCubit extends Cubit<PayslipState> {
   void openResetLink(){
     try {
       launchUrl(
-        Uri.parse("https://portal.hassanallam.com/PaySlip_Login.aspx"),
+        Uri.parse(resetPayslipLink()),
         mode: LaunchMode.externalApplication,
       );
     } catch (e, s) {
