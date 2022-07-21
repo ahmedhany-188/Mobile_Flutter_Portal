@@ -227,9 +227,6 @@ class _MyAppState extends State<MyApp> {
               ..getLatestNews(),
             lazy: true,
           ),
-          BlocProvider<EquipmentsCubit>(
-            create: (newsContext) => EquipmentsCubit()..getAll(),
-          ),
 
           // BlocProvider<PermissionCubit>(
           //   create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),

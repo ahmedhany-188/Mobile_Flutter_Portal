@@ -31,6 +31,7 @@ import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiarie
 
 import '../data/models/contacts_related_models/contacts_data_from_api.dart';
 import '../screens/apps_screen/apps_screen.dart';
+import '../screens/my_requests_screen/add_request_screen.dart';
 import '../screens/notification_screen/notifications_screen.dart';
 import '../screens/polls_screen/polls_screen.dart';
 import '../screens/videos_screen/videos_screen.dart';
@@ -207,6 +208,10 @@ class AppRouter {
       case EquipmentsRequest.routeName:
         return MaterialPageRoute(
             builder: (_) => EquipmentsRequest());
+
+      case AddRequestScreen.routeName:
+        return MaterialPageRoute(
+            builder: (_) => const AddRequestScreen());
 
       default:
         return null;

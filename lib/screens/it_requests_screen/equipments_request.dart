@@ -7,6 +7,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/contacts_screen_bloc/contacts_cubit.dart';
+import '../../constants/enums.dart';
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 import '../../data/models/it_requests_form_models/equipments_models/departments_model.dart';
 import '../../bloc/it_request_bloc/equipments_request/equipments_cubit/equipments_cubit.dart';
@@ -15,10 +16,13 @@ import '../../data/models/it_requests_form_models/equipments_models/equipments_i
 import '../../data/models/it_requests_form_models/equipments_models/equipments_location_model.dart';
 import '../../data/models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
 import '../../bloc/it_request_bloc/equipments_request/equipments_items_cubit/equipments_items_cubit.dart';
+import '../../data/repositories/request_repository.dart';
 
 class EquipmentsRequest extends StatelessWidget {
-  EquipmentsRequest({Key? key}) : super(key: key);
+  EquipmentsRequest({this.requestNo,Key? key}) : super(key: key);
   static const routeName = 'request-equipments-screen';
+  static const requestNoKey = 'request-No';
+  final requestNo;
 
   final GlobalKey<DropdownSearchState<EquipmentsItemModel>> itemFormKey =
       GlobalKey();
@@ -39,9 +43,10 @@ class EquipmentsRequest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user =
-        context.select((AppBloc bloc) => bloc.state.userData.employeeData);
-    return BlocProvider(
-      create: (context) => EquipmentsCubit()..getAll(),
+        context.select((AppBloc bloc) => bloc.state.userData);
+
+    return BlocProvider<EquipmentsCubit>(
+      create: (context) => (requestNo == null)? (EquipmentsCubit(RequestRepository(user))..getAll()):(EquipmentsCubit(RequestRepository(user))..getEquipmentsData(RequestStatus.oldRequest, requestNo)),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Equipments request'),
@@ -351,7 +356,7 @@ class EquipmentsRequest extends StatelessWidget {
                         businessUnitFormKey.currentState!.getSelectedItem!,
                     locationObject:
                         locationFormKey.currentState!.getSelectedItem!,
-                    userHrCode: user!.userHrCode!,
+                    userHrCode: user.employeeData!.userHrCode!,
                     selectedItem: state.chosenList,
                   );
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
