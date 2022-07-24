@@ -547,12 +547,21 @@ class EquipmentsRequest extends StatelessWidget {
       onTap: () {
         showEquipmentsDialog(context: context, name: name, id: id, icon: icon);
       },
+      borderRadius: const BorderRadius.all(Radius.circular(25)),
       child: Container(
         width: 20.w,
         height: 20.h,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(25)),
-          color: Colors.red,
+          gradient: LinearGradient(
+              colors: [
+                Color(0xFF1a4c78),
+                Color(0xFF3772a6),
+                Colors.white,
+              ],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topRight,
+              tileMode: TileMode.clamp),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
