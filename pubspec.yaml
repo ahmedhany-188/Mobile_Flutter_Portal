@@ -102,6 +102,7 @@ dependencies:
   open_file: ^3.2.1
   file_picker: ^4.6.1
   package_info_plus: ^1.4.2
+  flutter_easyloading: ^3.0.5
 
 
 #repositories

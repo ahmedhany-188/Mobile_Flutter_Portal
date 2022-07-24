@@ -3,6 +3,8 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/data/helpers/download_pdf.dart';
 import 'package:hassanallamportalflutter/data/repositories/payslip_repository.dart';
 import 'package:intl/intl.dart';
@@ -19,6 +21,9 @@ class PayslipCubit extends Cubit<PayslipState> {
   PayslipCubit() : super(PayslipInitialState());
 
   void getPdfLink(User user,String password) async {
+    // EasyLoading.init();
+
+    // EasyLoading.showSuccess(status)
     emit(PayslipLoadingState());
         try {
           var connectivityResult = await connectivity.checkConnectivity();
@@ -68,6 +73,14 @@ class PayslipCubit extends Cubit<PayslipState> {
     } catch (e, s) {
       print(s);
     }
+  }
+
+  @override
+  Future<void> close() {
+    // TODO: implement close
+    EasyLoading.dismiss();
+    return super.close();
+
   }
 
 
