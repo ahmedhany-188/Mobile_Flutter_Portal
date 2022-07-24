@@ -8,6 +8,7 @@ import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medica
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ignore: camel_case_types
 class MedicalRequestScreen extends StatefulWidget{
@@ -32,10 +33,6 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // var deviceSize = MediaQuery
-    //     .of(context)
-    //     .size;
-
     final user = context.select((AppBloc bloc) => bloc.state.userData);
     hrUserMedicalRequest.text = user.employeeData!.userHrCode!;
 
@@ -60,24 +57,19 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
 
                 floatingActionButton: Column(
                     mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[ FloatingActionButton.extended(
+                    children: <Widget>[
+                      FloatingActionButton.extended(
                   onPressed: () {
                     String hrCode = user.user!.userHRCode.toString();
                     context.read<MedicalRequestCubit>()
                         .getSuccessMessage(
                         hrCode);
                   },
-                  label: const Text('Submit', style: TextStyle(
-                      color: Colors.black
-                  )),
-                  icon: const Icon(
-                      Icons.thumb_up_alt_outlined,
-                      color: Colors.black),
-                  backgroundColor: Colors.white,),],),
-
-                resizeToAvoidBottomInset: false,
-
-
+                  label: const Text('SUBMIT'),
+                      icon: const Icon(Icons.send),),
+                    ]
+                  ,
+                ),
                 // drawer: MainDrawer(),
 
                 body: BlocListener<MedicalRequestCubit, MedicalRequestInitial>(
@@ -89,8 +81,16 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                           content: Text("Success"),
                         ),
                       );
-                      _launchUrl(
-                          jsonDecode(state.successMessage.toString())['link']);
+
+                      try {
+                        launchUrl(
+                            Uri.parse(jsonDecode(state.successMessage.toString())['link']),
+                          mode: LaunchMode.externalApplication,
+                        );
+
+                      } catch (e, s) {
+                        print(s);
+                      }
                     }
                     else if (state.status.isSubmissionInProgress) {
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -111,96 +111,109 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                   },
 
                   child: Padding(
-                    padding: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
                     child: SingleChildScrollView(
                       child: Column(
                         children: [
-                          BlocBuilder<MedicalRequestCubit,
-                              MedicalRequestInitial>(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            child: BlocBuilder<MedicalRequestCubit,
+                                MedicalRequestInitial>(
+                                builder: (context, state) {
+                                  return TextField(
+                                      onChanged: (name) {
+                                        context.read<MedicalRequestCubit>()
+                                            .patientName(name);
+                                      },
+                                      decoration: InputDecoration(
+                                        labelText: "Patient Name",
+                                        // labelStyle: const TextStyle(
+                                        //     color: Colors.black, fontSize: 15),
+                                        prefixIcon: const Icon(Icons.people),
+                                        // border: myInputBorder(),
+                                        // // enabledBorder: myInputBorder(),
+                                        // // focusedBorder: myfocusborder(),
+                                        errorText: state.patientNameMedicalRequest
+                                            .invalid
+                                            ? 'invalid Name'
+                                            : null,
+                                      )
+                                  );
+                                }
+                            ),
+                          ),
+
+                          // Container(height: 20),
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            child: TextField(
+                                enabled: false,
+
+                                controller: hrUserMedicalRequest,
+                                decoration: const InputDecoration(
+
+                                  prefixIcon: Icon(Icons.lock),
+                                  // labelStyle: const TextStyle(
+                                  //     color: Colors.black, fontSize: 15),
+                                  labelText: "HR Code",
+                                  // enabledBorder: myInputBorder(),
+                                  // focusedBorder: myfocusborder(),
+
+                                )
+                            ),
+                          ),
+
+                          // Container(height: 20),
+
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            child: BlocBuilder<MedicalRequestCubit,
+                                MedicalRequestInitial>(
                               builder: (context, state) {
-                                return TextField(
-                                    onChanged: (name) {
-                                      context.read<MedicalRequestCubit>()
-                                          .patientName(name);
-                                    },
-                                    decoration: InputDecoration(
-                                      labelText: "Patient Name",
-                                      labelStyle: const TextStyle(
-                                          color: Colors.black, fontSize: 15),
-                                      prefixIcon: const Icon(Icons.people),
-                                      border: myinputborder(),
-                                      enabledBorder: myinputborder(),
-                                      focusedBorder: myfocusborder(),
-                                      errorText: state.patientNameMedicalRequest
-                                          .invalid
-                                          ? 'invalid Name'
-                                          : null,
-                                    )
+                                return TextFormField(
+                                  initialValue: state.requestDate.value,
+                                  key: UniqueKey(),
+                                  readOnly: true,
+                                  decoration: InputDecoration(
+                                    floatingLabelAlignment:
+                                    FloatingLabelAlignment.start,
+                                    labelText: 'Select Date',
+                                    errorText: state.requestDate.invalid
+                                        ? 'invalid Date'
+                                        : null,
+                                    prefixIcon: const Icon(
+                                        Icons.calendar_today),
+                                  ),
+                                  onTap: () async {
+                                    context.read<MedicalRequestCubit>().
+                                    selectDate(context);
+                                  },
                                 );
-                              }
+                              },
+                            ),
                           ),
 
+                          // Container(height: 20),
 
-                          Container(height: 20),
+                          // const Text("Lab Type",
+                          //     style: TextStyle(
+                          //       color: Colors.black, fontSize: 15,
+                          //       fontFamily: 'Nunito',)),
 
-                          TextField(
-                              enabled: false,
-
-                              controller: hrUserMedicalRequest,
-                              decoration: InputDecoration(
-
-                                prefixIcon: const Icon(Icons.lock),
-                                labelStyle: const TextStyle(
-                                    color: Colors.black, fontSize: 15),
-                                labelText: "Hr code:",
-                                enabledBorder: myinputborder(),
-                                focusedBorder: myfocusborder(),
-
-                              )
-                          ),
-
-                          Container(height: 20),
-
-
-                          BlocBuilder<MedicalRequestCubit,
-                              MedicalRequestInitial>(
-                            builder: (context, state) {
-                              return TextFormField(
-                                initialValue: state.requestDate.value,
-                                key: UniqueKey(),
-                                readOnly: true,
-                                decoration: InputDecoration(
-                                  floatingLabelAlignment:
-                                  FloatingLabelAlignment.start,
-                                  labelText: 'Select Date',
-                                  errorText: state.requestDate.invalid
-                                      ? 'invalid Date'
-                                      : null,
-                                  prefixIcon: const Icon(
-                                      Icons.calendar_today),
-                                ),
-                                onTap: () async {
-                                  context.read<MedicalRequestCubit>().
-                                  selectDate(context);
-                                },
-                              );
-                            },),
-
-                          Container(height: 20),
-
-                          const Text("Lab Type",
-                              style: TextStyle(
-                                color: Colors.black, fontSize: 15,
-                                fontFamily: 'Nunito',)),
-
-                          BlocBuilder<MedicalRequestCubit,
-                              MedicalRequestInitial>(
-                            builder: (context, state) {
-                              return
-                                Container(
-
-                                  child: DropdownButtonFormField(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            child: BlocBuilder<MedicalRequestCubit,
+                                MedicalRequestInitial>(
+                              builder: (context, state) {
+                                return DropdownButtonFormField(
                                     decoration: InputDecoration(
+                                      labelText: "Lab Type",
+                                      prefixIcon: const Icon(Icons.vaccines),
                                       errorText: state.selectedValueLab.invalid
                                           ? 'select lab'
                                           : null,
@@ -238,27 +251,23 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                       context.read<MedicalRequestCubit>()
                                           .addSelectedLab(selectedValueLab);
                                     },
-                                  ),
+                                  );
+                              },),
+                          ),
 
-                                );
-                            },),
-
-                          Container(height: 20),
-
-                          const Text("Service Type",
-                              style: TextStyle(
-                                color: Colors.black, fontSize: 15,
-                                fontFamily: 'Nunito',)),
-
-                          BlocBuilder<MedicalRequestCubit,
-                              MedicalRequestInitial>(
-                            builder: (context, state) {
-                              return
-                                Container(
-
-                                  child: DropdownButtonFormField(
-
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            child: BlocBuilder<MedicalRequestCubit,
+                                MedicalRequestInitial>(
+                              builder: (context, state) {
+                                return DropdownButtonFormField(
                                     decoration: InputDecoration(
+                                      labelText: 'Service Type',
+                                      hintText: "Service Type",
+                                      floatingLabelAlignment:
+                                      FloatingLabelAlignment.start,
+                                      prefixIcon: const Icon(Icons.design_services),
                                       errorText: state.selectedValueService
                                           .invalid
                                           ? 'select service'
@@ -291,12 +300,10 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                           .addSelectedService(
                                           selectedValueService);
                                     },
-                                  ),
-
-
-                                );
-                            },),
-                          Container(height: 20),
+                                  );
+                              },),
+                          ),
+                          
 
 
                         ],
@@ -314,7 +321,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
 
 }
 
-  OutlineInputBorder myinputborder() {
+  OutlineInputBorder myInputBorder() {
     // return type is OutlineInputBorder
     return const OutlineInputBorder( // Outline border type for TextFeild
         borderRadius: BorderRadius.all(Radius.circular(20)),
@@ -342,29 +349,6 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
     );
   }
 
-void _launchUrl(_url) async {
-  FlutterWebBrowser.openWebPage(
-    url: _url,
-    customTabsOptions: const CustomTabsOptions(
-      colorScheme: CustomTabsColorScheme.dark,
-      // toolbarColor: Colors.blue,
-      // secondaryToolbarColor: Colors.green,
-      // navigationBarColor: Colors.amber,
-      shareState: CustomTabsShareState.on,
-      instantAppsEnabled: true,
-      showTitle: true,
-      urlBarHidingEnabled: true,
-    ),
-    safariVCOptions: const SafariViewControllerOptions(
-      barCollapsingEnabled: true,
-      preferredBarTintColor: Colors.green,
-      preferredControlTintColor: Colors.amber,
-      dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
-      modalPresentationCapturesStatusBarAppearance: true,
-    ),
-  );
-
-}
 
 
 

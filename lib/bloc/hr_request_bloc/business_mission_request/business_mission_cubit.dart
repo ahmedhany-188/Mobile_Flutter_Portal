@@ -20,11 +20,19 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
   final RequestRepository _requestRepository;
 
 
-  void getRequestData(RequestStatus requestStatus, String? requestNo) async{
+  void getRequestData({required RequestStatus requestStatus, String? requestNo,String? date}) async{
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
-      var formatter = GlobalConstants.dateFormatViewed;
-      String formattedDate = formatter.format(now);
+      String formattedDate = GlobalConstants.dateFormatViewed.format(now);
+
+
+      print("-----"+date.toString());
+      if(date!=null){
+        formattedDate = GlobalConstants.dateFormatViewed.format(DateTime.parse(date));
+      }else{
+        formattedDate = GlobalConstants.dateFormatViewed.format(now);
+      }
+
       final requestDate = RequestDate.dirty(formattedDate);
       emit(
         state.copyWith(
@@ -34,7 +42,9 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
           requestStatus: RequestStatus.newRequest
         ),
       );
+
     }else{
+
       final requestData = await _requestRepository.getBusinessMissionRequestData(requestNo!);
 
       final requestFromDate = DateFrom.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateFrom!)));

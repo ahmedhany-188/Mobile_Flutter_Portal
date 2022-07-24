@@ -142,7 +142,7 @@ class AppRouter {
 
       case PermissionScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => PermissionScreen(requestNo: settings.arguments),
+          builder: (_) => PermissionScreen(requestData: settings.arguments),
         );
       case VacationScreen.routeName:
         return MaterialPageRoute(
@@ -177,7 +177,7 @@ class AppRouter {
 
       case BusinessMissionScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => BusinessMissionScreen(requestNo: settings.arguments),
+          builder: (_) => BusinessMissionScreen(requestData: settings.arguments),
         );
 
       case PollsScreen.routeName:

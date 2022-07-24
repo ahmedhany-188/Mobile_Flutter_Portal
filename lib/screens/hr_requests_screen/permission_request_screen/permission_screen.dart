@@ -7,15 +7,17 @@ import '../../../bloc/hr_request_bloc/permission_request/permission_cubit.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
 
-
 class PermissionScreen extends StatefulWidget {
 
-  static const routeName = 'permission-page';
+
   static const requestNoKey = 'request-No';
+  static const requestDateAttendance = 'date-Attendance';
+  static const routeName = 'permission-page';
+  static const requesterHRCode = 'requester-HRCode';
 
-  const PermissionScreen({Key? key,this.requestNo}) : super(key: key);
+  const PermissionScreen({Key? key,this.requestData}) : super(key: key);
 
-  final requestNo;
+  final requestData;
 
 
   @override
@@ -27,14 +29,11 @@ class _PermissionScreenState extends State<PermissionScreen> {
   @override
   Widget build(BuildContext context) {
 
-    // final user = context.select((AppBloc bloc) =>
-    // bloc.state.userData.employeeData);
+
     final userMainData = context.select((AppBloc bloc) =>
     bloc.state.userData);
 
-    // final TextEditingController commentController = TextEditingController();
-    final currentRequestNo = widget.requestNo;
-
+    final currentRequestData = widget.requestData;
 
     return Theme(
       data: Theme.of(context).copyWith(
@@ -46,12 +45,9 @@ class _PermissionScreenState extends State<PermissionScreen> {
       ),
       child: BlocProvider<PermissionCubit>(
         create: (permissionContext) =>
-        currentRequestNo == null ? (PermissionCubit(
-            RequestRepository(userMainData))
-          ..getRequestData(RequestStatus.newRequest, ""))
-            : (PermissionCubit(RequestRepository(userMainData))
-          ..getRequestData(RequestStatus.oldRequest,
-              currentRequestNo[PermissionScreen.requestNoKey])),
+        currentRequestData[PermissionScreen.requestNoKey] == "0"?
+        (PermissionCubit(RequestRepository(userMainData))..getRequestData(requestStatus:RequestStatus.newRequest,date:currentRequestData[PermissionScreen.requestDateAttendance])) :
+        (PermissionCubit(RequestRepository(userMainData))..getRequestData(requestStatus:RequestStatus.oldRequest,requestNo:currentRequestData[PermissionScreen.requestNoKey])),
         child: BlocBuilder<PermissionCubit,PermissionInitial>(
             builder: (context,state) {
               return Scaffold(
@@ -77,7 +73,6 @@ class _PermissionScreenState extends State<PermissionScreen> {
                       heroTag: null,
                       onPressed: () {},
                       icon: const Icon(Icons.dangerous),
-
                       label: const Text('Reject'),
                     ),
                     const SizedBox(height: 12),

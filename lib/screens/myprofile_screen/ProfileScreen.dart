@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/contacts_screen_bloc/contacts_cubit.dart';
 import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_userprofile.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:vcard_maintained/vcard_maintained.dart';
+
 
 class UserProfileScreen extends StatefulWidget {
 
   static const routeName = "/my-profile-screen";
 
   const UserProfileScreen({Key? key}) : super(key: key);
+
+
 
   @override
   State<UserProfileScreen> createState() => UserProfileScreenClass();
@@ -29,9 +35,24 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
 
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
+    ///Create a new vCard
+    VCard vCard=VCard();
+
+    ///Set properties
+    vCard.firstName = user.employeeData!.name!;
+    vCard.organization = user.employeeData!.companyName!;
+    // vCard.photo.attachFromUrl('/path/to/image/file.png', 'PNG');
+    vCard.jobTitle = user.employeeData!.titleName!;
+    vCard.email = user.employeeData!.email!;
+    vCard.url = "https://hassanallam.com";
+    vCard.workPhone = user.employeeData!.deskPhone!;
+    vCard.cellPhone = user.employeeData!.mobile;
+
+
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Hassan Allam Holding'),
+        title: const Text('My Profile'),
         centerTitle: true,
       ),
 
@@ -55,7 +76,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
               children: [
 
                 Container(
-                  height: height * 0.45,
+                  height: height * 0.55,
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       double innerHeight = constraints.maxHeight;
@@ -68,7 +89,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                             left: 0,
                             right: 0,
                             child: Container(
-                              height: innerHeight * 0.72,
+                              height: innerHeight * 0.85,
                               width: innerWidth,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
@@ -113,7 +134,8 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                             ),
                                           ),
                                           Text(
-                                            user.employeeData!.userHrCode!.toString(),
+                                            user.employeeData!.userHrCode!
+                                                .toString(),
                                             style: const TextStyle(
                                               color: Color.fromRGBO(
                                                   39, 105, 171, 1),
@@ -149,7 +171,8 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                             ),
                                           ),
                                           Text(
-                                            user.employeeData!.gradeName.toString(),
+                                            user.employeeData!.gradeName
+                                                .toString(),
                                             style: const TextStyle(
                                               color: Color.fromRGBO(
                                                   39, 105, 171, 1),
@@ -160,7 +183,16 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                         ],
                                       ),
                                     ],
-                                  )
+                                  ),
+                                  QrImage(
+                                      // data: user.employeeData!.name
+                                      //   .toString()+"\n"+user.employeeData!.titleName
+                                      //   .toString()+"\n"+user.employeeData!.companyName
+                                      // .toString(),
+                                    data:vCard.getFormattedString(),
+                                    version: QrVersions.auto,
+                                    size: width*0.40,
+                                  ),
                                 ],
                               ),
                             ),
@@ -181,7 +213,6 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                               },
                             ),
                           ),
-
                           Positioned(
                             top: 0,
                             left: 0,
@@ -190,13 +221,13 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                               child: CircleAvatar(
                                 backgroundImage:
                                 NetworkImage(
-                                    "https://portal.hassanallam.com/Apps/images/Profile/${user.employeeData!.userHrCode!}.jpg"),
+                                    "https://portal.hassanallam.com/Apps/images/Profile/${user
+                                        .employeeData!.userHrCode!}.jpg"),
                                 radius: 70,
 
                               ),
                             ),
                           ),
-
 
                         ],
                       );
@@ -207,7 +238,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                   height: 30,
                 ),
                 Container(
-                  height: height * 0.6,
+                  height: height * 0.65,
                   width: width,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),
@@ -238,7 +269,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                           width: double.infinity,
                           height: height * 0.08,
                           child: Text(
-                            'Department: \n${user.employeeData!.mainDepartment!}',
+                            'Department: \n${user.employeeData!.projectName!}',
 
                             style: const TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),
@@ -255,7 +286,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                           width: double.infinity,
                           height: height * 0.08,
                           child: Text(
-                            'Direct Manager: \n${user.employeeData!.managerCode!}',
+                            'Job Title: \n${user.employeeData!.titleName!}',
                             style: const TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),
                               fontSize: 16,
@@ -264,6 +295,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                             textAlign: TextAlign.left,
                           ),
                         ),
+
                         const SizedBox(
                           height: 5,
                         ),
@@ -287,7 +319,21 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                           width: double.infinity,
                           height: height * 0.08,
                           child: Text(
-                            'Mobile Number: \n' + user.employeeData!.phone!,
+                            'Direct Manager: \n${user.employeeData!
+                                .managerCode!}',
+                            style: const TextStyle(
+                              color: Color.fromRGBO(39, 105, 171, 1),
+                              fontSize: 16,
+                              fontFamily: 'Nunito',
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          height: height * 0.08,
+                          child: Text(
+                            'Mobile Number: \n${user.employeeData!.mobile!}',
                             style: const TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),
                               fontSize: 16,
@@ -302,9 +348,9 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                         Container(
                           width: double.infinity,
                           height: height * 0.08,
-                          child: const Text(
-                            'Ext: \n',
-                            style: TextStyle(
+                          child: Text(
+                            'Ext: \n' + user.employeeData!.deskPhone!,
+                            style: const TextStyle(
                               color: Color.fromRGBO(39, 105, 171, 1),
                               fontSize: 16,
                               fontFamily: 'Nunito',

@@ -48,9 +48,9 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
                   requestData.requestDate!)));
 
       final employeeName = RequestDate.dirty(requestData.employeeNameCard!);
-      // final employeeComments = requestData.employeeComments;
-      // final employeeMobile = RequestDate.dirty(requestData.employeeMobil!);
-      // final faxNo = requestData.faxNo!;
+      final employeeComments = requestData.employeeComments;
+      final employeeMobile = RequestDate.dirty(requestData.employeeMobil!);
+      // final faxNo = requestData.faxNo;
       // final employeeExt = requestData.employeeExt!;
 
 
@@ -63,16 +63,17 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
         status = "Rejected";
       }
 
+
+
       emit(
         state.copyWith(
           requestDate: requestDate,
           employeeNameCard: employeeName,
-          // comment: employeeComments,
-          // employeeMobile: employeeMobile,
+          comment: employeeComments,
+          employeeMobile: employeeMobile,
           // employeeFaxNO: faxNo,
           // employeeExt: employeeExt,
-          status: Formz.validate(
-              [state.employeeNameCard, state.employeeMobile]),
+          status: Formz.validate([state.employeeNameCard, state.employeeMobile]),
           requestStatus: RequestStatus.oldRequest,
           statusAction: status,
           // takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
@@ -84,7 +85,8 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
   void getSubmitBusinessCard(MainUserData user) async {
     final employeeName = RequestDate.dirty(state.employeeNameCard.value);
     final employeeMobile = RequestDate.dirty(state.employeeMobile.value);
-
+    DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(state.requestDate.value);
+    final requestDateValue = GlobalConstants.dateFormatServer.format(requestDateTemp);
     BusinessCardFormModel businessCardFormModel;
 
     emit(state.copyWith(
@@ -95,13 +97,12 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
 
     if (state.status.isValidated) {
       businessCardFormModel = BusinessCardFormModel(
-          state.requestDate.value,
+          requestDateValue,
           employeeName.value,
           employeeMobile.value,
           state.employeeExt,
           state.employeeFaxNO,
-          state.comment,
-          0,
+          state.comment,0,
           "");
 
 

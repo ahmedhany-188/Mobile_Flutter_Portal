@@ -21,12 +21,18 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
   static MedicalRequestCubit get(context) => BlocProvider.of(context);
 
   void getSuccessMessage(String hrCode) async {
+
     final patientNameMedicalRequest = RequestDate.dirty(
         state.patientNameMedicalRequest.value);
     final selectedValueLab = RequestDate.dirty(state.selectedValueLab.value);
     final selectedValueService = RequestDate.dirty(
         state.selectedValueService.value);
-     final requestDate = RequestDate.dirty(state.requestDate.value);
+
+    final requestDate = RequestDate.dirty(state.requestDate.value);
+
+    DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(requestDate.value);
+    final requestDateValue = GlobalConstants.dateFormatServer.format(requestDateTemp);
+
 
     emit(state.copyWith(
       patientNameMedicalRequest: patientNameMedicalRequest,
@@ -46,7 +52,6 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
           selectedService = "";
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
-
       switch (selectedValueLab.value.toString()) {
         case "ELmokhtaber":
           selectedLab = "0";
@@ -65,11 +70,9 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
           break;
       }
 
-      final dateData =GlobalConstants.dateFormatViewed.format(requestDate as DateTime);
-
       RequestMedicalBenefit requestMedicalBenefit = RequestMedicalBenefit(
           hrCode, patientNameMedicalRequest.value.toString(),
-          dateData, selectedLab, selectedService);
+          requestDateValue, selectedLab, selectedService);
 
       try {
         var connectivityResult = await connectivity.checkConnectivity();
@@ -175,7 +178,6 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
       }
     }
 
-    // var formatter = DateFormat('EEEE dd-MM-yyyy');
     var formatter = GlobalConstants.dateFormatViewed;
     String formattedDate = formatter.format(
         currentDate ?? DateTime.now());

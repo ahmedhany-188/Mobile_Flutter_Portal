@@ -10,17 +10,10 @@ import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/login_cubit/login_cubit.dart';
 import '../../screens/about_value_screen/about_screen.dart';
 import '../../screens/about_value_screen/value_screen.dart';
-import '../../screens/admin_request_screen/business_card_screen.dart';
-import '../../screens/admin_request_screen/embassy_letter_screen.dart';
 import '../../screens/economy_news_screen/economy_news_screen.dart';
 import '../../screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 import '../../screens/get_direction_screen/get_direction_screen.dart';
 import '../../screens/home_screen/taps_screen.dart';
-import '../../screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
-import '../../screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
-import '../../screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
-import '../../screens/it_requests_screen/access_right_screen.dart';
-import '../../screens/it_requests_screen/email_and_useraccount_screen.dart';
 import '../../screens/medicalrequest_screen/medical_request_screen.dart';
 import '../../screens/my_requests_screen/add_request_screen.dart';
 import '../../screens/my_requests_screen/my_requests_screen.dart';
@@ -32,7 +25,6 @@ import '../../screens/photos_screen/photos_screen.dart';
 import '../../screens/polls_screen/polls_screen.dart';
 import '../../screens/subsidiaries_screen/subsidiaries_screen.dart';
 import '../../screens/apps_screen/apps_screen.dart';
-import '../../screens/it_requests_screen/equipments_request.dart';
 import '../../screens/videos_screen/videos_screen.dart';
 
 class MainDrawer extends StatefulWidget {

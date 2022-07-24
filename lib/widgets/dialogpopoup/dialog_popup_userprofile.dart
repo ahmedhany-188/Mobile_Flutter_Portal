@@ -7,6 +7,7 @@ class DialogPopUpUserProfile extends StatefulWidget {
 
   @override
   DialogPopUpUserProfileClass createState() => DialogPopUpUserProfileClass();
+
 }
 
 class DialogPopUpUserProfileClass extends State<DialogPopUpUserProfile> {
@@ -42,53 +43,51 @@ class DialogPopUpUserProfileClass extends State<DialogPopUpUserProfile> {
               ]
           ),
           child: Container(
-            height: 80,
-              margin: const EdgeInsets.all(10),
-              child: RaisedButton(
-                onPressed: () async {
-                  final result = await FilePicker.platform.pickFiles();
+            margin: const EdgeInsets.all(10),
+            child: RaisedButton(
+              onPressed: () async {
+                final result = await FilePicker.platform.pickFiles();
 
-                  PlatformFile? pickedFile;
+                PlatformFile? pickedFile;
 
-                  setState(() {
-                    pickedFile = result!.files.first;
+                setState(() {
+                  pickedFile = result!.files.first;
 
-                    print(pickedFile!.path.toString()+"----");
-                    print(pickedFile!.name.toString()+"----");
+                  print(pickedFile!.path.toString() + "----");
+                  print(pickedFile!.name.toString() + "----");
 
-                    Navigator.of(context).pop();
-
-
-                  });
-
-                },
-                color: Theme.of(context).colorScheme.secondary,
-                child: Padding(
-                  padding: const EdgeInsets.all(0),
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const <Widget>[
-                        Text(
-                          'Upload Image',
-                          style: TextStyle(
-                            fontSize: 15,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Icon(
-                          Icons.camera_alt,
+                  Navigator.of(context).pop();
+                });
+              },
+              color: Theme
+                  .of(context)
+                  .colorScheme
+                  .secondary,
+              child: Padding(
+                padding: const EdgeInsets.all(0),
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const <Widget>[
+                      Text(
+                        'Upload Image',
+                        style: TextStyle(
+                          fontSize: 15,
                           color: Colors.white,
-                        )
-                      ],
-                    ),
+                        ),
+                      ),
+                      Icon(
+                        Icons.camera_alt,
+                        color: Colors.white,
+                      )
+                    ],
                   ),
                 ),
               ),
             ),
+          ),
         ),
-
         Positioned(
           left: 20,
           right: 20,
@@ -104,5 +103,6 @@ class DialogPopUpUserProfileClass extends State<DialogPopUpUserProfile> {
       ],
     );
   }
+
 }
 

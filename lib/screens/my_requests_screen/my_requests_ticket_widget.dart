@@ -239,7 +239,6 @@ class MyRequestsItemWidget extends StatelessWidget {
         {
           Navigator.of(context)
               .pushNamed(PermissionScreen.routeName,arguments: {PermissionScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
-
           break;
         }
       case RequestServiceID.businessMissionServiceID:
@@ -257,19 +256,22 @@ class MyRequestsItemWidget extends StatelessWidget {
       case RequestServiceID.accessRightServiceID:
         {
           Navigator.of(context)
-              .pushNamed(AccessRightScreen.routeName,arguments: {AccessRightScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
+              .pushNamed(AccessRightScreen.routeName,arguments: {AccessRightScreen.requestNoKey: myRequestsModelData.requestNo.toString()
+            ,AccessRightScreen.requestHrCode: myRequestsModelData.requestHRCode.toString()});
           break;
         }
       case RequestServiceID.emailUserAccountServiceID:
         {
           Navigator.of(context)
-              .pushNamed(EmailAndUserAccountScreen.routeName,arguments: {EmailAndUserAccountScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
+              .pushNamed(EmailAndUserAccountScreen.routeName,arguments: {EmailAndUserAccountScreen.requestNoKey: myRequestsModelData.requestNo.toString()
+              ,EmailAndUserAccountScreen.requestHrCode: myRequestsModelData.requestHRCode.toString()});
           break;
         }
       case RequestServiceID.businessCardServiceID:
         {
           Navigator.of(context)
-              .pushNamed(BusinessCardScreen.routeName,arguments: {BusinessCardScreen.requestNoKey: myRequestsModelData.requestNo.toString()});
+              .pushNamed(BusinessCardScreen.routeName,arguments: {BusinessCardScreen.requestNoKey: myRequestsModelData.requestNo.toString()
+            ,BusinessCardScreen.requestHrCode: myRequestsModelData.requestHRCode.toString()});
           break;
         }
       case RequestServiceID.equipmentServiceID:

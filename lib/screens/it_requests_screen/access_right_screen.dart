@@ -8,6 +8,7 @@ import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart
 import 'package:hassanallamportalflutter/bloc/it_request_bloc/access_right_request/access_right_cubit.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:hassanallamportalflutter/widgets/filters/multi_selection_chips_filters.dart';
@@ -21,12 +22,14 @@ class AccessRightScreen extends StatefulWidget {
 
   static const routeName = "/access-user-account-screen";
   static const requestNoKey = 'request-No';
+  static const requestHrCode = 'request-HrCode';
 
   const AccessRightScreen(
-      {Key? key,this.requestNo})
+      {Key? key,this.requestNo,this.requestedHrCode})
       : super(key: key);
 
   final requestNo;
+  final requestedHrCode;
 
   @override
   State<AccessRightScreen> createState() => _AccessRightScreen();
@@ -38,7 +41,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
   @override
   Widget build(BuildContext context) {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
-
+    final formatter = GlobalConstants.dateFormatServer;
 
     final currentRequestNo = widget.requestNo;
 
@@ -445,7 +448,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
 
                                   builder: (context, state) {
                                     return TextFormField(
-                                      initialValue: state.fromDate.value,
+                                      initialValue:  state.fromDate.value,
                                       key: UniqueKey(),
                                       readOnly: true,
                                       decoration: InputDecoration(

@@ -267,7 +267,9 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                         onChanged: (value) {
                                             context.read<EmbassyLetterCubit>()
                                                 .addSelectedEmbassy(
-                                                value.toString());
+                                                value.toString()
+                                                // GlobalConstants.embassyLetterList.indexOf(value.toString()).toString()
+                                            );
                                         },
                                       ),
                                     ),
@@ -400,7 +402,7 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                           FloatingLabelAlignment.start,
                                           labelText: "Comments",
                                           prefixIcon: const Icon(Icons.comment),
-                                          border: myinputborder(),
+                                          border: myInputBorder(),
                                         )
                                     );
                                   }
