@@ -1,6 +1,10 @@
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:sizer/sizer.dart';
@@ -27,6 +31,23 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
 
   List<dynamic> setBenefitsFilters(int catId, List<dynamic> mainList) {
     return mainList.where((element) => element['catId'] == catId).toList();
+  }
+  @override
+  void initState() {
+    super.initState();
+
+    FlutterDownloader.registerCallback(downloadCallback);
+  }
+
+  static void downloadCallback(String id, DownloadTaskStatus status,
+      int progress) {
+    // if (debug) {
+    print(
+        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
+    // }
+    final SendPort send =
+    IsolateNameServer.lookupPortByName('downloader_send_port')!;
+    send.send([id, status, progress]);
   }
 
   @override

@@ -17,7 +17,7 @@ class AddRequestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(title: const Text('Add New Request'),),
       body: Sizer(
         builder: (BuildContext context, Orientation orientation,
             DeviceType deviceType) {
@@ -28,7 +28,7 @@ class AddRequestScreen extends StatelessWidget {
                 child: ExpansionTile(
                   expandedAlignment: Alignment.centerLeft,
                   leading: const Icon(Icons.usb, size: 40),
-                  title: Text(
+                  title: const Text(
                     'IT Request',
                     style: TextStyle(
                       fontSize: 17,
@@ -38,7 +38,7 @@ class AddRequestScreen extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: double.infinity,
-                      child: TextButton(style: ButtonStyle(alignment: Alignment.centerLeft),
+                      child: TextButton(style: const ButtonStyle(alignment: Alignment.centerLeft),
                         child: const Text('Email & User Account'),
                         onPressed: () {
                           Navigator.of(context).pushNamed(EmailAndUserAccountScreen.routeName);
@@ -47,7 +47,7 @@ class AddRequestScreen extends StatelessWidget {
                     ),
                     SizedBox(
                       width: double.infinity,
-                      child: TextButton(style: ButtonStyle(alignment: Alignment.centerLeft),
+                      child: TextButton(style: const ButtonStyle(alignment: Alignment.centerLeft),
                         child: const Text('Access Right'),
                         onPressed: () {
                           Navigator.of(context).pushNamed(AccessRightScreen.routeName);
@@ -56,7 +56,7 @@ class AddRequestScreen extends StatelessWidget {
                     ),
                     SizedBox(
                       width: double.infinity,
-                      child: TextButton(style: ButtonStyle(alignment: Alignment.centerLeft),
+                      child: TextButton(style: const ButtonStyle(alignment: Alignment.centerLeft),
                         child: const Text('Equipments'),
                         onPressed: () {
                           Navigator.of(context).pushNamed(EquipmentsRequest.routeName);
@@ -77,7 +77,7 @@ class AddRequestScreen extends StatelessWidget {
                 child: ExpansionTile(
                   expandedAlignment: Alignment.centerLeft,
                   leading: const Icon(Icons.calendar_month_outlined, size: 40),
-                  title: Text(
+                  title: const Text(
                     'HR Request',
                     style: TextStyle(
                       fontSize: 17,
@@ -87,26 +87,26 @@ class AddRequestScreen extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: double.infinity,
-                      child: TextButton(style: ButtonStyle(alignment: Alignment.centerLeft),                        child: const Text('Business Mission'),
+                      child: TextButton(style: const ButtonStyle(alignment: Alignment.centerLeft),                        child: const Text('Business Mission'),
                         onPressed: () {
-                          Navigator.of(context).pushNamed(BusinessMissionScreen.routeName);
+                          Navigator.of(context).pushNamed(BusinessMissionScreen.routeName,arguments: {'request-No': '0'});
                         },
                       ),
                     ),
                     SizedBox(
                       width: double.infinity,
-                      child: TextButton(style: ButtonStyle(alignment: Alignment.centerLeft),
+                      child: TextButton(style: const ButtonStyle(alignment: Alignment.centerLeft),
                         child: const Text('Permission'),
                         onPressed: () {
-                          Navigator.of(context).pushNamed(PermissionScreen.routeName);
+                          Navigator.of(context).pushNamed(PermissionScreen.routeName,arguments: {'request-No': '0'});
                         },
                       ),
                     ),
                     SizedBox(
                       width: double.infinity,
-                      child: TextButton(style: ButtonStyle(alignment: Alignment.centerLeft),                        child: const Text('Vacation'),
+                      child: TextButton(style: const ButtonStyle(alignment: Alignment.centerLeft),                        child: const Text('Vacation'),
                         onPressed: () {
-                          Navigator.of(context).pushNamed(VacationScreen.routeName);
+                          Navigator.of(context).pushNamed(VacationScreen.routeName,arguments: {'request-No': '0'});
                         },
                       ),
                     ),
@@ -123,7 +123,7 @@ class AddRequestScreen extends StatelessWidget {
                   expandedAlignment: Alignment.centerLeft,
                   leading: const Icon(Icons.perm_contact_calendar_outlined,
                       size: 40),
-                  title: Text(
+                  title: const Text(
                     'Admin Request',
                     style: TextStyle(
                       fontSize: 17,
@@ -133,7 +133,7 @@ class AddRequestScreen extends StatelessWidget {
                   children: [
                     SizedBox(
                       width: double.infinity,
-                      child: TextButton(style: ButtonStyle(alignment: Alignment.centerLeft),                        child: const Text('Business Card'),
+                      child: TextButton(style: const ButtonStyle(alignment: Alignment.centerLeft),                        child: const Text('Business Card'),
                         onPressed: () {
                           Navigator.of(context).pushNamed(BusinessCardScreen.routeName);
                         },
@@ -141,7 +141,7 @@ class AddRequestScreen extends StatelessWidget {
                     ),
                     SizedBox(
                       width: double.infinity,
-                      child: TextButton(style: ButtonStyle(alignment: Alignment.centerLeft),                        child: const Text('Travel Request'),
+                      child: TextButton(style: const ButtonStyle(alignment: Alignment.centerLeft),                        child: const Text('Travel Request'),
                         onPressed: () {
                           Navigator.of(context).pushNamed(EmbassyLetterScreen.routeName);
                         },
