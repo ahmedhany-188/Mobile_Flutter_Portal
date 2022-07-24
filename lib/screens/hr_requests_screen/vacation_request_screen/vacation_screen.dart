@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/responsible_vacation_request/responsible_vacation_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/vacation_request/vacation_cubit.dart';
@@ -9,6 +10,8 @@ import 'package:hassanallamportalflutter/data/models/requests_form_models/reques
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
+import '../../../widgets/loading/loading_dialog.dart';
+import '../../../widgets/success/success_request_widget.dart';
 
 
 class VacationScreen extends StatefulWidget {
@@ -32,7 +35,7 @@ class _VacationScreenState extends State<VacationScreen> {
   void dispose() {
     // TODO: implement dispose
 
-
+    EasyLoading.dismiss();
     super.dispose();
   }
   @override
@@ -126,11 +129,14 @@ class _VacationScreenState extends State<VacationScreen> {
                       LoadingDialog.show(context);
                     }
                     if (state.status.isSubmissionSuccess) {
-                      LoadingDialog.hide(context);
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (_) =>
-                              SuccessScreen(text: state.successMessage ??
-                                  "Error Number",)));
+                      // LoadingDialog.hide(context);
+                      if(state.requestStatus == RequestStatus.newRequest){
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (_) =>
+                                SuccessScreen(text: state.successMessage ??
+                                    "Error Number",routName: VacationScreen.routeName,)));
+                      }
+
                     }
                     if (state.status.isSubmissionFailure) {
                       LoadingDialog.hide(context);
@@ -495,6 +501,7 @@ class _VacationScreenState extends State<VacationScreen> {
     );
   }
 
+
   // final TextEditingController textController = TextEditingController();
   void _showModal(context) {
     final VacationCubit bloc = BlocProvider.of<VacationCubit>(context);
@@ -659,69 +666,34 @@ class ItemView extends StatelessWidget {
 }
 
 
-class LoadingDialog extends StatelessWidget {
-  static void show(BuildContext context, {Key? key}) => showDialog<void>(
-        context: context,
-        useRootNavigator: false,
-        barrierDismissible: false,
-        builder: (_) => LoadingDialog(key: key),
-      ).then((_) => FocusScope.of(context).requestFocus(FocusNode()));
+// class LoadingDialog extends StatelessWidget {
+//   static void show(BuildContext context, {Key? key}) => showDialog<void>(
+//         context: context,
+//         useRootNavigator: false,
+//         barrierDismissible: false,
+//         builder: (_) => LoadingDialog(key: key),
+//       ).then((_) => FocusScope.of(context).requestFocus(FocusNode()));
+//
+//   static void hide(BuildContext context) => Navigator.pop(context);
+//
+//   const LoadingDialog({Key? key}) : super(key: key);
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return WillPopScope(
+//       onWillPop: () async => false,
+//       child: Center(
+//         child: Card(
+//           child: Container(
+//             width: 80,
+//             height: 80,
+//             padding: const EdgeInsets.all(12.0),
+//             child: const CircularProgressIndicator(),
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
 
-  static void hide(BuildContext context) => Navigator.pop(context);
 
-  const LoadingDialog({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Center(
-        child: Card(
-          child: Container(
-            width: 80,
-            height: 80,
-            padding: const EdgeInsets.all(12.0),
-            child: const CircularProgressIndicator(),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class SuccessScreen extends StatelessWidget {
-  const SuccessScreen({Key? key, required this.text}) : super(key: key);
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Icon(Icons.tag_faces, size: 100),
-            const SizedBox(height: 10),
-            Text(
-              text,
-              style: const TextStyle(fontSize: 54, color: Colors.black),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              onPressed: () => Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (_) => const VacationScreen())),
-              icon: const Icon(Icons.replay),
-              label: const Text('Create Another Permission Request'),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.close),
-              label: const Text('Close'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
