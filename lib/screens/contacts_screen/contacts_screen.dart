@@ -280,7 +280,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                                           isCollapsed: true,
                                           filled: true,
                                           labelText: "Search contact",
-                                          hintText: "Search contact",
+                                          hintText: 'Name or HR Code',
                                           prefixIcon: Icon(Icons.search),
                                           border: OutlineInputBorder(
                                               borderRadius: BorderRadius.all(
