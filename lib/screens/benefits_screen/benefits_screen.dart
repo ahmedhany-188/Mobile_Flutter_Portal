@@ -100,7 +100,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            RawMaterialButton(
+                            OutlinedButton(
                               child: const Text('Retail shops'),
                               onPressed: () {
                                 setState(() {
@@ -111,7 +111,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                               },
                             ),
                             const SizedBox(width: 10),
-                            ElevatedButton(
+                            OutlinedButton(
                               child: const Text('Hotels & travel'),
                               onPressed: () {
                                 setState(() {
@@ -133,7 +133,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                               },
                             ),
                             const SizedBox(width: 10),
-                            TextButton(
+                            OutlinedButton(
                               child: const Text('Other'),
                               onPressed: () {
                                 setState(() {
@@ -150,10 +150,9 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                     ),
                     SizedBox(
                       height: 80.h,
-                      child: (searchResult.isNotEmpty ||
-                              textController.text.isNotEmpty)
+                      child: (searchResult.isNotEmpty)
                           ? benefitsListView(searchResult)
-                          : benefitsListView(benefitsData),
+                          : (textController.text.isEmpty)? benefitsListView(benefitsData): Center(child: Text('No data found'),),
                     ),
                   ],
                 ),

@@ -87,6 +87,15 @@ class RequestDataProviders {
     return rawDurationData;
   }
 
+  Future<http.Response> getEquipmentsRequestData(String hrCode,String requestNo) async{
+    http.Response rawDurationData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/GetEquipments?HRCode=$hrCode&requestno=$requestNo"),
+    );
+    print(rawDurationData.body);
+    return rawDurationData;
+  }
+
   Future<http.Response> getAccessRightRequestData(String hrCode,String requestNo) async{
     http.Response rawDurationData = await http.get(
       Uri.parse(getAccessRightLink(hrCode,requestNo)),
