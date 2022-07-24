@@ -1,18 +1,22 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/request_service_id.dart';
 
+import '../../../../constants/enums.dart';
 import '../../../../data/data_providers/general_dio/general_dio.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/departments_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/business_unit_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/equipments_location_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
+import '../../../../data/repositories/request_repository.dart';
 
 part 'equipments_state.dart';
 
 class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
-  EquipmentsCubit() : super(const EquipmentsCubitStates()) {
+  EquipmentsCubit(this.requestRepository)
+      : super(const EquipmentsCubitStates()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (state.businessUnitEnumStates == EquipmentsEnumState.failed) {
         if (connectivityResult == ConnectivityResult.wifi ||
@@ -35,6 +39,28 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   static EquipmentsCubit get(context) => BlocProvider.of(context);
 
   final Connectivity connectivity = Connectivity();
+  final RequestRepository requestRepository;
+
+  void getEquipmentsData(RequestStatus requestStatus, String? requestNo) async {
+    final requestData = await requestRepository.getEquipments(requestNo!);
+
+    var status = "Pending";
+    if (requestData.status == 0) {
+      status = "Pending";
+    } else if (requestData.status == 1) {
+      status = "Approved";
+    } else if (requestData.status == 2) {
+      status = "Rejected";
+    }
+
+    emit(
+      state.copyWith(
+        requestStatus: RequestStatus.oldRequest,
+        statusAction: status,
+        // takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
+      ),
+    );
+  }
 
   void postEquipmentsRequest({
     required DepartmentsModel departmentObject,

@@ -9,6 +9,7 @@ import 'package:hassanallamportalflutter/data/models/admin_requests_models/busin
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/it_requests_form_models/equipments_models/equipments_items_model.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_access_right_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_account_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_business_card_model.dart';
@@ -22,6 +23,8 @@ import 'package:hassanallamportalflutter/data/models/requests_form_models/reques
 import 'package:http/http.dart' as http;
 
 import '../../constants/request_service_id.dart';
+import '../models/it_requests_form_models/equipments_models/equipments_requested_model.dart';
+import '../models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
 import '../models/requests_form_models/request_business_mission_data_model.dart';
 import '../models/requests_form_models/request_permission_data_model.dart';
 
@@ -99,6 +102,14 @@ class RequestRepository {
         .getBusinessCardRequestData(userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawPermission.body);
     final BusinessCardFormModel response = BusinessCardFormModel.fromJson(json[0]);
+    return response;
+  }
+
+  Future<EquipmentsRequestedModel> getEquipments(String requestNo) async{
+    final http.Response rawPermission = await requestDataProviders
+        .getEquipmentsRequestData(userData.user?.userHRCode ?? "",requestNo);
+    final json = await jsonDecode(rawPermission.body);
+    final EquipmentsRequestedModel response = EquipmentsRequestedModel.fromJson(json[0]);
     return response;
   }
 

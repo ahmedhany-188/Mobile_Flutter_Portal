@@ -16,6 +16,8 @@ import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_us
 import 'package:path/path.dart';
 import 'package:sizer/sizer.dart';
 
+import '../it_requests_screen/equipments_request.dart';
+
 class MyRequestsItemWidget extends StatelessWidget {
 
   final List<MyRequestsModelData> listFromRequestScreen;
@@ -270,6 +272,12 @@ class MyRequestsItemWidget extends StatelessWidget {
           Navigator.of(context)
               .pushNamed(BusinessCardScreen.routeName,arguments: {BusinessCardScreen.requestNoKey: myRequestsModelData.requestNo.toString()
             ,BusinessCardScreen.requestHrCode: myRequestsModelData.requestHRCode.toString()});
+          break;
+        }
+      case RequestServiceID.equipmentServiceID:
+        {
+          Navigator.of(context)
+              .pushNamed(EquipmentsRequest.routeName,arguments: {EquipmentsRequest.requestNoKey: myRequestsModelData.requestNo.toString()});
           break;
         }
 
