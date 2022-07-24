@@ -21,9 +21,7 @@ class EmbassyLetterFormModel {
       this.requestHrCode);
 
 
-  EmbassyLetterFormModel.fromJson(Map<String, dynamic>json)
-      :
-
+  EmbassyLetterFormModel.fromJson(Map<String, dynamic>json):
         requestDate=json["date"],
         purpose=json["purpose"],
         embassy=json["embassyId"],
@@ -34,6 +32,5 @@ class EmbassyLetterFormModel {
         comments=json["comments"],
         status=json["status"],
         requestHrCode=json["requestHrCode"];
-
 
 }

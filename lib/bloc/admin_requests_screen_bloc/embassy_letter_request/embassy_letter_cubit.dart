@@ -100,16 +100,17 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
       status: Formz.validate([fromDate, toDate, passportNO]),
     ));
 
-    print("salary:   "+state.salary+  "     "+state.comments.toString());
+    print("salary:   "+state.salary+  "     "+state.comments);
     if (state.status.isValidated) {
       embassyLetterFormModel = EmbassyLetterFormModel(state.requestDate.value,
           state.purpose,
           state.embassy,
           state.dateFrom.value,
           state.dateTo.value,
-          state.passportNumber.value,
+          state.passportNumber.value.toString(),
           state.salary,
-          state.comments,0,"0");
+          state.comments.toString(),0,"0");
+
       try {
         var connectivityResult = await connectivity.checkConnectivity();
         if (connectivityResult == ConnectivityResult.wifi ||

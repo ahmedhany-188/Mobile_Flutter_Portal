@@ -366,14 +366,14 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                           Row(children: [
                                             Padding(
                                               padding: const EdgeInsets.all(
-                                                  8.0),
+                                                  5.0),
                                               child: FloatingActionButton
                                                   .extended(
                                                 onPressed: () {
                                                   _launchUrl();
                                                 },
                                                 label: const Text(
-                                                    'Download file',
+                                                    'Download',
                                                     style: TextStyle(
                                                         color: Colors.black
                                                     )),
@@ -385,7 +385,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
 
                                             Padding(
                                               padding: const EdgeInsets.all(
-                                                  8.0),
+                                                  5.0),
                                               child: BlocBuilder<
                                                   AccessRightCubit,
                                                   AccessRightInitial>(
@@ -393,6 +393,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                   return
                                                     FloatingActionButton
                                                         .extended(
+
                                                       onPressed: () async {
                                                         FilePickerResult? result = await FilePicker
                                                             .platform
@@ -412,7 +413,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                         }
                                                       },
                                                       label: const Text(
-                                                          'Upload',
+                                                          ' Upload ',
                                                           style: TextStyle(
                                                               color: Colors
                                                                   .black

@@ -212,6 +212,8 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                 child: BlocBuilder<EmailUserAccountCubit,
                                     EmailUserAccountInitial>(
                                     buildWhen: (previous, current) {
+
+
                                       return (previous.requestType !=
                                           current.requestType);
                                     },

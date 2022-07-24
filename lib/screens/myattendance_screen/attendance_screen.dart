@@ -1,14 +1,11 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/DaysOfTheWeek.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_ticket_widget.dart';
-import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
 
 class AttendanceScreen extends StatefulWidget {
@@ -31,11 +28,14 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
       .now()
       .month - 1;
 
+  late StreamSubscription mSub;
+
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery
         .of(context)
         .size;
+
 
     var pageController = PageController(initialPage: selectedPage);
     final user = context.select((AppBloc bloc) => bloc.state.userData);
@@ -76,74 +76,61 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                       child: SingleChildScrollView(child: Column(
 
                           children: [
-                            Container(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextButton.icon(onPressed:
-                                      () {
-                                    if (!transition) {
-                                      transition = true;
-                                      monthNumber--;
-                                      pageController.jumpToPage(monthNumber - 1);
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton.icon(onPressed:
+                                    () {
+                                  if (!transition) {
+                                    transition = true;
+                                    monthNumber--;
+                                    pageController.jumpToPage(monthNumber - 1);
 
-                                      if (monthNumber < 1) {
-                                        monthNumber = 12;
-                                        pageController.jumpToPage(11);
-                                      }
-                                      BlocProvider.of<AttendanceCubit>(context)
-                                          .getAttendanceList(
-                                          user.user!.userHRCode, monthNumber);
-                                      if (state is BlocGetTheAttendanceErrorState) {
-                                        AttendanceTicketWidget(const []);
-                                      } else
-                                      if (state is BlocGetTheAttendanceLoadingState) {
-                                        AttendanceTicketWidget(const []);
-                                      }
-                                    } else {
-                                      null;
+                                    if (monthNumber < 1) {
+                                      monthNumber = 12;
+                                      pageController.jumpToPage(11);
                                     }
-                                  },
-                                      icon: Icon(Icons.arrow_back_ios,
-                                        color: Colors.white,),
-                                      label: Text("")),
-                                  Text(
-                                    DateFormat('MMMM').format(
-                                        DateTime(0, monthNumber)),
-                                    style: TextStyle(
-                                        fontSize: 25, color: Colors.white),),
-                                  TextButton.icon(onPressed:
-                                      () {
-                                    if (!transition) {
-                                      transition = true;
-                                      monthNumber++;
-                                      pageController.jumpToPage(monthNumber - 1);
+                                    BlocProvider.of<AttendanceCubit>(context)
+                                        .getAttendanceList(
+                                        user.user!.userHRCode, monthNumber);
+                                  } else {
+                                    null;
+                                  }
+                                },
+                                    icon: Icon(Icons.arrow_back_ios,
+                                      color: Colors.white,),
+                                    label: Text("")),
+                                Text(
+                                  DateFormat('MMMM').format(
+                                      DateTime(0, monthNumber)),
+                                  style: TextStyle(
+                                      fontSize: 25, color: Colors.white),),
+                                TextButton.icon(onPressed:
+                                    () {
+                                  if (!transition) {
+                                    transition = true;
+                                    monthNumber++;
+                                    pageController.jumpToPage(monthNumber - 1);
 
-                                      if (monthNumber > 12) {
-                                        monthNumber = 1;
-                                        pageController.jumpToPage(0);
-                                      }
-                                      BlocProvider.of<AttendanceCubit>(
-                                          context)
-                                          .getAttendanceList(
-                                          user.user!.userHRCode, monthNumber);
-                                      if (state is BlocGetTheAttendanceErrorState) {
-                                        AttendanceTicketWidget(const []);
-                                      } else
-                                      if (state is BlocGetTheAttendanceLoadingState) {
-                                        AttendanceTicketWidget(const []);
-                                      }
-                                    } else {
-                                      null;
+                                    if (monthNumber > 12) {
+                                      monthNumber = 1;
+                                      pageController.jumpToPage(0);
                                     }
-                                  },
-                                      icon: Icon(Icons.arrow_forward_ios,
-                                        color: Colors.white,),
-                                      label: Text("")
-                                  )
-                                ],
-                              ),
+                                    BlocProvider.of<AttendanceCubit>(
+                                        context)
+                                        .getAttendanceList(
+                                        user.user!.userHRCode, monthNumber);
+                                  } else {
+                                    null;
+                                  }
+                                },
+                                    icon: Icon(Icons.arrow_forward_ios,
+                                      color: Colors.white,),
+                                    label: Text("")
+                                )
+                              ],
                             ),
+
 
 
                             SafeArea(child:
@@ -155,20 +142,21 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                                     Timer timer = Timer(
                                         const Duration(milliseconds: 1000), () {
                                       setState(() {
+
                                         BlocProvider.of<AttendanceCubit>(
                                             context)
                                             .getAttendanceList(
                                             user.user!.userHRCode, index + 1);
                                         monthNumber = index + 1;
-                                        if (state is BlocGetTheAttendanceErrorState) {
-                                          AttendanceTicketWidget(const []);
-                                        } else
-                                        if (state is BlocGetTheAttendanceLoadingState) {
-                                          AttendanceTicketWidget(const []);
-                                        } else
-                                        if (state is BlocGetTheAttendanceSuccessState) {
-                                          transition = false;
-                                        }
+                                        mSub = BlocProvider.of<AttendanceCubit>(context).stream.listen((state) {
+                                          if(state is BlocGetTheAttendanceSuccessState){
+                                            print('-----------------------------------listening to bloc');
+                                          }
+                                        });
+                                        // if (state is BlocGetTheAttendanceSuccessState) {
+                                        //  // transition = false;
+                                        // }
+
                                       });
                                     });
                                   });
@@ -201,6 +189,7 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
   }
 
   Container getMonth(AttendanceState state) {
+
     return Container(
       child: state is BlocGetTheAttendanceSuccessState
           ? Padding(
@@ -218,6 +207,13 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
         child: CircularProgressIndicator(),),
     );
   }
+
+  @override
+  void dispose() {
+    mSub.cancel();
+    super.dispose();
+  }
+
 }
 
 

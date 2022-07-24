@@ -14,8 +14,6 @@ class UserProfileScreen extends StatefulWidget {
 
   const UserProfileScreen({Key? key}) : super(key: key);
 
-
-
   @override
   State<UserProfileScreen> createState() => UserProfileScreenClass();
 }
@@ -76,7 +74,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
               children: [
 
                 Container(
-                  height: height * 0.55,
+                  height: height * 0.70,
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       double innerHeight = constraints.maxHeight;

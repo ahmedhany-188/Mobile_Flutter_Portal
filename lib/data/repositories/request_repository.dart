@@ -209,17 +209,17 @@ class RequestRepository {
       "date": GlobalConstants.dateFormatServer.format(
           GlobalConstants.dateFormatViewed.parse(
               embassyLetterFormModel.requestDate!)),
-      "comments": embassyLetterFormModel.comments,
+      "comments": embassyLetterFormModel.comments.toString(),
       "dateFrom": GlobalConstants.dateFormatServer.format(
           GlobalConstants.dateFormatViewed.parse(
               embassyLetterFormModel.dateFrom!)),
       "dateTo": GlobalConstants.dateFormatServer.format(
           GlobalConstants.dateFormatViewed.parse(
               embassyLetterFormModel.dateTo!)),
-      "purpose": embassyLetterFormModel.purpose,
+      "purpose": embassyLetterFormModel.purpose.toString(),
       "embassyId": embassyLetterFormModel.embassy,
-      "passportNo": embassyLetterFormModel.passportNo,
-      "addSalary": embassyLetterFormModel.addSalary,
+      "passportNo": embassyLetterFormModel.passportNo.toString(),
+      "addSalary": embassyLetterFormModel.addSalary.toString(),
     });
 
     final http.Response rawEmbassyLetter = await requestDataProviders
