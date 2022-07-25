@@ -42,28 +42,61 @@ class VacationCubit extends Cubit<VacationInitial> {
           requestStatus: RequestStatus.newRequest
         ),
       );
-    }else{
+    }else {
+      emit(state.copyWith(status: FormzStatus.submissionInProgress));
+      final requestData = await _requestRepository.getVacationRequestData(
+          requestNo!, requesterHRCode!);
 
-      final requestData = await _requestRepository.getVacationRequestData(requestNo!,requesterHRCode!);
+      final comments = requestData.comments!.isEmpty
+          ? "No Comment"
+          : requestData.comments;
+      // final responsiblePerson = requestData.responsible != null ? ContactsDataFromApi(
+      //     email: requestData.responsible!.contains("null")
+      //         ? "No Data"
+      //         : requestData.responsible,
+      //     name: requestData.responsible!.contains("null") ||
+      //         requestData.responsible!.isEmpty ? "No Data" : requestData
+      //         .responsible):ContactsDataFromApi.empty;
 
+      var responsiblePerson;
+      if(requestData.responsible != null){
+        responsiblePerson =  ContactsDataFromApi(
+            email: requestData.responsible!.contains("null")
+                ? "No Data"
+                : requestData.responsible,
+            name: requestData.responsible!.contains("null") ||
+                requestData.responsible!.isEmpty ? "No Data" : requestData
+                .responsible);
+      }else{
+        responsiblePerson = ContactsDataFromApi(
+            email:  "No Data"
+            ,
+            name:  "No Data");
+      }
 
-      final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
-      final responsiblePerson  = ContactsDataFromApi(email: requestData.responsible!.contains("null") ? "No Data" : requestData.responsible,name: requestData.responsible!.contains("null") || requestData.responsible!.isEmpty? "No Data" : requestData.responsible);
-      final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.date!)));
-      final requestFromDate = DateFrom.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateFrom!)));
-      final requestToDate = DateTo.dirty(value: GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateTo!)), dateFrom: requestFromDate.value);
+      final requestDate = RequestDate.dirty(
+          GlobalConstants.dateFormatViewed.format(
+              GlobalConstants.dateFormatServer.parse(requestData.date!)));
+      final requestFromDate = DateFrom.dirty(
+          GlobalConstants.dateFormatViewed.format(
+              GlobalConstants.dateFormatServer.parse(requestData.dateFrom!)));
+      final requestToDate = DateTo.dirty(
+          value: GlobalConstants.dateFormatViewed.format(
+              GlobalConstants.dateFormatServer.parse(requestData.dateTo!)),
+          dateFrom: requestFromDate.value);
 
       print(requestToDate.value);
 
       var status = "Pending";
-      if(requestData.status == 0){
+      if (requestData.status == 0) {
         status = "Pending";
-      }else if (requestData.status == 1){
+      } else if (requestData.status == 1) {
         status = "Approved";
-      }else if (requestData.status == 2){
+      } else if (requestData.status == 2) {
         status = "Rejected";
       }
 
+      print(requestData.noOfDays.toString());
       emit(
         state.copyWith(
             requestDate: requestDate,
@@ -73,11 +106,13 @@ class VacationCubit extends Cubit<VacationInitial> {
             vacationDuration: requestData.noOfDays.toString(),
             responsiblePerson: responsiblePerson,
             comment: comments,
-            status: Formz.validate([requestDate,
-               state.vacationFromDate,state.vacationToDate]),
+            status: FormzStatus.submissionSuccess,
             requestStatus: RequestStatus.oldRequest,
-          statusAction: status,
-          takeActionStatus: (_requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
+            statusAction: status,
+            takeActionStatus: (_requestRepository.userData.user?.userHRCode ==
+                requestData.requestHrCode)
+                ? TakeActionStatus.view
+                : TakeActionStatus.takeAction
         ),
       );
     }
@@ -216,6 +251,12 @@ class VacationCubit extends Cubit<VacationInitial> {
       vacationToDate: vacationToDate,
       status: Formz.validate([requestDate, vacationFromDate,vacationToDate]),
     ));
+    // emit(
+    //   state.copyWith(
+    //     successMessage: "testing",
+    //     status: FormzStatus.submissionSuccess,
+    //   ),
+    // );
     if (state.status.isValidated) {
       // print("Done permission");
       // final DateFormat dateFormatViewed = DateFormat("EEEE dd-MM-yyyy");

@@ -23,7 +23,7 @@ class VacationScreen extends StatefulWidget {
 
   const VacationScreen({Key? key, this.requestData}) : super(key: key);
 
-  final  requestData;
+  final  dynamic requestData;
 
   @override
   State<VacationScreen> createState() => _VacationScreenState();
@@ -70,9 +70,9 @@ class _VacationScreenState extends State<VacationScreen> {
         child: BlocBuilder<VacationCubit,VacationInitial>(
 
             builder: (context,state) {
-              print(currentRequestData);
+              // print(currentRequestData);
               return Scaffold(
-                appBar: AppBar(title: const Text('Vacation Request')),
+                appBar: AppBar(title: Text("Vacation Request ${state.requestStatus == RequestStatus.oldRequest ?currentRequestData[VacationScreen.requestNoKey] :""}")),
                 floatingActionButton: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
@@ -98,7 +98,6 @@ class _VacationScreenState extends State<VacationScreen> {
 
                       },
                       icon: const Icon(Icons.dangerous),
-
                       label: const Text('Reject'),
                     ),
                     const SizedBox(height: 12),
@@ -126,28 +125,30 @@ class _VacationScreenState extends State<VacationScreen> {
                 body: BlocListener<VacationCubit, VacationInitial>(
                   listener: (context, state) {
                     if (state.status.isSubmissionInProgress) {
-                      LoadingDialog.show(context);
+                      EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
                     }
                     if (state.status.isSubmissionSuccess) {
                       // LoadingDialog.hide(context);
+                      EasyLoading.dismiss(animation: true);
                       if(state.requestStatus == RequestStatus.newRequest){
                         Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (_) =>
                                 SuccessScreen(text: state.successMessage ??
-                                    "Error Number",routName: VacationScreen.routeName,)));
+                                    "Error Number",routName: VacationScreen.routeName, requestName: 'Vacation',)));
                       }
 
                     }
                     if (state.status.isSubmissionFailure) {
-                      LoadingDialog.hide(context);
-                      ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                state.errorMessage ?? 'Request Failed'),
-                          ),
-                        );
+                      EasyLoading.showError(state.errorMessage ?? 'Request Failed');
+                      // LoadingDialog.hide(context);
+                      // ScaffoldMessenger.of(context)
+                      //   ..hideCurrentSnackBar()
+                      //   ..showSnackBar(
+                      //     SnackBar(
+                      //       content: Text(
+                      //           state.errorMessage ?? 'Request Failed'),
+                      //     ),
+                      //   );
                     }
                   },
                   child: Padding(
@@ -404,8 +405,8 @@ class _VacationScreenState extends State<VacationScreen> {
                                         current.vacationDuration);
                                   },
                                   builder: (context, state) {
-                                    // print(
-                                    //     "from Screen${state.vacationDuration}");
+                                    print(
+                                        "from vacationDuration ${state.vacationDuration}");
                                     return TextFormField(
                                       key: UniqueKey(),
                                       initialValue: state.vacationDuration,
