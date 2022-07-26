@@ -84,7 +84,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
         body: BlocConsumer<PayslipCubit, PayslipState>(
           listener: (context, state) {
             if (state is PayslipLoadingState) {
-              EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
+              EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
               // ScaffoldMessenger.of(context).hideCurrentSnackBar();
               // ScaffoldMessenger.of(context).showSnackBar(
               //   const SnackBar(

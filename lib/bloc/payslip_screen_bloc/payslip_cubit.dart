@@ -40,7 +40,7 @@ class PayslipCubit extends Cubit<PayslipState> {
                   PayslipErrorState(
                       response));
             }else {
-            PayslipErrorState("No internet Connection");
+            emit(PayslipErrorState("No internet Connection"));
           }
         } catch (e) {
           if (kDebugMode) {

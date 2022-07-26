@@ -19,7 +19,7 @@ import '../../bloc/it_request_bloc/equipments_request/equipments_items_cubit/equ
 import '../../data/repositories/request_repository.dart';
 
 class EquipmentsRequest extends StatelessWidget {
-  EquipmentsRequest({this.requestNo,Key? key}) : super(key: key);
+  EquipmentsRequest({this.requestNo, Key? key}) : super(key: key);
   static const routeName = 'request-equipments-screen';
   static const requestNoKey = 'request-No';
   final requestNo;
@@ -42,11 +42,13 @@ class EquipmentsRequest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user =
-        context.select((AppBloc bloc) => bloc.state.userData);
+    final user = context.select((AppBloc bloc) => bloc.state.userData);
 
     return BlocProvider<EquipmentsCubit>(
-      create: (context) => (requestNo == null)? (EquipmentsCubit(RequestRepository(user))..getAll()):(EquipmentsCubit(RequestRepository(user))..getEquipmentsData(RequestStatus.oldRequest, requestNo)),
+      create: (context) => (requestNo == null)
+          ? (EquipmentsCubit(RequestRepository(user))..getAll())
+          : (EquipmentsCubit(RequestRepository(user))
+            ..getEquipmentsData(RequestStatus.oldRequest, requestNo)),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Equipments request'),
@@ -75,17 +77,47 @@ class EquipmentsRequest extends StatelessWidget {
                               dropdownDecoratorProps:
                                   const DropDownDecoratorProps(
                                       dropdownSearchDecoration: InputDecoration(
-                                          labelText: 'Business Unit')),
-                              popupProps: const PopupProps.dialog(
+                                labelText: 'Business Unit',
+                                border: OutlineInputBorder(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
+                              )),
+                              popupProps: const PopupProps.modalBottomSheet(
                                   showSearchBox: true,
-                                  searchDelay: Duration.zero)),
+                                  searchDelay: Duration.zero,
+                                  title: Center(
+                                    child: Text('Business Unit',
+                                        softWrap: true,
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                        )),
+                                  ),
+                                  modalBottomSheetProps: ModalBottomSheetProps(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(20),
+                                              topLeft: Radius.circular(20)))),
+                                  searchFieldProps: TextFieldProps(
+                                    padding: EdgeInsets.all(20),
+                                    decoration: InputDecoration(
+                                        contentPadding: EdgeInsets.all(10),
+                                        isCollapsed: true,
+                                        filled: true,
+                                        labelText: "Search for name",
+                                        hintText: "Search for name",
+                                        prefixIcon: Icon(Icons.search),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0)),
+                                            borderSide: BorderSide.none)),
+                                  ))),
                         ),
                       );
                     },
                   ),
                   BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
                     builder: (context, state) {
-                      return  Flexible(
+                      return Flexible(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: DropdownSearch<EquipmentsLocationModel>(
@@ -94,16 +126,40 @@ class EquipmentsRequest extends StatelessWidget {
                             itemAsString: (loc) => loc.projectName!,
                             dropdownDecoratorProps:
                                 const DropDownDecoratorProps(
-                                    dropdownSearchDecoration:
-                                        InputDecoration(labelText: 'Location')),
-                            popupProps: PopupProps.bottomSheet(
+                                    dropdownSearchDecoration: InputDecoration(
+                              labelText: 'Location',
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                            )),
+                            popupProps: const PopupProps.modalBottomSheet(
                               showSearchBox: true,
-                              title: AppBar(
-                                  title: const Text('Choose location'),
-                                  shape: const RoundedRectangleBorder(
+                              modalBottomSheetProps: ModalBottomSheetProps(
+                                  shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20),
-                                          topRight: Radius.circular(20)))),
+                                          topRight: Radius.circular(20),
+                                          topLeft: Radius.circular(20)))),
+                              title: Center(
+                                child: Text('Location',
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                    )),
+                              ),
+                              searchFieldProps: TextFieldProps(
+                                padding: EdgeInsets.all(20),
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10),
+                                    isCollapsed: true,
+                                    filled: true,
+                                    labelText: "Search for location",
+                                    hintText: "Search for location",
+                                    prefixIcon: Icon(Icons.search),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10.0)),
+                                        borderSide: BorderSide.none)),
+                              ),
                               showSelectedItems: false,
                               searchDelay: Duration.zero,
                             ),
@@ -124,17 +180,41 @@ class EquipmentsRequest extends StatelessWidget {
                             dropdownDecoratorProps:
                                 const DropDownDecoratorProps(
                                     dropdownSearchDecoration: InputDecoration(
-                                        labelText: 'Department')),
-                            popupProps: PopupProps.bottomSheet(
+                              labelText: 'Department',
+                              border: OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(20))),
+                            )),
+                            popupProps: const PopupProps.modalBottomSheet(
                               showSearchBox: true,
-                              title: AppBar(
-                                  title: const Text('Choose department'),
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(20),
-                                          topRight: Radius.circular(20)))),
                               showSelectedItems: false,
                               searchDelay: Duration.zero,
+                              title: Center(
+                                child: Text('Department',
+                                    softWrap: true,
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                    )),
+                              ),
+                              modalBottomSheetProps: ModalBottomSheetProps(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.only(
+                                          topRight: Radius.circular(20),
+                                          topLeft: Radius.circular(20)))),
+                              searchFieldProps: TextFieldProps(
+                                padding: EdgeInsets.all(20),
+                                decoration: InputDecoration(
+                                    contentPadding: EdgeInsets.all(10),
+                                    isCollapsed: true,
+                                    filled: true,
+                                    labelText: "Search for department",
+                                    hintText: "Search for department",
+                                    prefixIcon: Icon(Icons.search),
+                                    border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10.0)),
+                                        borderSide: BorderSide.none)),
+                              ),
                             ),
                           ),
                         ),
@@ -467,12 +547,21 @@ class EquipmentsRequest extends StatelessWidget {
       onTap: () {
         showEquipmentsDialog(context: context, name: name, id: id, icon: icon);
       },
+      borderRadius: const BorderRadius.all(Radius.circular(25)),
       child: Container(
         width: 20.w,
         height: 20.h,
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(25)),
-          color: Colors.red,
+          gradient: LinearGradient(
+              colors: [
+                Color(0xFF1a4c78),
+                Color(0xFF3772a6),
+                Colors.white,
+              ],
+              begin: Alignment.bottomCenter,
+              end: Alignment.topRight,
+              tileMode: TileMode.clamp),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -589,9 +678,15 @@ class EquipmentsRequest extends StatelessWidget {
               searchFieldProps: TextFieldProps(
                 padding: EdgeInsets.all(20),
                 decoration: InputDecoration(
-                  icon: Icon(Icons.search),
-                  hintText: 'Search for name',
-                ),
+                    contentPadding: EdgeInsets.all(10),
+                    isCollapsed: true,
+                    filled: true,
+                    labelText: "Search for name",
+                    hintText: "Search for name",
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        borderSide: BorderSide.none)),
               )),
         ),
       ),

@@ -26,7 +26,7 @@ class GetDirectionWidget extends StatelessWidget {
           itemCount: projectsDirectionData.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
-              padding: const EdgeInsets.all(5.0),
+              padding: const EdgeInsets.all(10.0),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: GridTile(
@@ -72,7 +72,7 @@ class GetDirectionWidget extends StatelessWidget {
             );
           },
         ),
-        fallback: (context) => const Center(child: LinearProgressIndicator()),
+        fallback: (context) => const Center(child: CircularProgressIndicator()),
       ),
     );
   }

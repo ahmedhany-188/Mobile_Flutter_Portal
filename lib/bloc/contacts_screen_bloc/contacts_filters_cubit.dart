@@ -71,7 +71,11 @@ class ContactsFiltersCubit extends Cubit<ContactsFiltersInitial> {
                     .toString()
                     .toLowerCase()
                     .trim()
-                    .contains(singleSplitElement))
+                    .contains(singleSplitElement) || contactElement.userHrCode
+            .toString()
+            .toLowerCase()
+            .trim()
+            .contains(singleSplitElement))
                 : true) &&
             ((state.chosenCompaniesFilter.isNotEmpty)
                 ? state.chosenCompaniesFilter

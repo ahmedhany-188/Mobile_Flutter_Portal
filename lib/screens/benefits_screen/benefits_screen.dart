@@ -1,6 +1,11 @@
+import 'dart:isolate';
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:sizer/sizer.dart';
@@ -30,6 +35,20 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+
+    FlutterDownloader.registerCallback(downloadCallback);
+  }
+
+  static void downloadCallback(
+      String id, DownloadTaskStatus status, int progress) {
+    final SendPort send =
+        IsolateNameServer.lookupPortByName('downloader_send_port')!;
+    send.send([id, status, progress]);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => BenefitsCubit()..getBenefits(),
@@ -41,7 +60,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
         },
         builder: (context, state) {
           return Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(title: const Text('Benefits'),),
             body: Sizer(
               builder: (c, o, d) => SingleChildScrollView(
                 physics: const NeverScrollableScrollPhysics(),
@@ -66,29 +85,32 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                           });
                         },
                         decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.all(10),
-                            isCollapsed: false,
-                            labelText: "Search by name",
-                            hintText: "Search",
-                            prefixIcon: const Icon(Icons.search),
-                            suffixIcon: (textController.text.isEmpty)
-                                ? null
-                                : IconButton(
-                                    onPressed: () {
-                                      setState(() {
-                                        searchResult.clear();
-                                        textController.clear();
-                                        searchTextFieldFocusNode.unfocus();
-                                      });
-                                    },
-                                    icon: const Icon(
-                                      Icons.clear,
-                                      color: Colors.red,
-                                    ),
+                          contentPadding: const EdgeInsets.all(10),
+                          isCollapsed: true,
+                          filled: true,
+                          prefixIcon: const Icon(Icons.search),
+                          border: const OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                              borderSide: BorderSide.none),
+                          labelText: "Search by name",
+                          hintText: "Search",
+                          suffixIcon: (textController.text.isEmpty)
+                              ? null
+                              : IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      searchResult.clear();
+                                      textController.clear();
+                                      searchTextFieldFocusNode.unfocus();
+                                    });
+                                  },
+                                  icon: const Icon(
+                                    Icons.clear,
+                                    color: Colors.red,
                                   ),
-                            border: const OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)))),
+                                ),
+                        ),
                       ),
                     ),
                     Scrollbar(
@@ -152,7 +174,11 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                       height: 80.h,
                       child: (searchResult.isNotEmpty)
                           ? benefitsListView(searchResult)
-                          : (textController.text.isEmpty)? benefitsListView(benefitsData): Center(child: Text('No data found'),),
+                          : (textController.text.isEmpty)
+                              ? benefitsListView(benefitsData)
+                              : const Center(
+                                  child: Text('No data found'),
+                                ),
                     ),
                   ],
                 ),
@@ -165,13 +191,6 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
   }
 
   Widget benefitsListView(List<dynamic> benefitsDataList) {
-    showErrorSnackBar() {
-      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Something went wrong'),
-      ));
-    }
-
     return Sizer(
       builder: (BuildContext context, Orientation orientation,
           DeviceType deviceType) {
@@ -225,49 +244,81 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                           ],
                         ),
                         children: [
-                          Html(
-                            shrinkWrap: true,
-                            data: benefitsDataList[index]['benefitsDescription']
-                                .toString(),
-                            onLinkTap: (String? url, RenderContext context,
-                                Map<String, String> attributes, _) async {
-                              await DownloadPdfHelper(
-                                  fileUrl: url!,
-                                  fileName: url.substring(
-                                      url.lastIndexOf('/') + 1, url.length),
-                                  success: () {},
-                                  failed: () {
-                                    showErrorSnackBar();
-                                  }).download();
+                          WillPopScope(
+                            onWillPop: () async {
+                              await EasyLoading.dismiss(animation: true);
+                              return true;
                             },
-                            style: {
-                              '#': Style(
-                                  fontSize: const FontSize(18),
-                                  maxLines: benefitsDataList[index]
-                                          ['benefitsDescription']
-                                      .length,
-                                  // textOverflow: TextOverflow.ellipsis,
-                                  margin: const EdgeInsets.all(10)),
-                              'strong': Style(fontWeight: FontWeight.normal)
-                            },
+                            child: Html(
+                              shrinkWrap: true,
+                              data: benefitsDataList[index]
+                                      ['benefitsDescription']
+                                  .toString(),
+                              onLinkTap: (String? url, RenderContext context,
+                                  Map<String, String> attributes, _) async {
+                                EasyLoading.show(
+                                  status: 'loading...',
+                                  maskType: EasyLoadingMaskType.black,
+                                  dismissOnTap: false,
+                                );
+                                await DownloadPdfHelper(
+                                    fileUrl: url!,
+                                    fileName: url.substring(
+                                        url.lastIndexOf('/') + 1, url.length),
+                                    success: () {
+                                      // EasyLoading.show(
+                                      //     status: 'Success',
+                                      //     maskType: EasyLoadingMaskType.black,
+                                      //     dismissOnTap: true,
+                                      //     indicator: const Icon(
+                                      //       Icons.done,
+                                      //       size: 50,
+                                      //       color: Colors.white,
+                                      //     ));
+                                      // EasyLoading.dismiss();
+                                    },
+                                    failed: () {
+                                      EasyLoading.show(
+                                          status: 'Failed',
+                                          maskType: EasyLoadingMaskType.black,
+                                          dismissOnTap: true,
+                                          indicator: const Icon(
+                                            Icons.clear,
+                                            size: 50,
+                                            color: Colors.white,
+                                          ));
+                                      // EasyLoading.dismiss();
+                                    }).download();
+                                if (EasyLoading.isShow) {
+                                  EasyLoading.dismiss();
+                                }
+                              },
+                              style: {
+                                '#': Style(
+                                    fontSize: const FontSize(18),
+                                    maxLines: benefitsDataList[index]
+                                            ['benefitsDescription']
+                                        .length,
+                                    // textOverflow: TextOverflow.ellipsis,
+                                    margin: const EdgeInsets.all(10)),
+                                'strong': Style(fontWeight: FontWeight.normal)
+                              },
+                            ),
                           ),
                           GestureDetector(
                             onTap: () async {
-                              // if(await canLaunchUrl(Uri.parse(benefitsExtraDataLink(
-                              //     benefitsDataList[index]['benefitsId']
-                              //         .toString())))){
                               try {
                                 launchUrl(
-                                Uri.parse(benefitsExtraDataLink(
-                                benefitsDataList[index]['benefitsId']
-                                    .toString())),
-                                mode: LaunchMode.externalApplication,
+                                  Uri.parse(benefitsExtraDataLink(
+                                      benefitsDataList[index]['benefitsId']
+                                          .toString())),
+                                  mode: LaunchMode.externalApplication,
                                 );
-                              } catch (e, s) {
-                                print(s);
+                              } catch (e) {
+                                EasyLoading.showError('Something went wrong',
+                                    dismissOnTap: true);
                               }
                               // }
-
                             },
                             child: const Padding(
                               padding: EdgeInsets.only(bottom: 8.0),
