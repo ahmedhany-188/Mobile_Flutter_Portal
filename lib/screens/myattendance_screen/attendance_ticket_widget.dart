@@ -126,11 +126,8 @@ class AttendanceTicketWidget extends StatelessWidget {
                     );
                   }
                   else if
-                  ((int.parse(timeOut) != 4 && int.parse(timeOut2) != 59)
-                      ||
-                      (int.parse(timeOut) != 4 && int.parse(timeOut2) < 59) ||
-                      (int.parse(timeOut) < 5)
-                          &&
+                  ((int.parse(timeOut) == 4 && int.parse(timeOut2) < 59) ||
+                      (int.parse(timeOut) < 4) &&
                           ((int.parse(timeIn) < 8) ||
                               (int.parse(timeIn) == 8 &&
                                   int.parse(timeIn2) < 31))) {
@@ -188,13 +185,10 @@ class AttendanceTicketWidget extends StatelessWidget {
                     );
                   }
                 }
-                else if (attendanceListData[index].timeIN.toString() !=
-                    "null" &&
-                    attendanceListData[index].timeOUT.toString() ==
-                        "null" || attendanceListData[index].timeIN.toString() ==
-                    "null" &&
-                    attendanceListData[index].timeOUT.toString() !=
-                        "null") {
+                else if (attendanceListData[index].timeIN.toString() != "null"
+                    && attendanceListData[index].timeOUT.toString() == "null" ||
+                    attendanceListData[index].timeIN.toString() == "null"
+                        && attendanceListData[index].timeOUT.toString() != "null") {
                   return SizedBox(
                     width: double.infinity,
                     child: InkWell(
@@ -206,11 +200,12 @@ class AttendanceTicketWidget extends StatelessWidget {
                         Text(
                             "${date[1]}/${date[2].substring(0, 2)}",
                             style: const TextStyle(color: Colors.white)),
-                        attendanceContainer(
-                            attendanceListData[index].timeIN.toString(),
+                        attendanceContainer(attendanceListData[index].timeIN.toString()!="null"?
+                            attendanceListData[index].timeIN.toString():"",
                             "in", "red"),
                         Container(height: 5, color: Colors.white,),
-                        attendanceContainer(attendanceListData[index].timeOUT.toString(), "out", "red"),]),),);
+                        attendanceContainer(attendanceListData[index].timeOUT.toString()!="null"?
+                        attendanceListData[index].timeOUT.toString():"", "out", "red"),]),),);
                 }
                 else {
                   return SizedBox(

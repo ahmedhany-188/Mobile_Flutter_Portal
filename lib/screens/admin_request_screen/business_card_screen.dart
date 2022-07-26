@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/business_card_request/business_card_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
@@ -36,7 +37,6 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
 
     final currentRequestNo = widget.requestNo;
 
-
     return Theme(
       data: Theme.of(context).copyWith(
         inputDecorationTheme: InputDecorationTheme(
@@ -58,7 +58,11 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
         child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
 
             builder: (context, state) {
-              return Scaffold(
+              return  WillPopScope(
+                  onWillPop: () async {
+                await EasyLoading.dismiss(animation: true);
+                return true;
+              }, child: Scaffold(
                 appBar: AppBar(
                   title: const Text("Business Card"),
                   centerTitle: true,
@@ -119,24 +123,15 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                 body: BlocListener<BusinessCardCubit, BusinessCardInitial>(
                   listener: (context, state) {
                     if (state.status.isSubmissionSuccess) {
-                      LoadingDialog.show(context);
                       Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (_) =>
                               SuccessScreen(text: state.successMessage ??
                                   "Error Number",)));
                     } else if (state.status.isSubmissionInProgress) {
-                      LoadingDialog.show(context);
+                      EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
                     }
                     else if (state.status.isSubmissionFailure) {
-                      LoadingDialog.hide(context);
-                      ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                state.errorMessage ?? 'Request Failed'),
-                          ),
-                        );
+                      EasyLoading.showError(state.errorMessage.toString(),);
                     }
                   },
 
@@ -168,7 +163,8 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: TextFormField(
                                 initialValue: state.requestDate.value,
-                                readOnly: true,
+                                key: UniqueKey(),
+                                enabled: false,
                                 decoration: const InputDecoration(
                                   floatingLabelAlignment:
                                   FloatingLabelAlignment.start,
@@ -192,12 +188,14 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                                 builder: (context, state) {
                                   return TextFormField(
                                     initialValue: state.employeeNameCard.value,
-                                    readOnly: state.requestStatus ==
-                                        RequestStatus.oldRequest ? true : false,
+                                    // readOnly: state.requestStatus ==
+                                    //     RequestStatus.oldRequest ? true : false,
                                     onChanged: (value) =>
                                         context.read<BusinessCardCubit>()
                                             .nameCard(value),
-                                    keyboardType: TextInputType.text,
+                                    readOnly: state.requestStatus == RequestStatus.oldRequest ? true : false,
+
+                                    //keyboardType: TextInputType.text,
                                     decoration: InputDecoration(
                                       floatingLabelAlignment:
                                       FloatingLabelAlignment.start,
@@ -218,10 +216,10 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               child: BlocBuilder<
                                   BusinessCardCubit,
                                   BusinessCardInitial>(
-                                buildWhen: (previous, current) {
-                                  return (state.requestStatus ==
-                                      RequestStatus.newRequest);
-                                },
+                                // buildWhen: (previous, current) {
+                                //   return (state.requestStatus ==
+                                //       RequestStatus.newRequest);
+                                // },
                                 builder: (context, state) {
                                   return TextFormField(
                                     // enabled: (widget.objectValidation)
@@ -257,10 +255,10 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               child: BlocBuilder<
                                   BusinessCardCubit,
                                   BusinessCardInitial>(
-                                buildWhen: (previous, current) {
-                                  return (state.requestStatus ==
-                                      RequestStatus.newRequest);
-                                },
+                                // buildWhen: (previous, current) {
+                                //   return (state.requestStatus ==
+                                //       RequestStatus.newRequest);
+                                // },
                                 builder: (context, state) {
                                   return TextFormField(
                                     // enabled: (widget.objectValidation)
@@ -293,10 +291,10 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               child: BlocBuilder<
                                   BusinessCardCubit,
                                   BusinessCardInitial>(
-                                buildWhen: (previous, current) {
-                                  return (state.requestStatus ==
-                                      RequestStatus.newRequest);
-                                },
+                                // buildWhen: (previous, current) {
+                                //   return (state.requestStatus ==
+                                //       RequestStatus.newRequest);
+                                // },
                                 builder: (context, state) {
                                   return TextFormField(
                                     // enabled: (widget.objectValidation)
@@ -321,7 +319,6 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                                 },
                               ),
                             ),
-
 
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -356,13 +353,14 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                                 },
                               ),
                             ),
+
                           ],
                         ),
                       ),
                     ),
                   ),
                 ),
-              );
+              ),);
             }
         ),
       ),

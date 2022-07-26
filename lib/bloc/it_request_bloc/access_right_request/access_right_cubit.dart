@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/constants/enums.dart';
@@ -124,10 +125,14 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     AccessRightModel accessRightModel;
 
     final requestDate = RequestDate.dirty(state.requestDate.value);
-
-    // "date" -> "2022-05-17T13:47:07"
     DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(requestDate.value);
     final requestDateValue = GlobalConstants.dateFormatServer.format(requestDateTemp);
+
+    DateTime requestDateTempFrom = GlobalConstants.dateFormatViewed.parse(fromDate.value);
+    final requestDateValueFrom = GlobalConstants.dateFormatServer.format(requestDateTempFrom);
+
+    DateTime requestDateTempTo = GlobalConstants.dateFormatViewed.parse(toDate.value);
+    final requestDateValueTo = GlobalConstants.dateFormatServer.format(requestDateTempTo);
 
     emit(state.copyWith(
         requestItems: requestItem,
@@ -146,8 +151,8 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
           state.localAdmin,
           state.permanent,
         requestDateValue,
-        state.fromDate.value,
-        state.toDate.value,
+          requestDateValueFrom,
+          requestDateValueTo,
           state.filePDF,
           state.comments,
         ""
@@ -157,8 +162,15 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
         var connectivityResult = await connectivity.checkConnectivity();
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
+
+          emit(state.copyWith(
+              status: FormzStatus.submissionInProgress));
+
           final accessResponse = await requestRepository
               .postAccessRightRequest(accessRightModel: accessRightModel);
+
+          print("======tt====="+accessResponse.id.toString());
+
           if (accessResponse.id == 1) {
             emit(state.copyWith(successMessage: accessResponse.requestNo,
               status: FormzStatus.submissionSuccess,
@@ -310,6 +322,8 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
   Future<void> close() {
     // TODO: implement close
     // connectivityStreamSubscription?.cancel();
+    EasyLoading.dismiss();
+
     return super.close();
   }
 

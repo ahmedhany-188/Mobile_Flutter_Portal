@@ -33,7 +33,6 @@ class DayOfTheWeek extends StatelessWidget{
             ),
           itemCount: 7,
           itemBuilder: (BuildContext context, int index) {
-
               return SizedBox(
                 width: double.infinity,
                 child: InkWell(

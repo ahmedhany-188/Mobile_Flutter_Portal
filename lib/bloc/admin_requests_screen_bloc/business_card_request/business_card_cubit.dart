@@ -3,6 +3,7 @@ import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/constants/enums.dart';
@@ -47,11 +48,11 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
               GlobalConstants.dateFormatServer.parse(
                   requestData.requestDate!)));
 
-      final employeeName = RequestDate.dirty(requestData.employeeNameCard!);
-      final employeeComments = requestData.employeeComments;
-      final employeeMobile = RequestDate.dirty(requestData.employeeMobil!);
-      // final faxNo = requestData.faxNo;
-      // final employeeExt = requestData.employeeExt!;
+      final employeeName = RequestDate.dirty(requestData.employeeNameCard.toString());
+      final employeeComments = requestData.employeeComments.toString() ?? "No Comment";
+      final employeeMobile =  RequestDate.dirty(requestData.employeeMobil.toString());
+      final faxNo = requestData.faxNo.toString();
+     final employeeExt = requestData.employeeExt.toString();
 
 
       var status = "Pending";
@@ -62,6 +63,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
       } else if (requestData.status == 2) {
         status = "Rejected";
       }
+
 
 
 
@@ -76,9 +78,16 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
           status: Formz.validate([state.employeeNameCard, state.employeeMobile]),
           requestStatus: RequestStatus.oldRequest,
           statusAction: status,
-          // takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
+          takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
         ),
       );
+
+      // emit(state.copyWith(
+      //   employeeNameCard: employeeName,
+      //   employeeMobile: employeeMobile,
+      //   status: Formz.validate([employeeName, employeeMobile]),
+      // ));
+
     }
   }
 
@@ -110,6 +119,10 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
         var connectivityResult = await connectivity.checkConnectivity();
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
+
+          emit(state.copyWith(
+              status: FormzStatus.submissionInProgress));
+
           final accessBusinessCardResponse = await requestRepository
               .postBusinessCard(businessCardFormModel: businessCardFormModel);
           if (accessBusinessCardResponse.id == 1) {
@@ -186,6 +199,8 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
   Future<void> close() {
     // TODO: implement close
     // connectivityStreamSubscription?.cancel();
+    EasyLoading.dismiss();
+
     return super.close();
   }
 

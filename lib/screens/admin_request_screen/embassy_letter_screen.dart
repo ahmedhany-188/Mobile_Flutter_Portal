@@ -3,12 +3,14 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/embassy_letter_request/embassy_letter_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
+import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
@@ -66,7 +68,11 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
               currentRequestNo[EmbassyLetterScreen.requestNoKey])),
         child: BlocBuilder<EmbassyLetterCubit,EmbassyLetterInitial>(
             builder: (context,state) {
-              return Scaffold(
+              return  WillPopScope(
+                  onWillPop: () async {
+                await EasyLoading.dismiss(animation: true);
+                return true;
+              }, child: Scaffold(
                 appBar: AppBar(
                   title: const Text("Embassy Letter"),
                   centerTitle: true,
@@ -75,7 +81,8 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       if(state.requestStatus ==
-                          RequestStatus.oldRequest)FloatingActionButton
+                          RequestStatus.oldRequest && state.takeActionStatus ==
+                          TakeActionStatus.takeAction)FloatingActionButton
                           .extended(
                         heroTag: null,
                         onPressed: () {},
@@ -84,7 +91,8 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                       ),
                       const SizedBox(height: 12),
                       if(state.requestStatus ==
-                          RequestStatus.oldRequest)FloatingActionButton
+                          RequestStatus.oldRequest && state.takeActionStatus ==
+                          TakeActionStatus.takeAction)FloatingActionButton
                           .extended(
                         backgroundColor: Colors.red,
                         heroTag: null,
@@ -114,14 +122,21 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                   ),
 
 
-
                 body: BlocListener<EmbassyLetterCubit, EmbassyLetterInitial>(
                   listener: (context, state) {
                     if (state.status.isSubmissionSuccess) {
+                      Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(builder: (_) =>
+                              SuccessScreen(text: state.successMessage ??
+                                  "Error Number",)));
                     }
                     else if (state.status.isSubmissionInProgress) {
+                      EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
+
                     }
                     else if (state.status.isSubmissionFailure) {
+                      EasyLoading.showError(state.errorMessage.toString(),);
+
                     }
                   },
 
@@ -305,7 +320,8 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                   builder: (context, state) {
                                     return TextFormField(
                                         initialValue:state.passportNumber.value,
-
+                                        readOnly: state.requestStatus ==
+                                            RequestStatus.oldRequest ? true : false,
                                         onChanged: (value) {
                                           context.read<EmbassyLetterCubit>()
                                               .passportNo(value);
@@ -387,6 +403,7 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                   ),
 
                 ),
+              ),
               );
             }
         ),

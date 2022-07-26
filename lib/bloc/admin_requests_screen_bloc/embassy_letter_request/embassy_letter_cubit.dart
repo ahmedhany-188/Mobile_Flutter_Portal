@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
@@ -115,11 +116,15 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
         var connectivityResult = await connectivity.checkConnectivity();
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
+
+          emit(state.copyWith(
+              status: FormzStatus.submissionInProgress));
+
           final embassyLetterResponse = await _requestRepository.postEmbassyLetter(embassyLetterFormModel: embassyLetterFormModel);
 
           print("-------"+embassyLetterResponse.requestNo.toString());
 
-          if (embassyLetterResponse.id == 1) {
+          if (embassyLetterResponse.id == 0) {
             emit(
               state.copyWith(
                 successMessage: embassyLetterResponse.requestNo,
@@ -266,6 +271,7 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
   Future<void> close() {
     // TODO: implement close
     // connectivityStreamSubscription?.cancel();
+    EasyLoading.dismiss();
     return super.close();
   }
 

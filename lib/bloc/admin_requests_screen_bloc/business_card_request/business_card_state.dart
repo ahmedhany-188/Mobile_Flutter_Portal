@@ -5,28 +5,27 @@ abstract class BusinessCardState  extends Equatable{
 
   const BusinessCardState();
   const BusinessCardState.copyWith({
-    required RequestDate employeeNameCard,required RequestDate employeeMobile,
+    required  employeeNameCard,required  employeeMobile,
     required FormzStatus status});
-
 }
 
 class BusinessCardInitial  extends Equatable {
   const BusinessCardInitial({
-
-    this.requestStatus = RequestStatus.newRequest,
+    this.requestDate = const RequestDate.pure(),
+    this.requestStatus ,
     this.employeeNameCard = const RequestDate.pure(),
     this.employeeMobile = const RequestDate.pure(),
-    this.employeeExt="",
-    this.employeeFaxNO="",
-    this.comment="",
+    this.employeeExt = "",
+    this.employeeFaxNO = "",
+    this.comment = "",
     this.status = FormzStatus.pure,
     this.errorMessage,
     this.successMessage,
     this.takeActionStatus,
     this.statusAction,
-    this.requestDate = const RequestDate.pure(),
 
   });
+
   final RequestDate requestDate;
   final TakeActionStatus? takeActionStatus;
   final String? statusAction;
@@ -41,11 +40,19 @@ class BusinessCardInitial  extends Equatable {
   final String? successMessage;
 
   @override
-  List<Object> get props => [employeeNameCard,employeeMobile,employeeFaxNO,employeeExt,comment,status];
-
+  List<Object> get props =>
+      [requestDate,
+        employeeNameCard,
+        employeeMobile,
+        employeeFaxNO,
+        employeeExt,
+        comment,
+        status
+      ];
 
 
   BusinessCardInitial copyWith({
+    RequestDate? requestDate,
     RequestDate ?employeeNameCard,
     RequestDate ?employeeMobile,
     String ?employeeExt,
@@ -54,12 +61,10 @@ class BusinessCardInitial  extends Equatable {
     FormzStatus ?status,
     String? errorMessage,
     String? successMessage,
-    RequestDate ?requestDate,
     RequestStatus? requestStatus,
     String? statusAction,
-
-
-  }){
+    TakeActionStatus? takeActionStatus,
+  }) {
     return BusinessCardInitial(
       requestDate: requestDate ?? this.requestDate,
       employeeNameCard: employeeNameCard ?? this.employeeNameCard,
@@ -70,11 +75,10 @@ class BusinessCardInitial  extends Equatable {
       status: status ?? this.status,
       errorMessage: errorMessage ?? this.errorMessage,
       successMessage: successMessage ?? this.successMessage,
-        takeActionStatus: takeActionStatus ?? this.takeActionStatus,
-        statusAction: statusAction ?? this.statusAction,
+      takeActionStatus: takeActionStatus ?? this.takeActionStatus,
+      statusAction: statusAction ?? this.statusAction,
       requestStatus: requestStatus ?? this.requestStatus,
-
     );
   }
-
 }
+

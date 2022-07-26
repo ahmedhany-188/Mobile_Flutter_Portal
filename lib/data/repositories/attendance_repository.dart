@@ -20,5 +20,4 @@ class AttendanceRepository {
         json.map((model) => MyAttendanceModel.fromJson(model)));
     return myAttendanceData;
   }
-
 }

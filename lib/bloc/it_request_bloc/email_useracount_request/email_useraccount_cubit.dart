@@ -4,6 +4,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/constants/enums.dart';
@@ -134,12 +135,15 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
             title.value,fullName.value,email.value);
         //TODO: creation of Object;
 
-        print("--....--");
-
+        emit(state.copyWith(
+            status: FormzStatus.submissionInProgress));
         try {
           var connectivityResult = await connectivity.checkConnectivity();
           if (connectivityResult == ConnectivityResult.wifi ||
               connectivityResult == ConnectivityResult.mobile) {
+
+
+
 
 
             final accessEmailUserAccount = await requestRepository
@@ -218,6 +222,8 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
   Future<void> close() {
     // TODO: implement close
     // connectivityStreamSubscription?.cancel();
+    EasyLoading.dismiss();
+
     return super.close();
   }
 

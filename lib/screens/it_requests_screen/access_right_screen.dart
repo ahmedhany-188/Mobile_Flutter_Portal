@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_multiselect/flutter_multiselect.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
@@ -65,7 +66,12 @@ class _AccessRightScreen extends State<AccessRightScreen> {
         ],
         child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
             builder: (context, state) {
-              return Scaffold(
+
+              return  WillPopScope(
+                  onWillPop: () async {
+                await EasyLoading.dismiss(animation: true);
+                return true;
+              }, child: Scaffold(
                   appBar: AppBar(
                     title: const Text("Access Right"),
                     centerTitle: true,
@@ -75,9 +81,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       if(
-                      state
-                          .requestStatus ==
-                          RequestStatus.oldRequest && state.takeActionStatus ==
+                      state.requestStatus == RequestStatus.oldRequest && state.takeActionStatus ==
                           TakeActionStatus.takeAction )FloatingActionButton
                           .extended(
                         heroTag: null,
@@ -91,6 +95,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                           RequestStatus.oldRequest && state.takeActionStatus ==
                           TakeActionStatus.takeAction )FloatingActionButton
                           .extended(
+                        backgroundColor: Colors.red,
                         heroTag: null,
                         onPressed: () {},
                         icon: const Icon(Icons.dangerous),
@@ -122,25 +127,16 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                   body: BlocListener<AccessRightCubit, AccessRightInitial>(
                     listener: (context, state) {
                       if (state.status.isSubmissionInProgress) {
-                        LoadingDialog.show(context);
+                        EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
                       }
                       if (state.status.isSubmissionSuccess) {
-                        LoadingDialog.hide(context);
                         Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (_) =>
                                 SuccessScreen(text: state.successMessage ??
                                     "Error Number",)));
                       }
                       if (state.status.isSubmissionFailure) {
-                        LoadingDialog.hide(context);
-                        ScaffoldMessenger.of(context)
-                          ..hideCurrentSnackBar()
-                          ..showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                  state.errorMessage ?? 'Request Failed'),
-                            ),
-                          );
+                        EasyLoading.showError(state.errorMessage.toString(),);
                       }
                     },
 
@@ -589,7 +585,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                       ),
                     ),
                   )
-              );
+              ),);
             }
         ),
       ),
@@ -618,8 +614,6 @@ class _AccessRightScreen extends State<AccessRightScreen> {
       ),
     );
   }
-
-
 }
 
 
