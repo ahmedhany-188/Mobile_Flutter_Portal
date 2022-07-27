@@ -31,9 +31,9 @@ class MyRequestsItemWidget extends StatelessWidget {
           condition: listFromRequestScreen.isNotEmpty,
           builder: (context) => ListView.separated(
             physics: const BouncingScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             itemBuilder: (context, index) => Padding(
-
-              padding: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(10.0),
               child: Container(
                 padding: const EdgeInsets.all(10.0),
                 decoration: BoxDecoration(
@@ -48,10 +48,10 @@ class MyRequestsItemWidget extends StatelessWidget {
                       tileMode: TileMode.clamp),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.4),
+                      color: Colors.grey.withOpacity(0.3),
                       spreadRadius: 5,
                       blurRadius: 3,
-                      offset: const Offset(0, 3), // changes position of shadow
+                      offset: const Offset(0, 2), // changes position of shadow
                     ),
                   ],
                 ),
@@ -59,76 +59,82 @@ class MyRequestsItemWidget extends StatelessWidget {
                   onTap: () {
                     _pushForRequestDetail(context, listFromRequestScreen[index]);
                   },
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: SizedBox(
-                          height: 22.0.h,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Flexible(
-                                fit: FlexFit.loose,
-                                child: Center(
-                                  child: Text(
-                                    '${listFromRequestScreen[index].serviceName}'.trim(),
-                                    style: const TextStyle(
-                                      fontSize: 17.0,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.white,
-                                    ),
-                                    maxLines: 1,
-                                    // overflow: TextOverflow.ellipsis,
+                  child: SizedBox(
+                    height: 20.0.h,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Flexible(
+                          fit: FlexFit.loose,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  '${listFromRequestScreen[index].serviceName}'.trim(),
+                                  style: const TextStyle(
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
                                   ),
+                                  maxLines: 1,
+                                  // overflow: TextOverflow.ellipsis,
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 5, bottom: 5),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 0.2.h,
+                                Text(
+                                  '#${listFromRequestScreen[index].requestNo}'.trim(),
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                  maxLines: 1,
+                                  // overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5, bottom: 5),
+                          child: Container(
+                            width: double.infinity,
+                            height: 0.2.h,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Container(
+                          clipBehavior: Clip.none,
+                          alignment: Alignment.center,
+                          child: Column(
+                            children: [
+                              // Text(
+                              //   '${listFromRequestScreen[index].statusName}'
+                              //       .trim(),
+                              //   style: const TextStyle(
+                              //     fontSize: 14.0,
+                              //     color: Colors.white,
+                              //   ),
+                              //   maxLines: 2,
+                              //   overflow: TextOverflow.ellipsis,
+                              //   textAlign: TextAlign.center,
+                              // ),
+                              MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
+                              Text(
+                                '${listFromRequestScreen[index].rDate}',
+                                style: const TextStyle(
+                                  fontSize: 13.0,
                                   color: Colors.white,
                                 ),
-                              ),
-                              Container(
-                                clipBehavior: Clip.none,
-                                alignment: Alignment.center,
-                                child: Column(
-                                  children: [
-                                    // Text(
-                                    //   '${listFromRequestScreen[index].statusName}'
-                                    //       .trim(),
-                                    //   style: const TextStyle(
-                                    //     fontSize: 14.0,
-                                    //     color: Colors.white,
-                                    //   ),
-                                    //   maxLines: 2,
-                                    //   overflow: TextOverflow.ellipsis,
-                                    //   textAlign: TextAlign.center,
-                                    // ),
-                                    MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
-                                    Text(
-                                      '${listFromRequestScreen[index].rDate}',
-                                      style: const TextStyle(
-                                        fontSize: 13.0,
-                                        color: Colors.white,
-                                      ),
-                                      maxLines: 2,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
                               ),
                             ],
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -277,7 +283,7 @@ class MyRequestsItemWidget extends StatelessWidget {
       case RequestServiceID.equipmentServiceID:
         {
           Navigator.of(context)
-              .pushNamed(EquipmentsRequest.routeName,arguments: {EquipmentsRequest.requestNoKey: myRequestsModelData.requestNo.toString()});
+              .pushNamed(EquipmentsRequest.routeName);
           break;
         }
 

@@ -41,26 +41,26 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   final Connectivity connectivity = Connectivity();
   final RequestRepository requestRepository;
 
-  void getEquipmentsData(RequestStatus requestStatus, String? requestNo) async {
-    final requestData = await requestRepository.getEquipments(requestNo!);
-
-    var status = "Pending";
-    if (requestData.status == 0) {
-      status = "Pending";
-    } else if (requestData.status == 1) {
-      status = "Approved";
-    } else if (requestData.status == 2) {
-      status = "Rejected";
-    }
-
-    emit(
-      state.copyWith(
-        requestStatus: RequestStatus.oldRequest,
-        statusAction: status,
-        // takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
-      ),
-    );
-  }
+  // void getEquipmentsData(RequestStatus requestStatus, String? requestNo) async {
+  //   final requestData = await requestRepository.getEquipments(requestNo!);
+  //
+  //   var status = "Pending";
+  //   if (requestData.status == 0) {
+  //     status = "Pending";
+  //   } else if (requestData.status == 1) {
+  //     status = "Approved";
+  //   } else if (requestData.status == 2) {
+  //     status = "Rejected";
+  //   }
+  //
+  //   emit(
+  //     state.copyWith(
+  //       requestStatus: RequestStatus.oldRequest,
+  //       statusAction: status,
+  //       // takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
+  //     ),
+  //   );
+  // }
 
   void postEquipmentsRequest({
     required DepartmentsModel departmentObject,
