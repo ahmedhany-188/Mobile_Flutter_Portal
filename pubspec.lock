@@ -517,6 +517,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0+1"
+  flutter_easyloading:
+    dependency: "direct main"
+    description:
+      name: flutter_easyloading
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.5"
   flutter_form_builder:
     dependency: "direct main"
     description:
@@ -587,6 +594,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.7"
+  flutter_spinkit:
+    dependency: transitive
+    description:
+      name: flutter_spinkit
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.1.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -948,7 +962,7 @@ packages:
     source: hosted
     version: "1.11.1"
   percent_indicator:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: percent_indicator
       url: "https://pub.dartlang.org"

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/data/data_providers/attendance_data_provider/attendance_data_provider.dart';
@@ -12,6 +14,9 @@ class AttendanceCubit extends Cubit<AttendanceState> {
 
   final Connectivity connectivity = Connectivity();
 
+  late MultiBlocProvider myBloc;
+  late StreamSubscription mSub;
+
   void getAttendanceList(userHRCode,monthNumber) async {
 
     emit(BlocGetTheAttendanceLoadingState());
@@ -20,12 +25,11 @@ class AttendanceCubit extends Cubit<AttendanceState> {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
 
-        AttendanceRepository().getAttendanceData(userHRCode, monthNumber)
-        // AttendanceDataProvider().getAttendanceList(userHRcode,monthNumber)
-            .then((value){
 
-          // print("----------"+myAttendance);
-          emit(BlocGetTheAttendanceSuccessState(value));
+        //mSub=
+            AttendanceRepository().getAttendanceData(userHRCode, monthNumber)
+            .then((value){
+          emit(BlocGetTheAttendanceSuccessState(value,monthNumber));
         }).catchError((error){
 
           print("Err0r: "+error.toString());
@@ -45,8 +49,10 @@ class AttendanceCubit extends Cubit<AttendanceState> {
   @override
   Future<void> close() {
     // TODO: implement close
-    // connectivityStreamSubscription?.cancel();
+    mSub.cancel();
     return super.close();
   }
+
+
 
 }

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
@@ -100,25 +101,30 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
       status: Formz.validate([fromDate, toDate, passportNO]),
     ));
 
-    print("salary:   "+state.salary+  "     "+state.comments.toString());
+    print("salary:   "+state.salary+  "     "+state.comments);
     if (state.status.isValidated) {
       embassyLetterFormModel = EmbassyLetterFormModel(state.requestDate.value,
           state.purpose,
           state.embassy,
           state.dateFrom.value,
           state.dateTo.value,
-          state.passportNumber.value,
+          state.passportNumber.value.toString(),
           state.salary,
-          state.comments,0,"0");
+          state.comments.toString(),0,"0");
+
       try {
         var connectivityResult = await connectivity.checkConnectivity();
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
+
+          emit(state.copyWith(
+              status: FormzStatus.submissionInProgress));
+
           final embassyLetterResponse = await _requestRepository.postEmbassyLetter(embassyLetterFormModel: embassyLetterFormModel);
 
           print("-------"+embassyLetterResponse.requestNo.toString());
 
-          if (embassyLetterResponse.id == 1) {
+          if (embassyLetterResponse.id == 0) {
             emit(
               state.copyWith(
                 successMessage: embassyLetterResponse.requestNo,
@@ -265,6 +271,7 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
   Future<void> close() {
     // TODO: implement close
     // connectivityStreamSubscription?.cancel();
+    EasyLoading.dismiss();
     return super.close();
   }
 

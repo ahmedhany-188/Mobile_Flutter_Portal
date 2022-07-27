@@ -77,7 +77,6 @@ class EmailUserAccountInitial extends Equatable {
     String? successMessage,
     TakeActionStatus? takeActionStatus,
     String? statusAction
-
   }) {
     return EmailUserAccountInitial(
         requestDate: requestDate ?? this.requestDate,
@@ -96,8 +95,6 @@ class EmailUserAccountInitial extends Equatable {
         successMessage: successMessage ?? this.successMessage,
         takeActionStatus: takeActionStatus ?? this.takeActionStatus,
         statusAction: statusAction ?? this.statusAction
-
     );
   }
-
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
@@ -49,7 +50,12 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
             MedicalRequestCubit(),
         child: Builder(
             builder: (context) {
-              return Scaffold(
+
+              return  WillPopScope(
+                  onWillPop: () async {
+                await EasyLoading.dismiss(animation: true);
+                return true;
+              }, child: Scaffold(
                 appBar: AppBar(
                   title: const Text("Medical Request"),
                   centerTitle: true,
@@ -75,38 +81,21 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                 body: BlocListener<MedicalRequestCubit, MedicalRequestInitial>(
                   listener: (context, state) {
                     if (state.status.isSubmissionSuccess) {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Success"),
-                        ),
-                      );
-
+                      EasyLoading.showSuccess("Success",);
                       try {
                         launchUrl(
                             Uri.parse(jsonDecode(state.successMessage.toString())['link']),
                           mode: LaunchMode.externalApplication,
                         );
-
                       } catch (e, s) {
                         print(s);
                       }
                     }
                     else if (state.status.isSubmissionInProgress) {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Loading"),
-                        ),
-                      );
+                      EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
                     }
                     else if (state.status.isSubmissionFailure) {
-                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(state.errorMessage.toString()),
-                        ),
-                      );
+                      EasyLoading.showError(state.errorMessage.toString(),);
                     }
                   },
 
@@ -312,6 +301,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
 
                   ),
                 ),
+              ),
               );
             }
         ),

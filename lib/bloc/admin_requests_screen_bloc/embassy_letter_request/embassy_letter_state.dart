@@ -14,7 +14,7 @@ class EmbassyLetterInitial extends EmbassyLetterState {
   const EmbassyLetterInitial({
     this.requestDate = const RequestDate.pure(),
     this.purpose = "Tourism",
-    this.embassy = "Afghanistan",
+    this.embassy = "0",
     this.dateFrom = const RequestDate.pure(),
     this.dateTo = const RequestDate.pure(),
     this.passportNumber = const PassportNumber.pure(),

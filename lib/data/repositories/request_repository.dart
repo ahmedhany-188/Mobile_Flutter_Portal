@@ -61,24 +61,25 @@ class RequestRepository {
       {required AccessRightModel accessRightModel}) async {
     var bodyString = jsonEncode(<String, dynamic>
     {
-      "ServiceId": RequestServiceID.accessRightServiceID,
-      "RequestHrCode": userData.employeeData!.userHrCode,
-      "Date": accessRightModel.requestDate,
-      "FilePdf": (accessRightModel.filePDF != null)
+      "serviceId": RequestServiceID.accessRightServiceID,
+      "requestHrCode": userData.employeeData!.userHrCode,
+      "date": accessRightModel.requestDate,
+      "filePdf": (accessRightModel.filePDF != null)
           ? accessRightModel.filePDF
           : null,
-      "Comments": accessRightModel.comments,
-      "requestHrCode": userData.user?.userHRCode!,
+      "comments": accessRightModel.comments,
+      //"requestHrCode": userData.user?.userHRCode!,
 
-      "ReqType": accessRightModel.requestType,
-      "StartDate": accessRightModel.fromDate,
-      "EndDate": accessRightModel.toDate,
-      "IsPermanent": accessRightModel.permanent,
-      "USBException": accessRightModel.usbException,
-      "VPNAccount": accessRightModel.vpnAccount,
-      "IPPhone": accessRightModel.ipPhone,
-      "LocalAdmin": accessRightModel.localAdmin,
+      "reqType": accessRightModel.requestType,
+      "startDate": accessRightModel.fromDate,
+      "endDate": accessRightModel.toDate,
+      "isPermanent": accessRightModel.permanent,
+      "usbException": accessRightModel.usbException,
+      "vpnAccount": accessRightModel.vpnAccount,
+      "ipPhone": accessRightModel.ipPhone,
+      "localAdmin": accessRightModel.localAdmin,
     });
+
 
     final http.Response rawAccess = await requestDataProviders
         .postAccessAccountAccessRequest(bodyString);
@@ -164,6 +165,8 @@ class RequestRepository {
       "extNo": businessCardFormModel.employeeExt,
       "mobileNo": businessCardFormModel.employeeMobil
     });
+
+    print("===========---"+bodyString);
     final http.Response rawBusinessCard = await requestDataProviders
         .postBusinessCardRequest(bodyString);
     final json = await jsonDecode(rawBusinessCard.body);
@@ -220,17 +223,17 @@ class RequestRepository {
       "date": GlobalConstants.dateFormatServer.format(
           GlobalConstants.dateFormatViewed.parse(
               embassyLetterFormModel.requestDate!)),
-      "comments": embassyLetterFormModel.comments,
+      "comments": embassyLetterFormModel.comments.toString(),
       "dateFrom": GlobalConstants.dateFormatServer.format(
           GlobalConstants.dateFormatViewed.parse(
               embassyLetterFormModel.dateFrom!)),
       "dateTo": GlobalConstants.dateFormatServer.format(
           GlobalConstants.dateFormatViewed.parse(
               embassyLetterFormModel.dateTo!)),
-      "purpose": embassyLetterFormModel.purpose,
+      "purpose": embassyLetterFormModel.purpose.toString(),
       "embassyId": embassyLetterFormModel.embassy,
-      "passportNo": embassyLetterFormModel.passportNo,
-      "addSalary": embassyLetterFormModel.addSalary,
+      "passportNo": embassyLetterFormModel.passportNo.toString(),
+      "addSalary": embassyLetterFormModel.addSalary.toString(),
     });
 
     final http.Response rawEmbassyLetter = await requestDataProviders

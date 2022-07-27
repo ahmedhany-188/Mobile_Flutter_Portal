@@ -8,7 +8,8 @@ class BlocGetTheAttendanceLoadingState extends AttendanceState{}
 
 class BlocGetTheAttendanceSuccessState extends AttendanceState{
    List<MyAttendanceModel> getAttendanceList;
-   BlocGetTheAttendanceSuccessState(this.getAttendanceList);
+   int month;
+   BlocGetTheAttendanceSuccessState(this.getAttendanceList,this.month);
 }
 
 class BlocGetTheAttendanceErrorState extends AttendanceState{

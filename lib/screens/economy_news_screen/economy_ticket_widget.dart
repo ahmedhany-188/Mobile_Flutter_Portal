@@ -1,7 +1,10 @@
 
+import 'dart:convert';
+
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ignore: must_be_immutable
 class EconomyNewsTicketWidget extends StatelessWidget {
@@ -9,20 +12,14 @@ class EconomyNewsTicketWidget extends StatelessWidget {
   // ignore: non_constant_identifier_names
   List<dynamic> EconomyNewsTicketWidgetData;
 
-  // ignore: prefer_typing_uninitialized_variables
-  var deviceSize;
-
   EconomyNewsTicketWidget(this.EconomyNewsTicketWidgetData, {Key? key})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    deviceSize = MediaQuery
-        .of(context)
-        .size;
+
 
     return SafeArea(
-
 
       maintainBottomViewPadding: true,
       child: ConditionalBuilder(
@@ -43,8 +40,14 @@ class EconomyNewsTicketWidget extends StatelessWidget {
                 ),
                 itemCount: EconomyNewsTicketWidgetData.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return Container(
-
+                  return GestureDetector(
+                      onTap: (){
+                        launchUrl(
+                        Uri.parse(EconomyNewsTicketWidgetData[index]["url"]),
+                        mode: LaunchMode.externalApplication,
+                      );
+                      },
+                      child:Container(
                     decoration: BoxDecoration(
 
                       image: getHeadineImage(index)
@@ -53,12 +56,12 @@ class EconomyNewsTicketWidget extends StatelessWidget {
                     child: Container(
                       width: double.infinity,
                       color: const Color.fromARGB(100, 22, 44, 33),
-                      margin: const EdgeInsets.all(10),
                       padding: const EdgeInsets.all(10),
                       child: Text(
                         EconomyNewsTicketWidgetData[index]["title"],
                         style: const TextStyle(fontSize: 16, color: Colors.white),),
                     ),
+                  )
                   );
                 }
             ),

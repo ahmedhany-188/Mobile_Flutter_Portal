@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/it_request_bloc/email_useracount_request/email_useraccount_cubit.dart';
@@ -39,7 +40,11 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
 
     final currentRequestNo = widget.requestNo;
 
-    return Theme(
+    return  WillPopScope(
+        onWillPop: () async {
+      await EasyLoading.dismiss(animation: true);
+      return true;
+    }, child: Theme(
       data: Theme.of(context).copyWith(
         inputDecorationTheme: InputDecorationTheme(
           border: OutlineInputBorder(
@@ -60,6 +65,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
 
         child: BlocBuilder<EmailUserAccountCubit, EmailUserAccountInitial>(
             builder: (context, state) {
+
               return Scaffold(
                 appBar: AppBar(
                   title: const Text("Email Account"),
@@ -103,9 +109,8 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                           if(user.employeeData!.userHrCode != state.hrCodeUser.value){
                             context.read<EmailUserAccountCubit>()
                                 .submitEmailAccount();
-
                           }else{
-                            print("----1---"+user.employeeData!.userHrCode.toString());
+                            EasyLoading.showError("Invalid same hr",);
                           }
                         },
 
@@ -121,26 +126,17 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                     EmailUserAccountInitial>(
                   listener: (context, state) {
                     if (state.status.isSubmissionInProgress) {
-                      LoadingDialog.show(context);
+                      EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
                     }
                     if (state.status.isSubmissionSuccess) {
-                      LoadingDialog.hide(context);
                       Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (_) =>
                               SuccessScreen(text: state.successMessage ??
                                   "Error Number",)));
                     }
                      if (state.status.isSubmissionFailure) {
-                      LoadingDialog.hide(context);
-                      ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                state.errorMessage ?? 'Request Failed'),
-                          ),
-                        );
-                    }
+                       EasyLoading.showError(state.errorMessage.toString(),);
+                     }
                   },
 
                   child: Padding(
@@ -212,6 +208,8 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                 child: BlocBuilder<EmailUserAccountCubit,
                                     EmailUserAccountInitial>(
                                     buildWhen: (previous, current) {
+
+
                                       return (previous.requestType !=
                                           current.requestType);
                                     },
@@ -502,43 +500,18 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                   ),
 
                 ),
-              );
+              )
+                //,)
+              ;
             }
         ),
       ),
+    ),
     );
   }
 }
 
-class LoadingDialog extends StatelessWidget {
-  static void show(BuildContext context, {Key? key}) => showDialog<void>(
-    context: context,
-    useRootNavigator: false,
-    barrierDismissible: false,
-    builder: (_) => LoadingDialog(key: key),
-  ).then((_) => FocusScope.of(context).requestFocus(FocusNode()));
 
-  static void hide(BuildContext context) => Navigator.pop(context);
-
-  const LoadingDialog({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => false,
-      child: Center(
-        child: Card(
-          child: Container(
-            width: 80,
-            height: 80,
-            padding: const EdgeInsets.all(12.0),
-            child: const CircularProgressIndicator(),
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 class SuccessScreen extends StatelessWidget {
   const SuccessScreen({Key? key, required this.text}) : super(key: key);
