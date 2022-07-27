@@ -11,11 +11,7 @@ class AttendanceCubit extends Cubit<AttendanceState> {
   AttendanceCubit() : super(AttendanceInitial());
 
   static AttendanceCubit get(context) =>BlocProvider.of(context);
-
   final Connectivity connectivity = Connectivity();
-
-  late MultiBlocProvider myBloc;
-  late StreamSubscription mSub;
 
   void getAttendanceList(userHRCode,monthNumber) async {
 
@@ -49,10 +45,7 @@ class AttendanceCubit extends Cubit<AttendanceState> {
   @override
   Future<void> close() {
     // TODO: implement close
-    mSub.cancel();
     return super.close();
   }
-
-
 
 }

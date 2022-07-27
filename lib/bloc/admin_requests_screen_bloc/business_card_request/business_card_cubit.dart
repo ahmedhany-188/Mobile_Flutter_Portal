@@ -49,7 +49,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
                   requestData.requestDate!)));
 
       final employeeName = RequestDate.dirty(requestData.employeeNameCard.toString());
-      final employeeComments = requestData.employeeComments.toString() ?? "No Comment";
+      final employeeComments = requestData.employeeComments.toString();
       final employeeMobile =  RequestDate.dirty(requestData.employeeMobil.toString());
       final faxNo = requestData.faxNo.toString();
      final employeeExt = requestData.employeeExt.toString();

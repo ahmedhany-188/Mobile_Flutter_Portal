@@ -21,6 +21,7 @@ import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_r
 import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreen.dart';
+import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreenDirectManager.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
@@ -107,6 +108,11 @@ class AppRouter {
       case UserProfileScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => const UserProfileScreen(),
+        );
+
+      case DirectManagerProfileScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) =>  DirectManagerProfileScreen(employeeData: settings.arguments),
         );
 
       case EconomyNewsScreen.routeName:
