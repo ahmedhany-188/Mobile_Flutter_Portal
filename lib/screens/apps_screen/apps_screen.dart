@@ -1,3 +1,4 @@
+import 'package:grouped_list/grouped_list.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
@@ -45,7 +46,6 @@ class AppsScreen extends StatelessWidget {
                           },
                           decoration: const InputDecoration(
                               contentPadding: EdgeInsets.all(10),
-                              isCollapsed: true,
                               filled: true,
                               labelText: "Search Apps",
                               hintText: "Search Apps",
@@ -60,7 +60,7 @@ class AppsScreen extends StatelessWidget {
                         height: 87.5.h,
                         width: 100.w,
                         margin: EdgeInsets.only(left: 4.w, right: 4.w),
-                        child: buildApps(state.appsList, context),
+                        child: buildSeperatedApps(state.appsList, context),
                       ),
                     ],
                   );
@@ -75,6 +75,80 @@ class AppsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  buildSeperatedApps(List<AppsData> apps, BuildContext appsContext) {
+    return (apps.isNotEmpty)
+        ? GroupedListView<AppsData, String>(
+      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            elements: apps,
+            groupBy: (element) => element.sysName!,
+            groupComparator: (value1, value2) => value2.compareTo(value1),
+            // itemComparator: (item1, item2) => item1['name'].compareTo(item2['name']),
+            order: GroupedListOrder.ASC,
+            useStickyGroupSeparators: false,
+            groupSeparatorBuilder: (String value) => Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                value,
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+            itemBuilder: (c, element) {
+              return InkWell(
+                onTap: () async {
+                  try {
+                    await launchUrl(Uri.parse(element.sysLink.toString()),
+                        mode: LaunchMode.externalApplication);
+                  } catch (err) {
+                    if (kDebugMode) {
+                      print(err);
+                    }
+                  }
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 5),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    gradient: const LinearGradient(
+                        colors: [
+                          Color(0xFF1a4c78),
+                          Color(0xFF3772a6),
+                        ],
+                        begin: Alignment.bottomLeft,
+                        end: Alignment.topRight,
+                        tileMode: TileMode.clamp),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      createAngularIcon(
+                        angularIcon: element.angularIcon.toString(),
+                        solid: false,
+                        context: appsContext,
+                        color: Colors.white,
+                        size: 60,
+                      ),
+                      Text(
+                        '${element.sysName}',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+          )
+        : (AppsCubit.get(appsContext).appsList.isEmpty)
+            ? buildNoAppsFound()
+            : buildNoSearchFound();
   }
 
   buildApps(List<AppsData> apps, BuildContext appsContext) {

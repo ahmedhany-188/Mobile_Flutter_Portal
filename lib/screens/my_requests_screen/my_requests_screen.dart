@@ -209,16 +209,14 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                               },
                               decoration: InputDecoration(
                                 contentPadding: const EdgeInsets.all(10),
-                                isCollapsed: true,
                                 filled: true,
                                 prefixIcon: const Icon(Icons.search),
                                 border: const OutlineInputBorder(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(10.0)),
                                     borderSide: BorderSide.none),
-                                labelText:
-                                    "Search by 'request number, request name'",
-                                hintText: "Search",
+                                // labelText: 'Search',
+                                hintText: "Search by 'request number, request name'",
                                 suffixIcon: (textController.text.isEmpty)
                                     ? null
                                     : IconButton(

@@ -71,13 +71,15 @@ class _VideoContentState extends State<_VideoContent> {
     _controller = VideoPlayerController.network(
       videosLinks(VideosCubit.get(context).videosList[widget.index].videoName!),
       // closedCaptionFile: _loadCaptions(),
-      videoPlayerOptions: VideoPlayerOptions(mixWithOthers: true),
+      videoPlayerOptions: VideoPlayerOptions(
+        mixWithOthers: true,
+      ),
     );
 
     _controller.addListener(() {
       setState(() {});
     });
-    // _controller.setLooping(true);
+    _controller.setLooping(false);
     _controller.initialize();
   }
 
@@ -99,10 +101,16 @@ class _VideoContentState extends State<_VideoContent> {
           key: UniqueKey(),
           alignment: Alignment.bottomCenter,
           children: <Widget>[
-            VideoPlayer(_controller, key: UniqueKey()),
-            // ClosedCaption(text: _controller.value.caption.text),
+            VideoPlayer(
+              _controller,
+              key: UniqueKey(),
+            ),
+            ClosedCaption(text: _controller.value.caption.text),
             _ControlsOverlay(controller: _controller),
-            VideoProgressIndicator(_controller, allowScrubbing: true),
+            SizedBox(
+                height: 3.h,
+                child: VideoProgressIndicator(_controller,
+                    allowScrubbing: true, key: UniqueKey())),
           ],
         ),
       ),
@@ -149,11 +157,12 @@ class _ControlsOverlay extends StatelessWidget {
               ? const SizedBox.shrink()
               : Container(
                   color: Colors.black26,
-                  child: const Center(
+                  height: 50.h,
+                  child: Center(
                     child: Icon(
                       Icons.play_arrow,
                       color: Colors.white,
-                      size: 100.0,
+                      size: 100.0.sp,
                       semanticLabel: 'Play',
                     ),
                   ),

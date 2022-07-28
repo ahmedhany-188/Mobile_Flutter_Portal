@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../data/helpers/assist_function.dart';
-import '../../widgets/appbar/basic_appbar.dart';
+import '../../widgets/appbar/internal_appbar.dart';
 import '../../widgets/drawer/main_drawer.dart';
 
 class ValueScreen extends StatelessWidget {

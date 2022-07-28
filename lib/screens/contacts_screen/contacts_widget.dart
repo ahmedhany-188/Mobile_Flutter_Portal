@@ -73,17 +73,14 @@ class ContactsWidget extends StatelessWidget {
                         onForegroundImageError: (o, t) {
                           Image.asset(
                             'assets/images/logo.png',
-                            scale: 3,
-                            fit: BoxFit.fitHeight,
+                            height: 19.h,
+                            fit: BoxFit.scaleDown,
                           );
                         },
-                        // backgroundImage: const AssetImage(
-                        //   'assets/images/logo.png',
-                        // ),
                         child: Image.asset(
                           'assets/images/logo.png',
-                          scale: 3,
-                          fit: BoxFit.fitHeight,
+                          height: 19.h,
+                          fit: BoxFit.scaleDown,
                         ),
                       ),
                     ),

@@ -1,11 +1,9 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../data/helpers/assist_function.dart';
-import '../../widgets/appbar/basic_appbar.dart';
-import '../../widgets/drawer/main_drawer.dart';
+import '../../widgets/appbar/internal_appbar.dart';
 
 class AboutScreen extends StatelessWidget {
   static const routeName = 'about-screen';
@@ -15,8 +13,7 @@ class AboutScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
-        appBar: AppBar(), ///basicAppBar(context, 'About'),
-        // drawer: MainDrawer(),
+        appBar: internalAppBar(context: context, title: 'About'),
         body: SizedBox(
           height: MediaQuery.of(context).size.height,
           child: SingleChildScrollView(
@@ -35,7 +32,7 @@ class AboutScreen extends StatelessWidget {
                   titleText('About Our New Mobile Application'),
                   paragraphText(
                       "Now you can navigate easily around the application."
-                      "all feature are exactly the same and added some new feature."
+                      "all feature are exactly the same and added some new features."
                       "feel free to inquire about the application throw IT department"),
                   RichText(
                     text: TextSpan(
@@ -47,10 +44,12 @@ class AboutScreen extends StatelessWidget {
                         text: 'See User Manual',
                         recognizer: TapGestureRecognizer()
                           ..onTap = () async {
-                            if (await canLaunchUrl(
-                                Uri.parse('https://portal.hassanallam.com/Portal_Mobile_App_user_manual.pdf'))) {
+                            if (await canLaunchUrl(Uri.parse(
+                                'https://portal.hassanallam.com/Portal_Mobile_App_user_manual.pdf'))) {
                               launchUrl(
-                                  Uri.parse('https://portal.hassanallam.com/Portal_Mobile_App_user_manual.pdf'),mode: LaunchMode.externalApplication);
+                                  Uri.parse(
+                                      'https://portal.hassanallam.com/Portal_Mobile_App_user_manual.pdf'),
+                                  mode: LaunchMode.externalApplication);
                               Navigator.defaultRouteName;
                             } else {
                               showErrorSnackBar(context);
