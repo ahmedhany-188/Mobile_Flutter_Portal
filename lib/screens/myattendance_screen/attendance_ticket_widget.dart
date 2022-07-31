@@ -6,13 +6,14 @@ import '../../widgets/dialogpopoup/dialog_popup_attendance.dart';
 class AttendanceTicketWidget extends StatelessWidget {
 
   List<MyAttendanceModel> attendanceListData;
+  String hrUser;
 
   String timeIn = "";
   String timeIn2 = "";
   String timeOut = "";
   String timeOut2 = "";
 
-  AttendanceTicketWidget(this.attendanceListData, {Key? key})
+  AttendanceTicketWidget(this.attendanceListData,this.hrUser, {Key? key})
       : super(key: key);
 
   @override
@@ -50,7 +51,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                         showDialog(context: context,
                             builder: (BuildContext context) {
                               return DialogPopUpAttendance(
-                                  attendanceListData: attendanceListData[index]);
+                                  attendanceListData: attendanceListData[index],hrUser:hrUser);
                             });
                       },
                       child: Column(children: [
@@ -65,7 +66,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                     || attendanceListData[index].permission != null) {
                   return sizedDay(
                       attendanceListData[index], context, "in", "out",
-                      "blue", "blue");
+                      "blue", "blue",hrUser);
                 }
                 else if (attendanceListData[index].timeIN != null &&
                     attendanceListData[index].timeOUT != null
@@ -91,16 +92,24 @@ class AttendanceTicketWidget extends StatelessWidget {
 
                   /// Time out AM Error
                   timeOut2 = timeOut2.replaceAll("AM", "");
+
                   timeOut2 = timeOut2.replaceAll("PM", "");
 
-                  if (((int.parse(timeOut) >= 5) ||
+
+                  if(attendanceListData[index].timeIN.toString().split(':')[1].contains("PM")
+                      || attendanceListData[index].timeOUT.toString().split(':')[1].contains("AM")){
+                    return sizedDay(
+                        attendanceListData[index], context, "in", "out", "red", "red",hrUser);
+                  }
+
+                  else if (((int.parse(timeOut) >= 5) ||
                       (int.parse(timeOut) == 4 &&
                           int.parse(timeOut2) == 59)) &&
                       ((int.parse(timeIn) < 8) || (int.parse(timeIn) == 8 &&
                           int.parse(timeIn2) < 31))) {
                     return sizedDay(
                         attendanceListData[index], context, "in", "out",
-                        "green", "green");
+                        "green", "green",hrUser);
                   }
                   else if
                   (((int.parse(timeOut) >= 5) || (int.parse(timeOut) == 4 &&
@@ -109,7 +118,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                           int.parse(timeIn2) > 30))) {
                     return sizedDay(
                         attendanceListData[index], context, "in", "out", "red",
-                        "green");
+                        "green",hrUser);
                   }
                   else if
                   ((int.parse(timeOut) == 4 && int.parse(timeOut2) < 59) ||
@@ -119,12 +128,12 @@ class AttendanceTicketWidget extends StatelessWidget {
                                   int.parse(timeIn2) < 31))) {
                     return sizedDay(
                         attendanceListData[index], context, "in", "out",
-                        "green", "red");
+                        "green", "red",hrUser);
                   }
                   else {
                     return sizedDay(
                         attendanceListData[index], context, "in", "out", "red",
-                        "red");
+                        "red",hrUser);
                   }
                 }
                 else if (attendanceListData[index].timeIN.toString() != "null"
@@ -134,17 +143,17 @@ class AttendanceTicketWidget extends StatelessWidget {
                         "null") {
                   return sizedDay(
                       attendanceListData[index], context, "in", "out", "red",
-                      "red");
+                      "red",hrUser);
                 }
                 else {
                   if (attendanceListData[index].deduction == "غياب") {
                     return sizedDay(
                         attendanceListData[index], context, "in", "out", "red",
-                        "red");
+                        "red",hrUser);
                   } else {
                     return sizedDay(
                         attendanceListData[index], context, "in", "out", "grey",
-                        "grey");
+                        "grey",hrUser);
                   }
                 }
               },
@@ -206,7 +215,7 @@ Container holidayContainer(MyAttendanceModel attendanceModel) {
   }
   SizedBox sizedDay(MyAttendanceModel attendanceModel,
       BuildContext context, String dayMorning,String dayNight,
-      String dayActionMorning,String dayActionNight) {
+      String dayActionMorning,String dayActionNight,String hrUser) {
     List<String> date = attendanceModel.date.toString().split('-');
 
     return SizedBox(
@@ -216,7 +225,7 @@ Container holidayContainer(MyAttendanceModel attendanceModel) {
             showDialog(context: context,
                 builder: (BuildContext context) {
                   return DialogPopUpAttendance(
-                      attendanceListData: attendanceModel);
+                      attendanceListData: attendanceModel,hrUser:hrUser);
                 }
             );
           },

@@ -18,10 +18,12 @@ class AttendanceScreen extends StatefulWidget {
   @override
   State<AttendanceScreen> createState() => AttendanceScreenStateClass();
 
+
 }
 
 class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
+  late final user;
   int monthNumber = DateTime.now().month;
 
   int dayNumber = DateTime.now().day;
@@ -55,7 +57,7 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
 
     var pageController = PageController(initialPage: selectedPage);
-    final user = context.select((AppBloc bloc) => bloc.state.userData);
+     user = context.select((AppBloc bloc) => bloc.state.userData);
 
     return Scaffold(
         appBar: AppBar(
@@ -219,7 +221,7 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                 child: DayOfTheWeek(list),
               ),
               SizedBox(
-                child: AttendanceTicketWidget(list),
+                child: AttendanceTicketWidget(list,user.user!.userHRCode.toString()),
               ),
             ],)
         )
