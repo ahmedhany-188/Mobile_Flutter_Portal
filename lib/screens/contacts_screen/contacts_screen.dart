@@ -223,9 +223,9 @@ class _ContactsScreenState extends State<ContactsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if(textController.text.isEmpty){
-      ContactsCubit.get(context).getAllContacts();
-    }
+    // if(textController.text.isEmpty){
+    //   ContactsCubit.get(context).getAllContacts();
+    // }
     var deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,

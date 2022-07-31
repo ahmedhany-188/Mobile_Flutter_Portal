@@ -22,6 +22,8 @@ class ContactCubitStates extends Equatable {
     this.titleFilter = const [],
   });
 
+
+
   ContactCubitStates copyWith({
     ContactsEnumStates? contactStates,
     List<ContactsDataFromApi>? listContacts,
@@ -52,6 +54,45 @@ class ContactCubitStates extends Equatable {
         departmentFilter,
         titleFilter
       ];
+
+   static ContactCubitStates? fromMap(Map<String, dynamic> json) {
+    if (json.isEmpty) {
+      return const ContactCubitStates(
+        contactStates :ContactsEnumStates.initial,
+        listContacts : <ContactsDataFromApi>[],
+        tempList : <ContactsDataFromApi>[],
+        companiesFilter : [],
+        projectsFilter : [],
+        departmentFilter : [],
+        titleFilter : [],
+      );
+    }
+    int val = json['contactStates'];
+    return ContactCubitStates(
+      contactStates :ContactsEnumStates.values[val],
+      listContacts : List<ContactsDataFromApi>.from(
+          json['listContacts']?.map((p) => ContactsDataFromApi.fromJson(p))),
+            // : null)json['listContacts'] as List<ContactsDataFromApi>,
+      tempList : List<ContactsDataFromApi>.from(
+          json['tempList']?.map((p) => ContactsDataFromApi.fromJson(p))),
+      // json['tempList'],
+      companiesFilter : json['companiesFilter'],
+      projectsFilter : json['projectsFilter'],
+      departmentFilter : json['departmentFilter'],
+      titleFilter : json['titleFilter'],
+    );
+  }
+  Map<String, dynamic> toMap() {
+    return {
+      'contactStates':contactStates.index,
+      'listContacts': listContacts,
+      'tempList': tempList,
+      'companiesFilter': companiesFilter,
+      'projectsFilter': projectsFilter,
+      'departmentFilter': departmentFilter,
+      'titleFilter': titleFilter,
+    };
+  }
 }
 
 class BlocGetContactsErrorState extends ContactsStates {

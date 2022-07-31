@@ -1,13 +1,14 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../data/data_providers/general_dio/general_dio.dart';
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 
 part 'contacts_states.dart';
 
-class ContactsCubit extends Cubit<ContactCubitStates> {
+class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin{
   ContactsCubit() : super(const ContactCubitStates()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (state.contactStates == ContactsEnumStates.failed) {
@@ -35,9 +36,9 @@ class ContactsCubit extends Cubit<ContactCubitStates> {
   List<ContactsDataFromApi> contacts = [];
 
   void getContacts() {
-    emit(state.copyWith(
-      contactStates: ContactsEnumStates.initial,
-    ));
+    // emit(state.copyWith(
+    //   contactStates: ContactsEnumStates.initial,
+    // ));
     GeneralDio.getContactListData().then((value) {
       if (value.data != null) {
         contacts = List<ContactsDataFromApi>.from(
@@ -72,7 +73,7 @@ class ContactsCubit extends Cubit<ContactCubitStates> {
             titleFilter: titleFilters));
       }
     }).catchError((error) {
-      emit(state.copyWith(contactStates: ContactsEnumStates.failed));
+      // emit(state.copyWith(contactStates: ContactsEnumStates.failed));
     });
   }
 
@@ -88,5 +89,25 @@ class ContactsCubit extends Cubit<ContactCubitStates> {
       contactStates: ContactsEnumStates.filtered,
       tempList: updatedList,
     ));
+  }
+
+  @override
+  ContactCubitStates? fromJson(Map<String, dynamic> json) {
+    // TODO: implement fromJson
+    // throw UnimplementedError();
+    return ContactCubitStates.fromMap(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(ContactCubitStates state) {
+    // TODO: implement toJson
+    if (state.contactStates == ContactsEnumStates.success && state.listContacts.isNotEmpty) {
+      return state.toMap();
+    } else {
+      return null;
+    }
+    return state.toMap();
+    // throw UnimplementedError();
+
   }
 }
