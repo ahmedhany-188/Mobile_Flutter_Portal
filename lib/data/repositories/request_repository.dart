@@ -80,7 +80,6 @@ class RequestRepository {
       "localAdmin": accessRightModel.localAdmin,
     });
 
-
     final http.Response rawAccess = await requestDataProviders
         .postAccessAccountAccessRequest(bodyString);
     final json = await jsonDecode(rawAccess.body);

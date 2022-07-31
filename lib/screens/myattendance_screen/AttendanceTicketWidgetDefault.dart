@@ -40,35 +40,29 @@ class AttendanceTicketWidgetDefault extends StatelessWidget {
                       child: Column(children: [
                         Text(type,
                             style: const TextStyle(color: Colors.white)),
-                        Container(
-                          height: 30,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(5),
-                                topRight: Radius.circular(5)),
-                            color: Colors.grey,
-                          ),
-                          alignment: Alignment.center,
-                          width: double.infinity,
-                        ),
+                        defaultDay(),
                         Container(height: 5, color: Colors.white,),
-                        Container(
-                          height: 30,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(5),
-                                bottomLeft: Radius.circular(5)),
-                            color: Colors.grey,
-                          ),
-                          alignment: Alignment.center,
-                          width: double.infinity,
-                        ),
+                        defaultDay(),
                       ]),
                     );
                 }
             ),
         fallback: null, //(context) => const Center(child: LinearProgressIndicator()),
       ),
+    );
+  }
+
+  Container defaultDay(){
+    return Container(
+      height: 30,
+      decoration: const BoxDecoration(
+        borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(5),
+            bottomLeft: Radius.circular(5)),
+        color: Colors.grey,
+      ),
+      alignment: Alignment.center,
+      width: double.infinity,
     );
   }
 }

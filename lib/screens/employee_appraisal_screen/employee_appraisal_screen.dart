@@ -51,22 +51,12 @@ class EmployeeAppraisalScreen extends StatefulWidget {
               EmployeeAppraisalBlocState>(
             listener: (context, state) {
               if (state is BlocGetEmployeeAppraisalBlocInitialSuccessState) {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Success"),
-                  ),
-                );
-
                 employeeAppraisalList = jsonDecode(state.employeeAppraisaleList)["data"];
-
                 // employee_appraisal_model!.overallscore = employeeAppraisaleList!.elementAt(0)["overallscore"];
-
                 appraisalDataList.add(ObjectAppraisalModel("Company", employeeAppraisalList!.elementAt(0)["companyScore"]));
                 appraisalDataList.add( ObjectAppraisalModel("Department", employeeAppraisalList!.elementAt(0)["departmentScore"]));
                 appraisalDataList.add( ObjectAppraisalModel("Individual", employeeAppraisalList!.elementAt(0)["individualScore"]));
                 appraisalDataList.add( ObjectAppraisalModel("Competence", employeeAppraisalList!.elementAt(0)["competencescore"]));
-
               } else
               if (state is BlocGetEmployeeAppraisalBlocInitialErrorState) {
                 ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -76,14 +66,7 @@ class EmployeeAppraisalScreen extends StatefulWidget {
                   ),
                 );
               } else
-              if (state is BlocGetEmployeeAppraisalBlocInitialLoadingState) {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Loading"),
-                  ),
-                );
-              }
+              if (state is BlocGetEmployeeAppraisalBlocInitialLoadingState) {}
             },
             builder: (context, state) {
               return

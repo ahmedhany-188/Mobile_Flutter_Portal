@@ -1,11 +1,10 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
-import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_userprofile.dart';
 import '../../widgets/dialogpopoup/dialog_popup_attendance.dart';
 
-// ignore: must_be_immutable
 class AttendanceTicketWidget extends StatelessWidget {
+
   List<MyAttendanceModel> attendanceListData;
 
   String timeIn = "";
@@ -41,7 +40,34 @@ class AttendanceTicketWidget extends StatelessWidget {
                 List<String> date = attendanceListData[index].date
                     .toString().split('-');
 
-                if (attendanceListData[index].timeIN != null &&
+
+                if (attendanceListData[index].holiday == true ||
+                    attendanceListData[index].vacation != null) {
+                  return SizedBox(
+                    width: double.infinity,
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(context: context,
+                            builder: (BuildContext context) {
+                              return DialogPopUpAttendance(
+                                  attendanceListData: attendanceListData[index]);
+                            });
+                      },
+                      child: Column(children: [
+                        Text("${date[1]}/${date[2].substring(0, 2)}",
+                            style: const TextStyle(color: Colors.white)),
+                        holidayContainer(attendanceListData[index]),
+                      ]),
+                    ),
+                  );
+                }
+                else if (attendanceListData[index].businessMission != null
+                    || attendanceListData[index].permission != null) {
+                  return sizedDay(
+                      attendanceListData[index], context, "in", "out",
+                      "blue", "blue");
+                }
+                else if (attendanceListData[index].timeIN != null &&
                     attendanceListData[index].timeOUT != null
                 ) {
                   timeIn = attendanceListData[index].timeIN
@@ -52,78 +78,38 @@ class AttendanceTicketWidget extends StatelessWidget {
                       .split(':')[1];
 
                   timeIn2 = timeIn2.replaceAll("AM", "");
+
+                  /// Time in 2 PM Error
                   timeIn2 = timeIn2.replaceAll("PM", "");
+
                   timeOut = attendanceListData[index].timeOUT
                       .toString()
                       .split(':')[0];
                   timeOut2 = attendanceListData[index].timeOUT
                       .toString()
                       .split(':')[1];
+
+                  /// Time out AM Error
                   timeOut2 = timeOut2.replaceAll("AM", "");
                   timeOut2 = timeOut2.replaceAll("PM", "");
-                }
 
-                if (attendanceListData[index].timeIN.toString() !=
-                    "null" &&
-                    attendanceListData[index].timeOUT.toString() !=
-                        "null") {
                   if (((int.parse(timeOut) >= 5) ||
                       (int.parse(timeOut) == 4 &&
                           int.parse(timeOut2) == 59)) &&
                       ((int.parse(timeIn) < 8) || (int.parse(timeIn) == 8 &&
                           int.parse(timeIn2) < 31))) {
-                    return SizedBox(
-                      width: double.infinity,
-                      child: InkWell(
-                          onTap: () {
-                            showDialog(context: context,
-                                builder: (BuildContext context) {
-                                  return DialogPopUpAttendance(
-                                      attendanceListData: attendanceListData[index]);
-                                }
-                            );
-                          },
-                          child: Column(children: [
-                            Text(
-                                "${date[1]}/${date[2].substring(0, 2)}",
-                                style: const TextStyle(color: Colors.white,)),
-
-                            attendanceContainer(attendanceListData[index]
-                                .timeIN.toString(), "in", "green"),
-                            Container(height: 5, color: Colors.white,),
-                            attendanceContainer(attendanceListData[index]
-                                .timeOUT.toString(), "out", "green"),
-                          ])
-                      ),
-                    );
+                    return sizedDay(
+                        attendanceListData[index], context, "in", "out",
+                        "green", "green");
                   }
                   else if
                   (((int.parse(timeOut) >= 5) || (int.parse(timeOut) == 4 &&
                       int.parse(timeOut2) == 59)) &&
                       ((int.parse(timeIn) > 8) || (int.parse(timeIn) == 8 &&
                           int.parse(timeIn2) > 30))) {
-                    return SizedBox(
-                      width: double.infinity,
-                      child: InkWell(
-                        onTap: () {
-                          showDialog(context: context,
-                              builder: (BuildContext context) {
-                                return DialogPopUpAttendance(
-                                    attendanceListData: attendanceListData[index]);
-                              }
-                          );
-                        },
-                        child: Column(children: [
-                          Text("${date[1]}/${date[2].substring(0, 2)}",
-                              style: const TextStyle(color: Colors.white)),
-                          attendanceContainer(attendanceListData[index]
-                              .timeIN.toString(), "in", "red"),
-                          Container(height: 5, color: Colors.white,),
-                          attendanceContainer(attendanceListData[index]
-                              .timeOUT.toString(), "out", "green"),
-                        ]),
-                      ),
-                    );
+                    return sizedDay(
+                        attendanceListData[index], context, "in", "out", "red",
+                        "green");
                   }
                   else if
                   ((int.parse(timeOut) == 4 && int.parse(timeOut2) < 59) ||
@@ -131,125 +117,57 @@ class AttendanceTicketWidget extends StatelessWidget {
                           ((int.parse(timeIn) < 8) ||
                               (int.parse(timeIn) == 8 &&
                                   int.parse(timeIn2) < 31))) {
-                    return SizedBox(
-                      width: double.infinity,
-                      child: InkWell(
-                        onTap: () {
-                          showDialog(context: context,
-                              builder: (BuildContext context) {
-                                return DialogPopUpAttendance(
-                                    attendanceListData: attendanceListData[index]);
-                              }
-                          );
-                        },
-                        child: Column(children: [
-                          Text("${date[1]}/${date[2].substring(0, 2)}",
-                              style: const TextStyle(color: Colors.white)),
-                          attendanceContainer(
-                              attendanceListData[index].timeIN.toString(),
-                              "in", "green"),
-                          Container(height: 5, color: Colors.white,),
-                          attendanceContainer(
-                              attendanceListData[index].timeOUT.toString(),
-                              "out", "red"),
-                        ]),
-                      ),
-                    );
+                    return sizedDay(
+                        attendanceListData[index], context, "in", "out",
+                        "green", "red");
                   }
                   else {
-                    return SizedBox(
-                      width: double.infinity,
-                      child: InkWell(
-                        onTap: () {
-                          showDialog(context: context,
-                              builder: (BuildContext context) {
-                                return DialogPopUpAttendance(
-                                    attendanceListData: attendanceListData[index]);
-                              }
-                          );
-                        },
-                        child: Column(children: [
-
-                          Text(
-                              "${date[1]}/${date[2].substring(0, 2)}",
-                              style: const TextStyle(color: Colors.white)),
-                          attendanceContainer(
-                              attendanceListData[index].timeIN.toString(),
-                              "in", "red"),
-                          Container(height: 5, color: Colors.white,),
-                          attendanceContainer(
-                              attendanceListData[index].timeOUT.toString(),
-                              "out", "red"),
-                        ]),
-                      ),
-                    );
+                    return sizedDay(
+                        attendanceListData[index], context, "in", "out", "red",
+                        "red");
                   }
                 }
                 else if (attendanceListData[index].timeIN.toString() != "null"
                     && attendanceListData[index].timeOUT.toString() == "null" ||
                     attendanceListData[index].timeIN.toString() == "null"
-                        && attendanceListData[index].timeOUT.toString() != "null") {
-                  return SizedBox(
-                    width: double.infinity,
-                    child: InkWell(
-                      onTap: () {
-                        showDialog(context: context,
-                            builder: (BuildContext context) {
-                              return DialogPopUpAttendance(attendanceListData: attendanceListData[index]);});},
-                      child: Column(children: [
-                        Text(
-                            "${date[1]}/${date[2].substring(0, 2)}",
-                            style: const TextStyle(color: Colors.white)),
-                        attendanceContainer(attendanceListData[index].timeIN.toString()!="null"?
-                            attendanceListData[index].timeIN.toString():"",
-                            "in", "red"),
-                        Container(height: 5, color: Colors.white,),
-                        attendanceContainer(attendanceListData[index].timeOUT.toString()!="null"?
-                        attendanceListData[index].timeOUT.toString():"", "out", "red"),]),),);
+                        && attendanceListData[index].timeOUT.toString() !=
+                        "null") {
+                  return sizedDay(
+                      attendanceListData[index], context, "in", "out", "red",
+                      "red");
                 }
                 else {
-                  return SizedBox(
-                    width: double.infinity,
-                    child: InkWell(
-                      onTap: () {
-                        showDialog(context: context,
-                            builder: (BuildContext context) {return DialogPopUpAttendance(attendanceListData: attendanceListData[index]);});},
-                      child: Column(children: [
-                        Text("${date[1]}/${date[2].substring(0, 2)}",
-                            style: const TextStyle(color: Colors.white)),
-                        Container(
-                            height: 30,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  topLeft: Radius.circular(5),
-                                  topRight: Radius.circular(5)),
-                              color: Colors.grey,
-                            ),
-                            alignment: Alignment.center,
-                            width: double.infinity,
-                        ),
-                        Container(height: 5, color: Colors.white,),
-                        Container(
-                            height: 30,
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(5),
-                                  bottomLeft: Radius.circular(5)),
-                              color: Colors.grey,
-                            ),
-                            alignment: Alignment.center,
-                            width: double.infinity,
-                        ),
-                      ]),
-                    ),
-                  );
+                  if (attendanceListData[index].deduction == "غياب") {
+                    return sizedDay(
+                        attendanceListData[index], context, "in", "out", "red",
+                        "red");
+                  } else {
+                    return sizedDay(
+                        attendanceListData[index], context, "in", "out", "grey",
+                        "grey");
+                  }
                 }
               },
             ),
-        fallback:  null,   //(context) => const Center(child: LinearProgressIndicator()),
+        fallback: null, //(context) => const Center(child: LinearProgressIndicator()),
       ),
     );
   }
+}
+
+
+
+Container holidayContainer(MyAttendanceModel attendanceModel) {
+  return Container(
+    child: iconContainer(attendanceModel),
+    height: 65,
+    decoration: const BoxDecoration(
+      borderRadius: BorderRadius.all(Radius.circular(5)),
+      color: Colors.grey,
+    ),
+    alignment: Alignment.center,
+    width: double.infinity,
+  );
 }
 
   Container attendanceContainer(String timeText,String action, String color) {
@@ -261,7 +179,7 @@ class AttendanceTicketWidget extends StatelessWidget {
             topRight: Radius.circular(5)) : const BorderRadius.only(
             bottomLeft: Radius.circular(5),
             bottomRight: Radius.circular(5)),
-        color: color == "green" ? Colors.lightGreen : Colors.red,
+        color: containerColor(color)   ,
       ),
       alignment: Alignment.center,
       width: double.infinity,
@@ -275,10 +193,54 @@ class AttendanceTicketWidget extends StatelessWidget {
     );
   }
 
+  Color containerColor(String color) {
+    if (color == "green") {
+      return Colors.lightGreen;
+    } else if (color == "red") {
+      return Colors.red;
+    } else if(color == "blue") {
+      return Colors.blueGrey;
+    }else{
+      return Colors.grey;
+    }
+  }
+  SizedBox sizedDay(MyAttendanceModel attendanceModel,
+      BuildContext context, String dayMorning,String dayNight,
+      String dayActionMorning,String dayActionNight) {
+    List<String> date = attendanceModel.date.toString().split('-');
+
+    return SizedBox(
+      width: double.infinity,
+      child: InkWell(
+          onTap: () {
+            showDialog(context: context,
+                builder: (BuildContext context) {
+                  return DialogPopUpAttendance(
+                      attendanceListData: attendanceModel);
+                }
+            );
+          },
+          child: Column(children: [
+            Text(
+                "${date[1]}/${date[2].substring(0, 2)}",
+                style: const TextStyle(color: Colors.white,)),
+            attendanceContainer(attendanceModel.timeIN
+                .toString() != "null" ?
+            attendanceModel.timeIN.toString() : "", dayMorning,
+                dayActionMorning),
+            Container(height: 5, color: Colors.white,),
+            attendanceContainer(attendanceModel.timeOUT
+                .toString() != "null" ?
+            attendanceModel.timeOUT.toString() : "", dayNight, dayActionNight),
+          ])
+      ),
+    );
+  }
+
 IconButton iconContainer(MyAttendanceModel attendanceModel) {
   if (attendanceModel.vacation != null) {
     return IconButton(icon: const Icon(
-        Icons.beach_access
+      Icons.beach_access, color: Colors.white70,
     ), onPressed: () {},);
   } else if (attendanceModel.businessMission != null) {
     return IconButton(icon: const Icon(
@@ -293,10 +255,14 @@ IconButton iconContainer(MyAttendanceModel attendanceModel) {
         Icons.timelapse
     ), onPressed: () {},);
   }
+  else if(attendanceModel.holiday == true){
+    return IconButton(icon: const Icon(
+      Icons.weekend, color: Colors.white70,
+    ), onPressed: () {},);
+  }
   else {
     return IconButton(icon: const Icon(
-      Icons.free_cancellation
-
+      Icons.work, color: Colors.white70,
     ), onPressed: () {},);
   }
 }

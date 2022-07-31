@@ -112,7 +112,7 @@ class AppRouter {
 
       case DirectManagerProfileScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) =>  DirectManagerProfileScreen(employeeData: settings.arguments),
+          builder: (_) =>  DirectManagerProfileScreen(),
         );
 
       case EconomyNewsScreen.routeName:
