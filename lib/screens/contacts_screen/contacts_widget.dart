@@ -56,11 +56,13 @@ class ContactsWidget extends StatelessWidget {
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  // mainAxisSize: MainAxisSize.min,
                   children: [
                     Flexible(
-                      fit: FlexFit.tight,
+                      fit: FlexFit.loose,
+                      flex: 1,
                       child: CircleAvatar(
-                        radius: 40.sp,
+                        minRadius: 40.sp,maxRadius: 40.sp,
                         backgroundColor: Colors.transparent,
                         foregroundImage:
                             (listFromContactsScreen[index].imgProfile != null ||
@@ -73,24 +75,29 @@ class ContactsWidget extends StatelessWidget {
                         onForegroundImageError: (o, t) {
                           Image.asset(
                             'assets/images/logo.png',
-                            height: 19.h,
-                            fit: BoxFit.scaleDown,
+                            height: 50.sp,
+                            // fit: BoxFit.scaleDown,
                           );
                         },
+                        // backgroundImage: AssetImage(
+                        //   'assets/images/logo.png',
+                        // ),
                         child: Image.asset(
                           'assets/images/logo.png',
-                          height: 19.h,
-                          fit: BoxFit.scaleDown,
+                          height: 50.sp,
+                          // fit: BoxFit.scaleDown,
                         ),
                       ),
                     ),
-                    Expanded(
+                    Flexible(
                       flex: 2,
+                      fit: FlexFit.loose,
                       child: SizedBox(
-                        height: 25.0.h,
+                        height: 100.0.sp,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
+                          // mainAxisSize: MainAxisSize.min,
                           children: [
                             Flexible(
                               fit: FlexFit.loose,
@@ -109,14 +116,16 @@ class ContactsWidget extends StatelessWidget {
                               padding: const EdgeInsets.only(top: 5, bottom: 5),
                               child: Container(
                                 width: double.infinity,
-                                height: 0.2.h,
+                                height: 0.5.sp,
                                 color: Colors.white,
                               ),
                             ),
                             Container(
                               clipBehavior: Clip.none,
                               alignment: Alignment.center,
+                              // height: 10.sp,
                               child: Column(
+                                // mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
                                     '${listFromContactsScreen[index].titleName}'

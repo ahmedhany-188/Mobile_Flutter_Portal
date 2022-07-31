@@ -223,9 +223,6 @@ class _ContactsScreenState extends State<ContactsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // if(textController.text.isEmpty){
-    //   ContactsCubit.get(context).getAllContacts();
-    // }
     var deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -246,11 +243,9 @@ class _ContactsScreenState extends State<ContactsScreen> {
                     padding: const EdgeInsets.all(5.0),
                     child: SingleChildScrollView(
                       clipBehavior: Clip.none,
-                      physics: const BouncingScrollPhysics(
-                          parent: NeverScrollableScrollPhysics()),
+                      physics: const NeverScrollableScrollPhysics(),
                       keyboardDismissBehavior:
                           ScrollViewKeyboardDismissBehavior.onDrag,
-                      dragStartBehavior: DragStartBehavior.down,
                       child: Column(
                         children: [
                           BlocConsumer<ContactsFiltersCubit,
@@ -332,7 +327,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                             child: BlocBuilder<ContactsCubit, ContactCubitStates>(
                               builder: (context, state) {
                                 return SizedBox(
-                                  height: deviceSize.height * 0.64,
+                                  height: deviceSize.height * 0.61,
                                   child: (state.contactStates ==
                                           ContactsEnumStates.success)
                                       ? ContactsWidget(state.listContacts)
