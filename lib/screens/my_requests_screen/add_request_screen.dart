@@ -1,3 +1,4 @@
+import 'package:hassanallamportalflutter/widgets/appbar/internal_appbar.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 
@@ -18,8 +19,9 @@ class AddRequestScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add New Request'),
+      appBar: internalAppBar(
+        context: context,
+        title: 'Add New Request',
       ),
       body: Sizer(
         builder: (BuildContext context, Orientation orientation,
@@ -136,12 +138,17 @@ class AddRequestScreen extends StatelessWidget {
                         },
                       ),
                     ),
-                    TextButton(
-                      child: const Text('Forget Sign In/Out'),
-                      onPressed: () {
-                        Navigator.of(context)
-                            .pushNamed(MedicalRequestScreen.routeName);
-                      },
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        style:
+                        const ButtonStyle(alignment: Alignment.centerLeft),
+                        child: const Text('Medical Request'),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(MedicalRequestScreen.routeName);
+                        },
+                      ),
                     ),
                   ],
                 ),

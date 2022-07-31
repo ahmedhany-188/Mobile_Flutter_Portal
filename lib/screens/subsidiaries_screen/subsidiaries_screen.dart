@@ -1,7 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:hassanallamportalflutter/data/helpers/convert_from_html.dart';
-import 'package:hassanallamportalflutter/widgets/appbar/basic_appbar.dart';
-import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
+import 'package:hassanallamportalflutter/widgets/appbar/internal_appbar.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +23,7 @@ class _SubsidiariesScreenState extends State<SubsidiariesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       // drawer: MainDrawer(),
-      appBar: AppBar(),
+      appBar: internalAppBar(context: context, title: 'Subsidiaries'),
 
       /// basicAppBar(context, 'Subsidiaries'),
       backgroundColor: Colors.blueGrey,

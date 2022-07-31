@@ -3,21 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:hassanallamportalflutter/bloc/statistics_bloc/statistics_cubit.dart';
 
 import '../../bloc/login_cubit/login_cubit.dart';
 import '../../screens/news_screen/news_screen.dart';
 import '../../screens/polls_screen/polls_screen.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
+import '../../bloc/statistics_bloc/statistics_cubit.dart';
 import '../../screens/payslip_screen/payslip_screen.dart';
 import '../../screens/myprofile_screen/ProfileScreen.dart';
 import '../../screens/about_value_screen/about_screen.dart';
-import '../../screens/my_requests_screen/add_request_screen.dart';
 import '../../screens/my_requests_screen/my_requests_screen.dart';
+import '../../screens/my_requests_screen/add_request_screen.dart';
 import '../../screens/myattendance_screen/attendance_screen.dart';
 import '../../screens/economy_news_screen/economy_news_screen.dart';
 import '../../screens/get_direction_screen/get_direction_screen.dart';
-import '../../screens/medicalrequest_screen/medical_request_screen.dart';
 import '../../screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 
 class MainDrawer extends StatefulWidget {
@@ -110,8 +109,13 @@ class _MainDrawerState extends State<MainDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    FocusManager.instance.primaryFocus
+        ?.unfocus(disposition: UnfocusDisposition.previouslyFocusedChild);
+    FocusManager.instance.primaryFocus
+        ?.unfocus(disposition: UnfocusDisposition.scope);
     final user =
         context.select((AppBloc bloc) => bloc.state.userData.employeeData);
+
     return Sizer(
       builder: (c, o, d) {
         return ClipRRect(
@@ -120,6 +124,7 @@ class _MainDrawerState extends State<MainDrawer> {
             bottomRight: Radius.circular(30),
           ),
           child: Container(
+            height: 100.h,
             width: 90.w,
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -181,17 +186,17 @@ class _MainDrawerState extends State<MainDrawer> {
                       // ),
                       /// code below is for new design
                       Container(
-                        clipBehavior: Clip.none,
+                        // clipBehavior: Clip.none,
                         height: 18.h,
                         width: double.infinity,
-                        margin: EdgeInsets.symmetric(vertical: 1.h),
+                        margin: EdgeInsets.only(bottom: 1.h),
                         alignment: Alignment.bottomLeft,
                         color: Colors.transparent,
                         child: Stack(
                           alignment: Alignment.bottomLeft,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0),
+                            Container(
+                              padding: EdgeInsets.only(left: 10.0.sp),
                               child: CircleAvatar(
                                 backgroundColor: Colors.white,
                                 radius: 30,
@@ -213,177 +218,186 @@ class _MainDrawerState extends State<MainDrawer> {
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.only(left: 80),
-                              height: 50,
+                              margin: EdgeInsets.only(left: 60.sp),
+                              alignment: Alignment.centerLeft,
+                              height: 8.0.h,
+                              width: 70.w,
+                              // color: Colors.yellow,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Flexible(
-                                      child: Text(
-                                          user.name!
-                                              .split(' ')
-                                              .take(3)
-                                              .join(' '),
-                                          style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white))),
-                                  Flexible(
-                                      child: Text('${user.titleName}',
-                                          style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.normal,
-                                              color: Colors.white))),
+                                  Text(
+                                      user.name!
+                                          .split(' ')
+                                          .take(3)
+                                          .join(' '),
+                                      maxLines: 2,
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                                overflow: TextOverflow.fade,
+                                          color: Colors.white)),
+                                  Text('${user.titleName}',
+                                      maxLines: 1,
+                                      overflow: TextOverflow.fade,
+                                      style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.normal,
+                                          color: Colors.white)),
                                 ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                      BlocProvider.value(
-                          value: StatisticsCubit.get(context),
-                          child:
-                              BlocBuilder<StatisticsCubit, StatisticsInitial>(
-                            buildWhen: (pre, curr) {
-                              if (pre != curr) {
-                                return true;
-                              } else {
-                                return false;
-                              }
-                            },
-                            builder: (context, state) {
-                              return (state.statisticsStates ==
-                                      StatisticsEnumStates.success)
-                                  ? Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 0.5.h,
-                                            horizontal: 2.5.w,
-                                          ),
-                                          child: LinearPercentIndicator(
-                                            progressColor: Colors.red,
-                                            percent: double.parse(state
-                                                    .statisicsList[0]
-                                                    .consumed!) /
-                                                double.parse(state
-                                                    .statisicsList[0].balance!),
-                                            lineHeight: 2.sp,
-                                            widgetIndicator: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(2.0),
-                                              child: Text(
-                                                  '${state.statisicsList[0].consumed}',
+                      SizedBox(
+                        height: 10.h,
+                        child: BlocProvider.value(
+                            value: StatisticsCubit.get(context),
+                            child:
+                                BlocBuilder<StatisticsCubit, StatisticsInitial>(
+                              buildWhen: (pre, curr) {
+                                if (pre != curr) {
+                                  return true;
+                                } else {
+                                  return false;
+                                }
+                              },
+                              builder: (context, state) {
+                                return (state.statisticsStates ==
+                                        StatisticsEnumStates.success)
+                                    ? Column(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 0.5.h,
+                                              horizontal: 2.5.w,
+                                            ),
+                                            child: LinearPercentIndicator(
+                                              progressColor: Colors.red,
+                                              percent: double.parse(state
+                                                      .statisicsList[0]
+                                                      .consumed!) /
+                                                  double.parse(state
+                                                      .statisicsList[0]
+                                                      .balance!),
+                                              lineHeight: 2.sp,
+                                              widgetIndicator: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(2.0),
+                                                child: Text(
+                                                    '${state.statisicsList[0].consumed}',
+                                                    style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        color: Colors.red)),
+                                              ),
+                                              animation: true,
+                                              animationDuration: 1000,
+                                              trailing: Text(
+                                                  '${state.statisicsList[0].balance} days',
                                                   style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
+                                                      fontSize: 15,
                                                       color: Colors.red)),
+                                              leading: const Text('Vacations',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15,
+                                                      color: Colors.red)),
+                                              barRadius:
+                                                  const Radius.circular(25),
                                             ),
-                                            animation: true,
-                                            animationDuration: 1000,
-                                            trailing: Text(
-                                                '${state.statisicsList[0].balance} days',
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15,
-                                                    color: Colors.red)),
-                                            leading: const Text('Vacations',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15,
-                                                    color: Colors.red)),
-                                            barRadius:
-                                                const Radius.circular(25),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 0.5.h,
-                                            horizontal: 2.5.w,
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 0.5.h,
+                                              horizontal: 2.5.w,
+                                            ),
+                                            child: LinearPercentIndicator(
+                                              progressColor: Colors.yellow,
+                                              percent: double.parse(
+                                                      '${state.statisicsList[2].consumed}') /
+                                                  double.parse(
+                                                      '${state.statisicsList[2].balance}'),
+                                              lineHeight: 2.sp,
+                                              widgetIndicator: Text(
+                                                  '${state.statisicsList[2].consumed}',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.yellow)),
+                                              animation: true,
+                                              trailing: Text(
+                                                  '${state.statisicsList[2].balance} hours',
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15,
+                                                      color: Colors.yellow)),
+                                              leading: const Text('Permissions',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15,
+                                                      color: Colors.yellow)),
+                                              barRadius:
+                                                  const Radius.circular(25),
+                                            ),
                                           ),
-                                          child: LinearPercentIndicator(
-                                            progressColor: Colors.yellow,
-                                            percent: double.parse(
-                                                    '${state.statisicsList[2].consumed}') /
-                                                double.parse(
-                                                    '${state.statisicsList[2].balance}'),
-                                            lineHeight: 2.sp,
-                                            widgetIndicator: Text(
-                                                '${state.statisicsList[2].consumed}',
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.yellow)),
-                                            animation: true,
-                                            trailing: Text(
-                                                '${state.statisicsList[2].balance} hours',
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15,
-                                                    color: Colors.yellow)),
-                                            leading: const Text('Permissions',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15,
-                                                    color: Colors.yellow)),
-                                            barRadius:
-                                                const Radius.circular(25),
+                                          Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 0.5.h,
+                                              horizontal: 2.5.w,
+                                            ),
+                                            child: LinearPercentIndicator(
+                                              progressColor: Colors.green,
+                                              percent: double.parse(state
+                                                      .statisicsList[1]
+                                                      .consumed!) /
+                                                  30,
+                                              lineHeight: 2.sp,
+                                              widgetIndicator: Text(
+                                                  state.statisicsList[1]
+                                                      .consumed!,
+                                                  style: const TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.green)),
+                                              animation: true,
+                                              trailing: const Text('No Limits',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15,
+                                                      color: Colors.green)),
+                                              leading: const Text(
+                                                  'Business Mission',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontSize: 15,
+                                                      color: Colors.green)),
+                                              barRadius:
+                                                  const Radius.circular(25),
+                                            ),
                                           ),
-                                        ),
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            vertical: 0.5.h,
-                                            horizontal: 2.5.w,
-                                          ),
-                                          child: LinearPercentIndicator(
-                                            progressColor: Colors.green,
-                                            percent: double.parse(state
-                                                    .statisicsList[1]
-                                                    .consumed!) /
-                                                30,
-                                            lineHeight: 2.sp,
-                                            widgetIndicator: Text(
-                                                state
-                                                    .statisicsList[1].consumed!,
-                                                style: const TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    color: Colors.green)),
-                                            animation: true,
-                                            trailing: const Text('No Limits',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15,
-                                                    color: Colors.green)),
-                                            leading: const Text(
-                                                'Business Mission',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 15,
-                                                    color: Colors.green)),
-                                            barRadius:
-                                                const Radius.circular(25),
-                                          ),
-                                        ),
-                                      ],
-                                    )
-                                  : const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                            },
-                          )),
+                                        ],
+                                      )
+                                    : const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                              },
+                            )),
+                      ),
                       SizedBox(
                         height: 70.h,
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              // buildListTile(
-                              //   'Home',
-                              //   Icons.home,
-                              //   () {
-                              //     Navigator.pushNamed(
-                              //         context, TapsScreen.routeName);
-                              //   },
-                              // ),
-                              // buildDivider(),
                               buildListTile(
                                 'My Profile',
                                 Icons.person,
@@ -397,13 +411,13 @@ class _MainDrawerState extends State<MainDrawer> {
                                 'Get Direction',
                                 Icons.nature_people,
                                 () {
-                                  Navigator.of(context)
-                                      .popAndPushNamed(GetDirectionScreen.routeName);
+                                  Navigator.of(context).popAndPushNamed(
+                                      GetDirectionScreen.routeName);
                                 },
                               ),
                               buildDivider(),
                               buildListTile(
-                                'Attendance',
+                                'My Attendance',
                                 Icons.fingerprint,
                                 () {
                                   Navigator.popAndPushNamed(
@@ -412,110 +426,32 @@ class _MainDrawerState extends State<MainDrawer> {
                               ),
                               buildDivider(),
                               buildListTile(
-                                  'Medical Request', Icons.medical_services,
-                                  () {
-                                Navigator.popAndPushNamed(
-                                    context, MedicalRequestScreen.routeName);
-                              }),
-                              buildDivider(),
-                              buildListTile(
-                                'Payslip',
+                                'My Payslip',
                                 Icons.nature_people,
                                 () {
                                   Navigator.of(context)
                                       .popAndPushNamed(PayslipScreen.routeName);
                                 },
                               ),
-                              // buildDivider(),
-                              // buildListTile(
-                              //   'Subsidiaries',
-                              //   Icons.add_business_sharp,
-                              //   () {
-                              //     Navigator.of(context)
-                              //         .pushNamed(SubsidiariesScreen.routeName);
-                              //   },
-                              // ),
-                              // buildDivider(),
-                              //
-                              // buildListTile(
-                              //   'it request email account',
-                              //   Icons.format_align_justify_outlined,
-                              //   () {
-                              //     Navigator.pushNamed(
-                              //         context, EmailAndUserAccountScreen.routeName);
-                              //   },
-                              // ),
-                              //
-                              // buildDivider(),
-                              // buildListTile(
-                              //   'it request access right',
-                              //   Icons.format_align_justify_outlined,
-                              //   () {
-                              //     Navigator.pushNamed(
-                              //         context, AccessRightScreen.routeName);
-                              //   },
-                              // ),
-                              //
-                              // buildDivider(),
-                              // buildListTile(
-                              //   'IT Equipments Request',
-                              //   Icons.format_align_justify_outlined,
-                              //   () {
-                              //     Navigator.of(context)
-                              //         .pushNamed(EquipmentsRequest.routeName);
-                              //
-                              //     // Navigator
-                              //     //     .pushNamed(context,AccessRightScreen.routeName);
-                              //   },
-                              // ),
-                              // buildDivider(),
-                              // buildListTile(
-                              //   'Business Card',
-                              //   Icons.credit_card,
-                              //   () {
-                              //     Navigator.pushNamed(
-                              //         context, BusinessCardScreen.routeName);
-                              //   },
-                              // ),
-                              //
-                              // buildDivider(),
-                              // buildListTile(
-                              //   'Embassy Letter',
-                              //   Icons.airplanemode_active,
-                              //   () {
-                              //     Navigator.pushNamed(
-                              //         context, EmbassyLetterScreen.routeName);
-                              //   },
-                              // ),
-                              //
                               buildDivider(),
                               buildListTile(
                                 'My Requests',
                                 Icons.wallpaper,
                                 () {
-                                  Navigator.of(context)
-                                      .popAndPushNamed(MyRequestsScreen.routeName);
+                                  Navigator.of(context).popAndPushNamed(
+                                      MyRequestsScreen.routeName);
                                 },
                               ),
 
                               buildDivider(),
                               buildListTile(
-                                'Appraisal',
+                                'My Appraisal',
                                 Icons.quiz,
                                 () {
                                   Navigator.popAndPushNamed(context,
                                       EmployeeAppraisalScreen.routeName);
                                 },
                               ),
-                              // buildDivider(),
-                              // buildListTile(
-                              //   'Value',
-                              //   Icons.agriculture_sharp,
-                              //   () {
-                              //     Navigator.of(context)
-                              //         .pushNamed(ValueScreen.routeName);
-                              //   },
-                              // ),
                               buildDivider(),
                               buildListTile(
                                 'About',
@@ -525,43 +461,6 @@ class _MainDrawerState extends State<MainDrawer> {
                                       .popAndPushNamed(AboutScreen.routeName);
                                 },
                               ),
-
-                              // buildDivider(),
-                              // buildListTile(
-                              //   'Photos',
-                              //   Icons.add_a_photo,
-                              //   () {
-                              //     Navigator.of(context)
-                              //         .pushNamed(PhotosScreen.routeName);
-                              //   },
-                              // ),
-                              // buildDivider(),
-                              // buildListTile(
-                              //   'HR Permission',
-                              //   Icons.add_a_photo,
-                              //   () {
-                              //     Navigator.of(context)
-                              //         .pushNamed(PermissionScreen.routeName);
-                              //   },
-                              // ),
-                              // buildDivider(),
-                              // buildListTile(
-                              //   'HR Vacation',
-                              //   Icons.add_a_photo,
-                              //   () {
-                              //     Navigator.of(context)
-                              //         .pushNamed(VacationScreen.routeName);
-                              //   },
-                              // ),
-                              // buildDivider(),
-                              // buildListTile(
-                              //   'HR Business Mission',
-                              //   Icons.add_a_photo,
-                              //   () {
-                              //     Navigator.of(context)
-                              //         .pushNamed(BusinessMissionScreen.routeName);
-                              //   },
-                              // ),
                               buildDivider(),
                               buildListTile(
                                 'Polls',
@@ -571,20 +470,11 @@ class _MainDrawerState extends State<MainDrawer> {
                                       .popAndPushNamed(PollsScreen.routeName);
                                 },
                               ),
-                              // buildDivider(),
-                              // buildListTile(
-                              //   'Videos',
-                              //   Icons.add_a_photo,
-                              //   () {
-                              //     Navigator.of(context)
-                              //         .pushNamed(VideosScreen.routeName);
-                              //   },
-                              // ),
                               buildDivider(),
                               buildListTile(
                                 'News',
                                 Icons.list,
-                                    () {
+                                () {
                                   Navigator.of(context)
                                       .popAndPushNamed(NewsScreen.routeName);
                                 },
@@ -593,13 +483,16 @@ class _MainDrawerState extends State<MainDrawer> {
                               buildListTile(
                                 'EconomyNews',
                                 Icons.waterfall_chart,
-                                    () {
+                                () {
                                   Navigator.popAndPushNamed(
                                       context, EconomyNewsScreen.routeName);
                                 },
                               ),
                               buildDivider(),
-                              buildExpansionTile(), ///NewsLetter
+                              buildExpansionTile(),
+
+                              ///NewsLetter
+
                               // buildListTile(
                               //   'News Letter',
                               //   Icons.apps,
