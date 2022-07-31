@@ -123,9 +123,6 @@ class AuthenticationRepository {
 
                   //TODO : Add manager data in employee data
 
-
-
-
                   String employeeDataString = jsonEncode(employeeData.toJson());
                   shared_User.setString(employeeCacheKey, employeeDataString);
                   print(employeeData.toString());

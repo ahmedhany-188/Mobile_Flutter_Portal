@@ -20,4 +20,6 @@ class BusinessCardFormModel {
         employeeComments=json["comments"],
         status=json["status"],
         requestHrCode=json["requestHrCode"];
+
+
 }

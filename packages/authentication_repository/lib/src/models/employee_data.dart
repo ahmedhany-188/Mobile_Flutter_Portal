@@ -12,7 +12,7 @@ class EmployeeData extends Equatable {
   final String? mainFunction;
   final String? projectName;
   final String? titleName;
-  final int? gradeName;
+  final String? gradeName;
   final String? companyName;
   final String? name;
   final String? arabicName;
@@ -47,7 +47,6 @@ class EmployeeData extends Equatable {
   final bool? isTopManagement;
   final bool? isCEO;
   final bool? isLessonLearned;
-
 
   const EmployeeData(
       {this.userHrCode,
@@ -198,7 +197,7 @@ class EmployeeData extends Equatable {
   // EmployeeData(email: "");
   // EmployeeData.empty1();
    const EmployeeData(email: "",address: "",applications: null,arabicName: "",area: "",birthdate: null,city: "",companyName: "",
-      country: "",cv: null,departmentId: "",deskPhone: "",fingerPrintGroup: 0,gradeName: 0,hireDate: "",imgProfile: "",
+      country: "",cv: null,departmentId: "",deskPhone: "",fingerPrintGroup: 0,gradeName: "",hireDate: "",imgProfile: "",
       inDate: "",interviewId: null,inUser: "",isActive: false,isCEO: false,isLessonLearned: false,isTopManagement: false,lastName: "",
       linkedIn: "",locationId: "",mainDepartment: "",mainDepartmentID: 0,mainFunction: "",managerCode: "",
       middleName: "",mobile1: "",mobile: "",name: "",nationalId: "",phone: "",projectId: null,projectName: "",skype: null,status: null,stName: "",

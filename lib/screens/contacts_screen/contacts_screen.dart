@@ -329,8 +329,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                             },
                           ),
                           Scrollbar(
-                            child:
-                                BlocBuilder<ContactsCubit, ContactCubitStates>(
+                            child: BlocBuilder<ContactsCubit, ContactCubitStates>(
                               builder: (context, state) {
                                 return SizedBox(
                                   height: deviceSize.height * 0.64,

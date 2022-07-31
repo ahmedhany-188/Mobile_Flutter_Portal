@@ -22,25 +22,35 @@ class AttendanceScreen extends StatefulWidget {
 
 class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
-  int monthNumber = DateTime
-      .now()
-      .month;
+  int monthNumber = DateTime.now().month;
 
-  bool transition = false;
-  bool found = false;
+  int dayNumber = DateTime.now().day;
 
   int selectedPage = DateTime
       .now()
       .month - 1;
 
-  late List<MyAttendanceModel> getAttendanceList;
+  bool transition = false;
+  bool found = false;
 
+  late List<MyAttendanceModel> getAttendanceList;
 
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery
         .of(context)
         .size;
+
+    // new month
+    if(dayNumber>15){
+      monthNumber=monthNumber+1;
+      selectedPage=selectedPage+1;
+    }
+
+
+
+
+
 
 
 
@@ -101,7 +111,6 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                                         .getAttendanceList(
                                         user.user!.userHRCode, monthNumber);
                                     found=false;
-
                                   } else {
                                     null;
                                   }
