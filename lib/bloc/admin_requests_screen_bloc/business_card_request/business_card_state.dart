@@ -5,37 +5,39 @@ abstract class BusinessCardState  extends Equatable{
 
   const BusinessCardState();
   const BusinessCardState.copyWith({
-    required  employeeNameCard,required  employeeMobile,
+    required  RequestDate employeeNameCard,required RequestDate employeeMobile,
     required FormzStatus status});
 }
 
-class BusinessCardInitial  extends Equatable {
+class BusinessCardInitial  extends BusinessCardState {
   const BusinessCardInitial({
     this.requestDate = const RequestDate.pure(),
-    this.requestStatus ,
+
     this.employeeNameCard = const RequestDate.pure(),
     this.employeeMobile = const RequestDate.pure(),
     this.employeeExt = "",
     this.employeeFaxNO = "",
     this.comment = "",
+    this.requestStatus ,
     this.status = FormzStatus.pure,
-    this.errorMessage,
-    this.successMessage,
     this.takeActionStatus,
     this.statusAction,
+    this.errorMessage,
+    this.successMessage,
+
 
   });
 
   final RequestDate requestDate;
-  final TakeActionStatus? takeActionStatus;
-  final String? statusAction;
-  final RequestStatus? requestStatus;
   final RequestDate employeeNameCard;
   final RequestDate employeeMobile;
   final String employeeExt;
   final String employeeFaxNO;
   final String comment;
+  final RequestStatus? requestStatus;
   final FormzStatus status;
+  final TakeActionStatus? takeActionStatus;
+  final String? statusAction;
   final String? errorMessage;
   final String? successMessage;
 
@@ -44,8 +46,8 @@ class BusinessCardInitial  extends Equatable {
       [requestDate,
         employeeNameCard,
         employeeMobile,
-        employeeFaxNO,
         employeeExt,
+        employeeFaxNO,
         comment,
         status
       ];
@@ -81,4 +83,6 @@ class BusinessCardInitial  extends Equatable {
     );
   }
 }
+
+
 

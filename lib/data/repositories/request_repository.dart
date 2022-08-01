@@ -101,7 +101,11 @@ class RequestRepository {
     final http.Response rawPermission = await requestDataProviders
         .getBusinessCardRequestData(userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawPermission.body);
+    print("repository page json :: "+ json.toString());
+
     final BusinessCardFormModel response = BusinessCardFormModel.fromJson(json[0]);
+
+    print("repository page "+response.toString());
     return response;
   }
 

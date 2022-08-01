@@ -8,9 +8,12 @@ import 'package:hassanallamportalflutter/bloc/it_request_bloc/email_useracount_r
 import 'package:hassanallamportalflutter/constants/enums.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
+import '../../../widgets/success/success_request_widget.dart';
 
 
 class EmailAndUserAccountScreen  extends StatefulWidget{
@@ -129,10 +132,14 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                       EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
                     }
                     if (state.status.isSubmissionSuccess) {
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (_) =>
-                              SuccessScreen(text: state.successMessage ??
-                                  "Error Number",)));
+                      // LoadingDialog.hide(context);
+                      EasyLoading.dismiss(animation: true);
+                      if(state.requestStatus == RequestStatus.newRequest){
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (_) =>
+                                SuccessScreen(text: state.successMessage ??
+                                    "Error Number",routName: EmailAndUserAccountScreen.routeName, requestName: 'Vacation',)));
+                      }
                     }
                      if (state.status.isSubmissionFailure) {
                        EasyLoading.showError(state.errorMessage.toString(),);
@@ -513,41 +520,3 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
 
 
 
-class SuccessScreen extends StatelessWidget {
-  const SuccessScreen({Key? key, required this.text}) : super(key: key);
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Icon(Icons.tag_faces, size: 100),
-            const SizedBox(height: 10),
-            Text(
-              text,
-              style: const TextStyle(fontSize: 54, color: Colors.black),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              onPressed: () =>
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                          builder: (_) => const EmailAndUserAccountScreen())),
-              icon: const Icon(Icons.replay),
-              label: const Text('Create Another Permission Request'),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.close),
-              label: const Text('Close'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

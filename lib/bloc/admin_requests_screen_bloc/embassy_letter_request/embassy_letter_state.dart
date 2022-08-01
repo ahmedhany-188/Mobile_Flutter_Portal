@@ -48,7 +48,9 @@ class EmbassyLetterInitial extends EmbassyLetterState {
   final RequestStatus? requestStatus;
 
   @override
-  List<Object> get props => [requestDate,dateFrom, dateTo, passportNumber, status,embassy,salary,comments];
+  List<Object> get props => [requestDate,dateFrom, dateTo,
+    passportNumber, status,embassy,
+    salary,comments];
 
 
   EmbassyLetterInitial copyWith({
