@@ -1254,118 +1254,115 @@ class HomeScreen3 extends StatelessWidget {
   // ignore: avoid_renaming_method_parameters
   Widget build(BuildContext homeScreenContext) {
     // List<AnimatedText> announcment = [];
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: BlocProvider<NewsCubit>.value(
-        value: NewsCubit.get(homeScreenContext),
-        child: Sizer(
-          builder: (ctx, or, dt) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BlocBuilder<NewsCubit, NewsState>(
-                  buildWhen: (previous, current) {
-                    if (current is LatestNewsSuccessState) {
-                      current.latestNewsList.add(
-                          Data(newsID: 0, newsBody: "Test", newsTitle: "Test"));
-                      return current.latestNewsList.isNotEmpty;
-                    } else {
-                      return false;
-                    }
-                  },
-                  builder: (context, latestNewsstate) {
-                    List<ImageGalleryHeroProperties> heroProperties = [];
-                    List<Widget> assets = [];
-                    return NewsCubit.get(context).latestNewsList.isNotEmpty
-                        ? Container(
-                            margin: EdgeInsets.only(top: 12.sp),
-                            width: 100.w,
-                            height: 30.h,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: NewsSliderList(
-                                  newsAllData:
-                                      NewsCubit.get(context).latestNewsList,
-                                  assets: assets,
-                                  heroProperties: heroProperties),
-                            ),
-                          )
-                        : const ShimmerHomeNewsSlider();
-                  },
-                ),
-                BlocBuilder<NewsCubit, NewsState>(
-                  builder: (context, state) {
-                    // ScrollController src = ScrollController();
-                    // _scrollTo() {
-                    //   // src.animateTo(src.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear,);
-                    //   (src.hasClients)
-                    //       ? src.jumpTo(src.position.maxScrollExtent)
-                    //       : null;
-                    // }
-                    // WidgetsBinding.instance
-                    //     .addPostFrameCallback((_) => _scrollTo());
+    return BlocProvider<NewsCubit>.value(
+      value: NewsCubit.get(homeScreenContext),
+      child: Sizer(
+        builder: (ctx, or, dt) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BlocBuilder<NewsCubit, NewsState>(
+                buildWhen: (previous, current) {
+                  if (current is LatestNewsSuccessState) {
+                    current.latestNewsList.add(
+                        Data(newsID: 0, newsBody: "Test", newsTitle: "Test"));
+                    return current.latestNewsList.isNotEmpty;
+                  } else {
+                    return false;
+                  }
+                },
+                builder: (context, latestNewsstate) {
+                  List<ImageGalleryHeroProperties> heroProperties = [];
+                  List<Widget> assets = [];
+                  return NewsCubit.get(context).latestNewsList.isNotEmpty
+                      ? Container(
+                          margin: EdgeInsets.only(top: 12.sp),
+                          width: 100.w,
+                          height: 130.sp,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: NewsSliderList(
+                                newsAllData:
+                                    NewsCubit.get(context).latestNewsList,
+                                assets: assets,
+                                heroProperties: heroProperties),
+                          ),
+                        )
+                      : const ShimmerHomeNewsSlider();
+                },
+              ),
+              BlocBuilder<NewsCubit, NewsState>(
+                builder: (context, state) {
+                  // ScrollController src = ScrollController();
+                  // _scrollTo() {
+                  //   // src.animateTo(src.position.maxScrollExtent, duration: const Duration(milliseconds: 100), curve: Curves.linear,);
+                  //   (src.hasClients)
+                  //       ? src.jumpTo(src.position.maxScrollExtent)
+                  //       : null;
+                  // }
+                  // WidgetsBinding.instance
+                  //     .addPostFrameCallback((_) => _scrollTo());
 
-                    return Container(
-                      margin: (MediaQuery.of(context).size.height <= 750)
-                          ? EdgeInsets.only(top: 5.sp, bottom: 5.sp)
-                          : EdgeInsets.only(top: 10.sp, bottom: 10.sp),
-                      color: Colors.grey.shade50,
-                      padding: EdgeInsets.only(bottom: 1.sp, top: 1.sp),
-                      child: NewsCubit.get(context).announcment.isNotEmpty
-                          ? Padding(
-                              padding:
-                                  EdgeInsets.only(top: 9.0.sp, bottom: 9.0.sp),
-                              child: SizedBox(
-                                height: 3.h,
-                                width: 100.w,
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 14.0.sp, bottom: 0.sp, top: 0.sp),
-                                  child: ListView(
-                                    reverse: true,
-                                    shrinkWrap: true,
-                                    // scrollDirection: Axis.horizontal,
-                                    // controller: src,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    children: [
-                                      AnimatedTextKit(
-                                        isRepeatingAnimation: true,
-                                        pause: const Duration(milliseconds: 1000),
-                                        repeatForever: true,
-                                        displayFullTextOnTap: false,
-                                        animatedTexts: NewsCubit.get(context)
-                                                .announcment
-                                                .isEmpty
-                                            ? [
-                                                TyperAnimatedText(
-                                                  'Checking for Announcement... ',
-                                                  speed: const Duration(
-                                                      milliseconds: 100),
-                                                  textAlign: TextAlign.center,
-                                                  curve: Curves.ease,
-                                                  textStyle: const TextStyle(
-                                                      color: Color(0xFF174873),
-                                                      overflow: TextOverflow.clip,
-                                                      fontFamily: 'RobotoFlex',
-                                                      fontSize: 16),
-                                                )
-                                              ]
-                                            : NewsCubit.get(context).announcment,
-                                      ),
-                                    ],
-                                  ),
+                  return Container(
+                    margin: (MediaQuery.of(context).size.height <= 750)
+                        ? EdgeInsets.only(top: 5.sp, bottom: 5.sp)
+                        : EdgeInsets.only(top: 10.sp, bottom: 10.sp),
+                    color: Colors.grey.shade50,
+                    padding: EdgeInsets.only(bottom: 1.sp, top: 1.sp),
+                    child: NewsCubit.get(context).announcment.isNotEmpty
+                        ? Padding(
+                            padding:
+                                EdgeInsets.only(top: 9.0.sp, bottom: 9.0.sp),
+                            child: SizedBox(
+                              height: 14.sp,
+                              width: 100.w,
+                              child: Padding(
+                                padding: EdgeInsets.only(
+                                    left: 14.0.sp, bottom: 0.sp, top: 0.sp),
+                                child: ListView(
+                                  reverse: true,
+                                  shrinkWrap: true,
+                                  // scrollDirection: Axis.horizontal,
+                                  // controller: src,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  children: [
+                                    AnimatedTextKit(
+                                      isRepeatingAnimation: true,
+                                      pause: const Duration(milliseconds: 1000),
+                                      repeatForever: true,
+                                      displayFullTextOnTap: false,
+                                      animatedTexts: NewsCubit.get(context)
+                                              .announcment
+                                              .isEmpty
+                                          ? [
+                                              TyperAnimatedText(
+                                                'Checking for Announcement... ',
+                                                speed: const Duration(
+                                                    milliseconds: 100),
+                                                textAlign: TextAlign.center,
+                                                curve: Curves.ease,
+                                                textStyle: const TextStyle(
+                                                    color: Color(0xFF174873),
+                                                    overflow: TextOverflow.clip,
+                                                    fontFamily: 'RobotoFlex',
+                                                    fontSize: 16),
+                                              )
+                                            ]
+                                          : NewsCubit.get(context).announcment,
+                                    ),
+                                  ],
                                 ),
                               ),
-                            )
-                          : const ShimmerAnnouncement(),
-                    );
-                  },
-                ),
-                _buildHomeScreenContent(ctx),
-              ],
-            );
-          },
-        ),
+                            ),
+                          )
+                        : const ShimmerAnnouncement(),
+                  );
+                },
+              ),
+              _buildHomeScreenContent(ctx),
+            ],
+          );
+        },
       ),
     );
   }
@@ -1374,12 +1371,11 @@ class HomeScreen3 extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, right: 10.0),
       child: SizedBox(
-        height: 55.h,
+        height: 255.sp,
         width: 100.w,
         child: GridView(
           padding: EdgeInsets.zero,
-          addAutomaticKeepAlives: true,
-          // shrinkWrap: true,
+          shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
@@ -1888,7 +1884,7 @@ class ShimmerHomeNewsSlider extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(top: 12.sp),
         width: 100.w,
-        height: 30.h,
+        height: 130.sp,
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: ListView.builder(
@@ -1904,7 +1900,7 @@ class ShimmerHomeNewsSlider extends StatelessWidget {
                 child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
                     child: Container(
-                      height: 30.h,
+                      height: 130.sp,
                       width: 27.w,
                       color: Colors.grey,
                     )),

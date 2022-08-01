@@ -59,10 +59,10 @@ class ContactsWidget extends StatelessWidget {
                   // mainAxisSize: MainAxisSize.min,
                   children: [
                     Flexible(
-                      fit: FlexFit.loose,
+                      fit: FlexFit.tight,
                       flex: 1,
                       child: CircleAvatar(
-                        minRadius: 40.sp,maxRadius: 40.sp,
+                        radius: 40.sp,
                         backgroundColor: Colors.transparent,
                         foregroundImage:
                             (listFromContactsScreen[index].imgProfile != null ||
@@ -164,7 +164,7 @@ class ContactsWidget extends StatelessWidget {
             padding: const EdgeInsetsDirectional.only(start: 20.0, end: 20.0),
             child: Container(
               width: double.infinity,
-              height: 0.2.h,
+              height: 0.5.sp,
               color: Colors.grey[300],
             ),
           ),
