@@ -2,6 +2,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/contacts_related_models/contacts_data_from_api.dart';
@@ -43,7 +44,9 @@ class VacationCubit extends Cubit<VacationInitial> {
         ),
       );
     }else {
-      emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+      // emit(state.copyWith(status: FormzStatus.submissionInProgress));
+      EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
       final requestData = await _requestRepository.getVacationRequestData(
           requestNo!, requesterHRCode!);
 
@@ -58,7 +61,7 @@ class VacationCubit extends Cubit<VacationInitial> {
       //         requestData.responsible!.isEmpty ? "No Data" : requestData
       //         .responsible):ContactsDataFromApi.empty;
 
-      var responsiblePerson;
+      ContactsDataFromApi responsiblePerson;
       if(requestData.responsible != null){
         responsiblePerson =  ContactsDataFromApi(
             email: requestData.responsible!.contains("null")
@@ -68,9 +71,8 @@ class VacationCubit extends Cubit<VacationInitial> {
                 requestData.responsible!.isEmpty ? "No Data" : requestData
                 .responsible);
       }else{
-        responsiblePerson = ContactsDataFromApi(
-            email:  "No Data"
-            ,
+        responsiblePerson = const ContactsDataFromApi(
+            email:  "No Data",
             name:  "No Data");
       }
 
@@ -262,6 +264,16 @@ class VacationCubit extends Cubit<VacationInitial> {
       // final DateFormat dateFormatViewed = DateFormat("EEEE dd-MM-yyyy");
       // final DateFormat dateFormatServer = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
       emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
+      // if(state.vacationDuration.isEmpty){
+      //   emit(
+      //     state.copyWith(
+      //       errorMessage: "An error occurred, Please try again later",
+      //       status: FormzStatus.submissionFailure,
+      //     ),
+      //   );
+      // }
+
 
       // "date" -> "2022-05-17T13:47:07"
       DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(requestDate.value);
