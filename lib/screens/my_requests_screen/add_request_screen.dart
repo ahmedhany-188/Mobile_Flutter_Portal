@@ -150,6 +150,18 @@ class AddRequestScreen extends StatelessWidget {
                         },
                       ),
                     ),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        style:
+                        const ButtonStyle(alignment: Alignment.centerLeft),
+                        child: const Text('Embassy Letter'),
+                        onPressed: () {
+                          Navigator.of(context)
+                              .pushNamed(EmbassyLetterScreen.routeName);
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -176,18 +188,6 @@ class AddRequestScreen extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context)
                               .pushNamed(BusinessCardScreen.routeName);
-                        },
-                      ),
-                    ),
-                    SizedBox(
-                      width: double.infinity,
-                      child: TextButton(
-                        style:
-                            const ButtonStyle(alignment: Alignment.centerLeft),
-                        child: const Text('Travel Request'),
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushNamed(EmbassyLetterScreen.routeName);
                         },
                       ),
                     ),

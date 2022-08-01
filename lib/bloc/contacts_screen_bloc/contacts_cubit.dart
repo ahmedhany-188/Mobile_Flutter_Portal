@@ -33,7 +33,7 @@ class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin{
 
   static ContactsCubit get(context) => BlocProvider.of(context);
 
-  List<ContactsDataFromApi> contacts = [];
+  // List<ContactsDataFromApi> contacts = [];
 
   void getContacts() {
     // emit(state.copyWith(
@@ -41,7 +41,7 @@ class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin{
     // ));
     GeneralDio.getContactListData().then((value) {
       if (value.data != null) {
-        contacts = List<ContactsDataFromApi>.from(
+        List<ContactsDataFromApi> contacts = List<ContactsDataFromApi>.from(
             value.data.map((model) => ContactsDataFromApi.fromJson(model)));
 
         var apiMap = <String>{};
@@ -77,12 +77,12 @@ class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin{
     });
   }
 
-  void getAllContacts(){
-    emit(state.copyWith(
-      contactStates: ContactsEnumStates.success,
-      listContacts: contacts,
-    ));
-  }
+  // void getAllContacts(){
+  //   emit(state.copyWith(
+  //     contactStates: ContactsEnumStates.success,
+  //     listContacts: contacts,
+  //   ));
+  // }
 
   void updateContacts(List<ContactsDataFromApi> updatedList) {
     emit(state.copyWith(
@@ -106,7 +106,7 @@ class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin{
     } else {
       return null;
     }
-    return state.toMap();
+    // return state.toMap();
     // throw UnimplementedError();
 
   }

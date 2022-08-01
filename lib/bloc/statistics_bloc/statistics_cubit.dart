@@ -40,7 +40,6 @@ class StatisticsCubit extends Cubit<StatisticsInitial> {
       statisticsStates: StatisticsEnumStates.initial,
     ));
     _generalDio.getStatistics().then((value) {
-      print('============== $value');
       if (value.data != null) {
         List<Statistics> statisticsList = List<Statistics>.from(value.data.map((model) => Statistics.fromJson(model)));
 

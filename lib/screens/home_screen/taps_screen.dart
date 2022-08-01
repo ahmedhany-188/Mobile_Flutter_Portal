@@ -2,14 +2,15 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
-import 'package:hassanallamportalflutter/screens/apps_screen/apps_screen.dart';
-import 'package:hassanallamportalflutter/screens/home_screen/home_screen.dart';
-import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
 
-import '../../screens/contacts_screen/contacts_screen.dart';
+import '../apps_screen/apps_screen.dart';
+import '../home_screen/home_screen.dart';
+import '../menu_screen/menu_screen.dart';
 import '../../widgets/drawer/main_drawer.dart';
+import '../contacts_screen/contacts_screen.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
+import '../notification_screen/notifications_screen.dart';
+import '../../bloc/notification_bloc/bloc/user_notification_bloc.dart';
 
 class TapsScreen extends StatefulWidget {
   static const routeName = 'tabs-screen';
@@ -279,10 +280,10 @@ class _TapsScreenState extends State<TapsScreen> {
             child: const TabBarView(
               physics: BouncingScrollPhysics(),
               children: [
-                HomeScreen3(),
+                HomeScreen(),
                 AppsScreen(),
                 ContactsScreen(),
-                HomeScreen(),
+                MenuScreen(),
               ],
             ),
           ),

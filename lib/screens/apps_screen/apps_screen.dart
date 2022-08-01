@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+
 import '../../data/models/apps_model/apps_model.dart';
 import '../../bloc/apps_screen_bloc/apps_cubit.dart';
 import '../../widgets/icons/angular_icon.dart';
@@ -56,6 +57,7 @@ class AppsScreen extends StatelessWidget {
                                   borderSide: BorderSide.none)),
                         ),
                       ),
+
                       Container(
                         height: 87.5.h,
                         width: 100.w,
@@ -80,13 +82,21 @@ class AppsScreen extends StatelessWidget {
   buildSeperatedApps(List<AppsData> apps, BuildContext appsContext) {
     return (apps.isNotEmpty)
         ? GroupedListView<AppsData, String>(
-      keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             elements: apps,
-            groupBy: (element) => element.sysName!,
+            groupBy: (element) {
+              if (element.sysName!.contains('Staff')) {
+                return element.sysName!;
+              } else if(element.sysName!.length == 3){
+                return 'three Leters systems';
+              }else{
+                return 'other';
+              }
+            },
             groupComparator: (value1, value2) => value2.compareTo(value1),
             // itemComparator: (item1, item2) => item1['name'].compareTo(item2['name']),
-            order: GroupedListOrder.ASC,
-            useStickyGroupSeparators: false,
+            order: GroupedListOrder.DESC,
+            useStickyGroupSeparators: true,shrinkWrap: true,
             groupSeparatorBuilder: (String value) => Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
@@ -97,52 +107,62 @@ class AppsScreen extends StatelessWidget {
               ),
             ),
             itemBuilder: (c, element) {
-              return InkWell(
-                onTap: () async {
-                  try {
-                    await launchUrl(Uri.parse(element.sysLink.toString()),
-                        mode: LaunchMode.externalApplication);
-                  } catch (err) {
-                    if (kDebugMode) {
-                      print(err);
-                    }
-                  }
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFF1a4c78),
-                          Color(0xFF3772a6),
+              return GridView(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,childAspectRatio: 1.sp),
+                primary: true,
+                shrinkWrap: true,
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                physics: const NeverScrollableScrollPhysics(),
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      try {
+                        await launchUrl(Uri.parse(element.sysLink.toString()),
+                            mode: LaunchMode.externalApplication);
+                      } catch (err) {
+                        if (kDebugMode) {
+                          print(err);
+                        }
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(bottom: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        gradient: const LinearGradient(
+                            colors: [
+                              Color(0xFF1a4c78),
+                              Color(0xFF3772a6),
+                            ],
+                            begin: Alignment.bottomLeft,
+                            end: Alignment.topRight,
+                            tileMode: TileMode.clamp),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          createAngularIcon(
+                            angularIcon: element.angularIcon.toString(),
+                            solid: false,
+                            context: appsContext,
+                            color: Colors.white,
+                            size: 60,
+                          ),
+                          Text(
+                            '${element.sysName}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w400,
+                              color: Colors.white,
+                            ),
+                          ),
                         ],
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.topRight,
-                        tileMode: TileMode.clamp),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      createAngularIcon(
-                        angularIcon: element.angularIcon.toString(),
-                        solid: false,
-                        context: appsContext,
-                        color: Colors.white,
-                        size: 60,
                       ),
-                      Text(
-                        '${element.sysName}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               );
             },
           )
@@ -158,10 +178,10 @@ class AppsScreen extends StatelessWidget {
             itemCount: apps.length,
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: 3,
               childAspectRatio: 1.sp,
-              crossAxisSpacing: 15.sp,
-              mainAxisSpacing: 10.sp,
+              crossAxisSpacing: 5.sp,
+              mainAxisSpacing: 5.sp,
             ),
             itemBuilder: (ctx, index) {
               return InkWell(
@@ -197,14 +217,16 @@ class AppsScreen extends StatelessWidget {
                         solid: false,
                         context: appsContext,
                         color: Colors.white,
-                        size: 60,
+                        size: 30,
                       ),
-                      Text(
-                        '${apps[index].sysName}',
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                          color: Colors.white,
+                      Flexible(
+                        child: Text(
+                          '${apps[index].sysName}',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],

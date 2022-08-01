@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_date.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
@@ -43,7 +44,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
       );
 
     } else {
-
+      EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
       final requestData = await _requestRepository.getPermissionRequestData(
           requestNo!);
 
@@ -77,9 +78,9 @@ class PermissionCubit extends Cubit<PermissionInitial> {
             permissionDate: permissionDate,
             permissionType: requestData.type,
             permissionTime: permissionTime,
-
-            status: Formz.validate([requestDate,
-              state.permissionTime, state.permissionDate]),
+            status: FormzStatus.submissionSuccess,
+            // status: Formz.validate([requestDate,
+            //   state.permissionTime, state.permissionDate]),
             requestStatus: RequestStatus.oldRequest,
             comment: comments,
             statusAction: status,

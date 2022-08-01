@@ -19,6 +19,7 @@ resetPayslipLink() {
 getPayslipLink(String email,String password){
   return "http://api.hassanallam.com:3415/api/Portal/Payslip?Email=$email&Password=$password";
 }
+
 addPermissionLink(){
   return "https://api.hassanallam.com/api/SelfService/AddPermission";
 }
@@ -34,6 +35,7 @@ addBusinessCardLink(){
 addEmbassyLetterLink(){
   return "https://api.hassanallam.com/api/SelfService/AddEmbassyLetter";
 }
+
 getVacationDurationLink(int type,String dateFrom,String dateTo){
   return "https://api.hassanallam.com/api/SelfService/GetVacationDuration?VacationType=$type&FromDate=$dateFrom&ToDate=$dateTo";
 }
@@ -46,3 +48,43 @@ getBusinessCardLink(String hrCode,String requestNo){
 getAccessRightLink(String hrCode,String requestNo){
   return "https://api.hassanallam.com/api/SelfService/GetAccessRight?HRCode=$hrCode&requestno=$requestNo";
 }
+
+getQualityIso(){
+  return 'https://portal.hassanallam.com/QualityISO.aspx?FormID=15';
+}
+getQualityAsme(){
+  return 'https://portal.hassanallam.com/QualityASME.aspx';
+}
+getQualityBestPractice(){
+  return 'https://portal.hassanallam.com/Apps/LessonsLearned/Message.aspx';
+}
+
+getItOperationsPortal(){
+  return 'https://sharepoint.hassanallam.com/IT/SitePages/Home.aspx';
+}
+getEDMSPortal(){
+  return 'https://sharepoint.hassanallam.com/sites/HAEDMS/Pages/HP.aspx';
+}
+getItTicketingSystem(){
+  return 'https://itsd.hassanallam.com/';
+}
+getConferenceCall(){
+  return 'https://portal.hassanallam.com/Zoom.aspx';
+}
+
+getHrManagment(){
+  return 'https://portal.hassanallam.com/mainhr.aspx';
+}
+getHSEManagment(){
+  return 'https://portal.hassanallam.com/MainSafty.aspx';
+}
+getCompliance(){
+  return 'https://portal.hassanallam.com/Complains.aspx';
+}
+getCodeOfConduct(){
+  return 'https://portal.hassanallam.com/Codeofconduct.aspx';
+}
+getTrainingPlan(){
+  return 'https://portal.hassanallam.com/TrainingMonthes.aspx';
+}
+
