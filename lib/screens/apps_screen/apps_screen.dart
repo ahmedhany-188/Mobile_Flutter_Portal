@@ -1,10 +1,9 @@
-import 'package:grouped_list/grouped_list.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:simple_grouped_listview/simple_grouped_listview.dart';
 
 import '../../data/models/apps_model/apps_model.dart';
 import '../../bloc/apps_screen_bloc/apps_cubit.dart';
@@ -57,12 +56,11 @@ class AppsScreen extends StatelessWidget {
                                   borderSide: BorderSide.none)),
                         ),
                       ),
-
                       Container(
                         height: 87.5.h,
                         width: 100.w,
                         margin: EdgeInsets.only(left: 4.w, right: 4.w),
-                        child: buildSeperatedApps(state.appsList, context),
+                        child: buildSeperatedGridApps(state.appsList, context),
                       ),
                     ],
                   );
@@ -79,97 +77,200 @@ class AppsScreen extends StatelessWidget {
     );
   }
 
-  buildSeperatedApps(List<AppsData> apps, BuildContext appsContext) {
+  buildSeperatedGridApps(List<AppsData> apps, BuildContext appsContext) {
     return (apps.isNotEmpty)
-        ? GroupedListView<AppsData, String>(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            elements: apps,
-            groupBy: (element) {
-              if (element.sysName!.contains('Staff')) {
-                return element.sysName!;
-              } else if(element.sysName!.length == 3){
-                return 'three Leters systems';
-              }else{
-                return 'other';
+        ? GroupedListView<String, AppsData>.grid(
+            items: apps,
+            shrinkWrap: true,
+            crossAxisCount: 3,
+            crossAxisSpacing: 5,
+            mainAxisSpacing: 5,
+            headerSorter: (string1, string2) {
+              if (string1.contains('Staff')) {
+                return 0;
+              }
+              if (string1.contains('DSS')) {
+                return 1;
+              } else {
+                return 3;
               }
             },
-            groupComparator: (value1, value2) => value2.compareTo(value1),
-            // itemComparator: (item1, item2) => item1['name'].compareTo(item2['name']),
-            order: GroupedListOrder.DESC,
-            useStickyGroupSeparators: true,shrinkWrap: true,
-            groupSeparatorBuilder: (String value) => Padding(
-              padding: const EdgeInsets.all(8.0),
+            physics: const BouncingScrollPhysics(),
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            itemGrouper: (element) {
+              if (element.sysName!.contains('Staff')) {
+                return element.sysName!;
+              } else if (element.sysName!.length == 3) {
+                return 'Three Letters systems';
+              } else {
+                return 'Other';
+              }
+            },
+            headerBuilder: (context, stringTest) => Container(
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.amber,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              margin: const EdgeInsets.only(bottom: 10, top: 10),
+              padding: const EdgeInsets.all(16),
               child: Text(
-                value,
-                textAlign: TextAlign.center,
+                stringTest,
                 style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
               ),
             ),
-            itemBuilder: (c, element) {
-              return GridView(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,childAspectRatio: 1.sp),
-                primary: true,
-                shrinkWrap: true,
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                physics: const NeverScrollableScrollPhysics(),
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      try {
-                        await launchUrl(Uri.parse(element.sysLink.toString()),
-                            mode: LaunchMode.externalApplication);
-                      } catch (err) {
-                        if (kDebugMode) {
-                          print(err);
-                        }
-                      }
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        gradient: const LinearGradient(
-                            colors: [
-                              Color(0xFF1a4c78),
-                              Color(0xFF3772a6),
-                            ],
-                            begin: Alignment.bottomLeft,
-                            end: Alignment.topRight,
-                            tileMode: TileMode.clamp),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          createAngularIcon(
-                            angularIcon: element.angularIcon.toString(),
-                            solid: false,
-                            context: appsContext,
+            gridItemBuilder:
+                (_, int countInGroup, int itemIndexInGroup, element) => InkWell(
+              onTap: () async {
+                try {
+                  await launchUrl(Uri.parse(element.sysLink.toString()),
+                      mode: LaunchMode.externalApplication);
+                } catch (err) {
+                  if (kDebugMode) {
+                    print(err);
+                  }
+                }
+              },
+              child: Container(
+                // margin: const EdgeInsets.only(bottom: 5),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  gradient: const LinearGradient(
+                      colors: [
+                        Color(0xFF1a4c78),
+                        Color(0xFF3772a6),
+                      ],
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.topRight,
+                      tileMode: TileMode.clamp),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    createAngularIcon(
+                      angularIcon: element.angularIcon.toString(),
+                      solid: false,
+                      context: appsContext,
+                      color: Colors.white,
+                      size: 35,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: FittedBox(
+                        clipBehavior: Clip.none,
+                        child: Text(
+                          '${element.sysName}',
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w500,
                             color: Colors.white,
-                            size: 60,
                           ),
-                          Text(
-                            '${element.sysName}',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              );
-            },
+                  ],
+                ),
+              ),
+            ),
           )
         : (AppsCubit.get(appsContext).appsList.isEmpty)
             ? buildNoAppsFound()
             : buildNoSearchFound();
   }
+  // buildSeperatedApps(List<AppsData> apps, BuildContext appsContext) {
+  //   return (apps.isNotEmpty)
+  //       ? GroupedListView<AppsData, String>(
+  //           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+  //           elements: apps,
+  //           groupBy: (element) {
+  //             if (element.sysName!.contains('Staff')) {
+  //               return element.sysName!;
+  //             } else if (element.sysName!.length == 3) {
+  //               return 'three Leters systems';
+  //             } else {
+  //               return 'other';
+  //             }
+  //           },
+  //           groupComparator: (value1, value2) => value2.compareTo(value1),
+  //           // itemComparator: (item1, item2) => item1['name'].compareTo(item2['name']),
+  //           order: GroupedListOrder.DESC,
+  //           useStickyGroupSeparators: true,
+  //           shrinkWrap: true,
+  //           groupSeparatorBuilder: (String value) => Padding(
+  //             padding: const EdgeInsets.all(8.0),
+  //             child: Text(
+  //               value,
+  //               textAlign: TextAlign.center,
+  //               style:
+  //                   const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+  //             ),
+  //           ),
+  //           itemBuilder: (c, element) {
+  //             return GridView(
+  //               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+  //                   crossAxisCount: 2, childAspectRatio: 1.sp),
+  //               primary: true,
+  //               shrinkWrap: true,
+  //               clipBehavior: Clip.none,
+  //               physics: const NeverScrollableScrollPhysics(),
+  //               children: [
+  //                 InkWell(
+  //                   onTap: () async {
+  //                     try {
+  //                       await launchUrl(Uri.parse(element.sysLink.toString()),
+  //                           mode: LaunchMode.externalApplication);
+  //                     } catch (err) {
+  //                       if (kDebugMode) {
+  //                         print(err);
+  //                       }
+  //                     }
+  //                   },
+  //                   child: Container(
+  //                     margin: const EdgeInsets.only(bottom: 5),
+  //                     decoration: BoxDecoration(
+  //                       borderRadius: BorderRadius.circular(20),
+  //                       gradient: const LinearGradient(
+  //                           colors: [
+  //                             Color(0xFF1a4c78),
+  //                             Color(0xFF3772a6),
+  //                           ],
+  //                           begin: Alignment.bottomLeft,
+  //                           end: Alignment.topRight,
+  //                           tileMode: TileMode.clamp),
+  //                     ),
+  //                     child: Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.center,
+  //                       mainAxisAlignment: MainAxisAlignment.center,
+  //                       children: [
+  //                         createAngularIcon(
+  //                           angularIcon: element.angularIcon.toString(),
+  //                           solid: false,
+  //                           context: appsContext,
+  //                           color: Colors.white,
+  //                           size: 60,
+  //                         ),
+  //                         Text(
+  //                           '${element.sysName}',
+  //                           style: const TextStyle(
+  //                             fontSize: 18,
+  //                             fontWeight: FontWeight.w400,
+  //                             color: Colors.white,
+  //                           ),
+  //                         ),
+  //                       ],
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             );
+  //           },
+  //         )
+  //       : (AppsCubit.get(appsContext).appsList.isEmpty)
+  //           ? buildNoAppsFound()
+  //           : buildNoSearchFound();
+  // }
 
   buildApps(List<AppsData> apps, BuildContext appsContext) {
     return (apps.isNotEmpty)

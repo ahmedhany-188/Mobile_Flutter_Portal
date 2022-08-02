@@ -1278,7 +1278,7 @@ class HomeScreen extends StatelessWidget {
                       ? Container(
                           margin: EdgeInsets.only(top: 12.sp),
                           width: 100.w,
-                          height: 130.sp,
+                          height: 140.sp,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: NewsSliderList(
@@ -1370,334 +1370,330 @@ class HomeScreen extends StatelessWidget {
   _buildHomeScreenContent(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(left: 10.0, right: 10.0),
-      child: SizedBox(
-        height: 255.sp,
-        width: 100.w,
-        child: GridView(
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: 10.sp,
-            mainAxisSpacing: 10.sp,
-            childAspectRatio:
-                (MediaQuery.of(context).size.height <= 750) ? 1.sp : 0.9.sp,
-          ),
-          children: [
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(BenefitsScreen.routeName);
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF1a4c78),
-                        Color(0xFF3772a6),
-                      ],
-                      begin: Alignment(0, 1),
-                      end: Alignment(0.5, 0),
-                      tileMode: TileMode.clamp),
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/Benefits.png'),
-                      alignment: Alignment.centerRight,
-                      opacity: 0.5,
-                      scale: 1.8),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height / 3,
-                  width: MediaQuery.of(context).size.width / 3,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 18.0, top: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.loyalty_outlined,
-                            size: 30,
-                            color: Color(0xFF174873),
-
-                            /// Color(0xFF174873)
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 8.0, bottom: 5),
-                          child: Text(
-                            'Benefits',
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                fontFamily: 'RobotoCondensed'),
-                          ),
-                        ),
-                        Text(
-                          'Hotels, Health, Retails...',
-                          style: TextStyle(
-                              fontSize: 15,
-                              overflow: TextOverflow.ellipsis,
-                              color: Colors.white,
-                              fontFamily: 'RobotoCondensed'),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            PopupMenuButton(
-              color: const Color(0xFF9695ed),
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20.0),
-                  bottomRight: Radius.circular(20.0),
-                ),
-              ),
-              elevation: 50,
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF6860c8),
-                        Color(0xFF9695ed),
-                      ],
-                      begin: Alignment(0, 1),
-                      end: Alignment(0.5, 0),
-                      tileMode: TileMode.clamp),
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/Media.png'),
-                      alignment: Alignment.centerRight,
-                      opacity: 0.5,
-                      scale: 1.8),
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(20),
-                    topLeft: Radius.circular(20),
-                  ),
-                ),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height / 3,
-                  width: MediaQuery.of(context).size.width / 3,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 18.0, top: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.camera_alt_outlined,
-                            size: 30,
-                            color: Color(0xFF174873),
-
-                            /// Color(0xFF174873)
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 8.0, bottom: 5),
-                          child: Text(
-                            'Media',
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                overflow: TextOverflow.ellipsis,
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: 'RobotoCondensed'),
-                          ),
-                        ),
-                        Text(
-                          'Photo Gallery, Videos.',
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                              overflow: TextOverflow.ellipsis,
-                              fontFamily: 'RobotoCondensed'),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              itemBuilder: (context) {
-                return [
-                  const PopupMenuItem(
-                    value: 1,
-                    child: Text('Photo Gallery'),
-                  ),
-                  const PopupMenuItem(
-                    value: 2,
-                    child: Text('Videos'),
-                  )
-                ];
-              },
-              onSelected: (index) => Navigator.of(context).pushNamed(
-                  (index == 1)
-                      ? PhotosScreen.routeName
-                      : VideosScreen.routeName),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(SubsidiariesScreen.routeName);
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF6860c8),
-                        Color(0xFF9695ed),
-                      ],
-                      begin: Alignment(0, 1),
-                      end: Alignment(0.5, 0),
-                      tileMode: TileMode.clamp),
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/Subsidiaries.png'),
-                      alignment: Alignment.centerRight,
-                      opacity: 0.5,
-                      scale: 1.8),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
-                ),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height / 3,
-                  width: MediaQuery.of(context).size.width / 3,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 18.0, top: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.white,
-                          child:
-                              // Text(
-                              //   String.fromCharCode(0xf190),
-                              //   style: TextStyle(
-                              //     inherit: false,
-                              //     color: Color(0xFF174873),
-                              //     fontSize: 30.0,
-                              //     fontWeight: FontWeight.w100,
-                              //     fontFamily: "MaterialIcons",
-                              //   ),
-                              // ),
-                              Icon(
-                            // IconData(0xe7f1, fontFamily: 'MaterialIcons-Outlined'),
-                            Icons.location_city_outlined,
-                            size: 30,
-                            color: Color(0xFF174873),
-
-                            /// Color(0xFF174873)
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 8.0, bottom: 5),
-                          child: Text(
-                            'Subsidiaries',
-                            style: TextStyle(
-                                fontSize: 20,
-                                overflow: TextOverflow.ellipsis,
-                                color: Colors.white,
-                                fontFamily: 'RobotoCondensed'),
-                          ),
-                        ),
-                        Text(
-                          'Know about subsidiaries',
-                          style: TextStyle(
-                              fontSize: 15,
-                              overflow: TextOverflow.ellipsis,
-                              color: Colors.white,
-                              fontFamily: 'RobotoCondensed'),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            InkWell(
-              onTap: () {
-                Navigator.of(context).pushNamed(ValueScreen.routeName);
-              },
-              child: Container(
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                      colors: [
-                        Color(0xFF1a4c78),
-                        Color(0xFF3772a6),
-                      ],
-                      begin: Alignment(0, 1),
-                      end: Alignment(0.5, 0),
-                      tileMode: TileMode.clamp),
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/Values.png'),
-                      alignment: Alignment.centerRight,
-                      opacity: 0.5,
-                      scale: 1.8),
-                  borderRadius: BorderRadius.only(
-                    bottomRight: Radius.circular(20),
-                    topLeft: Radius.circular(20),
-                  ),
-                ),
-                child: SizedBox(
-                  height: MediaQuery.of(context).size.height / 3,
-                  width: MediaQuery.of(context).size.width / 3,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 18.0, top: 20),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.interpreter_mode_outlined,
-                            size: 30,
-                            color: Color(0xFF174873),
-
-                            /// Color(0xFF174873)
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 8.0, bottom: 5),
-                          child: Text(
-                            'HAH Values',
-                            style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                                overflow: TextOverflow.ellipsis,
-                                // fontWeight: FontWeight.bold,
-                                fontFamily: 'RobotoCondensed'),
-                          ),
-                        ),
-                        Text(
-                          'Know about our values',
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                              overflow: TextOverflow.ellipsis,
-                              fontFamily: 'RobotoCondensed'),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
+      child: GridView(
+        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10.sp,
+          mainAxisSpacing: 10.sp,
+          childAspectRatio:
+              (MediaQuery.of(context).size.height <= 750) ? 1.sp : 0.9.sp,
         ),
+        children: [
+          InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed(BenefitsScreen.routeName);
+            },
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [
+                      Color(0xFF1a4c78),
+                      Color(0xFF3772a6),
+                    ],
+                    begin: Alignment(0, 1),
+                    end: Alignment(0.5, 0),
+                    tileMode: TileMode.clamp),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/Benefits.png'),
+                    alignment: Alignment.centerRight,
+                    opacity: 0.5,
+                    scale: 1.8),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height / 3,
+                width: MediaQuery.of(context).size.width / 3,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 18.0, top: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.loyalty_outlined,
+                          size: 30,
+                          color: Color(0xFF174873),
+
+                          /// Color(0xFF174873)
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.0, bottom: 5),
+                        child: Text(
+                          'Benefits',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontFamily: 'RobotoCondensed'),
+                        ),
+                      ),
+                      Text(
+                        'Hotels, Health, Retails...',
+                        style: TextStyle(
+                            fontSize: 15,
+                            overflow: TextOverflow.ellipsis,
+                            color: Colors.white,
+                            fontFamily: 'RobotoCondensed'),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          PopupMenuButton(
+            color: const Color(0xFF9695ed),
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(20.0),
+                bottomRight: Radius.circular(20.0),
+              ),
+            ),
+            elevation: 50,
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [
+                      Color(0xFF6860c8),
+                      Color(0xFF9695ed),
+                    ],
+                    begin: Alignment(0, 1),
+                    end: Alignment(0.5, 0),
+                    tileMode: TileMode.clamp),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/Media.png'),
+                    alignment: Alignment.centerRight,
+                    opacity: 0.5,
+                    scale: 1.8),
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(20),
+                  topLeft: Radius.circular(20),
+                ),
+              ),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height / 3,
+                width: MediaQuery.of(context).size.width / 3,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 18.0, top: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.camera_alt_outlined,
+                          size: 30,
+                          color: Color(0xFF174873),
+
+                          /// Color(0xFF174873)
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.0, bottom: 5),
+                        child: Text(
+                          'Media',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              overflow: TextOverflow.ellipsis,
+                              // fontWeight: FontWeight.bold,
+                              fontFamily: 'RobotoCondensed'),
+                        ),
+                      ),
+                      Text(
+                        'Photo Gallery, Videos.',
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
+                            fontFamily: 'RobotoCondensed'),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            itemBuilder: (context) {
+              return [
+                const PopupMenuItem(
+                  value: 1,
+                  child: Text('Photo Gallery'),
+                ),
+                const PopupMenuItem(
+                  value: 2,
+                  child: Text('Videos'),
+                )
+              ];
+            },
+            onSelected: (index) => Navigator.of(context).pushNamed(
+                (index == 1)
+                    ? PhotosScreen.routeName
+                    : VideosScreen.routeName),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed(SubsidiariesScreen.routeName);
+            },
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [
+                      Color(0xFF6860c8),
+                      Color(0xFF9695ed),
+                    ],
+                    begin: Alignment(0, 1),
+                    end: Alignment(0.5, 0),
+                    tileMode: TileMode.clamp),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/Subsidiaries.png'),
+                    alignment: Alignment.centerRight,
+                    opacity: 0.5,
+                    scale: 1.8),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height / 3,
+                width: MediaQuery.of(context).size.width / 3,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 18.0, top: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.white,
+                        child:
+                            // Text(
+                            //   String.fromCharCode(0xf190),
+                            //   style: TextStyle(
+                            //     inherit: false,
+                            //     color: Color(0xFF174873),
+                            //     fontSize: 30.0,
+                            //     fontWeight: FontWeight.w100,
+                            //     fontFamily: "MaterialIcons",
+                            //   ),
+                            // ),
+                            Icon(
+                          // IconData(0xe7f1, fontFamily: 'MaterialIcons-Outlined'),
+                          Icons.location_city_outlined,
+                          size: 30,
+                          color: Color(0xFF174873),
+
+                          /// Color(0xFF174873)
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.0, bottom: 5),
+                        child: Text(
+                          'Subsidiaries',
+                          style: TextStyle(
+                              fontSize: 20,
+                              overflow: TextOverflow.ellipsis,
+                              color: Colors.white,
+                              fontFamily: 'RobotoCondensed'),
+                        ),
+                      ),
+                      Text(
+                        'Know about subsidiaries',
+                        style: TextStyle(
+                            fontSize: 15,
+                            overflow: TextOverflow.ellipsis,
+                            color: Colors.white,
+                            fontFamily: 'RobotoCondensed'),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          InkWell(
+            onTap: () {
+              Navigator.of(context).pushNamed(ValueScreen.routeName);
+            },
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                    colors: [
+                      Color(0xFF1a4c78),
+                      Color(0xFF3772a6),
+                    ],
+                    begin: Alignment(0, 1),
+                    end: Alignment(0.5, 0),
+                    tileMode: TileMode.clamp),
+                image: DecorationImage(
+                    image: AssetImage('assets/images/Values.png'),
+                    alignment: Alignment.centerRight,
+                    opacity: 0.5,
+                    scale: 1.8),
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(20),
+                  topLeft: Radius.circular(20),
+                ),
+              ),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height / 3,
+                width: MediaQuery.of(context).size.width / 3,
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 18.0, top: 20),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      CircleAvatar(
+                        radius: 25,
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.interpreter_mode_outlined,
+                          size: 30,
+                          color: Color(0xFF174873),
+
+                          /// Color(0xFF174873)
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 8.0, bottom: 5),
+                        child: Text(
+                          'HAH Values',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              overflow: TextOverflow.ellipsis,
+                              // fontWeight: FontWeight.bold,
+                              fontFamily: 'RobotoCondensed'),
+                        ),
+                      ),
+                      Text(
+                        'Know about our values',
+                        style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.white,
+                            overflow: TextOverflow.ellipsis,
+                            fontFamily: 'RobotoCondensed'),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -1884,7 +1880,7 @@ class ShimmerHomeNewsSlider extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(top: 12.sp),
         width: 100.w,
-        height: 130.sp,
+        height: 140.sp,
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: ListView.builder(
