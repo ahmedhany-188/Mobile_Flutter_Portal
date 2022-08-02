@@ -16,14 +16,13 @@ import 'package:intl/intl.dart';
 part 'business_card_state.dart';
 
 class BusinessCardCubit extends Cubit<BusinessCardInitial> {
-  BusinessCardCubit(this.requestRepository) : super(BusinessCardInitial());
+  BusinessCardCubit(this.requestRepository) : super(const BusinessCardInitial());
 
   final Connectivity connectivity = Connectivity();
 
   static BusinessCardCubit get(context) => BlocProvider.of(context);
 
   final RequestRepository requestRepository;
-
 
   void getRequestData(RequestStatus requestStatus, String? requestNo) async {
     if (requestStatus == RequestStatus.newRequest) {
@@ -43,16 +42,24 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
     else {
       final requestData = await requestRepository.geBusinessCard(requestNo!);
 
+      print("-----------" + requestData.faxNo.toString());
+      print("-----------" + requestData.employeeExt.toString());
+      print("-----------" + requestData.employeeNameCard.toString());
+      print("-----------" + requestData.employeeMobil.toString());
+      print("-----------" + requestData.employeeComments.toString());
+
       final requestDate = RequestDate.dirty(
           GlobalConstants.dateFormatViewed.format(
               GlobalConstants.dateFormatServer.parse(
                   requestData.requestDate!)));
 
-      final employeeName = RequestDate.dirty(requestData.employeeNameCard.toString());
+      final employeeName = RequestDate.dirty(
+          requestData.employeeNameCard.toString());
       final employeeComments = requestData.employeeComments.toString();
-      final employeeMobile =  RequestDate.dirty(requestData.employeeMobil.toString());
+      final employeeMobile = RequestDate.dirty(
+          requestData.employeeMobil.toString());
       final faxNo = requestData.faxNo.toString();
-     final employeeExt = requestData.employeeExt.toString();
+      final employeeExt = requestData.employeeExt.toString();
 
 
       var status = "Pending";
@@ -65,38 +72,40 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
       }
 
 
-
-
       emit(
         state.copyWith(
-          requestDate: requestDate,
-          employeeNameCard: employeeName,
-          comment: employeeComments,
-          employeeMobile: employeeMobile,
-          // employeeFaxNO: faxNo,
-          // employeeExt: employeeExt,
-          status: Formz.validate([state.employeeNameCard, state.employeeMobile]),
-          requestStatus: RequestStatus.oldRequest,
-          statusAction: status,
-          takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
+            requestDate: requestDate,
+            employeeNameCard: employeeName,
+            employeeMobile: employeeMobile,
+            employeeExt: employeeExt,
+            employeeFaxNO: faxNo,
+            comment: employeeComments,
+            status: Formz.validate(
+                [state.employeeNameCard, state.employeeMobile]),
+            requestStatus: RequestStatus.oldRequest,
+            statusAction: status,
+            takeActionStatus: (requestRepository.userData.user?.userHRCode ==
+                requestData.requestHrCode)
+                ? TakeActionStatus.view
+                : TakeActionStatus.takeAction
         ),
       );
-
-      // emit(state.copyWith(
-      //   employeeNameCard: employeeName,
-      //   employeeMobile: employeeMobile,
-      //   status: Formz.validate([employeeName, employeeMobile]),
-      // ));
-
     }
   }
 
   void getSubmitBusinessCard(MainUserData user) async {
     final employeeName = RequestDate.dirty(state.employeeNameCard.value);
     final employeeMobile = RequestDate.dirty(state.employeeMobile.value);
-    DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(state.requestDate.value);
-    final requestDateValue = GlobalConstants.dateFormatServer.format(requestDateTemp);
     BusinessCardFormModel businessCardFormModel;
+
+
+    var now = DateTime.now();
+    var formatter = GlobalConstants.dateFormatServer;
+    String formattedDate = formatter.format(now);
+
+    // DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(state.requestDate.value);
+    // final requestDateValue = GlobalConstants.dateFormatServer.format(requestDateTemp);
+
 
     emit(state.copyWith(
       employeeNameCard: employeeName,
@@ -106,13 +115,13 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
 
     if (state.status.isValidated) {
       businessCardFormModel = BusinessCardFormModel(
-          requestDateValue,
+          formattedDate,
           employeeName.value,
           employeeMobile.value,
-          state.employeeExt,
-          state.employeeFaxNO,
-          state.comment,0,
-          "");
+          state.employeeExt.toString(),
+          state.employeeFaxNO.toString(),
+          state.comment.toString(),0,
+          user.employeeData!.userHrCode.toString());
 
 
       try {
@@ -125,6 +134,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
 
           final accessBusinessCardResponse = await requestRepository
               .postBusinessCard(businessCardFormModel: businessCardFormModel);
+
           if (accessBusinessCardResponse.id == 1) {
             emit(state.copyWith(
               successMessage: accessBusinessCardResponse.requestNo,

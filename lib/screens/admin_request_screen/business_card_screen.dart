@@ -7,7 +7,9 @@ import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/constants/enums.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
-import 'package:intl/intl.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
+import '../../../widgets/success/success_request_widget.dart';
 
 class BusinessCardScreen extends StatefulWidget{
 
@@ -29,12 +31,13 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     var deviceSize = MediaQuery
         .of(context)
         .size;
+
     final user = context.select((AppBloc bloc) => bloc.state.userData);
     var formatter = GlobalConstants.dateFormatViewed;
-    String formattedDate = formatter.format(DateTime.now());
 
     final currentRequestNo = widget.requestNo;
 
@@ -49,15 +52,13 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
 
       child: BlocProvider<BusinessCardCubit>(
         create: (businessCardContext) =>
-        currentRequestNo == null ? (BusinessCardCubit(RequestRepository(user))
-          ..getRequestData(RequestStatus.newRequest, "")) : (BusinessCardCubit(
+        currentRequestNo == null ? (BusinessCardCubit(
             RequestRepository(user))
+          ..getRequestData(RequestStatus.newRequest, ""))
+            : (BusinessCardCubit(RequestRepository(user))
           ..getRequestData(RequestStatus.oldRequest,
               currentRequestNo[BusinessCardScreen.requestNoKey])),
-        // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])
-
         child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
-
             builder: (context, state) {
               return  WillPopScope(
                   onWillPop: () async {
@@ -68,11 +69,9 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                   title: const Text("Business Card"),
                   centerTitle: true,
                 ),
-                resizeToAvoidBottomInset: false,
 
                 floatingActionButton: Column(
                   mainAxisSize: MainAxisSize.min,
-
                   children: <Widget>[
                     if(
                     state.requestStatus ==
@@ -97,10 +96,7 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                       label: const Text('Reject'),
                     ),
                     const SizedBox(height: 12),
-                    if(context
-                        .read<BusinessCardCubit>()
-                        .state
-                        .requestStatus == RequestStatus.newRequest)
+                    if(state.requestStatus == RequestStatus.newRequest)
                       FloatingActionButton.extended(
                         heroTag: null,
                         onPressed: () {
@@ -124,10 +120,14 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                 body: BlocListener<BusinessCardCubit, BusinessCardInitial>(
                   listener: (context, state) {
                     if (state.status.isSubmissionSuccess) {
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (_) =>
-                              SuccessScreen(text: state.successMessage ??
-                                  "Error Number",)));
+                      // LoadingDialog.hide(context);
+                      EasyLoading.dismiss(animation: true);
+                      if(state.requestStatus == RequestStatus.newRequest){
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (_) =>
+                                SuccessScreen(text: state.successMessage ??
+                                    "Error Number",routName: BusinessCardScreen.routeName, requestName: 'Vacation',)));
+                      }
                     } else if (state.status.isSubmissionInProgress) {
                       EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
                     }
@@ -141,6 +141,7 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                     child: Form(
                       child: SingleChildScrollView(
                         child: Column(
+
                           children: [
 
                             if(state.requestStatus ==
@@ -165,6 +166,7 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               child: TextFormField(
                                 initialValue: state.requestDate.value,
                                 key: UniqueKey(),
+                                readOnly: true,
                                 enabled: false,
                                 decoration: const InputDecoration(
                                   floatingLabelAlignment:
@@ -176,185 +178,135 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               ),
                             ),
 
-
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: BlocBuilder<
-                                  BusinessCardCubit,
+                              child: BlocBuilder<BusinessCardCubit,
                                   BusinessCardInitial>(
-                                // buildWhen: (previous, current) {
-                                //   return (state.requestStatus ==
-                                //       RequestStatus.newRequest);
-                                // },
                                 builder: (context, state) {
-                                  return TextFormField(
-                                    initialValue: state.employeeNameCard.value,
-                                    // readOnly: state.requestStatus ==
-                                    //     RequestStatus.oldRequest ? true : false,
-                                    onChanged: (value) =>
-                                        context.read<BusinessCardCubit>()
-                                            .nameCard(value),
-                                    readOnly: state.requestStatus == RequestStatus.oldRequest ? true : false,
+                                  return Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          initialValue: state.employeeNameCard
+                                              .value,
 
-                                    //keyboardType: TextInputType.text,
-                                    decoration: InputDecoration(
-                                      floatingLabelAlignment:
-                                      FloatingLabelAlignment.start,
-                                      labelText: 'Employee Name on Card',
-                                      prefixIcon: const Icon(
-                                          Icons.person),
-                                      errorText: state.employeeNameCard.invalid
-                                          ? 'invalid Name'
-                                          : null,
-                                    ),
+                                          readOnly: state.requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? true
+                                              : false,
+                                          onChanged: (value) {
+                                            context.read<BusinessCardCubit>()
+                                                .nameCard(value);
+                                          },
+                                          decoration: InputDecoration(
+                                            floatingLabelAlignment:
+                                            FloatingLabelAlignment.start,
+                                            labelText: 'Employee Name on Card',
+                                            prefixIcon: const Icon(
+                                                Icons.person),
+                                            errorText: state.employeeNameCard
+                                                .invalid
+                                                ? 'invalid Name'
+                                                : null,
+                                          ),
+                                        ),),
+
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child:
+                                        TextFormField(
+                                          initialValue: state.employeeMobile
+                                              .value,
+                                          readOnly: state.requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? true
+                                              : false,
+                                          onChanged: (value) {
+                                            context.read<BusinessCardCubit>()
+                                                .employeeMobile(value);
+                                          },
+                                          keyboardType: TextInputType.phone,
+                                          decoration: InputDecoration(
+                                            floatingLabelAlignment:
+                                            FloatingLabelAlignment.start,
+                                            labelText: 'Mobile',
+                                            prefixIcon: const Icon(
+                                                Icons.mobile_friendly),
+                                            errorText: state.employeeMobile
+                                                .invalid
+                                                ? 'invalid Phone Number'
+                                                : null,
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+                                          initialValue: state.employeeExt,
+                                          readOnly: state.requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? true
+                                              : false,
+                                          onChanged: (value) {
+                                            context.read<BusinessCardCubit>()
+                                                .employeeExt(value);
+                                          },
+                                          keyboardType: TextInputType.number,
+                                          decoration: const InputDecoration(
+                                            floatingLabelAlignment:
+                                            FloatingLabelAlignment.start,
+                                            labelText: 'Ext #',
+                                            prefixIcon: Icon(
+                                                Icons.phone),
+                                          ),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child:  TextFormField(
+                                              initialValue: state.employeeFaxNO,
+                                              readOnly: state.requestStatus ==
+                                                  RequestStatus.oldRequest ? true : false,
+                                              onChanged: (value){
+                                                  context.read<BusinessCardCubit>()
+                                                      .employeeFaxNO(value);
+                                                  },
+                                              keyboardType: TextInputType.number,
+                                              decoration: const InputDecoration(
+                                                floatingLabelAlignment:
+                                                FloatingLabelAlignment.start,
+                                                labelText: 'FAX NO',
+                                                prefixIcon: Icon(
+                                                    Icons.fax),
+                                              ),
+                                            ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: TextFormField(
+
+                                              initialValue: state.comment,
+                                              readOnly: state.requestStatus ==
+                                                  RequestStatus.oldRequest ? true : false,
+                                              onChanged: (value) =>
+                                                  context.read<BusinessCardCubit>()
+                                                      .EemployeeComment(value),
+                                              keyboardType: TextInputType.text,
+                                              decoration: const InputDecoration(
+                                                floatingLabelAlignment:
+                                                FloatingLabelAlignment.start,
+                                                labelText: 'Comments',
+                                                prefixIcon: Icon(
+                                                    Icons.comment),
+                                              ),
+                                            ),
+                                      ),
+                                    ],
                                   );
-                                },
+                                }
                               ),
                             ),
-
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: BlocBuilder<
-                                  BusinessCardCubit,
-                                  BusinessCardInitial>(
-                                // buildWhen: (previous, current) {
-                                //   return (state.requestStatus ==
-                                //       RequestStatus.newRequest);
-                                // },
-                                builder: (context, state) {
-                                  return TextFormField(
-                                    // enabled: (widget.objectValidation)
-                                    //     ? false
-                                    //     : true,
-                                    initialValue: state.employeeMobile.value,
-
-                                    readOnly: state.requestStatus ==
-                                        RequestStatus.oldRequest ? true : false,
-
-                                    onChanged: (value) =>
-                                        context.read<BusinessCardCubit>()
-                                            .employeeMobile(value),
-                                    keyboardType: TextInputType.phone,
-                                    decoration: InputDecoration(
-                                      floatingLabelAlignment:
-                                      FloatingLabelAlignment.start,
-                                      labelText: 'Mobile',
-                                      prefixIcon: const Icon(
-                                          Icons.mobile_friendly),
-                                      errorText: state.employeeMobile.invalid
-                                          ? 'invalid Phone Number'
-                                          : null,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-
-
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: BlocBuilder<
-                                  BusinessCardCubit,
-                                  BusinessCardInitial>(
-                                // buildWhen: (previous, current) {
-                                //   return (state.requestStatus ==
-                                //       RequestStatus.newRequest);
-                                // },
-                                builder: (context, state) {
-                                  return TextFormField(
-                                    // enabled: (widget.objectValidation)
-                                    //     ? false
-                                    //     : true,
-                                    initialValue: state.employeeExt,
-
-                                    readOnly: state.requestStatus ==
-                                        RequestStatus.oldRequest ? true : false,
-
-                                    onChanged: (value) =>
-                                        context.read<BusinessCardCubit>()
-                                            .employeeExt(value),
-                                    keyboardType: TextInputType.number,
-                                    decoration: const InputDecoration(
-                                      floatingLabelAlignment:
-                                      FloatingLabelAlignment.start,
-                                      labelText: 'Ext #',
-                                      prefixIcon: Icon(
-                                          Icons.phone),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-
-
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: BlocBuilder<
-                                  BusinessCardCubit,
-                                  BusinessCardInitial>(
-                                // buildWhen: (previous, current) {
-                                //   return (state.requestStatus ==
-                                //       RequestStatus.newRequest);
-                                // },
-                                builder: (context, state) {
-                                  return TextFormField(
-                                    // enabled: (widget.objectValidation)
-                                    //     ? false
-                                    //     : true,
-                                    initialValue: state.employeeFaxNO,
-
-                                    readOnly: state.requestStatus ==
-                                        RequestStatus.oldRequest ? true : false,
-                                    onChanged: (value) =>
-                                        context.read<BusinessCardCubit>()
-                                            .employeeFaxNO(value),
-                                    keyboardType: TextInputType.number,
-                                    decoration: const InputDecoration(
-                                      floatingLabelAlignment:
-                                      FloatingLabelAlignment.start,
-                                      labelText: 'FAX NO',
-                                      prefixIcon: Icon(
-                                          Icons.fax),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: BlocBuilder<
-                                  BusinessCardCubit,
-                                  BusinessCardInitial>(
-                                buildWhen: (previous, current) {
-                                  return (state.requestStatus ==
-                                      RequestStatus.newRequest);
-                                },
-                                builder: (context, state) {
-                                  return TextFormField(
-                                    // enabled: (widget.objectValidation)
-                                    //     ? false
-                                    //     : true,
-                                    initialValue: state.comment,
-
-                                    readOnly: state.requestStatus ==
-                                        RequestStatus.oldRequest ? true : false,
-                                    onChanged: (value) =>
-                                        context.read<BusinessCardCubit>()
-                                            .EemployeeComment(value),
-                                    keyboardType: TextInputType.text,
-                                    decoration: const InputDecoration(
-                                      floatingLabelAlignment:
-                                      FloatingLabelAlignment.start,
-                                      labelText: 'Comments',
-                                      prefixIcon: Icon(
-                                          Icons.comment),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-
                           ],
                         ),
                       ),
@@ -404,41 +356,3 @@ class LoadingDialog extends StatelessWidget {
   }
 }
 
-class SuccessScreen extends StatelessWidget {
-  const SuccessScreen({Key? key, required this.text}) : super(key: key);
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Icon(Icons.tag_faces, size: 100),
-            const SizedBox(height: 10),
-            Text(
-              text,
-              style: const TextStyle(fontSize: 54, color: Colors.black),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              onPressed: () =>
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                          builder: (_) => const BusinessCardScreen())),
-              icon: const Icon(Icons.replay),
-              label: const Text('Create Another Permission Request'),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.close),
-              label: const Text('Close'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

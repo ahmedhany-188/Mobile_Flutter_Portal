@@ -11,11 +11,13 @@ import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
 
 import '../../constants/enums.dart';
+import '../../../widgets/success/success_request_widget.dart';
 
 class EmbassyLetterScreen extends StatefulWidget{
 
@@ -125,10 +127,14 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                 body: BlocListener<EmbassyLetterCubit, EmbassyLetterInitial>(
                   listener: (context, state) {
                     if (state.status.isSubmissionSuccess) {
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (_) =>
-                              SuccessScreen(text: state.successMessage ??
-                                  "Error Number",)));
+                      // LoadingDialog.hide(context);
+                      EasyLoading.dismiss(animation: true);
+                      if(state.requestStatus == RequestStatus.newRequest){
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (_) =>
+                                SuccessScreen(text: state.successMessage ??
+                                    "Error Number",routName: EmbassyLetterScreen.routeName, requestName: 'Vacation',)));
+                      }
                     }
                     else if (state.status.isSubmissionInProgress) {
                       EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);

@@ -9,17 +9,15 @@ class BusinessCardFormModel {
       this.employeeMobil, this.employeeExt, this.faxNo, this.employeeComments,
       this.status, this.requestHrCode);
 
-
   BusinessCardFormModel.fromJson(Map<String, dynamic>json):
 
+        requestHrCode=json["requestHrCode"],
         requestDate=json["date"],
-        employeeNameCard=json["cardName"],
-        employeeMobil=json["mobileNo"],
-        employeeExt= json["extNo"],
-        faxNo=json["faxNo"],
-        employeeComments=json["comments"],
         status=json["status"],
-        requestHrCode=json["requestHrCode"];
-
+        employeeComments=json["comments"],
+        employeeNameCard=json["cardName"],
+        faxNo=json["faxNo"],
+        employeeExt= json["extNo"],
+        employeeMobil=json["mobileNo"];
 
 }

@@ -18,6 +18,8 @@ import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:file_picker/file_picker.dart';
 
 import '../../constants/enums.dart';
+import '../../../widgets/success/success_request_widget.dart';
+
 
 class AccessRightScreen extends StatefulWidget {
 
@@ -130,10 +132,14 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                         EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
                       }
                       if (state.status.isSubmissionSuccess) {
-                        Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (_) =>
-                                SuccessScreen(text: state.successMessage ??
-                                    "Error Number",)));
+                        // LoadingDialog.hide(context);
+                        EasyLoading.dismiss(animation: true);
+                        if(state.requestStatus == RequestStatus.newRequest){
+                          Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(builder: (_) =>
+                                  SuccessScreen(text: state.successMessage ??
+                                      "Error Number",routName: AccessRightScreen.routeName, requestName: 'Vacation',)));
+                        }
                       }
                       if (state.status.isSubmissionFailure) {
                         EasyLoading.showError(state.errorMessage.toString(),);
@@ -648,41 +654,3 @@ class LoadingDialog extends StatelessWidget {
   }
 }
 
-class SuccessScreen extends StatelessWidget {
-  const SuccessScreen({Key? key, required this.text}) : super(key: key);
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Icon(Icons.tag_faces, size: 100),
-            const SizedBox(height: 10),
-            Text(
-              text,
-              style: const TextStyle(fontSize: 54, color: Colors.black),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              onPressed: () =>
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                          builder: (_) => const AccessRightScreen())),
-              icon: const Icon(Icons.replay),
-              label: const Text('Create Another Permission Request'),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.close),
-              label: const Text('Close'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}

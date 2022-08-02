@@ -7,6 +7,7 @@ import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../bloc/hr_request_bloc/hr_request_export.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
+import '../../../widgets/success/success_request_widget.dart';
 
 class BusinessMissionScreen extends StatefulWidget {
 
@@ -97,12 +98,13 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                       LoadingDialog.show(context);
                     }
                     if (state.status.isSubmissionSuccess) {
-                      LoadingDialog.hide(context);
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (_) =>
-                              SuccessScreen(
-                                text: state.successMessage ??
-                                    "Error Number",)));
+                      // LoadingDialog.hide(context);
+                      if(state.requestStatus == RequestStatus.newRequest){
+                        Navigator.of(context).pushReplacement(
+                            MaterialPageRoute(builder: (_) =>
+                                SuccessScreen(text: state.successMessage ??
+                                    "Error Number",routName: BusinessMissionScreen.routeName, requestName: 'Vacation',)));
+                      }
                     }
                     if (state.status.isSubmissionFailure) {
                       LoadingDialog.hide(context);
@@ -501,41 +503,3 @@ class LoadingDialog extends StatelessWidget {
   }
 }
 
-class SuccessScreen extends StatelessWidget {
-  const SuccessScreen({Key? key, required this.text}) : super(key: key);
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Icon(Icons.tag_faces, size: 100),
-            const SizedBox(height: 10),
-            Text(
-              text,
-              style: const TextStyle(fontSize: 54, color: Colors.black),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 10),
-            ElevatedButton.icon(
-              onPressed: () =>
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (_) =>
-                          BusinessMissionScreen())),
-              icon: const Icon(Icons.replay),
-              label: const Text('Create Another Permission Request'),
-            ),
-            ElevatedButton.icon(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.close),
-              label: const Text('Close'),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
