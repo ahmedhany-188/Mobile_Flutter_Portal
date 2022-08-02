@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_business_mission_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
@@ -95,27 +96,29 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                     BusinessMissionInitial>(
                   listener: (context, state) {
                     if (state.status.isSubmissionInProgress) {
-                      LoadingDialog.show(context);
+                      EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
                     }
                     if (state.status.isSubmissionSuccess) {
                       // LoadingDialog.hide(context);
+                      EasyLoading.dismiss(animation: true);
                       if(state.requestStatus == RequestStatus.newRequest){
                         Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (_) =>
                                 SuccessScreen(text: state.successMessage ??
-                                    "Error Number",routName: BusinessMissionScreen.routeName, requestName: 'Vacation',)));
+                                    "Error Number",routName: BusinessMissionScreen.routeName, requestName: 'Business Mission',)));
                       }
                     }
                     if (state.status.isSubmissionFailure) {
-                      LoadingDialog.hide(context);
-                      ScaffoldMessenger.of(context)
-                        ..hideCurrentSnackBar()
-                        ..showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                state.errorMessage ?? 'Request Failed'),
-                          ),
-                        );
+                      EasyLoading.showError(state.errorMessage ?? 'Request Failed');
+                      // LoadingDialog.hide(context);
+                      // ScaffoldMessenger.of(context)
+                      //   ..hideCurrentSnackBar()
+                      //   ..showSnackBar(
+                      //     SnackBar(
+                      //       content: Text(
+                      //           state.errorMessage ?? 'Request Failed'),
+                      //     ),
+                      //   );
                     }
                   },
                   child: Padding(

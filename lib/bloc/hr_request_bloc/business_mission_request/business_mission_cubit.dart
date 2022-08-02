@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
@@ -45,8 +46,9 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
 
     }else{
 
-      final requestData = await _requestRepository.getBusinessMissionRequestData(requestNo!);
+      EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
 
+      final requestData = await _requestRepository.getBusinessMissionRequestData(requestNo!);
       final requestFromDate = DateFrom.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateFrom!)));
       final requestToDate = DateTo.dirty(value: GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateTo!)), dateFrom: requestFromDate.value);
       final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.date!)));
@@ -61,7 +63,6 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
       }else if (requestData.status == 2){
         status = "Rejected";
       }
-
       emit(
         state.copyWith(
             requestDate: requestDate,
@@ -71,8 +72,9 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
             comment: comments,
             timeFrom: hoursFrom,
             timeTo: hoursTo,
-            status: Formz.validate([requestDate,
-              state.timeFrom , state.dateFrom]),
+            status: FormzStatus.submissionSuccess,
+            // status: Formz.validate([requestDate,
+            //   state.timeFrom , state.dateFrom]),
             requestStatus: RequestStatus.oldRequest,
             statusAction: status,
             takeActionStatus: (_requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
