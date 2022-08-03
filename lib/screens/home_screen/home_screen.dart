@@ -1,19 +1,19 @@
-import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:sizer/sizer.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/screens/videos_screen/videos_screen.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:sizer/sizer.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:swipe_image_gallery/swipe_image_gallery.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
-import '../../bloc/news_screen_bloc/news_cubit.dart';
+import '../news_screen/news_screen.dart';
+import '../videos_screen/videos_screen.dart';
+import '../photos_screen/photos_screen.dart';
 import '../../data/models/response_news.dart';
 import '../about_value_screen/value_screen.dart';
-import '../subsidiaries_screen/subsidiaries_screen.dart';
 import '../benefits_screen/benefits_screen.dart';
-import '../news_screen/news_screen.dart';
-import '../photos_screen/photos_screen.dart';
+import '../../bloc/news_screen_bloc/news_cubit.dart';
+import '../subsidiaries_screen/subsidiaries_screen.dart';
 
 // class HomeScreen3 extends StatelessWidget {
 //   const HomeScreen({Key? key}) : super(key: key);
@@ -1740,6 +1740,7 @@ class NewsSliderList extends StatelessWidget {
                 children: assets,
                 initialIndex: index,
                 heroProperties: heroProperties,
+                backgroundColor: Colors.transparent,
                 hideOverlayOnTap: false,
                 hideStatusBar: false,
               ).show();

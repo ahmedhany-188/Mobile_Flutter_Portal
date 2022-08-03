@@ -1,11 +1,8 @@
 
-
-import 'dart:ffi';
-
 class EmployeeAppraisalModel{
 
   int ?code,id,appID,status;
-  Bool ?error;
+  bool ?error;
 
   double ?companyScore,departmentScore,competencescore,individualScore,overallscore;
   String ?trainingneeds,acknowledge1,acknowledge2,inUser,inDate,message,hrcode;

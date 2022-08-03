@@ -1,4 +1,5 @@
 import 'package:badges/badges.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -119,7 +120,7 @@ class _TapsScreenState extends State<TapsScreen> {
                         child: CircleAvatar(
                           radius: 29,
                           // borderRadius: BorderRadius.circular(50),
-                          backgroundImage: NetworkImage(
+                          backgroundImage: CachedNetworkImageProvider(
                             'https://portal.hassanallam.com/Apps/images/Profile/${user?.imgProfile}',
                           ),
                           onBackgroundImageError: (_, __) {

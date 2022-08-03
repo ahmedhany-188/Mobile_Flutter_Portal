@@ -229,121 +229,128 @@ class _ContactsScreenState extends State<ContactsScreen> {
       body: BlocProvider<ContactsCubit>.value(
         value: ContactsCubit.get(context),
         child: BlocBuilder<ContactsCubit, ContactCubitStates>(
+          buildWhen: (pre, curr) {
+            if (curr.contactStates == ContactsEnumStates.success ||
+                curr.contactStates == ContactsEnumStates.filtered) {
+              return true;
+            } else {
+              return false;
+            }
+          },
           builder: (context, state) {
-            if (state.contactStates == ContactsEnumStates.success ||
-                state.contactStates == ContactsEnumStates.filtered) {
-              return BlocProvider(
-                create: (filtersContext) => ContactsFiltersCubit(
-                  ContactsCubit.get(context).state.listContacts,
-                ),
-                child: SizedBox(
-                  height: deviceSize.height,
-                  child: Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: SingleChildScrollView(
-                      clipBehavior: Clip.none,
-                      physics: const NeverScrollableScrollPhysics(),
-                      keyboardDismissBehavior:
-                          ScrollViewKeyboardDismissBehavior.onDrag,
-                      child: Column(
-                        children: [
-                          BlocConsumer<ContactsFiltersCubit,
-                              ContactsFiltersInitial>(
-                            listener: (filtersCubitContext, filtersCubitState) {
-                              if (filtersCubitState.isFiltered) {
-                                ContactsCubit.get(context).updateContacts(
-                                    filtersCubitState.listContacts);
-                              }
-                            },
-                            builder: (ctx, state) {
-
-                              return Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: TextFormField(
-                                      focusNode: textFoucus,
-                                      // key: uniqueKey,
-                                      controller: textController,
-                                      onChanged: (text) {
+            // if (state.contactStates == ContactsEnumStates.success ||
+            //     state.contactStates == ContactsEnumStates.filtered) {
+            return BlocProvider(
+              create: (filtersContext) => ContactsFiltersCubit(
+                ContactsCubit.get(context).state.listContacts,
+              ),
+              child: SizedBox(
+                height: deviceSize.height,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: SingleChildScrollView(
+                    clipBehavior: Clip.none,
+                    physics: const NeverScrollableScrollPhysics(),
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    child: Column(
+                      children: [
+                        BlocConsumer<ContactsFiltersCubit,
+                            ContactsFiltersInitial>(
+                          listener: (filtersCubitContext, filtersCubitState) {
+                            if (filtersCubitState.isFiltered) {
+                              ContactsCubit.get(context).updateContacts(
+                                  filtersCubitState.listContacts);
+                            }
+                          },
+                          builder: (ctx, state) {
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: TextFormField(
+                                    focusNode: textFoucus,
+                                    // key: uniqueKey,
+                                    controller: textController,
+                                    onChanged: (text) {
+                                      ContactsFiltersCubit.get(ctx)
+                                          .writenTextSearch(text);
+                                    },
+                                    decoration: const InputDecoration(
+                                        contentPadding: EdgeInsets.all(10),
+                                        isCollapsed: true,
+                                        filled: true,
+                                        labelText: "Search contact",
+                                        hintText: 'Name or HR Code',
+                                        prefixIcon: Icon(Icons.search),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10.0)),
+                                            borderSide: BorderSide.none)),
+                                  ),
+                                ),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ElevatedButton.icon(
+                                      onPressed: () {
                                         ContactsFiltersCubit.get(ctx)
-                                            .writenTextSearch(text);
+                                            .updateFilters();
+                                        _showDialogAndGetFiltersResults(ctx);
                                       },
-                                      decoration: const InputDecoration(
-                                          contentPadding: EdgeInsets.all(10),
-                                          isCollapsed: true,
-                                          filled: true,
-                                          labelText: "Search contact",
-                                          hintText: 'Name or HR Code',
-                                          prefixIcon: Icon(Icons.search),
-                                          border: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(10.0)),
-                                              borderSide: BorderSide.none)),
+                                      label: const Text('Filter Contacts'),
+                                      icon: const Icon(
+                                        Icons.filter_list_alt,
+                                        color: Colors.green,
+                                      ),
                                     ),
-                                  ),
-                                  Row(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      ElevatedButton.icon(
-                                        onPressed: () {
-                                          ContactsFiltersCubit.get(ctx)
-                                              .updateFilters();
-                                          _showDialogAndGetFiltersResults(ctx);
-                                        },
-                                        label: const Text('Filter Contacts'),
-                                        icon: const Icon(
-                                          Icons.filter_list_alt,
-                                          color: Colors.green,
-                                        ),
+                                    const SizedBox(width: 10),
+                                    ElevatedButton.icon(
+                                      onPressed: (state.isFiltered == false &&
+                                              textController.text.isEmpty)
+                                          ? null
+                                          : () {
+                                              ContactsFiltersCubit.get(ctx)
+                                                  .onClearData();
+                                              textController.clear();
+                                              textFoucus.unfocus();
+                                            },
+                                      label: const Text('Clear Filters'),
+                                      icon: const Icon(
+                                        Icons.clear,
+                                        color: Colors.red,
                                       ),
-                                      const SizedBox(width: 10),
-                                      ElevatedButton.icon(
-                                        onPressed: (state.isFiltered == false &&
-                                                textController.text.isEmpty)
-                                            ? null
-                                            : () {
-                                                ContactsFiltersCubit.get(ctx)
-                                                    .onClearData();
-                                                textController.clear();
-                                                textFoucus.unfocus();
-                                              },
-                                        label: const Text('Clear Filters'),
-                                        icon: const Icon(
-                                          Icons.clear,
-                                          color: Colors.red,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        Scrollbar(
+                          child: BlocBuilder<ContactsCubit, ContactCubitStates>(
+                            builder: (context, state) {
+                              return SizedBox(
+                                height: deviceSize.height * 0.61,
+                                child: (ContactsFiltersCubit.get(context)
+                                        .state
+                                        .isFiltered)
+                                    ? ContactsWidget(state.tempList)
+                                    : ContactsWidget(state.listContacts),
                               );
                             },
                           ),
-                          Scrollbar(
-                            child: BlocBuilder<ContactsCubit, ContactCubitStates>(
-                              builder: (context, state) {
-                                return SizedBox(
-                                  height: deviceSize.height * 0.61,
-                                  child: (state.contactStates ==
-                                          ContactsEnumStates.success)
-                                      ? ContactsWidget(state.listContacts)
-                                      : ContactsWidget(state.tempList),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
+              ),
+            );
+            // } else {
+            //   return const Center(child: CircularProgressIndicator());
+            // }
           },
         ),
       ),
