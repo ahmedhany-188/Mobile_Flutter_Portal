@@ -77,7 +77,7 @@ class Data {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['news_ID'] = this.newsID;
     data['news_Description'] = this.newsDescription;
     data['news_Body'] = this.newsBody;
