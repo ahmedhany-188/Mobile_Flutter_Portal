@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class AuthenticationProvider{
@@ -9,7 +10,9 @@ class AuthenticationProvider{
     )
         // .timeout(Duration(seconds: 20))
     ;
-    print(rawAttendanceData.body);
+    if (kDebugMode) {
+      print(rawAttendanceData.body);
+    }
     return rawAttendanceData;
   }
 
@@ -19,7 +22,9 @@ class AuthenticationProvider{
           "https://api.hassanallam.com/api/Employee/GetEmployee?HRCode=$hrCode"),
     );
 
-    print(rawAttendanceData.body);
+    if (kDebugMode) {
+      print(rawAttendanceData.body);
+    }
     return rawAttendanceData;
   }
 }

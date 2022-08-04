@@ -1,5 +1,4 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +10,6 @@ import 'package:hassanallamportalflutter/data/models/admin_requests_models/busin
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:meta/meta.dart';
-import 'package:intl/intl.dart';
 
 part 'business_card_state.dart';
 
@@ -42,11 +40,11 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
     else {
       final requestData = await requestRepository.geBusinessCard(requestNo!);
 
-      print("-----------" + requestData.faxNo.toString());
-      print("-----------" + requestData.employeeExt.toString());
-      print("-----------" + requestData.employeeNameCard.toString());
-      print("-----------" + requestData.employeeMobil.toString());
-      print("-----------" + requestData.employeeComments.toString());
+      print("-----------${requestData.faxNo}");
+      print("-----------${requestData.employeeExt}");
+      print("-----------${requestData.employeeNameCard}");
+      print("-----------${requestData.employeeMobil}");
+      print("-----------${requestData.employeeComments}");
 
       final requestDate = RequestDate.dirty(
           GlobalConstants.dateFormatViewed.format(

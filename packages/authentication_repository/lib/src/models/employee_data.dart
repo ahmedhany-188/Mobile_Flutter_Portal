@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class EmployeeData extends Equatable {
-
+ //TODO: change null data types
   final String? userHrCode;
   final Null? applications;
   final int? fingerPrintGroup;

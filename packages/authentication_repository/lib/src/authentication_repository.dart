@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:authentication_repository/src/authentication_provider.dart';
 // import 'package:firebase_auth/f
 import 'package:firebase_auth/firebase_auth.dart'as flutter_firebase_auth;
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:authentication_repository/authentication_repository.dart';
@@ -20,7 +19,7 @@ class AuthenticationRepository {
   late SharedPreferences shared_User;
   final firebase_auth.FirebaseAuth _firebaseAuth = firebase_auth.FirebaseAuth.instance;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  DatabaseReference _databaseReferenceUsers = FirebaseDatabase.instance.ref("Users");
+  // DatabaseReference _databaseReferenceUsers = FirebaseDatabase.instance.ref("Users");
 
   static final AuthenticationRepository? _singleton = AuthenticationRepository();
   static getInstance(){
