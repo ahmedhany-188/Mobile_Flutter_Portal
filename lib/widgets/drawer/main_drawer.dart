@@ -406,15 +406,15 @@ class _MainDrawerState extends State<MainDrawer> {
                                       context, UserProfileScreen.routeName);
                                 },
                               ),
-                              buildDivider(),
-                              buildListTile(
-                                'Get Direction',
-                                Icons.nature_people,
-                                () {
-                                  Navigator.of(context).popAndPushNamed(
-                                      GetDirectionScreen.routeName);
-                                },
-                              ),
+                              // buildDivider(),
+                              // buildListTile(
+                              //   'Get Direction',
+                              //   Icons.nature_people,
+                              //   () {
+                              //     Navigator.of(context).popAndPushNamed(
+                              //         GetDirectionScreen.routeName);
+                              //   },
+                              // ),
                               buildDivider(),
                               buildListTile(
                                 'My Attendance',
@@ -470,26 +470,26 @@ class _MainDrawerState extends State<MainDrawer> {
                                       .popAndPushNamed(PollsScreen.routeName);
                                 },
                               ),
-                              buildDivider(),
-                              buildListTile(
-                                'News',
-                                Icons.list,
-                                () {
-                                  Navigator.of(context)
-                                      .popAndPushNamed(NewsScreen.routeName);
-                                },
-                              ),
-                              buildDivider(),
-                              buildListTile(
-                                'EconomyNews',
-                                Icons.waterfall_chart,
-                                () {
-                                  Navigator.popAndPushNamed(
-                                      context, EconomyNewsScreen.routeName);
-                                },
-                              ),
-                              buildDivider(),
-                              buildExpansionTile(),
+                              // buildDivider(),
+                              // buildListTile(
+                              //   'News',
+                              //   Icons.list,
+                              //   () {
+                              //     Navigator.of(context)
+                              //         .popAndPushNamed(NewsScreen.routeName);
+                              //   },
+                              // ),
+                              // buildDivider(),
+                              // buildListTile(
+                              //   'EconomyNews',
+                              //   Icons.waterfall_chart,
+                              //   () {
+                              //     Navigator.popAndPushNamed(
+                              //         context, EconomyNewsScreen.routeName);
+                              //   },
+                              // ),
+                              // buildDivider(),
+                              // buildExpansionTile(),
 
                               ///NewsLetter
 

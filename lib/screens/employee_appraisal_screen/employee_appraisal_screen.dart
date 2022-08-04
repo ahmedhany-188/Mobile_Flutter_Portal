@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -8,7 +7,6 @@ import 'package:hassanallamportalflutter/bloc/employee_appraisal_screen_bloc/emp
 import 'package:hassanallamportalflutter/data/models/appraisal_models/employee_appraisal_model.dart';
 import 'package:hassanallamportalflutter/data/models/appraisal_models/object_appraisal_model.dart';
 import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_ticket_widget.dart';
-import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 
 class EmployeeAppraisalScreen extends StatefulWidget {
 

@@ -64,41 +64,41 @@ class MenuScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () async {
-                  Navigator.of(context).pushNamed(AboutScreen.routeName);
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 5),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    gradient: const LinearGradient(
-                        colors: [
-                          Color(0xFF1a4c78),
-                          Color(0xFF3772a6),
-                        ],
-                        begin: Alignment.bottomLeft,
-                        end: Alignment.topRight,
-                        tileMode: TileMode.clamp),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Flexible(
-                        child: Text(
-                          'About',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w400,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+              // InkWell(
+              //   onTap: () async {
+              //     Navigator.of(context).pushNamed(AboutScreen.routeName);
+              //   },
+              //   child: Container(
+              //     margin: const EdgeInsets.only(bottom: 5),
+              //     decoration: BoxDecoration(
+              //       borderRadius: BorderRadius.circular(20),
+              //       gradient: const LinearGradient(
+              //           colors: [
+              //             Color(0xFF1a4c78),
+              //             Color(0xFF3772a6),
+              //           ],
+              //           begin: Alignment.bottomLeft,
+              //           end: Alignment.topRight,
+              //           tileMode: TileMode.clamp),
+              //     ),
+              //     child: Column(
+              //       crossAxisAlignment: CrossAxisAlignment.center,
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: const [
+              //         Flexible(
+              //           child: Text(
+              //             'About',
+              //             style: TextStyle(
+              //               fontSize: 20,
+              //               fontWeight: FontWeight.w400,
+              //               color: Colors.white,
+              //             ),
+              //           ),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
               Container(
                 margin: const EdgeInsets.only(bottom: 5),
                 decoration: BoxDecoration(
