@@ -110,6 +110,9 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                         }
                       }
 
+                      //sorting after selecting
+                      searchResult.sort((a,b) => b.reqDate?.compareTo(a.reqDate!) ?? 0);
+
                       setState(() {
                         isSelected[index].value = !isSelected[index].value;
                       });

@@ -82,7 +82,7 @@ class MyRequestsItemWidget extends StatelessWidget {
                                   // overflow: TextOverflow.ellipsis,
                                 ),
                                 Text(
-                                  '#${listFromRequestScreen[index].requestNo}'.trim(),
+                                  '# ${listFromRequestScreen[index].requestNo}'.trim(),
                                   style: const TextStyle(
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.w600,
@@ -121,7 +121,7 @@ class MyRequestsItemWidget extends StatelessWidget {
                               // ),
                               MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
                               Text(
-                                '${listFromRequestScreen[index].rDate}',
+                                GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(listFromRequestScreen[index].reqDate ?? "")),
                                 style: const TextStyle(
                                   fontSize: 13.0,
                                   color: Colors.white,
