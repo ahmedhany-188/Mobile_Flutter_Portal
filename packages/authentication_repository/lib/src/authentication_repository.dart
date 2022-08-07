@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:authentication_repository/src/authentication_provider.dart';
 // import 'package:firebase_auth/f
 import 'package:firebase_auth/firebase_auth.dart'as flutter_firebase_auth;
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:authentication_repository/authentication_repository.dart';
@@ -20,7 +19,7 @@ class AuthenticationRepository {
   late SharedPreferences shared_User;
   final firebase_auth.FirebaseAuth _firebaseAuth = firebase_auth.FirebaseAuth.instance;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  DatabaseReference _databaseReferenceUsers = FirebaseDatabase.instance.ref("Users");
+  // DatabaseReference _databaseReferenceUsers = FirebaseDatabase.instance.ref("Users");
 
   static final AuthenticationRepository? _singleton = AuthenticationRepository();
   static getInstance(){
@@ -40,7 +39,7 @@ class AuthenticationRepository {
     try{
       await _firebaseAuth.currentUser?.reload();
     }on firebase_auth.FirebaseAuthException catch (e){
-      if (e.code == 'user-disabled') {
+      if (e.code == 'user-disabled'|| e.code == 'user-not-found') {
         // User is disabled.
         // _controller.add(MainUserData.empty);
         await Future.wait([
@@ -175,7 +174,12 @@ class AuthenticationRepository {
         password: password,
       );
     } on flutter_firebase_auth.FirebaseAuthException catch (e) {
-      throw LogInWithEmailAndPasswordFailureFirebase.fromCode(e.code);
+
+      if(e.code.contains('user-not-found')){
+        await signUp(email: email, password: password);
+      }else{
+        throw LogInWithEmailAndPasswordFailureFirebase.fromCode(e.code);
+      }
     } catch (_) {
       throw const LogInWithEmailAndPasswordFailureFirebase();
     }
@@ -207,6 +211,8 @@ class AuthenticationRepository {
       // try{
       // await firebase_auth.FirebaseAuth.instance.currentUser?.reload();
       // if(_firebaseAuth.currentUser != null){
+
+      if(_firebaseAuth.currentUser != null) {
         print(_firebaseAuth.currentUser);
         // String? data = shared_User.getString(userCacheKey);
         // Map userMap = jsonDecode(data!);
@@ -218,9 +224,13 @@ class AuthenticationRepository {
         var user = User.fromJson(userMap as Map<String, dynamic>);
         String? dataEmployee = shared_User.getString(employeeCacheKey);
         Map employeeMap = jsonDecode(dataEmployee!);
-        var employeeData = EmployeeData.fromJson(employeeMap as Map<String, dynamic>);
-        var mainUserData = MainUserData(user: user,employeeData: employeeData);
+        var employeeData = EmployeeData.fromJson(
+            employeeMap as Map<String, dynamic>);
+        var mainUserData = MainUserData(user: user, employeeData: employeeData);
         return mainUserData;
+      }else{
+        return MainUserData.empty;
+      }
       // }else{
       //   return User.empty;
       // }

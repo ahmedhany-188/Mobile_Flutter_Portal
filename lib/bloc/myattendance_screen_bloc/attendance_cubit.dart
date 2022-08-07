@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/data/data_providers/attendance_data_provider/attendance_data_provider.dart';
 import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/attendance_repository.dart';
 part 'attendance_state.dart';
@@ -28,7 +27,7 @@ class AttendanceCubit extends Cubit<AttendanceState> {
           emit(BlocGetTheAttendanceSuccessState(value,monthNumber));
         }).catchError((error){
 
-          print("Err0r: "+error.toString());
+          print("Err0r: $error");
           emit(BlocGetTheAttendanceErrorState(error.toString()));
         });
 
@@ -36,7 +35,7 @@ class AttendanceCubit extends Cubit<AttendanceState> {
         emit(BlocGetTheAttendanceErrorState("No internet connection"));
       }
     }catch(e){
-      print("Err0r2: "+e.toString());
+      print("Err0r2: $e");
       emit(BlocGetTheAttendanceErrorState(e.toString()));
     }
 

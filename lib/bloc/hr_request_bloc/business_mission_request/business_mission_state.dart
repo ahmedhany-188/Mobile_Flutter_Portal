@@ -3,7 +3,7 @@ part of 'business_mission_cubit.dart';
 abstract class BusinessMissionState extends Equatable {
   const BusinessMissionState();
 
-  BusinessMissionState.copyWith({required RequestDate requestDate, required FormzStatus status}) {}
+  const BusinessMissionState.copyWith({required RequestDate requestDate, required FormzStatus status});
 }
 
 class BusinessMissionInitial extends BusinessMissionState {

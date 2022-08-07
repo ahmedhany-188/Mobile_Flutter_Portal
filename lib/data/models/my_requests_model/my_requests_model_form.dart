@@ -1,6 +1,8 @@
+import 'package:equatable/equatable.dart';
+
 import '../../../constants/constants.dart';
 
-class MyRequestsModelData {
+class MyRequestsModelData extends Equatable {
   int? id;
   int? requestNo;
   String? serviceID;
@@ -46,7 +48,7 @@ class MyRequestsModelData {
     statusName = json['status_Name'];
     reqName = json['req_Name'];
     responsbleperson = json['responsbleperson'];
-    rDate = GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(json['rDate'] ?? ""));
+    rDate = json['rDate'];
   }
 
   Map<String, dynamic> toJson() {
@@ -67,4 +69,9 @@ class MyRequestsModelData {
     data['rDate'] = this.rDate;
     return data;
   }
+
+  @override
+  // TODO: implement props
+  List<Object?> get props => [id,requestNo,reqDate,serviceName];
+
 }
