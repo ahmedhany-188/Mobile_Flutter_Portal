@@ -1278,7 +1278,7 @@ class HomeScreen extends StatelessWidget {
                       ? Container(
                           margin: EdgeInsets.only(top: 12.sp),
                           width: 100.w,
-                          height: 140.sp,
+                          height: 30.h,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: NewsSliderList(
@@ -1368,10 +1368,10 @@ class HomeScreen extends StatelessWidget {
   }
 
   _buildHomeScreenContent(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10.0, right: 10.0),
+    return SizedBox(
+      height: 55.h,
       child: GridView(
-        padding: EdgeInsets.zero,
+        padding: const EdgeInsets.only(left: 10.0, right: 10.0),
         shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -1538,9 +1538,7 @@ class HomeScreen extends StatelessWidget {
               ];
             },
             onSelected: (index) => Navigator.of(context).pushNamed(
-                (index == 1)
-                    ? PhotosScreen.routeName
-                    : VideosScreen.routeName),
+                (index == 1) ? PhotosScreen.routeName : VideosScreen.routeName),
           ),
           InkWell(
             onTap: () {
@@ -1748,6 +1746,7 @@ class NewsSliderList extends StatelessWidget {
           },
           child: Hero(
             tag: 'imageId$index',
+            transitionOnUserGestures: true,
             child: Container(
               width: 27.w,
               margin: const EdgeInsets.symmetric(
@@ -1881,7 +1880,7 @@ class ShimmerHomeNewsSlider extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(top: 12.sp),
         width: 100.w,
-        height: 140.sp,
+        height: 30.h,
         child: Padding(
           padding: const EdgeInsets.only(left: 8.0),
           child: ListView.builder(
@@ -1923,7 +1922,7 @@ class ShimmerAnnouncement extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.only(top: 9.0.sp, bottom: 9.0.sp),
         child: SizedBox(
-          height: 3.h,
+          height: 14.sp,
           width: 100.w,
         ),
       ),

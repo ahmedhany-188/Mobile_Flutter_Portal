@@ -1,21 +1,26 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/request_service_id.dart';
 
+import '../../../../constants/constants.dart';
 import '../../../../constants/enums.dart';
 import '../../../../data/data_providers/general_dio/general_dio.dart';
+import '../../../../data/models/contacts_related_models/contacts_data_from_api.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/departments_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/business_unit_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/equipments_location_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
+import '../../../../data/models/requests_form_models/request_date.dart';
+import '../../../../data/models/requests_form_models/request_date_from.dart';
 import '../../../../data/repositories/request_repository.dart';
 
 part 'equipments_state.dart';
 
 class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
-  EquipmentsCubit(this.requestRepository)
+  EquipmentsCubit(this._requestRepository)
       : super(const EquipmentsCubitStates()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (state.businessUnitEnumStates == EquipmentsEnumState.failed) {
@@ -39,28 +44,84 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   static EquipmentsCubit get(context) => BlocProvider.of(context);
 
   final Connectivity connectivity = Connectivity();
-  final RequestRepository requestRepository;
+  final RequestRepository _requestRepository;
 
-  // void getEquipmentsData(RequestStatus requestStatus, String? requestNo) async {
-  //   final requestData = await requestRepository.getEquipments(requestNo!);
-  //
-  //   var status = "Pending";
-  //   if (requestData.status == 0) {
-  //     status = "Pending";
-  //   } else if (requestData.status == 1) {
-  //     status = "Approved";
-  //   } else if (requestData.status == 2) {
-  //     status = "Rejected";
-  //   }
-  //
-  //   emit(
-  //     state.copyWith(
-  //       requestStatus: RequestStatus.oldRequest,
-  //       statusAction: status,
-  //       // takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
-  //     ),
-  //   );
-  // }
+
+  void getRequestData({required RequestStatus requestStatus , String? requestNo,String? requesterHRCode,String? date}) async {
+    if (requestStatus == RequestStatus.newRequest){
+      var now = DateTime.now();
+      String formattedDate = GlobalConstants.dateFormatViewed.format(now);
+
+      if(date!=null){
+        formattedDate = GlobalConstants.dateFormatViewed.format(DateTime.parse(date));
+      }else{
+        formattedDate = GlobalConstants.dateFormatViewed.format(now);
+      }
+
+      final requestDate = RequestDate.dirty(formattedDate);
+      emit(
+        state.copyWith(
+            // requestDate: requestDate,
+            // status: Formz.validate([requestDate,
+            //   state.vacationFromDate,state.vacationToDate]),
+            requestStatus: RequestStatus.newRequest
+        ),
+      );
+    }else {
+
+      // emit(state.copyWith(status: FormzStatus.submissionInProgress));
+      EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
+      final requestData = await _requestRepository.getEquipmentData(
+          requestNo!, requesterHRCode!);
+
+      ContactsDataFromApi responsiblePerson;
+      if(requestData.ownerName != null){
+        responsiblePerson =  ContactsDataFromApi(
+            email: requestData.ownerName!.contains("null")
+                ? "No Data"
+                : requestData.ownerName,
+            name: requestData.ownerName!.contains("null") ||
+                requestData.ownerName!.isEmpty ? "No Data" : requestData
+                .ownerName);
+      }else{
+        responsiblePerson = const ContactsDataFromApi(
+            email:  "No Data",
+            name:  "No Data");
+      }
+
+      // final requestDate = RequestDate.dirty(
+      //     GlobalConstants.dateFormatViewed.format(
+      //         GlobalConstants.dateFormatServer.parse(requestData.date!)));
+
+      var status = "Pending";
+      if (requestData.status == 0) {
+        status = "Pending";
+      } else if (requestData.status == 1) {
+        status = "Approved";
+      } else if (requestData.status == 2) {
+        status = "Rejected";
+      }
+
+
+      emit(
+        state.copyWith(
+            // requestDate: requestDate,
+            // vacationType: int.parse(requestData.vacationType ?? "1"),
+            // responsiblePerson: responsiblePerson,
+            // comment: comments,
+            status: FormzStatus.submissionSuccess,
+            requestStatus: RequestStatus.oldRequest,
+            statusAction: status,
+        //     takeActionStatus: (_requestRepository.userData.user?.userHRCode ==
+        //         requestData.requestHrCode)
+        //         ? TakeActionStatus.view
+        //         : TakeActionStatus.takeAction
+        ),
+      );
+    }
+  }
+
+
 
   void postEquipmentsRequest({
     required DepartmentsModel departmentObject,

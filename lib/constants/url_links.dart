@@ -42,6 +42,9 @@ getVacationDurationLink(int type,String dateFrom,String dateTo){
 getVacationRequestLink(String hrCode,String requestNo){
   return "https://api.hassanallam.com/api/SelfService/GetVacation?HRCode=$hrCode&requestno=$requestNo";
 }
+getEquipmentLink(String hrCode,String requestNo){
+  return "https://api.hassanallam.com/api/SelfService/GetEquipments?HRCode=$hrCode&requestno=$requestNo";
+}
 getBusinessCardLink(String hrCode,String requestNo){
   return "https://api.hassanallam.com/api/SelfService/GetBusinessCard?HRCode=$hrCode&requestno=$requestNo";
 }

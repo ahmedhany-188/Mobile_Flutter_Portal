@@ -109,14 +109,6 @@ class RequestRepository {
     return response;
   }
 
-  Future<EquipmentsRequestedModel> getEquipments(String requestNo) async{
-    final http.Response rawPermission = await requestDataProviders
-        .getEquipmentsRequestData(userData.user?.userHRCode ?? "",requestNo);
-    final json = await jsonDecode(rawPermission.body);
-    final EquipmentsRequestedModel response = EquipmentsRequestedModel.fromJson(json[0]);
-    return response;
-  }
-
   Future<AccessRightModel> getAccessRight(String requestNo) async{
     final http.Response rawPermission = await requestDataProviders
         .getAccessRightRequestData(userData.user?.userHRCode ?? "",requestNo);
@@ -305,6 +297,16 @@ class RequestRepository {
 
     return response;
   }
+
+  Future<EquipmentsRequestedModel> getEquipmentData(String requestNo,String requesterHRCode) async{
+    final http.Response rawRequestData = await requestDataProviders
+        .getEquipmentRequestData(requesterHRCode,requestNo);
+    final json = await jsonDecode(rawRequestData.body);
+    final EquipmentsRequestedModel response = EquipmentsRequestedModel.fromJson(json[0]);
+
+    return response;
+  }
+
   Future<BusinessMissionRequestData> getBusinessMissionRequestData(String requestNo) async{
     final http.Response rawRequestData = await requestDataProviders
         .getBusinessMissionRequestData(userData.user?.userHRCode ?? "",requestNo);

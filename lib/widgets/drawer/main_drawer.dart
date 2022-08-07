@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,7 +6,6 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../../bloc/login_cubit/login_cubit.dart';
-import '../../screens/news_screen/news_screen.dart';
 import '../../screens/polls_screen/polls_screen.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/statistics_bloc/statistics_cubit.dart';
@@ -15,8 +15,6 @@ import '../../screens/about_value_screen/about_screen.dart';
 import '../../screens/my_requests_screen/my_requests_screen.dart';
 import '../../screens/my_requests_screen/add_request_screen.dart';
 import '../../screens/myattendance_screen/attendance_screen.dart';
-import '../../screens/economy_news_screen/economy_news_screen.dart';
-import '../../screens/get_direction_screen/get_direction_screen.dart';
 import '../../screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 
 class MainDrawer extends StatefulWidget {
@@ -203,7 +201,7 @@ class _MainDrawerState extends State<MainDrawer> {
                                 child: CircleAvatar(
                                   radius: 29,
                                   // borderRadius: BorderRadius.circular(50),
-                                  backgroundImage: NetworkImage(
+                                  backgroundImage: CachedNetworkImageProvider(
                                     'https://portal.hassanallam.com/Apps/images/Profile/${user!.imgProfile}',
                                   ),
                                   onBackgroundImageError: (_, __) {
@@ -252,7 +250,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         ),
                       ),
                       SizedBox(
-                        height: 10.h,
+                        height: 12.h,
                         child: BlocProvider.value(
                             value: StatisticsCubit.get(context),
                             child:
@@ -394,7 +392,7 @@ class _MainDrawerState extends State<MainDrawer> {
                             )),
                       ),
                       SizedBox(
-                        height: 70.h,
+                        height: 69.h,
                         child: SingleChildScrollView(
                           child: Column(
                             children: [

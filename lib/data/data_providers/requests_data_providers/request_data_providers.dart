@@ -79,18 +79,16 @@ class RequestDataProviders {
     return rawDurationData;
   }
 
-  Future<http.Response> getBusinessCardRequestData(String hrCode,String requestNo) async{
+  Future<http.Response> getEquipmentRequestData(String hrCode,String requestNo) async{
     http.Response rawDurationData = await http.get(
-      Uri.parse(getBusinessCardLink(hrCode,requestNo)),
+      Uri.parse(getEquipmentLink(hrCode,requestNo)),
     );
-    print(rawDurationData.body);
     return rawDurationData;
   }
 
-  Future<http.Response> getEquipmentsRequestData(String hrCode,String requestNo) async{
+  Future<http.Response> getBusinessCardRequestData(String hrCode,String requestNo) async{
     http.Response rawDurationData = await http.get(
-      Uri.parse(
-          "https://api.hassanallam.com/api/SelfService/GetEquipments?HRCode=$hrCode&requestno=$requestNo"),
+      Uri.parse(getBusinessCardLink(hrCode,requestNo)),
     );
     print(rawDurationData.body);
     return rawDurationData;
