@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/constants/request_service_id.dart';
+import 'package:heroicons/heroicons.dart';
 
 import '../../../../constants/constants.dart';
 import '../../../../constants/enums.dart';
@@ -123,6 +125,51 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       );
       EasyLoading.dismiss();
     }
+  }
+
+
+  Widget getIconByGroupName(String groupName){
+    switch (groupName){
+      case 'Accessories':
+        return const Icon(Icons.keyboard_alt_outlined);
+      case 'Laptop':
+        return const Icon(Icons.laptop_chromebook_outlined);
+      case 'Datashow / projector':
+        return const Icon(Icons.live_tv);
+      case 'Desktop':
+        return const Icon(Icons.computer_outlined);
+      case 'Toner/Ink':
+        return const Icon(Icons.water_drop);
+      case 'Network':
+        return const HeroIcon(HeroIcons.globe);
+      case 'Server':
+        return const HeroIcon(HeroIcons.server);
+      case 'Printer':
+        return const Icon(Icons.print_outlined);
+      case 'Telephones':
+        return const Icon(Icons.call);
+      case 'Internet connection':
+        return const Icon(Icons.network_wifi_outlined);
+      case 'Fingerprint':
+        return const Icon(Icons.fingerprint);
+
+
+    }
+    return const Icon(Icons.access_alarm_outlined);
+
+  }
+  String? getRequestForFromType(int type){
+    switch (type) {
+      case 1:
+        return 'New Hire';
+      case 2:
+        return 'Replacement / New Item';
+      case 3:
+        return 'Training';
+      case 4:
+        return 'Mobilization';
+    }
+    return null;
   }
 
   void postEquipmentsRequest({

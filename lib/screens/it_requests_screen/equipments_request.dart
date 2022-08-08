@@ -483,13 +483,18 @@ class EquipmentsRequest extends StatelessWidget {
                                       Center(
                                           child: (state.requestStatus ==
                                                   RequestStatus.oldRequest)
-                                              ? null
+                                              ? EquipmentsCubit.get(context)
+                                                  .getIconByGroupName(state
+                                                      .requestedData!
+                                                      .data![0]
+                                                      .groupName!)
                                               : state.chosenList[index].icon!),
                                       Text(
                                         (state.requestStatus ==
                                                 RequestStatus.oldRequest)
                                             ? state.requestedData!.data![index]
                                                 .hardWareItemName!
+                                                .trim()
                                             : state.chosenList[index]
                                                 .selectedItem!.hardWareItemName!
                                                 .trim(),
@@ -499,7 +504,12 @@ class EquipmentsRequest extends StatelessWidget {
                                       Text(
                                         (state.requestStatus ==
                                                 RequestStatus.oldRequest)
-                                            ? 'Request for'
+                                            ? EquipmentsCubit.get(context)
+                                                .getRequestForFromType(state
+                                                    .requestedData!
+                                                    .data![index]
+                                                    .type!)!
+                                                .trim()
                                             : state
                                                 .chosenList[index].requestFor!
                                                 .trim(),
@@ -512,7 +522,7 @@ class EquipmentsRequest extends StatelessWidget {
                                         style: TextStyle(fontSize: 18.sp),
                                       ),
                                       Text(
-                                        'Owner: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].ownerName : state.chosenList[index].selectedContact!.name!.trim().toLowerCase()}',
+                                        'Owner: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].ownerName!.trim() : state.chosenList[index].selectedContact!.name!.trim().toLowerCase()}',
                                         softWrap: false,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
