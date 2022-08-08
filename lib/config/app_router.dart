@@ -112,7 +112,7 @@ class AppRouter {
 
       case DirectManagerProfileScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) =>  DirectManagerProfileScreen(),
+          builder: (_) =>  DirectManagerProfileScreen(requestData: settings.arguments),
         );
 
       case EconomyNewsScreen.routeName:
@@ -213,7 +213,7 @@ class AppRouter {
 
       case EquipmentsRequest.routeName:
         return MaterialPageRoute(
-            builder: (_) => EquipmentsRequest());
+            builder: (_) => EquipmentsRequest(requestData: settings.arguments,));
 
       case AddRequestScreen.routeName:
         return MaterialPageRoute(

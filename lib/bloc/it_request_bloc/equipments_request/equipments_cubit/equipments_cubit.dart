@@ -1,21 +1,26 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:formz/formz.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/constants/request_service_id.dart';
+import 'package:heroicons/heroicons.dart';
 
+import '../../../../constants/constants.dart';
 import '../../../../constants/enums.dart';
 import '../../../../data/data_providers/general_dio/general_dio.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/departments_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/business_unit_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/equipments_location_model.dart';
+import '../../../../data/models/it_requests_form_models/equipments_models/equipments_requested_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
+import '../../../../data/models/requests_form_models/request_date.dart';
 import '../../../../data/repositories/request_repository.dart';
 
 part 'equipments_state.dart';
 
 class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
-  EquipmentsCubit(this.requestRepository)
+  EquipmentsCubit(this._requestRepository)
       : super(const EquipmentsCubitStates()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (state.businessUnitEnumStates == EquipmentsEnumState.failed) {
@@ -39,28 +44,133 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   static EquipmentsCubit get(context) => BlocProvider.of(context);
 
   final Connectivity connectivity = Connectivity();
-  final RequestRepository requestRepository;
+  final RequestRepository _requestRepository;
 
-  // void getEquipmentsData(RequestStatus requestStatus, String? requestNo) async {
-  //   final requestData = await requestRepository.getEquipments(requestNo!);
-  //
-  //   var status = "Pending";
-  //   if (requestData.status == 0) {
-  //     status = "Pending";
-  //   } else if (requestData.status == 1) {
-  //     status = "Approved";
-  //   } else if (requestData.status == 2) {
-  //     status = "Rejected";
-  //   }
-  //
-  //   emit(
-  //     state.copyWith(
-  //       requestStatus: RequestStatus.oldRequest,
-  //       statusAction: status,
-  //       // takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
-  //     ),
-  //   );
-  // }
+  void getRequestData(
+      {required RequestStatus requestStatus,
+      String? requestNo,
+      String? requesterHRCode,
+      String? date}) async {
+    if (requestStatus == RequestStatus.newRequest) {
+      var now = DateTime.now();
+      String formattedDate = GlobalConstants.dateFormatViewed.format(now);
+
+      if (date != null) {
+        formattedDate =
+            GlobalConstants.dateFormatViewed.format(DateTime.parse(date));
+      } else {
+        formattedDate = GlobalConstants.dateFormatViewed.format(now);
+      }
+
+      final requestDate = RequestDate.dirty(formattedDate);
+      emit(
+        state.copyWith(
+          requestDate: requestDate,
+          requestStatus: RequestStatus.newRequest,
+        ),
+      );
+    } else {
+      EasyLoading.show(
+        status: 'Loading...',
+        maskType: EasyLoadingMaskType.black,
+        dismissOnTap: false,
+      );
+      final requestData = await _requestRepository.getEquipmentData(
+          requestNo!, requesterHRCode!);
+
+      // ContactsDataFromApi responsiblePerson;
+      // if(requestData.ownerName != null){
+      //   responsiblePerson =  ContactsDataFromApi(
+      //       email: requestData.ownerName!.contains("null")
+      //           ? "No Data"
+      //           : requestData.ownerName,
+      //       name: requestData.ownerName!.contains("null") ||
+      //           requestData.ownerName!.isEmpty ? "No Data" : requestData
+      //           .ownerName);
+      // }else{
+      //   responsiblePerson = const ContactsDataFromApi(
+      //       email:  "No Data",
+      //       name:  "No Data");
+      // }
+
+      // final requestDate = RequestDate.dirty(
+      //     GlobalConstants.dateFormatViewed.format(
+      //         GlobalConstants.dateFormatServer.parse(requestData.date!)));
+
+      var status = "Pending";
+      if (requestData.data![0].status == 0) {
+        status = "Pending";
+      } else if (requestData.data![0].status == 1) {
+        status = "Approved";
+      } else if (requestData.data![0].status == 2) {
+        status = "Rejected";
+      }
+
+
+      emit(
+        state.copyWith(
+          requestedData: requestData,
+          // requestDate: requestDate,
+          // vacationType: int.parse(requestData.vacationType ?? "1"),
+          // responsiblePerson: responsiblePerson,
+          // comment: comments,
+          // status: FormzStatus.submissionSuccess,
+          requestStatus: RequestStatus.oldRequest,
+          statusAction: status,
+          //     takeActionStatus: (_requestRepository.userData.user?.userHRCode ==
+          //         requestData.requestHrCode)
+          //         ? TakeActionStatus.view
+          //         : TakeActionStatus.takeAction
+        ),
+      );
+      EasyLoading.dismiss();
+    }
+  }
+
+
+  Widget getIconByGroupName(String groupName){
+    switch (groupName){
+      case 'Accessories':
+        return const Icon(Icons.keyboard_alt_outlined);
+      case 'Laptop':
+        return const Icon(Icons.laptop_chromebook_outlined);
+      case 'Datashow / projector':
+        return const Icon(Icons.live_tv);
+      case 'Desktop':
+        return const Icon(Icons.computer_outlined);
+      case 'Toner/Ink':
+        return const Icon(Icons.water_drop);
+      case 'Network':
+        return const HeroIcon(HeroIcons.globe);
+      case 'Server':
+        return const HeroIcon(HeroIcons.server);
+      case 'Printer':
+        return const Icon(Icons.print_outlined);
+      case 'Telephones':
+        return const Icon(Icons.call);
+      case 'Internet connection':
+        return const Icon(Icons.network_wifi_outlined);
+      case 'Fingerprint':
+        return const Icon(Icons.fingerprint);
+
+
+    }
+    return const Icon(Icons.access_alarm_outlined);
+
+  }
+  String? getRequestForFromType(int type){
+    switch (type) {
+      case 1:
+        return 'New Hire';
+      case 2:
+        return 'Replacement / New Item';
+      case 3:
+        return 'Training';
+      case 4:
+        return 'Mobilization';
+    }
+    return null;
+  }
 
   void postEquipmentsRequest({
     required DepartmentsModel departmentObject,

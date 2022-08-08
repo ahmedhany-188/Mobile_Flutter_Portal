@@ -3,17 +3,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/business_card_request/business_card_cubit.dart';
-import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/embassy_letter_request/embassy_letter_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/apps_screen_bloc/apps_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
-import 'package:hassanallamportalflutter/bloc/it_request_bloc/access_right_request/access_right_cubit.dart';
-import 'package:hassanallamportalflutter/bloc/it_request_bloc/email_useracount_request/email_useraccount_cubit.dart';
-import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
-import 'package:hassanallamportalflutter/bloc/my_requests_detail_screen_bloc/my_requests_detail_cubit.dart';
-import 'package:hassanallamportalflutter/bloc/my_requests_screen_bloc/my_requests_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
@@ -21,9 +15,6 @@ import 'package:hassanallamportalflutter/bloc/statistics_bloc/statistics_cubit.d
 import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.dart';
 import 'package:hassanallamportalflutter/data/repositories/upgrader_repository.dart';
 import 'package:hassanallamportalflutter/life_cycle_states.dart';
-import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
-import 'package:hassanallamportalflutter/screens/apps_screen/apps_screen.dart';
-import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -42,9 +33,7 @@ import './bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import './bloc/payslip_screen_bloc/payslip_cubit.dart';
 import './bloc/subsidiaries_screen_bloc/subsidiaries_cubit.dart';
 import 'bloc/auth_app_status_bloc/app_bloc.dart';
-import 'bloc/it_request_bloc/equipments_request/equipments_cubit/equipments_cubit.dart';
 import 'bloc/login_cubit/login_cubit.dart';
-import 'bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'bloc/videos_screen_bloc/videos_cubit.dart';
 import 'data/data_providers/album_dio/album_dio.dart';
 import 'data/repositories/request_repository.dart';
@@ -52,6 +41,8 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   final storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
@@ -67,7 +58,6 @@ void main() async {
     storage: storage,
     blocObserver: AppBlocObserver(),
   );
-
 
   configLoading();
   await GeneralDio.init();
@@ -90,15 +80,16 @@ void configLoading() {
     ..dismissOnTap = false
     ..customAnimation = CustomAnimation();
 }
+
 class CustomAnimation extends EasyLoadingAnimation {
   CustomAnimation();
 
   @override
   Widget buildWidget(
-      Widget child,
-      AnimationController controller,
-      AlignmentGeometry alignment,
-      ) {
+    Widget child,
+    AnimationController controller,
+    AlignmentGeometry alignment,
+  ) {
     return Opacity(
       opacity: controller.value,
       child: RotationTransition(
@@ -132,10 +123,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final platform = Theme.of(context).platform;
-    final AuthenticationRepository _authenticationRepository =
+    // final platform = Theme.of(context).platform;
+    final AuthenticationRepository authenticationRepository =
         AuthenticationRepository.getInstance();
-    print("build");
     // _authenticationRepository.init();
 
     // LifeCycleStates(context);
@@ -210,13 +200,13 @@ class _MyAppState extends State<MyApp> {
 
           BlocProvider<AppBloc>(
             create: (authenticationContext) => AppBloc(
-              authenticationRepository: _authenticationRepository,
+              authenticationRepository: authenticationRepository,
             ),
           ),
 
           BlocProvider<LoginCubit>(
             create: (authenticationContext) =>
-                LoginCubit(_authenticationRepository),
+                LoginCubit(authenticationRepository),
           ),
           BlocProvider<PhotosCubit>(
             create: (photosContext) => PhotosCubit()..getPhotos(),
@@ -242,7 +232,7 @@ class _MyAppState extends State<MyApp> {
 
           BlocProvider<AppBloc>(
             create: (authenticationContext) => AppBloc(
-              authenticationRepository: _authenticationRepository,
+              authenticationRepository: authenticationRepository,
             ),
           ),
           BlocProvider<AppsCubit>(
@@ -281,7 +271,7 @@ class _MyAppState extends State<MyApp> {
             builder: EasyLoading.init(),
             theme: ThemeData(
               colorScheme: ColorScheme.fromSeed(
-                seedColor: Color.fromRGBO(23, 72, 115, 1),
+                seedColor: const Color.fromRGBO(23, 72, 115, 1),
               ),
               // primarySwatch: Colors.accents,
               visualDensity: VisualDensity.adaptivePlatformDensity,

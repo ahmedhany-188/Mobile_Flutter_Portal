@@ -48,11 +48,14 @@ class AttendanceTicketWidget extends StatelessWidget {
                     width: double.infinity,
                     child: InkWell(
                       onTap: () {
-                        showDialog(context: context,
-                            builder: (BuildContext context) {
-                              return DialogPopUpAttendance(
-                                  attendanceListData: attendanceListData[index],hrUser:hrUser);
-                            });
+                        if (attendanceListData[index].vacation == null && attendanceListData[index].holiday == false) {
+                          showDialog(context: context,
+                              builder: (BuildContext context) {
+                                return DialogPopUpAttendance(
+                                    attendanceListData: attendanceListData[index],
+                                    hrUser: hrUser);
+                              });
+                        }
                       },
                       child: Column(children: [
                         Text("${date[1]}/${date[2].substring(0, 2)}",
@@ -222,12 +225,14 @@ Container holidayContainer(MyAttendanceModel attendanceModel) {
       width: double.infinity,
       child: InkWell(
           onTap: () {
-            showDialog(context: context,
-                builder: (BuildContext context) {
-                  return DialogPopUpAttendance(
-                      attendanceListData: attendanceModel,hrUser:hrUser);
-                }
-            );
+            if (attendanceModel.vacation == null && attendanceModel.holiday != true ) {
+              showDialog(context: context,
+                  builder: (BuildContext context) {
+                    return DialogPopUpAttendance(
+                        attendanceListData: attendanceModel, hrUser: hrUser);
+                  }
+              );
+            }
           },
           child: Column(children: [
             Text(

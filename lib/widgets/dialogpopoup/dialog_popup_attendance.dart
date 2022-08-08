@@ -107,7 +107,13 @@ class DialogPopUpAttendanceClass extends State<DialogPopUpAttendance> {
                 child: Text("Create Request",
                   style: TextStyle(color: Colors.grey, fontSize: 20),),),
 
-              sizeBoxRequest("View Form",iconRequest(widget.attendanceListData)),
+        // if (attendanceListData[index].vacation == null && attendanceListData[index].holiday == false) {
+        //   sizeBoxRequest("View Form",iconRequest(widget.attendanceListData)),
+        //
+        // },
+              checkViewForm(widget.attendanceListData),
+
+
               sizeBoxRequest("Permission", Icon(Icons.timelapse)),
               // sizeBoxRequest("Forget sign", const Icon(Icons.fingerprint)),
               sizeBoxRequest("Business Mission", Icon(Icons.hail)),
@@ -132,6 +138,16 @@ class DialogPopUpAttendanceClass extends State<DialogPopUpAttendance> {
         ),
       ],
     );
+  }
+
+  Padding checkViewForm(MyAttendanceModel attendanceModel){
+
+    if (attendanceModel.vacation != null || attendanceModel.permission != null
+    || attendanceModel.businessMission != null){ // || attendanceModel.forget != null) {
+      return sizeBoxRequest("View Form",iconRequest(widget.attendanceListData));
+    }else{
+      return const Padding(padding: EdgeInsets.all(2.0),);
+    }
   }
 
 

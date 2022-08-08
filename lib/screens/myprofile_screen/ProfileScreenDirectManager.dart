@@ -1,22 +1,24 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:authentication_repository/authentication_repository.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/profile_manager_screen_bloc/profile_manager_cubit.dart';
-import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_userprofile.dart';
-import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:vcard_maintained/vcard_maintained.dart';
-import 'package:rounded_loading_button/rounded_loading_button.dart';
+import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 
 
 class DirectManagerProfileScreen extends StatefulWidget {
 
   static const routeName = "/direct-manager-profile-screen";
-  const DirectManagerProfileScreen({Key? key}) : super(key: key);
+  static const  String employeeHrCode = "managerHrCode";
+  static const ContactsDataFromApi selectedContactDataAsMap=const ContactsDataFromApi() ;
+
+  const DirectManagerProfileScreen({Key? key,this.requestData}) : super(key: key);
+
+  final requestData;
 
   @override
   State<DirectManagerProfileScreen> createState() => DirectManagerProfileScreenClass();
@@ -24,10 +26,12 @@ class DirectManagerProfileScreen extends StatefulWidget {
 
 class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> {
 
-  final RoundedLoadingButtonController directManagerButton = RoundedLoadingButtonController();
 
   ScrollController scrollController = ScrollController();
-  
+
+  static String assetImage = 'assets/images/logo.png';
+
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery
@@ -44,10 +48,12 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
     ///Create a new vCard
     VCard vCard = VCard();
 
+    final currentRequestData = widget.requestData;
+
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text('My Profile'),
+          title: const Text(''),
           centerTitle: true,
         ),
 
@@ -55,13 +61,15 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
         resizeToAvoidBottomInset: false,
         body: BlocProvider<ProfileManagerCubit>(
             create: (context) =>
-            ProfileManagerCubit()
-              ..getManagerData(user.employeeData!.managerCode!),
+
+            currentRequestData[DirectManagerProfileScreen.employeeHrCode]!="0"?
+            (ProfileManagerCubit()..getManagerData(currentRequestData[DirectManagerProfileScreen.employeeHrCode])):
+            (ProfileManagerCubit()..getUserOffline(currentRequestData[DirectManagerProfileScreen.selectedContactDataAsMap])),
+
             child: BlocConsumer<ProfileManagerCubit, ProfileManagerState>(
                 listener: (context, state) {
+
                   if (state is BlocGetManagerDataSuccessState) {
-
-
 
                     ///Set properties
                     vCard.firstName = state.managerData.name!.toString();
@@ -74,9 +82,28 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                     vCard.cellPhone = state.managerData.mobile;
 
                   }
+
+                  // if(state is BlocGetManagerDataSuccessOfflineState){
+                  //
+                  //   ///Set properties
+                  //   vCard.firstName = state.employeeData.name!.toString();
+                  //   vCard.organization = state.employeeData.companyName!;
+                  //   // vCard.photo.attachFromUrl('/path/to/image/file.png', 'PNG');
+                  //   vCard.jobTitle = state.employeeData.titleName!;
+                  //   vCard.email = state.employeeData.email!;
+                  //   vCard.url = "https://hassanallam.com";
+                  //   vCard.workPhone = state.employeeData.deskPhone!;
+                  //   vCard.cellPhone = state.employeeData.mobile!;
+                  //
+                  // }
+
                   if (state is BlocGetManagerDataErrorState) {
-                    directManagerButton.error();
-                  }
+                    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text("error"),
+                      ),
+                    );                  }
                 },
                 builder: (context, state) {
                   return Container(
@@ -123,8 +150,9 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                                 height: 80,
                                               ),
 
-                                          Text(
-                                            state is BlocGetManagerDataSuccessState?state.managerData.name!:"",
+                                              Text(
+                                            state is BlocGetManagerDataSuccessState ?state.managerData.name!:"",
+
                                                   style: const TextStyle(
                                                   color: Color.fromRGBO(
                                                   39, 105, 171, 1),
@@ -133,7 +161,6 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                                   ),
                                                   textAlign: TextAlign.center,
                                                   ),
-
                                               Text(
                                                 state is BlocGetManagerDataSuccessState?state.managerData.titleName!:"",
                                                 style: const TextStyle(
@@ -143,7 +170,6 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                                   fontSize: 15,
                                                 ),
                                               ),
-
                                               Row(
                                                 mainAxisAlignment:
                                                 MainAxisAlignment.center,
@@ -227,12 +253,12 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                         right: 0,
                                         child: Center(
                                           child: CircleAvatar(
-                                            backgroundImage:
-                                            NetworkImage(
-                                              "https://portal.hassanallam.com/Apps/images/Profile/${
-                                                  state is BlocGetManagerDataSuccessState?state.managerData.userHrCode!:"10204738"
-                                                }.jpg"),
-
+                                            // backgroundImage:
+                                            backgroundColor: Colors.transparent,
+                                            foregroundImage:  state is BlocGetManagerDataSuccessState ?
+                                            NetworkImage("https://portal.hassanallam.com/Apps/images/Profile/"
+                                                "${state.managerData.userHrCode!}.jpg"):
+                                            AssetImage(assetImage) as ImageProvider,
                                             radius: 70,
                                           ),
                                         ),
@@ -335,27 +361,26 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                     Container(
                                         width: double.infinity,
                                         height: height * 0.08,
-                                        child: RoundedLoadingButton(
-                                          controller: directManagerButton,
-                                          onPressed: (){
-                                            Timer(Duration(seconds: 1), () {
-                                              directManagerButton.reset();
+                                        child: InkWell(
+                                          onTap: (){
                                               scrollController.animateTo(scrollController.position.minScrollExtent,  duration: Duration(milliseconds: 500), curve: Curves.ease);
-                                              BlocProvider.of<ProfileManagerCubit>(context)
-                                                  .getManagerData(
+                                              BlocProvider.of<ProfileManagerCubit>(context).getManagerData(
                                                   state is BlocGetManagerDataSuccessState?state.managerData.managerCode!:
                                                   user.employeeData!.managerCode!
                                               );
-                                            });
                                           },
-                                          child: Text(
-                                            'Direct Manager: \n${
-                                                state is BlocGetManagerDataSuccessState?state.managerData.managerCode!:""
+                                          child:
+                                          Text(
+                                            'Direct Manager: ${
+                                                // state is BlocGetManagerDataSuccessState?
+                                                // state.managerData.managerCode!:""
+                                                getDirectmanager(state)
                                               }',
                                             style: const TextStyle(
                                               color: Color.fromRGBO(
                                                   39, 105, 171, 1),
                                               fontSize: 16,
+                                              decoration: TextDecoration.underline,
                                               fontFamily: 'Nunito',),
                                             textAlign: TextAlign.left,),
                                         )
@@ -365,12 +390,10 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                       width: double.infinity,
                                       height: height * 0.08,
                                       child: Text(
-
-
                                         'Mobile Number: \n${
-                                            state is BlocGetManagerDataSuccessState?state.managerData.mobile!:""
+                                            // state is BlocGetManagerDataSuccessState?state.managerData.mobile:""
+                                            getMobile(state)
                                           }',
-
                                         style: const TextStyle(
                                           color: Color.fromRGBO(
                                               39, 105, 171, 1),
@@ -387,9 +410,10 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                       width: double.infinity,
                                       height: height * 0.08,
                                       child: Text(
-                                        //'Ext: \n' + employeeDataManager.deskPhone!,
-
-                                         state is BlocGetManagerDataSuccessState?state.managerData.deskPhone!:"",
+                                        'Ext: \n${
+                                       // state is BlocGetManagerDataSuccessState?state.managerData.deskPhone!:"",
+                                        getExt(state)
+                                          }',
                                         style: const TextStyle(
                                           color: Color.fromRGBO(
                                               39, 105, 171, 1),
@@ -413,4 +437,41 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
         )
     );
   }
+  String getDirectmanager(ProfileManagerState state){
+    if(state is BlocGetManagerDataSuccessState){
+      if(state.managerData.managerCode==null){
+        return "";
+      }else{
+        return state.managerData.managerCode!;
+      }
+    }
+    else{
+      return "";
+    }
+  }
+  String getMobile(ProfileManagerState state){
+    if(state is BlocGetManagerDataSuccessState){
+      if(state.managerData.mobile==null){
+        return "";
+      }else{
+        return state.managerData.mobile!;
+      }
+    }
+    else{
+      return "";
+    }
+  }
+  String getExt(ProfileManagerState state){
+    if(state is BlocGetManagerDataSuccessState){
+      if(state.managerData.deskPhone==null){
+        return "";
+      }else{
+        return state.managerData.deskPhone!;
+      }
+    }
+    else{
+      return "";
+    }
+  }
+
 }

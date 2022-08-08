@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -200,7 +201,7 @@ class _MainDrawerState extends State<MainDrawer> {
                                 child: CircleAvatar(
                                   radius: 29,
                                   // borderRadius: BorderRadius.circular(50),
-                                  backgroundImage: NetworkImage(
+                                  backgroundImage: CachedNetworkImageProvider(
                                     'https://portal.hassanallam.com/Apps/images/Profile/${user!.imgProfile}',
                                   ),
                                   onBackgroundImageError: (_, __) {
@@ -249,7 +250,7 @@ class _MainDrawerState extends State<MainDrawer> {
                         ),
                       ),
                       SizedBox(
-                        height: 10.h,
+                        height: 12.h,
                         child: BlocProvider.value(
                             value: StatisticsCubit.get(context),
                             child:
@@ -391,7 +392,7 @@ class _MainDrawerState extends State<MainDrawer> {
                             )),
                       ),
                       SizedBox(
-                        height: 70.h,
+                        height: 69.h,
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
