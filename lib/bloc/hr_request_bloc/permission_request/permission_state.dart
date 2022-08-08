@@ -20,6 +20,8 @@ class PermissionInitial extends PermissionState {
     this.comment = "",
     this.statusAction,
     this.takeActionStatus,
+    this.requesterData = EmployeeData.empty,
+    this.actionComment = "",
   });
 
   final RequestDate requestDate;
@@ -33,11 +35,13 @@ class PermissionInitial extends PermissionState {
   final String comment;
   final TakeActionStatus? takeActionStatus;
   final String? statusAction;
+  final EmployeeData requesterData;
+  final String actionComment;
 
   @override
   List<Object> get props =>
       [requestDate, permissionDate,
-        permissionType, permissionTime, status, comment];
+        permissionType, permissionTime, status, comment,actionComment];
 
   PermissionInitial copyWith({
     RequestDate? requestDate,
@@ -50,7 +54,9 @@ class PermissionInitial extends PermissionState {
     RequestStatus? requestStatus,
     String? comment,
     TakeActionStatus? takeActionStatus,
-    String? statusAction
+    String? statusAction,
+    EmployeeData? requesterData,
+    String? actionComment,
   }) {
     return PermissionInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -64,6 +70,8 @@ class PermissionInitial extends PermissionState {
       comment: comment ?? this.comment,
       statusAction: statusAction ?? this.statusAction,
       takeActionStatus: takeActionStatus ?? this.takeActionStatus,
+      requesterData: requesterData ?? this.requesterData,
+      actionComment: actionComment ?? this.actionComment,
     );
   }
 }

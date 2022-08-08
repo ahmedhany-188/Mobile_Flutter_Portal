@@ -47,6 +47,7 @@ import 'bloc/login_cubit/login_cubit.dart';
 import 'bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'bloc/videos_screen_bloc/videos_cubit.dart';
 import 'data/data_providers/album_dio/album_dio.dart';
+import 'data/repositories/request_repository.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -205,10 +206,7 @@ class _MyAppState extends State<MyApp> {
           //       AccessRightCubit(),
           // ),
 
-          // BlocProvider<MyRequestsCubit>(
-          //   create: (travelRequestContext) =>
-          //       MyRequestsCubit(),
-          // ),
+
 
           BlocProvider<AppBloc>(
             create: (authenticationContext) => AppBloc(
@@ -251,6 +249,12 @@ class _MyAppState extends State<MyApp> {
             create: (contactsCubitContext) => AppsCubit(GeneralDio(
                 BlocProvider.of<AppBloc>(contactsCubitContext).state.userData))
               ..getApps(),
+          ),
+          BlocProvider<MyRequestsCubit>(
+            create: (myRequestCubitContext) =>
+                MyRequestsCubit(RequestRepository(BlocProvider.of<AppBloc>(myRequestCubitContext)
+                    .state
+                    .userData)),
           ),
           BlocProvider<StatisticsCubit>(
             create: (statisticsCubitContext) => StatisticsCubit(GeneralDio(

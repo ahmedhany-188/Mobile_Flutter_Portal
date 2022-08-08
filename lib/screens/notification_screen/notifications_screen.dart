@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 
+import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../data/helpers/convert_from_html.dart';
 import '../../data/models/response_news.dart';
 
@@ -27,6 +28,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userMainData = context.select((AppBloc bloc) =>
+    bloc.state.userData);
     return Scaffold(
         // drawer: MainDrawer(),
         appBar:AppBar(title: const Text("Your Notification"),),/// basicAppBar(context, 'News'),
@@ -52,72 +55,236 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       // ),
                       itemBuilder: (ctx, index) {
                         FirebaseUserNotification notification = state.notifications[index];
-                        return InkWell(
-                          onTap: () {
-                            // notification.
+                        // return InkWell(
+                        //   onTap: () {
+                        //     // notification.
+                        //     _pushForRequestDetail(notification);
+                        //   },
+                        //   child: ClipRRect(
+                        //     borderRadius: BorderRadius.circular(20),
+                        //     child: Card(
+                        //       elevation: 4,
+                        //       shadowColor: Colors.white,
+                        //       margin: EdgeInsets.all(10),
+                        //       child: ListTile(
+                        //         //leading: Icon(Icons.music_note),
+                        //         title: Text(notification.requestNo ?? "",
+                        //             style: const TextStyle(color: Colors.black, fontSize: 16),textAlign: TextAlign.center),
+                        //
+                        //       ),
+                        //     )// ListView.separated(
+                        //     //
+                        //     //   itemBuilder: (BuildContext context, int index) {
+                        //     //     return
+                        //     //   }, itemCount: null,
+                        //       // child: Text("${notification.requestNo}"),
+                        //       // FadeInImage(
+                        //       //   placeholder: const AssetImage('assets/images/logo.png'),
+                        //       //   image: NetworkImage(
+                        //       //     'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg',
+                        //       //   ),
+                        //       //   fit: BoxFit.fill,
+                        //       // ),
+                        //       // footer: GridTileBar(
+                        //       //   title:Text( notification.from ?? "Tap to see more details",
+                        //       //               style: const TextStyle(
+                        //       //                 fontWeight: FontWeight.bold,
+                        //       //                 fontSize: 18,
+                        //       //               ),
+                        //       //             ),
+                        //       //   backgroundColor: Colors.black54,
+                        //       // ),
+                        //     ),
+                        //   );
 
-                            _pushForRequestDetail(notification);
+                        return Padding(
 
-                            // showDialog(
-                            //   context: context,
-                            //   builder: (context) {
-                            //     return AlertDialog(
-                            //       backgroundColor:
-                            //           Theme.of(context).colorScheme.background,
-                            //       title: Text(notification.from ?? ""),
-                            //       elevation: 20,
-                            //       contentPadding: const EdgeInsets.all(10.0),
-                            //       content: SingleChildScrollView(
-                            //         child: Column(
-                            //           children: [
-                            //             Text(notification.requestNo ?? ""),
-                            //             Text(notification.type ?? ""),
-                            //             Text(notification.requestType ?? ""),
-                            //
-                            //           ],
-                            //         ),
-                            //       ),
-                            //     );
-                            //   },
-                            // );
-                          },
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: Card(
-                              elevation: 4,
-                              shadowColor: Colors.white,
-                              margin: EdgeInsets.all(10),
-                              child: ListTile(
-                                //leading: Icon(Icons.music_note),
-                                title: Text(notification.requestNo ?? "",
-                                    style: const TextStyle(color: Colors.black, fontSize: 16),textAlign: TextAlign.center),
-
-                              ),
-                            )// ListView.separated(
-                            //
-                            //   itemBuilder: (BuildContext context, int index) {
-                            //     return
-                            //   }, itemCount: null,
-                              // child: Text("${notification.requestNo}"),
-                              // FadeInImage(
-                              //   placeholder: const AssetImage('assets/images/logo.png'),
-                              //   image: NetworkImage(
-                              //     'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg',
-                              //   ),
-                              //   fit: BoxFit.fill,
-                              // ),
-                              // footer: GridTileBar(
-                              //   title:Text( notification.from ?? "Tap to see more details",
-                              //               style: const TextStyle(
-                              //                 fontWeight: FontWeight.bold,
-                              //                 fontSize: 18,
-                              //               ),
-                              //             ),
-                              //   backgroundColor: Colors.black54,
-                              // ),
+                          padding: const EdgeInsets.all(15.0),
+                          child: Container(
+                            padding: const EdgeInsets.all(10.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0),
+                              gradient: const LinearGradient(
+                                  colors: [
+                                    Color(0xFF1a4c78),
+                                    Color(0xFF3772a6),
+                                  ],
+                                  begin: Alignment.bottomLeft,
+                                  end: Alignment.topRight,
+                                  tileMode: TileMode.clamp),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.4),
+                                  spreadRadius: 5,
+                                  blurRadius: 3,
+                                  offset: const Offset(0, 3), // changes position of shadow
+                                ),
+                              ],
                             ),
-                          );
+                            child: InkWell(
+                              onTap: () {
+                                _pushForRequestDetail(notification);
+                                // _pushForRequestDetail(context, listFromRequestScreen[index]);
+                              },
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: SizedBox(
+                                      height: 22.0.h,
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        children: [
+                                          Flexible(
+                                            fit: FlexFit.loose,
+                                            child: Center(
+                                              child: Column(
+                                                mainAxisAlignment: MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    '${notification.from}'.trim(),
+                                                    style: const TextStyle(
+                                                      fontSize: 17.0,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.white,
+                                                    ),
+                                                    maxLines: 1,
+                                                    // overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                  Text(
+                                                    '${notification.requestType}'.trim(),
+                                                    style: const TextStyle(
+                                                      fontSize: 17.0,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.white,
+                                                    ),
+                                                    maxLines: 1,
+                                                    // overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                  Text(
+                                                    '# ${notification.requestNo}'.trim(),
+                                                    style: const TextStyle(
+                                                      fontSize: 12.0,
+                                                      fontWeight: FontWeight.w600,
+                                                      color: Colors.white,
+                                                    ),
+                                                    maxLines: 1,
+                                                    // overflow: TextOverflow.ellipsis,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          // Flexible(
+                                          //   fit: FlexFit.loose,
+                                          //   child: Center(
+                                          //     child: Text(
+                                          //       '${notification.requestType} ${notification.requestNo}'.trim(),
+                                          //       style: const TextStyle(
+                                          //         fontSize: 14.0,
+                                          //         fontWeight: FontWeight.w600,
+                                          //         color: Colors.white,
+                                          //       ),
+                                          //       maxLines: 1,
+                                          //       // overflow: TextOverflow.ellipsis,
+                                          //     ),
+                                          //   ),
+                                          // ),
+                                          Padding(
+                                            padding: const EdgeInsets.only(top: 5, bottom: 5),
+                                            child: Container(
+                                              width: double.infinity,
+                                              height: 0.2.h,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          Container(
+                                            clipBehavior: Clip.none,
+                                            alignment: Alignment.center,
+                                            child: Column(
+                                              children: [
+                                                // Text(
+                                                //   '${listFromRequestScreen[index].statusName}'
+                                                //       .trim(),
+                                                //   style: const TextStyle(
+                                                //     fontSize: 14.0,
+                                                //     color: Colors.white,
+                                                //   ),
+                                                //   maxLines: 2,
+                                                //   overflow: TextOverflow.ellipsis,
+                                                //   textAlign: TextAlign.center,
+                                                // ),
 
+                                            Text(
+                                            '${notification.type}',
+                                              style: const TextStyle(
+                                                fontSize: 13.0,
+                                                color: Colors.white,
+                                              ),
+                                              maxLines: 2,
+                                              overflow: TextOverflow.ellipsis,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                                // MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
+                                                Text(
+                                                  '${notification.requesterHRCode}',
+                                                  style: const TextStyle(
+                                                    fontSize: 13.0,
+                                                    color: Colors.white,
+                                                  ),
+                                                  maxLines: 2,
+                                                  overflow: TextOverflow.ellipsis,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+
+                                          if(notification.type!.contains("Pending") && notification.requesterHRCode != userMainData.employeeData?.userHrCode)Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              clipBehavior: Clip.none,
+                                              alignment: Alignment.center,
+                                              child: Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  Expanded(
+                                                    child: OutlinedButton(
+                                                      onPressed: () {},
+                                                      style:  OutlinedButton.styleFrom(
+                                                          backgroundColor: Colors.green),
+                                                      child: const Text('Accept',style: TextStyle(color: Colors.white)),
+                                                      // color: Colors.white,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 12,),
+                                                  // MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
+                                                  Expanded(
+                                                    child: OutlinedButton(
+                                                      onPressed: () {  },
+                                                      style:  OutlinedButton.styleFrom(
+                                                          backgroundColor: Colors.red[800]),
+                                                      child: const Text('Reject',style: TextStyle(color: Colors.white)),
+
+                                                      // color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
                       },
                     ),
                   );

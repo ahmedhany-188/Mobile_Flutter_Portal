@@ -48,9 +48,9 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
     var deviceSize = MediaQuery.of(context).size;
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
-    return BlocProvider<MyRequestsCubit>(
-      create: (context) =>
-          MyRequestsCubit(RequestRepository(user))..getRequests(),
+    return BlocProvider.value
+      (value:MyRequestsCubit.get(context)
+          ..getRequests(),
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(

@@ -2,7 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/data/repositories/manager_repository.dart';
+import 'package:hassanallamportalflutter/data/repositories/employee_repository.dart';
 import 'package:meta/meta.dart';
 
 part 'profile_manager_state.dart';
@@ -23,7 +23,7 @@ class ProfileManagerCubit extends Cubit<ProfileManagerState> {
       var connectivityResult = await connectivity.checkConnectivity();
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
-        GetManagerRepository().getManagerData(managerHRCode)
+        GetEmployeeRepository().getEmployeeData(managerHRCode)
             .then((value){
           emit(BlocGetManagerDataSuccessState(value));
         }).catchError((error){
