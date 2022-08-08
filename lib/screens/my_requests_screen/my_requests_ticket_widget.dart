@@ -1,11 +1,9 @@
-import 'dart:convert';
 
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/constants/request_service_id.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_requests_model_form.dart';
-import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
@@ -13,7 +11,6 @@ import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_r
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
-import 'package:path/path.dart';
 import 'package:sizer/sizer.dart';
 
 import '../it_requests_screen/equipments_request.dart';
@@ -283,7 +280,7 @@ class MyRequestsItemWidget extends StatelessWidget {
       case RequestServiceID.equipmentServiceID:
         {
           Navigator.of(context)
-              .pushNamed(EquipmentsRequest.routeName);
+              .pushNamed(EquipmentsRequest.routeName,arguments: {EquipmentsRequest.requestNoKey: myRequestsModelData.requestNo.toString(),EquipmentsRequest.requesterHrCode: myRequestsModelData.requestHRCode.toString()});
           break;
         }
 

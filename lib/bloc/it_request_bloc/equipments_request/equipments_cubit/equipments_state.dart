@@ -14,21 +14,24 @@ class EquipmentsCubitStates extends Equatable {
 
   final String? statusAction;
   final RequestStatus? requestStatus;
-  final FormzStatus status;
+  final RequestDate? requestDate;
+  final EquipmentsRequestedModel? requestedData;
+  // final FormzStatus status;
 
   const EquipmentsCubitStates({
     this.businessUnitEnumStates = EquipmentsEnumState.initial,
     this.locationEnumStates = EquipmentsEnumState.initial,
     this.departmentEnumStates = EquipmentsEnumState.initial,
 
-    this.status = FormzStatus.pure,
+    // this.status = FormzStatus.pure,
     this.requestStatus,
     this.statusAction,
-
     this.listBusinessUnit = const <BusinessUnitModel>[],
     this.listLocation = const <EquipmentsLocationModel>[],
     this.listDepartment = const <DepartmentsModel>[],
     this.chosenList = const <SelectedEquipmentsModel>[],
+    this.requestDate,
+    this.requestedData,
   });
 
   EquipmentsCubitStates copyWith({
@@ -39,24 +42,27 @@ class EquipmentsCubitStates extends Equatable {
     List<EquipmentsLocationModel>? listLocation,
     List<DepartmentsModel>? listDepartment,
     List<SelectedEquipmentsModel>? chosenList,
-
     String? statusAction,
     RequestStatus? requestStatus,
-    FormzStatus? status,
+    RequestDate? requestDate,
+    EquipmentsRequestedModel? requestedData,
+    // FormzStatus? status,
   }) {
     return EquipmentsCubitStates(
-        businessUnitEnumStates:
-            businessUnitEnumStates ?? this.businessUnitEnumStates,
-        locationEnumStates: locationEnumStates ?? this.locationEnumStates,
-        departmentEnumStates: departmentEnumStates ?? this.departmentEnumStates,
-        listBusinessUnit: listBusinessUnit ?? this.listBusinessUnit,
-        listLocation: listLocation ?? this.listLocation,
-        listDepartment: listDepartment ?? this.listDepartment,
-        chosenList: chosenList ?? this.chosenList,
-
-        requestStatus: requestStatus ?? this.requestStatus,
-        status: status ?? this.status,
-        statusAction: statusAction ?? this.statusAction);
+      businessUnitEnumStates:
+          businessUnitEnumStates ?? this.businessUnitEnumStates,
+      locationEnumStates: locationEnumStates ?? this.locationEnumStates,
+      departmentEnumStates: departmentEnumStates ?? this.departmentEnumStates,
+      listBusinessUnit: listBusinessUnit ?? this.listBusinessUnit,
+      listLocation: listLocation ?? this.listLocation,
+      listDepartment: listDepartment ?? this.listDepartment,
+      chosenList: chosenList ?? this.chosenList,
+      requestStatus: requestStatus ?? this.requestStatus,
+      requestDate: requestDate ?? this.requestDate,
+      requestedData: requestedData ?? this.requestedData,
+      // status: status ?? this.status,
+      statusAction: statusAction ?? this.statusAction,
+    );
   }
 
   @override
@@ -68,6 +74,6 @@ class EquipmentsCubitStates extends Equatable {
         listLocation,
         listDepartment,
         chosenList,
-        status,
+        // status,
       ];
 }

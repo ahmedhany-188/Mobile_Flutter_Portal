@@ -9,14 +9,7 @@ import 'package:hassanallamportalflutter/data/models/admin_requests_models/busin
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
-import 'package:hassanallamportalflutter/data/models/it_requests_form_models/equipments_models/equipments_items_model.dart';
-import 'package:hassanallamportalflutter/data/models/my_requests_model/my_access_right_form_model.dart';
-import 'package:hassanallamportalflutter/data/models/my_requests_model/my_account_form_model.dart';
-import 'package:hassanallamportalflutter/data/models/my_requests_model/my_business_card_model.dart';
-import 'package:hassanallamportalflutter/data/models/my_requests_model/my_business_mission_form_model.dart';
-import 'package:hassanallamportalflutter/data/models/my_requests_model/my_embassy_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_requests_model_form.dart';
-import 'package:hassanallamportalflutter/data/models/my_requests_model/my_vacation_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_duration_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_vacation_data_model.dart';
@@ -24,7 +17,6 @@ import 'package:http/http.dart' as http;
 
 import '../../constants/request_service_id.dart';
 import '../models/it_requests_form_models/equipments_models/equipments_requested_model.dart';
-import '../models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
 import '../models/requests_form_models/request_business_mission_data_model.dart';
 import '../models/requests_form_models/request_permission_data_model.dart';
 
@@ -101,19 +93,9 @@ class RequestRepository {
     final http.Response rawPermission = await requestDataProviders
         .getBusinessCardRequestData(userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawPermission.body);
-    print("repository page json :: "+ json.toString());
 
     final BusinessCardFormModel response = BusinessCardFormModel.fromJson(json[0]);
 
-    print("repository page "+response.toString());
-    return response;
-  }
-
-  Future<EquipmentsRequestedModel> getEquipments(String requestNo) async{
-    final http.Response rawPermission = await requestDataProviders
-        .getEquipmentsRequestData(userData.user?.userHRCode ?? "",requestNo);
-    final json = await jsonDecode(rawPermission.body);
-    final EquipmentsRequestedModel response = EquipmentsRequestedModel.fromJson(json[0]);
     return response;
   }
 
@@ -123,7 +105,6 @@ class RequestRepository {
     final json = await jsonDecode(rawPermission.body);
     final AccessRightModel response = AccessRightModel.fromJson(json[0]);
 
-    print("-.-.-."+json.toString());
     return response;
 
   }
@@ -169,7 +150,6 @@ class RequestRepository {
       "mobileNo": businessCardFormModel.employeeMobil
     });
 
-    print("===========---"+bodyString);
     final http.Response rawBusinessCard = await requestDataProviders
         .postBusinessCardRequest(bodyString);
     final json = await jsonDecode(rawBusinessCard.body);
@@ -305,6 +285,17 @@ class RequestRepository {
 
     return response;
   }
+
+  Future<EquipmentsRequestedModel> getEquipmentData(String requestNo,String requesterHRCode) async{
+    final http.Response rawRequestData = await requestDataProviders
+        .getEquipmentRequestData(requesterHRCode,requestNo);
+
+    final json = await jsonDecode(rawRequestData.body);
+    final EquipmentsRequestedModel response = EquipmentsRequestedModel.fromJson(json);
+
+    return response;
+  }
+
   Future<BusinessMissionRequestData> getBusinessMissionRequestData(String requestNo) async{
     final http.Response rawRequestData = await requestDataProviders
         .getBusinessMissionRequestData(userData.user?.userHRCode ?? "",requestNo);

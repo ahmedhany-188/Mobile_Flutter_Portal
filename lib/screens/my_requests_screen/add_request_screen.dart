@@ -73,7 +73,7 @@ class AddRequestScreen extends StatelessWidget {
                         child: const Text('Equipments'),
                         onPressed: () {
                           Navigator.of(context)
-                              .pushNamed(EquipmentsRequest.routeName);
+                              .pushNamed(EquipmentsRequest.routeName,arguments: {EquipmentsRequest.requestNoKey: '0'});
                         },
                       ),
                     ),
