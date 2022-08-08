@@ -1,4 +1,36 @@
 class EquipmentsRequestedModel {
+  int? code;
+  bool? error;
+  String? message;
+  List<EquipmentsRequestedModelData>? data;
+
+  EquipmentsRequestedModel({this.code, this.error, this.message, this.data});
+
+  EquipmentsRequestedModel.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    error = json['error'];
+    message = json['message'];
+    if (json['data'] != null) {
+      data = <EquipmentsRequestedModelData>[];
+      json['data'].forEach((v) {
+        data!.add(EquipmentsRequestedModelData.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['code'] = code;
+    data['error'] = error;
+    data['message'] = message;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+}
+
+class EquipmentsRequestedModelData {
   String? requestHRCode;
   String? name;
   String? departmentName;
@@ -12,10 +44,10 @@ class EquipmentsRequestedModel {
   String? ownerHRCode;
   String? ownerName;
   int? qty;
-  int? max;
+  double? max;
   String? approved;
 
-  EquipmentsRequestedModel(
+  EquipmentsRequestedModelData(
       {this.requestHRCode,
         this.name,
         this.departmentName,
@@ -32,7 +64,7 @@ class EquipmentsRequestedModel {
         this.max,
         this.approved});
 
-  EquipmentsRequestedModel.fromJson(Map<String, dynamic> json) {
+  EquipmentsRequestedModelData.fromJson(Map<String, dynamic> json) {
     requestHRCode = json['request_HR_Code'];
     name = json['name'];
     departmentName = json['department_Name'];

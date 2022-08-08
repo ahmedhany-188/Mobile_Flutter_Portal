@@ -213,7 +213,7 @@ class AppRouter {
 
       case EquipmentsRequest.routeName:
         return MaterialPageRoute(
-            builder: (_) => EquipmentsRequest());
+            builder: (_) => EquipmentsRequest(requestData: settings.arguments,));
 
       case AddRequestScreen.routeName:
         return MaterialPageRoute(

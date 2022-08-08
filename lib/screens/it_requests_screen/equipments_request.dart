@@ -21,9 +21,13 @@ import '../../bloc/it_request_bloc/equipments_request/equipments_items_cubit/equ
 import '../../widgets/success/success_request_widget.dart';
 
 class EquipmentsRequest extends StatelessWidget {
-  EquipmentsRequest({Key? key, this.requestData}) : super(key: key);
   static const routeName = 'request-equipments-screen';
-  final  dynamic requestData;
+  static const requestNoKey = 'request-No';
+  static const requesterHrCode = 'requester-HRCode';
+
+  EquipmentsRequest({Key? key, this.requestData}) : super(key: key);
+
+  final dynamic requestData;
 
   final GlobalKey<DropdownSearchState<EquipmentsItemModel>> itemFormKey =
       GlobalKey();
@@ -50,8 +54,16 @@ class EquipmentsRequest extends StatelessWidget {
         return true;
       },
       child: BlocProvider<EquipmentsCubit>(
-        create: (context) =>
-            (EquipmentsCubit(RequestRepository(user))..getRequestData(requestStatus: RequestStatus.newRequest)..getAll()),
+        create: (context) => requestData[EquipmentsRequest.requestNoKey] == "0"
+            ? (EquipmentsCubit(RequestRepository(user))
+              ..getRequestData(requestStatus: RequestStatus.newRequest)
+              ..getAll())
+            : (EquipmentsCubit(RequestRepository(user))
+              ..getRequestData(
+                requestStatus: RequestStatus.oldRequest,
+                requesterHRCode: requestData[EquipmentsRequest.requesterHrCode],
+                requestNo: requestData[EquipmentsRequest.requestNoKey],
+              )),
         child: Scaffold(
           appBar: AppBar(
             title: const Text('Equipment request'),
@@ -79,6 +91,31 @@ class EquipmentsRequest extends StatelessWidget {
                             items: state.listBusinessUnit,
                             itemAsString: (businessUnit) =>
                                 businessUnit.departmentName!,
+                            selectedItem: (state.requestStatus ==
+                                    RequestStatus.oldRequest)
+                                ? (BusinessUnitModel.fromJson({
+                                    'departmentName': state
+                                        .requestedData!.data![0].departmentName
+                                  }))
+                                : null,
+                            autoValidateMode: (state.requestStatus ==
+                                    RequestStatus.oldRequest)
+                                ? AutovalidateMode.disabled
+                                : AutovalidateMode.always,
+                            validator: (state.requestStatus ==
+                                    RequestStatus.newRequest)
+                                ? (item) {
+                                    if (item == null) {
+                                      return "Required field";
+                                    } else {
+                                      return null;
+                                    }
+                                  }
+                                : null,
+                            enabled: (state.requestStatus ==
+                                    RequestStatus.oldRequest)
+                                ? false
+                                : true,
                             dropdownDecoratorProps:
                                 const DropDownDecoratorProps(
                               dropdownSearchDecoration: InputDecoration(
@@ -140,6 +177,31 @@ class EquipmentsRequest extends StatelessWidget {
                             key: locationFormKey,
                             items: state.listLocation,
                             itemAsString: (loc) => loc.projectName!,
+                            selectedItem: (state.requestStatus ==
+                                    RequestStatus.oldRequest)
+                                ? (EquipmentsLocationModel.fromJson({
+                                    'projectName': state
+                                        .requestedData!.data![0].projectName
+                                  }))
+                                : null,
+                            autoValidateMode: (state.requestStatus ==
+                                    RequestStatus.oldRequest)
+                                ? AutovalidateMode.disabled
+                                : AutovalidateMode.always,
+                            validator: (state.requestStatus ==
+                                    RequestStatus.newRequest)
+                                ? (item) {
+                                    if (item == null) {
+                                      return "Required field";
+                                    } else {
+                                      return null;
+                                    }
+                                  }
+                                : null,
+                            enabled: (state.requestStatus ==
+                                    RequestStatus.oldRequest)
+                                ? false
+                                : true,
                             dropdownDecoratorProps:
                                 const DropDownDecoratorProps(
                               dropdownSearchDecoration: InputDecoration(
@@ -196,6 +258,31 @@ class EquipmentsRequest extends StatelessWidget {
                             key: departmentFormKey,
                             items: state.listDepartment,
                             itemAsString: (dept) => dept.departmentName!,
+                            // selectedItem: (state.requestStatus ==
+                            //     RequestStatus.oldRequest)
+                            //     ? (DepartmentsModel.fromJson({
+                            //   'department_Name': state
+                            //       .requestedData!.data![0].groupName
+                            // }))
+                            //     : null,
+                            autoValidateMode: (state.requestStatus ==
+                                    RequestStatus.oldRequest)
+                                ? AutovalidateMode.disabled
+                                : AutovalidateMode.always,
+                            validator: (state.requestStatus ==
+                                    RequestStatus.newRequest)
+                                ? (item) {
+                                    if (item == null) {
+                                      return "Required field";
+                                    } else {
+                                      return null;
+                                    }
+                                  }
+                                : null,
+                            enabled: (state.requestStatus ==
+                                    RequestStatus.oldRequest)
+                                ? false
+                                : true,
                             dropdownDecoratorProps:
                                 const DropDownDecoratorProps(
                                     dropdownSearchDecoration: InputDecoration(
@@ -241,18 +328,23 @@ class EquipmentsRequest extends StatelessWidget {
                     ),
                     BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
                       builder: (context, state) {
-                        return (EquipmentsCubit.get(context).state
-                            .requestStatus == RequestStatus.newRequest)?
-                         ElevatedButton.icon(
-                          onPressed: () {
-                            showAddRequestDialog(context);
-                          },
-                          icon: const Icon(Icons.add),
-                          label: const Text('Request Item'),
-                          style: ElevatedButton.styleFrom(
-                              tapTargetSize: MaterialTapTargetSize.padded,
-                              primary: Colors.blueGrey),
-                        ):Container();
+                        return (EquipmentsCubit.get(context)
+                                    .state
+                                    .requestStatus ==
+                                RequestStatus.newRequest)
+                            ? ElevatedButton.icon(
+                                onPressed: () {
+                                  showAddRequestDialog(context);
+                                },
+                                icon: const Icon(Icons.add),
+                                label: const Text('Request Item'),
+                                style: ElevatedButton.styleFrom(
+                                    tapTargetSize: MaterialTapTargetSize.padded,
+                                    primary: Colors.blueGrey),
+                              )
+                            : SizedBox(
+                                child: Text(state.statusAction ?? ''),
+                              );
                       },
                     ),
                     SizedBox(
@@ -260,16 +352,28 @@ class EquipmentsRequest extends StatelessWidget {
                       child:
                           BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
                         buildWhen: (prev, current) {
-                          return prev.chosenList.length !=
-                              current.chosenList.length;
+                          if (current.requestStatus ==
+                              RequestStatus.newRequest) {
+                            return prev.chosenList.length !=
+                                current.chosenList.length;
+                          } else {
+                            return current.requestedData!.data!.isNotEmpty;
+                          }
                         },
                         builder: (context, state) {
                           return ListView.builder(
                             clipBehavior: Clip.hardEdge,
-                            itemCount: state.chosenList.length,
+                            itemCount: (state.requestStatus ==
+                                    RequestStatus.oldRequest)
+                                ? state.requestedData!.data!.length
+                                : state.chosenList.length,
                             padding: EdgeInsets.all(5.sp),
                             itemBuilder: (listViewContext, index) {
                               return Dismissible(
+                                direction: (state.requestStatus ==
+                                        RequestStatus.oldRequest)
+                                    ? DismissDirection.none
+                                    : DismissDirection.horizontal,
                                 key: UniqueKey(),
                                 confirmDismiss: (dismissDirection) async {
                                   if (dismissDirection ==
@@ -377,27 +481,38 @@ class EquipmentsRequest extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Center(
-                                          child: state.chosenList[index].icon!),
+                                          child: (state.requestStatus ==
+                                                  RequestStatus.oldRequest)
+                                              ? null
+                                              : state.chosenList[index].icon!),
                                       Text(
-                                        state.chosenList[index].selectedItem!
-                                            .hardWareItemName!
-                                            .trim(),
+                                        (state.requestStatus ==
+                                                RequestStatus.oldRequest)
+                                            ? state.requestedData!.data![index]
+                                                .hardWareItemName!
+                                            : state.chosenList[index]
+                                                .selectedItem!.hardWareItemName!
+                                                .trim(),
                                         softWrap: true,
                                         style: TextStyle(fontSize: 18.sp),
                                       ),
                                       Text(
-                                        state.chosenList[index].requestFor!
-                                            .trim(),
+                                        (state.requestStatus ==
+                                                RequestStatus.oldRequest)
+                                            ? 'Request for'
+                                            : state
+                                                .chosenList[index].requestFor!
+                                                .trim(),
                                         softWrap: true,
                                         style: TextStyle(fontSize: 18.sp),
                                       ),
                                       Text(
-                                        'Qty: ${state.chosenList[index].quantity}',
+                                        'Qty: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].qty : state.chosenList[index].quantity}',
                                         softWrap: true,
                                         style: TextStyle(fontSize: 18.sp),
                                       ),
                                       Text(
-                                        'Owner: ${state.chosenList[index].selectedContact!.name!.trim().toLowerCase()}',
+                                        'Owner: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].ownerName : state.chosenList[index].selectedContact!.name!.trim().toLowerCase()}',
                                         softWrap: false,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
@@ -420,55 +535,77 @@ class EquipmentsRequest extends StatelessWidget {
           floatingActionButton:
               BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
             builder: (context, state) {
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if(state
-                        .requestStatus == RequestStatus.newRequest)
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (state.requestStatus == RequestStatus.oldRequest)
                     FloatingActionButton.extended(
-                    label: const Text('Submit'),
-                    icon: const Icon(Icons.save),
-                    onPressed: () {
-                      if (businessUnitFormKey.currentState!.getSelectedItem ==
-                              null ||
-                          locationFormKey.currentState!.getSelectedItem == null ||
-                          departmentFormKey.currentState!.getSelectedItem == null) {
-                        businessUnitFormKey.currentState!.popupOnValidate();
-                        EasyLoading.showInfo(
-                          'Fill All the fields',
-                          maskType: EasyLoadingMaskType.black,
-                        );
-                      } else if (EquipmentsCubit.get(context)
-                          .state
-                          .chosenList
-                          .isEmpty) {
-                        EasyLoading.showInfo('Add at least one item to request',
-                            maskType: EasyLoadingMaskType.black);
-                      } else {
-                        EquipmentsCubit.get(context).postEquipmentsRequest(
-                          departmentObject:
-                              departmentFormKey.currentState!.getSelectedItem!,
-                          businessUnitObject:
-                              businessUnitFormKey.currentState!.getSelectedItem!,
-                          locationObject:
-                              locationFormKey.currentState!.getSelectedItem!,
-                          userHrCode: user.employeeData!.userHrCode!,
-                          selectedItem: state.chosenList,
-                        );
-                        ;
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                            builder: (_) => const SuccessScreen(
-                                  requestName: 'Equipment',
-                                  routName: EquipmentsRequest.routeName,
-                                  text: "Success",
-                                )));
-                      }
-                    },
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    tooltip: 'Save Request',
-              ),
-                  ],
-                );
+                      heroTag: null,
+                      onPressed: () {
+                        // context.read<EquipmentsCubit>()
+                        //     .submitAction(true);
+                      },
+                      icon: const Icon(Icons.verified),
+                      label: const Text('Accept'),
+                    ),
+                  const SizedBox(height: 12),
+                  if (state.requestStatus == RequestStatus.oldRequest)
+                    FloatingActionButton.extended(
+                      backgroundColor: Colors.red,
+                      heroTag: null,
+                      onPressed: () {},
+                      icon: const Icon(Icons.dangerous),
+                      label: const Text('Reject'),
+                    ),
+                  const SizedBox(height: 12),
+                  if (state.requestStatus == RequestStatus.newRequest)
+                    FloatingActionButton.extended(
+                      label: const Text('Submit'),
+                      icon: const Icon(Icons.save),
+                      onPressed: () {
+                        if (businessUnitFormKey.currentState!.getSelectedItem ==
+                                null ||
+                            locationFormKey.currentState!.getSelectedItem ==
+                                null ||
+                            departmentFormKey.currentState!.getSelectedItem ==
+                                null) {
+                          businessUnitFormKey.currentState!.popupOnValidate();
+                          EasyLoading.showInfo(
+                            'Fill All the fields',
+                            maskType: EasyLoadingMaskType.black,
+                          );
+                        } else if (EquipmentsCubit.get(context)
+                            .state
+                            .chosenList
+                            .isEmpty) {
+                          EasyLoading.showInfo(
+                              'Add at least one item to request',
+                              maskType: EasyLoadingMaskType.black);
+                        } else {
+                          EquipmentsCubit.get(context).postEquipmentsRequest(
+                            departmentObject: departmentFormKey
+                                .currentState!.getSelectedItem!,
+                            businessUnitObject: businessUnitFormKey
+                                .currentState!.getSelectedItem!,
+                            locationObject:
+                                locationFormKey.currentState!.getSelectedItem!,
+                            userHrCode: user.employeeData!.userHrCode!,
+                            selectedItem: state.chosenList,
+                          );
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: (_) => const SuccessScreen(
+                                        requestName: 'Equipment',
+                                        routName: EquipmentsRequest.routeName,
+                                        text: "Success",
+                                      )));
+                        }
+                      },
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      tooltip: 'Save Request',
+                    ),
+                ],
+              );
             },
           ),
         ),
