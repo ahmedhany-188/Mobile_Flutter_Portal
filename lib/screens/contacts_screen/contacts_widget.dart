@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreenDirectManager.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
@@ -12,9 +13,15 @@ class ContactsWidget extends StatelessWidget {
       : super(key: key);
 
   void contactDetails(BuildContext context, int contactIndex) {
+    // Navigator.of(context).pushNamed(
+    //   ContactDetailScreen.routeName,
+    //   arguments: listFromContactsScreen[contactIndex],
+    // );
+
     Navigator.of(context).pushNamed(
-      ContactDetailScreen.routeName,
-      arguments: listFromContactsScreen[contactIndex],
+      DirectManagerProfileScreen.routeName,
+      arguments: {DirectManagerProfileScreen.employeeHrCode: "0",
+        DirectManagerProfileScreen.selectedContactDataAsMap: listFromContactsScreen[contactIndex]},
     );
   }
 

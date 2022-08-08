@@ -22,7 +22,6 @@ class UserProfileScreen extends StatefulWidget {
 
 class UserProfileScreenClass extends State<UserProfileScreen> {
 
-  final RoundedLoadingButtonController directManagerButton = RoundedLoadingButtonController();
 
   late final user;
 
@@ -341,37 +340,27 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                         Container(
                           width: double.infinity,
                           height: height * 0.08,
-                          child: RoundedLoadingButton(
-                            height: height * 0.08,
-                            controller: directManagerButton,
-                            onPressed: () {
-                              Timer(const Duration(seconds: 2), () {
-                                directManagerButton.success();
-                                Navigator.of(context)
-                                    .popAndPushNamed(
-                                    DirectManagerProfileScreen.routeName);
-                              });
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.of(context).pushNamed(DirectManagerProfileScreen.routeName,arguments: {DirectManagerProfileScreen.employeeHrCode : user.employeeData!.managerCode});
                             },
-
-
                             child: Text(
-                              'Direct Manager: \n${user
+                              'Direct Manager: ${user
                                   .employeeData!
                                   .managerCode!}',
                               style: const TextStyle(
                                 color: Color.fromRGBO(
                                     39, 105, 171, 1),
                                 fontSize: 16,
-                                fontFamily: 'Nunito',),
+                                fontFamily: 'Nunito',
+                                decoration: TextDecoration.underline,),
                               textAlign: TextAlign.left,),
-                          ),
+                          )
                         ),
-
                         Container(
                           width: double.infinity,
                           height: height * 0.08,
                           child: Text(
-
                             'Mobile Number: \n${user.employeeData!
                                 .mobile!}',
                             style: const TextStyle(

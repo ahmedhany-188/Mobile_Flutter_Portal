@@ -27,36 +27,41 @@ class _PollsScreenState extends State<PollsScreen> {
     }
     return Scaffold(
       appBar: AppBar(),
-      body: FlutterPolls(
-        userToVote: userData.user!.token,
-        pollStartDate: DateTime.now(),
-        pollId: 'Example',
-        onVoted: (PollOption pollOption, int newTotalVotes) {
-          switch (pollOption.id) {
-            case 1:
-              votedUser.votes1++;
-              break;
-            case 2:
-              votedUser.votes2++;
-              break;
-            case 3:
-              votedUser.votes3++;
-              break;
-          }
-          setState(() {
-            votedUser.votedId = pollOption.id!;
-            votedUser.isVoted = true;
-          });
-        },
-        pollTitle: const Text('Example Polls'),
-        userVotedOptionId: votedUser.votedId,
-        hasVoted: votedUser.isVoted,
-        pollOptions: [
-          PollOption(title: const Text('Option 1'), votes: votedUser.votes1, id: 1),
-          PollOption(title: const Text('Option 2'), votes: votedUser.votes2, id: 2),
-          PollOption(title: const Text('Option 3'), votes: votedUser.votes3, id: 3),
-        ],
-      ),
+      body: Container(
+
+      )
+    //FlutterPolls(
+      //   userToVote: userData.user!.token,
+      //   pollStartDate: DateTime.now(),
+      //   pollId: 'Example',
+      //   onVoted:
+      //       (PollOption pollOption, int newTotalVotes) {
+      //     switch (pollOption.id) {
+      //       case 1:
+      //         votedUser.votes1++;
+      //         break;
+      //       case 2:
+      //         votedUser.votes2++;
+      //         break;
+      //       case 3:
+      //         votedUser.votes3++;
+      //         break;
+      //     }
+      //     setState(() {
+      //       votedUser.votedId = pollOption.id!;
+      //       votedUser.isVoted = true;
+      //     });
+      //   }
+      //   ,
+      //   pollTitle: const Text('Example Polls'),
+      //   userVotedOptionId: votedUser.votedId,
+      //   hasVoted: votedUser.isVoted,
+      //   pollOptions: [
+      //     PollOption(title: const Text('Option 1'), votes: votedUser.votes1, id: 1),
+      //     PollOption(title: const Text('Option 2'), votes: votedUser.votes2, id: 2),
+      //     PollOption(title: const Text('Option 3'), votes: votedUser.votes3, id: 3),
+      //   ],
+      // ),
     );
   }
 }
