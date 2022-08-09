@@ -45,7 +45,7 @@ class NewsCubit extends Cubit<NewsState> {
             announcment.add(
               TyperAnimatedText(
                 newsList[i].newsDescription!,
-                speed: const Duration(milliseconds: 100),
+                speed: const Duration(milliseconds: 50),
                 textAlign: TextAlign.center,
                 curve: Curves.linear,
                 textStyle: const TextStyle(
