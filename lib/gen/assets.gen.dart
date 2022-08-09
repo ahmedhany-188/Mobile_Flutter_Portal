@@ -44,6 +44,10 @@ class $AssetsImagesGen {
   AssetGenImage get buildings =>
       const AssetGenImage('assets/images/buildings.png');
 
+  /// File path: assets/images/defaultBg.jpg
+  AssetGenImage get defaultBg =>
+      const AssetGenImage('assets/images/defaultBg.jpg');
+
   /// File path: assets/images/fulllogoblue.png
   AssetGenImage get fulllogoblue =>
       const AssetGenImage('assets/images/fulllogoblue.png');
@@ -51,6 +55,8 @@ class $AssetsImagesGen {
   /// File path: assets/images/home_cropped.jpg
   AssetGenImage get homeCropped =>
       const AssetGenImage('assets/images/home_cropped.jpg');
+
+  $AssetsImagesHomepageGen get homepage => const $AssetsImagesHomepageGen();
 
   /// File path: assets/images/login_image_background.png
   AssetGenImage get loginImageBackground =>
@@ -78,6 +84,54 @@ class $AssetsImagesGen {
   /// File path: assets/images/native_splash.png
   AssetGenImage get nativeSplash =>
       const AssetGenImage('assets/images/native_splash.png');
+
+  /// File path: assets/images/welcomeImage.gif
+  AssetGenImage get welcomeImage =>
+      const AssetGenImage('assets/images/welcomeImage.gif');
+}
+
+class $AssetsImagesHomepageGen {
+  const $AssetsImagesHomepageGen();
+
+  /// File path: assets/images/homepage/attendanceIcon.png
+  AssetGenImage get attendanceIcon =>
+      const AssetGenImage('assets/images/homepage/attendanceIcon.png');
+
+  /// File path: assets/images/homepage/benefitsIcon.png
+  AssetGenImage get benefitsIcon =>
+      const AssetGenImage('assets/images/homepage/benefitsIcon.png');
+
+  /// File path: assets/images/homepage/contactListIcon.png
+  AssetGenImage get contactListIcon =>
+      const AssetGenImage('assets/images/homepage/contactListIcon.png');
+
+  /// File path: assets/images/homepage/economyNewsIcon.png
+  AssetGenImage get economyNewsIcon =>
+      const AssetGenImage('assets/images/homepage/economyNewsIcon.png');
+
+  /// File path: assets/images/homepage/haNewsLetterIcon.png
+  AssetGenImage get haNewsLetterIcon =>
+      const AssetGenImage('assets/images/homepage/haNewsLetterIcon.png');
+
+  /// File path: assets/images/homepage/hrRequestsIcon.png
+  AssetGenImage get hrRequestsIcon =>
+      const AssetGenImage('assets/images/homepage/hrRequestsIcon.png');
+
+  /// File path: assets/images/homepage/itRequestIcon.png
+  AssetGenImage get itRequestIcon =>
+      const AssetGenImage('assets/images/homepage/itRequestIcon.png');
+
+  /// File path: assets/images/homepage/mediaCenterIcon.png
+  AssetGenImage get mediaCenterIcon =>
+      const AssetGenImage('assets/images/homepage/mediaCenterIcon.png');
+
+  /// File path: assets/images/homepage/newsIcon.png
+  AssetGenImage get newsIcon =>
+      const AssetGenImage('assets/images/homepage/newsIcon.png');
+
+  /// File path: assets/images/homepage/staffDashboardIcon.png
+  AssetGenImage get staffDashboardIcon =>
+      const AssetGenImage('assets/images/homepage/staffDashboardIcon.png');
 }
 
 class Assets {

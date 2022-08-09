@@ -134,6 +134,7 @@ dev_dependencies:
   flutter_gen_runner: ^4.3.0
 
 
+
 lutter_gen:
   output: lib/gen/ # Optional (default: lib/gen/)
   line_length: 80   # Optional (default: 80)
@@ -171,7 +172,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
+  # color main : 031A28
   assets:
+    - assets/images/
     - assets/images/logo.png
     - assets/images/buildings.png
     - assets/images/fulllogoblue.png
@@ -190,6 +193,19 @@ flutter:
     - assets/images/Subsidiaries.png
     - assets/images/Values.png
     - assets/images/Cover.png
+    - assets/images/defaultBg.jpg
+    - assets/images/welcomeImage.gif
+    - assets/images/homepage/
+    - assets/images/homepage/attendanceIcon.png
+    - assets/images/homepage/benefitsIcon.png
+    - assets/images/homepage/contactListIcon.png
+    - assets/images/homepage/economyNewsIcon.png
+    - assets/images/homepage/haNewsLetterIcon.png
+    - assets/images/homepage/hrRequestsIcon.png
+    - assets/images/homepage/itRequestIcon.png
+    - assets/images/homepage/mediaCenterIcon.png
+    - assets/images/homepage/newsIcon.png
+    - assets/images/homepage/staffDashboardIcon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
