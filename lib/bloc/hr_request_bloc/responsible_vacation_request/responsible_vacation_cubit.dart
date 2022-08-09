@@ -53,6 +53,11 @@ class ResponsibleVacationCubit extends Cubit<ResponsibleVacationInitial> {
           (index) => ContactsDataFromApi(email: "asd",userHrCode: "dsad",name: "$index"),
     );
   }
+  @override
+  Future<void> close() {
+    // TODO: implement close
+    return super.close();
+  }
 
 
 }

@@ -12,6 +12,7 @@ import '../../../constants/constants.dart';
 import '../../../constants/enums.dart';
 import '../../../data/models/requests_form_models/request_date.dart';
 import '../../../data/models/requests_form_models/request_permission_time.dart';
+import '../../../data/repositories/employee_repository.dart';
 part 'permission_state.dart';
 
 class PermissionCubit extends Cubit<PermissionInitial> {
@@ -78,6 +79,8 @@ class PermissionCubit extends Cubit<PermissionInitial> {
       } else if (requestData.status == 2) {
         status = "Rejected";
       }
+
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode!);
       emit(
         state.copyWith(
             requestDate: requestDate,
@@ -87,6 +90,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
             status: FormzStatus.submissionSuccess,
             // status: Formz.validate([requestDate,
             //   state.permissionTime, state.permissionDate]),
+            requesterData: requesterData,
             requestStatus: RequestStatus.oldRequest,
             comment: comments,
             statusAction: status,
@@ -201,6 +205,17 @@ class PermissionCubit extends Cubit<PermissionInitial> {
       state.copyWith(
         comment: value,
         status: Formz.validate([state.requestDate,state.permissionDate,state.permissionTime]),
+      ),
+    );
+  }
+  void commentRequesterChanged(String value) {
+
+    // final permissionTime = PermissionTime.dirty(value);
+    // print(permissionTime.value);
+    emit(
+      state.copyWith(
+        actionComment : value,
+        // status: Formz.validate([state.requestDate,state.permissionDate,state.permissionTime]),
       ),
     );
   }

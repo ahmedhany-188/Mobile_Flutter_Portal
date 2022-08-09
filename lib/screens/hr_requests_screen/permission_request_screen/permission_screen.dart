@@ -1,8 +1,9 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
-import 'package:hassanallamportalflutter/data/models/my_requests_model/my_permission_form_model.dart';
+import 'package:sizer/sizer.dart';
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../bloc/hr_request_bloc/permission_request/permission_cubit.dart';
 import '../../../constants/enums.dart';
@@ -19,7 +20,7 @@ class PermissionScreen extends StatefulWidget {
 
   const PermissionScreen({Key? key,this.requestData}) : super(key: key);
 
-  final requestData;
+  final dynamic requestData;
 
 
   @override
@@ -160,6 +161,25 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                 ),
                               ),
 
+                              if(state.requestStatus == RequestStatus.oldRequest && state.takeActionStatus == TakeActionStatus.takeAction)
+                                Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 8),
+                                child: BlocBuilder<
+                                    PermissionCubit,
+                                    PermissionInitial>(
+                                    buildWhen: (previous, current) {
+                                      return (previous.requesterData !=
+                                          current.requesterData);
+                                    },
+                                    builder: (context, state) {
+                                      return RequesterDataWidget(requesterData: state.requesterData,actionComment: ActionCommentWidget(onChanged: (commentValue) =>
+                                          context
+                                              .read<PermissionCubit>()
+                                              .commentRequesterChanged(commentValue)),);
+                                    }
+                                ),
+                              ),
 
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -189,8 +209,6 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                     }
                                 ),
                               ),
-
-
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 8),
@@ -375,6 +393,134 @@ class _PermissionScreenState extends State<PermissionScreen> {
     );
   }
 
+}
+
+class RequesterDataWidget extends StatelessWidget {
+  const RequesterDataWidget({
+    Key? key, required this.requesterData, required this.actionComment,
+  }) : super(key: key);
+
+  final EmployeeData requesterData;
+  final Widget actionComment;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      margin: EdgeInsets.only(bottom: 1.h),
+      alignment: Alignment.bottomLeft,
+      color: Colors.transparent,
+      child: InputDecorator(
+        decoration: const InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+              horizontal: 20, vertical: 5),
+          labelText: 'Requester Data',
+          floatingLabelAlignment:
+          FloatingLabelAlignment.start,
+          alignLabelWithHint: true,
+          // prefixIcon: Icon(Icons.event),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    radius: 30,
+                    child: CircleAvatar(
+                      radius: 29,
+                      // borderRadius: BorderRadius.circular(50),
+                      backgroundImage: NetworkImage(
+                        'https://portal.hassanallam.com/Apps/images/Profile/${requesterData.imgProfile}',
+                      ),
+                      onBackgroundImageError: (_, __) {
+                        Image.asset(
+                          'assets/images/logo.png',
+                          fit: BoxFit.fitHeight,
+                          width: 65,
+                          height: 65,
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(width: 5,),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('${requesterData.name}',
+                          maxLines: 1,
+                          style:  TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              overflow: TextOverflow.fade,
+                              color: Theme.of(context).primaryColor)),
+                      Text('${requesterData.titleName}',
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).primaryColor)),
+                      Text('#${requesterData.userHrCode}',
+                          maxLines: 1,
+                          overflow: TextOverflow.fade,
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                              color: Theme.of(context).primaryColor)),
+                    ],
+                  ),
+                ],
+              ),
+              SizedBox(height: 24,),
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                    horizontal: 0, vertical: 0),
+                child: actionComment,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ActionCommentWidget extends StatelessWidget {
+  const ActionCommentWidget({
+    Key? key, required this.onChanged,
+  }) : super(key: key);
+  final Function onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+            // controller: commentController,
+            key: UniqueKey(),
+            enabled: true,
+            onChanged: onChanged(),
+            keyboardType: TextInputType.multiline,
+            // enabled: (widget.objectValidation) ? false : true,
+            maxLines: 3,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(
+                    20.0),
+              ),
+              filled: true,
+              hintStyle: TextStyle(
+                  color: Colors.grey[800]),
+              labelText: "Action comment",
+              fillColor: Colors.white70,
+              prefixIcon: const Icon(Icons.comment),
+              enabled: true,
+            ),
+          );
+  }
 }
 
 class LoadingDialog extends StatelessWidget {

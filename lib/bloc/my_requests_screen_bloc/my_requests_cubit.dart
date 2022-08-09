@@ -26,6 +26,7 @@ class MyRequestsCubit extends Cubit<MyRequestsState> {
 
         requestRepository.getMyRequestsData()
             .then((value)async{
+              // await Future.delayed(Duration(milliseconds: 2000));
           emit(BlocGetMyRequestsSuccessState(value));
         }).catchError((error){
           emit(BlocGetMyRequestsErrorState(error.toString()));
@@ -44,5 +45,6 @@ class MyRequestsCubit extends Cubit<MyRequestsState> {
     // connectivityStreamSubscription?.cancel();
     return super.close();
   }
+
 
 }
