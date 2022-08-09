@@ -184,7 +184,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                 decoration: const InputDecoration(
                                   contentPadding: EdgeInsets.symmetric(
                                       horizontal: 0, vertical: 5),
-                                  labelText: 'Mission Location',
+                                  labelText: 'Mission Type',
                                   floatingLabelAlignment:
                                   FloatingLabelAlignment.start,
                                   prefixIcon: Icon(Icons.event),
