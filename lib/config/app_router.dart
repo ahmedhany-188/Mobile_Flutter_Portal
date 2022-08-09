@@ -6,6 +6,7 @@ import 'package:hassanallamportalflutter/screens/admin_request_screen/business_c
 import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
+import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
@@ -218,6 +219,10 @@ class AppRouter {
       case AddRequestScreen.routeName:
         return MaterialPageRoute(
             builder: (_) => const AddRequestScreen());
+
+      case ContactsScreen.routeName:
+        return MaterialPageRoute(
+            builder: (_) => const ContactsScreen());
 
       default:
         return null;

@@ -10,6 +10,7 @@ import '../../widgets/filters/multi_selection_chips_filters.dart';
 
 class ContactsScreen extends StatefulWidget {
   const ContactsScreen({Key? key}) : super(key: key);
+  static const routeName = 'contacts-screen';
 
   @override
   State<ContactsScreen> createState() => _ContactsScreenState();
@@ -226,6 +227,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.transparent,
+      appBar: AppBar(centerTitle: true,title: Text('Contacts List'),),
       body: BlocProvider<ContactsCubit>.value(
         value: ContactsCubit.get(context),
         child: BlocBuilder<ContactsCubit, ContactCubitStates>(
@@ -332,7 +334,7 @@ class _ContactsScreenState extends State<ContactsScreen> {
                           child: BlocBuilder<ContactsCubit, ContactCubitStates>(
                             builder: (context, state) {
                               return SizedBox(
-                                height: deviceSize.height * 0.61,
+                                height: deviceSize.height * 0.69,
                                 child: (ContactsFiltersCubit.get(context)
                                         .state
                                         .isFiltered)

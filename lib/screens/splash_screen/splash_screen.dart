@@ -13,9 +13,9 @@ import 'package:sprung/sprung.dart';
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../data/helpers/assist_function.dart';
-import '../../screens/home_screen/taps_screen.dart';
 import '../../screens/login_screen/auth_screen.dart';
 import '../../widgets/animation/page_transition_animation.dart';
+import '../home_screen/home_grid_view_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -236,7 +236,7 @@ class _SplashScreenState extends State<SplashScreen>
                                   FirebaseProvider(state.userData)
                                       .updateUserOnline(
                                           AppLifecycleStatus.online);
-                                  return const TapsScreen();
+                                  return const HomeGridViewScreen();
                                 // return AlertUpgradeShow();
                                 case AppStatus.unauthenticated:
                                   return const AuthScreen();
