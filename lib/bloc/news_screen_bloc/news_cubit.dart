@@ -46,13 +46,13 @@ class NewsCubit extends Cubit<NewsState> {
               TyperAnimatedText(
                 newsList[i].newsDescription!,
                 speed: const Duration(milliseconds: 100),
-                textAlign: TextAlign.start,
+                textAlign: TextAlign.center,
                 curve: Curves.linear,
                 textStyle: const TextStyle(
-                    color: Color(0xFF174873),
+                    color: Colors.white,
                     overflow: TextOverflow.visible,
                     fontFamily: 'RobotoFlex',
-                    fontSize: 16),
+                    fontSize: 14),
               ),
             );
           }
