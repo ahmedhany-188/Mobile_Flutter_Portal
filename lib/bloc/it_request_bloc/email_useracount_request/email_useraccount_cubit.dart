@@ -87,13 +87,15 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
     final titleEmployee =  requestData.titleName.toString();
     final locationEmployee= requestData.projectName.toString();
     final emailEmployee = requestData.email.toString();
+    final userMobile = RequestDate.dirty(requestData.mobile.toString());
 
     emit(state.copyWith(
       fullName: fullName,
       userTitle: titleEmployee,
       userLocation: locationEmployee,
       email: emailEmployee,
-      status: Formz.validate([state.userMobile, state.hrCodeUser]),
+      userMobile:userMobile,
+      status: Formz.validate([userMobile, state.hrCodeUser]),
     ));
   }
 

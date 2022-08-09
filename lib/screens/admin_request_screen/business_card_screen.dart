@@ -126,7 +126,7 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                         Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (_) =>
                                 SuccessScreen(text: state.successMessage ??
-                                    "Error Number",routName: BusinessCardScreen.routeName, requestName: 'Vacation',)));
+                                    "Error Number",routName: BusinessCardScreen.routeName, requestName: 'Business Card',)));
                       }
                     } else if (state.status.isSubmissionInProgress) {
                       EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);

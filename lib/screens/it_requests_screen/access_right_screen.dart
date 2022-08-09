@@ -138,7 +138,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(builder: (_) =>
                                   SuccessScreen(text: state.successMessage ??
-                                      "Error Number",routName: AccessRightScreen.routeName, requestName: 'Vacation',)));
+                                      "Error Number",routName: AccessRightScreen.routeName, requestName: 'Access Right',)));
                         }
                       }
                       if (state.status.isSubmissionFailure) {
@@ -273,7 +273,6 @@ class _AccessRightScreen extends State<AccessRightScreen> {
 
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-
                                 child: InputDecorator(
                                   decoration: const InputDecoration(
                                     contentPadding: EdgeInsets.symmetric(
@@ -338,9 +337,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                     contentPadding: EdgeInsets.symmetric(
                                         horizontal: 0, vertical: 5),
                                     labelText: 'Usb Agreement',
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    prefixIcon: Icon(Icons.usb),
+                                    floatingLabelAlignment: FloatingLabelAlignment.start, prefixIcon: Icon(Icons.usb),
                                   ),
 
                                   child: BlocBuilder<
@@ -430,6 +427,115 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                             ),
                                           ],),
 
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: BlocBuilder<
+                                                AccessRightCubit,
+                                                AccessRightInitial>(
+                                              // buildWhen: (previous, current) {
+                                              //   return (previous.requestDate !=
+                                              //       current.requestDate) ||
+                                              //       previous.status != current.status;
+                                              // },
+                                              builder: (context, state) {
+                                                return TextFormField(
+                                                  initialValue:  state.fromDate.value,
+                                                  key: UniqueKey(),
+                                                  readOnly: true,
+                                                  decoration: InputDecoration(
+                                                    floatingLabelAlignment:
+                                                    FloatingLabelAlignment.start,
+                                                    labelText: 'From Date',
+                                                    errorText: state.fromDate.invalid
+                                                        ? 'invalid Date'
+                                                        : null,
+                                                    prefixIcon: const Icon(
+                                                        Icons.calendar_today),
+                                                  ),
+                                                  onTap: () async {
+                                                    if (state.requestStatus ==
+                                                        RequestStatus.newRequest) {
+                                                      context.read<AccessRightCubit>().
+                                                      selectDate(context, "from");
+                                                    }
+                                                  },
+                                                );
+                                              },),
+                                          ),
+
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: BlocBuilder<
+                                                AccessRightCubit,
+                                                AccessRightInitial>(
+                                              // buildWhen: (previous, current) {
+                                              //   return (previous.requestDate !=
+                                              //       current.requestDate) ||
+                                              //       previous.status != current.status;
+                                              // },
+                                              builder: (context, state) {
+                                                return TextFormField(
+                                                  initialValue: state.toDate.value,
+                                                  key: UniqueKey(),
+                                                  readOnly: true,
+                                                  decoration: InputDecoration(
+                                                    floatingLabelAlignment:
+                                                    FloatingLabelAlignment.start,
+                                                    labelText: 'To Date',
+                                                    errorText: state.toDate.invalid
+                                                        ? 'invalid Date'
+                                                        : null,
+                                                    prefixIcon: const Icon(
+                                                        Icons.calendar_today),
+                                                  ),
+                                                  onTap: () async {
+                                                    if (state.requestStatus ==
+                                                        RequestStatus.newRequest) {
+                                                      context.read<AccessRightCubit>().
+                                                      selectDate(context, "to");
+                                                    }
+                                                  },
+                                                );
+                                              },),
+                                          ),
+
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: InputDecorator(
+                                              decoration: const InputDecoration(
+                                                contentPadding: EdgeInsets.symmetric(
+                                                    horizontal: 0, vertical: 5),
+                                                labelText: 'Time',
+                                                floatingLabelAlignment:
+                                                FloatingLabelAlignment.start,
+                                                prefixIcon: Icon(Icons.event),
+                                              ),
+                                              child: BlocBuilder<
+                                                  AccessRightCubit,
+                                                  AccessRightInitial>(
+
+                                                buildWhen: (previous, current) {
+                                                  return (state.requestStatus ==
+                                                      RequestStatus.newRequest);
+                                                },
+
+                                                builder: (context, state) {
+                                                  return Row(
+                                                    children: [
+                                                      const Text('Permanent'), //Text
+                                                      Checkbox(
+                                                        value: state.permanent,
+                                                        onChanged: (bool? value) {
+                                                          context.read<AccessRightCubit>()
+                                                              .getPermanentValue(value!);
+                                                        },
+
+                                                      ),
+                                                    ], /** Checkbox Widget **/ //<Widget>[]
+                                                  );
+                                                },),
+                                            ),
+                                          ),
                                         ],);
                                     },),
 
@@ -438,116 +544,8 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                               ),
 
 
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: BlocBuilder<
-                                    AccessRightCubit,
-                                    AccessRightInitial>(
-                                  // buildWhen: (previous, current) {
-                                  //   return (previous.requestDate !=
-                                  //       current.requestDate) ||
-                                  //       previous.status != current.status;
-                                  // },
 
-                                  builder: (context, state) {
-                                    return TextFormField(
-                                      initialValue:  state.fromDate.value,
-                                      key: UniqueKey(),
-                                      readOnly: true,
-                                      decoration: InputDecoration(
-                                        floatingLabelAlignment:
-                                        FloatingLabelAlignment.start,
-                                        labelText: 'From Date',
-                                        errorText: state.fromDate.invalid
-                                            ? 'invalid Date'
-                                            : null,
-                                        prefixIcon: const Icon(
-                                            Icons.calendar_today),
-                                      ),
-                                      onTap: () async {
-                                        if (state.requestStatus ==
-                                            RequestStatus.newRequest) {
-                                          context.read<AccessRightCubit>().
-                                          selectDate(context, "from");
-                                        }
-                                      },
-                                    );
-                                  },),
-                              ),
 
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: BlocBuilder<
-                                    AccessRightCubit,
-                                    AccessRightInitial>(
-                                  // buildWhen: (previous, current) {
-                                  //   return (previous.requestDate !=
-                                  //       current.requestDate) ||
-                                  //       previous.status != current.status;
-                                  // },
-                                  builder: (context, state) {
-                                    return TextFormField(
-                                      initialValue: state.toDate.value,
-                                      key: UniqueKey(),
-                                      readOnly: true,
-                                      decoration: InputDecoration(
-                                        floatingLabelAlignment:
-                                        FloatingLabelAlignment.start,
-                                        labelText: 'To Date',
-                                        errorText: state.toDate.invalid
-                                            ? 'invalid Date'
-                                            : null,
-                                        prefixIcon: const Icon(
-                                            Icons.calendar_today),
-                                      ),
-                                      onTap: () async {
-                                        if (state.requestStatus ==
-                                            RequestStatus.newRequest) {
-                                          context.read<AccessRightCubit>().
-                                          selectDate(context, "to");
-                                        }
-                                      },
-                                    );
-                                  },),
-                              ),
-
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: InputDecorator(
-                                  decoration: const InputDecoration(
-                                    contentPadding: EdgeInsets.symmetric(
-                                        horizontal: 0, vertical: 5),
-                                    labelText: 'Time',
-                                    floatingLabelAlignment:
-                                    FloatingLabelAlignment.start,
-                                    prefixIcon: Icon(Icons.event),
-                                  ),
-                                  child: BlocBuilder<
-                                      AccessRightCubit,
-                                      AccessRightInitial>(
-
-                                    buildWhen: (previous, current) {
-                                      return (state.requestStatus ==
-                                          RequestStatus.newRequest);
-                                    },
-
-                                    builder: (context, state) {
-                                      return Row(
-                                        children: [
-                                          const Text('Permanent'), //Text
-                                          Checkbox(
-                                            value: state.permanent,
-                                            onChanged: (bool? value) {
-                                              context.read<AccessRightCubit>()
-                                                  .getPermanentValue(value!);
-                                            },
-
-                                          ),
-                                        ], /** Checkbox Widget **/ //<Widget>[]
-                                      );
-                                    },),
-                                ),
-                              ),
 
                               Padding(
                                 padding: const EdgeInsets.only(right: 8.0,
@@ -577,7 +575,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                       decoration: const InputDecoration(
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
-                                        labelText: 'Comment',
+                                        labelText: 'Justify Your Request',
                                         prefixIcon: Icon(
                                             Icons.comment),
                                       ),
