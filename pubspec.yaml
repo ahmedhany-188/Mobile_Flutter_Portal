@@ -75,10 +75,10 @@ dependencies:
   flutter_html: any
   http: any
   html: ^0.15.0
-  firebase_core: ^1.17.0
-  firebase_auth: ^3.3.18
-  firebase_database: ^9.0.13
-  firebase_crashlytics: ^2.8.1
+  firebase_core: ^1.20.0
+  firebase_auth: ^3.6.2
+  firebase_database: ^9.1.0
+  firebase_crashlytics: ^2.8.6
   dio: ^4.0.6
   url_launcher: ^6.1.2
 
@@ -131,6 +131,33 @@ dev_dependencies:
   json_serializable: any
   build_runner: ^2.1.11
   flutter_web_browser: ^0.17.1
+  flutter_gen_runner: ^4.3.0
+
+
+lutter_gen:
+  output: lib/gen/ # Optional (default: lib/gen/)
+  line_length: 80   # Optional (default: 80)
+
+  integrations:
+    flutter_svg: true
+    flare_flutter: true
+    rive: true
+
+  assets:
+    enabled: true
+    package_parameter_enabled: false
+    # Assets.imagesChip
+    # style: camel-case
+
+    # Assets.images_chip
+    # style: snake-case
+
+    # Assets.images.chip (default style)
+    # style: dot-delimiter
+
+  fonts:
+    enabled: true
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

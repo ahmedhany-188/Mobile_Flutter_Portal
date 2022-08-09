@@ -8,6 +8,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.dart';
+import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:sprung/sprung.dart';
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
@@ -70,9 +71,10 @@ class _SplashScreenState extends State<SplashScreen>
       body: Container(
         width: deviceWidth,
         height: deviceHeight,
-        decoration: const BoxDecoration(
+        decoration:  BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/images/S_Background.png'),
+            // image: AssetImage('assets/images/S_Background.png'),
+            image: Assets.images.sBackground.image().image,
             fit: BoxFit.fill,
           ),
         ),
