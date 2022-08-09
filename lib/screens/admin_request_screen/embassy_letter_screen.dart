@@ -133,7 +133,7 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                         Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (_) =>
                                 SuccessScreen(text: state.successMessage ??
-                                    "Error Number",routName: EmbassyLetterScreen.routeName, requestName: 'Vacation',)));
+                                    "Error Number",routName: EmbassyLetterScreen.routeName, requestName: 'Embassy Letter',)));
                       }
                     }
                     else if (state.status.isSubmissionInProgress) {

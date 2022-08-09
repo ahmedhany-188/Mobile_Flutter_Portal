@@ -25,25 +25,29 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
       String formattedDate = GlobalConstants.dateFormatViewed.format(now);
-
-
-      print("-----"+date.toString());
+      final dateNow = RequestDate.dirty(formattedDate);
       if(date!=null){
         formattedDate = GlobalConstants.dateFormatViewed.format(DateTime.parse(date));
+        final requestDateFrom = DateFrom.dirty(formattedDate);
+        emit(
+          state.copyWith(
+              requestDate: dateNow,
+              dateFrom: requestDateFrom,
+              status: Formz.validate([dateNow,
+                requestDateFrom , state.dateTo]),
+              requestStatus: RequestStatus.newRequest
+          ),
+        );
       }else{
-        formattedDate = GlobalConstants.dateFormatViewed.format(now);
+        emit(
+          state.copyWith(
+              requestDate: dateNow,
+              status: Formz.validate([dateNow,
+                state.timeFrom , state.dateFrom]),
+              requestStatus: RequestStatus.newRequest
+          ),
+        );
       }
-
-      final requestDate = RequestDate.dirty(formattedDate);
-      emit(
-        state.copyWith(
-          requestDate: requestDate,
-          status: Formz.validate([requestDate,
-            state.timeFrom , state.dateFrom]),
-          requestStatus: RequestStatus.newRequest
-        ),
-      );
-
     }else{
 
       EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);

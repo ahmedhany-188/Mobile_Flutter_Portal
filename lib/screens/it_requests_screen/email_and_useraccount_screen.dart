@@ -35,6 +35,8 @@ class EmailAndUserAccountScreen  extends StatefulWidget{
 
 class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
 
+  var mobileKey =false;
+
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +140,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                         Navigator.of(context).pushReplacement(
                             MaterialPageRoute(builder: (_) =>
                                 SuccessScreen(text: state.successMessage ??
-                                    "Error Number",routName: EmailAndUserAccountScreen.routeName, requestName: 'Vacation',)));
+                                    "Error Number",routName: EmailAndUserAccountScreen.routeName, requestName: 'User Account',)));
                       }
                     }
                      if (state.status.isSubmissionFailure) {
@@ -293,7 +295,6 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                         // LoadingDialog.show(context),
                                         context.read<EmailUserAccountCubit>()
                                             .hrCodeSubmittedGetData(value.toString()),
-                                        //
                                         // if(state.fullName!=null){
                                         //   LoadingDialog.hide(context),
                                         // }
@@ -317,13 +318,14 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
 
                             Padding(
                                 padding: const EdgeInsets.all(10.0),
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.grey,
-                                      width: 1,
-                                    ),
-                                    borderRadius: BorderRadius.circular(12),
+                                child: InputDecorator(
+                                  decoration: const InputDecoration(
+                                    contentPadding: EdgeInsets.symmetric(
+                                        horizontal: 0, vertical: 5),
+                                    labelText: '   Requested To',
+                                    // floatingLabelAlignment:
+                                    // FloatingLabelAlignment.start,
+                                    // prefixIcon: Icon(Icons.usb),
                                   ),
                                   child: Column(children: [
 
@@ -343,10 +345,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                               // state.requestStatus ==
                                               //     RequestStatus.oldRequest
                                               //     ? true: false,
-                                              readOnly:
-                                              state.requestStatus ==
-                                                  RequestStatus.oldRequest
-                                                  ? true : false,
+                                              readOnly:true,
                                               decoration: const InputDecoration(
                                                 floatingLabelAlignment:
                                                 FloatingLabelAlignment.start,
@@ -374,10 +373,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                               // state.requestStatus ==
                                               //     RequestStatus.oldRequest
                                               //     ? true: false,
-                                              readOnly:
-                                              state.requestStatus ==
-                                                  RequestStatus.oldRequest
-                                                  ? true : false,
+                                              readOnly:true,
                                               decoration: const InputDecoration(
                                                 floatingLabelAlignment:
                                                 FloatingLabelAlignment.start,
@@ -406,10 +402,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                                 // state.requestStatus ==
                                                 //     RequestStatus.oldRequest
                                                 //     ? true: false,
-                                                readOnly:
-                                                state.requestStatus ==
-                                                    RequestStatus.oldRequest
-                                                    ? true : false,
+                                                readOnly: true,
                                                 decoration: const InputDecoration(
                                                   floatingLabelAlignment:
                                                   FloatingLabelAlignment.start,
@@ -421,49 +414,52 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                             })
                                     ),
 
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: BlocBuilder<
+                                          EmailUserAccountCubit,
+                                          EmailUserAccountInitial>(
+                                        // buildWhen: (previous, current) {
+                                        //   // return (previous.requestDate !=
+                                        //   //     current.requestDate) ||
+                                        //   //     previous.status != current.status;
+                                        //   return (state.requestStatus == RequestStatus.newRequest) ;
+                                        // },
+                                        builder: (context, state) {
+                                          return TextFormField(
+                                            key:mobileKey==false?UniqueKey():null,
+                                            initialValue: state.userMobile.value,
+                                            onChanged: (phoneValue) =>
+                                            {
+                                              mobileKey=true,
+                                              context.read<EmailUserAccountCubit>()
+                                                  .phoneNumberChanged(phoneValue.toString()),
+                                            },
+
+
+                                            keyboardType: TextInputType.phone,
+                                            readOnly: state.requestStatus == RequestStatus.oldRequest ? true : false,
+                                            decoration: InputDecoration(
+                                              floatingLabelAlignment:
+                                              FloatingLabelAlignment.start,
+                                              labelText: 'Mobile',
+                                              prefixIcon: const Icon(
+                                                  Icons.mobile_friendly),
+                                              errorText: state.userMobile.invalid
+                                                  ? 'invalid Phone Number'
+                                                  : null,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
                                   ]),
                                 )
 
                             ),
 
 
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: BlocBuilder<
-                                  EmailUserAccountCubit,
-                                  EmailUserAccountInitial>(
-                                buildWhen: (previous, current) {
-                                  return (previous.requestDate !=
-                                      current.requestDate) ||
-                                      previous.status != current.status;
-                                },
-                                builder: (context, state) {
-                                  return TextFormField(
-                                    initialValue: state.userMobile.value,
-                                    onChanged: (phoneValue) =>
-                                    {
-                                      context.read<EmailUserAccountCubit>()
-                                          .phoneNumberChanged(phoneValue),
-                                    },
-                                    keyboardType: TextInputType.phone,
-                                    readOnly:
-                                    state.requestStatus ==
-                                        RequestStatus.oldRequest
-                                        ? true : false,
-                                    decoration: InputDecoration(
-                                      floatingLabelAlignment:
-                                      FloatingLabelAlignment.start,
-                                      labelText: 'Mobile',
-                                      prefixIcon: const Icon(
-                                          Icons.mobile_friendly),
-                                      errorText: state.userMobile.invalid
-                                          ? 'invalid Phone Number'
-                                          : null,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
+
 
 
                             Padding(

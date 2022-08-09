@@ -27,22 +27,29 @@ class VacationCubit extends Cubit<VacationInitial> {
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
       String formattedDate = GlobalConstants.dateFormatViewed.format(now);
-
+      final dateNow = RequestDate.dirty(formattedDate);
       if(date!=null){
         formattedDate = GlobalConstants.dateFormatViewed.format(DateTime.parse(date));
+        final requestDate = DateFrom.dirty(formattedDate);
+        emit(
+          state.copyWith(
+              requestDate: dateNow,
+              vacationFromDate: requestDate,
+              status: Formz.validate([dateNow,
+                requestDate,state.vacationToDate]),
+              requestStatus: RequestStatus.newRequest
+          ),
+        );
       }else{
-        formattedDate = GlobalConstants.dateFormatViewed.format(now);
+        emit(
+          state.copyWith(
+              requestDate: dateNow,
+              status: Formz.validate([dateNow,
+                state.vacationFromDate,state.vacationToDate]),
+              requestStatus: RequestStatus.newRequest
+          ),
+        );
       }
-
-      final requestDate = RequestDate.dirty(formattedDate);
-      emit(
-        state.copyWith(
-          requestDate: requestDate,
-          status: Formz.validate([requestDate,
-              state.vacationFromDate,state.vacationToDate]),
-          requestStatus: RequestStatus.newRequest
-        ),
-      );
     }else {
 
       // emit(state.copyWith(status: FormzStatus.submissionInProgress));

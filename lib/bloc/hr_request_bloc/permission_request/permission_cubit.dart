@@ -28,25 +28,30 @@ class PermissionCubit extends Cubit<PermissionInitial> {
     if (requestStatus == RequestStatus.newRequest) {
       var now = DateTime.now();
       String formattedDate = GlobalConstants.dateFormatViewed.format(now);
-
+      final dateNow = RequestDate.dirty(formattedDate);
       if(date!=null){
-         formattedDate = GlobalConstants.dateFormatViewed.format(DateTime.parse(date));
+        formattedDate = GlobalConstants.dateFormatViewed.format(DateTime.parse(date));
+        final requestDate = PermissionDate.dirty(formattedDate);
+         emit(
+           state.copyWith(
+             requestDate: dateNow,
+               permissionDate:requestDate,
+               status: Formz.validate([dateNow,
+                 state.permissionTime, requestDate]),
+               requestStatus: RequestStatus.newRequest
+           ),
+         );
       }else{
-         formattedDate = GlobalConstants.dateFormatViewed.format(now);
+         emit(
+           state.copyWith(
+               requestDate: dateNow,
+               status: Formz.validate([dateNow,
+                 state.permissionTime]),
+               requestStatus: RequestStatus.newRequest
+           ),
+         );
       }
-
-      final requestDate = RequestDate.dirty(formattedDate);
-      emit(
-        state.copyWith(
-            requestDate: requestDate,
-            status: Formz.validate([requestDate,
-              state.permissionTime, state.permissionDate]),
-            requestStatus: RequestStatus.newRequest
-        ),
-      );
-
-    }
-    else {
+    } else {
       EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
       final requestData = await _requestRepository.getPermissionRequestData(
           requestNo!);
