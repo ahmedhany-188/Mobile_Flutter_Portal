@@ -191,31 +191,31 @@ Container holidayContainer(MyAttendanceModel attendanceModel) {
             topRight: Radius.circular(5)) : const BorderRadius.only(
             bottomLeft: Radius.circular(5),
             bottomRight: Radius.circular(5)),
-        color: containerColor(color)   ,
+        // color: containerColor(color)   ,
       ),
       alignment: Alignment.center,
       width: double.infinity,
       child: Text(
           timeText,
           style: const TextStyle(
-            color: Colors.petrolTextAttendance,
+            // color: Colors.petrolTextAttendance,
             fontSize: 11,
           )
       ),
     );
   }
 
-  Color containerColor(String color) {
-    if (color == "green") {
-      return Colors.greenAttendance;
-    } else if (color == "red") {
-      return Colors.redAttendance;
-    } else if(color == "blue") {
-      return Colors.blueGrey;
-    }else{
-      return Colors.whiteNormalAttendance;
-    }
-  }
+  // Color containerColor(String color) {
+  //   if (color == "green") {
+  //     return Colors.greenAttendance;
+  //   } else if (color == "red") {
+  //     return Colors.redAttendance;
+  //   } else if(color == "blue") {
+  //     return Colors.blueGrey;
+  //   }else{
+  //     return Colors.whiteNormalAttendance;
+  //   }
+  // }
   SizedBox sizedDay(MyAttendanceModel attendanceModel,
       BuildContext context, String dayMorning,String dayNight,
       String dayActionMorning,String dayActionNight,String hrUser) {
