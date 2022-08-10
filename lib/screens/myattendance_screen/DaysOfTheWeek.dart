@@ -63,7 +63,7 @@ class DayOfTheWeek extends StatelessWidget{
       child: Text(
          GlobalConstants.daysInWeek[day-1] ,
           style: const TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontSize: 14,
           )
       ),

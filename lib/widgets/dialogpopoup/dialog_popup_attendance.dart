@@ -7,145 +7,96 @@ import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mis
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 
-class DialogPopUpAttendance extends StatefulWidget {
+class ShowAttendanceBottomSheet extends StatefulWidget {
 
-
-
-  const DialogPopUpAttendance({Key? key, required this.attendanceListData,required this.hrUser})
+  const ShowAttendanceBottomSheet({Key? key, required this.attendanceListData,required this.hrUser})
       : super(key: key);
 
   final MyAttendanceModel attendanceListData;
   final String hrUser;
 
   @override
-  DialogPopUpAttendanceClass createState() =>
-      DialogPopUpAttendanceClass(attendanceListData,hrUser);
-
+  ShowAttendanceBottomSheetClass createState() =>
+      ShowAttendanceBottomSheetClass(attendanceListData,hrUser);
 }
 
-class DialogPopUpAttendanceClass extends State<DialogPopUpAttendance> {
-  DialogPopUpAttendanceClass(MyAttendanceModel attendanceListData,String hrUser);
-
+class ShowAttendanceBottomSheetClass extends State<ShowAttendanceBottomSheet> {
+  ShowAttendanceBottomSheetClass(MyAttendanceModel attendanceListData,
+      String hrUser);
 
   List<Widget> _getChildren(int count, String name) =>
       List<Widget>.generate(
-        count,
-            (i) => ListTile(title: Text('$name$i')),
+        count, (i) => ListTile(title: Text('$name$i')),
       );
-
 
   @override
   Widget build(BuildContext context) {
-
-
-
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-
-
-
-
-    elevation: 0,
-      backgroundColor: Colors.transparent,
+    return Container(
       child: contentBox(context),
     );
   }
 
-
   contentBox(context) {
-    return Stack(
+    return ListView(
       children: <Widget>[
 
         Container(
 
-          height: 500.0,
-
-          padding: const EdgeInsets.only(left: 20, top: 45
-              + 20, right: 20, bottom: 20
-          ),
-          margin: const EdgeInsets.only(top: 45),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
-              shape: BoxShape.rectangle,
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              boxShadow: const [
-                BoxShadow(color: Colors.black, offset: Offset(0, 3),
-                    blurRadius: 3
-                ),
-              ]
+            shape: BoxShape.rectangle,
+            color: Colors.white,
           ),
-          child: Container(
-            margin: const EdgeInsets.all(10),
+          child: Column(children: [
 
-            child: Column(children: [
-
-              TextFormField(
-                initialValue: requestCase(),
-                readOnly: true,
-                decoration: const InputDecoration(
-                  labelText: 'Requested',
-                  prefixIcon: Icon(Icons.all_inbox),
-                ),
+            TextFormField(
+              initialValue: requestCase(),
+              readOnly: true,
+              decoration: const InputDecoration(
+                labelText: 'Requested',
+                prefixIcon: Icon(Icons.all_inbox),
               ),
-
-
-              TextFormField(
-                initialValue: widget.attendanceListData.deduction ??
-                    "No Comment",
-                readOnly: true,
-                decoration: const InputDecoration(
-                  labelText: 'Deduction',
-                  prefixIcon: Icon(
-                      Icons.email),
-                ),
-              ),
-
-              Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Text("Create Request",
-                  style: TextStyle(color: Colors.grey, fontSize: 20),),),
-
-        // if (attendanceListData[index].vacation == null && attendanceListData[index].holiday == false) {
-        //   sizeBoxRequest("View Form",iconRequest(widget.attendanceListData)),
-        //
-        // },
-              checkViewForm(widget.attendanceListData),
-
-
-              sizeBoxRequest("Permission", Icon(Icons.timelapse)),
-              // sizeBoxRequest("Forget sign", const Icon(Icons.fingerprint)),
-              sizeBoxRequest("Business Mission", Icon(Icons.hail)),
-              sizeBoxRequest("Vacation", Icon(Icons.beach_access)),
-
-            ],
             ),
 
-          ),
-        ),
-        Positioned(
-          left: 20,
-          right: 20,
-          child: CircleAvatar(
-            backgroundColor: Colors.transparent,
-            radius: 45,
-            child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(45)),
-                child: Image.asset("assets/images/logo.png")
+            TextFormField(
+              initialValue: widget.attendanceListData.deduction ??
+                  "No Comment",
+              readOnly: true,
+              decoration: const InputDecoration(
+                labelText: 'Deduction',
+                prefixIcon: Icon(
+                    Icons.email),
+              ),
             ),
+
+            Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Text("Create Request",
+                style: TextStyle(color: Colors.grey, fontSize: 20),),),
+
+    // Row(children: [
+            checkViewForm(widget.attendanceListData),
+            sizeBoxRequest("Permission", Icon(Icons.timelapse)),
+            // sizeBoxRequest("Forget sign", const Icon(Icons.fingerprint)),
+            sizeBoxRequest("Business Mission", Icon(Icons.hail)),
+            sizeBoxRequest("Vacation", Icon(Icons.beach_access)),
+    // ]),
+          ],
           ),
+
+
         ),
       ],
     );
   }
 
-  Padding checkViewForm(MyAttendanceModel attendanceModel){
-
+  Padding checkViewForm(MyAttendanceModel attendanceModel) {
     if (attendanceModel.vacation != null || attendanceModel.permission != null
-    || attendanceModel.businessMission != null){ // || attendanceModel.forget != null) {
-      return sizeBoxRequest("View Form",iconRequest(widget.attendanceListData));
-    }else{
+        || attendanceModel.businessMission !=
+            null) { // || attendanceModel.forget != null) {
+      return sizeBoxRequest(
+          "View Form", iconRequest(widget.attendanceListData));
+    } else {
       return const Padding(padding: EdgeInsets.all(2.0),);
     }
   }
@@ -171,7 +122,8 @@ class DialogPopUpAttendanceClass extends State<DialogPopUpAttendance> {
     return Padding(
         padding: EdgeInsets.all(6.0),
         child: SizedBox(
-          height: 36.0,
+          height: 80.0,
+
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.white,
@@ -180,28 +132,33 @@ class DialogPopUpAttendanceClass extends State<DialogPopUpAttendance> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                      color: requestType=="View Form"?Colors.blueGrey:Colors.grey,
+                      color: requestType == "View Form"
+                          ? Colors.blueGrey
+                          : Colors.grey,
                       offset: Offset(1.0, 2.0),
                       blurRadius: 8.0,
                       spreadRadius: 2.0)
                 ]),
             child: Stack(
               children: <Widget>[
-                Row(
+                Column(
                   children: <Widget>[
                     Container(
                         width: 36.0,
                         height: 36.0,
                         alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
-                          color: requestType=="View Form"?Colors.blueGrey:Colors.grey,
+                          color: requestType == "View Form"
+                              ? Colors.blueGrey
+                              : Colors.grey,
                           borderRadius: BorderRadius.all(
                             Radius.circular(8.0),
                           ),
                         ),
                         child: Align(
                             alignment: Alignment.center,
-                            child: requestIcon)),
+                            child: requestIcon)
+                    ),
                     Expanded(
                         child: Center(
                           child: Text(requestType,
@@ -218,58 +175,71 @@ class DialogPopUpAttendanceClass extends State<DialogPopUpAttendance> {
                     type: MaterialType.transparency,
                     child: InkWell(onTap: () {
                       switch (requestType) {
-
                         case "View Form":
-
-
-                          if(widget.attendanceListData.vacation!=null){
-
-                            print("---"+widget.attendanceListData.vacation.toString());
+                          if (widget.attendanceListData.vacation != null) {
+                            print("---" +
+                                widget.attendanceListData.vacation.toString());
                             Navigator.of(context)
-                                .pushNamed(VacationScreen.routeName,arguments:
-                            {VacationScreen.requestNoKey:widget.attendanceListData.vacation.toString(),
-                              VacationScreen.requesterHRCode: widget.hrUser});
+                                .pushNamed(VacationScreen.routeName, arguments:
+                            {
+                              VacationScreen.requestNoKey: widget
+                                  .attendanceListData.vacation.toString(),
+                              VacationScreen.requesterHRCode: widget.hrUser
+                            });
 
                             break;
-
-                          }else if(widget.attendanceListData.businessMission!=null){
-
+                          } else
+                          if (widget.attendanceListData.businessMission !=
+                              null) {
                             Navigator.of(context)
-                                .pushNamed(BusinessMissionScreen.routeName,arguments:
-                            {BusinessMissionScreen.requestNoKey:widget.attendanceListData.businessMission.toString(),
-                              BusinessMissionScreen.requestDateAttendance:widget.attendanceListData.date});
-
-                          }else{
-
+                                .pushNamed(
+                                BusinessMissionScreen.routeName, arguments:
+                            {
+                              BusinessMissionScreen.requestNoKey: widget
+                                  .attendanceListData.businessMission
+                                  .toString(),
+                              BusinessMissionScreen
+                                  .requestDateAttendance: widget
+                                  .attendanceListData.date
+                            });
+                          } else {
                             Navigator.of(context)
-                                .pushNamed(PermissionScreen.routeName,arguments:
-                            {PermissionScreen.requestNoKey:widget.attendanceListData.permission.toString(),
-                              PermissionScreen.requestDateAttendance:widget.attendanceListData.date});
-
+                                .pushNamed(
+                                PermissionScreen.routeName, arguments:
+                            {
+                              PermissionScreen.requestNoKey: widget
+                                  .attendanceListData.permission.toString(),
+                              PermissionScreen.requestDateAttendance: widget
+                                  .attendanceListData.date
+                            });
                           }
                           break;
 
                         case "Permission":
-
-                           Navigator.of(context)
-                               .pushNamed(PermissionScreen.routeName,arguments: {
-                                 PermissionScreen.requestNoKey:"0",
-                             PermissionScreen.requestDateAttendance:widget.attendanceListData.date});
+                          Navigator.of(context)
+                              .pushNamed(
+                              PermissionScreen.routeName, arguments: {
+                            PermissionScreen.requestNoKey: "0",
+                            PermissionScreen.requestDateAttendance: widget
+                                .attendanceListData.date});
 
                           break;
                         case "Vacation":
-
                           Navigator.of(context)
-                              .pushNamed(VacationScreen.routeName,arguments: {VacationScreen.requestNoKey:"0",
-                            VacationScreen.requestDateAttendance:widget.attendanceListData.date});
+                              .pushNamed(VacationScreen.routeName,
+                              arguments: {VacationScreen.requestNoKey: "0",
+                                VacationScreen.requestDateAttendance: widget
+                                    .attendanceListData.date});
 
                           break;
                         case "Business Mission":
-
-
                           Navigator.of(context)
-                              .pushNamed(BusinessMissionScreen.routeName,arguments: {BusinessMissionScreen.requestNoKey:"0",
-                            BusinessMissionScreen.requestDateAttendance:widget.attendanceListData.date});
+                              .pushNamed(BusinessMissionScreen.routeName,
+                              arguments: {BusinessMissionScreen
+                                  .requestNoKey: "0",
+                                BusinessMissionScreen
+                                    .requestDateAttendance: widget
+                                    .attendanceListData.date});
 
                           break;
                       }
@@ -283,17 +253,17 @@ class DialogPopUpAttendanceClass extends State<DialogPopUpAttendance> {
     );
   }
 
-  Icon iconRequest(MyAttendanceModel attendanceModel){
-    if(attendanceModel.vacation!=null){
+  Icon iconRequest(MyAttendanceModel attendanceModel) {
+    if (attendanceModel.vacation != null) {
       return const Icon(Icons.beach_access);
     }
-    else if(attendanceModel.businessMission!=null){
+    else if (attendanceModel.businessMission != null) {
       return const Icon(Icons.hail);
     }
-    else if(attendanceModel.permission!=null){
+    else if (attendanceModel.permission != null) {
       return const Icon(Icons.timelapse);
     }
-    else{
+    else {
       return const Icon(Icons.all_inbox);
     }
   }

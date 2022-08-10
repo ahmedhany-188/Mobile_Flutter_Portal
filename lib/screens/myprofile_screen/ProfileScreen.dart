@@ -100,7 +100,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
             physics: const BouncingScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                  horizontal: 8, vertical: 30),
+                  horizontal: 8, vertical: 15),
               child: Column(
                 children: [
 
@@ -289,7 +289,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
         child: Text(
           line, style: const TextStyle(
           color: Colors.white,
-          fontSize: 14,
+          fontSize: 15,
           fontFamily: 'Nunito',
         ),
           textAlign: TextAlign.left,
@@ -306,7 +306,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
         child: Text(
           head, style: const TextStyle(
           color: Colors.white,
-          fontSize: 16,
+          fontSize: 17,
           fontFamily: 'Nunito',
         ),
           textAlign: TextAlign.left,
@@ -323,7 +323,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
         child: Text(
           line, style: const TextStyle(
           color: Colors.white70,
-          fontSize: 14,
+          fontSize: 15,
           fontFamily: 'Nunito',
         ),
           textAlign: TextAlign.left,
