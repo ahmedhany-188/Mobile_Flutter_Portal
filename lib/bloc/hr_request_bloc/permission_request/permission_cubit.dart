@@ -14,6 +14,7 @@ import '../../../constants/enums.dart';
 import '../../../data/models/requests_form_models/request_date.dart';
 import '../../../data/models/requests_form_models/request_permission_time.dart';
 import '../../../data/repositories/employee_repository.dart';
+import '../../../widgets/dialogpopoup/custom_date_picker.dart';
 part 'permission_state.dart';
 
 class PermissionCubit extends Cubit<PermissionInitial> {
@@ -106,32 +107,10 @@ class PermissionCubit extends Cubit<PermissionInitial> {
     FocusScope.of(context).requestFocus(
         FocusNode());
     DateTime? date = DateTime.now();
-    if (defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.iOS) {
-      await showCupertinoModalPopup(
-          context: context,
-          builder: (BuildContext builder) {
-            return Container(
-              height: MediaQuery.of(context).copyWith().size.height * 0.25,
-              color: Colors.white,
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.date,
-                onDateTimeChanged: (value) {
-                  date = value;
-                },
-                initialDateTime: DateTime.now(),
-                minimumYear: 2020,
-                maximumYear: 2100,
-              ),
-            );
-          });
-    } else {
-      date = await showDatePicker(
-          context: context,
-          initialDate: DateTime.now(),
-          firstDate: DateTime(2020),
-          lastDate: DateTime(2100));
-    }
+    // if (defaultTargetPlatform == TargetPlatform.macOS ||
+    //     defaultTargetPlatform == TargetPlatform.iOS) {
+    date = await openShowDatePicker(context);
+
     var formatter = DateFormat(
         'EEEE dd-MM-yyyy');
     String formattedDate = formatter.format(
@@ -141,7 +120,8 @@ class PermissionCubit extends Cubit<PermissionInitial> {
     emit(
       state.copyWith(
         permissionDate: permissionDate,
-        status: Formz.validate([state.requestDate,permissionDate, state.permissionTime]),
+        status: Formz.validate(
+            [state.requestDate, permissionDate, state.permissionTime]),
       ),
     );
   }
@@ -161,29 +141,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
     final localizations = MaterialLocalizations
         .of(context);
 
-    if (defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.iOS){
-      await showCupertinoModalPopup(
-          context: context,
-          builder: (BuildContext builder) {
-            return Container(
-              height: MediaQuery.of(context).copyWith().size.height * 0.25,
-              color: Colors.white,
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.time,
-                onDateTimeChanged: (value) {
-                  time = TimeOfDay.fromDateTime(value);
-                },
-                initialDateTime: DateTime.now(),
-                minimumYear: 2020,
-                maximumYear: 2100,
-              ),
-            );
-          });
-    }else{
-      time = await showTimePicker(context: context,
-          initialTime: TimeOfDay.now());
-    }
+    time = await openShowTimePicker(context);
 
     final formattedTimeOfDay = localizations
         .formatTimeOfDay(

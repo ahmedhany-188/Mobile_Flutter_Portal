@@ -48,6 +48,9 @@ class $AssetsImagesGen {
   AssetGenImage get defaultBg =>
       const AssetGenImage('assets/images/defaultBg.jpg');
 
+  /// File path: assets/images/favicon.png
+  AssetGenImage get favicon => const AssetGenImage('assets/images/favicon.png');
+
   /// File path: assets/images/fulllogoblue.png
   AssetGenImage get fulllogoblue =>
       const AssetGenImage('assets/images/fulllogoblue.png');
