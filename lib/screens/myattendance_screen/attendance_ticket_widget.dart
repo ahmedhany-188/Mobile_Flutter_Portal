@@ -49,9 +49,9 @@ class AttendanceTicketWidget extends StatelessWidget {
                     child: InkWell(
                       onTap: () {
                         if (attendanceListData[index].vacation == null && attendanceListData[index].holiday == false) {
-                          showDialog(context: context,
+                          showModalBottomSheet<void>(context: context,
                               builder: (BuildContext context) {
-                                return DialogPopUpAttendance(
+                                return ShowAttendanceBottomSheet(
                                     attendanceListData: attendanceListData[index],
                                     hrUser: hrUser);
                               });
@@ -198,7 +198,7 @@ Container holidayContainer(MyAttendanceModel attendanceModel) {
       child: Text(
           timeText,
           style: const TextStyle(
-            color: Colors.white,
+            color: Colors.petrolTextAttendance,
             fontSize: 11,
           )
       ),
@@ -207,13 +207,13 @@ Container holidayContainer(MyAttendanceModel attendanceModel) {
 
   Color containerColor(String color) {
     if (color == "green") {
-      return Colors.lightGreen;
+      return Colors.greenAttendance;
     } else if (color == "red") {
-      return Colors.red;
+      return Colors.redAttendance;
     } else if(color == "blue") {
       return Colors.blueGrey;
     }else{
-      return Colors.grey;
+      return Colors.whiteNormalAttendance;
     }
   }
   SizedBox sizedDay(MyAttendanceModel attendanceModel,
@@ -226,9 +226,9 @@ Container holidayContainer(MyAttendanceModel attendanceModel) {
       child: InkWell(
           onTap: () {
             if (attendanceModel.vacation == null && attendanceModel.holiday != true ) {
-              showDialog(context: context,
+              showModalBottomSheet<void>(context: context,
                   builder: (BuildContext context) {
-                    return DialogPopUpAttendance(
+                    return ShowAttendanceBottomSheet(
                         attendanceListData: attendanceModel, hrUser: hrUser);
                   }
               );
