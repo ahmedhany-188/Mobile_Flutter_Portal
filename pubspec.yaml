@@ -194,6 +194,7 @@ flutter:
     - assets/images/Values.png
     - assets/images/Cover.png
     - assets/images/defaultBg.jpg
+    - assets/images/favicon.png
     - assets/images/welcomeImage.gif
     - assets/images/homepage/
     - assets/images/homepage/attendanceIcon.png

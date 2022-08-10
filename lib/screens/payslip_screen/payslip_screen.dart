@@ -83,6 +83,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
           appBar: AppBar(
             title: const Text("Payslip"),
             backgroundColor: Colors.transparent,
+            elevation: 0,
             centerTitle: true,
           ),
           body: BlocConsumer<PayslipCubit, PayslipState>(
@@ -97,7 +98,6 @@ class _PayslipScreenState extends State<PayslipScreen> {
                 // );
               }
               else if (state is PayslipErrorState) {
-
                 EasyLoading.showError(state.error,);
                 // ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 // ScaffoldMessenger.of(context).showSnackBar(
@@ -145,14 +145,14 @@ class _PayslipScreenState extends State<PayslipScreen> {
                           },
                           child:  Text("Reset Payslip Password",style: TextStyle(
                             decoration: TextDecoration.underline,
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).highlightColor,
                           ),),
                         ),
                       ],
                     ),
                     const SizedBox(height: 20,),
                     TextFormField(
-                      style: const TextStyle(color: Color(0xFF174873)),
+                      style: const TextStyle(color: Colors.white),
                       focusNode: passwordFocusNode,
                       cursorColor: Colors.white,
                       key: const Key('loginForm_passwordInput_textField'),
@@ -167,20 +167,16 @@ class _PayslipScreenState extends State<PayslipScreen> {
                           icon: showPassword
                               ? Icon(
                             Icons.visibility,
-                            color: (passwordFocusNode.hasFocus)
-                                ? const Color(0xFF186597)
-                                : const Color(0xFF174873),
+                            color: Colors.white70
                           )
-                              : Icon(Icons.visibility_off,
-                              color: (passwordFocusNode.hasFocus)
-                                  ? const Color(0xFF186597)
-                                  : const Color(0xFF174873)),
+                              : const Icon(Icons.visibility_off,
+                              color:  Colors.white38),
                         ),
                         prefixIcon: Icon(
                           Icons.password,
                           color: (passwordFocusNode.hasFocus)
-                              ? const Color(0xFF186597)
-                              : const Color(0xFF174873),
+                              ? Colors.white
+                              : Colors.white38,
                         ),
                         filled: true,
                         // fillColor: const Color(0xFFcfdeec),
@@ -196,6 +192,12 @@ class _PayslipScreenState extends State<PayslipScreen> {
                     ),
                     const SizedBox(height: 10,),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.blue[900],
+                          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                          textStyle: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold)),
                       onPressed: () {
                         if (_passwordController.text.isNotEmpty) {
                           BlocProvider.of<PayslipCubit>(context).getPdfLink(

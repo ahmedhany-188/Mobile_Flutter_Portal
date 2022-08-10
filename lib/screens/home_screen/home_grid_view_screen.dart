@@ -22,7 +22,7 @@ class HomeGridViewScreen extends StatelessWidget {
       decoration: BoxDecoration(
           image: DecorationImage(
         image: Assets.images.defaultBg.image().image,
-        fit: BoxFit.cover,
+        fit: BoxFit.fill,
       )),
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -65,231 +65,241 @@ class HomeGridViewScreen extends StatelessWidget {
             ],
           ),
           drawer: const MainDrawer(),
-          body: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
+          body: Stack(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                BlocProvider<NewsCubit>.value(
-                  value: NewsCubit.get(context),
-                  child: BlocBuilder<NewsCubit, NewsState>(
-                    builder: (context, state) {
-                      return Container(
-                        width: MediaQuery.of(context).size.width / 1.2,
-                        padding: const EdgeInsets.all(10),
-                        margin: const EdgeInsets.only(top: 20),
-                        height: 100,
-                        child: ListView(
-                          reverse: false,
-                          shrinkWrap: true,
-                          children: [
-                            AnimatedTextKit(
-                              isRepeatingAnimation: true,
-                              pause: const Duration(milliseconds: 1000),
-                              repeatForever: true,
-                              displayFullTextOnTap: false,
-                              animatedTexts: NewsCubit.get(context)
-                                      .announcment
-                                      .isEmpty
-                                  ? [
-                                      TyperAnimatedText(
-                                        'Checking for Announcement... ',
-                                        speed:
-                                            const Duration(milliseconds: 100),
-                                        textAlign: TextAlign.center,
-                                        curve: Curves.ease,
-                                        textStyle: const TextStyle(
-                                            color: Colors.white,
-                                            overflow: TextOverflow.clip,
-                                            fontFamily: 'RobotoFlex',
-                                            fontSize: 14),
-                                      )
-                                    ]
-                                  : NewsCubit.get(context).announcment,
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: BlocProvider<NewsCubit>.value(
+                    value: NewsCubit.get(context),
+                    child: BlocBuilder<NewsCubit, NewsState>(
+                      builder: (context, state) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width / 1.2,
+                          padding: const EdgeInsets.all(10),
+                          // margin: const EdgeInsets.only(top: 30),
+                          height: 100,
+                          child: ListView(
+                            reverse: false,
+                            shrinkWrap: true,
+                            children: [
+                              AnimatedTextKit(
+                                isRepeatingAnimation: true,
+                                pause: const Duration(milliseconds: 1000),
+                                repeatForever: true,
+                                displayFullTextOnTap: false,
+                                animatedTexts: NewsCubit.get(context)
+                                        .announcment
+                                        .isEmpty
+                                    ? [
+                                        TyperAnimatedText(
+                                          'Checking for Announcement... ',
+                                          speed:
+                                              const Duration(milliseconds: 100),
+                                          textAlign: TextAlign.center,
+                                          curve: Curves.ease,
+                                          textStyle: const TextStyle(
+                                              color: Colors.white,
+                                              overflow: TextOverflow.clip,
+                                              fontFamily: 'RobotoFlex',
+                                              fontSize: 14),
+                                        )
+                                      ]
+                                    : NewsCubit.get(context).announcment,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                GridView(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: GridView(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                      ),
+                      padding: EdgeInsets.zero,
+                      addRepaintBoundaries: false,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        GestureDetector(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(AttendanceScreen.routeName),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets.images.homepage.attendanceIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'Attendance',
+                                  softWrap: true,
+                                  style:
+                                      TextStyle(color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            )),
+                        GestureDetector(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(ContactsScreen.routeName),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets.images.homepage.contactListIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'Contact List',
+                                  softWrap: true,
+                                  style:
+                                      TextStyle(color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            )),
+                        GestureDetector(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(AttendanceScreen.routeName),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets.images.homepage.benefitsIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'Benefits',
+                                  softWrap: true,
+                                  style:
+                                      TextStyle(color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            )),
+                        GestureDetector(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(AttendanceScreen.routeName),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets.images.homepage.hrRequestsIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'HR Request',
+                                  softWrap: true,
+                                  style:
+                                      TextStyle(color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            )),
+                        GestureDetector(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(AttendanceScreen.routeName),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets.images.homepage.itRequestIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'IT Request',
+                                  softWrap: true,
+                                  style:
+                                      TextStyle(color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            )),
+                        GestureDetector(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(AttendanceScreen.routeName),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets.images.homepage.mediaCenterIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'Media Center',
+                                  softWrap: true,
+                                  style:
+                                      TextStyle(color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            )),
+                        GestureDetector(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(AttendanceScreen.routeName),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(Assets.images.homepage.newsIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'News',
+                                  softWrap: true,
+                                  style:
+                                      TextStyle(color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            )),
+                        GestureDetector(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(AttendanceScreen.routeName),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets.images.homepage.haNewsLetterIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'HA NewsLetter',
+                                  softWrap: true,
+                                  style:
+                                      TextStyle(color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            )),
+                        GestureDetector(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(AttendanceScreen.routeName),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets.images.homepage.economyNewsIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'Economy News',
+                                  softWrap: true,
+                                  style:
+                                      TextStyle(color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            )),
+                      ],
+                    ),
                   ),
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  children: [
-                    InkWell(
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(AttendanceScreen.routeName),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset(
-                                Assets.images.homepage.attendanceIcon.path,
-                                scale: 3),
-                            const Text(
-                              'Attendance',
-                              softWrap: true,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 14),
-                            )
-                          ],
-                        )),
-                    InkWell(
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(ContactsScreen.routeName),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset(
-                                Assets.images.homepage.contactListIcon.path,
-                                scale: 3),
-                            const Text(
-                              'Contact List',
-                              softWrap: true,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 14),
-                            )
-                          ],
-                        )),
-                    InkWell(
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(AttendanceScreen.routeName),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset(
-                                Assets.images.homepage.benefitsIcon.path,
-                                scale: 3),
-                            const Text(
-                              'Benefits',
-                              softWrap: true,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 14),
-                            )
-                          ],
-                        )),
-                    InkWell(
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(AttendanceScreen.routeName),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset(
-                                Assets.images.homepage.hrRequestsIcon.path,
-                                scale: 3),
-                            const Text(
-                              'HR Request',
-                              softWrap: true,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 14),
-                            )
-                          ],
-                        )),
-                    InkWell(
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(AttendanceScreen.routeName),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset(
-                                Assets.images.homepage.itRequestIcon.path,
-                                scale: 3),
-                            const Text(
-                              'IT Request',
-                              softWrap: true,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 14),
-                            )
-                          ],
-                        )),
-                    InkWell(
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(AttendanceScreen.routeName),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset(
-                                Assets.images.homepage.mediaCenterIcon.path,
-                                scale: 3),
-                            const Text(
-                              'Media Center',
-                              softWrap: true,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 14),
-                            )
-                          ],
-                        )),
-                    InkWell(
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(AttendanceScreen.routeName),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset(Assets.images.homepage.newsIcon.path,
-                                scale: 3),
-                            const Text(
-                              'News',
-                              softWrap: true,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 14),
-                            )
-                          ],
-                        )),
-                    InkWell(
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(AttendanceScreen.routeName),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset(
-                                Assets.images.homepage.haNewsLetterIcon.path,
-                                scale: 3),
-                            const Text(
-                              'HA NewsLetter',
-                              softWrap: true,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 14),
-                            )
-                          ],
-                        )),
-                    InkWell(
-                        onTap: () => Navigator.of(context)
-                            .pushNamed(AttendanceScreen.routeName),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Image.asset(
-                                Assets.images.homepage.economyNewsIcon.path,
-                                scale: 3),
-                            const Text(
-                              'Economy News',
-                              softWrap: true,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 14),
-                            )
-                          ],
-                        )),
-                  ],
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: 110),
-
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
                     child: Shimmer.fromColors(
                       baseColor: Colors.white,
                       highlightColor: Colors.grey.shade700,period: Duration(milliseconds: 3000),
