@@ -2,6 +2,7 @@ import 'dart:core';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 
 import '../../bloc/contacts_screen_bloc/contacts_filters_cubit.dart';
 import '../../screens/contacts_screen/contacts_widget.dart';
@@ -224,136 +225,138 @@ class _ContactsScreenState extends State<ContactsScreen> {
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.transparent,
-      appBar: AppBar(centerTitle: true,title: Text('Contacts List'),),
-      body: BlocProvider<ContactsCubit>.value(
-        value: ContactsCubit.get(context),
-        child: BlocBuilder<ContactsCubit, ContactCubitStates>(
-          buildWhen: (pre, curr) {
-            if (curr.contactStates == ContactsEnumStates.success ||
-                curr.contactStates == ContactsEnumStates.filtered) {
-              return true;
-            } else {
-              return false;
-            }
-          },
-          builder: (context, state) {
-            // if (state.contactStates == ContactsEnumStates.success ||
-            //     state.contactStates == ContactsEnumStates.filtered) {
-            return BlocProvider(
-              create: (filtersContext) => ContactsFiltersCubit(
-                ContactsCubit.get(context).state.listContacts,
-              ),
-              child: SizedBox(
-                height: deviceSize.height,
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: SingleChildScrollView(
-                    clipBehavior: Clip.none,
-                    physics: const NeverScrollableScrollPhysics(),
-                    keyboardDismissBehavior:
-                        ScrollViewKeyboardDismissBehavior.onDrag,
-                    child: Column(
-                      children: [
-                        BlocConsumer<ContactsFiltersCubit,
-                            ContactsFiltersInitial>(
-                          listener: (filtersCubitContext, filtersCubitState) {
-                            if (filtersCubitState.isFiltered) {
-                              ContactsCubit.get(context).updateContacts(
-                                  filtersCubitState.listContacts);
-                            }
-                          },
-                          builder: (ctx, state) {
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: TextFormField(
-                                    focusNode: textFoucus,
-                                    // key: uniqueKey,
-                                    controller: textController,
-                                    onChanged: (text) {
-                                      ContactsFiltersCubit.get(ctx)
-                                          .writenTextSearch(text);
-                                    },
-                                    decoration: const InputDecoration(
-                                        contentPadding: EdgeInsets.all(10),
-                                        isCollapsed: true,
-                                        filled: true,
-                                        labelText: "Search contact",
-                                        hintText: 'Name or HR Code',
-                                        prefixIcon: Icon(Icons.search),
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(10.0)),
-                                            borderSide: BorderSide.none)),
-                                  ),
-                                ),
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    ElevatedButton.icon(
-                                      onPressed: () {
+    return CustomBackground(
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(centerTitle: true,title: const Text('Contacts List'),backgroundColor: Colors.transparent,elevation: 0,),
+        body: BlocProvider<ContactsCubit>.value(
+          value: ContactsCubit.get(context),
+          child: BlocBuilder<ContactsCubit, ContactCubitStates>(
+            buildWhen: (pre, curr) {
+              if (curr.contactStates == ContactsEnumStates.success ||
+                  curr.contactStates == ContactsEnumStates.filtered) {
+                return true;
+              } else {
+                return false;
+              }
+            },
+            builder: (context, state) {
+              // if (state.contactStates == ContactsEnumStates.success ||
+              //     state.contactStates == ContactsEnumStates.filtered) {
+              return BlocProvider(
+                create: (filtersContext) => ContactsFiltersCubit(
+                  ContactsCubit.get(context).state.listContacts,
+                ),
+                child: SizedBox(
+                  height: deviceSize.height,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: SingleChildScrollView(
+                      clipBehavior: Clip.none,
+                      physics: const NeverScrollableScrollPhysics(),
+                      keyboardDismissBehavior:
+                          ScrollViewKeyboardDismissBehavior.onDrag,
+                      child: Column(
+                        children: [
+                          BlocConsumer<ContactsFiltersCubit,
+                              ContactsFiltersInitial>(
+                            listener: (filtersCubitContext, filtersCubitState) {
+                              if (filtersCubitState.isFiltered) {
+                                ContactsCubit.get(context).updateContacts(
+                                    filtersCubitState.listContacts);
+                              }
+                            },
+                            builder: (ctx, state) {
+                              return Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: TextFormField(
+                                      focusNode: textFoucus,
+                                      // key: uniqueKey,
+                                      controller: textController,
+                                      onChanged: (text) {
                                         ContactsFiltersCubit.get(ctx)
-                                            .updateFilters();
-                                        _showDialogAndGetFiltersResults(ctx);
+                                            .writenTextSearch(text);
                                       },
-                                      label: const Text('Filter Contacts'),
-                                      icon: const Icon(
-                                        Icons.filter_list_alt,
-                                        color: Colors.green,
-                                      ),
+                                      decoration: const InputDecoration(
+                                          contentPadding: EdgeInsets.all(10),
+                                          isCollapsed: true,
+                                          filled: true,
+                                          labelText: "Search contact",
+                                          hintText: 'Name or HR Code',
+                                          prefixIcon: Icon(Icons.search),
+                                          border: OutlineInputBorder(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(10.0)),
+                                              borderSide: BorderSide.none)),
                                     ),
-                                    const SizedBox(width: 10),
-                                    ElevatedButton.icon(
-                                      onPressed: (state.isFiltered == false &&
-                                              textController.text.isEmpty)
-                                          ? null
-                                          : () {
-                                              ContactsFiltersCubit.get(ctx)
-                                                  .onClearData();
-                                              textController.clear();
-                                              textFoucus.unfocus();
-                                            },
-                                      label: const Text('Clear Filters'),
-                                      icon: const Icon(
-                                        Icons.clear,
-                                        color: Colors.red,
+                                  ),
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      ElevatedButton.icon(
+                                        onPressed: () {
+                                          ContactsFiltersCubit.get(ctx)
+                                              .updateFilters();
+                                          _showDialogAndGetFiltersResults(ctx);
+                                        },
+                                        label: const Text('Filter Contacts'),
+                                        icon: const Icon(
+                                          Icons.filter_list_alt,
+                                          color: Colors.green,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                        Scrollbar(
-                          child: BlocBuilder<ContactsCubit, ContactCubitStates>(
-                            builder: (context, state) {
-                              return SizedBox(
-                                height: deviceSize.height * 0.69,
-                                child: (ContactsFiltersCubit.get(context)
-                                        .state
-                                        .isFiltered)
-                                    ? ContactsWidget(state.tempList)
-                                    : ContactsWidget(state.listContacts),
+                                      const SizedBox(width: 10),
+                                      ElevatedButton.icon(
+                                        onPressed: (state.isFiltered == false &&
+                                                textController.text.isEmpty)
+                                            ? null
+                                            : () {
+                                                ContactsFiltersCubit.get(ctx)
+                                                    .onClearData();
+                                                textController.clear();
+                                                textFoucus.unfocus();
+                                              },
+                                        label: const Text('Clear Filters'),
+                                        icon: const Icon(
+                                          Icons.clear,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               );
                             },
                           ),
-                        ),
-                      ],
+                          Scrollbar(
+                            child: BlocBuilder<ContactsCubit, ContactCubitStates>(
+                              builder: (context, state) {
+                                return SizedBox(
+                                  height: deviceSize.height * 0.69,
+                                  child: (ContactsFiltersCubit.get(context)
+                                          .state
+                                          .isFiltered)
+                                      ? ContactsWidget(state.tempList)
+                                      : ContactsWidget(state.listContacts),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-            );
-            // } else {
-            //   return const Center(child: CircularProgressIndicator());
-            // }
-          },
+              );
+              // } else {
+              //   return const Center(child: CircularProgressIndicator());
+              // }
+            },
+          ),
         ),
       ),
     );

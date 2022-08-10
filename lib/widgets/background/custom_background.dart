@@ -7,14 +7,17 @@ class CustomBackground extends StatelessWidget {
   final Widget child;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: Assets.images.defaultBg.image().image,
-          fit: BoxFit.cover,
+    return Hero(
+      tag: 'heroBackgroundTag',
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: Assets.images.defaultBg.image().image,
+            fit: BoxFit.cover,
+          ),
         ),
+        child: child,
       ),
-      child: child,
     );
   }
 }

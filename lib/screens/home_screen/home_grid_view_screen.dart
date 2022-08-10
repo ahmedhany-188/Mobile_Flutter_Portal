@@ -14,6 +14,7 @@ import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_us
 import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
+import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:popover/popover.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,316 +34,311 @@ class HomeGridViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-        image: Assets.images.defaultBg.image().image,
-        fit: BoxFit.fill,
-      )),
-      child: Scaffold(
-          backgroundColor: Colors.transparent,
-          appBar: AppBar(
+    return  CustomBackground(
+        child: Scaffold(
             backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: Builder(builder: (context) {
-              return GestureDetector(
-                  onTap: () => Scaffold.of(context).openDrawer(),
-                  child: Image.asset(Assets.images.logo.path, scale: 30));
-            }),
-            centerTitle: true,
-            title: const Text('Hassan Allam Holding'),
-            actions: [
-              BlocProvider.value(
-                value: BlocProvider.of<UserNotificationBloc>(context),
-                child: BlocBuilder<UserNotificationBloc, UserNotificationState>(
-                  builder: (context, state) {
-                    return Badge(
-                      toAnimate: true,
-                      animationDuration: const Duration(milliseconds: 1000),
-                      animationType: BadgeAnimationType.scale,
-                      badgeColor: Colors.red,
-                      badgeContent: Text(
-                        "${state.notifications.length}",
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 12),
-                      ),
-                      position: const BadgePosition(
-                        start: 5,
-                        top: 4,
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.notifications),
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushNamed(NotificationsScreen.routeName);
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leading: Builder(builder: (context) {
+                return GestureDetector(
+                    onTap: () => Scaffold.of(context).openDrawer(),
+                    child: Image.asset(Assets.images.logo.path, scale: 30));
+              }),
+              centerTitle: true,
+              title: const Text('Hassan Allam Holding'),
+              actions: [
+                BlocProvider.value(
+                  value: BlocProvider.of<UserNotificationBloc>(context),
+                  child: BlocBuilder<UserNotificationBloc, UserNotificationState>(
+                    builder: (context, state) {
+                      return Badge(
+                        toAnimate: true,
+                        animationDuration: const Duration(milliseconds: 1000),
+                        animationType: BadgeAnimationType.scale,
+                        badgeColor: Colors.red,
+                        badgeContent: Text(
+                          "${state.notifications.length}",
+                          style:
+                              const TextStyle(color: Colors.white, fontSize: 12),
+                        ),
+                        position: const BadgePosition(
+                          start: 5,
+                          top: 4,
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.notifications),
+                          onPressed: () {
+                            Navigator.of(context)
+                                .pushNamed(NotificationsScreen.routeName);
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            drawer: const MainDrawer(),
+            body: Stack(
+                // mainAxisAlignment: MainAxisAlignment.start,
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: BlocProvider<NewsCubit>.value(
+                      value: NewsCubit.get(context),
+                      child: BlocBuilder<NewsCubit, NewsState>(
+                        builder: (context, state) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width / 1.2,
+                            padding: const EdgeInsets.all(10),
+                            margin: const EdgeInsets.only(top: 25),
+                            height: 100,
+                            child: ListView(
+                              reverse: false,
+                              shrinkWrap: true,
+                              children: [
+                                AnimatedTextKit(
+                                  isRepeatingAnimation: true,
+                                  pause: const Duration(milliseconds: 1000),
+                                  repeatForever: true,
+                                  displayFullTextOnTap: false,
+                                  animatedTexts: NewsCubit.get(context)
+                                          .announcment
+                                          .isEmpty
+                                      ? [
+                                          TyperAnimatedText(
+                                            'Checking for Announcement... ',
+                                            speed:
+                                                const Duration(milliseconds: 100),
+                                            textAlign: TextAlign.center,
+                                            curve: Curves.ease,
+                                            textStyle: const TextStyle(
+                                                color: Colors.white,
+                                                overflow: TextOverflow.clip,
+                                                fontFamily: 'RobotoFlex',
+                                                fontSize: 14),
+                                          )
+                                        ]
+                                      : NewsCubit.get(context).announcment,
+                                ),
+                              ],
+                            ),
+                          );
                         },
                       ),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-          drawer: const MainDrawer(),
-          body: Stack(
-              // mainAxisAlignment: MainAxisAlignment.start,
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: BlocProvider<NewsCubit>.value(
-                    value: NewsCubit.get(context),
-                    child: BlocBuilder<NewsCubit, NewsState>(
-                      builder: (context, state) {
-                        return Container(
-                          width: MediaQuery.of(context).size.width / 1.2,
-                          padding: const EdgeInsets.all(10),
-                          margin: const EdgeInsets.only(top: 25),
-                          height: 100,
-                          child: ListView(
-                            reverse: false,
-                            shrinkWrap: true,
-                            children: [
-                              AnimatedTextKit(
-                                isRepeatingAnimation: true,
-                                pause: const Duration(milliseconds: 1000),
-                                repeatForever: true,
-                                displayFullTextOnTap: false,
-                                animatedTexts: NewsCubit.get(context)
-                                        .announcment
-                                        .isEmpty
-                                    ? [
-                                        TyperAnimatedText(
-                                          'Checking for Announcement... ',
-                                          speed:
-                                              const Duration(milliseconds: 100),
-                                          textAlign: TextAlign.center,
-                                          curve: Curves.ease,
-                                          textStyle: const TextStyle(
-                                              color: Colors.white,
-                                              overflow: TextOverflow.clip,
-                                              fontFamily: 'RobotoFlex',
-                                              fontSize: 14),
-                                        )
-                                      ]
-                                    : NewsCubit.get(context).announcment,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: GridView(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                        ),
+                        padding: EdgeInsets.zero,
+                        addRepaintBoundaries: false,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          GestureDetector(
+                              onTap: () => Navigator.of(context)
+                                  .pushNamed(AttendanceScreen.routeName),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                      Assets.images.homepage.attendanceIcon.path,
+                                      scale: 3),
+                                  const Text(
+                                    'Attendance',
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  )
+                                ],
+                              )),
+                          GestureDetector(
+                              onTap: () => Navigator.of(context)
+                                  .pushNamed(ContactsScreen.routeName),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                      Assets.images.homepage.contactListIcon.path,
+                                      scale: 3),
+                                  const Text(
+                                    'Contact List',
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  )
+                                ],
+                              )),
+                          MenuPopupWidget(
+                              benefitsMenuItems(context),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                      Assets.images.homepage.benefitsIcon.path,
+                                      scale: 3),
+                                  const Text(
+                                    'Benefits',
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  )
+                                ],
                               ),
-                            ],
+                              containerHeight: 100),
+                          MenuPopupWidget(
+                            hrRequestMenuItems(context),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets.images.homepage.hrRequestsIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'HR Request',
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            ),
+                            containerHeight: 200,
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: GridView(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
+                          MenuPopupWidget(
+                              itRequestMenuItems(context),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                      Assets.images.homepage.itRequestIcon.path,
+                                      scale: 3),
+                                  const Text(
+                                    'IT Request',
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  )
+                                ],
+                              ),
+                              containerHeight: 150),
+                          MenuPopupWidget(
+                              mediaCenterMenuItems(context),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                      Assets.images.homepage.mediaCenterIcon.path,
+                                      scale: 3),
+                                  const Text(
+                                    'Media Center',
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  )
+                                ],
+                              ),
+                              containerHeight: 100),
+                          GestureDetector(
+                              onTap: () => Navigator.of(context)
+                                  .pushNamed(NewsScreen.routeName),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                      Assets.images.homepage.newsIcon.path,
+                                      scale: 3),
+                                  const Text(
+                                    'News',
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  )
+                                ],
+                              )),
+                          MenuPopupWidget(
+                              newsLetterMenuItems(context),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                      Assets
+                                          .images.homepage.haNewsLetterIcon.path,
+                                      scale: 3),
+                                  const Text(
+                                    'HA NewsLetter',
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  )
+                                ],
+                              ),
+                              containerHeight: 100),
+                          GestureDetector(
+                              onTap: () => Navigator.of(context)
+                                  .pushNamed(EconomyNewsScreen.routeName),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                      Assets.images.homepage.economyNewsIcon.path,
+                                      scale: 3),
+                                  const Text(
+                                    'Economy News',
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  )
+                                ],
+                              )),
+                        ],
                       ),
-                      padding: EdgeInsets.zero,
-                      addRepaintBoundaries: false,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        GestureDetector(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(AttendanceScreen.routeName),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets.images.homepage.attendanceIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'Attendance',
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            )),
-                        GestureDetector(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(ContactsScreen.routeName),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets.images.homepage.contactListIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'Contact List',
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            )),
-                        MenuPopupWidget(
-                            benefitsMenuItems(context),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets.images.homepage.benefitsIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'Benefits',
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            ),
-                            containerHeight: 100),
-                        MenuPopupWidget(
-                          hrRequestMenuItems(context),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.asset(
-                                  Assets.images.homepage.hrRequestsIcon.path,
-                                  scale: 3),
-                              const Text(
-                                'HR Request',
-                                softWrap: true,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              )
-                            ],
-                          ),
-                          containerHeight: 200,
-                        ),
-                        MenuPopupWidget(
-                            itRequestMenuItems(context),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets.images.homepage.itRequestIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'IT Request',
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            ),
-                            containerHeight: 150),
-                        MenuPopupWidget(
-                            mediaCenterMenuItems(context),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets.images.homepage.mediaCenterIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'Media Center',
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            ),
-                            containerHeight: 100),
-                        GestureDetector(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(NewsScreen.routeName),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets.images.homepage.newsIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'News',
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            )),
-                        MenuPopupWidget(
-                            newsLetterMenuItems(context),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets
-                                        .images.homepage.haNewsLetterIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'HA NewsLetter',
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            ),
-                            containerHeight: 100),
-                        GestureDetector(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(EconomyNewsScreen.routeName),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets.images.homepage.economyNewsIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'Economy News',
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            )),
-                      ],
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Shimmer.fromColors(
-                        baseColor: Colors.white,
-                        highlightColor: Colors.grey.shade700,
-                        period: const Duration(milliseconds: 3000),
-                        child: const Text(
-                          '\u00a9 2021 IT Department All Rights Reserved',
-                          style: TextStyle(
-                            fontSize: 14,
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Shimmer.fromColors(
+                          baseColor: Colors.white,
+                          highlightColor: Colors.grey.shade700,
+                          period: const Duration(milliseconds: 3000),
+                          child: const Text(
+                            '\u00a9 2021 IT Department All Rights Reserved',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          )
+                          // Container(
+                          //   color: Colors.red,
+                          //   height: 20,
+                          //   width: MediaQuery.of(context).size.width,
+                          // ),
                           ),
-                        )
-                        // Container(
-                        //   color: Colors.red,
-                        //   height: 20,
-                        //   width: MediaQuery.of(context).size.width,
-                        // ),
-                        ),
+                    ),
                   ),
-                ),
-              ])),
+                ])),
+
     );
   }
 }
