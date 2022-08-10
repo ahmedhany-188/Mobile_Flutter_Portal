@@ -13,6 +13,7 @@ import 'package:intl/intl.dart';
 
 import '../../../constants/enums.dart';
 import '../../../data/models/requests_form_models/request_date.dart';
+import '../../../widgets/dialogpopoup/custom_date_picker.dart';
 
 part 'vacation_state.dart';
 
@@ -168,35 +169,6 @@ class VacationCubit extends Cubit<VacationInitial> {
       ),
     );
     await getVacationDuration();
-  }
-
-  Future<DateTime?> openShowDatePicker(context) async{
-    return await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100),
-        builder: (context, child) {
-          return Theme(
-            data: Theme.of(context).copyWith(
-              textTheme: Theme.of(context)
-                  .textTheme
-                  .apply(bodyColor: const Color(0xff0F3C5B),),
-              colorScheme: ColorScheme.light(
-                primary: const Color(0xff0F3C5B), // header background color
-                onPrimary: Colors.white, // header text color
-                // body text color
-              ),
-              textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(
-                  primary: const Color(0xff0F3C5B), // button text color
-                ),
-              ),
-            ),
-            child: child!,
-          );
-        }
-    );
   }
 
   void vacationTypeChanged(int value) async{
