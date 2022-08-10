@@ -90,4 +90,10 @@ getCodeOfConduct(){
 getTrainingPlan(){
   return 'https://portal.hassanallam.com/TrainingMonthes.aspx';
 }
+getItManagment(){
+  return 'https://portal.hassanallam.com/MainITForm.aspx';
+}
+getAppraisal(){
+  return 'https://portal.hassanallam.com/Apps/Appraisal/default.aspx';
+}
 
