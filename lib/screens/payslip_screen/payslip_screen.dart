@@ -84,7 +84,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
             title: const Text("Payslip"),
             backgroundColor: Colors.transparent,
             elevation: 0,
-            centerTitle: true,
+            // centerTitle: true,
           ),
           body: BlocConsumer<PayslipCubit, PayslipState>(
             listener: (context, state) {

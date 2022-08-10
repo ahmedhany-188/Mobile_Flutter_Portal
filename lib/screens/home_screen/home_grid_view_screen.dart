@@ -3,14 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
+import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
+import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
+import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
+import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request.dart';
+import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
+import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
+import 'package:popover/popover.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../widgets/drawer/main_drawer.dart';
 import '../../bloc/news_screen_bloc/news_cubit.dart';
+import '../admin_request_screen/business_card_screen.dart';
+import '../news_screen/news_screen.dart';
 import '../notification_screen/notifications_screen.dart';
 import '../../screens/contacts_screen/contacts_screen.dart';
 import '../../screens/myattendance_screen/attendance_screen.dart';
 import '../../bloc/notification_bloc/bloc/user_notification_bloc.dart';
+import '../videos_screen/videos_screen.dart';
 
 class HomeGridViewScreen extends StatelessWidget {
   const HomeGridViewScreen({Key? key}) : super(key: key);
@@ -29,7 +45,11 @@ class HomeGridViewScreen extends StatelessWidget {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
-            // leading: Image(image: Asset.),
+            leading: Builder(builder: (context) {
+              return GestureDetector(
+                  onTap: () => Scaffold.of(context).openDrawer(),
+                  child: Image.asset(Assets.images.logo.path, scale: 30));
+            }),
             centerTitle: true,
             title: const Text('Hassan Allam Holding'),
             actions: [
@@ -78,7 +98,7 @@ class HomeGridViewScreen extends StatelessWidget {
                         return Container(
                           width: MediaQuery.of(context).size.width / 1.2,
                           padding: const EdgeInsets.all(10),
-                          // margin: const EdgeInsets.only(top: 30),
+                          margin: const EdgeInsets.only(top: 25),
                           height: 100,
                           child: ListView(
                             reverse: false,
@@ -123,7 +143,8 @@ class HomeGridViewScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: GridView(
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                       ),
                       padding: EdgeInsets.zero,
@@ -144,8 +165,8 @@ class HomeGridViewScreen extends StatelessWidget {
                                 const Text(
                                   'Attendance',
                                   softWrap: true,
-                                  style:
-                                      TextStyle(color: Colors.white, fontSize: 14),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
                                 )
                               ],
                             )),
@@ -162,15 +183,14 @@ class HomeGridViewScreen extends StatelessWidget {
                                 const Text(
                                   'Contact List',
                                   softWrap: true,
-                                  style:
-                                      TextStyle(color: Colors.white, fontSize: 14),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
                                 )
                               ],
                             )),
-                        GestureDetector(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(AttendanceScreen.routeName),
-                            child: Column(
+                        MenuPopupWidget(
+                            benefitsMenuItems(context),
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -180,33 +200,34 @@ class HomeGridViewScreen extends StatelessWidget {
                                 const Text(
                                   'Benefits',
                                   softWrap: true,
-                                  style:
-                                      TextStyle(color: Colors.white, fontSize: 14),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
                                 )
                               ],
-                            )),
-                        GestureDetector(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(AttendanceScreen.routeName),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets.images.homepage.hrRequestsIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'HR Request',
-                                  softWrap: true,
-                                  style:
-                                      TextStyle(color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            )),
-                        GestureDetector(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(AttendanceScreen.routeName),
-                            child: Column(
+                            ),
+                            containerHeight: 100),
+                        MenuPopupWidget(
+                          hrRequestMenuItems(context),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Image.asset(
+                                  Assets.images.homepage.hrRequestsIcon.path,
+                                  scale: 3),
+                              const Text(
+                                'HR Request',
+                                softWrap: true,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              )
+                            ],
+                          ),
+                          containerHeight: 200,
+                        ),
+                        MenuPopupWidget(
+                            itRequestMenuItems(context),
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -216,15 +237,15 @@ class HomeGridViewScreen extends StatelessWidget {
                                 const Text(
                                   'IT Request',
                                   softWrap: true,
-                                  style:
-                                      TextStyle(color: Colors.white, fontSize: 14),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
                                 )
                               ],
-                            )),
-                        GestureDetector(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(AttendanceScreen.routeName),
-                            child: Column(
+                            ),
+                            containerHeight: 150),
+                        MenuPopupWidget(
+                            mediaCenterMenuItems(context),
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
@@ -234,49 +255,52 @@ class HomeGridViewScreen extends StatelessWidget {
                                 const Text(
                                   'Media Center',
                                   softWrap: true,
-                                  style:
-                                      TextStyle(color: Colors.white, fontSize: 14),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
                                 )
                               ],
-                            )),
+                            ),
+                            containerHeight: 100),
                         GestureDetector(
                             onTap: () => Navigator.of(context)
-                                .pushNamed(AttendanceScreen.routeName),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(Assets.images.homepage.newsIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'News',
-                                  softWrap: true,
-                                  style:
-                                      TextStyle(color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            )),
-                        GestureDetector(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(AttendanceScreen.routeName),
+                                .pushNamed(NewsScreen.routeName),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Image.asset(
-                                    Assets.images.homepage.haNewsLetterIcon.path,
+                                    Assets.images.homepage.newsIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'News',
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            )),
+                        MenuPopupWidget(
+                            newsLetterMenuItems(context),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets
+                                        .images.homepage.haNewsLetterIcon.path,
                                     scale: 3),
                                 const Text(
                                   'HA NewsLetter',
                                   softWrap: true,
-                                  style:
-                                      TextStyle(color: Colors.white, fontSize: 14),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
                                 )
                               ],
-                            )),
+                            ),
+                            containerHeight: 100),
                         GestureDetector(
                             onTap: () => Navigator.of(context)
-                                .pushNamed(AttendanceScreen.routeName),
+                                .pushNamed(EconomyNewsScreen.routeName),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -287,8 +311,8 @@ class HomeGridViewScreen extends StatelessWidget {
                                 const Text(
                                   'Economy News',
                                   softWrap: true,
-                                  style:
-                                      TextStyle(color: Colors.white, fontSize: 14),
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
                                 )
                               ],
                             )),
@@ -301,18 +325,294 @@ class HomeGridViewScreen extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
                     child: Shimmer.fromColors(
-                      baseColor: Colors.white,
-                      highlightColor: Colors.grey.shade700,period: Duration(milliseconds: 3000),
-                      child: Text('\u00a9 2021 IT Department All Rights Reserved',style: TextStyle(fontSize: 14,),)
-                      // Container(
-                      //   color: Colors.red,
-                      //   height: 20,
-                      //   width: MediaQuery.of(context).size.width,
-                      // ),
-                    ),
+                        baseColor: Colors.white,
+                        highlightColor: Colors.grey.shade700,
+                        period: const Duration(milliseconds: 3000),
+                        child: const Text(
+                          '\u00a9 2021 IT Department All Rights Reserved',
+                          style: TextStyle(
+                            fontSize: 14,
+                          ),
+                        )
+                        // Container(
+                        //   color: Colors.red,
+                        //   height: 20,
+                        //   width: MediaQuery.of(context).size.width,
+                        // ),
+                        ),
                   ),
                 ),
               ])),
+    );
+  }
+}
+
+Widget benefitsMenuItems(BuildContext context) {
+  return Scrollbar(
+    child: ListView(
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(8),
+      children: [
+        GestureDetector(
+          onTap: () =>
+              Navigator.of(context).pushNamed(MedicalRequestScreen.routeName),
+          child: Container(
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            height: 30,
+            child: const Text(
+              'Medical Request',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        const Divider(),
+        GestureDetector(
+          onTap: () =>
+              Navigator.of(context).pushNamed(BenefitsScreen.routeName),
+          child: Container(
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            height: 30,
+            child: const Text(
+              'HAH Benefits',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget hrRequestMenuItems(BuildContext context) {
+  return Scrollbar(
+    child: ListView(
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(8),
+      children: [
+        GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(
+              BusinessMissionScreen.routeName,
+              arguments: {'request-No': '0'}),
+          child: Container(
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            height: 30,
+            child: const Text(
+              'Business Mission',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        const Divider(),
+        GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(
+              PermissionScreen.routeName,
+              arguments: {'request-No': '0'}),
+          child: Container(
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            height: 30,
+            child: const Text(
+              'Permission',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        const Divider(),
+        GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(VacationScreen.routeName,
+              arguments: {'request-No': '0'}),
+          child: Container(
+            height: 30,
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            child: const Text(
+              'Vacation',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        const Divider(),
+        GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(
+              EmbassyLetterScreen.routeName,
+              arguments: {'request-No': '0'}),
+          child: Container(
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            height: 30,
+            child: const Text(
+              'Embassy Letter',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        const Divider(),
+        GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(
+              BusinessCardScreen.routeName,
+              arguments: {'request-No': '0'}),
+          child: Container(
+            height: 30,
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            child: const Text(
+              'Business Card',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget itRequestMenuItems(BuildContext context) {
+  return Scrollbar(
+    child: ListView(
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(8),
+      children: [
+        GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(
+              EmailAndUserAccountScreen.routeName,
+              arguments: {'request-No': '0'}),
+          child: Container(
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            height: 30,
+            child: const Text(
+              'Email Account',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        const Divider(),
+        GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(
+              AccessRightScreen.routeName,
+              arguments: {'request-No': '0'}),
+          child: Container(
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            height: 30,
+            child: const Text(
+              'Access Right',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        const Divider(),
+        GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(
+              EquipmentsRequest.routeName,
+              arguments: {'request-No': '0'}),
+          child: Container(
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            height: 30,
+            child: const Text(
+              'Equipment',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget mediaCenterMenuItems(BuildContext context) {
+  return Scrollbar(
+    child: ListView(
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(8),
+      children: [
+        GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(PhotosScreen.routeName),
+          child: Container(
+            height: 30,
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            child: const Text(
+              'Photos',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        const Divider(),
+        GestureDetector(
+          onTap: () => Navigator.of(context).pushNamed(VideosScreen.routeName),
+          child: Container(
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            height: 30,
+            child: const Text(
+              'Videos',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget newsLetterMenuItems(BuildContext context) {
+  return Scrollbar(
+    child: ListView(
+      shrinkWrap: true,
+      padding: const EdgeInsets.all(8),
+      children: [
+        GestureDetector(
+          onTap: () => launchUrl(
+              Uri.parse(
+                  'https://portal.hassanallam.com/NewsLatter/index-ar.html'),
+              mode: LaunchMode.platformDefault),
+          child: Container(
+            height: 30,
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            child: const Text(
+              'Arabic',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        const Divider(),
+        GestureDetector(
+          onTap: () => launchUrl(
+              Uri.parse('https://portal.hassanallam.com/NewsLatter/index.html'),
+              mode: LaunchMode.platformDefault),
+          child: Container(
+            height: 30,
+            padding: const EdgeInsets.only(left: 8,right: 8),
+            child: const Text(
+              'English',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class MenuPopupWidget extends StatelessWidget {
+  const MenuPopupWidget(this.widgetFunction, this.childWidget,
+      {Key? key, required this.containerHeight})
+      : super(key: key);
+
+  final Widget widgetFunction;
+  final Widget childWidget;
+  final double containerHeight;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      child: childWidget,
+      onTap: () {
+        showPopover(
+          context: context,
+          transitionDuration: const Duration(milliseconds: 150),
+          bodyBuilder: (context) => widgetFunction,
+          direction: PopoverDirection.top,
+          width: 150,
+          height: containerHeight,
+          backgroundColor: Colors.grey.shade500,
+          arrowHeight: 15,
+          arrowWidth: 30,
+        );
+      },
     );
   }
 }
