@@ -98,7 +98,7 @@ class HomeGridViewScreen extends StatelessWidget {
                         return Container(
                           width: MediaQuery.of(context).size.width / 1.2,
                           padding: const EdgeInsets.all(10),
-                          // margin: const EdgeInsets.only(top: 30),
+                          margin: const EdgeInsets.only(top: 25),
                           height: 100,
                           child: ListView(
                             reverse: false,
@@ -357,7 +357,7 @@ Widget benefitsMenuItems(BuildContext context) {
           onTap: () =>
               Navigator.of(context).pushNamed(MedicalRequestScreen.routeName),
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             height: 30,
             child: const Text(
               'Medical Request',
@@ -370,7 +370,7 @@ Widget benefitsMenuItems(BuildContext context) {
           onTap: () =>
               Navigator.of(context).pushNamed(BenefitsScreen.routeName),
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             height: 30,
             child: const Text(
               'HAH Benefits',
@@ -394,7 +394,7 @@ Widget hrRequestMenuItems(BuildContext context) {
               BusinessMissionScreen.routeName,
               arguments: {'request-No': '0'}),
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             height: 30,
             child: const Text(
               'Business Mission',
@@ -408,7 +408,7 @@ Widget hrRequestMenuItems(BuildContext context) {
               PermissionScreen.routeName,
               arguments: {'request-No': '0'}),
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             height: 30,
             child: const Text(
               'Permission',
@@ -422,7 +422,7 @@ Widget hrRequestMenuItems(BuildContext context) {
               arguments: {'request-No': '0'}),
           child: Container(
             height: 30,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             child: const Text(
               'Vacation',
               style: TextStyle(color: Colors.white),
@@ -435,7 +435,7 @@ Widget hrRequestMenuItems(BuildContext context) {
               EmbassyLetterScreen.routeName,
               arguments: {'request-No': '0'}),
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             height: 30,
             child: const Text(
               'Embassy Letter',
@@ -450,7 +450,7 @@ Widget hrRequestMenuItems(BuildContext context) {
               arguments: {'request-No': '0'}),
           child: Container(
             height: 30,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             child: const Text(
               'Business Card',
               style: TextStyle(color: Colors.white),
@@ -473,7 +473,7 @@ Widget itRequestMenuItems(BuildContext context) {
               EmailAndUserAccountScreen.routeName,
               arguments: {'request-No': '0'}),
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             height: 30,
             child: const Text(
               'Email Account',
@@ -487,7 +487,7 @@ Widget itRequestMenuItems(BuildContext context) {
               AccessRightScreen.routeName,
               arguments: {'request-No': '0'}),
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             height: 30,
             child: const Text(
               'Access Right',
@@ -501,7 +501,7 @@ Widget itRequestMenuItems(BuildContext context) {
               EquipmentsRequest.routeName,
               arguments: {'request-No': '0'}),
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             height: 30,
             child: const Text(
               'Equipment',
@@ -524,7 +524,7 @@ Widget mediaCenterMenuItems(BuildContext context) {
           onTap: () => Navigator.of(context).pushNamed(PhotosScreen.routeName),
           child: Container(
             height: 30,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             child: const Text(
               'Photos',
               style: TextStyle(color: Colors.white),
@@ -535,7 +535,7 @@ Widget mediaCenterMenuItems(BuildContext context) {
         GestureDetector(
           onTap: () => Navigator.of(context).pushNamed(VideosScreen.routeName),
           child: Container(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             height: 30,
             child: const Text(
               'Videos',
@@ -561,7 +561,7 @@ Widget newsLetterMenuItems(BuildContext context) {
               mode: LaunchMode.platformDefault),
           child: Container(
             height: 30,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             child: const Text(
               'Arabic',
               style: TextStyle(color: Colors.white),
@@ -575,7 +575,7 @@ Widget newsLetterMenuItems(BuildContext context) {
               mode: LaunchMode.platformDefault),
           child: Container(
             height: 30,
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.only(left: 8,right: 8),
             child: const Text(
               'English',
               style: TextStyle(color: Colors.white),
