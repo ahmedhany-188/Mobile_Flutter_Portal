@@ -131,11 +131,7 @@ class VacationCubit extends Cubit<VacationInitial> {
     DateTime? date = DateTime.now();
     FocusScope.of(context).requestFocus(
         FocusNode());
-    date = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100));
+    date = await openShowDatePicker(context);
     var formatter = DateFormat(
         'EEEE dd-MM-yyyy');
     String formattedDate = formatter.format(
@@ -159,11 +155,7 @@ class VacationCubit extends Cubit<VacationInitial> {
     DateTime? date = DateTime.now();
     FocusScope.of(context).requestFocus(
         FocusNode());
-    date = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100));
+    date =  await openShowDatePicker(context);
     var formatter = DateFormat(
         'EEEE dd-MM-yyyy');
     String formattedDate = formatter.format(
@@ -177,6 +169,36 @@ class VacationCubit extends Cubit<VacationInitial> {
     );
     await getVacationDuration();
   }
+
+  Future<DateTime?> openShowDatePicker(context) async{
+    return await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2100),
+        builder: (context, child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              textTheme: Theme.of(context)
+                  .textTheme
+                  .apply(bodyColor: const Color(0xff0F3C5B),),
+              colorScheme: ColorScheme.light(
+                primary: const Color(0xff0F3C5B), // header background color
+                onPrimary: Colors.white, // header text color
+                // body text color
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  primary: const Color(0xff0F3C5B), // button text color
+                ),
+              ),
+            ),
+            child: child!,
+          );
+        }
+    );
+  }
+
   void vacationTypeChanged(int value) async{
     final vacationType = value;
     emit(
