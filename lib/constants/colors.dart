@@ -15,4 +15,6 @@ class ConstantsColors{
   static const Color whiteNormalAttendance= Color(0xffecf4ff);
 
   static const Color buttonColors =  Color(0xff0F3C5B);
+
+  static const Color bottomSheetBackground = Color(0xff0F3C55);
 }
