@@ -26,23 +26,35 @@ class MultiSelectionChipsFilters extends StatelessWidget {
     return MultiSelectBottomSheetField(
       key: GlobalKey(),
       items: items,
-      searchTextStyle: TextStyle(color: Colors.white),
-      searchIcon: Icon(Icons.search,color: Colors.white),
-      closeSearchIcon: Icon(Icons.close,color: Colors.white),
+      searchTextStyle: const TextStyle(color: Colors.white),
+      searchIcon: const Icon(Icons.search, color: Colors.white),
+      closeSearchIcon: const Icon(Icons.close, color: Colors.white),
       onConfirm: onConfirm,
+      confirmText: const Text(
+        'OK',
+        style: TextStyle(color: Colors.white),
+      ),
+      cancelText: const Text(
+        'CANCEL',
+        style: TextStyle(color: Colors.white),
+      ),
+      searchHintStyle: const TextStyle(color: Colors.white),
+      unselectedColor: Colors.white,
+      selectedColor: ConstantsColors.bottomSheetBackground,
       initialValue: initialValue,
       searchable: true,
       backgroundColor: ConstantsColors.bottomSheetBackground,
       listType: MultiSelectListType.LIST,
-      title:
-          Text(filterName.toUpperCase(), style: TextStyle(color: Colors.white)),
-      itemsTextStyle: TextStyle(color: Colors.white),
-      selectedItemsTextStyle: TextStyle(color: ConstantsColors.greenAttendance),
+      title: Text(filterName.toUpperCase(),
+          style: const TextStyle(color: Colors.white)),
+      itemsTextStyle: const TextStyle(color: Colors.white),
+      selectedItemsTextStyle:
+          const TextStyle(color: ConstantsColors.greenAttendance),
       chipDisplay: MultiSelectChipDisplay(
         scrollBar: HorizontalScrollBar(isAlwaysShown: true),
         scroll: true,
         chipColor: ConstantsColors.greenAttendance,
-        textStyle: TextStyle(color: Colors.black),
+        textStyle: const TextStyle(color: Colors.black),
         onTap: onTap,
         icon: const Icon(
           Icons.clear,
@@ -51,7 +63,7 @@ class MultiSelectionChipsFilters extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(20)),
-        border: Border.all(width: 2, color: Colors.white),
+        border: Border.all(width: 1, color: Colors.white),
       ),
       buttonIcon: const Icon(
         Icons.filter_list_alt,
