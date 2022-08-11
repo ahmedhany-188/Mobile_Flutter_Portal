@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -38,9 +38,9 @@ class _VacationScreenState extends State<VacationScreen> {
     // EasyLoading.dismiss();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
-
     final userMainData = context.select((AppBloc bloc) =>
     bloc.state.userData);
     final currentRequestData = widget.requestData;
@@ -56,22 +56,35 @@ class _VacationScreenState extends State<VacationScreen> {
             providers: [
               BlocProvider<VacationCubit>(create: (vacationContext) =>
               currentRequestData[VacationScreen.requestNoKey] == "0" ?
-              (VacationCubit(RequestRepository(userMainData))..getRequestData(requestStatus: RequestStatus.newRequest,date:currentRequestData[VacationScreen.requestDateAttendance]))
-                  :(VacationCubit(RequestRepository(userMainData))..getRequestData(requestStatus: RequestStatus.oldRequest, requestNo: currentRequestData[VacationScreen.requestNoKey],requesterHRCode: currentRequestData[VacationScreen.requesterHRCode]))),
-                // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
-              BlocProvider<ResponsibleVacationCubit>(
-                lazy: false,
-                  create: (_) =>
-                  ResponsibleVacationCubit()
-                    ..fetchList()),
+              (VacationCubit(RequestRepository(userMainData))
+                ..getRequestData(requestStatus: RequestStatus.newRequest,
+                    date: currentRequestData[VacationScreen
+                        .requestDateAttendance]))
+                  : (VacationCubit(RequestRepository(userMainData))
+                ..getRequestData(requestStatus: RequestStatus.oldRequest,
+                    requestNo: currentRequestData[VacationScreen.requestNoKey],
+                    requesterHRCode: currentRequestData[VacationScreen
+                        .requesterHRCode]))),
+              // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
+              BlocProvider<ResponsibleVacationCubit>.value(
+                value: BlocProvider.of(context)
+                  ..fetchList(),),
+              // lazy: false,
+              //   create: (_) =>
+              //   ResponsibleVacationCubit()
+              //     ..fetchList()),
             ],
-            child: BlocBuilder<VacationCubit,VacationInitial>(
-                builder: (context,state) {
+            child: BlocBuilder<VacationCubit, VacationInitial>(
+                builder: (context, state) {
                   // print(currentRequestData);
                   return Scaffold(
                     backgroundColor: Colors.transparent,
-                    appBar: AppBar(title: Text("Vacation Request ${state.requestStatus == RequestStatus.oldRequest ?currentRequestData[VacationScreen.requestNoKey] :""}"),
-                    backgroundColor: Colors.transparent,
+                    appBar: AppBar(title: Text(
+                        "Vacation Request ${state.requestStatus ==
+                            RequestStatus.oldRequest
+                            ? currentRequestData[VacationScreen.requestNoKey]
+                            : ""}"),
+                      backgroundColor: Colors.transparent,
                       elevation: 0,
                     ),
                     floatingActionButton: Column(
@@ -80,19 +93,23 @@ class _VacationScreenState extends State<VacationScreen> {
 
 
                         if(state.requestStatus == RequestStatus.oldRequest &&
-                            state.takeActionStatus == TakeActionStatus.takeAction )
+                            state.takeActionStatus ==
+                                TakeActionStatus.takeAction )
                           FloatingActionButton.extended(
-                          heroTag: null,
-                          onPressed: () {
-                            context.read<VacationCubit>()
-                                .submitAction(true);
-                          },
-                          icon: const Icon(Icons.verified),
-                          label: const Text('Accept'),
-                        ),
+                            heroTag: null,
+                            onPressed: () {
+                              context.read<VacationCubit>()
+                                  .submitAction(true);
+                            },
+                            icon: const Icon(Icons.verified),
+                            label: const Text('Accept'),
+                          ),
                         const SizedBox(height: 12),
                         if(state.requestStatus ==
-                            RequestStatus.oldRequest && state.takeActionStatus == TakeActionStatus.takeAction)FloatingActionButton.extended(
+                            RequestStatus.oldRequest &&
+                            state.takeActionStatus ==
+                                TakeActionStatus.takeAction)FloatingActionButton
+                            .extended(
                           backgroundColor: Colors.red,
                           heroTag: null,
                           onPressed: () {
@@ -126,21 +143,25 @@ class _VacationScreenState extends State<VacationScreen> {
                     body: BlocListener<VacationCubit, VacationInitial>(
                       listener: (context, state) {
                         if (state.status.isSubmissionInProgress) {
-                          EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
+                          EasyLoading.show(status: 'Loading...',
+                            maskType: EasyLoadingMaskType.black,
+                            dismissOnTap: false,);
                         }
                         if (state.status.isSubmissionSuccess) {
                           // LoadingDialog.hide(context);
                           EasyLoading.dismiss(animation: true);
-                          if(state.requestStatus == RequestStatus.newRequest){
+                          if (state.requestStatus == RequestStatus.newRequest) {
                             Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(builder: (_) =>
                                     SuccessScreen(text: state.successMessage ??
-                                        "Error Number",routName: VacationScreen.routeName, requestName: 'Vacation',)));
+                                        "Error Number",
+                                      routName: VacationScreen.routeName,
+                                      requestName: 'Vacation',)));
                           }
-
                         }
                         if (state.status.isSubmissionFailure) {
-                          EasyLoading.showError(state.errorMessage ?? 'Request Failed');
+                          EasyLoading.showError(state.errorMessage ??
+                              'Request Failed');
                           // LoadingDialog.hide(context);
                           // ScaffoldMessenger.of(context)
                           //   ..hideCurrentSnackBar()
@@ -158,7 +179,8 @@ class _VacationScreenState extends State<VacationScreen> {
                           child: SingleChildScrollView(
                             child: Column(
                               children: <Widget>[
-                                if(state.requestStatus == RequestStatus.oldRequest)Padding(
+                                if(state.requestStatus ==
+                                    RequestStatus.oldRequest)Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8, vertical: 8),
                                   child: BlocBuilder<
@@ -166,7 +188,8 @@ class _VacationScreenState extends State<VacationScreen> {
                                       VacationInitial>(
 
                                       builder: (context, state) {
-                                        return Text(state.statusAction ?? "Pending",
+                                        return Text(
+                                          state.statusAction ?? "Pending",
                                           // style: TextStyle(decoration: BoxDecoration(
                                           //   // labelText: 'Request Date',
                                           //   errorText: state.requestDate.invalid
@@ -212,89 +235,105 @@ class _VacationScreenState extends State<VacationScreen> {
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8, vertical: 8),
-                                  child: CustomInputDecoratorRequests(labelText: 'Vacation Type',
+                                  child: CustomInputDecoratorRequests(
+                                    labelText: 'Vacation Type',
                                     child: BlocBuilder<VacationCubit,
-                                      VacationInitial>(
-                                      buildWhen: (previous, current) {
-                                        return (previous.vacationType !=
-                                            current.vacationType);
-                                      },
-                                      builder: (context, state) {
-                                        return Column(
-                                          crossAxisAlignment: CrossAxisAlignment
-                                              .start,
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .center,
-                                          children: [
-                                            RadioListTile<int>(
-                                              activeColor: Colors.white,
-                                              // tileColor: Colors.white70,
-                                              value: 1,
-                                              title: const Text("Annual"),
-                                              groupValue: state.vacationType,
-                                              onChanged: (vacationType) =>
-                                              state.requestStatus == RequestStatus.newRequest ? context
-                                                  .read<VacationCubit>()
-                                                  .vacationTypeChanged(
-                                                  vacationType ?? 1) : null,
-                                            ),
-                                            RadioListTile<int>(
-                                              activeColor: Colors.white,
-                                              value: 2,
-                                              // dense: true,
-                                              title: const Text("Casual"),
-                                              groupValue: state.vacationType,
-                                              // radioClickState: (mstate) => mstate.value),
-                                              onChanged: (vacationType) =>
-                                              state.requestStatus == RequestStatus.newRequest ?  context
-                                                  .read<VacationCubit>()
-                                                  .vacationTypeChanged(
-                                                  vacationType ?? 1) : null,
-                                            ),
-                                            RadioListTile<int>(
-                                              activeColor: Colors.white,
-                                              value: 3,
-                                              // dense: true,
-                                              title: const Text(
-                                                  "Holiday Replacement"),
-                                              groupValue: state.vacationType,
-                                              // radioClickState: (mstate) => mstate.value),
-                                              onChanged: (vacationType) =>
-                                              state.requestStatus == RequestStatus.newRequest ? context
-                                                  .read<VacationCubit>()
-                                                  .vacationTypeChanged(
-                                                  vacationType ?? 1) : null,
-                                            ),
-                                            RadioListTile<int>(
-                                              activeColor: Colors.white,
-                                              value: 4,
-                                              // dense: true,
-                                              title: const Text("Maternity"),
-                                              groupValue: state.vacationType,
-                                              // radioClickState: (mstate) => mstate.value),
-                                              onChanged: (vacationType) =>
-                                              state.requestStatus == RequestStatus.newRequest ? context
-                                                  .read<VacationCubit>()
-                                                  .vacationTypeChanged(
-                                                  vacationType ?? 1) : null,
-                                            ),
-                                            RadioListTile<int>(
-                                              activeColor: Colors.white,
-                                              value: 5,
-                                              // dense: true,
-                                              title: const Text("Haj"),
-                                              groupValue: state.vacationType,
-                                              // radioClickState: (mstate) => mstate.value),
-                                              onChanged: (vacationType) =>
-                                              state.requestStatus == RequestStatus.newRequest ? context
-                                                  .read<VacationCubit>()
-                                                  .vacationTypeChanged(
-                                                  vacationType ?? 1) : null,
-                                            ),
-                                          ],
-                                        );
-                                      }
-                                  ),),
+                                        VacationInitial>(
+                                        buildWhen: (previous, current) {
+                                          return (previous.vacationType !=
+                                              current.vacationType);
+                                        },
+                                        builder: (context, state) {
+                                          return Column(
+                                            crossAxisAlignment: CrossAxisAlignment
+                                                .start,
+                                            mainAxisAlignment: MainAxisAlignment
+                                                .center,
+                                            children: [
+                                              RadioListTile<int>(
+                                                activeColor: Colors.white,
+                                                // tileColor: Colors.white70,
+                                                value: 1,
+                                                title: const Text("Annual"),
+                                                groupValue: state.vacationType,
+                                                onChanged: (vacationType) =>
+                                                state.requestStatus ==
+                                                    RequestStatus.newRequest
+                                                    ? context
+                                                    .read<VacationCubit>()
+                                                    .vacationTypeChanged(
+                                                    vacationType ?? 1)
+                                                    : null,
+                                              ),
+                                              RadioListTile<int>(
+                                                activeColor: Colors.white,
+                                                value: 2,
+                                                // dense: true,
+                                                title: const Text("Casual"),
+                                                groupValue: state.vacationType,
+                                                // radioClickState: (mstate) => mstate.value),
+                                                onChanged: (vacationType) =>
+                                                state.requestStatus ==
+                                                    RequestStatus.newRequest
+                                                    ? context
+                                                    .read<VacationCubit>()
+                                                    .vacationTypeChanged(
+                                                    vacationType ?? 1)
+                                                    : null,
+                                              ),
+                                              RadioListTile<int>(
+                                                activeColor: Colors.white,
+                                                value: 3,
+                                                // dense: true,
+                                                title: const Text(
+                                                    "Holiday Replacement"),
+                                                groupValue: state.vacationType,
+                                                // radioClickState: (mstate) => mstate.value),
+                                                onChanged: (vacationType) =>
+                                                state.requestStatus ==
+                                                    RequestStatus.newRequest
+                                                    ? context
+                                                    .read<VacationCubit>()
+                                                    .vacationTypeChanged(
+                                                    vacationType ?? 1)
+                                                    : null,
+                                              ),
+                                              RadioListTile<int>(
+                                                activeColor: Colors.white,
+                                                value: 4,
+                                                // dense: true,
+                                                title: const Text("Maternity"),
+                                                groupValue: state.vacationType,
+                                                // radioClickState: (mstate) => mstate.value),
+                                                onChanged: (vacationType) =>
+                                                state.requestStatus ==
+                                                    RequestStatus.newRequest
+                                                    ? context
+                                                    .read<VacationCubit>()
+                                                    .vacationTypeChanged(
+                                                    vacationType ?? 1)
+                                                    : null,
+                                              ),
+                                              RadioListTile<int>(
+                                                activeColor: Colors.white,
+                                                value: 5,
+                                                // dense: true,
+                                                title: const Text("Haj"),
+                                                groupValue: state.vacationType,
+                                                // radioClickState: (mstate) => mstate.value),
+                                                onChanged: (vacationType) =>
+                                                state.requestStatus ==
+                                                    RequestStatus.newRequest
+                                                    ? context
+                                                    .read<VacationCubit>()
+                                                    .vacationTypeChanged(
+                                                    vacationType ?? 1)
+                                                    : null,
+                                              ),
+                                            ],
+                                          );
+                                        }
+                                    ),),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
@@ -309,10 +348,13 @@ class _VacationScreenState extends State<VacationScreen> {
                                             previous.status != current.status;
                                       },
                                       builder: (context, state) {
-                                        print(state.vacationFromDate.value);
+                                        if (kDebugMode) {
+                                          print(state.vacationFromDate.value);
+                                        }
                                         return TextFormField(
                                           key: UniqueKey(),
-                                          initialValue: state.vacationFromDate.value,
+                                          initialValue: state.vacationFromDate
+                                              .value,
 
                                           // onChanged: (vacationDate) =>
                                           //     context
@@ -320,7 +362,10 @@ class _VacationScreenState extends State<VacationScreen> {
                                           //         .vacationFromDateChanged(
                                           //         context),
                                           readOnly: true,
-                                          enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
+                                          enabled: state.requestStatus ==
+                                              RequestStatus.newRequest
+                                              ? true
+                                              : false,
 
                                           decoration: InputDecoration(
                                             floatingLabelAlignment:
@@ -331,7 +376,8 @@ class _VacationScreenState extends State<VacationScreen> {
                                                 ? 'invalid permission date'
                                                 : null,
                                             prefixIcon: const Icon(
-                                                Icons.date_range_outlined,color: Colors.white70,),
+                                              Icons.date_range_outlined,
+                                              color: Colors.white70,),
                                           ),
                                           onTap: () {
                                             context
@@ -361,20 +407,29 @@ class _VacationScreenState extends State<VacationScreen> {
                                       builder: (context, state) {
                                         return TextFormField(
                                           key: UniqueKey(),
-                                          initialValue: state.vacationToDate.value,
+                                          initialValue: state.vacationToDate
+                                              .value,
                                           readOnly: true,
-                                          enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
+                                          enabled: state.requestStatus ==
+                                              RequestStatus.newRequest
+                                              ? true
+                                              : false,
                                           decoration:
                                           InputDecoration(
                                             floatingLabelAlignment:
                                             FloatingLabelAlignment.start,
                                             labelText: 'Vacation To Date',
-                                            errorText: state.vacationToDate.invalid ? (state.vacationToDate.error == DateToError.empty
+                                            errorText: state.vacationToDate
+                                                .invalid ? (state.vacationToDate
+                                                .error == DateToError.empty
                                                 ? "Empty Date To or Date From"
-                                                : (state.vacationToDate.error == DateToError.isBefore)
-                                            ? "Date From must be before Date To" : null) : null,
+                                                : (state.vacationToDate.error ==
+                                                DateToError.isBefore)
+                                                ? "Date From must be before Date To"
+                                                : null) : null,
                                             prefixIcon: const Icon(
-                                                Icons.date_range_outlined,color: Colors.white70,),
+                                              Icons.date_range_outlined,
+                                              color: Colors.white70,),
                                           ),
 
                                           onTap: () {
@@ -401,17 +456,22 @@ class _VacationScreenState extends State<VacationScreen> {
                                             current.vacationDuration);
                                       },
                                       builder: (context, state) {
-                                        print(
-                                            "from vacationDuration ${state.vacationDuration}");
+                                        if (kDebugMode) {
+                                          print(
+                                            "from vacationDuration ${state
+                                                .vacationDuration}");
+                                        }
                                         return TextFormField(
                                           key: UniqueKey(),
                                           initialValue: state.vacationDuration,
                                           readOnly: true,
-                                          enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
+
+                                          enabled: false,
                                           decoration: const InputDecoration(
                                             labelText: 'Vacation Duration',
                                             prefixIcon: Icon(
-                                                Icons.date_range,color: Colors.white70,),
+                                              Icons.date_range,
+                                              color: Colors.white70,),
                                           ),
                                         );
                                       }
@@ -424,20 +484,25 @@ class _VacationScreenState extends State<VacationScreen> {
                                       VacationCubit,
                                       VacationInitial>(
                                       buildWhen: (previous, current) {
-                                        return (previous.responsiblePerson.name !=
+                                        return (previous.responsiblePerson
+                                            .name !=
                                             current.responsiblePerson.name);
                                       },
                                       builder: (context, state) {
                                         return TextFormField(
                                           key: UniqueKey(),
                                           initialValue: state.responsiblePerson
-                                              .name,
+                                              .name?.toTitleCase(),
                                           readOnly: true,
-                                          enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
+                                          enabled: state.requestStatus ==
+                                              RequestStatus.newRequest
+                                              ? true
+                                              : false,
                                           decoration: const InputDecoration(
                                             labelText: 'Responsible Person',
                                             prefixIcon: Icon(
-                                                Icons.date_range,color: Colors.white70,),
+                                              Icons.date_range,
+                                              color: Colors.white70,),
                                           ),
                                           onTap: () {
                                             _showModal(context);
@@ -458,9 +523,17 @@ class _VacationScreenState extends State<VacationScreen> {
                                       },
                                       builder: (context, state) {
                                         return TextFormField(
-                                          key: state.requestStatus == RequestStatus.oldRequest ? UniqueKey() : null,
-                                          initialValue: state.requestStatus == RequestStatus.oldRequest ? state.comment :"",
-                                          enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
+                                          key: state.requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? UniqueKey()
+                                              : null,
+                                          initialValue: state.requestStatus ==
+                                              RequestStatus.oldRequest ? state
+                                              .comment : "",
+                                          enabled: state.requestStatus ==
+                                              RequestStatus.newRequest
+                                              ? true
+                                              : false,
                                           onChanged: (commentValue) =>
                                               context
                                                   .read<VacationCubit>()
@@ -471,7 +544,8 @@ class _VacationScreenState extends State<VacationScreen> {
 
                                             border: OutlineInputBorder(
                                               // borderSide: BorderSide(color: Colors.white),
-                                              borderRadius: BorderRadius.circular(
+                                              borderRadius: BorderRadius
+                                                  .circular(
                                                   20.0),
 
                                             ),
@@ -480,7 +554,9 @@ class _VacationScreenState extends State<VacationScreen> {
                                             //     color: Colors.grey[800]),
                                             labelText: "Add your comment",
                                             // fillColor: Colors.white70,
-                                            prefixIcon: const Icon(Icons.comment,color: Colors.white70,),
+                                            prefixIcon: const Icon(
+                                              Icons.comment,
+                                              color: Colors.white70,),
                                             enabled: true,
                                           ),
                                         );
@@ -504,12 +580,11 @@ class _VacationScreenState extends State<VacationScreen> {
   }
 
 
-
   // final TextEditingController textController = TextEditingController();
   void _showModal(context) {
     final VacationCubit bloc = BlocProvider.of<VacationCubit>(context);
     showModalBottomSheet(
-      backgroundColor: const Color(0xff0F3C55),
+        backgroundColor: const Color(0xff0F3C55),
         isScrollControlled: true,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(15.0)),
@@ -534,13 +609,20 @@ class _VacationScreenState extends State<VacationScreen> {
                             switch (state.status) {
                               case ResponsibleListStatus.failure:
                                 return const Center(
-                                    child: Text('Oops something went wrong!',style: TextStyle(color: Colors.white),));
+                                    child: Text('Oops something went wrong!',
+                                      style: TextStyle(color: Colors.white),));
                               case ResponsibleListStatus.success:
-                                // print("Successsssssss");
-                                return ItemView(items: state.items, scrollController: scrollController, bloc: bloc,);
+                              // print("Successsssssss");
+                                return ItemView(items: state.items,
+                                  scrollController: scrollController,
+                                  bloc: bloc,);
                               case ResponsibleListStatus.successSearching:
-                                print(state.tempItems.length);
-                                return ItemView(items: state.tempItems, scrollController: scrollController, bloc: bloc,);
+                                if (kDebugMode) {
+                                  print(state.tempItems.length);
+                                }
+                                return ItemView(items: state.tempItems,
+                                  scrollController: scrollController,
+                                  bloc: bloc,);
                               default:
                                 return const Center(
                                     child: CircularProgressIndicator());
@@ -558,7 +640,7 @@ class _VacationScreenState extends State<VacationScreen> {
 
 class CustomInputDecoratorRequests extends StatelessWidget {
   const CustomInputDecoratorRequests({
-    Key? key,this.child, required this.labelText,
+    Key? key, this.child, required this.labelText,
   }) : super(key: key);
 
   final Widget? child;
@@ -567,16 +649,16 @@ class CustomInputDecoratorRequests extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InputDecorator(
-      decoration:  InputDecoration(
-        contentPadding: EdgeInsets.symmetric(
-            horizontal: 0, vertical: 5),
-        labelText: labelText,
-        prefixIconColor: Colors.white70,
-        floatingLabelAlignment:
-        FloatingLabelAlignment.start,
-        prefixIcon: Icon(Icons.event,color: Colors.white70),
-      ),
-      child: child
+        decoration: InputDecoration(
+          contentPadding: const EdgeInsets.symmetric(
+              horizontal: 0, vertical: 5),
+          labelText: labelText,
+          prefixIconColor: Colors.white70,
+          floatingLabelAlignment:
+          FloatingLabelAlignment.start,
+          prefixIcon: const Icon(Icons.event, color: Colors.white70),
+        ),
+        child: child
     );
   }
 }
@@ -604,20 +686,21 @@ class ItemView extends StatelessWidget {
                       contentPadding: const EdgeInsets.all(8),
                       border: OutlineInputBorder(
                         borderRadius:
-                         BorderRadius.circular(15.0),
-                        borderSide:  const BorderSide(),
+                        BorderRadius.circular(15.0),
+                        borderSide: const BorderSide(),
                       ),
 
-                      prefixIcon: const Icon(Icons.search,color: Colors.white60,),
+                      prefixIcon: const Icon(
+                        Icons.search, color: Colors.white60,),
                     ),
                     onChanged: (value) {
                       responsibleVacationCubit.searchForContacts(value);
                     })),
             CloseButton(
-              color: Colors.white24,
+                color: Colors.white24,
 
-              // icon: Icon(Icons.close),
-              // color: Color(0xFF1F91E7),
+                // icon: Icon(Icons.close),
+                // color: Color(0xFF1F91E7),
                 onPressed: () {
                   responsibleVacationCubit.clearAll();
                   Navigator.of(context).pop();
@@ -631,10 +714,11 @@ class ItemView extends StatelessWidget {
                 ? items.length
                 : items.length,
             separatorBuilder: (context, int) {
-              return const Divider();
+              return SizedBox(height: 2,);
             },
             itemBuilder: (context, index) {
               return InkWell(
+
 
                 //6
                   child: (items.isNotEmpty)
@@ -644,14 +728,14 @@ class ItemView extends StatelessWidget {
                       index, items),
                   onTap: () {
                     //7
-                    ScaffoldMessenger.of(context)
-                      ..hideCurrentSnackBar()
-                      ..showSnackBar(
-                          SnackBar(
-                              behavior: SnackBarBehavior.floating,
-                              content: Text((items.isNotEmpty)
-                                  ? items[index].name ?? ""
-                                  : items[index].name ?? "")));
+                    // ScaffoldMessenger.of(context)
+                    //   ..hideCurrentSnackBar()
+                    //   ..showSnackBar(
+                    //       SnackBar(
+                    //           // behavior: SnackBarBehavior.floating,
+                    //           content: Text((items.isNotEmpty)
+                    //               ? items[index].name ?? ""
+                    //               : items[index].name ?? "")));
                     // showSnackBar(
                     //     SnackBar(
                     //         behavior: SnackBarBehavior.floating,
@@ -688,9 +772,14 @@ class ItemView extends StatelessWidget {
 
   Widget _showBottomSheetWithSearch(int index,
       List<ContactsDataFromApi> listOfCities) {
-    return Text(listOfCities[index].name?.toTitleCase() ?? "",
-        // style: const TextStyle(color: Colors.black, fontSize: 16),
-        textAlign: TextAlign.center);
+    return SizedBox(
+      height: 30,
+      child: Center(
+        child: Text(listOfCities[index].name?.toTitleCase() ?? "",
+            // style: const TextStyle(color: Colors.black, fontSize: 16),
+            textAlign: TextAlign.center),
+      ),
+    );
   }
 }
 

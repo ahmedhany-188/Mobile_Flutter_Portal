@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/bloc/apps_screen_bloc/apps_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/hr_request_bloc/hr_request_export.dart';
 import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
@@ -258,6 +259,10 @@ class _MyAppState extends State<MyApp> {
             create: (newsContext) => NewsCubit()
               ..getNews()
               ..getLatestNews(),
+            lazy: true,
+          ),
+          BlocProvider<ResponsibleVacationCubit>(
+            create: (responsibleContext) => ResponsibleVacationCubit(),
             lazy: true,
           ),
 
