@@ -513,43 +513,44 @@ class _MainDrawerState extends State<MainDrawer> {
                             context, AttendanceScreen.routeName);
                       },
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        buildListTile(
-                          'Notification',
-                          Icons.notifications,
-                          () {
-                            Navigator.popAndPushNamed(
-                                context, NotificationsScreen.routeName);
-                          },
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 25.0),
-                          child: BlocProvider.value(
-                            value: BlocProvider.of<UserNotificationBloc>(context),
-                            child: BlocBuilder<UserNotificationBloc, UserNotificationState>(
-                              builder: (context, state) {
-                                return Badge(
-                                  toAnimate: true,
-                                  animationDuration: const Duration(milliseconds: 1000),
-                                  animationType: BadgeAnimationType.scale,
-                                  badgeColor: Colors.red,
-                                  badgeContent: Text(
-                                    "${state.notifications.length}",
-                                    style:
-                                    const TextStyle(color: Colors.white, fontSize: 12),
-                                  ),
-                                  position: const BadgePosition(
-                                    start: 5,
-                                    top: 4,
-                                  ),
-                                );
-                              },
+                    InkWell(
+                      onTap: ()=>Navigator.popAndPushNamed(
+                          context, NotificationsScreen.routeName),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          buildListTile(
+                            'Notification',
+                            Icons.notifications,
+                            null, /// to stop the navigation function to make the whole row navigate
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 25.0),
+                            child: BlocProvider.value(
+                              value: BlocProvider.of<UserNotificationBloc>(context),
+                              child: BlocBuilder<UserNotificationBloc, UserNotificationState>(
+                                builder: (context, state) {
+                                  return Badge(
+                                    toAnimate: true,
+                                    animationDuration: const Duration(milliseconds: 1000),
+                                    animationType: BadgeAnimationType.scale,
+                                    badgeColor: Colors.red,
+                                    badgeContent: Text(
+                                      "${state.notifications.length}",
+                                      style:
+                                      const TextStyle(color: Colors.white, fontSize: 12),
+                                    ),
+                                    position: const BadgePosition(
+                                      start: 5,
+                                      top: 4,
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     buildListTile(
                       'My Payslip',

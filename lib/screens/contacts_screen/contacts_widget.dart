@@ -5,7 +5,6 @@ import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreenD
 import 'package:sizer/sizer.dart';
 
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
-import './contact_detail_screen.dart';
 
 class ContactsWidget extends StatelessWidget {
   final List<ContactsDataFromApi> listFromContactsScreen;
@@ -34,32 +33,33 @@ class ContactsWidget extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           itemBuilder: (context, index) => Padding(
             padding: const EdgeInsets.all(15.0),
-            child: Container(
-              padding: const EdgeInsets.all(10.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.0),
-                gradient: const LinearGradient(
-                    colors: [
-                      Color(0xFF1a4c78),
-                      Color(0xFF3772a6),
-                    ],
-                    begin: Alignment.bottomLeft,
-                    end: Alignment.topRight,
-                    tileMode: TileMode.clamp),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.4),
-                    spreadRadius: 5,
-                    blurRadius: 3,
-                    offset: const Offset(0, 3), // changes position of shadow
-                  ),
-                ],
-              ),
-              child: InkWell(
-                onTap: () {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  contactDetails(context, index);
-                },
+            child: GestureDetector(
+              onTap: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                contactDetails(context, index);
+              },
+              child: Container(
+                padding: const EdgeInsets.all(10.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                  color: Colors.grey.shade400.withOpacity(0.4),
+                  // gradient: const LinearGradient(
+                  //     colors: [
+                  //       Color(0xFF1a4c78),
+                  //       Color(0xFF3772a6),
+                  //     ],
+                  //     begin: Alignment.bottomLeft,
+                  //     end: Alignment.topRight,
+                  //     tileMode: TileMode.clamp),
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.grey.withOpacity(0.4),
+                  //     spreadRadius: 5,
+                  //     blurRadius: 3,
+                  //     offset: const Offset(0, 3), // changes position of shadow
+                  //   ),
+                  // ],
+                ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

@@ -34,33 +34,40 @@ class HomeGridViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  CustomBackground(
-        child: Scaffold(
+    return CustomBackground(
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
             backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              leading: Builder(builder: (context) {
-                return GestureDetector(
-                    onTap: () => Scaffold.of(context).openDrawer(),
-                    child: Image.asset(Assets.images.logo.path, scale: 30));
-              }),
-              centerTitle: true,
-              title: const Text('Hassan Allam Holding'),
-              actions: [
-                BlocProvider.value(
-                  value: BlocProvider.of<UserNotificationBloc>(context),
-                  child: BlocBuilder<UserNotificationBloc, UserNotificationState>(
-                    builder: (context, state) {
-                      return Badge(
+            elevation: 0,
+            leading: Builder(builder: (context) {
+              return InkWell(
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  onTap: () => Scaffold.of(context).openDrawer(),
+                  child: Image.asset(Assets.images.logo.path, scale: 30));
+            }),
+            centerTitle: true,
+            title: const Text('Hassan Allam Holding'),
+            actions: [
+              BlocProvider.value(
+                value: BlocProvider.of<UserNotificationBloc>(context),
+                child: BlocBuilder<UserNotificationBloc, UserNotificationState>(
+                  builder: (context, state) {
+                    return InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () => Navigator.of(context)
+                          .pushNamed(NotificationsScreen.routeName),
+                      child: Badge(
                         toAnimate: true,
                         animationDuration: const Duration(milliseconds: 1000),
                         animationType: BadgeAnimationType.scale,
                         badgeColor: Colors.red,
                         badgeContent: Text(
                           "${state.notifications.length}",
-                          style:
-                              const TextStyle(color: Colors.white, fontSize: 12),
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 12),
                         ),
                         position: const BadgePosition(
                           start: 5,
@@ -68,277 +75,283 @@ class HomeGridViewScreen extends StatelessWidget {
                         ),
                         child: IconButton(
                           icon: const Icon(Icons.notifications),
-                          onPressed: () {
-                            Navigator.of(context)
-                                .pushNamed(NotificationsScreen.routeName);
-                          },
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onPressed: () => Navigator.of(context)
+                              .pushNamed(NotificationsScreen.routeName),
                         ),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-            drawer: const MainDrawer(),
-            body: Stack(
-                // mainAxisAlignment: MainAxisAlignment.start,
-                // crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: BlocProvider<NewsCubit>.value(
-                      value: NewsCubit.get(context),
-                      child: BlocBuilder<NewsCubit, NewsState>(
-                        builder: (context, state) {
-                          return Container(
-                            width: MediaQuery.of(context).size.width / 1.2,
-                            padding: const EdgeInsets.all(10),
-                            margin: const EdgeInsets.only(top: 25),
-                            height: 100,
-                            child: ListView(
-                              reverse: false,
-                              shrinkWrap: true,
-                              children: [
-                                AnimatedTextKit(
-                                  isRepeatingAnimation: true,
-                                  pause: const Duration(milliseconds: 1000),
-                                  repeatForever: true,
-                                  displayFullTextOnTap: false,
-                                  animatedTexts: NewsCubit.get(context)
-                                          .announcment
-                                          .isEmpty
-                                      ? [
-                                          TyperAnimatedText(
-                                            'Checking for Announcement... ',
-                                            speed:
-                                                const Duration(milliseconds: 100),
-                                            textAlign: TextAlign.center,
-                                            curve: Curves.ease,
-                                            textStyle: const TextStyle(
-                                                color: Colors.white,
-                                                overflow: TextOverflow.clip,
-                                                fontFamily: 'RobotoFlex',
-                                                fontSize: 14),
-                                          )
-                                        ]
-                                      : NewsCubit.get(context).announcment,
-                                ),
-                              ],
-                            ),
-                          );
-                        },
                       ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+          drawer: const MainDrawer(),
+          body: Stack(
+              // mainAxisAlignment: MainAxisAlignment.start,
+              // crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: BlocProvider<NewsCubit>.value(
+                    value: NewsCubit.get(context),
+                    child: BlocBuilder<NewsCubit, NewsState>(
+                      builder: (context, state) {
+                        return Container(
+                          width: MediaQuery.of(context).size.width / 1.2,
+                          padding: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.only(top: 25),
+                          height: 100,
+                          child: ListView(
+                            reverse: false,
+                            shrinkWrap: true,
+                            children: [
+                              AnimatedTextKit(
+                                isRepeatingAnimation: true,
+                                pause: const Duration(milliseconds: 1000),
+                                repeatForever: true,
+                                displayFullTextOnTap: false,
+                                animatedTexts: NewsCubit.get(context)
+                                        .announcment
+                                        .isEmpty
+                                    ? [
+                                        TyperAnimatedText(
+                                          'Checking for Announcement... ',
+                                          speed:
+                                              const Duration(milliseconds: 100),
+                                          textAlign: TextAlign.center,
+                                          curve: Curves.ease,
+                                          textStyle: const TextStyle(
+                                              color: Colors.white,
+                                              overflow: TextOverflow.clip,
+                                              fontFamily: 'RobotoFlex',
+                                              fontSize: 14),
+                                        )
+                                      ]
+                                    : NewsCubit.get(context).announcment,
+                              ),
+                            ],
+                          ),
+                        );
+                      },
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: GridView(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
-                        ),
-                        padding: EdgeInsets.zero,
-                        addRepaintBoundaries: false,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          GestureDetector(
-                              onTap: () => Navigator.of(context)
-                                  .pushNamed(AttendanceScreen.routeName),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                      Assets.images.homepage.attendanceIcon.path,
-                                      scale: 3),
-                                  const Text(
-                                    'Attendance',
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                  )
-                                ],
-                              )),
-                          GestureDetector(
-                              onTap: () => Navigator.of(context)
-                                  .pushNamed(ContactsScreen.routeName),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                      Assets.images.homepage.contactListIcon.path,
-                                      scale: 3),
-                                  const Text(
-                                    'Contact List',
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                  )
-                                ],
-                              )),
-                          MenuPopupWidget(
-                              benefitsMenuItems(context),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                      Assets.images.homepage.benefitsIcon.path,
-                                      scale: 3),
-                                  const Text(
-                                    'Benefits',
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                  )
-                                ],
-                              ),
-                              containerHeight: 100),
-                          MenuPopupWidget(
-                            hrRequestMenuItems(context),
-                            Column(
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: GridView(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                      ),
+                      padding: EdgeInsets.zero,
+                      addRepaintBoundaries: false,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      children: [
+                        InkWell(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(AttendanceScreen.routeName),
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Image.asset(
-                                    Assets.images.homepage.hrRequestsIcon.path,
+                                    Assets.images.homepage.attendanceIcon.path,
                                     scale: 3),
                                 const Text(
-                                  'HR Request',
+                                  'Attendance',
                                   softWrap: true,
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 14),
                                 )
                               ],
-                            ),
-                            containerHeight: 200,
+                            )),
+                        InkWell(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(ContactsScreen.routeName),
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets.images.homepage.contactListIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'Contact List',
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            )),
+                        MenuPopupWidget(
+                          benefitsMenuItems(context),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Image.asset(
+                                  Assets.images.homepage.benefitsIcon.path,
+                                  scale: 3),
+                              const Text(
+                                'Benefits',
+                                softWrap: true,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              )
+                            ],
                           ),
-                          MenuPopupWidget(
-                              itRequestMenuItems(context),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                      Assets.images.homepage.itRequestIcon.path,
-                                      scale: 3),
-                                  const Text(
-                                    'IT Request',
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                  )
-                                ],
-                              ),
-                              containerHeight: 150),
-                          MenuPopupWidget(
-                              mediaCenterMenuItems(context),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                      Assets.images.homepage.mediaCenterIcon.path,
-                                      scale: 3),
-                                  const Text(
-                                    'Media Center',
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                  )
-                                ],
-                              ),
-                              containerHeight: 100),
-                          GestureDetector(
-                              onTap: () => Navigator.of(context)
-                                  .pushNamed(NewsScreen.routeName),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                      Assets.images.homepage.newsIcon.path,
-                                      scale: 3),
-                                  const Text(
-                                    'News',
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                  )
-                                ],
-                              )),
-                          MenuPopupWidget(
-                              newsLetterMenuItems(context),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                      Assets
-                                          .images.homepage.haNewsLetterIcon.path,
-                                      scale: 3),
-                                  const Text(
-                                    'HA NewsLetter',
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                  )
-                                ],
-                              ),
-                              containerHeight: 100),
-                          GestureDetector(
-                              onTap: () => Navigator.of(context)
-                                  .pushNamed(EconomyNewsScreen.routeName),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                      Assets.images.homepage.economyNewsIcon.path,
-                                      scale: 3),
-                                  const Text(
-                                    'Economy News',
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                  )
-                                ],
-                              )),
-                        ],
-                      ),
+                        ),
+                        MenuPopupWidget(
+                          hrRequestMenuItems(context),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Image.asset(
+                                  Assets.images.homepage.hrRequestsIcon.path,
+                                  scale: 3),
+                              const Text(
+                                'HR Request',
+                                softWrap: true,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              )
+                            ],
+                          ),
+                        ),
+                        MenuPopupWidget(
+                          itRequestMenuItems(context),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Image.asset(
+                                  Assets.images.homepage.itRequestIcon.path,
+                                  scale: 3),
+                              const Text(
+                                'IT Request',
+                                softWrap: true,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              )
+                            ],
+                          ),
+                        ),
+                        MenuPopupWidget(
+                          mediaCenterMenuItems(context),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Image.asset(
+                                  Assets.images.homepage.mediaCenterIcon.path,
+                                  scale: 3),
+                              const Text(
+                                'Media Center',
+                                softWrap: true,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              )
+                            ],
+                          ),
+                        ),
+                        InkWell(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(NewsScreen.routeName),
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets.images.homepage.newsIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'News',
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            )),
+                        MenuPopupWidget(
+                          newsLetterMenuItems(context),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Image.asset(
+                                  Assets.images.homepage.haNewsLetterIcon.path,
+                                  scale: 3),
+                              const Text(
+                                'HA NewsLetter',
+                                softWrap: true,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14),
+                              )
+                            ],
+                          ),
+                        ),
+                        InkWell(
+                            onTap: () => Navigator.of(context)
+                                .pushNamed(EconomyNewsScreen.routeName),
+                            splashColor: Colors.transparent,
+                            highlightColor: Colors.transparent,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets.images.homepage.economyNewsIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'Economy News',
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            )),
+                      ],
                     ),
                   ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Shimmer.fromColors(
-                          baseColor: Colors.white,
-                          highlightColor: Colors.grey.shade700,
-                          period: const Duration(milliseconds: 3000),
-                          child: const Text(
-                            '\u00a9 2021 IT Department All Rights Reserved',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          )
-                          // Container(
-                          //   color: Colors.red,
-                          //   height: 20,
-                          //   width: MediaQuery.of(context).size.width,
-                          // ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: Shimmer.fromColors(
+                        baseColor: Colors.white,
+                        highlightColor: Colors.grey.shade700,
+                        period: const Duration(milliseconds: 3000),
+                        child: const Text(
+                          '\u00a9 2021 IT Department All Rights Reserved',
+                          style: TextStyle(
+                            fontSize: 14,
                           ),
-                    ),
+                        )
+                        // Container(
+                        //   color: Colors.red,
+                        //   height: 20,
+                        //   width: MediaQuery.of(context).size.width,
+                        // ),
+                        ),
                   ),
-                ])),
-
+                ),
+              ])),
     );
   }
 }
@@ -349,26 +362,28 @@ Widget benefitsMenuItems(BuildContext context) {
       shrinkWrap: true,
       padding: const EdgeInsets.all(8),
       children: [
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () =>
               Navigator.of(context).pushNamed(MedicalRequestScreen.routeName),
-          child: Container(
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            height: 30,
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'Medical Request',
               style: TextStyle(color: Colors.white),
             ),
           ),
         ),
         const Divider(),
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () =>
               Navigator.of(context).pushNamed(BenefitsScreen.routeName),
-          child: Container(
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            height: 30,
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'HAH Benefits',
               style: TextStyle(color: Colors.white),
             ),
@@ -385,69 +400,74 @@ Widget hrRequestMenuItems(BuildContext context) {
       shrinkWrap: true,
       padding: const EdgeInsets.all(8),
       children: [
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(
               BusinessMissionScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: Container(
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            height: 30,
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'Business Mission',
               style: TextStyle(color: Colors.white),
             ),
           ),
         ),
         const Divider(),
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(
               PermissionScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: Container(
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            height: 30,
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'Permission',
               style: TextStyle(color: Colors.white),
             ),
           ),
         ),
         const Divider(),
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(VacationScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: Container(
-            height: 30,
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'Vacation',
               style: TextStyle(color: Colors.white),
             ),
           ),
         ),
         const Divider(),
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(
               EmbassyLetterScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: Container(
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            height: 30,
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'Embassy Letter',
               style: TextStyle(color: Colors.white),
             ),
           ),
         ),
         const Divider(),
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(
               BusinessCardScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: Container(
-            height: 30,
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'Business Card',
               style: TextStyle(color: Colors.white),
             ),
@@ -464,42 +484,45 @@ Widget itRequestMenuItems(BuildContext context) {
       shrinkWrap: true,
       padding: const EdgeInsets.all(8),
       children: [
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(
               EmailAndUserAccountScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: Container(
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            height: 30,
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'Email Account',
               style: TextStyle(color: Colors.white),
             ),
           ),
         ),
         const Divider(),
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(
               AccessRightScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: Container(
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            height: 30,
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'Access Right',
               style: TextStyle(color: Colors.white),
             ),
           ),
         ),
         const Divider(),
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(
               EquipmentsRequest.routeName,
               arguments: {'request-No': '0'}),
-          child: Container(
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            height: 30,
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'Equipment',
               style: TextStyle(color: Colors.white),
             ),
@@ -516,24 +539,26 @@ Widget mediaCenterMenuItems(BuildContext context) {
       shrinkWrap: true,
       padding: const EdgeInsets.all(8),
       children: [
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(PhotosScreen.routeName),
-          child: Container(
-            height: 30,
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'Photos',
               style: TextStyle(color: Colors.white),
             ),
           ),
         ),
         const Divider(),
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(VideosScreen.routeName),
-          child: Container(
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            height: 30,
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'Videos',
               style: TextStyle(color: Colors.white),
             ),
@@ -550,29 +575,31 @@ Widget newsLetterMenuItems(BuildContext context) {
       shrinkWrap: true,
       padding: const EdgeInsets.all(8),
       children: [
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () => launchUrl(
               Uri.parse(
                   'https://portal.hassanallam.com/NewsLatter/index-ar.html'),
               mode: LaunchMode.platformDefault),
-          child: Container(
-            height: 30,
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'Arabic',
               style: TextStyle(color: Colors.white),
             ),
           ),
         ),
         const Divider(),
-        GestureDetector(
+        InkWell(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
           onTap: () => launchUrl(
               Uri.parse('https://portal.hassanallam.com/NewsLatter/index.html'),
               mode: LaunchMode.platformDefault),
-          child: Container(
-            height: 30,
-            padding: const EdgeInsets.only(left: 8,right: 8),
-            child: const Text(
+          child: const FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
               'English',
               style: TextStyle(color: Colors.white),
             ),
@@ -584,17 +611,20 @@ Widget newsLetterMenuItems(BuildContext context) {
 }
 
 class MenuPopupWidget extends StatelessWidget {
-  const MenuPopupWidget(this.widgetFunction, this.childWidget,
-      {Key? key, required this.containerHeight})
-      : super(key: key);
+  const MenuPopupWidget(
+    this.widgetFunction,
+    this.childWidget, {
+    Key? key,
+  }) : super(key: key);
 
   final Widget widgetFunction;
   final Widget childWidget;
-  final double containerHeight;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
+      splashColor: Colors.transparent,
+      highlightColor: Colors.transparent,
       child: childWidget,
       onTap: () {
         showPopover(
@@ -603,7 +633,6 @@ class MenuPopupWidget extends StatelessWidget {
           bodyBuilder: (context) => widgetFunction,
           direction: PopoverDirection.top,
           width: 150,
-          height: containerHeight,
           backgroundColor: Colors.grey.shade500,
           arrowHeight: 15,
           arrowWidth: 30,

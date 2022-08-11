@@ -36,6 +36,7 @@ import 'bloc/auth_app_status_bloc/app_bloc.dart';
 import 'bloc/login_cubit/login_cubit.dart';
 import 'bloc/my_requests_screen_bloc/my_requests_cubit.dart';
 import 'bloc/videos_screen_bloc/videos_cubit.dart';
+import 'constants/colors.dart';
 import 'data/data_providers/album_dio/album_dio.dart';
 import 'data/repositories/request_repository.dart';
 import 'firebase_options.dart';
@@ -197,8 +198,6 @@ class _MyAppState extends State<MyApp> {
           //       AccessRightCubit(),
           // ),
 
-
-
           BlocProvider<AppBloc>(
             create: (authenticationContext) => AppBloc(
               authenticationRepository: authenticationRepository,
@@ -242,10 +241,11 @@ class _MyAppState extends State<MyApp> {
               ..getApps(),
           ),
           BlocProvider<MyRequestsCubit>(
-            create: (myRequestCubitContext) =>
-                MyRequestsCubit(RequestRepository(BlocProvider.of<AppBloc>(myRequestCubitContext)
-                    .state
-                    .userData)),
+            create: (myRequestCubitContext) => MyRequestsCubit(
+                RequestRepository(
+                    BlocProvider.of<AppBloc>(myRequestCubitContext)
+                        .state
+                        .userData)),
           ),
           BlocProvider<StatisticsCubit>(
             create: (statisticsCubitContext) => StatisticsCubit(GeneralDio(
@@ -274,7 +274,9 @@ class _MyAppState extends State<MyApp> {
               colorScheme: ColorScheme.fromSeed(
                 seedColor: const Color.fromRGBO(23, 72, 115, 1),
               ),
-              // primarySwatch: Colors.accents,
+              elevatedButtonTheme: ElevatedButtonThemeData(
+                  style: ElevatedButton.styleFrom(
+                      primary: ConstantsColors.buttonColors)),
               visualDensity: VisualDensity.adaptivePlatformDensity,
             ),
             onGenerateRoute: widget.appRouter.onGenerateRoute,
