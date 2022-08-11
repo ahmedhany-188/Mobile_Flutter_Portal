@@ -29,7 +29,7 @@ class _ContactsScreenState extends State<ContactsScreen> with TickerProviderStat
       builder: (c) => BlocProvider<ContactsFiltersCubit>.value(
         value: ContactsFiltersCubit.get(context),
         child: ClipRRect(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
           child: BottomSheet(
             elevation: 10,
             backgroundColor: ConstantsColors.bottomSheetBackground,
@@ -535,7 +535,7 @@ class _ContactsScreenState extends State<ContactsScreen> with TickerProviderStat
                               child: BlocBuilder<ContactsCubit, ContactCubitStates>(
                                 builder: (context, state) {
                                   return SizedBox(
-                                    height: deviceSize.height * 0.69,
+                                    height: deviceSize.height * 0.71,
                                     child: (ContactsFiltersCubit.get(context)
                                             .state
                                             .isFiltered)
