@@ -37,6 +37,7 @@ class HomeGridViewScreen extends StatelessWidget {
     return CustomBackground(
       child: Scaffold(
           backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
@@ -104,6 +105,7 @@ class HomeGridViewScreen extends StatelessWidget {
                           margin: const EdgeInsets.only(top: 25),
                           height: 100,
                           child: ListView(
+                            physics:const NeverScrollableScrollPhysics(),
                             reverse: false,
                             shrinkWrap: true,
                             children: [
