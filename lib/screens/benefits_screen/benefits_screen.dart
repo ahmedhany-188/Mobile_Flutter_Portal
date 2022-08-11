@@ -1,12 +1,17 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:isolate';
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:sizer/sizer.dart';
 
@@ -59,128 +64,147 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
           }
         },
         builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(title: const Text('Benefits'),),
-            body: Sizer(
-              builder: (c, o, d) => SingleChildScrollView(
-                physics: const NeverScrollableScrollPhysics(),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: TextField(
-                        focusNode: searchTextFieldFocusNode,
-                        controller: textController,
-                        onSubmitted: (searchValue) {
-                          searchTextFieldFocusNode.unfocus();
-                          setState(() {});
-                        },
-                        onChanged: (_) {
-                          setState(() {
-                            searchResult = GeneralSearch().setGeneralSearch(
-                              query: textController.text,
-                              listKeyForCondition: 'benefitsName',
-                              listFromApi: benefitsData,
-                            );
-                          });
-                        },
-                        decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(10),
-                          isCollapsed: true,
-                          filled: true,
-                          prefixIcon: const Icon(Icons.search),
-                          border: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10.0)),
-                              borderSide: BorderSide.none),
-                          labelText: "Search by name",
-                          hintText: "Search",
-                          suffixIcon: (textController.text.isEmpty)
-                              ? null
-                              : IconButton(
+          return CustomBackground(
+            child: GestureDetector(
+              onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
+              child: Scaffold(
+                backgroundColor: Colors.transparent,
+                resizeToAvoidBottomInset: false,
+                appBar: AppBar(
+                    title: const Text('Benefits'),
+                    centerTitle: true,
+                    elevation: 0,
+                    backgroundColor: Colors.transparent),
+                body: Sizer(
+                  builder: (c, o, d) => SingleChildScrollView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: TextField(
+                            focusNode: searchTextFieldFocusNode,
+                            controller: textController,
+                            style: const TextStyle(color: Colors.white),
+                            onSubmitted: (searchValue) {
+                              searchTextFieldFocusNode.unfocus();
+                              setState(() {});
+                            },
+                            onChanged: (_) {
+                              setState(() {
+                                searchResult = GeneralSearch().setGeneralSearch(
+                                  query: textController.text,
+                                  listKeyForCondition: 'benefitsName',
+                                  listFromApi: benefitsData,
+                                );
+                              });
+                            },
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.all(10),
+                              filled: true,
+                              focusColor: Colors.white,
+                              fillColor: Colors.grey.shade400.withOpacity(0.4),
+                              // labelText: "Search contact",
+                              hintText: 'Search by name',
+                              hintStyle: const TextStyle(color: Colors.white),
+                              prefixIcon:
+                                  const Icon(Icons.search, color: Colors.white),
+                              border: const OutlineInputBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(10.0)),
+                                  borderSide: BorderSide.none),
+                              suffixIcon: (textController.text.isEmpty)
+                                  ? null
+                                  : IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          searchResult.clear();
+                                          textController.clear();
+                                          searchTextFieldFocusNode.unfocus();
+                                        });
+                                      },
+                                      icon: const Icon(
+                                        Icons.clear,
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                            ),
+                          ),
+                        ),
+                        Scrollbar(
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            padding: EdgeInsets.only(right: 5.sp, left: 5.sp),
+                            physics: const BouncingScrollPhysics(),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                OutlinedButton(
+                                  child: const Text('Retail shops',
+                                      style: TextStyle(color: Colors.white)),
                                   onPressed: () {
                                     setState(() {
-                                      searchResult.clear();
-                                      textController.clear();
-                                      searchTextFieldFocusNode.unfocus();
+                                      searchResult =
+                                          setBenefitsFilters(2, benefitsData);
+                                      textController.text = 'Retail shops';
                                     });
                                   },
-                                  icon: const Icon(
-                                    Icons.clear,
-                                    color: Colors.red,
-                                  ),
                                 ),
-                        ),
-                      ),
-                    ),
-                    Scrollbar(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.only(right: 5.sp, left: 5.sp),
-                        physics: const BouncingScrollPhysics(),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            OutlinedButton(
-                              child: const Text('Retail shops'),
-                              onPressed: () {
-                                setState(() {
-                                  searchResult =
-                                      setBenefitsFilters(2, benefitsData);
-                                  textController.text = 'Retail shops';
-                                });
-                              },
-                            ),
-                            const SizedBox(width: 10),
-                            OutlinedButton(
-                              child: const Text('Hotels & travel'),
-                              onPressed: () {
-                                setState(() {
-                                  searchResult =
-                                      setBenefitsFilters(3, benefitsData);
-                                  textController.text = 'Hotels & travel';
-                                });
-                              },
-                            ),
-                            const SizedBox(width: 10),
-                            OutlinedButton(
-                              child: const Text('Health & Fitness'),
-                              onPressed: () {
-                                setState(() {
-                                  searchResult =
-                                      setBenefitsFilters(4, benefitsData);
-                                  textController.text = 'Health & Fitness';
-                                });
-                              },
-                            ),
-                            const SizedBox(width: 10),
-                            OutlinedButton(
-                              child: const Text('Other'),
-                              onPressed: () {
-                                setState(() {
-                                  searchResult =
-                                      setBenefitsFilters(5, benefitsData);
-                                  textController.text =
-                                      'Banks, Schools and other';
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 80.h,
-                      child: (searchResult.isNotEmpty)
-                          ? benefitsListView(searchResult)
-                          : (textController.text.isEmpty)
-                              ? benefitsListView(benefitsData)
-                              : const Center(
-                                  child: Text('No data found'),
+                                const SizedBox(width: 10),
+                                OutlinedButton(
+                                  child: const Text('Hotels & travel',
+                                      style: TextStyle(color: Colors.white)),
+                                  onPressed: () {
+                                    setState(() {
+                                      searchResult =
+                                          setBenefitsFilters(3, benefitsData);
+                                      textController.text = 'Hotels & travel';
+                                    });
+                                  },
                                 ),
+                                const SizedBox(width: 10),
+                                OutlinedButton(
+                                  child: const Text('Health & Fitness',
+                                      style: TextStyle(color: Colors.white)),
+                                  onPressed: () {
+                                    setState(() {
+                                      searchResult =
+                                          setBenefitsFilters(4, benefitsData);
+                                      textController.text = 'Health & Fitness';
+                                    });
+                                  },
+                                ),
+                                const SizedBox(width: 10),
+                                OutlinedButton(
+                                  child: const Text('Other',
+                                      style: TextStyle(color: Colors.white)),
+                                  onPressed: () {
+                                    setState(() {
+                                      searchResult =
+                                          setBenefitsFilters(5, benefitsData);
+                                      textController.text =
+                                          'Banks, Schools and other';
+                                    });
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 80.h,
+                          child: (searchResult.isNotEmpty)
+                              ? benefitsListView(searchResult)
+                              : (textController.text.isEmpty)
+                                  ? benefitsListView(benefitsData)
+                                  : const Center(
+                                      child: Text('No data found'),
+                                    ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),
@@ -205,43 +229,37 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                     return Card(
                       margin: const EdgeInsets.symmetric(
                           vertical: 5, horizontal: 10),
+                      color: Colors.white70,
                       child: ExpansionTile(
-                        title: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SizedBox(
-                              height:
-                                  MediaQuery.of(context).devicePixelRatio.sp *
-                                      15,
-                              width:
-                                  MediaQuery.of(context).devicePixelRatio.sp *
-                                      25,
-                              child: CachedNetworkImage(
-                                imageUrl: benefitsLogosLink(
-                                    benefitsDataList[index]['benefitsId']
-                                        .toString()),
-                                placeholder: (c, m) => const Center(
-                                    child: RefreshProgressIndicator()),
-                                errorWidget: (c, s, d) => Image.asset(
-                                  'assets/images/logo.png',
-                                  scale: 7.sp,
-                                ),
+                        backgroundColor: Colors.white70,
+                        tilePadding: EdgeInsets.zero,
+                        leading: FittedBox(
+                          child: Container(
+                            height: 60,
+                            width: 100,
+                            color: Colors.white,
+                            child: CachedNetworkImage(
+                              imageUrl: benefitsLogosLink(
+                                  benefitsDataList[index]['benefitsId']
+                                      .toString()),
+                              placeholder: (c, m) => const Center(
+                                  child: RefreshProgressIndicator()),
+                              errorWidget: (c, s, d) => Image.asset(
+                                'assets/images/logo.png',
+                                scale: 7,
                               ),
+                              fit: BoxFit.fill,
                             ),
-                            SizedBox(
-                              width: 10.w,
+                          ),
+                        ),
+                        title: Flexible(
+                          child: Text(
+                            benefitsDataList[index]['benefitsName'],
+                            style: const TextStyle(
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
                             ),
-                            Flexible(
-                              child: Text(
-                                benefitsDataList[index]['benefitsName'],
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                         children: [
                           WillPopScope(
@@ -342,3 +360,74 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
     );
   }
 }
+//
+// class _OurKey {
+//   final Object providerCachKey;
+//
+//   _OurKey(this.providerCachKey);
+//
+//   @override
+//   int get hashCode => providerCachKey.hashCode;
+//
+//   @override
+//   bool operator ==(Object other) {
+//     if (other.runtimeType != runtimeType) return false;
+//     return other is _OurKey && other.providerCachKey == providerCachKey;
+//   }
+// }
+//
+// class OurImageProvider extends ImageProvider<_OurKey> {
+//   final ImageProvider imageProvider;
+//
+//   OurImageProvider(this.imageProvider);
+//
+//   @override
+//   ImageStreamCompleter load(_OurKey key, decode) {
+//     final ourDecoder = (
+//       Uint8List bytes, {
+//       required bool allowUpscaling,
+//       required int cacheWidth,
+//       required int cacheHeight,
+//     }) async {
+//       return decode(
+//         await whiteToAlpha(bytes),
+//         cacheWidth: cacheWidth,
+//         cacheHeight: cacheHeight,
+//       );
+//     };
+//     return imageProvider.load(key.providerCachKey, ourDecoder);
+//   }
+//
+//   @override
+//   Future<_OurKey> obtainKey(ImageConfiguration configuration) {
+//     Completer<_OurKey> completer;
+//     completer = Completer<_OurKey>();
+//
+//     SynchronousFuture<_OurKey>? result;
+//     imageProvider.obtainKey(configuration).then((Object key) {
+//       if (completer == null) {
+//         result = SynchronousFuture<_OurKey>(_OurKey(key));
+//       } else {
+//         completer.complete(_OurKey(key));
+//       }
+//     });
+//
+//     if (result != null) {
+//       return result!;
+//     }
+//
+//     return completer.future;
+//   }
+//
+//   Future<Uint8List> whiteToAlpha(Uint8List bytes) async {
+//     final image = decodeImageFromList(bytes);
+//     final pixels = image.getBytes(format: PixelFormat.rgba8888);
+//     final lenght = pixels.lenghtInBytes;
+//     for (var i = 0; i < lenght; i += 4) {
+//       if (pixels[i] == 255 && pixels[i + 1] == 255 && pixels[i + 2] == 255) {
+//         pixels[i + 3] = 0;
+//       }
+//     }
+//     return encodePng(image);
+//   }
+// }

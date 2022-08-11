@@ -476,7 +476,7 @@ class _MainDrawerState extends State<MainDrawer> {
             //       )),
             // ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.78,
+              height: MediaQuery.of(context).size.height * 0.77,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -646,7 +646,7 @@ class _MainDrawerState extends State<MainDrawer> {
                                             .toString());
                                   })
                               : const Text(
-                                  'You Have No Application To Be Shown');
+                                  'You Have No Application To Be Shown',style: TextStyle(color: Colors.white),);
                         },
                       ),
                     ),
