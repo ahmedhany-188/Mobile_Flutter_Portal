@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
@@ -23,7 +24,6 @@ class AttendanceScreen extends StatefulWidget {
 
 class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
-  late final user;
   int monthNumber = DateTime.now().month;
 
   int dayNumber = DateTime.now().day;
@@ -35,13 +35,15 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
   bool transition = false;
   bool found = false;
 
-  late List<MyAttendanceModel> getAttendanceList;
 
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery
         .of(context)
         .size;
+
+     List<MyAttendanceModel> getAttendanceListSuccess=[];
+
 
     // new month
     if(dayNumber>15){
@@ -50,7 +52,8 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
     }
 
     var pageController = PageController(initialPage: selectedPage);
-     user = context.select((AppBloc bloc) => bloc.state.userData);
+
+    final user = context.select((AppBloc bloc) => bloc.state.userData);
 
     return Container(
       decoration: BoxDecoration(
@@ -168,18 +171,18 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                                   },
                                   controller: pageController,
                                   children: [
-                                    getMonth(state),
-                                    getMonth(state),
-                                    getMonth(state),
-                                    getMonth(state),
-                                    getMonth(state),
-                                    getMonth(state),
-                                    getMonth(state),
-                                    getMonth(state),
-                                    getMonth(state),
-                                    getMonth(state),
-                                    getMonth(state),
-                                    getMonth(state),
+                                    getMonth(state,user,getAttendanceListSuccess),
+                                    getMonth(state,user,getAttendanceListSuccess),
+                                    getMonth(state,user,getAttendanceListSuccess),
+                                    getMonth(state,user,getAttendanceListSuccess),
+                                    getMonth(state,user,getAttendanceListSuccess),
+                                    getMonth(state,user,getAttendanceListSuccess),
+                                    getMonth(state,user,getAttendanceListSuccess),
+                                    getMonth(state,user,getAttendanceListSuccess),
+                                    getMonth(state,user,getAttendanceListSuccess),
+                                    getMonth(state,user,getAttendanceListSuccess),
+                                    getMonth(state,user,getAttendanceListSuccess),
+                                    getMonth(state,user,getAttendanceListSuccess),
                                   ],
                                 ),
                               ),
@@ -193,16 +196,16 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
     );
   }
 
-  Container getMonth(AttendanceState state) {
+  Container getMonth(AttendanceState state,MainUserData user,List<MyAttendanceModel> getAttendanceListSuccess) {
 
     if (state is BlocGetTheAttendanceSuccessState && state.month == monthNumber) {
       transition = false;
       found = true;
-      getAttendanceList=state.getAttendanceList;
-      return attendanceLoad(getAttendanceList);
+      getAttendanceListSuccess=state.getAttendanceList;
+      return attendanceLoad(getAttendanceListSuccess,user);
     }else if(state is BlocGetTheAttendanceSuccessState && state.month != monthNumber){
       if(found){
-        return attendanceLoad(getAttendanceList);
+        return attendanceLoad(getAttendanceListSuccess,user);
       }else{
         return attendanceShimmer();
       }
@@ -212,7 +215,7 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
     }
   }
 
-  Container attendanceLoad(List<MyAttendanceModel> list){
+  Container attendanceLoad(List<MyAttendanceModel> list,MainUserData user){
     return Container(
         child: Padding(
             padding: const EdgeInsets.all(5),
