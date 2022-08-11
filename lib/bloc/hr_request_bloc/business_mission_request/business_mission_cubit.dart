@@ -6,6 +6,7 @@ import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
+import 'package:hassanallamportalflutter/widgets/dialogpopoup/custom_date_picker.dart';
 import 'package:intl/intl.dart';
 
 import '../../../constants/enums.dart';
@@ -91,11 +92,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
     DateTime? date = DateTime.now();
     FocusScope.of(context).requestFocus(
         FocusNode());
-    date = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100));
+    date = await openShowDatePicker(context);
     var formatter = DateFormat(
         'EEEE dd-MM-yyyy');
     String formattedDate = formatter.format(
@@ -119,11 +116,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
     DateTime? date = DateTime.now();
     FocusScope.of(context).requestFocus(
         FocusNode());
-    date = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100));
+    date = await openShowDatePicker(context);
     var formatter = DateFormat(
         'EEEE dd-MM-yyyy');
     String formattedDate = formatter.format(
@@ -151,9 +144,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
         .of(context);
     FocusScope.of(context).requestFocus(
         FocusNode());
-    time =
-        await showTimePicker(context: context,
-        initialTime: TimeOfDay.now());
+    time = await openShowTimePicker(context);
     // if (time != null){
 
     final formattedTimeOfDay = localizations
@@ -176,9 +167,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
         .of(context);
     FocusScope.of(context).requestFocus(
         FocusNode());
-    time =
-    await showTimePicker(context: context,
-        initialTime: TimeOfDay.now());
+    time = await openShowTimePicker(context);
     final formattedTimeOfDay = localizations
         .formatTimeOfDay(
         time ?? TimeOfDay.now());

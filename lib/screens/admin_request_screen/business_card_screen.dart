@@ -52,7 +52,7 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
 
       child: BlocProvider<BusinessCardCubit>(
         create: (businessCardContext) =>
-        currentRequestNo == null ? (BusinessCardCubit(
+        currentRequestNo [BusinessCardScreen.requestNoKey] == "0" ? (BusinessCardCubit(
             RequestRepository(user))
           ..getRequestData(RequestStatus.newRequest, ""))
             : (BusinessCardCubit(RequestRepository(user))

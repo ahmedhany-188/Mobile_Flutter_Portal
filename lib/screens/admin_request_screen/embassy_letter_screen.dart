@@ -62,7 +62,7 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
       ),
       child: BlocProvider<EmbassyLetterCubit>(
         create: (embassyContext) =>
-        currentRequestNo == null ? (EmbassyLetterCubit(
+        currentRequestNo [EmbassyLetterScreen.requestNoKey] == "0"? (EmbassyLetterCubit(
             RequestRepository(userMainData))
           ..getRequestData(RequestStatus.newRequest, ""))
             : (EmbassyLetterCubit(RequestRepository(userMainData))
