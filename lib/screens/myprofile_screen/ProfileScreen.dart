@@ -236,29 +236,41 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                             .employeeData!
                                             .managerCode});
                                 },
-                                child: Column(
-                                    children: [
-                                      getHead("Direct Manager:"),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 15,
-                                            right: 3,
-                                            top: 3,
-                                            bottom: 3),
-                                        child: Container(
-                                          width: double.infinity,
-                                          child: Text(
-                                            user.employeeData!.managerCode!,
-                                            style: const TextStyle(
-                                              color: Colors.white70,
-                                              fontSize: 14,
-                                              fontFamily: 'Nunito',
-                                              decoration: TextDecoration
-                                                  .underline,),
-                                            textAlign: TextAlign.left,),
-                                        ),
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      flex: 6,
+                                      child: Column(
+                                          children: [
+                                            getHead("Direct Manager:"),
+                                            Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 15,
+                                                  right: 3,
+                                                  top: 3,
+                                                  bottom: 3),
+                                              child: Container(
+                                                width: double.infinity,
+                                                child: Text(
+                                                  user.employeeData!.managerCode!,
+                                                  style: const TextStyle(
+                                                    color: Colors.white70,
+                                                    fontSize: 14,
+                                                    fontFamily: 'Nunito',
+                                                    decoration: TextDecoration
+                                                        .underline,),
+                                                  textAlign: TextAlign.left,),
+                                              ),
+                                            ),
+                                          ]
                                       ),
-                                    ]
+                                    ),
+                                    Flexible(
+                                      flex: 1,
+                                      child: Icon(Icons.navigate_next_rounded,
+                                        color: Colors.white,size: 40.0,),
+                                    ),
+                                  ],
                                 ),
                               )
                           ),
