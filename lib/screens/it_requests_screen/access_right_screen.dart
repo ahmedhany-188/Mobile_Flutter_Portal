@@ -59,7 +59,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
       child: MultiBlocProvider(
         providers: [
           BlocProvider<AccessRightCubit>(create: (accessRightContext) =>
-          currentRequestNo == null ? (AccessRightCubit(RequestRepository(user))
+          currentRequestNo[AccessRightScreen.requestNoKey] == "0" ? (AccessRightCubit(RequestRepository(user))
             ..getRequestData(RequestStatus.newRequest, ""))
               : (AccessRightCubit(RequestRepository(user))
             ..getRequestData(RequestStatus.oldRequest,

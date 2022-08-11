@@ -60,7 +60,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
 
 
       child: BlocProvider<EmailUserAccountCubit>(create: (emailUserContext) =>
-      currentRequestNo == null ? (EmailUserAccountCubit(
+      currentRequestNo [EmailAndUserAccountScreen.requestNoKey] == "0" ? (EmailUserAccountCubit(
           RequestRepository(user))
         ..getRequestData(RequestStatus.newRequest, ""))
           : (EmailUserAccountCubit(RequestRepository(user))
