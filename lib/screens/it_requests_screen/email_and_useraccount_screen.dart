@@ -6,13 +6,8 @@ import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/it_request_bloc/email_useracount_request/email_useraccount_cubit.dart';
 import 'package:hassanallamportalflutter/constants/enums.dart';
-import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
-import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
-import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
-import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
-import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
+import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import '../../../widgets/success/success_request_widget.dart';
 
 
@@ -23,7 +18,6 @@ class EmailAndUserAccountScreen  extends StatefulWidget{
   static const requestHrCode = 'request-HrCode';
 
   const EmailAndUserAccountScreen({Key? key,this.requestNo ,this.requestedHrCode}) : super(key: key);
-
 
   final requestNo;
   final requestedHrCode;
@@ -49,16 +43,10 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
         onWillPop: () async {
       await EasyLoading.dismiss(animation: true);
       return true;
-    }, child: Theme(
-      data: Theme.of(context).copyWith(
-        inputDecorationTheme: InputDecorationTheme(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-          ),
-        ),
-      ),
+    },
 
-
+      child: CustomBackground(
+        child: CustomTheme(
       child: BlocProvider<EmailUserAccountCubit>(create: (emailUserContext) =>
       currentRequestNo [EmailAndUserAccountScreen.requestNoKey] == "0" ? (EmailUserAccountCubit(
           RequestRepository(user))
@@ -72,9 +60,12 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
             builder: (context, state) {
 
               return Scaffold(
+                backgroundColor: Colors.transparent,
                 appBar: AppBar(
                   title: const Text("Email Account"),
                   centerTitle: true,
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
                 ),
 
                 floatingActionButton: Column(
@@ -212,7 +203,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                   labelText: 'Request Type',
                                   floatingLabelAlignment:
                                   FloatingLabelAlignment.start,
-                                  prefixIcon: Icon(Icons.event),
+                                  prefixIcon: Icon(Icons.event,color: Colors.white70,),
                                 ),
                                 child: BlocBuilder<EmailUserAccountCubit,
                                     EmailUserAccountInitial>(
@@ -308,7 +299,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
                                         prefixIcon: Icon(
-                                            Icons.qr_code),
+                                            Icons.qr_code,color: Colors.white70,),
                                         labelText: 'Hr Code',
                                       ),
                                     );
@@ -351,7 +342,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                                 FloatingLabelAlignment.start,
                                                 labelText: 'Full Name',
                                                 prefixIcon: Icon(
-                                                    Icons.person),
+                                                    Icons.person,color: Colors.white70,),
                                               ),
                                             );
                                           },)
@@ -379,7 +370,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                                 FloatingLabelAlignment.start,
                                                 labelText: 'Title',
                                                 prefixIcon: Icon(
-                                                    Icons.desk_outlined),
+                                                    Icons.desk_outlined,color: Colors.white70,),
                                               ),
                                             );
                                           },)
@@ -408,7 +399,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                                   FloatingLabelAlignment.start,
                                                   labelText: 'Location',
                                                   prefixIcon: Icon(
-                                                      Icons.business_center),
+                                                      Icons.business_center,color: Colors.white70,),
                                                 ),
                                               );
                                             })
@@ -444,7 +435,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                               FloatingLabelAlignment.start,
                                               labelText: 'Mobile',
                                               prefixIcon: const Icon(
-                                                  Icons.mobile_friendly),
+                                                  Icons.mobile_friendly,color: Colors.white70,),
                                               errorText: state.userMobile.invalid
                                                   ? 'invalid Phone Number'
                                                   : null,
@@ -474,7 +465,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                   labelText: 'Email Type ',
                                   floatingLabelAlignment:
                                   FloatingLabelAlignment.start,
-                                  prefixIcon: Icon(Icons.event),
+                                  prefixIcon: Icon(Icons.event,color: Colors.white70,),
                                 ),
                                 child: BlocBuilder<
                                     EmailUserAccountCubit,
@@ -503,12 +494,11 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                   ),
 
                 ),
-              )
-                //,)
-              ;
+              );
             }
         ),
       ),
+    ),
     ),
     );
   }

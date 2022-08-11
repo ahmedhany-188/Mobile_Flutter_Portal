@@ -8,6 +8,7 @@ import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/DaysOfTheWeek.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_ticket_widget.dart';
+import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:intl/intl.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -55,14 +56,9 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
-    return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-            image: Assets.images.defaultBg
-                .image()
-                .image,
-            fit: BoxFit.cover,
-          )),
+    return CustomBackground(
+    child: CustomTheme(
+
       child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
@@ -193,6 +189,7 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
               )
           )
       ),
+    ),
     );
   }
 
