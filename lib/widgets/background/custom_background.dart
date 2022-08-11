@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
 
+import '../../constants/colors.dart';
 import '../../gen/assets.gen.dart';
 
 class CustomBackground extends StatelessWidget {
@@ -32,6 +34,7 @@ class CustomTheme extends StatelessWidget {
             .textTheme
             .apply(bodyColor: Colors.white,),
         unselectedWidgetColor: Colors.white70,
+        canvasColor: ConstantsColors.bottomSheetBackground,
 
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xff0F3C5B),

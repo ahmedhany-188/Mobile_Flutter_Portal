@@ -10,6 +10,7 @@ import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
+import 'package:hassanallamportalflutter/widgets/dialogpopoup/custom_date_picker.dart';
 import 'package:meta/meta.dart';
 
 import '../../../constants/enums.dart';
@@ -164,43 +165,46 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
 
     DateTime? currentDate = DateTime.now();
 
-    if (defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.iOS) {
-      await showCupertinoModalPopup(
-          context: context,
-          builder: (BuildContext builder) {
-            return Container(
-              height: MediaQuery
-                  .of(context)
-                  .copyWith()
-                  .size
-                  .height * 0.25,
-              color: Colors.white,
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.date,
-                onDateTimeChanged: (value) {
-                  currentDate = value;
-                },
-                initialDateTime: DateTime.now(),
-                minimumYear: 2020,
-                maximumYear: 2023,
-              ),
-            );
-          });
-    } else {
-      final DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: currentDate,
-          firstDate: DateTime.now(),
-          lastDate: DateTime(2101));
-
-      if (picked != null && picked != currentDate) {
-        currentDate = picked;
-      }
-    }
+    // if (defaultTargetPlatform == TargetPlatform.macOS ||
+    //     defaultTargetPlatform == TargetPlatform.iOS) {
+    //   await showCupertinoModalPopup(
+    //       context: context,
+    //       builder: (BuildContext builder) {
+    //         return Container(
+    //           height: MediaQuery
+    //               .of(context)
+    //               .copyWith()
+    //               .size
+    //               .height * 0.25,
+    //           color: Colors.white,
+    //           child: CupertinoDatePicker(
+    //             mode: CupertinoDatePickerMode.date,
+    //             onDateTimeChanged: (value) {
+    //               currentDate = value;
+    //             },
+    //             initialDateTime: DateTime.now(),
+    //             minimumYear: 2020,
+    //             maximumYear: 2023,
+    //           ),
+    //         );
+    //       });
+    // }
+    // else {
+    //   final DateTime? picked = await showDatePicker(
+    //       context: context,
+    //       initialDate: currentDate,
+    //       firstDate: DateTime.now(),
+    //       lastDate: DateTime(2101));
+    //
+    //   if (picked != null && picked != currentDate) {
+    //     currentDate = picked;
+    //   }
+    // }
 
     // var formatter = DateFormat('EEEE dd-MM-yyyy');
     // var formatter = DateFormat('yyyy-MM-dd');
+    currentDate = await openShowDatePicker(context);
+
     String formattedDate = GlobalConstants.dateFormatViewed.format(
         currentDate ?? DateTime.now());
     final requestDate = RequestDate.dirty(formattedDate);
