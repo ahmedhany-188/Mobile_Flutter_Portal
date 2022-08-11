@@ -13,4 +13,6 @@ class ConstantsColors{
   static const Color petrolTextAttendance= Color(0xff092a56);
 
   static const Color whiteNormalAttendance= Color(0xffecf4ff);
+
+  static const Color buttonColors =  Color(0xff0F3C5B);
 }
