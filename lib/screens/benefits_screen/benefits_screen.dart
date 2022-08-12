@@ -1,11 +1,7 @@
-import 'dart:async';
-import 'dart:convert';
 import 'dart:isolate';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -252,13 +248,11 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                             ),
                           ),
                         ),
-                        title: Flexible(
-                          child: Text(
-                            benefitsDataList[index]['benefitsName'],
-                            style: const TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        title: Text(
+                          benefitsDataList[index]['benefitsName'],
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                         children: [

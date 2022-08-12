@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:delayed_display/delayed_display.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
@@ -9,10 +8,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
-import 'package:sprung/sprung.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
-import '../../data/helpers/assist_function.dart';
 import '../../screens/login_screen/auth_screen.dart';
 import '../../widgets/animation/page_transition_animation.dart';
 import '../home_screen/home_grid_view_screen.dart';
@@ -24,42 +22,39 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-    with TickerProviderStateMixin {
-  late AnimationController animation;
-  Animation<double>? _fadeInFadeOut;
-
-  @override
-  void initState() {
-    super.initState();
-    animation = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1000),
-    );
-    _fadeInFadeOut = Tween<double>(begin: 0.0, end: 1).animate(animation);
-
-    animation.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        animation.reverse();
-      }
-      // else if(status == AnimationStatus.dismissed){
-      //   animation!.clearListeners();
-      // }
-    });
-    animation.forward();
-  }
-
-  @override
-  void dispose() {
-    animation.dispose(); /// must be before super.dispose();
-    super.dispose();
-  }
+class _SplashScreenState extends State<SplashScreen> {
+  // with TickerProviderStateMixin {
+  // late AnimationController animation;
+  // Animation<double>? _fadeInFadeOut;
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   animation = AnimationController(
+  //     vsync: this,
+  //     duration: const Duration(milliseconds: 1000),
+  //   );
+  //   _fadeInFadeOut = Tween<double>(begin: 0.0, end: 1).animate(animation);
+  //
+  //   animation.addStatusListener((status) {
+  //     if (status == AnimationStatus.completed) {
+  //       animation.reverse();
+  //     }
+  //     // else if(status == AnimationStatus.dismissed){
+  //     //   animation!.clearListeners();
+  //     // }
+  //   });
+  //   animation.forward();
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   animation.dispose(); /// must be before super.dispose();
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
-    // FlutterNativeSplash.remove();
-    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-    //     overlays: [SystemUiOverlay.bottom, SystemUiOverlay.top]);
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
@@ -71,13 +66,7 @@ class _SplashScreenState extends State<SplashScreen>
       body: Container(
         width: deviceWidth,
         height: deviceHeight,
-        decoration:  BoxDecoration(
-          image: DecorationImage(
-            // image: AssetImage('assets/images/defaultBg.jpg'),
-            image: Assets.images.sBackground.image().image,
-            fit: BoxFit.fill,
-          ),
-        ),
+        color: const Color(0xFF031A27),
         child: BlocConsumer<AppUpgraderCubit, AppUpgraderInitial>(
           listener: (context, state) {
             if (state.appUpgrader == AppUpgrader.needUpdate) {
@@ -145,80 +134,41 @@ class _SplashScreenState extends State<SplashScreen>
                       disableNavigation: true,
                       backgroundColor: Colors.transparent,
                       curve: Curves.linear,
-                      // duration: 2000,
                       splashIconSize: deviceHeight,
                       splashTransition: SplashTransition.fadeTransition,
                       animationDuration: const Duration(milliseconds: 1000),
                       splash: Stack(
                         children: [
-                          Positioned(
-                            top: -40,
-                            left: -55,
-                            child: DelayedDisplay(
-                              delay: const Duration(milliseconds: 1500),
-                              slidingBeginOffset: const Offset(0, 0),
-                              // slidingCurve: Sprung.criticallyDamped,
-                              child: SizedBox(
-                                width: deviceWidth,
-                                height: 300,
-                                child: Image.asset(
-                                  'assets/images/login_image_light.png',
-                                  alignment: Alignment.topLeft,
-                                ),
-                              ),
-                            ),
-                          ),
-                          FadeTransition(
-                            opacity: _fadeInFadeOut!,
+                          Align(
+                            widthFactor: double.infinity,
+                            alignment: Alignment.center,
                             child: SizedBox(
-                              child: Center(
-                                child: Image.asset(
-                                    'assets/images/login_image_logo.png',
-                                    fit: BoxFit.cover,
-                                    scale: 2),
+                              width: double.infinity,
+                              child: Image.asset(
+                                Assets.images.welcomeImage.path,
+                                fit: BoxFit.fitWidth,
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(20.0),
-                            child: DelayedDisplay(
-                              delay: const Duration(milliseconds: 2500),
-                              slidingCurve: Sprung.criticallyDamped,
-                              slidingBeginOffset: const Offset(0.0, 0.05),
-                              fadeIn: true,
-                              fadingDuration:
-                                  const Duration(milliseconds: 2000),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  FittedBox(
-                                      child: Text(
-                                    checkTimeAmPm()
-                                        ? 'Good Morning'
-                                        : 'Good Evening',
-                                    style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 70,
-                                        letterSpacing: 4,
-                                        fontWeight: FontWeight.bold,
-                                        fontFamily: 'RobotoFlex'),
-                                  )),
-                                  const Flexible(
-                                    child: Text(
-                                      'Welcome To Hassan Allam Portal',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 25,
-                                          letterSpacing: 4,
-                                          fontWeight: FontWeight.bold,
-                                          fontFamily: 'RobotoFlex'),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: Shimmer.fromColors(
+                                  baseColor: Colors.white,
+                                  highlightColor: Colors.grey.shade700,
+                                  period: const Duration(milliseconds: 3000),
+                                  child: const Text(
+                                    '\u00a9 2021 IT Department All Rights Reserved',
+                                    style: TextStyle(
+                                      fontSize: 14,
                                     ),
-                                  ),
-                                  const SizedBox(
-                                    height: 350,
-                                  ),
-                                ],
+                                  )
+                                // Container(
+                                //   color: Colors.red,
+                                //   height: 20,
+                                //   width: MediaQuery.of(context).size.width,
+                                // ),
                               ),
                             ),
                           ),
@@ -226,9 +176,9 @@ class _SplashScreenState extends State<SplashScreen>
                       ),
                       screenFunction: () {
                         return PageTransitionAnimation(
-                          transitionDuration: 1500,
+                          transitionDuration: 500,
                           context: context,
-                          delayedDuration: 3000,
+                          delayedDuration: 2500,
                           pageDirection: BlocBuilder<AppBloc, AppState>(
                             builder: (ctx, state) {
                               switch (state.status) {
@@ -237,26 +187,19 @@ class _SplashScreenState extends State<SplashScreen>
                                       .updateUserOnline(
                                           AppLifecycleStatus.online);
                                   return const HomeGridViewScreen();
-                                // return AlertUpgradeShow();
                                 case AppStatus.unauthenticated:
                                   return const AuthScreen();
 
                                 default:
                                   return const AuthScreen();
-
                               }
                             },
                           ),
-                        ).navigateWithFading();
+                        ).navigateFromBottom();
                       });
                 } else {
-                  return SizedBox(
-                    child: Center(
-                      child: Image.asset(
-                          'assets/images/login_image_logo.png',
-                          fit: BoxFit.cover,
-                          scale: 2),
-                    ),
+                  return Container(
+                    color: const Color(0xFF031A27),
                   );
                 }
               },
@@ -270,6 +213,7 @@ class _SplashScreenState extends State<SplashScreen>
 
 class AlertUpgradeShow extends StatelessWidget {
   const AlertUpgradeShow({Key? key}) : super(key: key);
+
   // Wrapper Widget
   @override
   Widget build(BuildContext context) {

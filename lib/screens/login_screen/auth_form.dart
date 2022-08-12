@@ -7,7 +7,8 @@ import 'package:formz/formz.dart';
 import 'login_form_widgets.dart';
 
 class AuthForm extends StatefulWidget {
-  const AuthForm();
+
+  const AuthForm({Key? key}) : super(key: key);
   static final FocusNode emailAddressFocusNode = FocusNode();
   static final FocusNode passwordFocusNode = FocusNode();
   @override
@@ -41,7 +42,7 @@ class _AuthFormState extends State<AuthForm> {
         child: Form(
           key: _formKey,
           child: SizedBox(
-            width: deviceSize.width / 1.3,
+            width: deviceSize.width / 1.5, ///before was 1.3
 
             ///oldValue 1.5
             child: SingleChildScrollView(
@@ -57,7 +58,7 @@ class _AuthFormState extends State<AuthForm> {
                   const Padding(padding: EdgeInsets.all(8)),
                   SizedBox(
                     width: deviceSize.width / 1.3,
-                    child: const GradientButton(),
+                    child: const LoginButton(),
                   ),
                 ],
               ),

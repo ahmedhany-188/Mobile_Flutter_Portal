@@ -12,27 +12,29 @@ class LoginButton extends StatelessWidget {
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
         return state.status.isSubmissionInProgress
-            ? const Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator(color: Colors.white,))
             : ElevatedButton(
                 key: const Key('loginForm_continue_raisedButton'),
+                // style: ButtonStyle(
+                //     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                //         RoundedRectangleBorder(
+                //   borderRadius: BorderRadius.circular(20.0),
+                // ))),
+          style: ElevatedButton.styleFrom(primary: Colors.white),
+                onPressed: () => context.read<LoginCubit>().logInWithCredentials(),
+                // state.status.isValidated
+                //     ? () => context.read<LoginCubit>().logInWithCredentials()
+                //     : null,
                 child: const Text(
                   'Sign in',
-                  style: TextStyle(
-                      color: Color.fromRGBO(255, 255, 255, 1),
+                  style:  TextStyle(
+                      color: Colors.black,
                       fontFamily: 'Inter',
                       fontSize: 20,
                       letterSpacing: 0,
                       fontWeight: FontWeight.normal,
                       height: 1),
                 ),
-                style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ))),
-                onPressed: state.status.isValidated
-                    ? () => context.read<LoginCubit>().logInWithCredentials()
-                    : null,
               );
       },
     );
@@ -95,23 +97,20 @@ class UsernameInput extends StatelessWidget {
         return TextFormField(
           focusNode: emailAddressFocusNode,
           cursorColor: Colors.white,
-          style: const TextStyle(color: Color(0xFF174873)),
+          style: const TextStyle(color: Colors.white),
           key: const Key('loginForm_usernameInput_textField'),
           onChanged: (username) =>
               context.read<LoginCubit>().usernameChanged(username),
           decoration: InputDecoration(
-            filled: true,
-            fillColor: const Color(0xFFcfdeec),
-            prefixIcon: Icon(Icons.person,
-                color: (emailAddressFocusNode.hasFocus)
-                    ? const Color(0xFF186597)
-                    : const Color(0xFF174873)),
-            hintText: 'Enter your email',
-            hintStyle: const TextStyle(color: Color(0xFFa2b6c9)),
-            contentPadding: const EdgeInsets.all(15),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
-                borderSide: BorderSide.none),
+            labelText: 'User Name',
+            labelStyle: const TextStyle(color: Colors.white),
+            contentPadding: EdgeInsets.zero,
+            enabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white38)
+            ),
+            focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white,)
+            ),
             errorText: state.username.invalid ? 'invalid username' : null,
           ),
         );
@@ -137,7 +136,7 @@ class _PasswordInputState extends State<PasswordInput> {
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextFormField(
-          style: const TextStyle(color: Color(0xFF174873)),
+          style: const TextStyle(color: Colors.white),
           focusNode: widget.passwordFocusNode,
           cursorColor: Colors.white,
           key: const Key('loginForm_passwordInput_textField'),
@@ -146,37 +145,30 @@ class _PasswordInputState extends State<PasswordInput> {
           obscureText: showPassword,
           decoration: InputDecoration(
             suffixIcon: IconButton(
+              color: Colors.white,
+              splashRadius: 1,
               onPressed: () {
                 setState(() {
                   showPassword = !showPassword;
                 });
               },
               icon: showPassword
-                  ? Icon(
+                  ? const Icon(
                       Icons.visibility,
-                      color: (widget.passwordFocusNode.hasFocus)
-                          ? const Color(0xFF186597)
-                          : const Color(0xFF174873),
+
                     )
-                  : Icon(Icons.visibility_off,
-                      color: (widget.passwordFocusNode.hasFocus)
-                          ? const Color(0xFF186597)
-                          : const Color(0xFF174873)),
+                  : const Icon(Icons.visibility_off,
+              ),
             ),
-            prefixIcon: Icon(
-              Icons.key,
-              color: (widget.passwordFocusNode.hasFocus)
-                  ? const Color(0xFF186597)
-                  : const Color(0xFF174873),
+            labelText: 'Password',
+            labelStyle: const TextStyle(color: Colors.white),
+            contentPadding: EdgeInsets.zero,
+            enabledBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white38)
             ),
-            filled: true,
-            fillColor: const Color(0xFFcfdeec),
-            hintText: 'Enter your password',
-            hintStyle: const TextStyle(color: Color(0xFFa2b6c9)),
-            contentPadding: const EdgeInsets.all(15),
-            border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(25),
-                borderSide: BorderSide.none),
+            focusedBorder: const UnderlineInputBorder(
+                borderSide: BorderSide(color: Colors.white,)
+            ),
             errorText: state.password.invalid ? 'invalid password' : null,
           ),
         );
