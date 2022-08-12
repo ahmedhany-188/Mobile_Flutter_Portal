@@ -63,7 +63,7 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget{
                 );
               }
           ),
-          fallback: (context) => const Center(child: LinearProgressIndicator()),
+          fallback: (context) => const Center(child: CircularProgressIndicator()),
 
         ),
     );

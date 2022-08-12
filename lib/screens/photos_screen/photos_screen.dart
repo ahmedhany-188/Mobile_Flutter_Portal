@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:hassanallamportalflutter/data/helpers/assist_function.dart';
+import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:sizer/sizer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -23,41 +24,47 @@ class PhotosScreen extends StatefulWidget {
 class _PhotosScreenState extends State<PhotosScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Photos'),
-      ),
-      body: BlocProvider(
-        create: (context) => PhotosCubit()..getPhotos(),
-        child: BlocConsumer<PhotosCubit, PhotosState>(
-          listener: (context, state) {
-            if (state is PhotosErrorState) {
-              showErrorSnackBar(context);
-            }
-          },
-          buildWhen: (pre, cur) {
-            if (cur is PhotosSuccessState) {
-              return cur.photosList.isNotEmpty;
-            } else {
-              return false;
-            }
-          },
-          builder: (context, state) {
-            return Sizer(
-              builder: (c, or, dt) {
-                return (state is PhotosSuccessState)
-                    ? ListView.builder(
-                        itemCount: state.photosList.length,
-                        itemBuilder: (ctx, index) => SizedBox(
-                          height: 30.h,
-                          child: albumSwiper(
-                              state.photosList[index].id.toString()),
-                        ),
-                      )
-                    : Container();
-              },
-            );
-          },
+    return CustomBackground(
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: const Text('Photos'),
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+        ),
+        body: BlocProvider(
+          create: (context) => PhotosCubit()..getPhotos(),
+          child: BlocConsumer<PhotosCubit, PhotosState>(
+            listener: (context, state) {
+              if (state is PhotosErrorState) {
+                showErrorSnackBar(context);
+              }
+            },
+            buildWhen: (pre, cur) {
+              if (cur is PhotosSuccessState) {
+                return cur.photosList.isNotEmpty;
+              } else {
+                return false;
+              }
+            },
+            builder: (context, state) {
+              return Sizer(
+                builder: (c, or, dt) {
+                  return (state is PhotosSuccessState)
+                      ? ListView.builder(shrinkWrap: true,
+                          itemCount: state.photosList.length,
+                          itemBuilder: (ctx, index) => SizedBox(
+                            height: 30.h,
+                            child: albumSwiper(
+                                state.photosList[index].id.toString()),
+                          ),
+                        )
+                      : Center(child: CircularProgressIndicator());
+                },
+              );
+            },
+          ),
         ),
       ),
     );

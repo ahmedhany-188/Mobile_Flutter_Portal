@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:hassanallamportalflutter/widgets/appbar/internal_appbar.dart';
+import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,107 +21,115 @@ class SubsidiariesScreen extends StatefulWidget {
 class _SubsidiariesScreenState extends State<SubsidiariesScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // drawer: MainDrawer(),
-      appBar: internalAppBar(context: context, title: 'Subsidiaries'),
+    return CustomBackground(
+      child: Scaffold(
+        // drawer: MainDrawer(),
+        // appBar: internalAppBar(context: context, title: 'Subsidiaries'),
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text('Subsidiaries'),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
 
-      /// basicAppBar(context, 'Subsidiaries'),
-      backgroundColor: Colors.blueGrey,
-      body: BlocProvider(
-        create: (context) => SubsidiariesCubit()..getSubsidiaries(),
-        child: BlocConsumer<SubsidiariesCubit, SubsidiariesState>(
-          listener: (context, state) {
-            if (state is SubsidiariesErrorState) {
-              showErrorSnackBar(context);
-            }
-          },
-          buildWhen: (pre, cur) {
-            if (cur is SubsidiariesSuccessState) {
-              return cur.subsidiariesList.isNotEmpty;
-            } else {
-              return false;
-            }
-          },
-          builder: (context, state) {
-            return Sizer(builder: (ctx, ori, dt) {
-              return (state is SubsidiariesSuccessState)
-                  ? ConditionalBuilder(
-                      condition: state.subsidiariesList.isNotEmpty,
-                      builder: (context) {
-                        return Padding(
-                          padding: EdgeInsets.all(5.0.sp),
-                          child: GridView.builder(
-                            physics: const BouncingScrollPhysics(),
-                            itemCount: 12,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              childAspectRatio: 1.sp,
-                              crossAxisSpacing: 9.sp,
-                              mainAxisSpacing: 9.sp,
-                            ),
-                            itemBuilder: (ctx, index) {
-                              var list = state.subsidiariesList[index];
-                              return InkWell(
-                                onTap: () {
-                                  // showDialog(
-                                  //     context: context,
-                                  //     builder: (context) {
-                                  //       return AlertDialog(
-                                  //           backgroundColor: Theme.of(context)
-                                  //               .colorScheme
-                                  //               .background,
-                                  //           title:
-                                  //               Text(list.subName.toString()),
-                                  //           elevation: 20,
-                                  //           contentPadding:
-                                  //               const EdgeInsets.all(10.0),
-                                  //           content: SingleChildScrollView(
-                                  //             child: Column(
-                                  //               children: [
-                                  //                 convertFromHtml(
-                                  //                     dataToConvert: list
-                                  //                         .subDesc
-                                  //                         .toString(),
-                                  //                     context: context),
-                                  //                 ClipRRect(
-                                  //                   borderRadius:
-                                  //                       BorderRadius.circular(
-                                  //                           20),
-                                  //                   child: Image.network(
-                                  //                       'https://portal.hassanallam.com/images/subsidiaries/${list.image1}'),
-                                  //                 )
-                                  //               ],
-                                  //             ),
-                                  //           ));
-                                  //     });
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.white,
+        /// basicAppBar(context, 'Subsidiaries'),
+        backgroundColor: Colors.transparent,
+        body: BlocProvider(
+          create: (context) => SubsidiariesCubit()..getSubsidiaries(),
+          child: BlocConsumer<SubsidiariesCubit, SubsidiariesState>(
+            listener: (context, state) {
+              if (state is SubsidiariesErrorState) {
+                showErrorSnackBar(context);
+              }
+            },
+            buildWhen: (pre, cur) {
+              if (cur is SubsidiariesSuccessState) {
+                return cur.subsidiariesList.isNotEmpty;
+              } else {
+                return false;
+              }
+            },
+            builder: (context, state) {
+              return Sizer(builder: (ctx, ori, dt) {
+                return (state is SubsidiariesSuccessState)
+                    ? ConditionalBuilder(
+                        condition: state.subsidiariesList.isNotEmpty,
+                        builder: (context) {
+                          return Padding(
+                            padding: EdgeInsets.all(5.0.sp),
+                            child: GridView.builder(
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: 12,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                childAspectRatio: 1.sp,
+                                crossAxisSpacing: 9.sp,
+                                mainAxisSpacing: 9.sp,
+                              ),
+                              itemBuilder: (ctx, index) {
+                                var list = state.subsidiariesList[index];
+                                return InkWell(
+                                  onTap: () {
+                                    // showDialog(
+                                    //     context: context,
+                                    //     builder: (context) {
+                                    //       return AlertDialog(
+                                    //           backgroundColor: Theme.of(context)
+                                    //               .colorScheme
+                                    //               .background,
+                                    //           title:
+                                    //               Text(list.subName.toString()),
+                                    //           elevation: 20,
+                                    //           contentPadding:
+                                    //               const EdgeInsets.all(10.0),
+                                    //           content: SingleChildScrollView(
+                                    //             child: Column(
+                                    //               children: [
+                                    //                 convertFromHtml(
+                                    //                     dataToConvert: list
+                                    //                         .subDesc
+                                    //                         .toString(),
+                                    //                     context: context),
+                                    //                 ClipRRect(
+                                    //                   borderRadius:
+                                    //                       BorderRadius.circular(
+                                    //                           20),
+                                    //                   child: Image.network(
+                                    //                       'https://portal.hassanallam.com/images/subsidiaries/${list.image1}'),
+                                    //                 )
+                                    //               ],
+                                    //             ),
+                                    //           ));
+                                    //     });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      color: Colors.white,
+                                    ),
+                                    child: CachedNetworkImage(
+                                        imageUrl: subsidiariesIconLink(
+                                            list.subIcone.toString())),
                                   ),
-                                  child: CachedNetworkImage(
-                                      imageUrl: subsidiariesIconLink(
-                                          list.subIcone.toString())),
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      fallback: (_) => Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: const [
-                          Center(child: CircularProgressIndicator()),
-                          Center(child: Text('Loading...')),
-                        ],
-                      ),
-                    )
-                  : Container();
-            });
-          },
+                                );
+                              },
+                            ),
+                          );
+                        },
+                        fallback: (_) => Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: const [
+                            Center(child: CircularProgressIndicator()),
+                            Center(child: Text('Loading...')),
+                          ],
+                        ),
+                      )
+                    : Container();
+              });
+            },
+          ),
         ),
       ),
     );

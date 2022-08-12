@@ -6,7 +6,7 @@ Widget titleText(String titleName) {
     style: const TextStyle(
         fontWeight: FontWeight.w900,
         fontSize: 18,
-        decoration: TextDecoration.underline),
+        decoration: TextDecoration.underline,color: Colors.white),
   );
 }
 Widget paragraphText(String paragraph) {
@@ -14,7 +14,7 @@ Widget paragraphText(String paragraph) {
     padding: const EdgeInsets.all(5.0),
     child: Text(
       paragraph,
-      style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 15),
+      style: const TextStyle(fontWeight: FontWeight.w400, fontSize: 15,color: Colors.white),
     ),
   );
 }
