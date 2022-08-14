@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreenDirectManager.dart';
 import 'package:sizer/sizer.dart';
 
@@ -83,21 +84,9 @@ class ContactsWidget extends StatelessWidget {
                                   image: imageProvider, fit: BoxFit.cover),
                             ),
                           ),
-                          placeholder: (context, url) => Image.asset(
-                                'assets/images/logo.png',
-                                height: 60.sp,
-                                // fit: BoxFit.scaleDown,
-                              ),
-                          errorWidget: (context, url, error) => Image.asset(
-                            'assets/images/logo.png',
-                            height: 60.sp,
-                            // fit: BoxFit.scaleDown,
-                          ),
-                        ) : Image.asset(
-                          'assets/images/logo.png',
-                          height: 60.sp,
-                          // fit: BoxFit.scaleDown,
-                        ),
+                          placeholder: (context, url) => Assets.images.logo.image(height: 60.sp),
+                          errorWidget: (context, url, error) => Assets.images.logo.image(height: 60.sp),
+                        ) : Assets.images.logo.image(height: 60.sp),
                         // CircleAvatar(
                         //   radius: 40.sp,
                         //   backgroundColor: Colors.transparent,
