@@ -31,142 +31,179 @@ class ContactsWidget extends StatelessWidget {
         condition: listFromContactsScreen.isNotEmpty,
         builder: (context) => ListView.separated(
           physics: const BouncingScrollPhysics(),
-          itemBuilder: (context, index) => Padding(
-            padding: const EdgeInsets.all(15.0),
-            child: GestureDetector(
-              onTap: () {
-                FocusManager.instance.primaryFocus?.unfocus();
-                contactDetails(context, index);
-              },
-              child: Container(
-                padding: const EdgeInsets.all(10.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15.0),
-                  color: Colors.grey.shade400.withOpacity(0.4),
-                  // gradient: const LinearGradient(
-                  //     colors: [
-                  //       Color(0xFF1a4c78),
-                  //       Color(0xFF3772a6),
-                  //     ],
-                  //     begin: Alignment.bottomLeft,
-                  //     end: Alignment.topRight,
-                  //     tileMode: TileMode.clamp),
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     color: Colors.grey.withOpacity(0.4),
-                  //     spreadRadius: 5,
-                  //     blurRadius: 3,
-                  //     offset: const Offset(0, 3), // changes position of shadow
-                  //   ),
-                  // ],
-                ),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  // mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Flexible(
-                      fit: FlexFit.tight,
-                      flex: 1,
-                      child: CircleAvatar(
-                        radius: 40.sp,
-                        backgroundColor: Colors.transparent,
-                        foregroundImage:
-                            (listFromContactsScreen[index].imgProfile != null ||
-                                    listFromContactsScreen[index].imgProfile !=
-                                        "")
-                                ? CachedNetworkImageProvider(
-                                    'https://portal.hassanallam.com/Apps/images/Profile/${listFromContactsScreen[index].imgProfile}',
-                                  )
-                                : null,
-                        onForegroundImageError: (o, t) {
-                          Image.asset(
+          itemBuilder: (context, index) {
+
+            var imageProfile = listFromContactsScreen[index].imgProfile ?? "";
+            return Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: GestureDetector(
+                onTap: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  contactDetails(context, index);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15.0),
+                    color: Colors.grey.shade400.withOpacity(0.4),
+                    // gradient: const LinearGradient(
+                    //     colors: [
+                    //       Color(0xFF1a4c78),
+                    //       Color(0xFF3772a6),
+                    //     ],
+                    //     begin: Alignment.bottomLeft,
+                    //     end: Alignment.topRight,
+                    //     tileMode: TileMode.clamp),
+                    // boxShadow: [
+                    //   BoxShadow(
+                    //     color: Colors.grey.withOpacity(0.4),
+                    //     spreadRadius: 5,
+                    //     blurRadius: 3,
+                    //     offset: const Offset(0, 3), // changes position of shadow
+                    //   ),
+                    // ],
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    // mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        fit: FlexFit.tight,
+                        flex: 1,
+                        child:
+                        imageProfile.isNotEmpty ? CachedNetworkImage(
+                          imageUrl: 'https://portal.hassanallam.com/Apps/images/Profile/$imageProfile',
+                          imageBuilder: (context, imageProvider) => Container(
+                            width: 80.sp,
+                            height: 80.sp,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image: imageProvider, fit: BoxFit.cover),
+                            ),
+                          ),
+                          placeholder: (context, url) => Image.asset(
+                                'assets/images/logo.png',
+                                height: 60.sp,
+                                // fit: BoxFit.scaleDown,
+                              ),
+                          errorWidget: (context, url, error) => Image.asset(
                             'assets/images/logo.png',
-                            height: 50.sp,
+                            height: 60.sp,
                             // fit: BoxFit.scaleDown,
-                          );
-                        },
-                        // backgroundImage: AssetImage(
-                        //   'assets/images/logo.png',
-                        // ),
-                        child: Image.asset(
+                          ),
+                        ) : Image.asset(
                           'assets/images/logo.png',
-                          height: 50.sp,
+                          height: 60.sp,
                           // fit: BoxFit.scaleDown,
                         ),
+                        // CircleAvatar(
+                        //   radius: 40.sp,
+                        //   backgroundColor: Colors.transparent,
+                        //   foregroundImage:
+                        //   (imageProfile.isNotEmpty)
+                        //       ?  CachedNetworkImageProvider(
+                        //     'https://portal.hassanallam.com/Apps/images/Profile/$imageProfile',
+                        //   )
+                        //       : Image.asset(
+                        //     'assets/images/logo.png',
+                        //     height: 20.sp,
+                        //     // fit: BoxFit.scaleDown,
+                        //   ).image,
+                        //   // onForegroundImageError: (o, t) {
+                        //   //   Image.asset(
+                        //   //     'assets/images/logo.png',
+                        //   //     height: 50.sp,
+                        //   //     // fit: BoxFit.scaleDown,
+                        //   //   );
+                        //   // },
+                        //   // backgroundImage: AssetImage(
+                        //   //   'assets/images/logo.png',
+                        //   // ),
+                        //   // child: Image.asset(
+                        //   //   'assets/images/logo.png',
+                        //   //   height: 50.sp,
+                        //   //   // fit: BoxFit.scaleDown,
+                        //   // ),
+                        // ),
                       ),
-                    ),
-                    Flexible(
-                      flex: 2,
-                      fit: FlexFit.loose,
-                      child: SizedBox(
-                        height: 100.0.sp,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          // mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Flexible(
-                              fit: FlexFit.loose,
-                              child: Text(
-                                '${listFromContactsScreen[index].name}'.trim(),
-                                style: const TextStyle(
-                                  fontSize: 17.0,
-                                  fontWeight: FontWeight.w600,
+                      Flexible(
+                        flex: 2,
+                        fit: FlexFit.loose,
+                        child: SizedBox(
+                          height: 100.0.sp,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            // mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Flexible(
+                                fit: FlexFit.loose,
+                                child: Text(
+                                  '${listFromContactsScreen[index].name}'
+                                      .trim(),
+                                  style: const TextStyle(
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
+                                  maxLines: 2,
+                                  // overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 5, bottom: 5),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 0.5.sp,
                                   color: Colors.white,
                                 ),
-                                maxLines: 2,
-                                // overflow: TextOverflow.ellipsis,
                               ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5, bottom: 5),
-                              child: Container(
-                                width: double.infinity,
-                                height: 0.5.sp,
-                                color: Colors.white,
-                              ),
-                            ),
-                            Container(
-                              clipBehavior: Clip.none,
-                              alignment: Alignment.center,
-                              // height: 10.sp,
-                              child: Column(
-                                // mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    '${listFromContactsScreen[index].titleName}'
-                                        .trim(),
-                                    style: const TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.white,
+                              Container(
+                                clipBehavior: Clip.none,
+                                alignment: Alignment.center,
+                                // height: 10.sp,
+                                child: Column(
+                                  // mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      '${listFromContactsScreen[index]
+                                          .titleName}'
+                                          .trim(),
+                                      style: const TextStyle(
+                                        fontSize: 14.0,
+                                        color: Colors.white,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                  Text(
-                                    '${listFromContactsScreen[index].projectName}',
-                                    style: const TextStyle(
-                                      fontSize: 13.0,
-                                      color: Colors.white,
+                                    Text(
+                                      '${listFromContactsScreen[index]
+                                          .projectName}',
+                                      style: const TextStyle(
+                                        fontSize: 13.0,
+                                        color: Colors.white,
+                                      ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
                                     ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
           separatorBuilder: (context, index) => Padding(
             padding: const EdgeInsetsDirectional.only(start: 20.0, end: 20.0),
             child: Container(
