@@ -17,6 +17,7 @@ import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.d
 import 'package:hassanallamportalflutter/data/repositories/upgrader_repository.dart';
 import 'package:hassanallamportalflutter/life_cycle_states.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:move_to_background/move_to_background.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -265,26 +266,36 @@ class _MyAppState extends State<MyApp> {
             create: (responsibleContext) => ResponsibleVacationCubit(),
             lazy: true,
           ),
+          BlocProvider<SubsidiariesCubit>(
+            create: (subsidiariesContext) => SubsidiariesCubit(),
+            lazy: true,
+          ),
 
           // BlocProvider<PermissionCubit>(
           //   create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),
           // ),
         ],
         child: LifeCycleState(
-          child: MaterialApp(
-            title: 'Hassan Allam Portal',
-            debugShowCheckedModeBanner: false,
-            builder: EasyLoading.init(),
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: const Color.fromRGBO(23, 72, 115, 1),
+          child: WillPopScope(
+            onWillPop: () async {
+              MoveToBackground.moveTaskToBack();
+              return false;
+            },
+            child: MaterialApp(
+              title: 'Hassan Allam Portal',
+              debugShowCheckedModeBanner: false,
+              builder: EasyLoading.init(),
+              theme: ThemeData(
+                colorScheme: ColorScheme.fromSeed(
+                  seedColor: const Color.fromRGBO(23, 72, 115, 1),
+                ),
+                elevatedButtonTheme: ElevatedButtonThemeData(
+                    style: ElevatedButton.styleFrom(
+                        primary: ConstantsColors.buttonColors)),
+                visualDensity: VisualDensity.adaptivePlatformDensity,
               ),
-              elevatedButtonTheme: ElevatedButtonThemeData(
-                  style: ElevatedButton.styleFrom(
-                      primary: ConstantsColors.buttonColors)),
-              visualDensity: VisualDensity.adaptivePlatformDensity,
+              onGenerateRoute: widget.appRouter.onGenerateRoute,
             ),
-            onGenerateRoute: widget.appRouter.onGenerateRoute,
           ),
         ));
   }

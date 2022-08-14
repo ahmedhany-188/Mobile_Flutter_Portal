@@ -34,8 +34,9 @@ class _SubsidiariesScreenState extends State<SubsidiariesScreen> {
 
         /// basicAppBar(context, 'Subsidiaries'),
         backgroundColor: Colors.transparent,
-        body: BlocProvider(
-          create: (context) => SubsidiariesCubit()..getSubsidiaries(),
+        body: BlocProvider<SubsidiariesCubit>.value(
+          value: BlocProvider.of(context)..getSubsidiaries(),
+              // (context) => SubsidiariesCubit()..getSubsidiaries(),
           child: BlocConsumer<SubsidiariesCubit, SubsidiariesState>(
             listener: (context, state) {
               if (state is SubsidiariesErrorState) {
