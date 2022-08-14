@@ -222,6 +222,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                         children: [
                                           RadioListTile<int>(
                                             value: 1,
+                                            activeColor: Colors.white,
                                             title: const Text("Create"),
                                             groupValue: state.requestType,
                                             onChanged: (permissionType) =>
@@ -240,6 +241,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                           ),
                                           RadioListTile<int>(
                                             value: 2,
+                                            activeColor: Colors.white,
                                             title: const Text("Disable"),
                                             groupValue: state.requestType,
                                             onChanged: (permissionType) =>

@@ -10,6 +10,7 @@ import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_userp
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:vcard_maintained/vcard_maintained.dart';
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
+import 'package:url_launcher/url_launcher.dart' as UrlLauncher;
 
 
 class DirectManagerProfileScreen extends StatefulWidget {
@@ -165,24 +166,50 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                               Padding(
                                   padding: const EdgeInsets.all(5.0),
 
-                                  child:  Stack(
-                                      children: [
 
-                                  Column(
+                                  child:Column(
                                   children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: Center(
-                                            child: CircleAvatar(
-                                              // backgroundImage:
-                                              backgroundColor: Colors.transparent,
-                                              foregroundImage:  state is BlocGetManagerDataSuccessState ?
-                                              NetworkImage("https://portal.hassanallam.com/Apps/images/Profile/"
-                                                  "${state.managerData.userHrCode!}.jpg"):
-                                              AssetImage(assetImage) as ImageProvider,
-                                              radius: 70,
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                          Flexible(
+                                            flex: 2,
+                                              child: IconButton(
+                                                icon: const Icon(Icons.phone),
+                                                color: Colors.white,
+                                                onPressed: () {
+                                                  UrlLauncher.launch('tel:+${getMobile(state)}');
+                                                },
+                                              ),
                                             ),
-                                          ),
+                                            Flexible(
+                                              flex: 3,
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(5.0),
+                                                child: Center(
+                                                  child: CircleAvatar(
+                                                    // backgroundImage:
+                                                    backgroundColor: Colors.transparent,
+                                                    foregroundImage:  state is BlocGetManagerDataSuccessState ?
+                                                    NetworkImage("https://portal.hassanallam.com/Apps/images/Profile/"
+                                                        "${state.managerData.userHrCode!}.jpg"):
+                                                    AssetImage(assetImage) as ImageProvider,
+                                                    radius: 70,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Flexible(
+                                              flex: 2,
+                                              child: IconButton(
+                                                icon: const Icon(Icons.mail),
+                                                color: Colors.white,
+                                                onPressed: () {
+                                                  UrlLauncher.launch('mailto:${getEmail(state)}');
+                                                },
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                     Container(
                                       padding: const EdgeInsets.all(10.0),
@@ -219,8 +246,6 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                         ),
                                         getFirstSection( 'HRCode: ${state is BlocGetManagerDataSuccessState?state.managerData.userHrCode!:""}',
                                         ),
-                                        getFirstSection( 'Grade: ${state is BlocGetManagerDataSuccessState?state.managerData.gradeName.toString():""}',
-                                        ),
 
                                       ]),
                                     ),
@@ -229,24 +254,6 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
 
                                           ],),
 
-                                        Positioned(
-                                          top: 30,
-                                          right: 30,
-                                          child: IconButton(
-                                            icon: const Icon(Icons.edit),
-                                            color: Colors.white,
-                                            onPressed: () {
-                                              showDialog(context: context,
-                                                  builder: (BuildContext context) {
-                                                    return const DialogPopUpUserProfile();
-                                                  }
-                                              );
-                                            },
-                                          ),
-                                        ),
-
-                                      ],
-                                    )
 
                               ),
 
@@ -374,6 +381,20 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
       return "";
     }
   }
+
+  String getEmail(ProfileManagerState state){
+    if(state is BlocGetManagerDataSuccessState){
+      if(state.managerData.email==null){
+        return "";
+      }else{
+        return state.managerData.email!;
+      }
+    }
+    else{
+      return "";
+    }
+  }
+
   String getMobile(ProfileManagerState state){
     if(state is BlocGetManagerDataSuccessState){
       if(state.managerData.mobile==null){

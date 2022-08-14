@@ -110,19 +110,52 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                         children: [
                           Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Center(
-                                  child: CircleAvatar(
-                                    backgroundImage:
-                                    NetworkImage(
-                                        "https://portal.hassanallam.com/Apps/images/Profile/${user
-                                            .employeeData!
-                                            .userHrCode!}.jpg"),
-                                    radius: 70,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Flexible(
+                                    flex: 2,
+                                    child: IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      color: Colors.transparent,
+                                      onPressed: () {},
+                                    ),
                                   ),
-                                ),
+                                  Flexible(
+                                    flex: 3,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Center(
+                                        child: CircleAvatar(
+                                          backgroundImage:
+                                          NetworkImage(
+                                              "https://portal.hassanallam.com/Apps/images/Profile/${user
+                                                  .employeeData!
+                                                  .userHrCode!}.jpg"),
+                                          radius: 70,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Flexible(
+                                    flex: 2,
+                                    child: IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      color: Colors.white,
+                                      onPressed: () {
+                                        showModalBottomSheet<void>(context: context,shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(20),),
+                                        ),
+                                            builder: (BuildContext context) {
+                                              return ShowUserProfileBottomSheet();
+                                            });
+                                      },
+                                    ),
+                                  ),
+                                ],
                               ),
+
                               Container(
                                 padding: const EdgeInsets.all(10.0),
                                 decoration: BoxDecoration(
@@ -162,23 +195,10 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
 
                                 ]),
                               ),
+
                             ],
                           ),
-                          Positioned(
-                            top: 30,
-                            right: 30,
-                            child: IconButton(
-                              icon: const Icon(Icons.edit),
-                              color: Colors.white,
-                              onPressed: () {
-                                showDialog(context: context,
-                                    builder: (BuildContext context) {
-                                      return const DialogPopUpUserProfile();
-                                    }
-                                );
-                              },
-                            ),
-                          ),
+
                         ],
                       )
                   ),

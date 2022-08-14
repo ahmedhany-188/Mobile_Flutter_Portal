@@ -252,6 +252,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                 children: [
                                                   RadioListTile<int>(
                                                     value: 1,
+                                                    activeColor: Colors.white,
                                                     title: const Text(
                                                         "Access Right"),
                                                     groupValue: state
@@ -272,6 +273,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                   ),
                                                   RadioListTile<int>(
                                                     value: 2,
+                                                    activeColor: Colors.white,
                                                     title: const Text(
                                                         "Disable"),
                                                     groupValue: state

@@ -30,49 +30,51 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
     return CustomBackground(
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        appBar: AppBar(
-          title: const Text('Appraisal'),
-          centerTitle: true,
-          elevation: 0,
+      child: CustomTheme(
+        child: Scaffold(
           backgroundColor: Colors.transparent,
-        ),
-        resizeToAvoidBottomInset: false,
-        // drawer: MainDrawer(),
+          appBar: AppBar(
+            title: const Text('Appraisal'),
+            centerTitle: true,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+          ),
+          resizeToAvoidBottomInset: false,
+          // drawer: MainDrawer(),
 
-        body: BlocProvider<EmployeeAppraisalBlocCubit>(
-          create: (context) => EmployeeAppraisalBlocCubit()
-            ..getEmployeeAppraisalList(user.user!.userHRCode!),
-          child: BlocConsumer<EmployeeAppraisalBlocCubit,
-              EmployeeAppraisalBlocState>(
-            listener: (context, state) {
-              if (state is BlocGetEmployeeAppraisalBlocInitialSuccessState) {
-                employeeAppraisalList =
-                    jsonDecode(state.employeeAppraisaleList)["data"];
-                // employee_appraisal_model!.overallscore = employeeAppraisaleList!.elementAt(0)["overallscore"];
-                appraisalDataList.add(ObjectAppraisalModel("Company",
-                    employeeAppraisalList!.elementAt(0)["companyScore"]));
-                appraisalDataList.add(ObjectAppraisalModel("Department",
-                    employeeAppraisalList!.elementAt(0)["departmentScore"]));
-                appraisalDataList.add(ObjectAppraisalModel("Individual",
-                    employeeAppraisalList!.elementAt(0)["individualScore"]));
-                appraisalDataList.add(ObjectAppraisalModel("Competence",
-                    employeeAppraisalList!.elementAt(0)["competencescore"]));
-              } else if (state
-                  is BlocGetEmployeeAppraisalBlocInitialErrorState) {
-                ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("error"),
-                  ),
-                );
-              } else if (state
-                  is BlocGetEmployeeAppraisalBlocInitialLoadingState) {}
-            },
-            builder: (context, state) {
-              return EmployeeAppraisalTicketWidget(appraisalDataList);
-            },
+          body: BlocProvider<EmployeeAppraisalBlocCubit>(
+            create: (context) => EmployeeAppraisalBlocCubit()
+              ..getEmployeeAppraisalList(user.user!.userHRCode!),
+            child: BlocConsumer<EmployeeAppraisalBlocCubit,
+                EmployeeAppraisalBlocState>(
+              listener: (context, state) {
+                if (state is BlocGetEmployeeAppraisalBlocInitialSuccessState) {
+                  employeeAppraisalList =
+                      jsonDecode(state.employeeAppraisaleList)["data"];
+                  // employee_appraisal_model!.overallscore = employeeAppraisaleList!.elementAt(0)["overallscore"];
+                  appraisalDataList.add(ObjectAppraisalModel("Company",
+                      employeeAppraisalList!.elementAt(0)["companyScore"]));
+                  appraisalDataList.add(ObjectAppraisalModel("Department",
+                      employeeAppraisalList!.elementAt(0)["departmentScore"]));
+                  appraisalDataList.add(ObjectAppraisalModel("Individual",
+                      employeeAppraisalList!.elementAt(0)["individualScore"]));
+                  appraisalDataList.add(ObjectAppraisalModel("Competence",
+                      employeeAppraisalList!.elementAt(0)["competencescore"]));
+                } else if (state
+                    is BlocGetEmployeeAppraisalBlocInitialErrorState) {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("error"),
+                    ),
+                  );
+                } else if (state
+                    is BlocGetEmployeeAppraisalBlocInitialLoadingState) {}
+              },
+              builder: (context, state) {
+                return EmployeeAppraisalTicketWidget(appraisalDataList);
+              },
+            ),
           ),
         ),
       ),
