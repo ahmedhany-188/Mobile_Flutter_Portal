@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
@@ -130,7 +131,7 @@ class ContactsWidget extends StatelessWidget {
                               Flexible(
                                 fit: FlexFit.loose,
                                 child: Text(
-                                  '${listFromContactsScreen[index].name}'
+                                  '${listFromContactsScreen[index].name?.toTitleCase()}'
                                       .trim(),
                                   style: const TextStyle(
                                     fontSize: 17.0,
