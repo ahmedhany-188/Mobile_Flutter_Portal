@@ -31,11 +31,13 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
 
   var mobileKey =false;
 
+  bool hrCodeUpdated=false;
+  String hrCodeEmail="";
+
 
   @override
   Widget build(BuildContext context) {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
-
 
     final currentRequestNo = widget.requestNo;
 
@@ -102,14 +104,18 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                       FloatingActionButton.extended(
                         heroTag: null,
                         onPressed: () {
-                          if(user.employeeData!.userHrCode != state.hrCodeUser.value){
+                          if(user.employeeData!.userHrCode == state.hrCodeUser.value){
+                            EasyLoading.showError("Invalid same hr code",);
+                          }else if(hrCodeUpdated){
+                            EasyLoading.showError("Data not added");
+                          }
+                          else if(user.employeeData!.userHrCode != state.hrCodeUser.value){
                             context.read<EmailUserAccountCubit>()
                                 .submitEmailAccount();
                           }else{
-                            EasyLoading.showError("Invalid same hr",);
+                            EasyLoading.showError("error",);
                           }
                         },
-
                         icon: const Icon(Icons.send),
                         label: const Text('SUBMIT'),
                       ),
@@ -146,7 +152,6 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                         child: Column(
 
                           children: [
-
                             if(state.requestStatus ==
                                 RequestStatus.oldRequest)Padding(
                               padding: const EdgeInsets.symmetric(
@@ -192,7 +197,6 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                               ),
                             ),
 
-
                             Padding(
                               padding: const EdgeInsets.all(8.0),
 
@@ -209,7 +213,6 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                     EmailUserAccountInitial>(
                                     buildWhen: (previous, current) {
 
-
                                       return (previous.requestType !=
                                           current.requestType);
                                     },
@@ -222,6 +225,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                         children: [
                                           RadioListTile<int>(
                                             value: 1,
+                                            activeColor: Colors.white,
                                             title: const Text("Create"),
                                             groupValue: state.requestType,
                                             onChanged: (permissionType) =>
@@ -240,6 +244,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                           ),
                                           RadioListTile<int>(
                                             value: 2,
+                                            activeColor: Colors.white,
                                             title: const Text("Disable"),
                                             groupValue: state.requestType,
                                             onChanged: (permissionType) =>
@@ -275,37 +280,49 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                   },
                                   builder: (context, state) {
                                     return TextFormField(
-                                      initialValue: state.hrCodeUser.value,
-                                      onChanged: (hrCode) =>
-                                      {
+                                        initialValue: state.hrCodeUser.value,
+                                        onChanged: (hrCode) =>
+                                        {
+                                          context.read<EmailUserAccountCubit>().hrCodeChanged(hrCode),
+                                          context.read<EmailUserAccountCubit>().clearStateHRCode(),
+                                          hrCodeUpdated = true,
+                                          hrCodeEmail=hrCode.toString()
+
+                                        },
+                                      onFieldSubmitted: (value) {
+
+                                        hrCodeEmail=value.toString();
                                         context.read<EmailUserAccountCubit>()
-                                            .hrCodeChanged(hrCode),
+                                            // .hrCodeSubmittedGetData(state.hrCodeUser.value);
+                                            .hrCodeSubmittedGetData(hrCodeEmail);
                                       },
-                                      onFieldSubmitted: (value)=>
-                                      {
-                                        // LoadingDialog.show(context),
-                                        context.read<EmailUserAccountCubit>()
-                                            .hrCodeSubmittedGetData(value.toString()),
-                                        // if(state.fullName!=null){
-                                        //   LoadingDialog.hide(context),
-                                        // }
-                                      },
-                                      keyboardType: TextInputType.phone,
-                                      readOnly: state.requestStatus == RequestStatus.oldRequest ? true : false,
-                                      decoration:  InputDecoration(
-                                        errorText: state.hrCodeUser.invalid
-                                      ? 'invalid Hr Code '
-                                          : null,
-                                        floatingLabelAlignment:
-                                        FloatingLabelAlignment.start,
-                                        prefixIcon: Icon(
-                                            Icons.qr_code,color: Colors.white70,),
-                                        labelText: 'Hr Code',
-                                      ),
-                                    );
+                                        keyboardType: TextInputType.phone,
+                                        readOnly: state.requestStatus ==
+                                            RequestStatus.oldRequest
+                                            ? true
+                                            : false,
+                                        decoration: InputDecoration(
+                                          errorText: state.hrCodeUser.invalid
+                                              ? 'invalid Hr Code '
+                                              : null,
+                                          floatingLabelAlignment: FloatingLabelAlignment.start,
+
+                                          prefixIcon: Icon(
+                                            Icons.search,
+                                            color: Colors.white70,),
+                                          suffixIcon: IconButton(
+                                            icon: Icon(Icons.done),
+                                            onPressed: () {
+                                              context.read<EmailUserAccountCubit>()
+                                                  .hrCodeSubmittedGetData(hrCodeEmail);
+                                            },),
+                                          labelText: 'Search hr Code',
+                                        ),
+                                      );
                                   }
                               ),
                             ),
+
 
                             Padding(
                                 padding: const EdgeInsets.all(10.0),
@@ -418,8 +435,12 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                         // },
                                         builder: (context, state) {
                                           return TextFormField(
+
+
                                             key:mobileKey==false?UniqueKey():null,
                                             initialValue: state.userMobile.value,
+
+
                                             onChanged: (phoneValue) =>
                                             {
                                               mobileKey=true,
@@ -474,6 +495,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                     return Row(children: [
                                       Text('Email Account'),
                                       Checkbox(
+                                        // activeColor: Colors.white,
                                         value: state.accountType,
                                         onChanged: (bool? value) {
                                           state.requestStatus ==

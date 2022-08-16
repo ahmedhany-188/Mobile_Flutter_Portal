@@ -35,14 +35,15 @@ class MyRequestsItemWidget extends StatelessWidget {
             padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.0),
-              gradient: const LinearGradient(
-                  colors: [
-                    Color(0xFF1a4c78),
-                    Color(0xFF3772a6),
-                  ],
-                  begin: Alignment.bottomLeft,
-                  end: Alignment.topRight,
-                  tileMode: TileMode.clamp),
+              color: Colors.grey.shade400.withOpacity(0.4),
+              // gradient: const LinearGradient(
+              //     colors: [
+                    // Color(0xFF1a4c78),
+                    // Color(0xFF3772a6),
+                  // ],
+                  // begin: Alignment.bottomLeft,
+                  // end: Alignment.topRight,
+                  // tileMode: TileMode.clamp),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.3),

@@ -120,11 +120,16 @@ class RequestRepository {
     return response;
   }
 
-  Future<EmployeeData> getEmailData(String hrCode) async{
+  Future<dynamic> getEmailData(String hrCode) async{
     final http.Response rawPermission = await requestDataProviders
         .getEmailAccountData(hrCode);
     final json = await jsonDecode(rawPermission.body);
-    final EmployeeData response = EmployeeData.fromJson(json[0]);
+    final EmployeeData response;
+    try{
+      response = EmployeeData.fromJson(json[0]);
+    }catch(e){
+      return "error";
+    }
     return response;
   }
 

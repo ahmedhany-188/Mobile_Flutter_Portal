@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:sizer/sizer.dart';
 import 'package:video_player/video_player.dart';
 
@@ -12,35 +13,45 @@ class VideosScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Videos'),
-      ),
-      body: BlocProvider<VideosCubit>.value(
-        value: VideosCubit.get(context),
-        child: BlocBuilder<VideosCubit, VideosState>(
-          builder: (context, state) {
-            return Sizer(
-              builder: (c, or, dt) {
-                return ListView.builder(
-                  key: UniqueKey(),
-                  itemCount: VideosCubit.get(context).videosList.length,
-                  itemBuilder: (ctx, index) {
-                    return Column(
-                      children: [
-                        Text(VideosCubit.get(context)
-                            .videosList[index]
-                            .videoName!),
-                        _VideoContent(
-                          index: index,
-                        ),
-                      ],
+
+
+
+    return CustomBackground(
+      child: CustomTheme(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            title: const Text('Videos'),
+            centerTitle: true,
+          ),
+          body: BlocProvider<VideosCubit>.value(
+            value: VideosCubit.get(context),
+            child: BlocBuilder<VideosCubit, VideosState>(
+              builder: (context, state) {
+                return Sizer(
+                  builder: (c, or, dt) {
+                    return ListView.builder(
+                      key: UniqueKey(),
+                      itemCount: VideosCubit.get(context).videosList.length,
+                      itemBuilder: (ctx, index) {
+                        return Column(
+                          children: [
+                            Text(VideosCubit.get(context)
+                                .videosList[index]
+                                .videoName!),
+                            _VideoContent(
+                              index: index,
+                            ),
+                          ],
+                        );
+                      },
                     );
                   },
                 );
               },
-            );
-          },
+            ),
+          ),
         ),
       ),
     );

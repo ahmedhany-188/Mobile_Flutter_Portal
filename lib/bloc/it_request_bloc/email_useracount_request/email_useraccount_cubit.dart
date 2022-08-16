@@ -80,23 +80,51 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
     }
   }
 
-  void hrCodeSubmittedGetData(String hrCode) async {
-    final requestData = await requestRepository.getEmailData(hrCode);
-
-    final fullName = requestData.name.toString();
-    final titleEmployee =  requestData.titleName.toString();
-    final locationEmployee= requestData.projectName.toString();
-    final emailEmployee = requestData.email.toString();
-    final userMobile = RequestDate.dirty(requestData.mobile.toString());
+  void clearStateHRCode(){
+    final hrCodeUser = RequestDate.dirty("");
+    final userMobile = RequestDate.dirty("");
 
     emit(state.copyWith(
-      fullName: fullName,
-      userTitle: titleEmployee,
-      userLocation: locationEmployee,
-      email: emailEmployee,
-      userMobile:userMobile,
-      status: Formz.validate([userMobile, state.hrCodeUser]),
+      fullName: "",
+      userTitle: "",
+      userLocation: "",
+      email: "",
+      userMobile: userMobile,
+      hrCodeUser:hrCodeUser,
+      status: Formz.validate([userMobile, hrCodeUser]),
     ));
+
+
+
+
+  }
+
+  void hrCodeSubmittedGetData(String hrCode) async {
+
+    final requestData = await requestRepository.getEmailData(hrCode);
+
+    if (requestData == "error") {
+
+      clearStateHRCode();
+
+      emit(state.copyWith(errorMessage: "Invalid hr code", status:FormzStatus.submissionFailure ));
+    } else {
+
+      final fullName = requestData.name.toString();
+      final titleEmployee = requestData.titleName.toString();
+      final locationEmployee = requestData.projectName.toString();
+      final emailEmployee = requestData.email.toString();
+      final userMobile = RequestDate.dirty(requestData.mobile.toString());
+
+      emit(state.copyWith(
+        fullName: fullName,
+        userTitle: titleEmployee,
+        userLocation: locationEmployee,
+        email: emailEmployee,
+        userMobile: userMobile,
+        status: Formz.validate([userMobile, state.hrCodeUser]),
+      ));
+    }
   }
 
 
