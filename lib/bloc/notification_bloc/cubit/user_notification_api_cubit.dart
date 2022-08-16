@@ -11,7 +11,7 @@ part 'user_notification_api_state.dart';
 class UserNotificationApiCubit extends Cubit<UserNotificationApiState> with HydratedMixin{
   UserNotificationApiCubit(this.requestRepository) : super(const UserNotificationApiState()){
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
-      if (state.userNotificationEnumStates != UserNotificationEnumStates.success) {
+      if (state.userNotificationEnumStates == UserNotificationEnumStates.failed) {
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
           try {
@@ -24,9 +24,9 @@ class UserNotificationApiCubit extends Cubit<UserNotificationApiState> with Hydr
           }
         }
         else if (connectivityResult == ConnectivityResult.none) {
-          // emit(state.copyWith(
-          //   userNotificationEnumStates: UserNotificationEnumStates.failed,
-          // ));
+          emit(state.copyWith(
+            userNotificationEnumStates: UserNotificationEnumStates.noConnection,
+          ));
         }
       }
     });
