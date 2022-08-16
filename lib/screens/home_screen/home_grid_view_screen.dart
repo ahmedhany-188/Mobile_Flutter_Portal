@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
@@ -52,8 +53,8 @@ class HomeGridViewScreen extends StatelessWidget {
             title: const Text('Hassan Allam Holding'),
             actions: [
               BlocProvider.value(
-                value: BlocProvider.of<UserNotificationBloc>(context),
-                child: BlocBuilder<UserNotificationBloc, UserNotificationState>(
+                value: BlocProvider.of<UserNotificationApiCubit>(context),
+                child: BlocBuilder<UserNotificationApiCubit, UserNotificationApiState>(
                   builder: (context, state) {
                     return InkWell(
                       splashColor: Colors.transparent,
@@ -61,18 +62,19 @@ class HomeGridViewScreen extends StatelessWidget {
                       onTap: () => Navigator.of(context)
                           .pushNamed(NotificationsScreen.routeName),
                       child: Badge(
+                        showBadge: state.userNotificationList.isNotEmpty ? true : false,
                         toAnimate: true,
                         animationDuration: const Duration(milliseconds: 1000),
                         animationType: BadgeAnimationType.scale,
                         badgeColor: Colors.red,
                         badgeContent: Text(
-                          "${state.notifications.length}",
+                          "${state.userNotificationList.length}",
                           style: const TextStyle(
-                              color: Colors.white, fontSize: 12),
+                              color: Colors.white, fontSize: 10),
                         ),
                         position: const BadgePosition(
                           start: 5,
-                          top: 4,
+                          top: 5,
                         ),
                         child: IconButton(
                           icon: const Icon(Icons.notifications),

@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
@@ -527,18 +528,19 @@ class _MainDrawerState extends State<MainDrawer> {
                           Padding(
                             padding: const EdgeInsets.only(right: 25.0),
                             child: BlocProvider.value(
-                              value: BlocProvider.of<UserNotificationBloc>(context),
-                              child: BlocBuilder<UserNotificationBloc, UserNotificationState>(
+                              value: BlocProvider.of<UserNotificationApiCubit>(context)..getNotifications(),
+                              child: BlocBuilder<UserNotificationApiCubit, UserNotificationApiState>(
                                 builder: (context, state) {
                                   return Badge(
-                                    toAnimate: true,
+                                    showBadge: state.userNotificationList.isNotEmpty ? true : false,
+                                    toAnimate: false,
                                     animationDuration: const Duration(milliseconds: 1000),
                                     animationType: BadgeAnimationType.scale,
                                     badgeColor: Colors.red,
                                     badgeContent: Text(
-                                      "${state.notifications.length}",
+                                      "${state.userNotificationList.length}",
                                       style:
-                                      const TextStyle(color: Colors.white, fontSize: 12),
+                                      const TextStyle(color: Colors.white, fontSize: 10),
                                     ),
                                     position: const BadgePosition(
                                       start: 5,
