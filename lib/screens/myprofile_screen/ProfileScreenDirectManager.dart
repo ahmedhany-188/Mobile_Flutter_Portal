@@ -32,7 +32,6 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
 
   ScrollController scrollController = ScrollController();
 
-  static String assetImage = 'assets/images/logo.png';
 
 
   @override
@@ -116,6 +115,7 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
 
                     if (state is BlocGetManagerDataSuccessState) {
 
+                      print("00-"+state.managerData.toJson().toString());
                       ///Set properties
                       vCard.firstName = state.managerData.name!.toString();
                       vCard.organization = state.managerData.companyName!;
@@ -125,6 +125,7 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                       vCard.url = "https://hassanallam.com";
                       vCard.workPhone = state.managerData.deskPhone!;
                       vCard.cellPhone = state.managerData.mobile;
+
 
                     }
 
@@ -187,15 +188,21 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                               child: Padding(
                                                 padding: const EdgeInsets.all(5.0),
                                                 child: Center(
-                                                  child: CircleAvatar(
-                                                    // backgroundImage:
-                                                    backgroundColor: Colors.transparent,
-                                                    foregroundImage:  state is BlocGetManagerDataSuccessState ?
-                                                    NetworkImage("https://portal.hassanallam.com/Apps/images/Profile/"
-                                                        "${state.managerData.userHrCode!}.jpg"):
-                                                    AssetImage(assetImage) as ImageProvider,
-                                                    radius: 70,
-                                                  ),
+                                                  child: state is BlocGetManagerDataSuccessState && state.managerData.imgProfile !=null && state.managerData.imgProfile.toString()!=""?
+                                                    CachedNetworkImage(imageUrl: "https://portal.hassanallam.com/Apps/images/Profile/${state.managerData.imgProfile}",
+                                                      imageBuilder: (context, imageProvider) => Container(
+                                                        width: 120,
+                                                        height: 120,
+                                                        decoration: BoxDecoration(
+                                                          shape: BoxShape.circle,
+                                                          image: DecorationImage(
+                                                              image: imageProvider, fit: BoxFit.cover),
+                                                        ),
+                                                      ),
+                                                      placeholder: (context, url) => Assets.images.logo.image(height: 70),
+                                                      errorWidget: (context, url, error) => Assets.images.logo.image(height: 70),
+                                                    ) :
+                                                  Assets.images.logo.image(height: 70),
                                                 ),
                                               ),
                                             ),
@@ -322,15 +329,11 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                               bottom: 3),
                                           child: Container(
                                             width: double.infinity,
-                                            child: Text(
-                                              user.employeeData!.managerCode!,
-                                              style: const TextStyle(
-                                                color: Colors.white70,
-                                                fontSize: 14,
-                                                fontFamily: 'Nunito',
-                                                decoration: TextDecoration
-                                                    .underline,),
-                                              textAlign: TextAlign.left,),
+
+                                            child:getManagerCodeText(state is BlocGetManagerDataSuccessState?state.managerData.managerName.toString()!:"not found")
+
+
+
                                           ),
                                         ),
                                       ]
@@ -365,21 +368,6 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
           )
       ),
     );
-  }
-
-
-
-  String getDirectmanager(ProfileManagerState state){
-    if(state is BlocGetManagerDataSuccessState){
-      if(state.managerData.managerCode==null){
-        return "";
-      }else{
-        return state.managerData.managerCode!;
-      }
-    }
-    else{
-      return "";
-    }
   }
 
   String getEmail(ProfileManagerState state){
@@ -452,6 +440,18 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
         ),
       ),
     );
+  }
+
+  Text getManagerCodeText(String managerCode) {
+    return Text(
+        managerCode,
+        style: TextStyle(
+          color: Colors.white70,
+          fontSize: 14,
+          fontFamily: 'Nunito',
+          decoration: TextDecoration
+              .underline,),
+        textAlign: TextAlign.left);
   }
 
   Padding getLine(String line) {

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
@@ -33,6 +34,9 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
         .height;
 
     final user = context.select((AppBloc bloc) => bloc.state.userData);
+
+
+    var imageProfile = user.employeeData?.imgProfile ?? "";
 
     ///Create a new vCard
     VCard vCard = VCard();
@@ -126,17 +130,25 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Center(
-                                        child: CircleAvatar(
-                                          backgroundImage:
-                                          NetworkImage(
-                                              "https://portal.hassanallam.com/Apps/images/Profile/${user
-                                                  .employeeData!
-                                                  .userHrCode!}.jpg"),
-                                          radius: 70,
+                                        child:  imageProfile.isNotEmpty ? CachedNetworkImage(
+                                          imageUrl: "https://portal.hassanallam.com/Apps/images/Profile/"+user.employeeData!.imgProfile.toString(),
+                                            imageBuilder: (context, imageProvider) => Container(
+                                              width: 120,
+                                              height: 120,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                    image: imageProvider, fit: BoxFit.cover),
+                                              ),
+                                            ),
+                                          placeholder: (context, url) => Assets.images.logo.image(height: 70),
+                                          errorWidget: (context, url, error) => Assets.images.logo.image(height: 70),
+                                        ) :
+                                        Assets.images.logo.image(height: 70),
                                         ),
                                       ),
                                     ),
-                                  ),
+
                                   Flexible(
                                     flex: 2,
                                     child: IconButton(
@@ -272,7 +284,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                               child: Container(
                                                 width: double.infinity,
                                                 child: Text(
-                                                  user.employeeData!.managerCode!,
+                                                  user.employeeData!.managerName!,
                                                   style: const TextStyle(
                                                     color: Colors.white70,
                                                     fontSize: 14,

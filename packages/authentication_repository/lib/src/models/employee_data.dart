@@ -20,6 +20,8 @@ class EmployeeData extends Equatable {
   final String? middleName;
   final String? lastName;
   final String? managerCode;
+  final String? managerEmail;
+  final String? managerName;
   final String? titleId;
   final String? email;
   final String? deskPhone;
@@ -67,6 +69,8 @@ class EmployeeData extends Equatable {
         this.middleName,
         this.lastName,
         this.managerCode,
+        this.managerEmail,
+        this.managerName,
         this.titleId,
         this.email,
         this.deskPhone,
@@ -114,6 +118,8 @@ class EmployeeData extends Equatable {
     middleName = json['middleName'],
     lastName = json['lastName'],
     managerCode = json['managerCode'],
+        managerEmail = json['managerEmail'],
+        managerName = json['managerName'],
     titleId = json['titleId'],
     email = json['email'],
     deskPhone = json['deskPhone'],
@@ -163,6 +169,8 @@ class EmployeeData extends Equatable {
     data['middleName'] = this.middleName;
     data['lastName'] = this.lastName;
     data['managerCode'] = this.managerCode;
+    data['managerEmail'] = this.managerEmail;
+    data['managerName'] = this.managerName;
     data['titleId'] = this.titleId;
     data['email'] = this.email;
     data['deskPhone'] = this.deskPhone;
@@ -199,7 +207,7 @@ class EmployeeData extends Equatable {
    const EmployeeData(email: "",address: "",applications: null,arabicName: "",area: "",birthdate: null,city: "",companyName: "",
       country: "",cv: null,departmentId: "",deskPhone: "",fingerPrintGroup: 0,gradeName: "",hireDate: "",imgProfile: "",
       inDate: "",interviewId: null,inUser: "",isActive: false,isCEO: false,isLessonLearned: false,isTopManagement: false,lastName: "",
-      linkedIn: "",locationId: "",mainDepartment: "",mainDepartmentID: 0,mainFunction: "",managerCode: "",
+      linkedIn: "",locationId: "",mainDepartment: "",mainDepartmentID: 0,mainFunction: "",managerCode: "",managerEmail:"",managerName:"",
       middleName: "",mobile1: "",mobile: "",name: "",nationalId: "",phone: "",projectId: null,projectName: "",skype: null,status: null,stName: "",
       street: "",titleId: "",titleName: "",userHrCode: "");
 
