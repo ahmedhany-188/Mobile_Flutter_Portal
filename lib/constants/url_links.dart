@@ -36,6 +36,10 @@ addEmbassyLetterLink(){
   return "https://api.hassanallam.com/api/SelfService/AddEmbassyLetter";
 }
 
+addUserMobileLink(){
+  return "https://api.hassanallam.com/api/SelfService/UpdatePhone";
+}
+
 getVacationDurationLink(int type,String dateFrom,String dateTo){
   return "https://api.hassanallam.com/api/SelfService/GetVacationDuration?VacationType=$type&FromDate=$dateFrom&ToDate=$dateTo";
 }

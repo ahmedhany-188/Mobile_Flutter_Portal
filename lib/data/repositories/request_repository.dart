@@ -131,6 +131,19 @@ class RequestRepository {
     return response;
   }
 
+  Future<dynamic> setNewUserMobileNumber(String mobile,String hrCode)async{
+
+    var bodyString=jsonEncode(<String, dynamic>{
+      "hrCode" : hrCode,
+      "mobile" : mobile,
+    });
+    final http.Response rawPermission = await requestDataProviders
+        .getNewMobileNumberData(bodyString);
+    final json = await jsonDecode(rawPermission.body);
+    final RequestResponse response = RequestResponse.fromJson(json);
+    return response;
+  }
+
   Future<EmbassyLetterFormModel> getEmbassyLetter(String requestNo) async{
     final http.Response rawPermission = await requestDataProviders
         .getEmbassyLetterRequestData(userData.user?.userHRCode ?? "",requestNo);

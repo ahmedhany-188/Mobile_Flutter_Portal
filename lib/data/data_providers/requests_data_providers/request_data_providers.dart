@@ -60,6 +60,16 @@ class RequestDataProviders {
     );
   }
 
+  Future<http.Response> getNewMobileNumberData(String bodyString) async {
+    return http.post(
+        Uri.parse(addUserMobileLink()),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body:bodyString
+    );
+  }
+
 
 
   Future<http.Response> getDurationVacation(int type,String dateFrom,String dateTo) async{
@@ -93,6 +103,8 @@ class RequestDataProviders {
     print(rawDurationData.body);
     return rawDurationData;
   }
+
+
 
   Future<http.Response> getAccessRightRequestData(String hrCode,String requestNo) async{
     http.Response rawDurationData = await http.get(

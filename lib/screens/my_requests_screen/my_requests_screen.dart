@@ -59,6 +59,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
             child: Scaffold(
               backgroundColor: Colors.transparent,
               appBar: AppBar(
+                elevation: 0,
                 backgroundColor: Colors.transparent,
                 title: const Text('My Requests'),
                 centerTitle: true,
