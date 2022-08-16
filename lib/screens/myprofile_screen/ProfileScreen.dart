@@ -148,7 +148,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                             top: Radius.circular(20),),
                                         ),
                                             builder: (BuildContext context) {
-                                              return ShowUserProfileBottomSheet();
+                                              return ShowUserProfileBottomSheet(user);
                                             });
                                       },
                                     ),
