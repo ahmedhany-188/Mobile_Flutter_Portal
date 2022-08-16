@@ -181,6 +181,14 @@ class RequestDataProviders {
     print(rawDurationData.body);
     return rawDurationData;
   }
+  Future<http.Response> getMyNotificationData(String hrCode) async{
+    http.Response rawDurationData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/GetMyNotification?HRCode=$hrCode"),
+    );
+    print(rawDurationData.body);
+    return rawDurationData;
+  }
 
 
   Future<http.Response> postTakeActionOnRequest(String bodyString) async {
