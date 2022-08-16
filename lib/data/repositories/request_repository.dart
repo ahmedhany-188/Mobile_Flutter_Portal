@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/data_providers/requests_data_providers/request_data_providers.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/business_card_form_model.dart';
@@ -13,6 +14,7 @@ import 'package:hassanallamportalflutter/data/models/my_requests_model/my_reques
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_duration_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_vacation_data_model.dart';
+import 'package:hassanallamportalflutter/data/models/user_notification_api/user_notification_api.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants/request_service_id.dart';
@@ -164,6 +166,21 @@ class RequestRepository {
 
      List<MyRequestsModelData> myRequestsData = List<MyRequestsModelData>.from(
          json.map((model) => MyRequestsModelData.fromJson(model)));
+    return myRequestsData;
+
+  }
+
+  Future<List<UserNotificationApi>> getMyNotificationData() async {
+    http.Response rawMyRequests = await requestDataProviders
+        .getMyNotificationData(userData.user?.userHRCode ?? "");
+    final json = await jsonDecode(rawMyRequests.body);
+
+    if (kDebugMode) {
+      print(json);
+    }
+
+    List<UserNotificationApi> myRequestsData = List<UserNotificationApi>.from(
+        json.map((model) => UserNotificationApi.fromJson(model)));
     return myRequestsData;
 
   }
