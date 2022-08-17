@@ -81,7 +81,8 @@ class PermissionCubit extends Cubit<PermissionInitial> {
         status = "Rejected";
       }
 
-      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode!);
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"");
+
       emit(
         state.copyWith(
             requestDate: requestDate,

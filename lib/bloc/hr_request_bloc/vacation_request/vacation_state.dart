@@ -18,10 +18,12 @@ class VacationInitial extends Equatable {
     this.successMessage,
     this.requestStatus,
     this.comment = "",
+    this.actionComment = "",
     this.responsiblePerson = ContactsDataFromApi.empty,
     this.vacationDuration ="",
     this.takeActionStatus,
     this.statusAction,
+    this.requesterData = EmployeeData.empty,
   });
 
   final RequestDate requestDate;
@@ -37,9 +39,11 @@ class VacationInitial extends Equatable {
   final String vacationDuration;
   final TakeActionStatus? takeActionStatus;
   final String? statusAction;
+  final EmployeeData requesterData;
+  final String actionComment;
 
   @override
-  List<Object> get props => [requestDate, vacationFromDate,vacationToDate,vacationType, status,comment,responsiblePerson,vacationDuration];
+  List<Object> get props => [requestDate, vacationFromDate,vacationToDate,vacationType, status,comment,responsiblePerson,vacationDuration,requesterData,actionComment];
 
   VacationInitial copyWith({
     RequestDate? requestDate,
@@ -51,10 +55,12 @@ class VacationInitial extends Equatable {
     String? successMessage,
     RequestStatus? requestStatus,
     String? comment,
+    String? actionComment,
     String? vacationDuration,
     ContactsDataFromApi? responsiblePerson,
     TakeActionStatus? takeActionStatus,
-    String? statusAction
+    String? statusAction,
+    EmployeeData? requesterData,
   }) {
     return VacationInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -69,7 +75,9 @@ class VacationInitial extends Equatable {
       responsiblePerson: responsiblePerson ?? this.responsiblePerson,
       vacationDuration: vacationDuration ?? this.vacationDuration,
       takeActionStatus: takeActionStatus ?? this.takeActionStatus,
-      statusAction: statusAction ?? this.statusAction
+      statusAction: statusAction ?? this.statusAction,
+      requesterData: requesterData ?? this.requesterData,
+      actionComment: actionComment ?? this.actionComment,
     );
   }
 }

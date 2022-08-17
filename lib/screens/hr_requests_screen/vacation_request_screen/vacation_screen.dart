@@ -12,6 +12,7 @@ import 'package:hassanallamportalflutter/widgets/background/custom_background.da
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
+import '../../../widgets/requester_data_widget/requester_data_widget.dart';
 import '../../../widgets/success/success_request_widget.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 
@@ -83,7 +84,8 @@ class _VacationScreenState extends State<VacationScreen> {
                     appBar: AppBar(title: Text(
                         "Vacation Request ${state.requestStatus ==
                             RequestStatus.oldRequest
-                            ? "#${currentRequestData[VacationScreen.requestNoKey]}"
+                            ? "#${currentRequestData[VacationScreen
+                            .requestNoKey]}"
                             : ""}"),
                       backgroundColor: Colors.transparent,
                       elevation: 0,
@@ -114,8 +116,10 @@ class _VacationScreenState extends State<VacationScreen> {
                           onPressed: () {
 
                           },
-                          icon: const Icon(Icons.dangerous,color:ConstantsColors.buttonColors,),
-                          label: const Text('Reject',style: TextStyle(color: ConstantsColors.buttonColors),),
+                          icon: const Icon(Icons.dangerous,
+                            color: ConstantsColors.buttonColors,),
+                          label: const Text('Reject', style: TextStyle(
+                              color: ConstantsColors.buttonColors),),
                         ),
                         const SizedBox(height: 12),
                         if(context
@@ -202,6 +206,33 @@ class _VacationScreenState extends State<VacationScreen> {
                                       }
                                   ),
                                 ),
+
+                                if(state.requestStatus ==
+                                    RequestStatus.oldRequest &&
+                                    state.takeActionStatus ==
+                                        TakeActionStatus.takeAction)
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8, vertical: 8),
+                                    child: BlocBuilder<
+                                        VacationCubit,
+                                        VacationInitial>(
+                                        buildWhen: (previous, current) {
+                                          return (previous.requesterData !=
+                                              current.requesterData);
+                                        },
+                                        builder: (context, state) {
+                                          return RequesterDataWidget(
+                                            requesterData: state.requesterData,
+                                            actionComment: ActionCommentWidget(
+                                                onChanged: (commentValue) =>
+                                                    context
+                                                        .read<VacationCubit>()
+                                                        .commentRequesterChanged(
+                                                        commentValue)),);
+                                        }
+                                    ),
+                                  ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 8, vertical: 8),
@@ -457,8 +488,8 @@ class _VacationScreenState extends State<VacationScreen> {
                                       builder: (context, state) {
                                         if (kDebugMode) {
                                           print(
-                                            "from vacationDuration ${state
-                                                .vacationDuration}");
+                                              "from vacationDuration ${state
+                                                  .vacationDuration}");
                                         }
                                         return TextFormField(
                                           key: UniqueKey(),

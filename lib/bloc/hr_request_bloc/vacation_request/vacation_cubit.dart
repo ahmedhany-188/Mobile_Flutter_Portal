@@ -1,4 +1,5 @@
 
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:intl/intl.dart';
 
 import '../../../constants/enums.dart';
 import '../../../data/models/requests_form_models/request_date.dart';
+import '../../../data/repositories/employee_repository.dart';
 import '../../../widgets/dialogpopoup/custom_date_picker.dart';
 
 part 'vacation_state.dart';
@@ -106,7 +108,9 @@ class VacationCubit extends Cubit<VacationInitial> {
         status = "Rejected";
       }
 
-      print(requestData.noOfDays.toString());
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"");
+
+      // print(requestData.noOfDays.toString());
       emit(
         state.copyWith(
             requestDate: requestDate,
@@ -119,6 +123,7 @@ class VacationCubit extends Cubit<VacationInitial> {
             status: FormzStatus.submissionSuccess,
             requestStatus: RequestStatus.oldRequest,
             statusAction: status,
+            requesterData: requesterData,
             takeActionStatus: (_requestRepository.userData.user?.userHRCode ==
                 requestData.requestHrCode)
                 ? TakeActionStatus.view
@@ -209,6 +214,18 @@ class VacationCubit extends Cubit<VacationInitial> {
       state.copyWith(
         comment: value,
         status: Formz.validate([state.requestDate,state.vacationFromDate,state.vacationToDate]),
+      ),
+    );
+  }
+
+  void commentRequesterChanged(String value) {
+
+    // final permissionTime = PermissionTime.dirty(value);
+    // print(permissionTime.value);
+    emit(
+      state.copyWith(
+        actionComment : value,
+        // status: Formz.validate([state.requestDate,state.permissionDate,state.permissionTime]),
       ),
     );
   }
