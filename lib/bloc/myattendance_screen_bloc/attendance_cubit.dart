@@ -23,7 +23,7 @@ class AttendanceCubit extends Cubit<AttendanceState> {
 
         //mSub=
             AttendanceRepository().getAttendanceData(userHRCode, monthNumber)
-            .then((value){
+            .then((value) async{
           emit(BlocGetTheAttendanceSuccessState(value,monthNumber));
         }).catchError((error){
 

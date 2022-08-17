@@ -38,58 +38,59 @@ class ShowAttendanceBottomSheetClass extends State<ShowAttendanceBottomSheet> {
   }
 
   contentBox(context) {
-    return Column(
-
-      children: <Widget>[
-        Container(
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            shape: BoxShape.rectangle,
-            color: Colors.white,
-          ),
-          child: Column(children: [
-
-            TextFormField(
-              initialValue: requestCase(),
-              readOnly: true,
-              decoration: const InputDecoration(
-                labelText: 'Requested',
-                prefixIcon: Icon(Icons.all_inbox),
-              ),
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+              color: Colors.white,
             ),
+            child: Column(children: [
 
-            TextFormField(
-              initialValue: widget.attendanceListData.deduction ??
-                  "No Comment",
-              readOnly: true,
-              decoration: const InputDecoration(
-                labelText: 'Deduction',
-                prefixIcon: Icon(
-                    Icons.email),
+              TextFormField(
+                initialValue: requestCase(),
+                readOnly: true,
+                decoration: const InputDecoration(
+                  labelText: 'Requested',
+                  prefixIcon: Icon(Icons.all_inbox),
+                ),
               ),
+
+              TextFormField(
+                initialValue: widget.attendanceListData.deduction ??
+                    "No Comment",
+                readOnly: true,
+                decoration: const InputDecoration(
+                  labelText: 'Deduction',
+                  prefixIcon: Icon(
+                      Icons.email),
+                ),
+              ),
+
+              checkViewForm(widget.attendanceListData),
+
+              Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Text("Create New Request",
+                  style: TextStyle(color: Colors.grey, fontSize: 20),),),
+
+              Row(children: [
+
+                Expanded(child:               sizeBoxRequest("Permission", Icon(Icons.timelapse,size: 50.0,)),
+                ),
+                Expanded(child:               sizeBoxRequest("Business Mission", Icon(Icons.hail,size: 50.0,)),
+                ),
+                Expanded(child:               sizeBoxRequest("Vacation", Icon(Icons.beach_access,size: 50.0,)),
+                ),
+                // sizeBoxRequest("Forget sign", const Icon(Icons.fingerprint)),
+              ]),
+            ],
             ),
-
-            checkViewForm(widget.attendanceListData),
-
-            Padding(
-              padding: EdgeInsets.all(15.0),
-              child: Text("Create New Request",
-                style: TextStyle(color: Colors.grey, fontSize: 20),),),
-
-            Row(children: [
-
-              Expanded(child:               sizeBoxRequest("Permission", Icon(Icons.timelapse,size: 50.0,)),
-              ),
-              Expanded(child:               sizeBoxRequest("Business Mission", Icon(Icons.hail,size: 50.0,)),
-              ),
-              Expanded(child:               sizeBoxRequest("Vacation", Icon(Icons.beach_access,size: 50.0,)),
-              ),
-              // sizeBoxRequest("Forget sign", const Icon(Icons.fingerprint)),
-            ]),
-          ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

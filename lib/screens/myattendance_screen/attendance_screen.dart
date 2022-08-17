@@ -192,7 +192,7 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
               )
           )
       ),
-    ),
+
     );
   }
 

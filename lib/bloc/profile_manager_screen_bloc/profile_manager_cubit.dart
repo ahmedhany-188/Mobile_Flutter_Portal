@@ -40,7 +40,10 @@ class ProfileManagerCubit extends Cubit<ProfileManagerState> {
 
     void getUserOffline(ContactsDataFromApi userData){
 
-      EmployeeData employeeData = EmployeeData.fromJson(userData.toJson());
+    print("09444--"+userData.phoneNumber.toString());
+      EmployeeData employeeData = EmployeeData.fromContactDataJson(userData.toJson());
+
+      print("-09000"+employeeData.toJson().toString());
       // emit(BlocGetManagerDataSuccessOfflineState(employeeData));
       emit(BlocGetManagerDataSuccessState(employeeData));
 

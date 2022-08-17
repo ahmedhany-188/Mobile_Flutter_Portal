@@ -10,6 +10,9 @@ class ContactsDataFromApi extends Equatable{
   final String? titleName;
   final String? companyName;
   final String? imgProfile;
+  final String? extenstion;
+  final String? phoneNumber;
+  final String? managerCode;
 
   const ContactsDataFromApi({
     this.userHrCode,
@@ -21,6 +24,9 @@ class ContactsDataFromApi extends Equatable{
     this.titleName,
     this.companyName,
     this.imgProfile,
+    this.extenstion,
+    this.phoneNumber,
+    this.managerCode,
   });
 
 
@@ -32,8 +38,10 @@ class ContactsDataFromApi extends Equatable{
   mainFunction = json['mainFunction'],
   titleName = json['titleName'],
   companyName = json['companyName'],
-  imgProfile = json['imgProfile'] ;
-
+  imgProfile = json['imgProfile'],
+  extenstion = json['extenstion'],
+  phoneNumber = json['phoneNumber'],
+  managerCode = json['managerCode'];
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['userHrCode'] = userHrCode;
@@ -45,6 +53,9 @@ class ContactsDataFromApi extends Equatable{
     data['titleName'] = titleName;
     data['companyName'] = companyName;
     data['imgProfile'] = imgProfile;
+    data['extenstion']=extenstion;
+    data['phoneNumber']=phoneNumber;
+    data['managerCode']=managerCode;
     return data;
   }
 

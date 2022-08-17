@@ -19,6 +19,7 @@ class ContactsWidget extends StatelessWidget {
     //   arguments: listFromContactsScreen[contactIndex],
     // );
 
+    print('pope'+listFromContactsScreen[contactIndex].phoneNumber.toString());
     Navigator.of(context).pushNamed(
       DirectManagerProfileScreen.routeName,
       arguments: {DirectManagerProfileScreen.employeeHrCode: "0",

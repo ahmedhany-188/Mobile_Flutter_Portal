@@ -330,9 +330,7 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                           child: Container(
                                             width: double.infinity,
 
-                                            child:getManagerCodeText(state is BlocGetManagerDataSuccessState?state.managerData.managerName.toString()!:"not found")
-
-
+                                            child:getManagerCodeText(state is BlocGetManagerDataSuccessState?state.managerData.managerName.toString():"not Found")
 
                                           ),
                                         ),
