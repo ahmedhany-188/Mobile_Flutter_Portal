@@ -1,10 +1,17 @@
 
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
+import 'package:hassanallamportalflutter/constants/colors.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
+import 'package:hassanallamportalflutter/data/models/user_notification_api/user_notification_api.dart';
+import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
+import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +20,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../data/helpers/convert_from_html.dart';
 import '../../data/models/response_news.dart';
+import '../../gen/assets.gen.dart';
 
 
 class NotificationsScreen extends StatefulWidget {
@@ -30,278 +38,382 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget build(BuildContext context) {
     final userMainData = context.select((AppBloc bloc) =>
     bloc.state.userData);
-    return Scaffold(
-        // drawer: MainDrawer(),
-        appBar:AppBar(title: const Text("Your Notification"),),/// basicAppBar(context, 'News'),
-        backgroundColor: Colors.white,
+    return CustomBackground(
+      child: Scaffold(
 
-        body: BlocBuilder<UserNotificationBloc, UserNotificationState>(
-          builder: (context, state) {
-            return Sizer(builder: (ctx, ori, dt) {
-              return ConditionalBuilder(
-                condition: state.notifications.isNotEmpty,
-                builder: (context) {
-                  // List<Data> newsList = newsAllData;
-                  return Padding(
-                    padding: EdgeInsets.all(5.0.sp),
-                    child: ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: state.notifications.length,
-                      // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      //   crossAxisCount: 1,
-                      //   childAspectRatio: 2.sp,
-                      //   crossAxisSpacing: 9.sp,
-                      //   mainAxisSpacing: 9.sp,
-                      // ),
-                      itemBuilder: (ctx, index) {
-                        FirebaseUserNotification notification = state.notifications[index];
-                        // return InkWell(
-                        //   onTap: () {
-                        //     // notification.
-                        //     _pushForRequestDetail(notification);
-                        //   },
-                        //   child: ClipRRect(
-                        //     borderRadius: BorderRadius.circular(20),
-                        //     child: Card(
-                        //       elevation: 4,
-                        //       shadowColor: Colors.white,
-                        //       margin: EdgeInsets.all(10),
-                        //       child: ListTile(
-                        //         //leading: Icon(Icons.music_note),
-                        //         title: Text(notification.requestNo ?? "",
-                        //             style: const TextStyle(color: Colors.black, fontSize: 16),textAlign: TextAlign.center),
-                        //
-                        //       ),
-                        //     )// ListView.separated(
-                        //     //
-                        //     //   itemBuilder: (BuildContext context, int index) {
-                        //     //     return
-                        //     //   }, itemCount: null,
-                        //       // child: Text("${notification.requestNo}"),
-                        //       // FadeInImage(
-                        //       //   placeholder: const AssetImage('assets/images/logo.png'),
-                        //       //   image: NetworkImage(
-                        //       //     'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg',
-                        //       //   ),
-                        //       //   fit: BoxFit.fill,
-                        //       // ),
-                        //       // footer: GridTileBar(
-                        //       //   title:Text( notification.from ?? "Tap to see more details",
-                        //       //               style: const TextStyle(
-                        //       //                 fontWeight: FontWeight.bold,
-                        //       //                 fontSize: 18,
-                        //       //               ),
-                        //       //             ),
-                        //       //   backgroundColor: Colors.black54,
-                        //       // ),
-                        //     ),
-                        //   );
+          // drawer: MainDrawer(),
+          appBar:AppBar(title: const Text("Your Notification"),backgroundColor: Colors.transparent,elevation: 0,),/// basicAppBar(context, 'News'),
+          backgroundColor: Colors.transparent,
 
-                        return Padding(
+          body:  RefreshIndicator(
+          onRefresh: () async {
+            await UserNotificationApiCubit.get(context).getNotifications();
+            // await Future.delayed(const Duration(milliseconds: 1000));
+            return Future(() => null);
+          },
+            child: BlocBuilder<UserNotificationApiCubit, UserNotificationApiState>(
+              builder: (context, state) {
+                print(state.userNotificationEnumStates);
+                return Sizer(builder: (ctx, ori, dt) {
+                  return ConditionalBuilder(
+                    condition: state.userNotificationEnumStates ==
+                        UserNotificationEnumStates.success ||
+                        (state.userNotificationEnumStates == UserNotificationEnumStates.noConnection && state.userNotificationList.isNotEmpty),
+                    builder: (context) {
+                      // List<Data> newsList = newsAllData;
+                      return Padding(
+                        padding: EdgeInsets.all(5.0.sp),
+                        child: ListView.separated(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: state.userNotificationList.length,
+                          itemBuilder: (ctx, index) {
+                            UserNotificationApi notification = state
+                                .userNotificationList[index];
 
-                          padding: const EdgeInsets.all(15.0),
-                          child: Container(
-                            padding: const EdgeInsets.all(10.0),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.0),
-                              gradient: const LinearGradient(
-                                  colors: [
-                                    Color(0xFF1a4c78),
-                                    Color(0xFF3772a6),
-                                  ],
-                                  begin: Alignment.bottomLeft,
-                                  end: Alignment.topRight,
-                                  tileMode: TileMode.clamp),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.4),
-                                  spreadRadius: 5,
-                                  blurRadius: 3,
-                                  offset: const Offset(0, 3), // changes position of shadow
-                                ),
-                              ],
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                _pushForRequestDetail(notification);
-                                // _pushForRequestDetail(context, listFromRequestScreen[index]);
-                              },
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: SizedBox(
-                                      height: 22.0.h,
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        children: [
-                                          Flexible(
-                                            fit: FlexFit.loose,
-                                            child: Center(
-                                              child: Column(
-                                                mainAxisAlignment: MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${notification.from}'.trim(),
-                                                    style: const TextStyle(
-                                                      fontSize: 17.0,
-                                                      fontWeight: FontWeight.w600,
-                                                      color: Colors.white,
+                            var imageProfile = notification.imgProfile ?? "";
+
+                            return Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: InkWell(
+                                onTap: () {
+                                  //TODO add notification to click listener
+                                  // _pushForRequestDetail(notification);
+                                  // _pushForRequestDetail(context, listFromRequestScreen[index]);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.only(left: 10.0,right: 10.0,top: 10.0,bottom: 0.0),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15.0),
+                                    color: Colors.grey.shade400.withOpacity(
+                                        0.4),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .center,
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceAround,
+                                    children: [
+                                      Expanded(
+                                        flex: 2,
+                                        child: SizedBox(
+                                          height: 22.0.h,
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment
+                                                .start,
+                                            mainAxisAlignment: MainAxisAlignment
+                                                .start,
+                                            children: [
+                                              Flexible(
+                                                fit: FlexFit.loose,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Flexible(
+                                                      fit: FlexFit.loose,
+                                                      flex: 1,
+                                                      child:
+                                                      imageProfile.isNotEmpty ? CachedNetworkImage(
+                                                        imageUrl: 'https://portal.hassanallam.com/Apps/images/Profile/$imageProfile',
+                                                        imageBuilder: (context, imageProvider) => Container(
+                                                          width: 60.sp,
+                                                          height: 60.sp,
+                                                          decoration: BoxDecoration(
+                                                            shape: BoxShape.circle,
+                                                            image: DecorationImage(
+                                                                image: imageProvider, fit: BoxFit.cover),
+                                                          ),
+                                                        ),
+                                                        placeholder: (context, url) => Assets.images.logo.image(height: 60.sp),
+                                                        errorWidget: (context, url, error) => Assets.images.logo.image(height: 60.sp),
+                                                      ) : Assets.images.logo.image(height: 60.sp),),
+                                                    Center(
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment
+                                                            .start,
+                                                        children: [
+                                                          Text(
+                                                            '${notification.reqName
+                                                                ?.toTitleCase()}'
+                                                                .trim(),
+                                                            style: const TextStyle(
+                                                              fontSize: 14.0,
+                                                              fontWeight: FontWeight
+                                                                  .w600,
+                                                              color: Colors.white,
+                                                              fontFamily: FontFamily.robotoFlex,
+                                                            ),
+                                                            maxLines: 1,
+                                                            // overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                          Text('${notification
+                                                              .projectName}'
+                                                              .trim(),
+
+                                                            style: const TextStyle(
+                                                              fontSize: 12.0,
+                                                              fontWeight: FontWeight
+                                                                  .w600,
+                                                              color: Colors.white,
+                                                              fontFamily: FontFamily.robotoFlex,
+                                                            ),
+                                                            maxLines: 1,
+                                                            // overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                          Text(
+                                                            '${notification
+                                                                .requestHRCode}'.trim(),
+                                                            style: const TextStyle(
+                                                              fontSize: 12.0,
+                                                              fontWeight: FontWeight
+                                                                  .w600,
+                                                              color: Colors.white,
+                                                              fontFamily: FontFamily.robotoFlex,
+                                                            ),
+                                                            maxLines: 1,
+                                                            // overflow: TextOverflow.ellipsis,
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                    maxLines: 1,
-                                                    // overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                  Text(
-                                                    '${notification.requestType}'.trim(),
-                                                    style: const TextStyle(
-                                                      fontSize: 17.0,
-                                                      fontWeight: FontWeight.w600,
-                                                      color: Colors.white,
-                                                    ),
-                                                    maxLines: 1,
-                                                    // overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                  Text(
-                                                    '# ${notification.requestNo}'.trim(),
-                                                    style: const TextStyle(
-                                                      fontSize: 12.0,
-                                                      fontWeight: FontWeight.w600,
-                                                      color: Colors.white,
-                                                    ),
-                                                    maxLines: 1,
-                                                    // overflow: TextOverflow.ellipsis,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                          // Flexible(
-                                          //   fit: FlexFit.loose,
-                                          //   child: Center(
-                                          //     child: Text(
-                                          //       '${notification.requestType} ${notification.requestNo}'.trim(),
-                                          //       style: const TextStyle(
-                                          //         fontSize: 14.0,
-                                          //         fontWeight: FontWeight.w600,
-                                          //         color: Colors.white,
-                                          //       ),
-                                          //       maxLines: 1,
-                                          //       // overflow: TextOverflow.ellipsis,
-                                          //     ),
-                                          //   ),
-                                          // ),
-                                          Padding(
-                                            padding: const EdgeInsets.only(top: 5, bottom: 5),
-                                            child: Container(
-                                              width: double.infinity,
-                                              height: 0.2.h,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                          Container(
-                                            clipBehavior: Clip.none,
-                                            alignment: Alignment.center,
-                                            child: Column(
-                                              children: [
-                                                // Text(
-                                                //   '${listFromRequestScreen[index].statusName}'
-                                                //       .trim(),
-                                                //   style: const TextStyle(
-                                                //     fontSize: 14.0,
-                                                //     color: Colors.white,
-                                                //   ),
-                                                //   maxLines: 2,
-                                                //   overflow: TextOverflow.ellipsis,
-                                                //   textAlign: TextAlign.center,
-                                                // ),
-
-                                            Text(
-                                            '${notification.type}',
-                                              style: const TextStyle(
-                                                fontSize: 13.0,
-                                                color: Colors.white,
-                                              ),
-                                              maxLines: 2,
-                                              overflow: TextOverflow.ellipsis,
-                                              textAlign: TextAlign.center,
-                                            ),
-                                                // MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
-                                                Text(
-                                                  '${notification.requesterHRCode}',
-                                                  style: const TextStyle(
-                                                    fontSize: 13.0,
-                                                    color: Colors.white,
-                                                  ),
-                                                  maxLines: 2,
-                                                  overflow: TextOverflow.ellipsis,
-                                                  textAlign: TextAlign.center,
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
-                                          ),
-
-                                          if(notification.type!.contains("Pending") && notification.requesterHRCode != userMainData.employeeData?.userHrCode)Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Container(
-                                              clipBehavior: Clip.none,
-                                              alignment: Alignment.center,
-                                              child: Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                children: [
-                                                  Expanded(
-                                                    child: OutlinedButton(
-                                                      onPressed: () {},
-                                                      style:  OutlinedButton.styleFrom(
-                                                          backgroundColor: Colors.green),
-                                                      child: const Text('Accept',style: TextStyle(color: Colors.white)),
-                                                      // color: Colors.white,
-                                                    ),
-                                                  ),
-                                                  const SizedBox(width: 12,),
-                                                  // MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
-                                                  Expanded(
-                                                    child: OutlinedButton(
-                                                      onPressed: () {  },
-                                                      style:  OutlinedButton.styleFrom(
-                                                          backgroundColor: Colors.red[800]),
-                                                      child: const Text('Reject',style: TextStyle(color: Colors.white)),
-
-                                                      // color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ],
                                               ),
-                                            ),
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 5, bottom: 5),
+                                                child: Container(
+                                                  width: double.infinity,
+                                                  height: 0.2.h,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                              Container(
+                                                clipBehavior: Clip.none,
+                                                alignment: Alignment.center,
+                                                child: Column(
+                                                  children: [
+                                                    Text(
+                                                      ' ${notification.status} ${notification
+                                                          .serviceName} #${notification
+                                                          .requestNo}',
+                                                      style: const TextStyle(
+                                                        fontSize: 13.0,
+                                                        color: Colors.white,
+                                                        fontFamily: FontFamily.robotoFlex,
+                                                      ),
+                                                      maxLines: 2,
+                                                      overflow: TextOverflow
+                                                          .ellipsis,
+                                                      textAlign: TextAlign
+                                                          .center,
+                                                    ),
+                                                    // MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
+                                                    Text(
+                                                      'comment: ${notification.reqComment}',
+                                                      style: const TextStyle(
+                                                        fontSize: 13.0,
+                                                        color: Colors.white,
+                                                        fontFamily: FontFamily.robotoFlex,
+                                                      ),
+                                                      maxLines: 1,
+                                                      overflow: TextOverflow
+                                                          .ellipsis,
+                                                      textAlign: TextAlign
+                                                          .center,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              if(notification.requestHRCode !=
+                                                  userMainData.employeeData
+                                                      ?.userHrCode)Padding(
+                                                padding: const EdgeInsets.all(
+                                                    5.0),
+                                                child: Container(
+                                                  clipBehavior: Clip.none,
+                                                  alignment: Alignment.center,
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment: MainAxisAlignment
+                                                            .spaceEvenly,
+                                                        children: [
+                                                          Expanded(
+                                                            child: OutlinedButton(
+                                                              onPressed: () {},
+                                                              style: OutlinedButton
+                                                                  .styleFrom(
+                                                                  backgroundColor: ConstantsColors
+                                                                      .buttonColors
+                                                              ),
+                                                              child: const Text(
+                                                                  'Accept',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .white)),
+                                                              // color: Colors.white,
+                                                            ),
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 12,),
+                                                          // MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
+                                                          Expanded(
+                                                            child: OutlinedButton(
+                                                              onPressed: () {},
+                                                              style: OutlinedButton
+                                                                  .styleFrom(
+                                                                  backgroundColor: Colors
+                                                                      .white),
+                                                              child: const Text(
+                                                                'Reject',
+                                                                style: TextStyle(
+                                                                    color: ConstantsColors
+                                                                        .buttonColors),),
+
+                                                              // color: Colors.white,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Text(
+                                                        GlobalConstants.dateFormatViewedDaysAndHours.format(GlobalConstants.dateFormatServer.parse(notification.reqDate ?? "")),
+                                                        style: const TextStyle(
+                                                          fontSize: 10.0,
+                                                          color: Colors.white,
+                                                          fontFamily: FontFamily.robotoFlex,
+                                                        ),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        textAlign: TextAlign
+                                                            .center,
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                        ],
+                                        ),
                                       ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                          separatorBuilder: (context, index) =>
+                            Padding(
+                              padding: const EdgeInsetsDirectional.only(
+                                  start: 20.0, end: 20.0),
+                              child: Container(
+                                width: double.infinity,
+                                height: 0.5.sp,
+                                color: Colors.grey[300],
+                              ),
+                            ),
+                        ),
+                      );
+                    },
+                    fallback: (_) =>
+                        Shimmer.fromColors(
+                          baseColor: Colors.white,
+                          highlightColor: Colors.grey,
+                          child: SingleChildScrollView(
+                            child: Padding(
+                                padding: EdgeInsets.all(5.0.sp),
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10.0),
+                                      height: 140.sp,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15.0),
+                                        color: Colors.grey.shade400.withOpacity(
+                                            0.4),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.only(start: 20.0, end: 20.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 0.5.sp,
+                                      color: Colors.grey[300],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10.0),
+                                      height: 140.sp,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15.0),
+                                        color: Colors.white.withOpacity(0.4),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.only(start: 20.0, end: 20.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 0.5.sp,
+                                      color: Colors.grey[300],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10.0),
+                                      height: 140.sp,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15.0),
+                                        color: Colors.white.withOpacity(0.4),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.only(start: 20.0, end: 20.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 0.5.sp,
+                                      color: Colors.grey[300],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10.0),
+                                      height: 140.sp,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(15.0),
+                                        color: Colors.white.withOpacity(0.4),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsetsDirectional.only(start: 20.0, end: 20.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 0.5.sp,
+                                      color: Colors.grey[300],
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                        );
-                      },
-                    ),
+                        ),
                   );
-                },
-                fallback: (_) => Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Center(child: CircularProgressIndicator()),
-                    Center(child: Text('Loading...')),
-                  ],
-                ),
-              );
-            });
-          },
+                });
+              },
+            ),
+          ),
         ),
-      );
+    );
   }
 
   _pushForRequestDetail(FirebaseUserNotification notification){
