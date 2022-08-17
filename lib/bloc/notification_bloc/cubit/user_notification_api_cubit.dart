@@ -2,7 +2,6 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-
 import '../../../data/models/user_notification_api/user_notification_api.dart';
 import '../../../data/repositories/request_repository.dart';
 

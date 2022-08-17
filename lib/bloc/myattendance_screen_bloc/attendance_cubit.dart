@@ -12,7 +12,7 @@ class AttendanceCubit extends Cubit<AttendanceState> {
   static AttendanceCubit get(context) =>BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();
 
-  void getAttendanceList(userHRCode,monthNumber) async {
+  Future<void> getAttendanceList(userHRCode,monthNumber) async {
 
     emit(BlocGetTheAttendanceLoadingState());
     try {
