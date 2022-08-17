@@ -51,12 +51,12 @@ class VacationCubit extends Cubit<VacationInitial> {
           ),
         );
       }
-    }else {
-
+    }
+    else {
       // emit(state.copyWith(status: FormzStatus.submissionInProgress));
       EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
       final requestData = await _requestRepository.getVacationRequestData(
-          requestNo!, requesterHRCode!);
+          requestNo ?? "", requesterHRCode ?? "");
 
       final comments = requestData.comments!.isEmpty
           ? "No Comment"

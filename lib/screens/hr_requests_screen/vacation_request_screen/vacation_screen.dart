@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/responsible_vacation_request/responsible_vacation_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/vacation_request/vacation_cubit.dart';
+import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/contacts_related_models/contacts_data_from_api.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
@@ -82,7 +83,7 @@ class _VacationScreenState extends State<VacationScreen> {
                     appBar: AppBar(title: Text(
                         "Vacation Request ${state.requestStatus ==
                             RequestStatus.oldRequest
-                            ? currentRequestData[VacationScreen.requestNoKey]
+                            ? "#${currentRequestData[VacationScreen.requestNoKey]}"
                             : ""}"),
                       backgroundColor: Colors.transparent,
                       elevation: 0,
@@ -90,8 +91,6 @@ class _VacationScreenState extends State<VacationScreen> {
                     floatingActionButton: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-
-
                         if(state.requestStatus == RequestStatus.oldRequest &&
                             state.takeActionStatus ==
                                 TakeActionStatus.takeAction )
@@ -110,13 +109,13 @@ class _VacationScreenState extends State<VacationScreen> {
                             state.takeActionStatus ==
                                 TakeActionStatus.takeAction)FloatingActionButton
                             .extended(
-                          backgroundColor: Colors.red,
+                          backgroundColor: Colors.white,
                           heroTag: null,
                           onPressed: () {
 
                           },
-                          icon: const Icon(Icons.dangerous),
-                          label: const Text('Reject'),
+                          icon: const Icon(Icons.dangerous,color:ConstantsColors.buttonColors,),
+                          label: const Text('Reject',style: TextStyle(color: ConstantsColors.buttonColors),),
                         ),
                         const SizedBox(height: 12),
                         if(context

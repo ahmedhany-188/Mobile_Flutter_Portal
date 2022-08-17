@@ -314,7 +314,7 @@ class RequestRepository {
 
   Future<VacationRequestData> getVacationRequestData(String requestNo,String requesterHRCode) async{
     final http.Response rawRequestData = await requestDataProviders
-        .getVacationRequestData(requesterHRCode,requestNo);
+        .getVacationRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final VacationRequestData response = VacationRequestData.fromJson(json[0]);
 
@@ -339,9 +339,9 @@ class RequestRepository {
 
     return response;
   }
-  Future<PermissionRequestData> getPermissionRequestData(String requestNo) async{
+  Future<PermissionRequestData> getPermissionRequestData(String requestNo,String requesterHRCode) async{
     final http.Response rawRequestData = await requestDataProviders
-        .getPermissionRequestData(userData.user?.userHRCode ?? "",requestNo);
+        .getPermissionRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final PermissionRequestData response = PermissionRequestData.fromJson(json[0]);
     return response;
