@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +15,7 @@ import '../../../data/models/requests_form_models/request_date.dart';
 import '../../../data/models/requests_form_models/request_date_from.dart';
 import '../../../data/models/requests_form_models/request_time_from.dart';
 import '../../../data/models/requests_form_models/request_time_to.dart';
+import '../../../data/repositories/employee_repository.dart';
 
 part 'business_mission_state.dart';
 
@@ -22,7 +24,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
   final RequestRepository _requestRepository;
 
 
-  void getRequestData({required RequestStatus requestStatus, String? requestNo,String? date}) async{
+  void getRequestData({required RequestStatus requestStatus, String? requestNo,String? date,String? requesterHRCode}) async{
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
       String formattedDate = GlobalConstants.dateFormatViewed.format(now);
@@ -49,11 +51,10 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
           ),
         );
       }
-    }else{
-
+    }
+    else{
       EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
-
-      final requestData = await _requestRepository.getBusinessMissionRequestData(requestNo!);
+      final requestData = await _requestRepository.getBusinessMissionRequestData(requestNo ?? "",requesterHRCode ?? "");
       final requestFromDate = DateFrom.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateFrom!)));
       final requestToDate = DateTo.dirty(value: GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateTo!)), dateFrom: requestFromDate.value);
       final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.date!)));
@@ -61,6 +62,8 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
       final hoursFrom  = TimeFrom.dirty("${requestData.hourFrom} ${requestData.dateFromAmpm}");
       final hoursTo  = TimeTo.dirty("${requestData.hourTo} ${requestData.dateToAmpm}");
       var status = "Pending";
+
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"");
       if(requestData.status == 0){
         status = "Pending";
       }else if (requestData.status == 1){
@@ -78,6 +81,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
             timeFrom: hoursFrom,
             timeTo: hoursTo,
             status: FormzStatus.submissionSuccess,
+            requesterData: requesterData,
             // status: Formz.validate([requestDate,
             //   state.timeFrom , state.dateFrom]),
             requestStatus: RequestStatus.oldRequest,
@@ -184,6 +188,17 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
       state.copyWith(
         comment: value,
         status: Formz.validate([state.requestDate,state.dateFrom,state.timeFrom]),
+      ),
+    );
+  }
+  void commentRequesterChanged(String value) {
+
+    // final permissionTime = PermissionTime.dirty(value);
+    // print(permissionTime.value);
+    emit(
+      state.copyWith(
+        actionComment : value,
+        // status: Formz.validate([state.requestDate,state.permissionDate,state.permissionTime]),
       ),
     );
   }

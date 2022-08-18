@@ -22,6 +22,8 @@ class BusinessMissionInitial extends BusinessMissionState {
     this.comment = "",
     this.statusAction,
     this.takeActionStatus,
+    this.requesterData = EmployeeData.empty,
+    this.actionComment = "",
   });
 
   final RequestDate requestDate;
@@ -37,9 +39,11 @@ class BusinessMissionInitial extends BusinessMissionState {
   final String comment;
   final TakeActionStatus? takeActionStatus;
   final String? statusAction;
+  final EmployeeData requesterData;
+  final String actionComment;
 
   @override
-  List<Object> get props => [requestDate, dateFrom,dateTo,missionType,timeFrom,timeTo, status,comment];
+  List<Object> get props => [requestDate, dateFrom,dateTo,missionType,timeFrom,timeTo, status,comment,requesterData,actionComment];
 
   BusinessMissionInitial copyWith({
     RequestDate? requestDate,
@@ -54,7 +58,9 @@ class BusinessMissionInitial extends BusinessMissionState {
     RequestStatus? requestStatus,
     String? comment,
     TakeActionStatus? takeActionStatus,
-    String? statusAction
+    String? statusAction,
+    EmployeeData? requesterData,
+    String? actionComment,
   }) {
     return BusinessMissionInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -70,6 +76,8 @@ class BusinessMissionInitial extends BusinessMissionState {
       comment: comment ?? this.comment,
       statusAction: statusAction ?? this.statusAction,
       takeActionStatus: takeActionStatus ?? this.takeActionStatus,
+      requesterData: requesterData ?? this.requesterData,
+      actionComment: actionComment ?? this.actionComment,
 
     );
   }

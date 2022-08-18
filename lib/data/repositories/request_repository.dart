@@ -331,9 +331,9 @@ class RequestRepository {
     return response;
   }
 
-  Future<BusinessMissionRequestData> getBusinessMissionRequestData(String requestNo) async{
+  Future<BusinessMissionRequestData> getBusinessMissionRequestData(String requestNo,String requesterHRCode) async{
     final http.Response rawRequestData = await requestDataProviders
-        .getBusinessMissionRequestData(userData.user?.userHRCode ?? "",requestNo);
+        .getBusinessMissionRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final BusinessMissionRequestData response = BusinessMissionRequestData.fromJson(json[0]);
 

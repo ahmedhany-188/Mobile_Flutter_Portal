@@ -516,7 +516,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
           Navigator.of(context)
               .pushNamed(BusinessMissionScreen.routeName, arguments: {
             BusinessMissionScreen.requestNoKey: notification.requestNo
-                .toString()
+                .toString(),
+            BusinessMissionScreen.requesterHRCode: notification.requestHRCode
           });
           break;
         }

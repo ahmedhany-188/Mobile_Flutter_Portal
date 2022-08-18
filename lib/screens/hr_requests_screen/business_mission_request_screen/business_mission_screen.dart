@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_business_mission_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
@@ -9,6 +10,7 @@ import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../bloc/hr_request_bloc/hr_request_export.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
+import '../../../widgets/requester_data_widget/requester_data_widget.dart';
 import '../../../widgets/success/success_request_widget.dart';
 
 class BusinessMissionScreen extends StatefulWidget {
@@ -41,7 +43,9 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
           create: (businessMissionContext) =>
           currentRequestData[BusinessMissionScreen.requestNoKey] == "0"?
           (BusinessMissionCubit(RequestRepository(userMainData))..getRequestData(requestStatus:RequestStatus.newRequest, date:currentRequestData[BusinessMissionScreen.requestDateAttendance])) :
-          (BusinessMissionCubit(RequestRepository(userMainData))..getRequestData(requestStatus:RequestStatus.oldRequest, requestNo:currentRequestData[BusinessMissionScreen.requestNoKey])),
+          (BusinessMissionCubit(RequestRepository(userMainData))..getRequestData(requestStatus:RequestStatus.oldRequest, requestNo:currentRequestData[BusinessMissionScreen.requestNoKey],
+              requesterHRCode: currentRequestData[BusinessMissionScreen
+              .requesterHRCode])),
           child: BlocBuilder<BusinessMissionCubit, BusinessMissionInitial>(
               builder: (context, state) {
                 return Scaffold(
@@ -66,12 +70,12 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                           RequestStatus.oldRequest && state.takeActionStatus ==
                           TakeActionStatus.takeAction)FloatingActionButton
                           .extended(
-                        backgroundColor: Colors.red,
+                        backgroundColor: Colors.white,
                         heroTag: null,
                         onPressed: () {},
-                        icon: const Icon(Icons.dangerous),
+                        icon: const Icon(Icons.dangerous,color: ConstantsColors.buttonColors,),
 
-                        label: const Text('Reject'),
+                        label: const Text('Reject',style: TextStyle(color: ConstantsColors.buttonColors),),
                       ),
                       const SizedBox(height: 12),
                       if(state
@@ -130,7 +134,6 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                 child: BlocBuilder<
                                     BusinessMissionCubit,
                                     BusinessMissionInitial>(
-
                                     builder: (context, state) {
                                       return Text(state.statusAction ?? "Pending",
                                         // style: TextStyle(decoration: BoxDecoration(
@@ -146,6 +149,34 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                     }
                                 ),
                               ),
+
+
+                              if(state.requestStatus ==
+                                  RequestStatus.oldRequest &&
+                                  state.takeActionStatus ==
+                                      TakeActionStatus.takeAction)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 8),
+                                  child: BlocBuilder<
+                                      BusinessMissionCubit,
+                                      BusinessMissionInitial>(
+                                      buildWhen: (previous, current) {
+                                        return (previous.requesterData !=
+                                            current.requesterData);
+                                      },
+                                      builder: (context, state) {
+                                        return RequesterDataWidget(
+                                          requesterData: state.requesterData,
+                                          actionComment: ActionCommentWidget(
+                                              onChanged: (commentValue) =>
+                                                  context
+                                                      .read<BusinessMissionCubit>()
+                                                      .commentRequesterChanged(
+                                                      commentValue)),);
+                                      }
+                                  ),
+                                ),
 
                               Padding(
                                 padding: const EdgeInsets.symmetric(

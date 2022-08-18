@@ -744,7 +744,7 @@ class ItemView extends StatelessWidget {
                 ? items.length
                 : items.length,
             separatorBuilder: (context, int) {
-              return SizedBox(height: 2,);
+              return const SizedBox(height: 2,);
             },
             itemBuilder: (context, index) {
               return InkWell(
