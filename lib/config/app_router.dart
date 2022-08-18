@@ -163,7 +163,7 @@ class AppRouter {
 
       case EmbassyLetterScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => EmbassyLetterScreen(requestNo: settings.arguments),
+          builder: (_) => EmbassyLetterScreen(requestData: settings.arguments),
         );
 
       case EmailAndUserAccountScreen.routeName:

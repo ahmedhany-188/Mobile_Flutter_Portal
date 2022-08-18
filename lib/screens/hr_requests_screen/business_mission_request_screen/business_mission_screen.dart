@@ -41,16 +41,29 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
       child: CustomTheme(
         child: BlocProvider<BusinessMissionCubit>(
           create: (businessMissionContext) =>
-          currentRequestData[BusinessMissionScreen.requestNoKey] == "0"?
-          (BusinessMissionCubit(RequestRepository(userMainData))..getRequestData(requestStatus:RequestStatus.newRequest, date:currentRequestData[BusinessMissionScreen.requestDateAttendance])) :
-          (BusinessMissionCubit(RequestRepository(userMainData))..getRequestData(requestStatus:RequestStatus.oldRequest, requestNo:currentRequestData[BusinessMissionScreen.requestNoKey],
-              requesterHRCode: currentRequestData[BusinessMissionScreen
-              .requesterHRCode])),
+          currentRequestData[BusinessMissionScreen.requestNoKey] == "0" ?
+          (BusinessMissionCubit(RequestRepository(userMainData))
+            ..getRequestData(requestStatus: RequestStatus.newRequest,
+                date: currentRequestData[BusinessMissionScreen
+                    .requestDateAttendance])) :
+          (BusinessMissionCubit(RequestRepository(userMainData))
+            ..getRequestData(requestStatus: RequestStatus.oldRequest,
+                requestNo: currentRequestData[BusinessMissionScreen
+                    .requestNoKey],
+                requesterHRCode: currentRequestData[BusinessMissionScreen
+                    .requesterHRCode])),
           child: BlocBuilder<BusinessMissionCubit, BusinessMissionInitial>(
               builder: (context, state) {
                 return Scaffold(
                   backgroundColor: Colors.transparent,
-                  appBar: AppBar(title: const Text('Business Mission Request'),backgroundColor: Colors.transparent,elevation: 0,),
+                  appBar: AppBar(title: Text(
+                      "Business Mission ${state.requestStatus ==
+                          RequestStatus.oldRequest
+                          ? "#${currentRequestData[BusinessMissionScreen
+                          .requestNoKey]}"
+                          : "Request"}"),
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,),
                   floatingActionButton: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -73,9 +86,11 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                         backgroundColor: Colors.white,
                         heroTag: null,
                         onPressed: () {},
-                        icon: const Icon(Icons.dangerous,color: ConstantsColors.buttonColors,),
+                        icon: const Icon(Icons.dangerous,
+                          color: ConstantsColors.buttonColors,),
 
-                        label: const Text('Reject',style: TextStyle(color: ConstantsColors.buttonColors),),
+                        label: const Text('Reject', style: TextStyle(
+                            color: ConstantsColors.buttonColors),),
                       ),
                       const SizedBox(height: 12),
                       if(state
@@ -96,20 +111,25 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                       BusinessMissionInitial>(
                     listener: (context, state) {
                       if (state.status.isSubmissionInProgress) {
-                        EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
+                        EasyLoading.show(status: 'Loading...',
+                          maskType: EasyLoadingMaskType.black,
+                          dismissOnTap: false,);
                       }
                       if (state.status.isSubmissionSuccess) {
                         // LoadingDialog.hide(context);
                         EasyLoading.dismiss(animation: true);
-                        if(state.requestStatus == RequestStatus.newRequest){
+                        if (state.requestStatus == RequestStatus.newRequest) {
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(builder: (_) =>
                                   SuccessScreen(text: state.successMessage ??
-                                      "Error Number",routName: BusinessMissionScreen.routeName, requestName: 'Business Mission',)));
+                                      "Error Number",
+                                    routName: BusinessMissionScreen.routeName,
+                                    requestName: 'Business Mission',)));
                         }
                       }
                       if (state.status.isSubmissionFailure) {
-                        EasyLoading.showError(state.errorMessage ?? 'Request Failed');
+                        EasyLoading.showError(
+                            state.errorMessage ?? 'Request Failed');
                         // LoadingDialog.hide(context);
                         // ScaffoldMessenger.of(context)
                         //   ..hideCurrentSnackBar()
@@ -135,7 +155,8 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                     BusinessMissionCubit,
                                     BusinessMissionInitial>(
                                     builder: (context, state) {
-                                      return Text(state.statusAction ?? "Pending",
+                                      return Text(
+                                        state.statusAction ?? "Pending",
                                         // style: TextStyle(decoration: BoxDecoration(
                                         //   // labelText: 'Request Date',
                                         //   errorText: state.requestDate.invalid
@@ -171,7 +192,8 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                           actionComment: ActionCommentWidget(
                                               onChanged: (commentValue) =>
                                                   context
-                                                      .read<BusinessMissionCubit>()
+                                                      .read<
+                                                      BusinessMissionCubit>()
                                                       .commentRequesterChanged(
                                                       commentValue)),);
                                       }
@@ -214,7 +236,8 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                     labelText: 'Mission Type',
                                     floatingLabelAlignment:
                                     FloatingLabelAlignment.start,
-                                    prefixIcon: Icon(Icons.event,color: Colors.white70,),
+                                    prefixIcon: Icon(
+                                      Icons.event, color: Colors.white70,),
                                   ),
                                   child: BlocBuilder<BusinessMissionCubit,
                                       BusinessMissionInitial>(
@@ -235,11 +258,14 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                               title: Text("Meeting"),
                                               groupValue: state.missionType,
                                               onChanged: (permissionType) =>
-                                              state.requestStatus == RequestStatus.newRequest ? context
-                                                      .read<
-                                                      BusinessMissionCubit>()
-                                                      .missionTypeChanged(
-                                                      permissionType!) : null,
+                                              state.requestStatus ==
+                                                  RequestStatus.newRequest
+                                                  ? context
+                                                  .read<
+                                                  BusinessMissionCubit>()
+                                                  .missionTypeChanged(
+                                                  permissionType!)
+                                                  : null,
                                             ),
                                             RadioListTile<int>(
                                               activeColor: Colors.white,
@@ -247,11 +273,14 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                               title: Text("Site Visit"),
                                               groupValue: state.missionType,
                                               onChanged: (missionType) =>
-                                              state.requestStatus == RequestStatus.newRequest ? context
-                                                      .read<
-                                                      BusinessMissionCubit>()
-                                                      .missionTypeChanged(
-                                                      missionType!) : null,
+                                              state.requestStatus ==
+                                                  RequestStatus.newRequest
+                                                  ? context
+                                                  .read<
+                                                  BusinessMissionCubit>()
+                                                  .missionTypeChanged(
+                                                  missionType!)
+                                                  : null,
                                             ),
                                             RadioListTile<int>(
                                               activeColor: Colors.white,
@@ -259,11 +288,14 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                               title: Text("Training"),
                                               groupValue: state.missionType,
                                               onChanged: (missionType) =>
-                                              state.requestStatus == RequestStatus.newRequest ? context
-                                                      .read<
-                                                      BusinessMissionCubit>()
-                                                      .missionTypeChanged(
-                                                      missionType!):null,
+                                              state.requestStatus ==
+                                                  RequestStatus.newRequest
+                                                  ? context
+                                                  .read<
+                                                  BusinessMissionCubit>()
+                                                  .missionTypeChanged(
+                                                  missionType!)
+                                                  : null,
                                             ),
                                             RadioListTile<int>(
                                               activeColor: Colors.white,
@@ -271,11 +303,14 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                               title: const Text("Others"),
                                               groupValue: state.missionType,
                                               onChanged: (missionType) =>
-                                              state.requestStatus == RequestStatus.newRequest ? context
-                                                      .read<
-                                                      BusinessMissionCubit>()
-                                                      .missionTypeChanged(
-                                                      missionType!):null,
+                                              state.requestStatus ==
+                                                  RequestStatus.newRequest
+                                                  ? context
+                                                  .read<
+                                                  BusinessMissionCubit>()
+                                                  .missionTypeChanged(
+                                                  missionType!)
+                                                  : null,
                                             ),
                                           ],
                                         );
@@ -306,7 +341,10 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                                 .businessDateFromChanged(
                                                 context),
                                         readOnly: true,
-                                        enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
+                                        enabled: state.requestStatus ==
+                                            RequestStatus.newRequest
+                                            ? true
+                                            : false,
                                         decoration: InputDecoration(
                                           floatingLabelAlignment:
                                           FloatingLabelAlignment.start,
@@ -316,7 +354,8 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                               ? 'invalid date from'
                                               : null,
                                           prefixIcon: const Icon(
-                                              Icons.date_range_outlined,color: Colors.white70,),
+                                            Icons.date_range_outlined,
+                                            color: Colors.white70,),
                                         ),
                                         onTap: () {
                                           context
@@ -348,20 +387,26 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                         key: UniqueKey(),
                                         initialValue: state.dateTo.value,
                                         readOnly: true,
-                                        enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
+                                        enabled: state.requestStatus ==
+                                            RequestStatus.newRequest
+                                            ? true
+                                            : false,
                                         decoration: InputDecoration(
                                           floatingLabelAlignment:
                                           FloatingLabelAlignment.start,
                                           labelText: 'Mission To Date',
-                                          errorText: state.dateTo.invalid ? (state
+                                          errorText: state.dateTo.invalid
+                                              ? (state
                                               .dateTo.error == DateToError.empty
                                               ? "Empty Date To or Date From"
                                               : (state.dateTo.error ==
                                               DateToError.isBefore)
                                               ? "Date From must be before Date To"
-                                              : null) : null,
+                                              : null)
+                                              : null,
                                           prefixIcon: const Icon(
-                                              Icons.date_range_outlined,color: Colors.white70,),
+                                            Icons.date_range_outlined,
+                                            color: Colors.white70,),
                                         ),
                                         onTap: () {
                                           context
@@ -388,7 +433,10 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                         key: UniqueKey(),
                                         initialValue: state.timeFrom.value,
                                         readOnly: true,
-                                        enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
+                                        enabled: state.requestStatus ==
+                                            RequestStatus.newRequest
+                                            ? true
+                                            : false,
                                         decoration: InputDecoration(
                                           floatingLabelAlignment:
                                           FloatingLabelAlignment.start,
@@ -397,7 +445,8 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                               ? 'invalid permission time'
                                               : null,
                                           prefixIcon: const Icon(
-                                              Icons.access_time,color: Colors.white70,),
+                                            Icons.access_time,
+                                            color: Colors.white70,),
                                         ),
                                         onTap: () async {
                                           // if (!widget.objectValidation) {
@@ -425,7 +474,10 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                         key: UniqueKey(),
                                         initialValue: state.timeTo.value,
                                         readOnly: true,
-                                        enabled: state.requestStatus == RequestStatus.newRequest ? true : false,
+                                        enabled: state.requestStatus ==
+                                            RequestStatus.newRequest
+                                            ? true
+                                            : false,
                                         decoration: InputDecoration(
                                           floatingLabelAlignment:
                                           FloatingLabelAlignment.start,
@@ -434,7 +486,8 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                               ? 'invalid time'
                                               : null,
                                           prefixIcon: const Icon(
-                                              Icons.access_time,color: Colors.white70,),
+                                            Icons.access_time,
+                                            color: Colors.white70,),
                                         ),
                                         onTap: () async {
                                           context
@@ -478,7 +531,8 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                           ),
                                           filled: true,
                                           labelText: "Add your comment",
-                                          prefixIcon: const Icon(Icons.comment,color: Colors.white70,),
+                                          prefixIcon: const Icon(Icons.comment,
+                                            color: Colors.white70,),
                                           enabled: true,
                                         ),
 

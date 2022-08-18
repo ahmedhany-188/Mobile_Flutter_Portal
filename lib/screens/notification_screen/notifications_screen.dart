@@ -525,7 +525,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         {
           Navigator.of(context)
               .pushNamed(EmbassyLetterScreen.routeName, arguments: {
-            EmbassyLetterScreen.requestNoKey: notification.requestNo.toString()
+            EmbassyLetterScreen.requestNoKey: notification.requestNo.toString(),
+            EmbassyLetterScreen.requesterHRCode: notification.requestHRCode
           });
           break;
         }
