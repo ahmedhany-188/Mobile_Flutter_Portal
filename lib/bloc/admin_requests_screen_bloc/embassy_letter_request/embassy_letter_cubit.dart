@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,7 @@ import 'package:meta/meta.dart';
 
 import '../../../constants/enums.dart';
 import '../../../data/models/admin_requests_models/passport_form_model.dart';
+import '../../../data/repositories/employee_repository.dart';
 
 part 'embassy_letter_state.dart';
 
@@ -28,7 +30,7 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
   final RequestRepository _requestRepository;
 
 
-  void getRequestData(RequestStatus requestStatus, String? requestNo) async{
+  void getRequestData({required RequestStatus requestStatus, String? requestNo,String? requesterHRCode}) async{
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
       var formatter = GlobalConstants.dateFormatViewed;
@@ -43,7 +45,8 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
         ),
       );
     }else{
-      final requestData = await _requestRepository.getEmbassyLetter(requestNo!);
+      EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
+      final requestData = await _requestRepository.getEmbassyLetter(requestNo ?? "", requesterHRCode?? "");
       final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.requestDate!)));
       final purpose = requestData.purpose;
       final country = requestData.embassy;
@@ -53,7 +56,10 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
       final salary = requestData.addSalary;
       final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
 
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"");
 
+
+      // print(passportNumber.value.toString());
       var status = "Pending";
 
       if(requestData.status == 0){
@@ -74,8 +80,9 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
             passportNumber: passportNumber,
             salary: salary,
             comments: comments,
-            status: Formz.validate([state.dateFrom, state.dateTo, state.passportNumber]),
+            status: FormzStatus.submissionSuccess,
             requestStatus: RequestStatus.oldRequest,
+            requesterData: requesterData,
             statusAction: status,
             takeActionStatus: (_requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
         ),
@@ -267,6 +274,18 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
       status: Formz.validate(
           [state.dateFrom, state.dateTo, state.passportNumber]),
     ));
+  }
+
+  void commentRequesterChanged(String value) {
+
+    // final permissionTime = PermissionTime.dirty(value);
+    // print(permissionTime.value);
+    emit(
+      state.copyWith(
+        actionComment : value,
+        // status: Formz.validate([state.requestDate,state.permissionDate,state.permissionTime]),
+      ),
+    );
   }
 
 

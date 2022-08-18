@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -13,6 +14,9 @@ import 'package:hassanallamportalflutter/data/models/requests_form_models/reques
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:intl/intl.dart';
 
+import '../../../data/repositories/employee_repository.dart';
+import '../../../widgets/dialogpopoup/custom_date_picker.dart';
+
 part 'access_right_state.dart';
 
 class AccessRightCubit extends Cubit<AccessRightInitial> {
@@ -24,7 +28,8 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
 
   final RequestRepository requestRepository;
 
-  void getRequestData(RequestStatus requestStatus, String? requestNo) async {
+  void getRequestData(
+      {required RequestStatus requestStatus, String? requestNo, String? requesterHRCode}) async {
     if (requestStatus == RequestStatus.newRequest) {
       var now = DateTime.now();
       var formatter = GlobalConstants.dateFormatViewed;
@@ -32,29 +37,28 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
       final requestDate = RequestDate.dirty(formattedDate);
       emit(
         state.copyWith(
-            requestDate: requestDate,
+          requestDate: requestDate,
 
-            status: Formz.validate(
-                [state.requestItems, state.fromDate, state.toDate]),
+          status: Formz.validate(
+              [state.requestItems, state.fromDate, state.toDate]),
           requestStatus: RequestStatus.newRequest,
         ),
       );
     }
     else {
-
-
-      final requestData = await requestRepository.getAccessRight(requestNo!);
-
-
-
+      EasyLoading.show(status: 'Loading...',
+        maskType: EasyLoadingMaskType.black,
+        dismissOnTap: false,);
+      final requestData = await requestRepository.getAccessRight(
+          requestNo ?? "", requesterHRCode ?? "");
       final requestType = requestData.requestType;
       final usbException = requestData.usbException;
       final vpnAccount = requestData.vpnAccount;
-      final ipPhone= requestData.ipPhone;
+      final ipPhone = requestData.ipPhone;
       final localAdmin = requestData.localAdmin;
 
-      List<String> requestItems=[];
-      if (usbException==true) {
+      List<String> requestItems = [];
+      if (usbException == true) {
         requestItems.add("USB Exception");
       }
       if (vpnAccount == true) {
@@ -69,7 +73,8 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
 
       final requestDate = RequestDate.dirty(
           GlobalConstants.dateFormatViewed.format(
-              GlobalConstants.dateFormatServer.parse(requestData.requestDate!)));
+              GlobalConstants.dateFormatServer.parse(
+                  requestData.requestDate!)));
 
       final fromDate = RequestDate.dirty(
           GlobalConstants.dateFormatViewed.format(
@@ -83,8 +88,10 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
 
       final comments = requestData.comments ?? "No Comment";
 
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"");
+
       var status = "Pending";
-      if (requestData.status== 0) {
+      if (requestData.status == 0) {
         status = "Pending";
       } else if (requestData.status == 1) {
         status = "Approved";
@@ -103,17 +110,18 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
           toDate: toDate,
           permanent: permanent,
           comments: comments,
-            requestItemsList: requestItems,
-
-            status: Formz.validate(
-                [state.requestDate,state.requestItems, state.fromDate, state.toDate]),
+          requestItemsList: requestItems,
+          requesterData : requesterData,
+          status: FormzStatus.submissionSuccess,
           requestStatus: RequestStatus.oldRequest,
           statusAction: status,
-            takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
-        ),
+          takeActionStatus: (requestRepository.userData.user?.userHRCode ==
+              requestData.requestHrCode)
+              ? TakeActionStatus.view
+              : TakeActionStatus.takeAction
+      ),
       );
     }
-
   }
 
 
@@ -125,14 +133,20 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     AccessRightModel accessRightModel;
 
     final requestDate = RequestDate.dirty(state.requestDate.value);
-    DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(requestDate.value);
-    final requestDateValue = GlobalConstants.dateFormatServer.format(requestDateTemp);
+    DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(
+        requestDate.value);
+    final requestDateValue = GlobalConstants.dateFormatServer.format(
+        requestDateTemp);
 
-    DateTime requestDateTempFrom = GlobalConstants.dateFormatViewed.parse(fromDate.value);
-    final requestDateValueFrom = GlobalConstants.dateFormatServer.format(requestDateTempFrom);
+    DateTime requestDateTempFrom = GlobalConstants.dateFormatViewed.parse(
+        fromDate.value);
+    final requestDateValueFrom = GlobalConstants.dateFormatServer.format(
+        requestDateTempFrom);
 
-    DateTime requestDateTempTo = GlobalConstants.dateFormatViewed.parse(toDate.value);
-    final requestDateValueTo = GlobalConstants.dateFormatServer.format(requestDateTempTo);
+    DateTime requestDateTempTo = GlobalConstants.dateFormatViewed.parse(
+        toDate.value);
+    final requestDateValueTo = GlobalConstants.dateFormatServer.format(
+        requestDateTempTo);
 
     emit(state.copyWith(
         requestItems: requestItem,
@@ -150,26 +164,25 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
           state.ipPhone,
           state.localAdmin,
           state.permanent,
-        requestDateValue,
+          requestDateValue,
           requestDateValueFrom,
           requestDateValueTo,
           state.filePDF,
           state.comments,
-        ""
-          );
+          ""
+      );
 
       try {
         var connectivityResult = await connectivity.checkConnectivity();
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
-
           emit(state.copyWith(
               status: FormzStatus.submissionInProgress));
 
           final accessResponse = await requestRepository
               .postAccessRightRequest(accessRightModel: accessRightModel);
 
-          print("======tt====="+accessResponse.id.toString());
+          print("======tt=====" + accessResponse.id.toString());
 
           if (accessResponse.id == 1) {
             emit(state.copyWith(successMessage: accessResponse.requestNo,
@@ -201,55 +214,61 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
   }
 
   void accessRightChanged(int value) {
-
     emit(state.copyWith(
       requestType: value,
       status: Formz.validate(
-          [state.requestDate,state.requestItems, state.fromDate, state.toDate]),
+          [
+            state.requestDate,
+            state.requestItems,
+            state.fromDate,
+            state.toDate
+          ]),
     ));
   }
 
   // set the new date
-  void selectDate(BuildContext context, String datetype) async {
+  void selectDate(BuildContext context, String dateType) async {
     FocusScope.of(context).requestFocus(
         FocusNode());
 
     DateTime? currentDate = DateTime.now();
 
-    if (defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.iOS) {
-      await showCupertinoModalPopup(
-          context: context,
-          builder: (BuildContext builder) {
-            return Container(
-              height: MediaQuery
-                  .of(context)
-                  .copyWith()
-                  .size
-                  .height * 0.25,
-              color: Colors.white,
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.date,
-                onDateTimeChanged: (value) {
-                  currentDate = value;
-                },
-                initialDateTime: DateTime.now(),
-                minimumYear: 2020,
-                maximumYear: 2023,
-              ),
-            );
-          });
-    } else {
-      final DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: currentDate,
-          firstDate: DateTime.now(),
-          lastDate: DateTime(2101));
-
-      if (picked != null && picked != currentDate) {
-        currentDate = picked;
-      }
-    }
+    // if (defaultTargetPlatform == TargetPlatform.macOS ||
+    //     defaultTargetPlatform == TargetPlatform.iOS) {
+    //   await showCupertinoModalPopup(
+    //       context: context,
+    //       builder: (BuildContext builder) {
+    //         return Container(
+    //           height: MediaQuery
+    //               .of(context)
+    //               .copyWith()
+    //               .size
+    //               .height * 0.25,
+    //           color: Colors.white,
+    //           child: CupertinoDatePicker(
+    //             mode: CupertinoDatePickerMode.date,
+    //             onDateTimeChanged: (value) {
+    //               currentDate = value;
+    //             },
+    //             initialDateTime: DateTime.now(),
+    //             minimumYear: 2020,
+    //             maximumYear: 2023,
+    //           ),
+    //         );
+    //       });
+    // }
+    // else {
+    //   final DateTime? picked = await showDatePicker(
+    //       context: context,
+    //       initialDate: currentDate,
+    //       firstDate: DateTime.now(),
+    //       lastDate: DateTime(2101));
+    //
+    //   if (picked != null && picked != currentDate) {
+    //     currentDate = picked;
+    //   }
+    // }
+    currentDate = await openShowDatePicker(context);
 
     var formatter = GlobalConstants.dateFormatViewed;
     String formattedDate = formatter.format(
@@ -257,8 +276,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     final requestDate = RequestDate.dirty(formattedDate);
 
 
-
-    if (datetype == "from") {
+    if (dateType == "from") {
       emit(state.copyWith(
         fromDate: requestDate,
         status: Formz.validate([state.requestItems, requestDate, state.toDate]),
@@ -283,7 +301,6 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
   }
 
   void chosenItemsOptions(List<String> chosenFilter) {
-
     emit(state.copyWith(
       requestItemsList: chosenFilter,
       status: Formz.validate(
@@ -296,7 +313,6 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     if (value != "[]") {
       valueNew = RequestDate.dirty(value);
     }
-
 
 
     emit(state.copyWith(
@@ -316,6 +332,17 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
       status: Formz.validate(
           [state.requestItems, state.fromDate, state.toDate]),
     ));
+  }
+
+  void commentRequesterChanged(String value) {
+    // final permissionTime = PermissionTime.dirty(value);
+    // print(permissionTime.value);
+    emit(
+      state.copyWith(
+        // actionComment : value,
+        // status: Formz.validate([state.requestDate,state.permissionDate,state.permissionTime]),
+      ),
+    );
   }
 
   @override

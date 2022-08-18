@@ -24,8 +24,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
   final RequestRepository _requestRepository;
 
 
-  void getRequestData({required RequestStatus requestStatus,String ?requestNo,String ?date})
-  async {
+  void getRequestData({required RequestStatus requestStatus,String ?requestNo,String ?date,String? requesterHRCode}) async {
     if (requestStatus == RequestStatus.newRequest) {
       var now = DateTime.now();
       String formattedDate = GlobalConstants.dateFormatViewed.format(now);
@@ -52,11 +51,11 @@ class PermissionCubit extends Cubit<PermissionInitial> {
            ),
          );
       }
-    } else {
+    }
+    else {
       EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
       final requestData = await _requestRepository.getPermissionRequestData(
-          requestNo!);
-
+          requestNo??"", requesterHRCode?? "");
       final permissionDate = PermissionDate.dirty(
           GlobalConstants.dateFormatViewed.format(
               GlobalConstants.dateFormatServer.parse(
@@ -82,7 +81,8 @@ class PermissionCubit extends Cubit<PermissionInitial> {
         status = "Rejected";
       }
 
-      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode!);
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"");
+
       emit(
         state.copyWith(
             requestDate: requestDate,

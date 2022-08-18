@@ -101,9 +101,9 @@ class RequestRepository {
     return response;
   }
 
-  Future<AccessRightModel> getAccessRight(String requestNo) async{
+  Future<AccessRightModel> getAccessRight(String requestNo,String requesterHRCode) async{
     final http.Response rawPermission = await requestDataProviders
-        .getAccessRightRequestData(userData.user?.userHRCode ?? "",requestNo);
+        .getAccessRightRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawPermission.body);
     final AccessRightModel response = AccessRightModel.fromJson(json[0]);
 
@@ -146,9 +146,9 @@ class RequestRepository {
     return response;
   }
 
-  Future<EmbassyLetterFormModel> getEmbassyLetter(String requestNo) async{
+  Future<EmbassyLetterFormModel> getEmbassyLetter(String requestNo,String requesterHRCode) async{
     final http.Response rawPermission = await requestDataProviders
-        .getEmbassyLetterRequestData(userData.user?.userHRCode ?? "",requestNo);
+        .getEmbassyLetterRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawPermission.body);
     final EmbassyLetterFormModel response = EmbassyLetterFormModel.fromJson(json[0]);
     return response;
@@ -314,7 +314,7 @@ class RequestRepository {
 
   Future<VacationRequestData> getVacationRequestData(String requestNo,String requesterHRCode) async{
     final http.Response rawRequestData = await requestDataProviders
-        .getVacationRequestData(requesterHRCode,requestNo);
+        .getVacationRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final VacationRequestData response = VacationRequestData.fromJson(json[0]);
 
@@ -331,17 +331,17 @@ class RequestRepository {
     return response;
   }
 
-  Future<BusinessMissionRequestData> getBusinessMissionRequestData(String requestNo) async{
+  Future<BusinessMissionRequestData> getBusinessMissionRequestData(String requestNo,String requesterHRCode) async{
     final http.Response rawRequestData = await requestDataProviders
-        .getBusinessMissionRequestData(userData.user?.userHRCode ?? "",requestNo);
+        .getBusinessMissionRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final BusinessMissionRequestData response = BusinessMissionRequestData.fromJson(json[0]);
 
     return response;
   }
-  Future<PermissionRequestData> getPermissionRequestData(String requestNo) async{
+  Future<PermissionRequestData> getPermissionRequestData(String requestNo,String requesterHRCode) async{
     final http.Response rawRequestData = await requestDataProviders
-        .getPermissionRequestData(userData.user?.userHRCode ?? "",requestNo);
+        .getPermissionRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final PermissionRequestData response = PermissionRequestData.fromJson(json[0]);
     return response;

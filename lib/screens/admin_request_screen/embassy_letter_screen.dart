@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/embassy_letter_request/embassy_letter_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
+import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
@@ -19,15 +20,17 @@ import 'package:intl/intl.dart';
 
 import '../../constants/enums.dart';
 import '../../../widgets/success/success_request_widget.dart';
+import '../../widgets/requester_data_widget/requester_data_widget.dart';
 
 class EmbassyLetterScreen extends StatefulWidget{
 
   static const routeName = "embassy-letter-screen";
   static const requestNoKey = 'request-No';
+  static const requesterHRCode = 'requester-HRCode';
 
-  const EmbassyLetterScreen({Key? key,this.requestNo}) : super(key: key);
+  const EmbassyLetterScreen({Key? key,this.requestData}) : super(key: key);
 
-  final requestNo;
+  final dynamic requestData;
 
   @override
   State<EmbassyLetterScreen> createState() => _EmbassyLetterScreen();
@@ -51,18 +54,20 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
     final userMainData = context.select((AppBloc bloc) =>
     bloc.state.userData);
 
-    final currentRequestNo = widget.requestNo;
+    final currentRequestData = widget.requestData;
 
     return CustomBackground(
       child: CustomTheme(
         child: BlocProvider<EmbassyLetterCubit>(
           create: (embassyContext) =>
-          currentRequestNo [EmbassyLetterScreen.requestNoKey] == "0"? (EmbassyLetterCubit(
+          currentRequestData [EmbassyLetterScreen.requestNoKey] == "0"? (EmbassyLetterCubit(
               RequestRepository(userMainData))
-            ..getRequestData(RequestStatus.newRequest, ""))
+            ..getRequestData(requestStatus: RequestStatus.newRequest))
               : (EmbassyLetterCubit(RequestRepository(userMainData))
-            ..getRequestData(RequestStatus.oldRequest,
-                currentRequestNo[EmbassyLetterScreen.requestNoKey])),
+            ..getRequestData(requestStatus: RequestStatus.oldRequest,
+                requestNo: currentRequestData[EmbassyLetterScreen.requestNoKey],
+                requesterHRCode: currentRequestData[EmbassyLetterScreen
+                    .requesterHRCode])),
           child: BlocBuilder<EmbassyLetterCubit,EmbassyLetterInitial>(
               builder: (context,state) {
                 return  WillPopScope(
@@ -72,7 +77,11 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                 }, child: Scaffold(
                   backgroundColor: Colors.transparent,
                   appBar: AppBar(
-                    title: const Text("Embassy Letter"),
+                    title:  Text("Embassy Letter ${state.requestStatus ==
+                        RequestStatus.oldRequest
+                        ? "#${currentRequestData[BusinessMissionScreen
+                        .requestNoKey]}"
+                        : "Request"}"),
                     backgroundColor: Colors.transparent,
                     elevation: 0,
                     // centerTitle: true,
@@ -94,12 +103,12 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                             RequestStatus.oldRequest && state.takeActionStatus ==
                             TakeActionStatus.takeAction)FloatingActionButton
                             .extended(
-                          backgroundColor: Colors.red,
+                          backgroundColor: Colors.white,
                           heroTag: null,
                           onPressed: () {},
-                          icon: const Icon(Icons.dangerous),
+                          icon: const Icon(Icons.dangerous,color: ConstantsColors.buttonColors,),
 
-                          label: const Text('Reject'),
+                          label: const Text('Reject',style: TextStyle(color: ConstantsColors.buttonColors,),),
                         ),
                         const SizedBox(height: 12),
                         if(state.requestStatus == RequestStatus.newRequest)
@@ -143,10 +152,8 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
 
                       }
                     },
-
-
                     child: Padding(
-                      padding: const EdgeInsets.all(15),
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
                       child: Form(
                         child: SingleChildScrollView(
                           child: Column(
@@ -175,7 +182,33 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                 ),
                               ),
 
-
+                              if(state.requestStatus ==
+                                  RequestStatus.oldRequest &&
+                                  state.takeActionStatus ==
+                                      TakeActionStatus.takeAction)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 8),
+                                  child: BlocBuilder<
+                                      EmbassyLetterCubit,
+                                      EmbassyLetterInitial>(
+                                      buildWhen: (previous, current) {
+                                        return (previous.requesterData !=
+                                            current.requesterData);
+                                      },
+                                      builder: (context, state) {
+                                        return RequesterDataWidget(
+                                          requesterData: state.requesterData,
+                                          actionComment: ActionCommentWidget(
+                                              onChanged: (commentValue) =>
+                                                  context
+                                                      .read<
+                                                      EmbassyLetterCubit>()
+                                                      .commentRequesterChanged(
+                                                      commentValue)),);
+                                      }
+                                  ),
+                                ),
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: TextFormField(
@@ -244,7 +277,7 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                           hint: Text(state.embassy,
                                             style: const TextStyle(
                                               fontSize: 14,
-                                              color: Colors.black,
+                                              color: Colors.white,
                                             ),
                                           ),
                                           items: GlobalConstants.embassyLetterList.map((item) =>
@@ -281,6 +314,10 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                         errorText: state.dateFrom.invalid
                                             ? 'invalid Date'
                                             : null,
+                                        enabled: state.requestStatus ==
+                                            RequestStatus.newRequest
+                                            ? true
+                                            : false,
                                         prefixIcon: const Icon(
                                             Icons.calendar_today,color: Colors.white70,),
                                       ),
@@ -304,6 +341,10 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                         floatingLabelAlignment:
                                         FloatingLabelAlignment.start,
                                         labelText: 'To Date',
+                                        enabled: state.requestStatus ==
+                                            RequestStatus.newRequest
+                                            ? true
+                                            : false,
                                         errorText: state.dateTo.invalid
                                             ? 'invalid Date'
                                             : null,
@@ -321,9 +362,19 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                 padding: const EdgeInsets.all(8.0),
                                 child: BlocBuilder<EmbassyLetterCubit,
                                     EmbassyLetterInitial>(
+                                  buildWhen: (curr,prev){
+                                    return curr.passportNumber != prev.passportNumber;
+                                  },
                                     builder: (context, state) {
                                       return TextFormField(
-                                          initialValue:state.passportNumber.value,
+                                          key: state.requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? UniqueKey()
+                                              : null,
+                                          initialValue: state.requestStatus ==
+                                              RequestStatus.oldRequest ? state
+                                              .passportNumber.value : "",
+                                          // initialValue:state.passportNumber.value,
                                           readOnly: state.requestStatus ==
                                               RequestStatus.oldRequest ? true : false,
                                           onChanged: (value) {
@@ -349,31 +400,34 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                     EmbassyLetterInitial>(
                                   builder: (context, state) {
                                     return DropdownButtonHideUnderline(
-                                      child: DropdownButtonFormField(
-                                        // hint: Text(state.salary,
-                                        //   style: const TextStyle(
-                                        //     fontSize: 14,
-                                        //     color: Colors.black,
-                                        //   ),
-                                        // ),
-                                          decoration: const InputDecoration(
-                                            floatingLabelAlignment:
-                                            FloatingLabelAlignment.start,
-                                            labelText: "Add Salary",
-                                            prefixIcon: Icon(Icons.money,color: Colors.white70,),
-                                          ),
-                                        items: addSalaryList.map((item) =>
-                                            DropdownMenuItem<String>(
-                                              value: item, child: Text(item,
-                                              style: const TextStyle(fontSize: 14,),
+                                      child: IgnorePointer(
+                                        ignoring: state.requestStatus == RequestStatus.oldRequest ? true :false,
+                                        child: DropdownButtonFormField(
+                                          // hint: Text(state.salary,
+                                          //   style: const TextStyle(
+                                          //     fontSize: 14,
+                                          //     color: Colors.black,
+                                          //   ),
+                                          // ),
+                                            decoration: const InputDecoration(
+                                              floatingLabelAlignment:
+                                              FloatingLabelAlignment.start,
+                                              labelText: "Add Salary",
+                                              prefixIcon: Icon(Icons.money,color: Colors.white70,),
                                             ),
-                                            )).toList(),
-                                        value: state.salary,
-                                        onChanged: (value) {
-                                            context.read<EmbassyLetterCubit>()
-                                                .addSelectedSalary(
-                                                value.toString());
-                                        },
+                                          items: addSalaryList.map((item) =>
+                                              DropdownMenuItem<String>(
+                                                value: item, child: Text(item,
+                                                style: const TextStyle(fontSize: 14,),
+                                              ),
+                                              )).toList(),
+                                          value: state.salary,
+                                          onChanged: (value) {
+                                              context.read<EmbassyLetterCubit>()
+                                                  .addSelectedSalary(
+                                                  value.toString());
+                                          },
+                                        ),
                                       ),
                                     );
                                   },),
@@ -384,11 +438,22 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                     EmbassyLetterInitial>(
                                     builder: (context, state) {
                                       return TextFormField(
-                                          initialValue:state.comments,
+                                          key: state.requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? UniqueKey()
+                                              : null,
+                                          initialValue: state.requestStatus ==
+                                              RequestStatus.oldRequest ? state
+                                              .comments : "",
+                                          // initialValue:state.comments,
                                           onChanged: (value) {
                                             context.read<EmbassyLetterCubit>()
                                                 .comments(value);
                                           },
+                                          enabled: state.requestStatus ==
+                                              RequestStatus.newRequest
+                                              ? true
+                                              : false,
                                           decoration: InputDecoration(
                                             floatingLabelAlignment:
                                             FloatingLabelAlignment.start,

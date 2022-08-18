@@ -26,6 +26,8 @@ class EmbassyLetterInitial extends EmbassyLetterState {
     this.statusAction,
     this.takeActionStatus,
     this.requestStatus,
+    this.requesterData = EmployeeData.empty,
+    this.actionComment = "",
   });
 
   final RequestDate requestDate;
@@ -47,10 +49,13 @@ class EmbassyLetterInitial extends EmbassyLetterState {
   final String? statusAction;
   final RequestStatus? requestStatus;
 
+  final EmployeeData requesterData;
+  final String actionComment;
+
   @override
   List<Object> get props => [requestDate,dateFrom, dateTo,
     passportNumber, status,embassy,
-    salary,comments];
+    salary,comments,requesterData,actionComment];
 
 
   EmbassyLetterInitial copyWith({
@@ -70,6 +75,9 @@ class EmbassyLetterInitial extends EmbassyLetterState {
     String? statusAction,
     RequestStatus? requestStatus,
 
+    EmployeeData? requesterData,
+    String? actionComment,
+
   }) {
     return EmbassyLetterInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -86,6 +94,8 @@ class EmbassyLetterInitial extends EmbassyLetterState {
       requestStatus: requestStatus ?? this.requestStatus,
       statusAction: statusAction ?? this.statusAction,
       takeActionStatus: takeActionStatus ?? this.takeActionStatus,
+      requesterData: requesterData ?? this.requesterData,
+      actionComment: actionComment ?? this.actionComment,
     );
   }
 }

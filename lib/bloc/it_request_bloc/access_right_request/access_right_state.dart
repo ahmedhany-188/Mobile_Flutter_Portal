@@ -30,7 +30,8 @@ class AccessRightInitial extends Equatable {
     this.successMessage,
     this.takeActionStatus,
     this.statusAction,
-
+    this.requesterData = EmployeeData.empty,
+    this.actionComment = "",
   });
 
   final RequestDate requestDate;
@@ -54,12 +55,29 @@ class AccessRightInitial extends Equatable {
   final TakeActionStatus? takeActionStatus;
   final String? statusAction;
 
+  final EmployeeData requesterData;
+  final String actionComment;
+
 
   @override
   List<Object> get props =>
-      [requestDate, requestItems, fromDate, toDate,
-        status, requestType, permanent, usbException,
-        localAdmin, vpnAccount, ipPhone, comments, requestItemsList];
+      [
+        requestDate,
+        requestItems,
+        fromDate,
+        toDate,
+        status,
+        requestType,
+        permanent,
+        usbException,
+        localAdmin,
+        vpnAccount,
+        ipPhone,
+        comments,
+        requestItemsList,
+        requesterData,
+        actionComment
+      ];
 
   AccessRightInitial copyWith({
     RequestDate ?requestDate,
@@ -80,29 +98,33 @@ class AccessRightInitial extends Equatable {
     String? successMessage,
     TakeActionStatus? takeActionStatus,
     RequestStatus? requestStatus,
-    String? statusAction
+    String? statusAction,
+    EmployeeData? requesterData,
+    String? actionComment,
 
   }) {
     return AccessRightInitial(
-        requestDate: requestDate ?? this.requestDate,
-        requestType: requestType ?? this.requestType,
-        requestItems: requestItems ?? this.requestItems,
-        requestItemsList: requestItemsList ?? this.requestItemsList,
-        fromDate: fromDate ?? this.fromDate,
-        toDate: toDate ?? this.toDate,
-        permanent: permanent ?? this.permanent,
-        usbException: usbException ?? this.usbException,
-        vpnAccount: vpnAccount ?? this.vpnAccount,
-        ipPhone: ipPhone ?? this.ipPhone,
-        localAdmin: localAdmin ?? this.localAdmin,
-        comments: comments ?? this.comments,
-        filePDF: filePDF ?? this.filePDF,
-        status: status ?? this.status,
-        errorMessage: errorMessage ?? this.errorMessage,
-        successMessage: successMessage ?? this.successMessage,
-        requestStatus: requestStatus ?? this.requestStatus,
-        takeActionStatus: takeActionStatus ?? this.takeActionStatus,
-        statusAction: statusAction ?? this.statusAction
+      requestDate: requestDate ?? this.requestDate,
+      requestType: requestType ?? this.requestType,
+      requestItems: requestItems ?? this.requestItems,
+      requestItemsList: requestItemsList ?? this.requestItemsList,
+      fromDate: fromDate ?? this.fromDate,
+      toDate: toDate ?? this.toDate,
+      permanent: permanent ?? this.permanent,
+      usbException: usbException ?? this.usbException,
+      vpnAccount: vpnAccount ?? this.vpnAccount,
+      ipPhone: ipPhone ?? this.ipPhone,
+      localAdmin: localAdmin ?? this.localAdmin,
+      comments: comments ?? this.comments,
+      filePDF: filePDF ?? this.filePDF,
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
+      successMessage: successMessage ?? this.successMessage,
+      requestStatus: requestStatus ?? this.requestStatus,
+      takeActionStatus: takeActionStatus ?? this.takeActionStatus,
+      statusAction: statusAction ?? this.statusAction,
+      requesterData: requesterData ?? this.requesterData,
+      actionComment: actionComment ?? this.actionComment,
 
     );
   }
