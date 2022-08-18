@@ -7,6 +7,7 @@ import 'package:flutter_multiselect/flutter_multiselect.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/it_request_bloc/access_right_request/access_right_cubit.dart';
+import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
@@ -17,9 +18,11 @@ import 'package:hassanallamportalflutter/widgets/filters/multi_selection_chips_f
 import 'package:intl/intl.dart';
 import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:sizer/sizer.dart';
 
 import '../../constants/enums.dart';
 import '../../../widgets/success/success_request_widget.dart';
+import '../../widgets/requester_data_widget/requester_data_widget.dart';
 
 
 class AccessRightScreen extends StatefulWidget {
@@ -29,11 +32,10 @@ class AccessRightScreen extends StatefulWidget {
   static const requestHrCode = 'request-HrCode';
 
   const AccessRightScreen(
-      {Key? key,this.requestNo,this.requestedHrCode})
+      {Key? key,this.requestData})
       : super(key: key);
 
-  final requestNo;
-  final requestedHrCode;
+  final dynamic requestData;
 
   @override
   State<AccessRightScreen> createState() => _AccessRightScreen();
@@ -46,8 +48,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
   Widget build(BuildContext context) {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
     final formatter = GlobalConstants.dateFormatServer;
-
-    final currentRequestNo = widget.requestNo;
+    final currentRequestData = widget.requestData;
 
     return
       WillPopScope(
@@ -55,20 +56,21 @@ class _AccessRightScreen extends State<AccessRightScreen> {
           await EasyLoading.dismiss(animation: true);
           return true;
         },
-
         child: CustomBackground(
           child: CustomTheme(
-
-
             child: MultiBlocProvider(
               providers: [
                 BlocProvider<AccessRightCubit>(create: (accessRightContext) =>
-                currentRequestNo[AccessRightScreen.requestNoKey] == "0"
+                currentRequestData[AccessRightScreen.requestNoKey] == "0"
                     ? (AccessRightCubit(RequestRepository(user))
-                  ..getRequestData(RequestStatus.newRequest, ""))
+                  ..getRequestData(
+                      requestStatus: RequestStatus.newRequest, requestNo: ""))
                     : (AccessRightCubit(RequestRepository(user))
-                  ..getRequestData(RequestStatus.oldRequest,
-                      currentRequestNo[AccessRightScreen.requestNoKey]))),
+                  ..getRequestData(requestStatus: RequestStatus.oldRequest,
+                      requestNo: currentRequestData[AccessRightScreen
+                          .requestNoKey],
+                      requesterHRCode: currentRequestData[AccessRightScreen
+                          .requestHrCode]))),
                 // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
               ],
               child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
@@ -78,7 +80,12 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                         appBar: AppBar(
                           backgroundColor: Colors.transparent,
                           elevation: 0,
-                          title: const Text("Access Right"),
+                          title: Text("Access Right "
+                              "${state.requestStatus ==
+                              RequestStatus.oldRequest
+                              ? "#${currentRequestData[AccessRightScreen
+                              .requestNoKey]}"
+                              : "Request"}"),
                           centerTitle: true,
                         ),
                         // resizeToAvoidBottomInset: false,
@@ -104,12 +111,14 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                     TakeActionStatus
                                         .takeAction )FloatingActionButton
                                 .extended(
-                              backgroundColor: Colors.red,
+                              backgroundColor: Colors.white,
                               heroTag: null,
                               onPressed: () {},
-                              icon: const Icon(Icons.dangerous),
+                              icon: const Icon(Icons.dangerous,
+                                color: ConstantsColors.buttonColors,),
 
-                              label: const Text('Reject'),
+                              label: const Text('Reject', style: TextStyle(
+                                  color: ConstantsColors.buttonColors),),
                             ),
                             const SizedBox(height: 12),
                             if(context
@@ -167,7 +176,6 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                               child: SingleChildScrollView(
                                 child: Column(
                                   children: [
-
                                     if(state.requestStatus ==
                                         RequestStatus.oldRequest)Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -192,6 +200,35 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                           }
                                       ),
                                     ),
+
+                                    if(state.requestStatus ==
+                                        RequestStatus.oldRequest &&
+                                        state.takeActionStatus ==
+                                            TakeActionStatus.takeAction)
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 8, vertical: 8),
+                                        child: BlocBuilder<
+                                            AccessRightCubit,
+                                            AccessRightInitial>(
+                                            buildWhen: (previous, current) {
+                                              return (previous.requesterData !=
+                                                  current.requesterData);
+                                            },
+                                            builder: (context, state) {
+                                              return RequesterDataWidget(
+                                                requesterData: state
+                                                    .requesterData,
+                                                actionComment: ActionCommentWidget(
+                                                    onChanged: (commentValue) =>
+                                                        context
+                                                            .read<
+                                                            AccessRightCubit>()
+                                                            .commentRequesterChanged(
+                                                            commentValue)),);
+                                            }
+                                        ),
+                                      ),
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8, vertical: 8),
@@ -235,7 +272,8 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                           labelText: 'Request Type',
                                           floatingLabelAlignment:
                                           FloatingLabelAlignment.start,
-                                          prefixIcon: Icon(Icons.event,color: Colors.white70),
+                                          prefixIcon: Icon(Icons.event,
+                                              color: Colors.white70),
                                         ),
                                         child: BlocBuilder<AccessRightCubit,
                                             AccessRightInitial>(
@@ -304,7 +342,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                       child: InputDecorator(
                                         decoration: const InputDecoration(
                                           contentPadding: EdgeInsets.symmetric(
-                                              horizontal: 0, vertical: 5),
+                                              horizontal: 20, vertical: 5),
                                           labelText: 'Select items',
                                           floatingLabelAlignment:
                                           FloatingLabelAlignment.start,
@@ -312,15 +350,13 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                         child: BlocBuilder<
                                             AccessRightCubit,
                                             AccessRightInitial>(
-                                            buildWhen: (previous, current) {
-                                              return (state.requestStatus ==
-                                                  RequestStatus.newRequest);
-                                            },
                                             builder: (context, state) {
                                               return Padding(
                                                 padding: const EdgeInsets.all(
                                                     10.0),
-                                                child: MultiSelectionChipsFilters(
+                                                child: state.requestStatus ==
+                                                    RequestStatus.newRequest
+                                                    ? MultiSelectionChipsFilters(
                                                   filtersList: GlobalConstants
                                                       .accountsTypesList,
                                                   filterName: 'Select items',
@@ -362,7 +398,32 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                     getRequestValue(
                                                         x.toString());
                                                   },
-                                                ),
+                                                )
+                                                    :
+                                                ListView.separated(
+                                                    separatorBuilder: (context,
+                                                        i) {
+                                                      return const SizedBox(
+                                                        height: 2,);
+                                                    },
+                                                    shrinkWrap: true,
+                                                    itemCount: state
+                                                        .requestItemsList
+                                                        .length,
+                                                    itemBuilder: (ctx, index) {
+                                                      return Center(
+                                                        child: Container(
+                                                            width: 30.h,
+                                                            color: Colors
+                                                                .white10,
+                                                            child: Padding(
+                                                              padding: const EdgeInsets
+                                                                  .all(8.0),
+                                                              child: Text(state
+                                                                  .requestItemsList[index]),
+                                                            )),
+                                                      );
+                                                    }),
                                               );
                                             }),
                                       ),
@@ -377,22 +438,16 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                           labelText: 'Usb Agreement',
                                           floatingLabelAlignment: FloatingLabelAlignment
                                               .start,
-                                          prefixIcon: Icon(Icons.usb,color: Colors.white70),
+                                          prefixIcon: Icon(
+                                              Icons.usb, color: Colors.white70),
                                         ),
 
                                         child: BlocBuilder<
                                             AccessRightCubit,
                                             AccessRightInitial>(
-                                          buildWhen: (previous, current) {
-                                            return (state.requestStatus ==
-                                                RequestStatus.newRequest);
-                                          },
                                           builder: (context, state) {
                                             return
-
-
                                               Column(children: [
-
                                                 const Padding(
                                                   padding: EdgeInsets.all(10.0),
                                                   child: Text(
@@ -400,82 +455,88 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                     style: TextStyle(
                                                         color: Colors.red),),
                                                 ),
+                                                Row(
+                                                  mainAxisAlignment: MainAxisAlignment
+                                                      .center,
+                                                  children: [
 
-
-                                                Row(children: [
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .all(
-                                                        5.0),
-                                                    child: FloatingActionButton
-                                                        .extended(
-                                                      heroTag: null,
-                                                      onPressed: () {
-                                                        _launchUrl();
-                                                      },
-                                                      label: const Text(
-                                                          'Download',
-                                                          style: TextStyle(
-                                                              color: Colors
-                                                                  .black
-                                                          )),
-                                                      icon: const Icon(
-                                                          Icons
-                                                              .cloud_download_sharp,
-                                                          color: Colors.black),
-
-                                                      backgroundColor: Colors
-                                                          .white,),
-                                                  ),
-
-                                                  Padding(
-                                                    padding: const EdgeInsets
-                                                        .all(
-                                                        5.0),
-                                                    child: BlocBuilder<
-                                                        AccessRightCubit,
-                                                        AccessRightInitial>(
-                                                      builder: (context,
-                                                          state) {
-                                                        return
-                                                          FloatingActionButton
-                                                              .extended(
-                                                            heroTag: null,
-                                                            onPressed: () async {
-                                                              FilePickerResult? result = await FilePicker
-                                                                  .platform
-                                                                  .pickFiles();
-
-                                                              if (result !=
-                                                                  null) {
-                                                                Uint8List? fileBytes = result
-                                                                    .files
-                                                                    .first
-                                                                    .bytes;
-                                                                String fileName = result
-                                                                    .files.first
-                                                                    .name;
-
-                                                                // Upload file
-                                                                // await FirebaseStorage.instance.ref('uploads/$fileName').putData(fileBytes);
-                                                              }
-                                                            },
-                                                            label: const Text(
-                                                                ' Upload ',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .black
-                                                                )),
-                                                            icon: const Icon(
-                                                                Icons
-                                                                    .cloud_upload_sharp,
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .all(
+                                                          5.0),
+                                                      child: FloatingActionButton
+                                                          .extended(
+                                                        heroTag: null,
+                                                        onPressed: () {
+                                                          _launchUrl();
+                                                        },
+                                                        label: const Text(
+                                                            'Download',
+                                                            style: TextStyle(
                                                                 color: Colors
-                                                                    .black),
-                                                            backgroundColor: Colors
-                                                                .white,);
-                                                      },),
-                                                  ),
-                                                ],),
+                                                                    .black
+                                                            )),
+                                                        icon: const Icon(
+                                                            Icons
+                                                                .cloud_download_sharp,
+                                                            color: Colors
+                                                                .black),
+
+                                                        backgroundColor: Colors
+                                                            .white,),
+                                                    ),
+
+                                                    if(state.requestStatus ==
+                                                        RequestStatus
+                                                            .newRequest)Padding(
+                                                      padding: const EdgeInsets
+                                                          .all(
+                                                          5.0),
+                                                      child: BlocBuilder<
+                                                          AccessRightCubit,
+                                                          AccessRightInitial>(
+                                                        builder: (context,
+                                                            state) {
+                                                          return
+                                                            FloatingActionButton
+                                                                .extended(
+                                                              heroTag: null,
+                                                              onPressed: () async {
+                                                                FilePickerResult? result = await FilePicker
+                                                                    .platform
+                                                                    .pickFiles();
+
+                                                                if (result !=
+                                                                    null) {
+                                                                  Uint8List? fileBytes = result
+                                                                      .files
+                                                                      .first
+                                                                      .bytes;
+                                                                  String fileName = result
+                                                                      .files
+                                                                      .first
+                                                                      .name;
+
+                                                                  // Upload file
+                                                                  // await FirebaseStorage.instance.ref('uploads/$fileName').putData(fileBytes);
+                                                                }
+                                                              },
+                                                              label: const Text(
+                                                                  ' Upload ',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .black
+                                                                  )),
+                                                              icon: const Icon(
+                                                                  Icons
+                                                                      .cloud_upload_sharp,
+                                                                  color: Colors
+                                                                      .black),
+                                                              backgroundColor: Colors
+                                                                  .white,);
+                                                        },),
+                                                    ),
+                                                  ],),
 
                                                 Padding(
                                                   padding: const EdgeInsets.all(
@@ -505,7 +566,9 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                               : null,
                                                           prefixIcon: const Icon(
                                                               Icons
-                                                                  .calendar_today,color: Colors.white70),
+                                                                  .calendar_today,
+                                                              color: Colors
+                                                                  .white70),
                                                         ),
                                                         onTap: () async {
                                                           if (state
@@ -551,7 +614,9 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                               : null,
                                                           prefixIcon: const Icon(
                                                               Icons
-                                                                  .calendar_today,color: Colors.white70),
+                                                                  .calendar_today,
+                                                              color: Colors
+                                                                  .white70),
                                                         ),
                                                         onTap: () async {
                                                           if (state
@@ -583,7 +648,9 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                       FloatingLabelAlignment
                                                           .start,
                                                       prefixIcon: Icon(
-                                                          Icons.event,color: Colors.white70),
+                                                          Icons.event,
+                                                          color: Colors
+                                                              .white70),
                                                     ),
                                                     child: BlocBuilder<
                                                         AccessRightCubit,
@@ -659,7 +726,8 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                               FloatingLabelAlignment.start,
                                               labelText: 'Justify Your Request',
                                               prefixIcon: Icon(
-                                                  Icons.comment,color: Colors.white70),
+                                                  Icons.comment,
+                                                  color: Colors.white70),
                                             ),
                                           );
                                         },

@@ -101,9 +101,9 @@ class RequestRepository {
     return response;
   }
 
-  Future<AccessRightModel> getAccessRight(String requestNo) async{
+  Future<AccessRightModel> getAccessRight(String requestNo,String requesterHRCode) async{
     final http.Response rawPermission = await requestDataProviders
-        .getAccessRightRequestData(userData.user?.userHRCode ?? "",requestNo);
+        .getAccessRightRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawPermission.body);
     final AccessRightModel response = AccessRightModel.fromJson(json[0]);
 

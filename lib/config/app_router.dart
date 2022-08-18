@@ -174,7 +174,7 @@ class AppRouter {
       case AccessRightScreen.routeName:
         return MaterialPageRoute(
           builder: (_) =>
-              AccessRightScreen(requestNo: settings.arguments),
+              AccessRightScreen(requestData: settings.arguments),
         );
 
       case MyRequestsScreen.routeName:
