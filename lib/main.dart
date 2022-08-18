@@ -164,7 +164,25 @@ class _MyAppState extends State<MyApp> {
             create: (payslipContext) => PayslipCubit(),
           ),
           BlocProvider<AttendanceCubit>(
-            create: (attendanceCubitContext) => AttendanceCubit(),
+            lazy: true,
+            create: (attendanceCubitContext) => AttendanceCubit(
+                BlocProvider
+                    .of<AppBloc>(attendanceCubitContext)
+                    .state
+                    .userData.employeeData!.userHrCode.toString()),
+          ),
+
+          BlocProvider<UserNotificationApiCubit>(
+            lazy: true,
+            create: (userNotificationContext) =>
+            UserNotificationApiCubit(
+              RequestRepository(
+                  BlocProvider
+                      .of<AppBloc>(userNotificationContext)
+                      .state
+                      .userData),
+            )
+              ..getNotifications(),
           ),
 
           BlocProvider<EconomyNewsCubit>(

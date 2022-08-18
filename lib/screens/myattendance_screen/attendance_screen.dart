@@ -71,7 +71,7 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
           body: RefreshIndicator(
             onRefresh: () async {
-              await AttendanceCubit()
+              await AttendanceCubit(user.user!.userHRCode.toString())
                 .getAttendanceList(
                     user.user!.userHRCode.toString(), monthNumber);
               // await Future.delayed(const Duration(milliseconds: 1000));
@@ -79,14 +79,14 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
             },
             child: BlocProvider<AttendanceCubit>(
                 create: (context) =>
-                AttendanceCubit()
+                AttendanceCubit(user.user!.userHRCode.toString())
                   ..getAttendanceList(
                       user.user!.userHRCode.toString(), monthNumber),
                 child: BlocConsumer<AttendanceCubit, AttendanceState>(
                     listener: (context, state) {
-                      if (state is BlocGetTheAttendanceSuccessState) {}
-                      else if (state is BlocGetTheAttendanceLoadingState) {}
-                      else if (state is BlocGetTheAttendanceErrorState) {
+                      if (state.attendanceDataEnumStates == AttendanceDataEnumStates.success) {}
+                      else if (state.attendanceDataEnumStates == AttendanceDataEnumStates.loading) {}
+                      else if (state.attendanceDataEnumStates == AttendanceDataEnumStates.failed) {
                         ScaffoldMessenger.of(context).hideCurrentSnackBar();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -207,12 +207,12 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
   Container getMonth(AttendanceState state,MainUserData user,List<MyAttendanceModel> getAttendanceListSuccess) {
 
-    if (state is BlocGetTheAttendanceSuccessState && state.month == monthNumber) {
+    if (state.attendanceDataEnumStates == AttendanceDataEnumStates.success   && state.month == monthNumber) {
       transition = false;
       found = true;
       getAttendanceListSuccess=state.getAttendanceList;
       return attendanceLoad(getAttendanceListSuccess,user);
-    }else if(state is BlocGetTheAttendanceSuccessState && state.month != monthNumber){
+    }else if(state.attendanceDataEnumStates == AttendanceDataEnumStates.success && state.month != monthNumber){
       if(found){
         return attendanceLoad(getAttendanceListSuccess,user);
       }else{
