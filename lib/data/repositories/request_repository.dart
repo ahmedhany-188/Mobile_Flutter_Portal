@@ -146,9 +146,9 @@ class RequestRepository {
     return response;
   }
 
-  Future<EmbassyLetterFormModel> getEmbassyLetter(String requestNo) async{
+  Future<EmbassyLetterFormModel> getEmbassyLetter(String requestNo,String requesterHRCode) async{
     final http.Response rawPermission = await requestDataProviders
-        .getEmbassyLetterRequestData(userData.user?.userHRCode ?? "",requestNo);
+        .getEmbassyLetterRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawPermission.body);
     final EmbassyLetterFormModel response = EmbassyLetterFormModel.fromJson(json[0]);
     return response;
