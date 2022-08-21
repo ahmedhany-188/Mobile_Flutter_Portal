@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
-import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/DaysOfTheWeek.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_ticket_widget.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
@@ -27,15 +26,17 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
   int monthNumber = DateTime.now().month;
 
-  int dayNumber = DateTime.now().day;
+  List<MyAttendanceModel> getAttendanceListSuccess=[];
+
 
   int selectedPage = DateTime
       .now()
       .month - 1;
 
+  int dayNumber = DateTime.now().day;
+
   bool transition = false;
   bool found = false;
-
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,6 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
         .of(context)
         .size;
 
-     List<MyAttendanceModel> getAttendanceListSuccess=[];
 
 
     // new month
@@ -57,7 +57,6 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
     return CustomBackground(
-    child: CustomTheme(
 
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -69,7 +68,8 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
           ),
           resizeToAvoidBottomInset: false,
 
-          body: RefreshIndicator(
+          body:
+          RefreshIndicator(
             onRefresh: () async {
               await AttendanceCubit(user.user!.userHRCode.toString())
                 .getAttendanceList(
@@ -77,7 +77,8 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
               // await Future.delayed(const Duration(milliseconds: 1000));
               return Future(() => null);
             },
-            child: BlocProvider<AttendanceCubit>(
+            child:
+            BlocProvider<AttendanceCubit>(
                 create: (context) =>
                 AttendanceCubit(user.user!.userHRCode.toString())
                   ..getAttendanceList(
@@ -177,18 +178,18 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                                       },
                                       controller: pageController,
                                       children: [
-                                        getMonth(state,user,getAttendanceListSuccess),
-                                        getMonth(state,user,getAttendanceListSuccess),
-                                        getMonth(state,user,getAttendanceListSuccess),
-                                        getMonth(state,user,getAttendanceListSuccess),
-                                        getMonth(state,user,getAttendanceListSuccess),
-                                        getMonth(state,user,getAttendanceListSuccess),
-                                        getMonth(state,user,getAttendanceListSuccess),
-                                        getMonth(state,user,getAttendanceListSuccess),
-                                        getMonth(state,user,getAttendanceListSuccess),
-                                        getMonth(state,user,getAttendanceListSuccess),
-                                        getMonth(state,user,getAttendanceListSuccess),
-                                        getMonth(state,user,getAttendanceListSuccess),
+                                        getMonth(state,user),
+                                        getMonth(state,user),
+                                        getMonth(state,user),
+                                        getMonth(state,user),
+                                        getMonth(state,user),
+                                        getMonth(state,user),
+                                        getMonth(state,user),
+                                        getMonth(state,user),
+                                        getMonth(state,user),
+                                        getMonth(state,user),
+                                        getMonth(state,user),
+                                        getMonth(state,user),
                                       ],
                                     ),
                                   ),
@@ -201,18 +202,19 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
           )
       ),
 
-    )
     );
   }
 
-  Container getMonth(AttendanceState state,MainUserData user,List<MyAttendanceModel> getAttendanceListSuccess) {
+  Container getMonth(AttendanceState state,MainUserData user) {
 
-    if (state.attendanceDataEnumStates == AttendanceDataEnumStates.success   && state.month == monthNumber) {
+    if (state.attendanceDataEnumStates == AttendanceDataEnumStates.success && state.month == monthNumber) {
       transition = false;
       found = true;
       getAttendanceListSuccess=state.getAttendanceList;
+      print("-88--"+getAttendanceListSuccess.toString());
       return attendanceLoad(getAttendanceListSuccess,user);
     }else if(state.attendanceDataEnumStates == AttendanceDataEnumStates.success && state.month != monthNumber){
+      print("--00-"+getAttendanceListSuccess.toString());
       if(found){
         return attendanceLoad(getAttendanceListSuccess,user);
       }else{
@@ -268,8 +270,3 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
   }
 
 }
-
-
-
-
-
