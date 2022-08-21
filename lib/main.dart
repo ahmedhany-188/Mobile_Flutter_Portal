@@ -163,14 +163,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<PayslipCubit>(
             create: (payslipContext) => PayslipCubit(),
           ),
-          BlocProvider<AttendanceCubit>(
-            lazy: true,
-            create: (attendanceCubitContext) => AttendanceCubit(
-                BlocProvider
-                    .of<AppBloc>(attendanceCubitContext)
-                    .state
-                    .userData.employeeData!.userHrCode.toString()),
-          ),
+
 
           BlocProvider<EconomyNewsCubit>(
             create: (economyNewsCubitContext) => EconomyNewsCubit(),
@@ -288,6 +281,16 @@ class _MyAppState extends State<MyApp> {
                             .state
                             .userData)),
           ),
+
+          BlocProvider<AttendanceCubit>(
+            create: (attendanceCubitContext) =>
+                AttendanceCubit(
+                BlocProvider
+                    .of<AppBloc>(attendanceCubitContext)
+                    .state
+                    .userData.employeeData!.userHrCode.toString()),
+          ),
+
           BlocProvider<StatisticsCubit>(
             create: (statisticsCubitContext) =>
             StatisticsCubit(GeneralDio(
