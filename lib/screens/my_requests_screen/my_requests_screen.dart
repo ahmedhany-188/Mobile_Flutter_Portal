@@ -73,7 +73,8 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                         selectedBorderColor: Colors.transparent,
                         color: Colors.white,
                         onPressed: (index) {
-                          if (state is BlocGetMyRequestsSuccessState) {
+
+                          if (state.userRequestsEnumStates == UserRequestsEnumStates.success) {
                             if (index == 0 && isSelected[index].value == false) {
                               searchResult.addAll(state.getMyRequests
                                   .where((element) => element.reqStatus
@@ -181,86 +182,93 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                 ),
               ),
               resizeToAvoidBottomInset: false,
-              body: BlocBuilder<MyRequestsCubit, MyRequestsState>(
-                builder: (context, state) {
-                  return SizedBox(
-                    height: deviceSize.height,
-                    child: state is BlocGetMyRequestsSuccessState
-                        ? Column(
-                            children: [
-                              Container(
-                                height: deviceSize.height * 0.09,
-                                padding: const EdgeInsets.all(10.0),
-                                child: TextField(
-                                  controller: textController,
-                                  onChanged: (_) {
-                                    setState(() {
-                                      searchResult = (searchResult.isEmpty)
-                                          ? state.getMyRequests
-                                          : searchResult
-                                              .where(
-                                                (element) =>
-                                                    element.requestNo
-                                                        .toString()
-                                                        .toLowerCase()
-                                                        .trim()
-                                                        .contains(
-                                                            textController.text) ||
-                                                    element.serviceName
-                                                        .toString()
-                                                        .toLowerCase()
-                                                        .trim()
-                                                        .contains(
-                                                            textController.text),
-                                              )
-                                              .toList();
-                                    });
-                                  },
-                                  decoration: InputDecoration(
-                                    contentPadding: const EdgeInsets.all(10),
-                                    filled: true,
-                                    prefixIcon: const Icon(Icons.search,color: Colors.white,),
-                                    border: const OutlineInputBorder(
-                                        borderRadius:
-                                            BorderRadius.all(Radius.circular(10.0)),
-                                        borderSide: BorderSide.none),
-                                    // labelText: 'Search',
-                                    hintText: "Search by 'request number, request name'",
-                                    suffixIcon: (textController.text.isEmpty)
-                                        ? null
-                                        : IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                searchResult.clear();
-                                                textController.clear();
-                                                searchTextFieldFocusNode.unfocus();
-                                              });
-                                            },
-                                            icon: const Icon(
-                                              Icons.clear,
-                                              color: Colors.red,
+              body: RefreshIndicator(
+                onRefresh: () async {
+                  await MyRequestsCubit.get(context).getRequests();
+                  // await Future.delayed(const Duration(milliseconds: 1000));
+                  return Future(() => null);
+                },
+                child: BlocBuilder<MyRequestsCubit, MyRequestsState>(
+                  builder: (context, state) {
+                    return SizedBox(
+                      height: deviceSize.height,
+                      child: state.userRequestsEnumStates == UserRequestsEnumStates.success
+                          ? Column(
+                              children: [
+                                Container(
+                                  height: deviceSize.height * 0.09,
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: TextField(
+                                    controller: textController,
+                                    onChanged: (_) {
+                                      setState(() {
+                                        searchResult = (searchResult.isEmpty)
+                                            ? state.getMyRequests
+                                            : searchResult
+                                                .where(
+                                                  (element) =>
+                                                      element.requestNo
+                                                          .toString()
+                                                          .toLowerCase()
+                                                          .trim()
+                                                          .contains(
+                                                              textController.text) ||
+                                                      element.serviceName
+                                                          .toString()
+                                                          .toLowerCase()
+                                                          .trim()
+                                                          .contains(
+                                                              textController.text),
+                                                )
+                                                .toList();
+                                      });
+                                    },
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.all(10),
+                                      filled: true,
+                                      prefixIcon: const Icon(Icons.search,color: Colors.white,),
+                                      border: const OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.all(Radius.circular(10.0)),
+                                          borderSide: BorderSide.none),
+                                      // labelText: 'Search',
+                                      hintText: "Search by 'request number, request name'",
+                                      suffixIcon: (textController.text.isEmpty)
+                                          ? null
+                                          : IconButton(
+                                              onPressed: () {
+                                                setState(() {
+                                                  searchResult.clear();
+                                                  textController.clear();
+                                                  searchTextFieldFocusNode.unfocus();
+                                                });
+                                              },
+                                              icon: const Icon(
+                                                Icons.clear,
+                                                color: Colors.red,
+                                              ),
                                             ),
-                                          ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              SizedBox(
-                                height: deviceSize.height * 0.73,
-                                child: (searchResult.isEmpty)
-                                    ? (textController.text.isNotEmpty)
-                                        ? const Center(
-                                            child: Text('No Data Found'),
-                                          )
-                                        : MyRequestsItemWidget(state.getMyRequests)
-                                    : MyRequestsItemWidget(searchResult),
-                              ),
-                            ],
-                          )
-                        : const Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                  );
-                },
+                                SizedBox(
+                                  height: deviceSize.height * 0.73,
+                                  child: (searchResult.isEmpty)
+                                      ? (textController.text.isNotEmpty)
+                                          ? const Center(
+                                              child: Text('No Data Found'),
+                                            )
+                                          : MyRequestsItemWidget(state.getMyRequests)
+                                      : MyRequestsItemWidget(searchResult),
+                                ),
+                              ],
+                            )
+                          : const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                    );
+                  },
+                ),
               ),
             ),
           ),

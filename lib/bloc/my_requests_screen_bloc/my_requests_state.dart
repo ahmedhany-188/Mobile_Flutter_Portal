@@ -1,24 +1,70 @@
 part of 'my_requests_cubit.dart';
 
+enum UserRequestsEnumStates {loading, success, failed,noConnection}
+
 @immutable
-abstract class MyRequestsState {}
+ class MyRequestsState extends Equatable {
 
-class MyRequestsInitial extends MyRequestsState {}
+  final UserRequestsEnumStates userRequestsEnumStates;
+  final List<MyRequestsModelData> getMyRequests;
 
-class BlocGetMyRequestsLoadingState extends MyRequestsState{}
+  const MyRequestsState({
+    this.userRequestsEnumStates = UserRequestsEnumStates.loading,
+    this.getMyRequests = const <MyRequestsModelData>[],
+  });
 
-// ignore: must_be_immutable
-class BlocGetMyRequestsSuccessState extends MyRequestsState{
+  MyRequestsState copyWith({
+    UserRequestsEnumStates? userRequestsEnumStates,
+    List<MyRequestsModelData>? getMyRequests,
+  }) {
+    return MyRequestsState(
+      userRequestsEnumStates: userRequestsEnumStates ?? this.userRequestsEnumStates,
+      getMyRequests: getMyRequests ?? this.getMyRequests,
+    );
+  }
+  @override
+  List<Object> get props => [userRequestsEnumStates,getMyRequests];
 
-  List<MyRequestsModelData> getMyRequests;
-  BlocGetMyRequestsSuccessState(this.getMyRequests);
+  static MyRequestsState? fromMap(Map<String, dynamic> json) {
+    if (json.isEmpty) {
+      return const MyRequestsState(
+        userRequestsEnumStates :UserRequestsEnumStates.loading,
+        getMyRequests : <MyRequestsModelData>[],
+      );
+    }
+    int val = json['userNotificationEnumStates'];
+    return MyRequestsState(
+      userRequestsEnumStates :UserRequestsEnumStates.values[val],
+      getMyRequests : List<MyRequestsModelData>.from(
+          json['userNotificationList']?.map((p) => MyRequestsModelData.fromJson(p))),
+    );
+  }
 
+  Map<String, dynamic> toMap() {
+    return {
+      'userNotificationEnumStates':userRequestsEnumStates.index,
+      'userNotificationList': getMyRequests,
+    };
+  }
 }
 
-class BlocGetMyRequestsErrorState extends MyRequestsState{
-  final String error;
-  BlocGetMyRequestsErrorState(this.error);
 
-}
+// class MyRequestsInitial extends MyRequestsState {}
+//
+// class BlocGetMyRequestsLoadingState extends MyRequestsState{}
+//
+// // ignore: must_be_immutable
+// class BlocGetMyRequestsSuccessState extends MyRequestsState{
+//
+//   List<MyRequestsModelData> getMyRequests;
+//   BlocGetMyRequestsSuccessState(this.getMyRequests);
+//
+// }
+//
+// class BlocGetMyRequestsErrorState extends MyRequestsState{
+//   final String error;
+//   BlocGetMyRequestsErrorState(this.error);
+//
+// }
 
 
