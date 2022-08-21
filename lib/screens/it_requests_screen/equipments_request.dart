@@ -394,7 +394,8 @@ class EquipmentsRequest extends StatelessWidget {
                                           actions: [
                                             TextButton(
                                               onPressed: () {
-                                                Navigator.of(context).pop(false);
+                                                Navigator.of(context)
+                                                    .pop(false);
                                               },
                                               child: const Text(
                                                 'Cancel',
@@ -472,7 +473,9 @@ class EquipmentsRequest extends StatelessWidget {
                                           RequestStatus.oldRequest)
                                       ? EquipmentsCubit.get(context)
                                           .getIconByGroupName(state
-                                              .requestedData!.data![0].groupName!)
+                                              .requestedData!
+                                              .data![0]
+                                              .groupName!)
                                       : state.chosenList[index].icon!,
                                   title: Text(
                                     (state.requestStatus ==
@@ -724,6 +727,7 @@ class EquipmentsRequest extends StatelessWidget {
   showAddRequestBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      enableDrag: false,
       backgroundColor: const Color(0xFF031A27),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
@@ -732,7 +736,7 @@ class EquipmentsRequest extends StatelessWidget {
         return BottomSheet(
           // insetAnimationCurve: Curves.easeIn,
           // insetAnimationDuration: const Duration(milliseconds: 500),
-          key: UniqueKey(),
+          key: UniqueKey(), enableDrag: false,
           backgroundColor: const Color(0xFF031A27),
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
@@ -755,6 +759,7 @@ class EquipmentsRequest extends StatelessWidget {
                         Icons.keyboard_alt_outlined,
                         color: Colors.white,
                       )),
+                  const Divider(color: Colors.white),
                   addRequestOptions(
                       id: '2',
                       context: context,
@@ -763,6 +768,7 @@ class EquipmentsRequest extends StatelessWidget {
                         Icons.laptop_chromebook_outlined,
                         color: Colors.white,
                       )),
+                  const Divider(color: Colors.white),
                   addRequestOptions(
                       id: '9',
                       context: context,
@@ -771,6 +777,7 @@ class EquipmentsRequest extends StatelessWidget {
                         Icons.live_tv,
                         color: Colors.white,
                       )),
+                  const Divider(color: Colors.white),
                   addRequestOptions(
                       id: '1',
                       context: context,
@@ -779,6 +786,7 @@ class EquipmentsRequest extends StatelessWidget {
                         Icons.computer_outlined,
                         color: Colors.white,
                       )),
+                  const Divider(color: Colors.white),
                   addRequestOptions(
                       id: '7',
                       context: context,
@@ -787,6 +795,7 @@ class EquipmentsRequest extends StatelessWidget {
                         Icons.fingerprint,
                         color: Colors.white,
                       )),
+                  const Divider(color: Colors.white),
                   addRequestOptions(
                       id: '11',
                       context: context,
@@ -795,6 +804,7 @@ class EquipmentsRequest extends StatelessWidget {
                         Icons.network_wifi_outlined,
                         color: Colors.white,
                       )),
+                  const Divider(color: Colors.white),
                   addRequestOptions(
                       id: '10',
                       context: context,
@@ -803,6 +813,7 @@ class EquipmentsRequest extends StatelessWidget {
                         Icons.call,
                         color: Colors.white,
                       )),
+                  const Divider(color: Colors.white),
                   addRequestOptions(
                       id: '4',
                       context: context,
@@ -811,6 +822,7 @@ class EquipmentsRequest extends StatelessWidget {
                         Icons.print_outlined,
                         color: Colors.white,
                       )),
+                  const Divider(color: Colors.white),
                   addRequestOptions(
                       id: '3',
                       context: context,
@@ -819,6 +831,7 @@ class EquipmentsRequest extends StatelessWidget {
                         HeroIcons.server,
                         color: Colors.white,
                       )),
+                  const Divider(color: Colors.white),
                   addRequestOptions(
                       id: '6',
                       context: context,
@@ -827,6 +840,7 @@ class EquipmentsRequest extends StatelessWidget {
                         HeroIcons.globe,
                         color: Colors.white,
                       )),
+                  const Divider(color: Colors.white),
                   addRequestOptions(
                       id: '14',
                       context: context,
@@ -890,6 +904,7 @@ class EquipmentsRequest extends StatelessWidget {
           // insetAnimationCurve: Curves.easeIn,
           // insetAnimationDuration: const Duration(milliseconds: 500),
           // backgroundColor: Colors.transparent,
+          enableDrag: false,
           key: UniqueKey(),
           backgroundColor: const Color(0xFF031A27),
           shape: const RoundedRectangleBorder(
@@ -898,6 +913,7 @@ class EquipmentsRequest extends StatelessWidget {
           builder: (_) {
             return Scaffold(
               backgroundColor: Colors.transparent,
+              resizeToAvoidBottomInset: false,
               appBar: AppBar(
                 title: Text(name),
                 centerTitle: true,
@@ -983,9 +999,9 @@ class EquipmentsRequest extends StatelessWidget {
           popupProps: PopupProps.menu(
             showSearchBox: true,
             menuProps: MenuProps(
-              backgroundColor: Theme.of(context).colorScheme.background,
+              backgroundColor: Theme.of(context).colorScheme.background,clipBehavior: Clip.hardEdge
             ),
-            fit: FlexFit.loose,
+            fit: FlexFit.tight,
             searchFieldProps: const TextFieldProps(
               padding: EdgeInsets.all(20),
               decoration: InputDecoration(
@@ -1034,7 +1050,7 @@ class EquipmentsRequest extends StatelessWidget {
                 backgroundColor: Theme.of(context).colorScheme.background,
               ),
               showSearchBox: showSearch,
-              fit: FlexFit.loose,
+              fit: FlexFit.tight,
               searchFieldProps: const TextFieldProps(
                   padding: EdgeInsets.zero, scrollPadding: EdgeInsets.zero)),
         ),
@@ -1066,7 +1082,7 @@ class EquipmentsRequest extends StatelessWidget {
                 backgroundColor: Theme.of(context).colorScheme.background,
               ),
               showSearchBox: showSearch,
-              fit: FlexFit.loose,
+              fit: FlexFit.tight,
               searchFieldProps: const TextFieldProps(
                   padding: EdgeInsets.zero, scrollPadding: EdgeInsets.zero)),
         ),
