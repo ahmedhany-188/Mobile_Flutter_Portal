@@ -11,6 +11,8 @@ import 'package:hassanallamportalflutter/data/models/requests_form_models/reques
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:meta/meta.dart';
 
+import '../../../data/repositories/employee_repository.dart';
+
 part 'business_card_state.dart';
 
 class BusinessCardCubit extends Cubit<BusinessCardInitial> {
@@ -22,7 +24,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
 
   final RequestRepository requestRepository;
 
-  void getRequestData(RequestStatus requestStatus, String? requestNo) async {
+  void getRequestData({required RequestStatus requestStatus, String? requestNo,String? requesterHRCode}) async {
     if (requestStatus == RequestStatus.newRequest) {
       var now = DateTime.now();
       var formatter = GlobalConstants.dateFormatViewed;
@@ -38,14 +40,8 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
       );
     }
     else {
-      final requestData = await requestRepository.geBusinessCard(requestNo!);
-
-      print("-----------${requestData.faxNo}");
-      print("-----------${requestData.employeeExt}");
-      print("-----------${requestData.employeeNameCard}");
-      print("-----------${requestData.employeeMobil}");
-      print("-----------${requestData.employeeComments}");
-
+      EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
+      final requestData = await requestRepository.geBusinessCard(requestNo ?? "",requesterHRCode ?? "");
       final requestDate = RequestDate.dirty(
           GlobalConstants.dateFormatViewed.format(
               GlobalConstants.dateFormatServer.parse(
@@ -59,6 +55,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
       final faxNo = requestData.faxNo.toString();
       final employeeExt = requestData.employeeExt.toString();
 
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"");
 
       var status = "Pending";
       if (requestData.status == 0) {
@@ -68,8 +65,6 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
       } else if (requestData.status == 2) {
         status = "Rejected";
       }
-
-
       emit(
         state.copyWith(
             requestDate: requestDate,
@@ -78,9 +73,9 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
             employeeExt: employeeExt,
             employeeFaxNO: faxNo,
             comment: employeeComments,
-            status: Formz.validate(
-                [state.employeeNameCard, state.employeeMobile]),
+            status: FormzStatus.submissionSuccess,
             requestStatus: RequestStatus.oldRequest,
+            requesterData: requesterData,
             statusAction: status,
             takeActionStatus: (requestRepository.userData.user?.userHRCode ==
                 requestData.requestHrCode)
@@ -89,6 +84,17 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
         ),
       );
     }
+  }
+  void commentRequesterChanged(String value) {
+
+    // final permissionTime = PermissionTime.dirty(value);
+    // print(permissionTime.value);
+    emit(
+      state.copyWith(
+        actionComment : value,
+        // status: Formz.validate([state.requestDate,state.permissionDate,state.permissionTime]),
+      ),
+    );
   }
 
   void getSubmitBusinessCard(MainUserData user) async {

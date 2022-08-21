@@ -557,9 +557,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         {
           Navigator.of(context)
               .pushNamed(BusinessCardScreen.routeName, arguments: {
-            BusinessCardScreen.requestNoKey: notification.requestNo.toString()
-            ,
-            BusinessCardScreen.requestHrCode: notification.requestHRCode
+            BusinessCardScreen.requestNoKey: notification.requestNo.toString(),
+            BusinessCardScreen.requesterHRCode: notification.requestHRCode
                 .toString()
           });
           break;
