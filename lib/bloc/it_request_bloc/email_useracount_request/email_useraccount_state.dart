@@ -14,9 +14,9 @@ class EmailUserAccountInitial extends Equatable {
 
     this.requestDate = const RequestDate.pure(),
     this.requestType = 1,
-    this.hrCodeUser =const RequestDate.pure(),
+    this.hrCodeUser = const RequestDate.pure(),
     this.fullName = "",
-    this.userTitle ="",
+    this.userTitle = "",
     this.userLocation = "",
     this.email = "",
     this.userMobile = const RequestDate.pure(),
@@ -28,6 +28,8 @@ class EmailUserAccountInitial extends Equatable {
     this.successMessage,
     this.takeActionStatus,
     this.statusAction,
+    this.requesterData = EmployeeData.empty,
+    this.actionComment = "",
 
   });
 
@@ -47,17 +49,19 @@ class EmailUserAccountInitial extends Equatable {
   final String? statusAction;
   final String? errorMessage;
   final String? successMessage;
+  final EmployeeData requesterData;
+  final String actionComment;
 
   @override
   List<Object> get props =>
-      [
-        userMobile,
+      [userMobile,
         hrCodeUser,
         status,
         requestType,
         accountType,
         comments,
-        fullName,userTitle,userLocation,email
+        fullName, userTitle, userLocation, email,
+        requesterData, actionComment
       ];
 
   EmailUserAccountInitial copyWith({
@@ -76,25 +80,29 @@ class EmailUserAccountInitial extends Equatable {
     String? errorMessage,
     String? successMessage,
     TakeActionStatus? takeActionStatus,
-    String? statusAction
+    String? statusAction,
+    EmployeeData? requesterData,
+    String? actionComment,
   }) {
     return EmailUserAccountInitial(
-        requestDate: requestDate ?? this.requestDate,
-        requestType: requestType ?? this.requestType,
-        hrCodeUser: hrCodeUser ?? this.hrCodeUser,
-        fullName: fullName ?? this.fullName,
-        userTitle: userTitle ?? this.userTitle,
-        userLocation: userLocation ?? this.userLocation,
-        email:email?? this.email,
-        userMobile: userMobile ?? this.userMobile,
-        accountType: accountType ?? this.accountType,
-        requestStatus: requestStatus ?? this.requestStatus,
-        comments: comments ?? this.comments,
-        status: status ?? this.status,
-        errorMessage: errorMessage ?? this.errorMessage,
-        successMessage: successMessage ?? this.successMessage,
-        takeActionStatus: takeActionStatus ?? this.takeActionStatus,
-        statusAction: statusAction ?? this.statusAction
+      requestDate: requestDate ?? this.requestDate,
+      requestType: requestType ?? this.requestType,
+      hrCodeUser: hrCodeUser ?? this.hrCodeUser,
+      fullName: fullName ?? this.fullName,
+      userTitle: userTitle ?? this.userTitle,
+      userLocation: userLocation ?? this.userLocation,
+      email: email ?? this.email,
+      userMobile: userMobile ?? this.userMobile,
+      accountType: accountType ?? this.accountType,
+      requestStatus: requestStatus ?? this.requestStatus,
+      comments: comments ?? this.comments,
+      status: status ?? this.status,
+      errorMessage: errorMessage ?? this.errorMessage,
+      successMessage: successMessage ?? this.successMessage,
+      takeActionStatus: takeActionStatus ?? this.takeActionStatus,
+      statusAction: statusAction ?? this.statusAction,
+      requesterData: requesterData ?? this.requesterData,
+      actionComment: actionComment ?? this.actionComment,
     );
   }
 }
