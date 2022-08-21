@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_requests_model_form.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'my_requests_state.dart';
 
-class MyRequestsCubit extends Cubit<MyRequestsState> {
-  MyRequestsCubit(this.requestRepository) : super(MyRequestsState()){
+class MyRequestsCubit extends Cubit<MyRequestsState> with HydratedMixin {
+  MyRequestsCubit(this.requestRepository) : super(const MyRequestsState()){
 
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (state.userRequestsEnumStates == UserRequestsEnumStates.failed) {
@@ -34,17 +35,16 @@ class MyRequestsCubit extends Cubit<MyRequestsState> {
   }
 
   static MyRequestsCubit get(context) =>BlocProvider.of(context);
-
-
   final Connectivity connectivity = Connectivity();
-
   final RequestRepository requestRepository;
 
   Future<void> getRequests() async {
+
+    try {
     emit(state.copyWith(
       userRequestsEnumStates: UserRequestsEnumStates.loading,
     ));
-    try {
+
       var connectivityResult = await connectivity.checkConnectivity();
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
@@ -52,6 +52,7 @@ class MyRequestsCubit extends Cubit<MyRequestsState> {
             .then((value) async {
           emit(state.copyWith(
             userRequestsEnumStates: UserRequestsEnumStates.success,
+            getMyRequests: value
           ));
         }).catchError((error) {
           emit(state.copyWith(
@@ -75,6 +76,22 @@ class MyRequestsCubit extends Cubit<MyRequestsState> {
     // TODO: implement close
     // connectivityStreamSubscription?.cancel();
     return super.close();
+  }
+
+  @override
+  MyRequestsState? fromJson(Map<String, dynamic> json) {
+    // TODO: implement fromJson
+    return MyRequestsState.fromMap(json);
+  }
+
+  @override
+  Map<String, dynamic>? toJson(MyRequestsState state) {
+    // TODO: implement toJson
+    if (state.userRequestsEnumStates == UserRequestsEnumStates.success && state.getMyRequests.isNotEmpty) {
+      return state.toMap();
+    } else {
+      return null;
+    }
   }
 
 

@@ -32,7 +32,7 @@ enum UserRequestsEnumStates {loading, success, failed,noConnection}
         getMyRequests : <MyRequestsModelData>[],
       );
     }
-    int val = json['userNotificationEnumStates'];
+    int val = json['userRequestsEnumStates'];
     return MyRequestsState(
       userRequestsEnumStates :UserRequestsEnumStates.values[val],
       getMyRequests : List<MyRequestsModelData>.from(
@@ -42,7 +42,7 @@ enum UserRequestsEnumStates {loading, success, failed,noConnection}
 
   Map<String, dynamic> toMap() {
     return {
-      'userNotificationEnumStates':userRequestsEnumStates.index,
+      'userRequestsEnumStates':userRequestsEnumStates.index,
       'userNotificationList': getMyRequests,
     };
   }
