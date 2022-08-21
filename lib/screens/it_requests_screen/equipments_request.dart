@@ -1,14 +1,15 @@
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
-import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../constants/enums.dart';
+import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../data/repositories/request_repository.dart';
+import '../../widgets/success/success_request_widget.dart';
 import '../../bloc/contacts_screen_bloc/contacts_cubit.dart';
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 import '../../data/models/it_requests_form_models/equipments_models/departments_model.dart';
@@ -18,7 +19,6 @@ import '../../data/models/it_requests_form_models/equipments_models/equipments_i
 import '../../data/models/it_requests_form_models/equipments_models/equipments_location_model.dart';
 import '../../data/models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
 import '../../bloc/it_request_bloc/equipments_request/equipments_items_cubit/equipments_items_cubit.dart';
-import '../../widgets/success/success_request_widget.dart';
 
 class EquipmentsRequest extends StatelessWidget {
   static const routeName = 'request-equipments-screen';
@@ -64,25 +64,27 @@ class EquipmentsRequest extends StatelessWidget {
                 requesterHRCode: requestData[EquipmentsRequest.requesterHrCode],
                 requestNo: requestData[EquipmentsRequest.requestNoKey],
               )),
-        child: Scaffold(
-          appBar: AppBar(
-            title: const Text('Equipment request'),
-          ),
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
-          body: Sizer(
-            builder: (sizerContext, orientation, deviceType) {
-              return SizedBox(
-                width: 100.w,
-                height: 100.h,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 1.5.h,
-                    ),
-                    BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+        child: CustomBackground(
+          child: CustomTheme(
+            child: Scaffold(
+              appBar: AppBar(
+                title: const Text('Equipment request'),
+                centerTitle: true,
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+              ),
+              resizeToAvoidBottomInset: false,
+              backgroundColor: Colors.transparent,
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 10,
+                    child: BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
                       builder: (context, state) {
                         return Padding(
                           padding: const EdgeInsets.all(5.0),
@@ -116,14 +118,13 @@ class EquipmentsRequest extends StatelessWidget {
                                     RequestStatus.oldRequest)
                                 ? false
                                 : true,
+                            dropdownButtonProps:
+                                const DropdownButtonProps(color: Colors.white),
                             dropdownDecoratorProps:
                                 const DropDownDecoratorProps(
                               dropdownSearchDecoration: InputDecoration(
                                 labelText: 'Business Unit',
                                 isDense: true,
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
                               ),
                             ),
                             popupProps: PopupProps.modalBottomSheet(
@@ -131,9 +132,7 @@ class EquipmentsRequest extends StatelessWidget {
                               interceptCallBacks: true,
                               searchDelay: Duration.zero,
                               title: AppBar(
-                                  title: const Text('Business Unit',
-                                      style: TextStyle(color: Colors.black)),
-                                  iconTheme: const IconThemeData.fallback(),
+                                  title: const Text('Business Unit'),
                                   centerTitle: true,
                                   backgroundColor: Colors.transparent,
                                   elevation: 0),
@@ -143,9 +142,10 @@ class EquipmentsRequest extends StatelessWidget {
                                   shrinkWrap: true,
                                   keyboardDismissBehavior:
                                       ScrollViewKeyboardDismissBehavior.onDrag),
-                              modalBottomSheetProps:
-                                  const ModalBottomSheetProps(
-                                shape: RoundedRectangleBorder(
+                              modalBottomSheetProps: ModalBottomSheetProps(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.background,
+                                shape: const RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
                                         topRight: Radius.circular(20),
                                         topLeft: Radius.circular(20))),
@@ -154,14 +154,10 @@ class EquipmentsRequest extends StatelessWidget {
                                 padding: EdgeInsets.all(20),
                                 decoration: InputDecoration(
                                   contentPadding: EdgeInsets.all(10),
-                                  isCollapsed: true,
                                   filled: true,
                                   hintText: "Search by name",
-                                  prefixIcon: Icon(Icons.search),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(10.0)),
-                                      borderSide: BorderSide.none),
+                                  prefixIcon:
+                                      Icon(Icons.search, color: Colors.white),
                                 ),
                               ),
                             ),
@@ -169,7 +165,10 @@ class EquipmentsRequest extends StatelessWidget {
                         );
                       },
                     ),
-                    BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 10,
+                    child: BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
                       builder: (context, state) {
                         return Padding(
                           padding: const EdgeInsets.all(5.0),
@@ -207,26 +206,24 @@ class EquipmentsRequest extends StatelessWidget {
                               dropdownSearchDecoration: InputDecoration(
                                 labelText: 'Location',
                                 isDense: true,
-                                border: OutlineInputBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
                               ),
                             ),
+                            dropdownButtonProps:
+                                const DropdownButtonProps(color: Colors.white),
                             popupProps: PopupProps.modalBottomSheet(
                               showSearchBox: true,
                               searchDelay: Duration.zero,
                               interceptCallBacks: true,
-                              modalBottomSheetProps:
-                                  const ModalBottomSheetProps(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.only(
-                                        topRight: Radius.circular(20),
-                                        topLeft: Radius.circular(20))),
+                              modalBottomSheetProps: ModalBottomSheetProps(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.secondary,
+                                shape: const RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20),
+                                )),
                               ),
                               title: AppBar(
-                                  title: const Text('Location',
-                                      style: TextStyle(color: Colors.black)),
-                                  iconTheme: const IconThemeData.fallback(),
+                                  title: const Text('Location'),
                                   centerTitle: true,
                                   backgroundColor: Colors.transparent,
                                   titleSpacing: 0,
@@ -234,23 +231,24 @@ class EquipmentsRequest extends StatelessWidget {
                               searchFieldProps: const TextFieldProps(
                                 padding: EdgeInsets.all(20),
                                 decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10),
-                                    isCollapsed: true,
-                                    filled: true,
-                                    labelText: "Search for location",
-                                    hintText: "Search for location",
-                                    prefixIcon: Icon(Icons.search),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0)),
-                                        borderSide: BorderSide.none)),
+                                  contentPadding: EdgeInsets.all(10),
+                                  filled: true,
+                                  hintText: "Search for location",
+                                  prefixIcon: Icon(
+                                    Icons.search,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         );
                       },
                     ),
-                    BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 10,
+                    child: BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
                       builder: (context, state) {
                         return Padding(
                           padding: const EdgeInsets.all(5.0),
@@ -288,92 +286,92 @@ class EquipmentsRequest extends StatelessWidget {
                                     dropdownSearchDecoration: InputDecoration(
                               labelText: 'Department',
                               isDense: true,
-                              border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(20))),
                             )),
-                            popupProps: const PopupProps.modalBottomSheet(
+                            dropdownButtonProps:
+                                const DropdownButtonProps(color: Colors.white),
+                            popupProps: PopupProps.modalBottomSheet(
                               showSearchBox: true,
                               searchDelay: Duration.zero,
-                              title: Center(
-                                child: Text('Department',
-                                    softWrap: true,
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    )),
+                              title: AppBar(
+                                title: const Text('Department'),
+                                centerTitle: true,
+                                backgroundColor: Colors.transparent,
+                                elevation: 0,
                               ),
                               modalBottomSheetProps: ModalBottomSheetProps(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.only(
-                                          topRight: Radius.circular(20),
-                                          topLeft: Radius.circular(20)))),
-                              searchFieldProps: TextFieldProps(
+                                  backgroundColor:
+                                      Theme.of(context).colorScheme.secondary,
+                                  shape: const RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.vertical(
+                                          top: Radius.circular(20)))),
+                              searchFieldProps: const TextFieldProps(
                                 padding: EdgeInsets.all(20),
                                 decoration: InputDecoration(
-                                    contentPadding: EdgeInsets.all(10),
-                                    isCollapsed: true,
-                                    filled: true,
-                                    labelText: "Search for department",
-                                    hintText: "Search for department",
-                                    prefixIcon: Icon(Icons.search),
-                                    border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0)),
-                                        borderSide: BorderSide.none)),
+                                  contentPadding: EdgeInsets.all(10),
+                                  filled: true,
+                                  hintText: "Search for department",
+                                  prefixIcon: Icon(
+                                    Icons.search,
+                                    color: Colors.white,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         );
                       },
                     ),
-                    BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
-                      builder: (context, state) {
-                        return (EquipmentsCubit.get(context)
-                                    .state
-                                    .requestStatus ==
-                                RequestStatus.newRequest)
-                            ? ElevatedButton.icon(
-                                onPressed: () {
-                                  showAddRequestDialog(context);
-                                },
-                                icon: const Icon(Icons.add),
-                                label: const Text('Request Item'),
-                                style: ElevatedButton.styleFrom(
-                                    tapTargetSize: MaterialTapTargetSize.padded,
-                                    primary: Colors.blueGrey),
-                              )
-                            : SizedBox(
-                                child: Text(state.statusAction ?? ''),
-                              );
+                  ),
+                  BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+                    builder: (context, state) {
+                      return (EquipmentsCubit.get(context)
+                                  .state
+                                  .requestStatus ==
+                              RequestStatus.newRequest)
+                          ? ElevatedButton.icon(
+                              onPressed: () {
+                                showAddRequestBottomSheet(context);
+                              },
+                              icon: const Icon(Icons.add),
+                              label: const Text('Request Item'),
+                              style: ElevatedButton.styleFrom(
+                                  tapTargetSize: MaterialTapTargetSize.padded,
+                                  primary: Colors.blueGrey),
+                            )
+                          : SizedBox(
+                              child: Text(state.statusAction ?? ''),
+                            );
+                    },
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.50,
+                    child: BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+                      buildWhen: (prev, current) {
+                        if (current.requestStatus == RequestStatus.newRequest) {
+                          return prev.chosenList.length !=
+                              current.chosenList.length;
+                        } else {
+                          return current.requestedData!.data!.isNotEmpty;
+                        }
                       },
-                    ),
-                    SizedBox(
-                      height: 60.h,
-                      child:
-                          BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
-                        buildWhen: (prev, current) {
-                          if (current.requestStatus ==
-                              RequestStatus.newRequest) {
-                            return prev.chosenList.length !=
-                                current.chosenList.length;
-                          } else {
-                            return current.requestedData!.data!.isNotEmpty;
-                          }
-                        },
-                        builder: (context, state) {
-                          return ListView.builder(
-                            clipBehavior: Clip.hardEdge,
-                            itemCount: (state.requestStatus ==
-                                    RequestStatus.oldRequest)
-                                ? state.requestedData!.data!.length
-                                : state.chosenList.length,
-                            padding: EdgeInsets.all(5.sp),
-                            itemBuilder: (listViewContext, index) {
-                              return Dismissible(
+                      builder: (context, state) {
+                        return ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          clipBehavior: Clip.hardEdge,
+                          shrinkWrap: true,
+                          itemCount:
+                              (state.requestStatus == RequestStatus.oldRequest)
+                                  ? state.requestedData!.data!.length
+                                  : state.chosenList.length,
+                          padding: const EdgeInsets.all(5),
+                          itemBuilder: (listViewContext, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Dismissible(
                                 direction: (state.requestStatus ==
                                         RequestStatus.oldRequest)
                                     ? DismissDirection.none
-                                    : DismissDirection.horizontal,
+                                    : DismissDirection.endToStart,
                                 key: UniqueKey(),
                                 confirmDismiss: (dismissDirection) async {
                                   if (dismissDirection ==
@@ -384,18 +382,19 @@ class EquipmentsRequest extends StatelessWidget {
                                       context: context,
                                       builder: (_) {
                                         return AlertDialog(
+                                          backgroundColor: Theme.of(context)
+                                              .colorScheme
+                                              .background,
                                           title: const Text('Caution',
                                               style:
                                                   TextStyle(color: Colors.red)),
                                           content: const Text(
-                                              'Are you sure you want to delete this item?',
-                                              style: TextStyle(
-                                                  color: Colors.black)),
+                                            'Are you sure you want to delete this item?',
+                                          ),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
-                                                Navigator.of(context)
-                                                    .pop(false);
+                                                Navigator.of(context).pop(false);
                                               },
                                               child: const Text(
                                                 'Cancel',
@@ -427,280 +426,419 @@ class EquipmentsRequest extends StatelessWidget {
                                     state.chosenList.removeAt(index);
                                   }
                                 },
-                                secondaryBackground: Container(
+                                background: Container(
                                   clipBehavior: Clip.none,
-                                  margin: EdgeInsets.only(
-                                    bottom: 8.sp,
+                                  margin: const EdgeInsets.only(
+                                    bottom: 8,
                                   ),
-                                  padding: EdgeInsets.all(10.0.sp),
-                                  width: 100.w,
+                                  padding: const EdgeInsets.all(10.0),
+                                  width: MediaQuery.of(context).size.width,
                                   decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: Colors.transparent,
                                       borderRadius: BorderRadius.circular(25)),
-                                  child: Align(
+                                  child: const Align(
                                     alignment: Alignment.centerRight,
                                     child: Icon(
                                       Icons.delete,
-                                      size: 30.sp,
+                                      size: 30,
                                       color: Colors.red,
                                     ),
                                   ),
                                 ),
-                                background: Container(
-                                  clipBehavior: Clip.none,
-                                  margin: EdgeInsets.only(
-                                    bottom: 8.sp,
+                                // secondaryBackground:Container(
+                                //   clipBehavior: Clip.none,
+                                //   margin: const EdgeInsets.only(
+                                //     bottom: 8,
+                                //   ),
+                                //   padding: const EdgeInsets.all(10.0),
+                                //   width: MediaQuery.of(context).size.width,
+                                //   decoration: BoxDecoration(
+                                //       color: Colors.transparent,
+                                //       borderRadius: BorderRadius.circular(25)),
+                                //   child: const Align(
+                                //     alignment: Alignment.centerLeft,
+                                //     child: Icon(
+                                //       Icons.edit,
+                                //       size: 30,
+                                //       color: Colors.green,
+                                //     ),
+                                //   ),
+                                // ),
+                                child: ExpansionTile(
+                                  backgroundColor: Colors.white54,
+                                  collapsedBackgroundColor: Colors.white38,
+                                  childrenPadding: const EdgeInsets.all(10),
+                                  leading: (state.requestStatus ==
+                                          RequestStatus.oldRequest)
+                                      ? EquipmentsCubit.get(context)
+                                          .getIconByGroupName(state
+                                              .requestedData!.data![0].groupName!)
+                                      : state.chosenList[index].icon!,
+                                  title: Text(
+                                    (state.requestStatus ==
+                                            RequestStatus.oldRequest)
+                                        ? state.requestedData!.data![index]
+                                            .hardWareItemName!
+                                            .trim()
+                                        : state.chosenList[index].selectedItem!
+                                            .hardWareItemName!
+                                            .trim(),
+                                    softWrap: true,
+                                    style: const TextStyle(fontSize: 18),
                                   ),
-                                  padding: EdgeInsets.all(10.0.sp),
-                                  width: 100.w,
-                                  decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(25)),
-                                  child: Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Icon(
-                                      Icons.edit,
-                                      size: 30.sp,
-                                      color: Colors.green,
-                                    ),
+                                  subtitle: Text(
+                                    'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].qty : state.chosenList[index].quantity}',
+                                    softWrap: true,
                                   ),
-                                ),
-                                child: Container(
-                                  key: Key('value$index'),
-                                  margin: EdgeInsets.only(
-                                    bottom: 8.sp,
-                                  ),
-                                  padding: EdgeInsets.all(10.0.sp),
-                                  width: 100.w,
-                                  decoration: BoxDecoration(
-                                      color: Colors.blueGrey,
-                                      borderRadius: BorderRadius.circular(25)),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Center(
-                                          child: (state.requestStatus ==
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const Text(
+                                          'Request for: ',
+                                          softWrap: true,
+                                          style: TextStyle(fontSize: 18),
+                                        ),
+                                        Text(
+                                          (state.requestStatus ==
                                                   RequestStatus.oldRequest)
                                               ? EquipmentsCubit.get(context)
-                                                  .getIconByGroupName(state
+                                                  .getRequestForFromType(state
                                                       .requestedData!
-                                                      .data![0]
-                                                      .groupName!)
-                                              : state.chosenList[index].icon!),
-                                      Text(
-                                        (state.requestStatus ==
-                                                RequestStatus.oldRequest)
-                                            ? state.requestedData!.data![index]
-                                                .hardWareItemName!
-                                                .trim()
-                                            : state.chosenList[index]
-                                                .selectedItem!.hardWareItemName!
-                                                .trim(),
-                                        softWrap: true,
-                                        style: TextStyle(fontSize: 18.sp),
-                                      ),
-                                      Text(
-                                        (state.requestStatus ==
-                                                RequestStatus.oldRequest)
-                                            ? EquipmentsCubit.get(context)
-                                                .getRequestForFromType(state
-                                                    .requestedData!
-                                                    .data![index]
-                                                    .type!)!
-                                                .trim()
-                                            : state
-                                                .chosenList[index].requestFor!
-                                                .trim(),
-                                        softWrap: true,
-                                        style: TextStyle(fontSize: 18.sp),
-                                      ),
-                                      Text(
-                                        'Qty: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].qty : state.chosenList[index].quantity}',
-                                        softWrap: true,
-                                        style: TextStyle(fontSize: 18.sp),
-                                      ),
-                                      Text(
-                                        'Owner: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].ownerName!.trim() : state.chosenList[index].selectedContact!.name!.trim().toLowerCase()}',
-                                        softWrap: false,
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(fontSize: 18.sp),
-                                      ),
-                                    ],
-                                  ),
+                                                      .data![index]
+                                                      .type!)!
+                                                  .trim()
+                                              : state
+                                                  .chosenList[index].requestFor!
+                                                  .trim(),
+                                          softWrap: true,
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                    // Row(
+                                    //   children: [
+                                    //     Text(
+                                    //       'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].qty : state.chosenList[index].quantity}',
+                                    //       softWrap: true,
+                                    //       style: const TextStyle(fontSize: 18),
+                                    //     ),
+                                    //   ],
+                                    // ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Owner: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].ownerName!.trim() : state.chosenList[index].selectedContact!.name!.trim().toLowerCase()}',
+                                          softWrap: false,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Estimate Price: ${(state.requestStatus == RequestStatus.oldRequest) ? ((state.requestedData!.data![index].estimatePrice == null) ? 'NO' : state.requestedData!.data![index].estimatePrice!.trim()) : (int.parse(state.chosenList[index].selectedItem!.estimatePrice!) * state.chosenList[index].quantity!).toString().trim()} LE',
+                                          softWrap: false,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          'Group name: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].groupName!.trim() : state.chosenList[index].selectedItem!.groupId!.toString().trim()}',
+                                          softWrap: false,
+                                          maxLines: 2,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-          floatingActionButton:
-              BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
-            builder: (context, state) {
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  if (state.requestStatus == RequestStatus.oldRequest)
-                    FloatingActionButton.extended(
-                      heroTag: null,
-                      onPressed: () {
-                        // context.read<EquipmentsCubit>()
-                        //     .submitAction(true);
+                                // Container(
+                                //   key: Key('value$index'),
+                                //   margin: const EdgeInsets.only(
+                                //     bottom: 8,
+                                //   ),
+                                //   padding: const EdgeInsets.all(10.0),
+                                //   width: MediaQuery.of(context).size.width,
+                                //   decoration: BoxDecoration(
+                                //       color: Colors.blueGrey,
+                                //       borderRadius: BorderRadius.circular(25)),
+                                //   child: Column(
+                                //     mainAxisAlignment: MainAxisAlignment.center,
+                                //     crossAxisAlignment: CrossAxisAlignment.start,
+                                //     children: [
+                                //       Center(
+                                //           child: (state.requestStatus ==
+                                //                   RequestStatus.oldRequest)
+                                //               ? EquipmentsCubit.get(context)
+                                //                   .getIconByGroupName(state
+                                //                       .requestedData!
+                                //                       .data![0]
+                                //                       .groupName!)
+                                //               : state.chosenList[index].icon!),
+                                //       Text(
+                                //         (state.requestStatus ==
+                                //                 RequestStatus.oldRequest)
+                                //             ? state.requestedData!.data![index]
+                                //                 .hardWareItemName!
+                                //                 .trim()
+                                //             : state.chosenList[index]
+                                //                 .selectedItem!.hardWareItemName!
+                                //                 .trim(),
+                                //         softWrap: true,
+                                //         style: const TextStyle(fontSize: 18),
+                                //       ),
+                                //       Text(
+                                //         (state.requestStatus ==
+                                //                 RequestStatus.oldRequest)
+                                //             ? EquipmentsCubit.get(context)
+                                //                 .getRequestForFromType(state
+                                //                     .requestedData!
+                                //                     .data![index]
+                                //                     .type!)!
+                                //                 .trim()
+                                //             : state.chosenList[index].requestFor!
+                                //                 .trim(),
+                                //         softWrap: true,
+                                //         style: const TextStyle(fontSize: 18),
+                                //       ),
+                                //       Text(
+                                //         'Qty: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].qty : state.chosenList[index].quantity}',
+                                //         softWrap: true,
+                                //         style: const TextStyle(fontSize: 18),
+                                //       ),
+                                //       Text(
+                                //         'Owner: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].ownerName!.trim() : state.chosenList[index].selectedContact!.name!.trim().toLowerCase()}',
+                                //         softWrap: false,
+                                //         maxLines: 2,
+                                //         overflow: TextOverflow.ellipsis,
+                                //         style: const TextStyle(fontSize: 18),
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
+                              ),
+                            );
+                          },
+                        );
                       },
-                      icon: const Icon(Icons.verified),
-                      label: const Text('Accept'),
                     ),
-                  const SizedBox(height: 12),
-                  if (state.requestStatus == RequestStatus.oldRequest)
-                    FloatingActionButton.extended(
-                      backgroundColor: Colors.red,
-                      heroTag: null,
-                      onPressed: () {},
-                      icon: const Icon(Icons.dangerous),
-                      label: const Text('Reject'),
-                    ),
-                  const SizedBox(height: 12),
-                  if (state.requestStatus == RequestStatus.newRequest)
-                    FloatingActionButton.extended(
-                      label: const Text('Submit'),
-                      icon: const Icon(Icons.save),
-                      onPressed: () {
-                        if (businessUnitFormKey.currentState!.getSelectedItem ==
-                                null ||
-                            locationFormKey.currentState!.getSelectedItem ==
-                                null ||
-                            departmentFormKey.currentState!.getSelectedItem ==
-                                null) {
-                          businessUnitFormKey.currentState!.popupOnValidate();
-                          EasyLoading.showInfo(
-                            'Fill All the fields',
-                            maskType: EasyLoadingMaskType.black,
-                          );
-                        } else if (EquipmentsCubit.get(context)
-                            .state
-                            .chosenList
-                            .isEmpty) {
-                          EasyLoading.showInfo(
-                              'Add at least one item to request',
-                              maskType: EasyLoadingMaskType.black);
-                        } else {
-                          EquipmentsCubit.get(context).postEquipmentsRequest(
-                            departmentObject: departmentFormKey
-                                .currentState!.getSelectedItem!,
-                            businessUnitObject: businessUnitFormKey
-                                .currentState!.getSelectedItem!,
-                            locationObject:
-                                locationFormKey.currentState!.getSelectedItem!,
-                            userHrCode: user.employeeData!.userHrCode!,
-                            selectedItem: state.chosenList,
-                          );
-                          Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(
-                                  builder: (_) => const SuccessScreen(
-                                        requestName: 'Equipment',
-                                        routName: EquipmentsRequest.routeName,
-                                        text: "Success",
-                                      )));
-                        }
-                      },
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      tooltip: 'Save Request',
-                    ),
+                  ),
                 ],
-              );
-            },
+              ),
+              floatingActionButton:
+                  BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+                builder: (context, state) {
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (state.requestStatus == RequestStatus.oldRequest)
+                        FloatingActionButton.extended(
+                          heroTag: null,
+                          onPressed: () {
+                            // context.read<EquipmentsCubit>()
+                            //     .submitAction(true);
+                          },
+                          icon: const Icon(Icons.verified),
+                          label: const Text('Accept'),
+                        ),
+                      const SizedBox(height: 12),
+                      if (state.requestStatus == RequestStatus.oldRequest)
+                        FloatingActionButton.extended(
+                          backgroundColor: Colors.red,
+                          heroTag: null,
+                          onPressed: () {},
+                          icon: const Icon(Icons.dangerous),
+                          label: const Text('Reject'),
+                        ),
+                      const SizedBox(height: 12),
+                      if (state.requestStatus == RequestStatus.newRequest)
+                        FloatingActionButton.extended(
+                          label: const Text('Submit'),
+                          icon: const Icon(Icons.save),
+                          onPressed: () {
+                            if (businessUnitFormKey
+                                        .currentState!.getSelectedItem ==
+                                    null ||
+                                locationFormKey.currentState!.getSelectedItem ==
+                                    null ||
+                                departmentFormKey
+                                        .currentState!.getSelectedItem ==
+                                    null) {
+                              businessUnitFormKey.currentState!
+                                  .popupOnValidate();
+                              EasyLoading.showInfo(
+                                'Fill All the fields',
+                                maskType: EasyLoadingMaskType.black,
+                              );
+                            } else if (EquipmentsCubit.get(context)
+                                .state
+                                .chosenList
+                                .isEmpty) {
+                              EasyLoading.showInfo(
+                                  'Add at least one item to request',
+                                  maskType: EasyLoadingMaskType.black);
+                            } else {
+                              EquipmentsCubit.get(context)
+                                  .postEquipmentsRequest(
+                                departmentObject: departmentFormKey
+                                    .currentState!.getSelectedItem!,
+                                businessUnitObject: businessUnitFormKey
+                                    .currentState!.getSelectedItem!,
+                                locationObject: locationFormKey
+                                    .currentState!.getSelectedItem!,
+                                userHrCode: user.employeeData!.userHrCode!,
+                                selectedItem: state.chosenList,
+                              );
+                              Navigator.of(context)
+                                  .pushReplacement(MaterialPageRoute(
+                                      builder: (_) => const SuccessScreen(
+                                            requestName: 'Equipment',
+                                            routName:
+                                                EquipmentsRequest.routeName,
+                                            text: "Success",
+                                          )));
+                            }
+                          },
+                          materialTapTargetSize:
+                              MaterialTapTargetSize.shrinkWrap,
+                          tooltip: 'Save Request',
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ),
           ),
         ),
       ),
     );
   }
 
-  showAddRequestDialog(BuildContext context) {
-    showDialog(
+  showAddRequestBottomSheet(BuildContext context) {
+    showModalBottomSheet(
       context: context,
-      useSafeArea: true,
+      backgroundColor: const Color(0xFF031A27),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
+      // useSafeArea: true,
       builder: (dialogContext) {
-        return Dialog(
-          insetAnimationCurve: Curves.easeIn,
-          insetAnimationDuration: const Duration(milliseconds: 500),
+        return BottomSheet(
+          // insetAnimationCurve: Curves.easeIn,
+          // insetAnimationDuration: const Duration(milliseconds: 500),
           key: UniqueKey(),
+          backgroundColor: const Color(0xFF031A27),
           shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(25))),
-          child: GridView(
-            shrinkWrap: true,
-            padding: EdgeInsets.all(10.sp),
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: 10.sp,
-              crossAxisSpacing: 10.sp,
-            ),
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            children: [
-              addRequestOptions(
-                  id: '8',
-                  context: context,
-                  name: 'Accessories',
-                  icon: const Icon(Icons.keyboard_alt_outlined)),
-              addRequestOptions(
-                  id: '2',
-                  context: context,
-                  name: 'Laptop',
-                  icon: const Icon(Icons.laptop_chromebook_outlined)),
-              addRequestOptions(
-                  id: '9',
-                  context: context,
-                  name: 'Datashow / projector',
-                  icon: const Icon(Icons.live_tv)),
-              addRequestOptions(
-                  id: '1',
-                  context: context,
-                  name: 'Desktop',
-                  icon: const Icon(Icons.computer_outlined)),
-              addRequestOptions(
-                  id: '7',
-                  context: context,
-                  name: 'Fingerprint',
-                  icon: const Icon(Icons.fingerprint)),
-              addRequestOptions(
-                  id: '11',
-                  context: context,
-                  name: 'Internet connection',
-                  icon: const Icon(Icons.network_wifi_outlined)),
-              addRequestOptions(
-                  id: '10',
-                  context: context,
-                  name: 'Telephones',
-                  icon: const Icon(Icons.call)),
-              addRequestOptions(
-                  id: '4',
-                  context: context,
-                  name: 'Printer',
-                  icon: const Icon(Icons.print_outlined)),
-              addRequestOptions(
-                  id: '3',
-                  context: context,
-                  name: 'Server',
-                  icon: const HeroIcon(HeroIcons.server)),
-              addRequestOptions(
-                  id: '6',
-                  context: context,
-                  name: 'Network',
-                  icon: const HeroIcon(HeroIcons.globe)),
-              addRequestOptions(
-                  id: '14',
-                  context: context,
-                  name: 'Toner/Ink',
-                  icon: const Icon(Icons.water_drop)),
-            ],
-          ),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
+          onClosing: () {},
+          builder: (_) {
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView(
+                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                padding: const EdgeInsets.all(10),
+                keyboardDismissBehavior:
+                    ScrollViewKeyboardDismissBehavior.onDrag,
+                children: [
+                  addRequestOptions(
+                      id: '8',
+                      context: context,
+                      name: 'Accessories',
+                      icon: const Icon(
+                        Icons.keyboard_alt_outlined,
+                        color: Colors.white,
+                      )),
+                  addRequestOptions(
+                      id: '2',
+                      context: context,
+                      name: 'Laptop',
+                      icon: const Icon(
+                        Icons.laptop_chromebook_outlined,
+                        color: Colors.white,
+                      )),
+                  addRequestOptions(
+                      id: '9',
+                      context: context,
+                      name: 'Datashow / projector',
+                      icon: const Icon(
+                        Icons.live_tv,
+                        color: Colors.white,
+                      )),
+                  addRequestOptions(
+                      id: '1',
+                      context: context,
+                      name: 'Desktop',
+                      icon: const Icon(
+                        Icons.computer_outlined,
+                        color: Colors.white,
+                      )),
+                  addRequestOptions(
+                      id: '7',
+                      context: context,
+                      name: 'Fingerprint',
+                      icon: const Icon(
+                        Icons.fingerprint,
+                        color: Colors.white,
+                      )),
+                  addRequestOptions(
+                      id: '11',
+                      context: context,
+                      name: 'Internet connection',
+                      icon: const Icon(
+                        Icons.network_wifi_outlined,
+                        color: Colors.white,
+                      )),
+                  addRequestOptions(
+                      id: '10',
+                      context: context,
+                      name: 'Telephones',
+                      icon: const Icon(
+                        Icons.call,
+                        color: Colors.white,
+                      )),
+                  addRequestOptions(
+                      id: '4',
+                      context: context,
+                      name: 'Printer',
+                      icon: const Icon(
+                        Icons.print_outlined,
+                        color: Colors.white,
+                      )),
+                  addRequestOptions(
+                      id: '3',
+                      context: context,
+                      name: 'Server',
+                      icon: const HeroIcon(
+                        HeroIcons.server,
+                        color: Colors.white,
+                      )),
+                  addRequestOptions(
+                      id: '6',
+                      context: context,
+                      name: 'Network',
+                      icon: const HeroIcon(
+                        HeroIcons.globe,
+                        color: Colors.white,
+                      )),
+                  addRequestOptions(
+                      id: '14',
+                      context: context,
+                      name: 'Toner/Ink',
+                      icon: const Icon(
+                        Icons.water_drop,
+                        color: Colors.white,
+                      )),
+                ],
+              ),
+            );
+          },
         );
       },
     );
@@ -715,28 +853,22 @@ class EquipmentsRequest extends StatelessWidget {
       onTap: () {
         showEquipmentsDialog(context: context, name: name, id: id, icon: icon);
       },
-      borderRadius: const BorderRadius.all(Radius.circular(25)),
+      // borderRadius: const BorderRadius.all(Radius.circular(25)),
       child: Container(
-        width: 20.w,
-        height: 20.h,
-        decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-          gradient: LinearGradient(
-              colors: [
-                Color(0xFF1a4c78),
-                Color(0xFF3772a6),
-                Colors.white,
-              ],
-              begin: Alignment.bottomCenter,
-              end: Alignment.topRight,
-              tileMode: TileMode.clamp),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        height: 35,
+        color: Colors.transparent,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             icon,
-            Text(name, softWrap: true, textAlign: TextAlign.center),
+            const SizedBox(
+              width: 20,
+            ),
+            Text(name,
+                softWrap: true,
+                textAlign: TextAlign.center,
+                style: const TextStyle(color: Colors.white)),
           ],
         ),
       ),
@@ -748,75 +880,79 @@ class EquipmentsRequest extends StatelessWidget {
       required String name,
       required String id,
       required Widget icon}) {
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      useSafeArea: true,
-      barrierDismissible: false,
+      backgroundColor: const Color(0xFF031A27),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
       builder: (dialogContext) {
-        return Dialog(
-          insetAnimationCurve: Curves.easeIn,
-          insetAnimationDuration: const Duration(milliseconds: 500),
+        return BottomSheet(
+          // insetAnimationCurve: Curves.easeIn,
+          // insetAnimationDuration: const Duration(milliseconds: 500),
+          // backgroundColor: Colors.transparent,
           key: UniqueKey(),
+          backgroundColor: const Color(0xFF031A27),
           shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(25))),
-          child: SizedBox(
-            width: 90.w,
-            height: 70.h,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(25),
-              child: Scaffold(
-                appBar: AppBar(title: Text(name)),
-                body: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    icon,
-                    BlocProvider(
-                      create: (context) =>
-                          EquipmentsItemsCubit()..getEquipmentsItems(id: id),
-                      child: BlocBuilder<EquipmentsItemsCubit,
-                          EquipmentsItemsInitial>(
-                        builder: (context, state) {
-                          return buildDynamicDropDownMenu(
-                            items: state.listEquipmentsItem,
-                            listName: 'Select Item',
-                            context: context,
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: buildTextFormField(),
-                    ),
-                    BlocBuilder<ContactsCubit, ContactCubitStates>(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
+          onClosing: () {},
+          builder: (_) {
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              appBar: AppBar(
+                title: Text(name),
+                centerTitle: true,
+                elevation: 0,
+                backgroundColor: Colors.transparent,
+              ),
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  icon,
+                  BlocProvider(
+                    create: (context) =>
+                        EquipmentsItemsCubit()..getEquipmentsItems(id: id),
+                    child: BlocBuilder<EquipmentsItemsCubit,
+                        EquipmentsItemsInitial>(
                       builder: (context, state) {
-                        return buildContactsDropDownMenu(
-                            listName: 'Owner Employee',
-                            items:
-                                ContactsCubit.get(context).state.listContacts,
-                            context: context);
+                        return buildDynamicDropDownMenu(
+                          items: state.listEquipmentsItem,
+                          listName: 'Select Item',
+                          context: context,
+                        );
                       },
                     ),
-                    buildDropDownMenu(
-                      items: [
-                        'New Hire',
-                        'Replacement / New Item',
-                        'Training',
-                        'Mobilization'
-                      ],
-                      listName: 'Request For',
-                      context: context,
-                    ),
-                    ElevatedButton.icon(
-                      onPressed: () => onSubmitRequest(context, icon),
-                      label: const Text('Done'),
-                      icon: const Icon(Icons.done),
-                    ),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: buildTextFormField(),
+                  ),
+                  BlocBuilder<ContactsCubit, ContactCubitStates>(
+                    builder: (context, state) {
+                      return buildContactsDropDownMenu(
+                          listName: 'Owner Employee',
+                          items: ContactsCubit.get(context).state.listContacts,
+                          context: context);
+                    },
+                  ),
+                  buildDropDownMenu(
+                    items: [
+                      'New Hire',
+                      'Replacement / New Item',
+                      'Training',
+                      'Mobilization'
+                    ],
+                    listName: 'Request For',
+                    context: context,
+                  ),
+                  ElevatedButton.icon(
+                    onPressed: () => onSubmitRequest(context, icon),
+                    label: const Text('Done'),
+                    icon: const Icon(Icons.done),
+                  ),
+                ],
               ),
-            ),
-          ),
+            );
+          },
         );
       },
     );
@@ -836,26 +972,31 @@ class EquipmentsRequest extends StatelessWidget {
           key: ownerFormKey,
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
-                labelText: listName,
-                contentPadding: EdgeInsets.zero,
-                icon: const Icon(Icons.people)),
+              labelText: listName,
+              contentPadding: const EdgeInsets.all(10),
+              icon: const Icon(
+                Icons.people,
+                color: Colors.white,
+              ),
+            ),
           ),
-          popupProps: const PopupProps.menu(
-              showSearchBox: true,
-              fit: FlexFit.loose,
-              searchFieldProps: TextFieldProps(
-                padding: EdgeInsets.all(20),
-                decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(10),
-                    isCollapsed: true,
-                    filled: true,
-                    labelText: "Search for name",
-                    hintText: "Search for name",
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                        borderSide: BorderSide.none)),
-              )),
+          popupProps: PopupProps.menu(
+            showSearchBox: true,
+            menuProps: MenuProps(
+              backgroundColor: Theme.of(context).colorScheme.background,
+            ),
+            fit: FlexFit.loose,
+            searchFieldProps: const TextFieldProps(
+              padding: EdgeInsets.all(20),
+              decoration: InputDecoration(
+                contentPadding: EdgeInsets.all(10),
+                filled: true,
+                labelText: "Search for name",
+                hintText: "Search for name",
+                prefixIcon: Icon(Icons.search, color: Colors.white),
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -883,9 +1024,15 @@ class EquipmentsRequest extends StatelessWidget {
           dropdownDecoratorProps: DropDownDecoratorProps(
               dropdownSearchDecoration: InputDecoration(
                   labelText: listName,
-                  contentPadding: EdgeInsets.zero,
-                  icon: const Icon(Icons.question_mark))),
+                  contentPadding: const EdgeInsets.all(10),
+                  icon: const Icon(
+                    Icons.question_mark,
+                    color: Colors.white,
+                  ))),
           popupProps: PopupProps.menu(
+              menuProps: MenuProps(
+                backgroundColor: Theme.of(context).colorScheme.background,
+              ),
               showSearchBox: showSearch,
               fit: FlexFit.loose,
               searchFieldProps: const TextFieldProps(
@@ -909,9 +1056,15 @@ class EquipmentsRequest extends StatelessWidget {
           dropdownDecoratorProps: DropDownDecoratorProps(
               dropdownSearchDecoration: InputDecoration(
                   labelText: listName,
-                  contentPadding: EdgeInsets.zero,
-                  icon: const Icon(Icons.question_mark))),
+                  contentPadding: const EdgeInsets.all(10),
+                  icon: const Icon(
+                    Icons.question_mark,
+                    color: Colors.white,
+                  ))),
           popupProps: PopupProps.menu(
+              menuProps: MenuProps(
+                backgroundColor: Theme.of(context).colorScheme.background,
+              ),
               showSearchBox: showSearch,
               fit: FlexFit.loose,
               searchFieldProps: const TextFieldProps(
@@ -930,7 +1083,10 @@ class EquipmentsRequest extends StatelessWidget {
         Flexible(
           fit: FlexFit.tight,
           child: IconButton(
-            icon: const Icon(Icons.remove_circle),
+            icon: const Icon(
+              Icons.remove_circle,
+              color: Colors.white,
+            ),
             onPressed: () {
               int currentValue = int.parse(controller.text);
               currentValue--;
@@ -960,7 +1116,10 @@ class EquipmentsRequest extends StatelessWidget {
         Flexible(
           fit: FlexFit.tight,
           child: IconButton(
-            icon: const Icon(Icons.add_circle),
+            icon: const Icon(
+              Icons.add_circle,
+              color: Colors.white,
+            ),
             splashColor: Colors.transparent,
             onPressed: () {
               int currentValue = int.parse(controller.text);
@@ -995,7 +1154,7 @@ class EquipmentsRequest extends StatelessWidget {
         );
         Navigator.of(context).pop();
         Navigator.of(context).pop();
-      } catch (_) {
+      } catch (e) {
         EasyLoading.showError('You already add this item',
             maskType: EasyLoadingMaskType.black);
       }

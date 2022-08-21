@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hassanallamportalflutter/constants/constants.dart';
 
 import '../../constants/colors.dart';
 import '../../gen/assets.gen.dart';
@@ -39,6 +38,7 @@ class CustomTheme extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xff0F3C5B),
           secondary: const Color(0xff0F3C5B),
+          background: const Color(0xFF031A27),
           primary: Colors.white70,
           // primary: Colors.white30
 
@@ -47,15 +47,15 @@ class CustomTheme extends StatelessWidget {
         inputDecorationTheme: InputDecorationTheme(
           disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.white30)
+              borderSide: const BorderSide(color: Colors.white30)
           ),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.white)
+              borderSide: const BorderSide(color: Colors.white)
           ),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.white)
+              borderSide: const BorderSide(color: Colors.white)
           ),
         ),
       ),
