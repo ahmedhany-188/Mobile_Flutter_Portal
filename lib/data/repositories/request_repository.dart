@@ -111,9 +111,9 @@ class RequestRepository {
 
   }
 
-  Future<EmailUserFormModel> getEmailAccount(String requestNo) async{
+  Future<EmailUserFormModel> getEmailAccount(String requestNo,String requesterHRCode) async{
     final http.Response rawPermission = await requestDataProviders
-        .getEmailAccountRequestData(userData.user?.userHRCode ?? "",requestNo);
+        .getEmailAccountRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawPermission.body);
     final EmailUserFormModel response = EmailUserFormModel.fromJson(json[0]);
 

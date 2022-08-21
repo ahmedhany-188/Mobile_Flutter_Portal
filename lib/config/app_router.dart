@@ -168,7 +168,7 @@ class AppRouter {
 
       case EmailAndUserAccountScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) =>  EmailAndUserAccountScreen(requestNo: settings.arguments),
+          builder: (_) =>  EmailAndUserAccountScreen(requestData: settings.arguments),
         );
 
       case AccessRightScreen.routeName:

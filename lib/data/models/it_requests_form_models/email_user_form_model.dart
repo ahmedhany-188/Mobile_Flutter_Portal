@@ -1,7 +1,7 @@
 
 class EmailUserFormModel {
 
-  final String ?requestDate, userMobile, comments, requestHrCode, location,
+  final String ?requestDate, userMobile, comments, requestHrCode,ownerHrCode, location,
       title, fullName, email;
   final int ?requestType, status;
 
@@ -9,8 +9,8 @@ class EmailUserFormModel {
 
 
   EmailUserFormModel(this.requestDate, this.requestType, this.userMobile,
-      this.accountType, this.valid, this.requestHrCode, this.status,
-      this.comments, this.location, this.title, this.fullName, this.email);
+      this.accountType, this.valid, this.status,
+      this.comments, this.location, this.title, this.fullName, this.email,this.ownerHrCode, this.requestHrCode);
 
 
   EmailUserFormModel.fromJson(Map<String, dynamic> json):
@@ -21,7 +21,8 @@ class EmailUserFormModel {
         valid =json["valid"],
         accountType=json["emailAccount"],
         status = json['status'],
-        requestHrCode = json['ownerHrCode'],
+        requestHrCode = json['requestHrCode'],
+        ownerHrCode = json['ownerHrCode'],
         comments=json["comments"],
         location=json["ownerLocation"],
         title=json["ownerTitle"],

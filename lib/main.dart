@@ -172,19 +172,6 @@ class _MyAppState extends State<MyApp> {
                     .userData.employeeData!.userHrCode.toString()),
           ),
 
-          BlocProvider<UserNotificationApiCubit>(
-            lazy: true,
-            create: (userNotificationContext) =>
-            UserNotificationApiCubit(
-              RequestRepository(
-                  BlocProvider
-                      .of<AppBloc>(userNotificationContext)
-                      .state
-                      .userData),
-            )
-              ..getNotifications(),
-          ),
-
           BlocProvider<EconomyNewsCubit>(
             create: (economyNewsCubitContext) => EconomyNewsCubit(),
           ),

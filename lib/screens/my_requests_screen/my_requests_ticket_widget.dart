@@ -270,7 +270,7 @@ class MyRequestsItemWidget extends StatelessWidget {
         {
           Navigator.of(context)
               .pushNamed(EmailAndUserAccountScreen.routeName,arguments: {EmailAndUserAccountScreen.requestNoKey: myRequestsModelData.requestNo.toString()
-              ,EmailAndUserAccountScreen.requestHrCode: myRequestsModelData.requestHRCode.toString()});
+              ,EmailAndUserAccountScreen.requesterHRCode: myRequestsModelData.requestHRCode.toString()});
           break;
         }
       case RequestServiceID.businessCardServiceID:

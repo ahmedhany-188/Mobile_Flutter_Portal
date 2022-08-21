@@ -15,6 +15,8 @@ import 'package:heroicons/heroicons.dart';
 import 'package:meta/meta.dart';
 import 'package:intl/intl.dart';
 
+import '../../../data/repositories/employee_repository.dart';
+
 part 'email_useraccount_state.dart';
 
 class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
@@ -25,7 +27,7 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
 
   final RequestRepository requestRepository;
 
-  void getRequestData(RequestStatus requestStatus , String? requestNo) async {
+  void getRequestData({required RequestStatus requestStatus , String? requestNo,String? requesterHRCode}) async {
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
       var formatter = GlobalConstants.dateFormatViewed;
@@ -38,8 +40,10 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
             requestStatus: RequestStatus.newRequest
         ),
       );
-    }else{
-      final requestData = await requestRepository.getEmailAccount(requestNo!);
+    }
+    else{
+      EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
+      final requestData = await requestRepository.getEmailAccount(requestNo?? "", requesterHRCode??"");
       final requestDate = RequestDate.dirty(
           GlobalConstants.dateFormatViewed.format(
               GlobalConstants.dateFormatServer.parse(requestData.requestDate!)));
@@ -47,12 +51,14 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
 
       final accountType = requestData.accountType;
       final userMobile = RequestDate.dirty(requestData.userMobile.toString());
-      final hrCodeUser = RequestDate.dirty(requestData.requestHrCode.toString());
+      final hrCodeUser = RequestDate.dirty(requestData.ownerHrCode.toString());
       final fullName = requestData.fullName.toString();
       final title = requestData.title.toString();
       final location = requestData.location.toString();
 
       final comments = requestData.comments ?? "No Comment";
+
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"");
       var status = "Pending";
       if (requestData.status== 0) {
         status = "Pending";
@@ -71,7 +77,8 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
           userLocation: location,
           userTitle: title,
           comments: comments,
-          status: Formz.validate([state.userMobile,state.hrCodeUser]),
+          status: FormzStatus.submissionSuccess,
+          requesterData: requesterData,
           requestStatus: RequestStatus.oldRequest,
           statusAction: status,
           takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
@@ -81,8 +88,8 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
   }
 
   void clearStateHRCode(){
-    final hrCodeUser = RequestDate.dirty("");
-    final userMobile = RequestDate.dirty("");
+    const hrCodeUser = const RequestDate.dirty("");
+    const userMobile = const RequestDate.dirty("");
 
     emit(state.copyWith(
       fullName: "",
@@ -93,10 +100,6 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
       hrCodeUser:hrCodeUser,
       status: Formz.validate([userMobile, hrCodeUser]),
     ));
-
-
-
-
   }
 
   void hrCodeSubmittedGetData(String hrCode) async {
@@ -161,9 +164,9 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
       if (state.status.isValidated) {
 
         emailUserFormModel=EmailUserFormModel(requestDateValue,
-            state.requestType, state.userMobile.value, state.accountType,false,state.hrCodeUser.value,0,"",location.value,
-            title.value,fullName.value,email.value);
-        //TODO: creation of Object;
+            state.requestType, state.userMobile.value, state.accountType,false,0,"",location.value,
+            title.value,fullName.value,email.value,state.hrCodeUser.value,state.hrCodeUser.value);
+        //TODO: creation of Object; yeah object error in it between requester hr code and owner hr code ;)
 
         emit(state.copyWith(
             status: FormzStatus.submissionInProgress));
@@ -246,6 +249,17 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
     ));
   }
 
+  void commentRequesterChanged(String value) {
+
+    // final permissionTime = PermissionTime.dirty(value);
+    // print(permissionTime.value);
+    emit(
+      state.copyWith(
+        actionComment : value,
+        // status: Formz.validate([state.requestDate,state.permissionDate,state.permissionTime]),
+      ),
+    );
+  }
 
 
   @override

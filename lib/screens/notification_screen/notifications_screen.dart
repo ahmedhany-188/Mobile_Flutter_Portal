@@ -46,15 +46,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     bloc.state.userData);
     return CustomBackground(
       child: Scaffold(
-
         // drawer: MainDrawer(),
         appBar: AppBar(title: const Text("Your Notification"),
           backgroundColor: Colors.transparent,
           elevation: 0,),
-
         /// basicAppBar(context, 'News'),
         backgroundColor: Colors.transparent,
-
         body: RefreshIndicator(
           onRefresh: () async {
             await UserNotificationApiCubit.get(context).getNotifications();
@@ -73,6 +70,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       UserNotificationEnumStates.success ||
                       (state.userNotificationEnumStates ==
                           UserNotificationEnumStates.noConnection &&
+                          state.userNotificationList.isNotEmpty) ||
+                      (state.userNotificationEnumStates ==
+                          UserNotificationEnumStates.failed &&
                           state.userNotificationList.isNotEmpty),
                   builder: (context) {
                     // List<Data> newsList = newsAllData;
@@ -548,7 +548,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             EmailAndUserAccountScreen.requestNoKey: notification.requestNo
                 .toString()
             ,
-            EmailAndUserAccountScreen.requestHrCode: notification.requestHRCode
+            EmailAndUserAccountScreen.requesterHRCode: notification.requestHRCode
                 .toString()
           });
           break;
