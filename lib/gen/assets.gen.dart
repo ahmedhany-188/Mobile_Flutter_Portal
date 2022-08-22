@@ -22,6 +22,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/Cover.png
   AssetGenImage get cover => const AssetGenImage('assets/images/Cover.png');
 
+  /// File path: assets/images/MainBackground.jpg
+  AssetGenImage get mainBackground =>
+      const AssetGenImage('assets/images/MainBackground.jpg');
+
   /// File path: assets/images/Media.png
   AssetGenImage get media => const AssetGenImage('assets/images/Media.png');
 

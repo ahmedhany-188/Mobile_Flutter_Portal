@@ -8,14 +8,40 @@ class CustomBackground extends StatelessWidget {
   final Widget child;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: Assets.images.defaultBg.image().image,
-          fit: BoxFit.cover,
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        ConstantsColors.backgroundStartColor,
+                        ConstantsColors.backgroundEndColor,
+                      ],
+                    )
+                ),),
+            ),
+            Container(
+              child: Assets.images.mainBackground.image(),
+            )
+          ],
         ),
-      ),
-      child: child,
+        Container(
+          // decoration: BoxDecoration(
+          //   image: DecorationImage(
+          //     image: Assets.images.defaultBg.image().image,
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
+          child: child,
+        )
+      ],
     );
   }
 }
