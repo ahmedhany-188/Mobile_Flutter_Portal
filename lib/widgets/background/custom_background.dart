@@ -34,6 +34,9 @@ class CustomTheme extends StatelessWidget {
             .apply(bodyColor: Colors.white,),
         unselectedWidgetColor: Colors.white70,
         canvasColor: ConstantsColors.bottomSheetBackground,
+        scaffoldBackgroundColor: Colors.transparent,
+        appBarTheme: const AppBarTheme(elevation: 0,color: Colors.transparent,centerTitle: true),
+        splashColor: Colors.transparent,
 
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xff0F3C5B),
