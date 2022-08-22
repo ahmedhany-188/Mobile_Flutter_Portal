@@ -375,11 +375,13 @@ Widget benefitsMenuItems(BuildContext context) {
               Navigator.of(context).pushNamed(MedicalRequestScreen.routeName),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'Medical Request',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
+            child: Center(
+              child: Text(
+                'Medical Request',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
@@ -392,10 +394,12 @@ Widget benefitsMenuItems(BuildContext context) {
               Navigator.of(context).pushNamed(BenefitsScreen.routeName),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'HAH Benefits',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            child: Center(
+              child: Text(
+                'HAH Benefits',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -418,10 +422,12 @@ Widget hrRequestMenuItems(BuildContext context) {
               arguments: {'request-No': '0'}),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'Business Mission',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            child: Center(
+              child: Text(
+                'Business Mission',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -434,10 +440,12 @@ Widget hrRequestMenuItems(BuildContext context) {
               arguments: {'request-No': '0'}),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'Permission',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            child: Center(
+              child: Text(
+                'Permission',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -449,10 +457,12 @@ Widget hrRequestMenuItems(BuildContext context) {
               arguments: {'request-No': '0'}),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'Vacation',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            child: Center(
+              child: Text(
+                'Vacation',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -465,10 +475,12 @@ Widget hrRequestMenuItems(BuildContext context) {
               arguments: {'request-No': '0'}),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'Embassy Letter',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            child: Center(
+              child: Text(
+                'Embassy Letter',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -481,10 +493,12 @@ Widget hrRequestMenuItems(BuildContext context) {
               arguments: {'request-No': '0'}),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'Business Card',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            child: Center(
+              child: Text(
+                'Business Card',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -507,10 +521,12 @@ Widget itRequestMenuItems(BuildContext context) {
               arguments: {'request-No': '0'}),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'Email Account',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            child: Center(
+              child: Text(
+                'Email Account',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -523,10 +539,12 @@ Widget itRequestMenuItems(BuildContext context) {
               arguments: {'request-No': '0'}),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'Access Right',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            child: Center(
+              child: Text(
+                'Access Right',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -539,10 +557,12 @@ Widget itRequestMenuItems(BuildContext context) {
               arguments: {'request-No': '0'}),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'Equipment',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            child: Center(
+              child: Text(
+                'Equipment',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -563,10 +583,12 @@ Widget mediaCenterMenuItems(BuildContext context) {
           onTap: () => Navigator.of(context).pushNamed(PhotosScreen.routeName),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'Photos',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            child: Center(
+              child: Text(
+                'Photos',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -577,10 +599,12 @@ Widget mediaCenterMenuItems(BuildContext context) {
           onTap: () => Navigator.of(context).pushNamed(VideosScreen.routeName),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'Videos',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            child: Center(
+              child: Text(
+                'Videos',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -604,10 +628,12 @@ Widget newsLetterMenuItems(BuildContext context) {
               mode: LaunchMode.platformDefault),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'Arabic',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            child: Center(
+              child: Text(
+                'Arabic',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),
@@ -620,10 +646,12 @@ Widget newsLetterMenuItems(BuildContext context) {
               mode: LaunchMode.platformDefault),
           child: const SizedBox(
             height: 25,
-            child: Text(
-              'English',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white),
+            child: Center(
+              child: Text(
+                'English',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ),
         ),

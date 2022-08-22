@@ -39,7 +39,7 @@ convertFromHtml(
       },
       style: {
         '#': Style(
-            fontSize: const FontSize(18),
+            fontSize: const FontSize(15),color: Colors.white,
             maxLines: dataToConvert.length,
             textOverflow: TextOverflow.ellipsis,
             margin: const EdgeInsets.all(10)),

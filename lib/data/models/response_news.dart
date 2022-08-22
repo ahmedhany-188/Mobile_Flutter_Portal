@@ -2,7 +2,7 @@ class ResponseNews {
   int? code;
   bool? error;
   String? message;
-  List<Data>? data;
+  List<NewsData>? data;
 
   ResponseNews({this.code, this.error, this.message, this.data});
 
@@ -11,9 +11,9 @@ class ResponseNews {
     error = json['error'];
     message = json['message'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <NewsData>[];
       json['data'].forEach((v) {
-        data!.add(Data.fromJson(v));
+        data!.add(NewsData.fromJson(v));
       });
     }
   }
@@ -30,7 +30,7 @@ class ResponseNews {
   }
 }
 
-class Data {
+class NewsData {
   int? newsID;
   String? newsDescription;
   String? newsBody;
@@ -45,7 +45,7 @@ class Data {
   int? newsType;
   String? newsImg;
 
-  Data(
+  NewsData(
       {this.newsID,
         this.newsDescription,
         this.newsBody,
@@ -60,7 +60,7 @@ class Data {
         this.newsType,
         this.newsImg});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  NewsData.fromJson(Map<String, dynamic> json) {
     newsID = json['news_ID'];
     newsDescription = json['news_Description'];
     newsBody = json['news_Body'];

@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:hassanallamportalflutter/screens/news_screen/news_details_screen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 
 import '../../bloc/news_screen_bloc/news_cubit.dart';
-import '../../data/helpers/convert_from_html.dart';
 import '../../data/models/response_news.dart';
 import '../../gen/assets.gen.dart';
 
@@ -64,37 +65,11 @@ class NewsScreen extends StatelessWidget {
                           mainAxisSpacing: 9.sp,
                         ),
                         itemBuilder: (ctx, index) {
-                          Data news = NewsCubit.get(context).newsList[index];
+                          NewsData news = NewsCubit.get(context).newsList[index];
                           return InkWell(
                             onTap: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    backgroundColor:
-                                        Theme.of(context).colorScheme.background,
-                                    title: Text(news.newsTitle ?? ""),
-                                    elevation: 20,
-                                    contentPadding: const EdgeInsets.all(10.0),
-                                    content: SingleChildScrollView(
-                                      child: Column(
-                                        children: [
-                                          Text(news.newsDescription ?? ""),
-                                          convertFromHtml(
-                                              dataToConvert: news.newsBody ?? "",
-                                              context: context),
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            child: Image.network(
-                                                'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg'),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              );
+                              Navigator.of(context).pushNamed(NewsDetailsScreen.routeName,arguments: news);
+
                             },
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),
@@ -113,7 +88,7 @@ class NewsScreen extends StatelessWidget {
                                   placeholderFit: BoxFit.scaleDown,
                                   placeholder:
                                       AssetImage(Assets.images.loginImageLogo.path),
-                                  image: NetworkImage(
+                                  image: CachedNetworkImageProvider(
                                     'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg',
                                   ),
                                   fit: BoxFit.fill,
@@ -125,14 +100,7 @@ class NewsScreen extends StatelessWidget {
                       ),
                     );
                   },
-                  fallback: (_) => Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: const [
-                      Center(child: CircularProgressIndicator()),
-                      Center(child: Text('Loading...')),
-                    ],
-                  ),
+                  fallback: (_) => const Center(child: CircularProgressIndicator()),
                 );
               });
             },

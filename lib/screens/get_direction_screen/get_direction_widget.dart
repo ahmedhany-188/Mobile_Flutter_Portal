@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 
@@ -47,24 +48,21 @@ class GetDirectionWidget extends StatelessWidget {
                         },
                         icon: const Icon(Icons.directions)),
                   ),
-                  child: Hero(
-                    tag: 'tag$index',
-                    child: GestureDetector(
-                      onTap: (){
-                        openMap(projectsDirectionData[index]['latitude'],
-                            projectsDirectionData[index]['longitude']);
-                      },
-                      child: FadeInImage(
-                        placeholder:
-                            const AssetImage('assets/images/fulllogoblue.png'),
-                        image: NetworkImage(
-                            DirectionHelper.generateLocationPreviewImage(
-                                latitude: projectsDirectionData[index]
-                                    ['latitude'],
-                                longitude: projectsDirectionData[index]
-                                    ['longitude'])),
-                        fit: BoxFit.cover,
-                      ),
+                  child: GestureDetector(
+                    onTap: (){
+                      openMap(projectsDirectionData[index]['latitude'],
+                          projectsDirectionData[index]['longitude']);
+                    },
+                    child: FadeInImage(
+                      placeholder:
+                          const AssetImage('assets/images/fulllogoblue.png'),
+                      image: CachedNetworkImageProvider(
+                          DirectionHelper.generateLocationPreviewImage(
+                              latitude: projectsDirectionData[index]
+                                  ['latitude'],
+                              longitude: projectsDirectionData[index]
+                                  ['longitude'])),
+                      fit: BoxFit.fill,
                     ),
                   ),
                 ),
