@@ -27,7 +27,6 @@ import '../news_screen/news_screen.dart';
 import '../notification_screen/notifications_screen.dart';
 import '../../screens/contacts_screen/contacts_screen.dart';
 import '../../screens/myattendance_screen/attendance_screen.dart';
-import '../../bloc/notification_bloc/bloc/user_notification_bloc.dart';
 import '../videos_screen/videos_screen.dart';
 
 class HomeGridViewScreen extends StatelessWidget {
@@ -54,7 +53,8 @@ class HomeGridViewScreen extends StatelessWidget {
             actions: [
               BlocProvider.value(
                 value: BlocProvider.of<UserNotificationApiCubit>(context),
-                child: BlocBuilder<UserNotificationApiCubit, UserNotificationApiState>(
+                child: BlocBuilder<UserNotificationApiCubit,
+                    UserNotificationApiState>(
                   builder: (context, state) {
                     return InkWell(
                       splashColor: Colors.transparent,
@@ -62,7 +62,9 @@ class HomeGridViewScreen extends StatelessWidget {
                       onTap: () => Navigator.of(context)
                           .pushNamed(NotificationsScreen.routeName),
                       child: Badge(
-                        showBadge: state.userNotificationList.isNotEmpty ? true : false,
+                        showBadge: state.userNotificationList.isNotEmpty
+                            ? true
+                            : false,
                         toAnimate: true,
                         animationDuration: const Duration(milliseconds: 1000),
                         animationType: BadgeAnimationType.scale,
@@ -107,7 +109,7 @@ class HomeGridViewScreen extends StatelessWidget {
                           margin: const EdgeInsets.only(top: 25),
                           height: 100,
                           child: ListView(
-                            physics:const NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             reverse: false,
                             shrinkWrap: true,
                             children: [
@@ -371,11 +373,14 @@ Widget benefitsMenuItems(BuildContext context) {
           highlightColor: Colors.transparent,
           onTap: () =>
               Navigator.of(context).pushNamed(MedicalRequestScreen.routeName),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'Medical Request',
-              style: TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+              ),
             ),
           ),
         ),
@@ -385,10 +390,11 @@ Widget benefitsMenuItems(BuildContext context) {
           highlightColor: Colors.transparent,
           onTap: () =>
               Navigator.of(context).pushNamed(BenefitsScreen.routeName),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'HAH Benefits',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -410,10 +416,11 @@ Widget hrRequestMenuItems(BuildContext context) {
           onTap: () => Navigator.of(context).pushNamed(
               BusinessMissionScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'Business Mission',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -425,10 +432,11 @@ Widget hrRequestMenuItems(BuildContext context) {
           onTap: () => Navigator.of(context).pushNamed(
               PermissionScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'Permission',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -439,10 +447,11 @@ Widget hrRequestMenuItems(BuildContext context) {
           highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(VacationScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'Vacation',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -454,10 +463,11 @@ Widget hrRequestMenuItems(BuildContext context) {
           onTap: () => Navigator.of(context).pushNamed(
               EmbassyLetterScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'Embassy Letter',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -469,10 +479,11 @@ Widget hrRequestMenuItems(BuildContext context) {
           onTap: () => Navigator.of(context).pushNamed(
               BusinessCardScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'Business Card',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -494,10 +505,11 @@ Widget itRequestMenuItems(BuildContext context) {
           onTap: () => Navigator.of(context).pushNamed(
               EmailAndUserAccountScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'Email Account',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -509,10 +521,11 @@ Widget itRequestMenuItems(BuildContext context) {
           onTap: () => Navigator.of(context).pushNamed(
               AccessRightScreen.routeName,
               arguments: {'request-No': '0'}),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'Access Right',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -524,10 +537,11 @@ Widget itRequestMenuItems(BuildContext context) {
           onTap: () => Navigator.of(context).pushNamed(
               EquipmentsRequest.routeName,
               arguments: {'request-No': '0'}),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'Equipment',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -547,10 +561,11 @@ Widget mediaCenterMenuItems(BuildContext context) {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(PhotosScreen.routeName),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'Photos',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -560,10 +575,11 @@ Widget mediaCenterMenuItems(BuildContext context) {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(VideosScreen.routeName),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'Videos',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -586,10 +602,11 @@ Widget newsLetterMenuItems(BuildContext context) {
               Uri.parse(
                   'https://portal.hassanallam.com/NewsLatter/index-ar.html'),
               mode: LaunchMode.platformDefault),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'Arabic',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -601,10 +618,11 @@ Widget newsLetterMenuItems(BuildContext context) {
           onTap: () => launchUrl(
               Uri.parse('https://portal.hassanallam.com/NewsLatter/index.html'),
               mode: LaunchMode.platformDefault),
-          child: const FittedBox(
-            fit: BoxFit.scaleDown,
+          child: const SizedBox(
+            height: 25,
             child: Text(
               'English',
+              textAlign: TextAlign.center,
               style: TextStyle(color: Colors.white),
             ),
           ),
