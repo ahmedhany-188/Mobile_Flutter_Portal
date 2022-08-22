@@ -91,11 +91,11 @@ class RequestRepository {
     return response;
   }
 
-  Future<BusinessCardFormModel> geBusinessCard(String requestNo) async{
+  Future<BusinessCardFormModel> geBusinessCard(String requestNo,String requesterHRCode) async{
     final http.Response rawPermission = await requestDataProviders
-        .getBusinessCardRequestData(userData.user?.userHRCode ?? "",requestNo);
+        .getBusinessCardRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
     final json = await jsonDecode(rawPermission.body);
-
+    print(json);
     final BusinessCardFormModel response = BusinessCardFormModel.fromJson(json[0]);
 
     return response;

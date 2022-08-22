@@ -158,7 +158,7 @@ class AppRouter {
 
       case BusinessCardScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => BusinessCardScreen(requestNo: settings.arguments),
+          builder: (_) => BusinessCardScreen(requestData: settings.arguments),
         );
 
       case EmbassyLetterScreen.routeName:

@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/admin_requests_screen_bloc/business_card_request/business_card_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
+import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/constants/enums.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
@@ -11,16 +12,16 @@ import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mis
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import '../../../widgets/success/success_request_widget.dart';
+import '../../widgets/requester_data_widget/requester_data_widget.dart';
 
-class BusinessCardScreen extends StatefulWidget{
+class BusinessCardScreen extends StatefulWidget {
 
   static const routeName = "/business-account-screen";
   static const requestNoKey = 'request-No';
-  static const requestHrCode = 'request-HrCode';
+  static const requesterHRCode = 'request-HrCode';
 
-  const BusinessCardScreen({Key? key,this.requestNo,this.requestedHrCode}) : super(key: key);
-  final requestNo;
-  final requestedHrCode;
+  const BusinessCardScreen({Key? key, this.requestData}) : super(key: key);
+  final dynamic requestData;
 
   @override
   State<BusinessCardScreen> createState() => _BusinessCardScreen();
@@ -39,7 +40,7 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
     var formatter = GlobalConstants.dateFormatViewed;
 
-    final currentRequestNo = widget.requestNo;
+    final currentRequestData = widget.requestData;
 
     return
       WillPopScope(
@@ -47,19 +48,21 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
           await EasyLoading.dismiss(animation: true);
           return true;
         },
-
         child: CustomBackground(
           child: CustomTheme(
-
             child: BlocProvider<BusinessCardCubit>(
               create: (businessCardContext) =>
-              currentRequestNo [BusinessCardScreen.requestNoKey] == "0"
+              currentRequestData [BusinessCardScreen.requestNoKey] == "0"
                   ? (BusinessCardCubit(
                   RequestRepository(user))
-                ..getRequestData(RequestStatus.newRequest, ""))
+                ..getRequestData(
+                    requestStatus: RequestStatus.newRequest, requestNo: ""))
                   : (BusinessCardCubit(RequestRepository(user))
-                ..getRequestData(RequestStatus.oldRequest,
-                    currentRequestNo[BusinessCardScreen.requestNoKey])),
+                ..getRequestData(requestStatus: RequestStatus.oldRequest,
+                    requestNo: currentRequestData[BusinessCardScreen
+                        .requestNoKey],
+                    requesterHRCode: currentRequestData[BusinessCardScreen
+                        .requesterHRCode])),
               child: BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
                   builder: (context, state) {
                     return Scaffold(
@@ -67,7 +70,11 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                       appBar: AppBar(
                         backgroundColor: Colors.transparent,
                         elevation: 0,
-                        title: const Text("Business Card"),
+                        title: Text("Business Card ${state.requestStatus ==
+                            RequestStatus.oldRequest
+                            ? "#${currentRequestData[BusinessMissionScreen
+                            .requestNoKey]}"
+                            : "Request"}"),
                         centerTitle: true,
                       ),
 
@@ -93,12 +100,13 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                                   TakeActionStatus
                                       .takeAction)FloatingActionButton
                               .extended(
-                            backgroundColor: Colors.red,
+                            backgroundColor: Colors.white,
                             heroTag: null,
                             onPressed: () {},
-                            icon: const Icon(Icons.dangerous),
-
-                            label: const Text('Reject'),
+                            icon: const Icon(Icons.dangerous,
+                              color: ConstantsColors.buttonColors,),
+                            label: const Text('Reject', style: TextStyle(
+                                color: ConstantsColors.buttonColors),),
                           ),
                           const SizedBox(height: 12),
                           if(state.requestStatus == RequestStatus.newRequest)
@@ -150,7 +158,7 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                         },
 
                         child: Padding(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
                           child: Form(
                             child: SingleChildScrollView(
                               child: Column(
@@ -174,9 +182,40 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                                     ),
                                   ),
 
+
+                                  if(state.requestStatus ==
+                                      RequestStatus.oldRequest &&
+                                      state.takeActionStatus ==
+                                          TakeActionStatus.takeAction)
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 8, vertical: 8),
+                                      child: BlocBuilder<
+                                          BusinessCardCubit,
+                                          BusinessCardInitial>(
+                                          buildWhen: (previous, current) {
+                                            return (previous.requesterData !=
+                                                current.requesterData);
+                                          },
+                                          builder: (context, state) {
+                                            return RequesterDataWidget(
+                                              requesterData: state
+                                                  .requesterData,
+                                              actionComment: ActionCommentWidget(
+                                                  onChanged: (commentValue) =>
+                                                      context
+                                                          .read<
+                                                          BusinessCardCubit>()
+                                                          .commentRequesterChanged(
+                                                          commentValue)),);
+                                          }
+                                      ),
+                                    ),
+
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
+
                                       initialValue: state.requestDate.value,
                                       key: UniqueKey(),
                                       readOnly: true,
@@ -186,173 +225,205 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                                         FloatingLabelAlignment.start,
                                         labelText: 'Request Date',
                                         prefixIcon: Icon(
-                                            Icons.calendar_today,color: Colors.white70,),
+                                          Icons.calendar_today,
+                                          color: Colors.white70,),
                                       ),
                                     ),
                                   ),
 
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(
+                                        8.0),
                                     child: BlocBuilder<BusinessCardCubit,
                                         BusinessCardInitial>(
-                                        builder: (context, state) {
-                                          return Column(
-                                            children: [
-                                              Padding(
-                                                padding: const EdgeInsets.all(
-                                                    8.0),
-                                                child: TextFormField(
-                                                  initialValue: state
-                                                      .employeeNameCard
-                                                      .value,
+                                      builder: (context, state) {
+                                        return TextFormField(
+                                          key: state.requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? UniqueKey()
+                                              : null,
+                                          initialValue: state
+                                              .employeeNameCard
+                                              .value,
 
-                                                  readOnly: state
-                                                      .requestStatus ==
-                                                      RequestStatus.oldRequest
-                                                      ? true
-                                                      : false,
-                                                  onChanged: (value) {
-                                                    context.read<
-                                                        BusinessCardCubit>()
-                                                        .nameCard(value);
-                                                  },
-                                                  decoration: InputDecoration(
-                                                    floatingLabelAlignment:
-                                                    FloatingLabelAlignment
-                                                        .start,
-                                                    labelText: 'Employee Name on Card',
-                                                    prefixIcon: const Icon(
-                                                        Icons.person,color: Colors.white70,),
-                                                    errorText: state
-                                                        .employeeNameCard
-                                                        .invalid
-                                                        ? 'invalid Name'
-                                                        : null,
-                                                  ),
-                                                ),),
+                                          readOnly: state
+                                              .requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? true
+                                              : false,
+                                          onChanged: (value) {
+                                            context.read<
+                                                BusinessCardCubit>()
+                                                .nameCard(value);
+                                          },
+                                          decoration: InputDecoration(
+                                            floatingLabelAlignment:
+                                            FloatingLabelAlignment
+                                                .start,
+                                            labelText: 'Employee Name on Card',
+                                            prefixIcon: const Icon(
+                                              Icons.person,
+                                              color: Colors.white70,),
+                                            errorText: state
+                                                .employeeNameCard
+                                                .invalid
+                                                ? 'invalid Name'
+                                                : null,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(
+                                        8.0),
+                                    child:
+                                    BlocBuilder<
+                                        BusinessCardCubit,
+                                        BusinessCardInitial>(
+                                      builder: (context, state) {
+                                        return TextFormField(
+                                          key: state.requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? UniqueKey()
+                                              : null,
+                                          initialValue: state
+                                              .employeeMobile
+                                              .value,
+                                          readOnly: state
+                                              .requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? true
+                                              : false,
+                                          onChanged: (value) {
+                                            context.read<
+                                                BusinessCardCubit>()
+                                                .employeeMobile(value);
+                                          },
+                                          keyboardType: TextInputType
+                                              .phone,
+                                          decoration: InputDecoration(
+                                            floatingLabelAlignment:
+                                            FloatingLabelAlignment
+                                                .start,
+                                            labelText: 'Mobile',
+                                            prefixIcon: const Icon(
+                                              Icons.mobile_friendly,
+                                              color: Colors.white70,),
+                                            errorText: state
+                                                .employeeMobile
+                                                .invalid
+                                                ? 'invalid Phone Number'
+                                                : null,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(
+                                        8.0),
+                                    child: BlocBuilder<BusinessCardCubit,
+                                        BusinessCardInitial>(
+                                      builder: (context, state) {
+                                        return TextFormField(
+                                          key: state.requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? UniqueKey()
+                                              : null,
+                                          initialValue: state
+                                              .employeeExt,
+                                          readOnly: state
+                                              .requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? true
+                                              : false,
+                                          onChanged: (value) {
+                                            context.read<
+                                                BusinessCardCubit>()
+                                                .employeeExt(value);
+                                          },
+                                          keyboardType: TextInputType
+                                              .number,
+                                          decoration: const InputDecoration(
+                                            floatingLabelAlignment:
+                                            FloatingLabelAlignment
+                                                .start,
+                                            labelText: 'Ext #',
+                                            prefixIcon: Icon(
+                                              Icons.phone,
+                                              color: Colors.white70,),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(
+                                        8.0),
+                                    child: BlocBuilder<BusinessCardCubit,
+                                        BusinessCardInitial>(
+                                      builder: (context, state) {
+                                        return TextFormField(
+                                          initialValue: state
+                                              .employeeFaxNO,
+                                          readOnly: state
+                                              .requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? true
+                                              : false,
+                                          onChanged: (value) {
+                                            context.read<
+                                                BusinessCardCubit>()
+                                                .employeeFaxNO(value);
+                                          },
+                                          keyboardType: TextInputType
+                                              .number,
+                                          decoration: const InputDecoration(
+                                            floatingLabelAlignment:
+                                            FloatingLabelAlignment
+                                                .start,
+                                            labelText: 'FAX NO',
+                                            prefixIcon: Icon(
+                                              Icons.fax,
+                                              color: Colors.white70,),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(
+                                        8.0),
+                                    child: BlocBuilder<BusinessCardCubit,
+                                        BusinessCardInitial>(
+                                      builder: (context, state) {
+                                        return TextFormField(
 
-                                              Padding(
-                                                padding: const EdgeInsets.all(
-                                                    8.0),
-                                                child:
-                                                TextFormField(
-                                                  initialValue: state
-                                                      .employeeMobile
-                                                      .value,
-                                                  readOnly: state
-                                                      .requestStatus ==
-                                                      RequestStatus.oldRequest
-                                                      ? true
-                                                      : false,
-                                                  onChanged: (value) {
-                                                    context.read<
-                                                        BusinessCardCubit>()
-                                                        .employeeMobile(value);
-                                                  },
-                                                  keyboardType: TextInputType
-                                                      .phone,
-                                                  decoration: InputDecoration(
-                                                    floatingLabelAlignment:
-                                                    FloatingLabelAlignment
-                                                        .start,
-                                                    labelText: 'Mobile',
-                                                    prefixIcon: const Icon(
-                                                        Icons.mobile_friendly,color: Colors.white70,),
-                                                    errorText: state
-                                                        .employeeMobile
-                                                        .invalid
-                                                        ? 'invalid Phone Number'
-                                                        : null,
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(
-                                                    8.0),
-                                                child: TextFormField(
-                                                  initialValue: state
-                                                      .employeeExt,
-                                                  readOnly: state
-                                                      .requestStatus ==
-                                                      RequestStatus.oldRequest
-                                                      ? true
-                                                      : false,
-                                                  onChanged: (value) {
-                                                    context.read<
-                                                        BusinessCardCubit>()
-                                                        .employeeExt(value);
-                                                  },
-                                                  keyboardType: TextInputType
-                                                      .number,
-                                                  decoration: const InputDecoration(
-                                                    floatingLabelAlignment:
-                                                    FloatingLabelAlignment
-                                                        .start,
-                                                    labelText: 'Ext #',
-                                                    prefixIcon: Icon(
-                                                        Icons.phone,color: Colors.white70,),
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(
-                                                    8.0),
-                                                child: TextFormField(
-                                                  initialValue: state
-                                                      .employeeFaxNO,
-                                                  readOnly: state
-                                                      .requestStatus ==
-                                                      RequestStatus.oldRequest
-                                                      ? true
-                                                      : false,
-                                                  onChanged: (value) {
-                                                    context.read<
-                                                        BusinessCardCubit>()
-                                                        .employeeFaxNO(value);
-                                                  },
-                                                  keyboardType: TextInputType
-                                                      .number,
-                                                  decoration: const InputDecoration(
-                                                    floatingLabelAlignment:
-                                                    FloatingLabelAlignment
-                                                        .start,
-                                                    labelText: 'FAX NO',
-                                                    prefixIcon: Icon(
-                                                        Icons.fax,color: Colors.white70,),
-                                                  ),
-                                                ),
-                                              ),
-                                              Padding(
-                                                padding: const EdgeInsets.all(
-                                                    8.0),
-                                                child: TextFormField(
-
-                                                  initialValue: state.comment,
-                                                  readOnly: state
-                                                      .requestStatus ==
-                                                      RequestStatus.oldRequest
-                                                      ? true
-                                                      : false,
-                                                  onChanged: (value) =>
-                                                      context.read<
-                                                          BusinessCardCubit>()
-                                                          .EemployeeComment(
-                                                          value),
-                                                  keyboardType: TextInputType
-                                                      .text,
-                                                  decoration: const InputDecoration(
-                                                    floatingLabelAlignment:
-                                                    FloatingLabelAlignment
-                                                        .start,
-                                                    labelText: 'Comments',
-                                                    prefixIcon: Icon(
-                                                        Icons.comment,color: Colors.white70,),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          );
-                                        }
+                                          initialValue: state.comment,
+                                          readOnly: state
+                                              .requestStatus ==
+                                              RequestStatus.oldRequest
+                                              ? true
+                                              : false,
+                                          onChanged: (value) =>
+                                              context.read<
+                                                  BusinessCardCubit>()
+                                                  .EemployeeComment(
+                                                  value),
+                                          keyboardType: TextInputType
+                                              .text,
+                                          decoration: const InputDecoration(
+                                            floatingLabelAlignment:
+                                            FloatingLabelAlignment
+                                                .start,
+                                            labelText: 'Comments',
+                                            prefixIcon: Icon(
+                                              Icons.comment,
+                                              color: Colors.white70,),
+                                          ),
+                                        );
+                                      },
                                     ),
                                   ),
                                 ],
