@@ -31,9 +31,11 @@ import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dar
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
+import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_details_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
 import '../data/models/contacts_related_models/contacts_data_from_api.dart';
+import '../data/models/subsidiares_model/subsidiares_model.dart';
 import '../screens/apps_screen/apps_screen.dart';
 import '../screens/my_requests_screen/add_request_screen.dart';
 import '../screens/notification_screen/notifications_screen.dart';
@@ -229,6 +231,10 @@ class AppRouter {
       case NewsDetailsScreen.routeName:
         return MaterialPageRoute(
             builder: (_) =>  NewsDetailsScreen(newsData: settings.arguments as NewsData,));
+
+      case SubsidiariesDetailsScreen.routeName:
+        return MaterialPageRoute(
+            builder: (_) =>  SubsidiariesDetailsScreen(subsidiariesData: settings.arguments as SubsidiariesData,));
 
       default:
         return null;

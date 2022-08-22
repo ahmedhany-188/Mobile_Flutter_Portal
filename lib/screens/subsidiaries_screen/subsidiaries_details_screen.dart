@@ -1,22 +1,25 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:hassanallamportalflutter/data/models/response_news.dart';
+import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 
+import '../../constants/url_links.dart';
 import '../../data/helpers/convert_from_html.dart';
+import '../../data/models/subsidiares_model/subsidiares_model.dart';
 
-class NewsDetailsScreen extends StatelessWidget {
-  const NewsDetailsScreen({Key? key, required this.newsData}) : super(key: key);
+class SubsidiariesDetailsScreen extends StatelessWidget {
+  const SubsidiariesDetailsScreen({Key? key, required this.subsidiariesData})
+      : super(key: key);
 
-  static const routeName = 'news-details-screen';
-  final NewsData newsData;
+  static const routeName = 'subsidiaries-details-screen';
+  final SubsidiariesData subsidiariesData;
 
   @override
   Widget build(BuildContext context) {
     return CustomBackground(
       child: CustomTheme(
         child: Scaffold(
-          appBar: AppBar(title: Text(newsData.newsTitle!)),
+          appBar: AppBar(title: Text(subsidiariesData.subName!)),
           body: Padding(
             padding: const EdgeInsets.all(10.0),
             child: SizedBox(
@@ -30,15 +33,20 @@ class NewsDetailsScreen extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(20),
                         child: CachedNetworkImage(
-                            imageUrl:
-                                'https://portal.hassanallam.com/images/imgs/${newsData.newsID}.jpg',
+                            imageUrl: subsidiariesIconLink(
+                                subsidiariesData.image1.toString()),
                             fit: BoxFit.scaleDown,
+                            placeholder: (_, __) => Image.asset(
+                                Assets.images.logo.path,fit: BoxFit.scaleDown,height: 60),
+                            errorWidget: (_, __, ___) => CachedNetworkImage(
+                                imageUrl: subsidiariesIconLink(
+                                    subsidiariesData.subIcone.toString())),
                             width: 250),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Text(newsData.newsTitle ?? "",
+                      child: Text(subsidiariesData.subName ?? "",
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
                     ),
@@ -47,8 +55,8 @@ class NewsDetailsScreen extends StatelessWidget {
                     ),
                     // Text(newsData.newsDescription ?? ""),
                     convertFromHtml(
-                        dataToConvert: newsData.newsBody ?? "", context: context),
-
+                        dataToConvert: subsidiariesData.subDesc ?? "",
+                        context: context),
                   ],
                 ),
               ),
@@ -59,32 +67,3 @@ class NewsDetailsScreen extends StatelessWidget {
     );
   }
 }
-
-// showDialog(
-// context: context,
-// builder: (context) {
-// return AlertDialog(
-// backgroundColor:
-// Theme.of(context).colorScheme.background,
-// title: Text(news.newsTitle ?? ""),
-// elevation: 20,
-// contentPadding: const EdgeInsets.all(10.0),
-// content: SingleChildScrollView(
-// child: Column(
-// children: [
-// Text(news.newsDescription ?? ""),
-// convertFromHtml(
-// dataToConvert: news.newsBody ?? "",
-// context: context),
-// ClipRRect(
-// borderRadius:
-// BorderRadius.circular(20),
-// child: Image.network(
-// 'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg'),
-// ),
-// ],
-// ),
-// ),
-// );
-// },
-// );
