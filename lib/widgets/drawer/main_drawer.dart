@@ -1,17 +1,16 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
-import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/apps_screen_bloc/apps_cubit.dart';
 import '../../bloc/login_cubit/login_cubit.dart';
-import '../../bloc/notification_bloc/bloc/user_notification_bloc.dart';
 import '../../constants/url_links.dart';
 import '../../screens/about_value_screen/value_screen.dart';
 import '../../screens/get_direction_screen/get_direction_screen.dart';
@@ -200,15 +199,10 @@ class _MainDrawerState extends State<MainDrawer> {
     final user =
         context.select((AppBloc bloc) => bloc.state.userData.employeeData);
 
-    return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      decoration: BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage(Assets.images.defaultBg.path), fit: BoxFit.fill),
-      ),
+    return CustomBackground(
       child: Drawer(
         elevation: 0,
+        width: double.infinity,
         backgroundColor: Colors.transparent,
         child: Column(
           children: [
