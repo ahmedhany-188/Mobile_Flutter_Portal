@@ -30,6 +30,8 @@ class MultiSelectionChipsFilters extends StatelessWidget {
       searchIcon: const Icon(Icons.search, color: Colors.white),
       closeSearchIcon: const Icon(Icons.close, color: Colors.white),
       onConfirm: onConfirm,
+      initialChildSize: 0.6,
+      maxChildSize: 0.75,
       confirmText: const Text(
         'OK',
         style: TextStyle(color: Colors.white),

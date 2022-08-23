@@ -224,6 +224,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     backgroundImage: CachedNetworkImageProvider(
                       'https://portal.hassanallam.com/Apps/images/Profile/${user!.imgProfile}',
                     ),
+                    backgroundColor: Colors.transparent,
                     onBackgroundImageError: (_, __) {
                       Image.asset(
                         'assets/images/logo.png',

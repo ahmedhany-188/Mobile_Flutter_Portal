@@ -132,6 +132,10 @@ class EquipmentsRequest extends StatelessWidget {
                                   ),
                                   popupProps: PopupProps.modalBottomSheet(
                                     showSearchBox: true,
+                                    constraints: BoxConstraints(
+                                        maxHeight:
+                                            MediaQuery.of(context).size.height *
+                                                0.75),
                                     interceptCallBacks: true,
                                     searchDelay: Duration.zero,
                                     title: AppBar(
@@ -216,13 +220,17 @@ class EquipmentsRequest extends StatelessWidget {
                                           color: Colors.white),
                                   popupProps: PopupProps.modalBottomSheet(
                                     showSearchBox: true,
+                                    constraints: BoxConstraints(
+                                        maxHeight:
+                                            MediaQuery.of(context).size.height *
+                                                0.75),
                                     searchDelay: Duration.zero,
                                     interceptCallBacks: true,
                                     modalBottomSheetProps:
                                         ModalBottomSheetProps(
                                       backgroundColor: Theme.of(context)
                                           .colorScheme
-                                          .secondary,
+                                          .background,
                                       shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.vertical(
                                         top: Radius.circular(20),
@@ -296,6 +304,10 @@ class EquipmentsRequest extends StatelessWidget {
                                           color: Colors.white),
                                   popupProps: PopupProps.modalBottomSheet(
                                     showSearchBox: true,
+                                    constraints: BoxConstraints(
+                                        maxHeight:
+                                            MediaQuery.of(context).size.height *
+                                                0.75),
                                     searchDelay: Duration.zero,
                                     title: AppBar(
                                       title: const Text('Department'),
@@ -307,7 +319,7 @@ class EquipmentsRequest extends StatelessWidget {
                                         ModalBottomSheetProps(
                                             backgroundColor: Theme.of(context)
                                                 .colorScheme
-                                                .secondary,
+                                                .background,
                                             shape: const RoundedRectangleBorder(
                                                 borderRadius:
                                                     BorderRadius.vertical(
@@ -379,8 +391,10 @@ class EquipmentsRequest extends StatelessWidget {
                                       label: const Text('Request Item'),
                                       style: ElevatedButton.styleFrom(
                                           tapTargetSize:
-                                              MaterialTapTargetSize.padded,shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20))
-                                          ),
+                                              MaterialTapTargetSize.padded,
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(20))),
                                     )
                                   : SizedBox(
                                       child: Text(state.statusAction ?? ''),
@@ -530,7 +544,8 @@ class EquipmentsRequest extends StatelessWidget {
                                                 const BorderRadius.all(
                                                     Radius.circular(20)),
                                             child: ExpansionTile(
-                                              backgroundColor: Colors.grey.shade400,
+                                              backgroundColor:
+                                                  Colors.blueGrey.shade300,
                                               collapsedBackgroundColor:
                                                   Colors.white38,
                                               maintainState: true,
@@ -1076,14 +1091,15 @@ class EquipmentsRequest extends StatelessWidget {
                                   userHrCode: user.employeeData!.userHrCode!,
                                   selectedItem: state.chosenList,
                                 );
-                                Navigator.of(context)
-                                    .pushReplacement(MaterialPageRoute(
-                                        builder: (_) => const SuccessScreen(
-                                              requestName: 'Equipment',
-                                              routName:
-                                                  EquipmentsRequest.routeName,
-                                              text: "Success",
-                                            )));
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (_) => const SuccessScreen(
+                                      requestName: 'Equipment',
+                                      routName: EquipmentsRequest.routeName,
+                                      text: "Success",
+                                    ),
+                                  ),
+                                );
                               }
                             },
                             materialTapTargetSize:
@@ -1105,133 +1121,246 @@ class EquipmentsRequest extends StatelessWidget {
   showAddRequestBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      enableDrag: false,
+      enableDrag: true,
+      isScrollControlled: true,
       backgroundColor: const Color(0xFF031A27),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
       // useSafeArea: true,
       builder: (dialogContext) {
-        return BottomSheet(
-          // insetAnimationCurve: Curves.easeIn,
-          // insetAnimationDuration: const Duration(milliseconds: 500),
-          key: UniqueKey(), enableDrag: false,
-          backgroundColor: const Color(0xFF031A27),
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
-          onClosing: () {},
-          builder: (_) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView(
-                shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
-                padding: const EdgeInsets.all(10),
-                keyboardDismissBehavior:
-                    ScrollViewKeyboardDismissBehavior.onDrag,
-                children: [
-                  addRequestOptions(
-                      id: '8',
-                      context: context,
-                      name: 'Accessories',
-                      icon: const Icon(
-                        Icons.keyboard_alt_outlined,
-                        color: Colors.white,
-                      )),
-                  const Divider(color: Colors.white),
-                  addRequestOptions(
-                      id: '2',
-                      context: context,
-                      name: 'Laptop',
-                      icon: const Icon(
-                        Icons.laptop_chromebook_outlined,
-                        color: Colors.white,
-                      )),
-                  const Divider(color: Colors.white),
-                  addRequestOptions(
-                      id: '9',
-                      context: context,
-                      name: 'Datashow / projector',
-                      icon: const Icon(
-                        Icons.live_tv,
-                        color: Colors.white,
-                      )),
-                  const Divider(color: Colors.white),
-                  addRequestOptions(
-                      id: '1',
-                      context: context,
-                      name: 'Desktop',
-                      icon: const Icon(
-                        Icons.computer_outlined,
-                        color: Colors.white,
-                      )),
-                  const Divider(color: Colors.white),
-                  addRequestOptions(
-                      id: '7',
-                      context: context,
-                      name: 'Fingerprint',
-                      icon: const Icon(
-                        Icons.fingerprint,
-                        color: Colors.white,
-                      )),
-                  const Divider(color: Colors.white),
-                  addRequestOptions(
-                      id: '11',
-                      context: context,
-                      name: 'Internet connection',
-                      icon: const Icon(
-                        Icons.network_wifi_outlined,
-                        color: Colors.white,
-                      )),
-                  const Divider(color: Colors.white),
-                  addRequestOptions(
-                      id: '10',
-                      context: context,
-                      name: 'Telephones',
-                      icon: const Icon(
-                        Icons.call,
-                        color: Colors.white,
-                      )),
-                  const Divider(color: Colors.white),
-                  addRequestOptions(
-                      id: '4',
-                      context: context,
-                      name: 'Printer',
-                      icon: const Icon(
-                        Icons.print_outlined,
-                        color: Colors.white,
-                      )),
-                  const Divider(color: Colors.white),
-                  addRequestOptions(
-                      id: '3',
-                      context: context,
-                      name: 'Server',
-                      icon: const HeroIcon(
-                        HeroIcons.server,
-                        color: Colors.white,
-                      )),
-                  const Divider(color: Colors.white),
-                  addRequestOptions(
-                      id: '6',
-                      context: context,
-                      name: 'Network',
-                      icon: const HeroIcon(
-                        HeroIcons.globe,
-                        color: Colors.white,
-                      )),
-                  const Divider(color: Colors.white),
-                  addRequestOptions(
-                      id: '14',
-                      context: context,
-                      name: 'Toner/Ink',
-                      icon: const Icon(
-                        Icons.water_drop,
-                        color: Colors.white,
-                      )),
-                ],
-              ),
-            );
-          },
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.75,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ListView(
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              padding: const EdgeInsets.all(10),
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+              children: [
+                addRequestOptions(
+                    id: '8',
+                    context: context,
+                    name: 'Accessories',
+                    icon: const Icon(
+                      Icons.keyboard_alt_outlined,
+                      color: Colors.white,
+                    )),
+                const Divider(color: Colors.white),
+                addRequestOptions(
+                    id: '2',
+                    context: context,
+                    name: 'Laptop',
+                    icon: const Icon(
+                      Icons.laptop_chromebook_outlined,
+                      color: Colors.white,
+                    )),
+                const Divider(color: Colors.white),
+                addRequestOptions(
+                    id: '9',
+                    context: context,
+                    name: 'Datashow / projector',
+                    icon: const Icon(
+                      Icons.live_tv,
+                      color: Colors.white,
+                    )),
+                const Divider(color: Colors.white),
+                addRequestOptions(
+                    id: '1',
+                    context: context,
+                    name: 'Desktop',
+                    icon: const Icon(
+                      Icons.computer_outlined,
+                      color: Colors.white,
+                    )),
+                const Divider(color: Colors.white),
+                addRequestOptions(
+                    id: '7',
+                    context: context,
+                    name: 'Fingerprint',
+                    icon: const Icon(
+                      Icons.fingerprint,
+                      color: Colors.white,
+                    )),
+                const Divider(color: Colors.white),
+                addRequestOptions(
+                    id: '11',
+                    context: context,
+                    name: 'Internet connection',
+                    icon: const Icon(
+                      Icons.network_wifi_outlined,
+                      color: Colors.white,
+                    )),
+                const Divider(color: Colors.white),
+                addRequestOptions(
+                    id: '10',
+                    context: context,
+                    name: 'Telephones',
+                    icon: const Icon(
+                      Icons.call,
+                      color: Colors.white,
+                    )),
+                const Divider(color: Colors.white),
+                addRequestOptions(
+                    id: '4',
+                    context: context,
+                    name: 'Printer',
+                    icon: const Icon(
+                      Icons.print_outlined,
+                      color: Colors.white,
+                    )),
+                const Divider(color: Colors.white),
+                addRequestOptions(
+                    id: '3',
+                    context: context,
+                    name: 'Server',
+                    icon: const HeroIcon(
+                      HeroIcons.server,
+                      color: Colors.white,
+                    )),
+                const Divider(color: Colors.white),
+                addRequestOptions(
+                    id: '6',
+                    context: context,
+                    name: 'Network',
+                    icon: const HeroIcon(
+                      HeroIcons.globe,
+                      color: Colors.white,
+                    )),
+                const Divider(color: Colors.white),
+                addRequestOptions(
+                    id: '14',
+                    context: context,
+                    name: 'Toner/Ink',
+                    icon: const Icon(
+                      Icons.water_drop,
+                      color: Colors.white,
+                    )),
+              ],
+            ),
+          ),
         );
+        //   BottomSheet(
+        //   // insetAnimationCurve: Curves.easeIn,
+        //   // insetAnimationDuration: const Duration(milliseconds: 500),
+        //   key: UniqueKey(), enableDrag: false,
+        //   backgroundColor: const Color(0xFF031A27),
+        //   shape: const RoundedRectangleBorder(
+        //       borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
+        //   onClosing: () {},
+        //   builder: (_) {
+        //     return Padding(
+        //       padding: const EdgeInsets.all(8.0),
+        //       child: ListView(
+        //         shrinkWrap: true,
+        //         physics: const BouncingScrollPhysics(),
+        //         padding: const EdgeInsets.all(10),
+        //         keyboardDismissBehavior:
+        //             ScrollViewKeyboardDismissBehavior.onDrag,
+        //         children: [
+        //           addRequestOptions(
+        //               id: '8',
+        //               context: context,
+        //               name: 'Accessories',
+        //               icon: const Icon(
+        //                 Icons.keyboard_alt_outlined,
+        //                 color: Colors.white,
+        //               )),
+        //           const Divider(color: Colors.white),
+        //           addRequestOptions(
+        //               id: '2',
+        //               context: context,
+        //               name: 'Laptop',
+        //               icon: const Icon(
+        //                 Icons.laptop_chromebook_outlined,
+        //                 color: Colors.white,
+        //               )),
+        //           const Divider(color: Colors.white),
+        //           addRequestOptions(
+        //               id: '9',
+        //               context: context,
+        //               name: 'Datashow / projector',
+        //               icon: const Icon(
+        //                 Icons.live_tv,
+        //                 color: Colors.white,
+        //               )),
+        //           const Divider(color: Colors.white),
+        //           addRequestOptions(
+        //               id: '1',
+        //               context: context,
+        //               name: 'Desktop',
+        //               icon: const Icon(
+        //                 Icons.computer_outlined,
+        //                 color: Colors.white,
+        //               )),
+        //           const Divider(color: Colors.white),
+        //           addRequestOptions(
+        //               id: '7',
+        //               context: context,
+        //               name: 'Fingerprint',
+        //               icon: const Icon(
+        //                 Icons.fingerprint,
+        //                 color: Colors.white,
+        //               )),
+        //           const Divider(color: Colors.white),
+        //           addRequestOptions(
+        //               id: '11',
+        //               context: context,
+        //               name: 'Internet connection',
+        //               icon: const Icon(
+        //                 Icons.network_wifi_outlined,
+        //                 color: Colors.white,
+        //               )),
+        //           const Divider(color: Colors.white),
+        //           addRequestOptions(
+        //               id: '10',
+        //               context: context,
+        //               name: 'Telephones',
+        //               icon: const Icon(
+        //                 Icons.call,
+        //                 color: Colors.white,
+        //               )),
+        //           const Divider(color: Colors.white),
+        //           addRequestOptions(
+        //               id: '4',
+        //               context: context,
+        //               name: 'Printer',
+        //               icon: const Icon(
+        //                 Icons.print_outlined,
+        //                 color: Colors.white,
+        //               )),
+        //           const Divider(color: Colors.white),
+        //           addRequestOptions(
+        //               id: '3',
+        //               context: context,
+        //               name: 'Server',
+        //               icon: const HeroIcon(
+        //                 HeroIcons.server,
+        //                 color: Colors.white,
+        //               )),
+        //           const Divider(color: Colors.white),
+        //           addRequestOptions(
+        //               id: '6',
+        //               context: context,
+        //               name: 'Network',
+        //               icon: const HeroIcon(
+        //                 HeroIcons.globe,
+        //                 color: Colors.white,
+        //               )),
+        //           const Divider(color: Colors.white),
+        //           addRequestOptions(
+        //               id: '14',
+        //               context: context,
+        //               name: 'Toner/Ink',
+        //               icon: const Icon(
+        //                 Icons.water_drop,
+        //                 color: Colors.white,
+        //               )),
+        //         ],
+        //       ),
+        //     );
+        //   },
+        // );
       },
     );
   }
@@ -1243,7 +1372,8 @@ class EquipmentsRequest extends StatelessWidget {
       required String id}) {
     return InkWell(
       onTap: () {
-        showEquipmentsDialog(context: context, name: name, id: id, icon: icon);
+        showEquipmentsBottomSheet(
+            context: context, name: name, id: id, icon: icon);
       },
       // borderRadius: const BorderRadius.all(Radius.circular(25)),
       child: Container(
@@ -1267,86 +1397,112 @@ class EquipmentsRequest extends StatelessWidget {
     );
   }
 
-  showEquipmentsDialog(
+  showEquipmentsBottomSheet(
       {required BuildContext context,
       required String name,
       required String id,
       required Widget icon}) {
     showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
+      enableDrag: true,
       backgroundColor: const Color(0xFF031A27),
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
       builder: (dialogContext) {
-        return BottomSheet(
-          // insetAnimationCurve: Curves.easeIn,
-          // insetAnimationDuration: const Duration(milliseconds: 500),
-          // backgroundColor: Colors.transparent,
-          enableDrag: false,
-          key: UniqueKey(),
-          backgroundColor: const Color(0xFF031A27),
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(25))),
-          onClosing: () {},
-          builder: (_) {
-            return Scaffold(
-              backgroundColor: Colors.transparent,
-              resizeToAvoidBottomInset: false,
-              appBar: AppBar(
-                title: Text(name),
-                centerTitle: true,
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-              ),
-              body: Column(
+        return SizedBox(
+          height: MediaQuery.of(context).size.height * 0.75,
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              title: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   icon,
-                  BlocProvider(
-                    create: (context) =>
-                        EquipmentsItemsCubit()..getEquipmentsItems(id: id),
-                    child: BlocBuilder<EquipmentsItemsCubit,
-                        EquipmentsItemsInitial>(
-                      builder: (context, state) {
-                        return buildDynamicDropDownMenu(
-                          items: state.listEquipmentsItem,
-                          listName: 'Select Item',
-                          context: context,
-                        );
-                      },
-                    ),
+                  const SizedBox(
+                    width: 10,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: buildTextFormField(),
-                  ),
-                  BlocBuilder<ContactsCubit, ContactCubitStates>(
-                    builder: (context, state) {
-                      return buildContactsDropDownMenu(
-                          listName: 'Owner Employee',
-                          items: ContactsCubit.get(context).state.listContacts,
-                          context: context);
-                    },
-                  ),
-                  buildDropDownMenu(
-                    items: [
-                      'New Hire',
-                      'Replacement / New Item',
-                      'Training',
-                      'Mobilization'
-                    ],
-                    listName: 'Request For',
-                    context: context,
-                  ),
-                  ElevatedButton.icon(
-                    onPressed: () => onSubmitRequest(context, icon),
-                    label: const Text('Done'),
-                    icon: const Icon(Icons.done),
-                  ),
+                  Text(name,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
                 ],
               ),
-            );
-          },
+              actions: [
+                TextButton.icon(
+                  onPressed: () => onSubmitRequest(context, icon),
+                  label: const Text(
+                    'Done',
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                  icon: const Icon(
+                    Icons.done,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+              centerTitle: true,
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+            ),
+            body: Column(
+              // mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                BlocProvider(
+                  create: (context) =>
+                      EquipmentsItemsCubit()..getEquipmentsItems(id: id),
+                  child:
+                      BlocBuilder<EquipmentsItemsCubit, EquipmentsItemsInitial>(
+                    builder: (context, state) {
+                      return buildDynamicDropDownMenu(
+                        items: state.listEquipmentsItem,
+                        listName: 'Select Item',
+                        context: context,
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: buildTextFormField(),
+                ),
+                BlocBuilder<ContactsCubit, ContactCubitStates>(
+                  builder: (context, state) {
+                    return buildContactsDropDownMenu(
+                        listName: 'Owner Employee',
+                        items: ContactsCubit.get(context).state.listContacts,
+                        context: context);
+                  },
+                ),
+                buildDropDownMenu(
+                  items: [
+                    'New Hire',
+                    'Replacement / New Item',
+                    'Training',
+                    'Mobilization'
+                  ],
+                  listName: 'Request For',
+                  context: context,
+                ),
+                // ElevatedButton.icon(
+                //   onPressed: () => onSubmitRequest(context, icon),
+                //   label: Text('Done',
+                //       style: TextStyle(
+                //           color: Theme.of(context).colorScheme.background)),
+                //   icon: Icon(
+                //     Icons.done,
+                //     color: Theme.of(context).colorScheme.background,
+                //   ),
+                //   style: ElevatedButton.styleFrom(
+                //     primary: Colors.white,
+                //     shape: RoundedRectangleBorder(
+                //         borderRadius: BorderRadius.circular(20)),
+                //   ),
+                // ),
+              ],
+            ),
+          ),
         );
       },
     );
@@ -1364,6 +1520,7 @@ class EquipmentsRequest extends StatelessWidget {
           items: items,
           itemAsString: (contactKey) => contactKey.name!.trim(),
           key: ownerFormKey,
+          dropdownButtonProps: const DropdownButtonProps(color: Colors.white),
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
               labelText: listName,
@@ -1415,6 +1572,7 @@ class EquipmentsRequest extends StatelessWidget {
             return null;
           },
           itemAsString: (equip) => equip.hardWareItemName!,
+          dropdownButtonProps: const DropdownButtonProps(color: Colors.white),
           dropdownDecoratorProps: DropDownDecoratorProps(
               dropdownSearchDecoration: InputDecoration(
                   labelText: listName,
@@ -1447,22 +1605,28 @@ class EquipmentsRequest extends StatelessWidget {
         child: DropdownSearch<String?>(
           items: items,
           key: requestForFormKey,
+          dropdownButtonProps: const DropdownButtonProps(color: Colors.white),
           dropdownDecoratorProps: DropDownDecoratorProps(
-              dropdownSearchDecoration: InputDecoration(
-                  labelText: listName,
-                  contentPadding: const EdgeInsets.all(10),
-                  icon: const Icon(
-                    Icons.question_mark,
-                    color: Colors.white,
-                  ))),
-          popupProps: PopupProps.menu(
-              menuProps: MenuProps(
-                backgroundColor: Theme.of(context).colorScheme.background,
+            dropdownSearchDecoration: InputDecoration(
+              labelText: listName,
+              contentPadding: const EdgeInsets.all(10),
+              icon: const Icon(
+                Icons.question_mark,
+                color: Colors.white,
               ),
-              showSearchBox: showSearch,
-              fit: FlexFit.tight,
-              searchFieldProps: const TextFieldProps(
-                  padding: EdgeInsets.zero, scrollPadding: EdgeInsets.zero)),
+            ),
+          ),
+          popupProps: PopupProps.menu(
+            menuProps: MenuProps(
+              backgroundColor: Theme.of(context).colorScheme.background,
+            ),
+            showSearchBox: showSearch,
+            fit: FlexFit.tight,
+            searchFieldProps: const TextFieldProps(
+              padding: EdgeInsets.zero,
+              scrollPadding: EdgeInsets.zero,
+            ),
+          ),
         ),
       ),
     );
