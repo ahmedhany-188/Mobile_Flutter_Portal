@@ -143,7 +143,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       curve: Curves.linear,
                       splashIconSize: deviceHeight,
                       splashTransition: SplashTransition.fadeTransition,
-                      animationDuration: const Duration(milliseconds: 1000),
+                      // animationDuration: const Duration(milliseconds: 1000),
                       splash: Stack(
                         children: [
                           Align(
@@ -185,7 +185,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         return PageTransitionAnimation(
                           transitionDuration: 500,
                           context: context,
-                          delayedDuration: 2500,
+                          delayedDuration: 1500,
                           pageDirection: BlocBuilder<AppBloc, AppState>(
                             builder: (ctx, state) {
                               switch (state.status) {
