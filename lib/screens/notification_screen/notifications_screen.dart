@@ -119,7 +119,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                 fit: FlexFit.loose,
                                                 child: Row(
                                                   mainAxisAlignment: MainAxisAlignment
-                                                      .start,
+                                                      .spaceAround,
                                                   crossAxisAlignment: CrossAxisAlignment
                                                       .start,
                                                   children: [
@@ -133,8 +133,8 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                                         imageBuilder: (context,
                                                             imageProvider) =>
                                                             Container(
-                                                              width: 60.sp,
-                                                              height: 60.sp,
+                                                              width: 40.sp,
+                                                              height: 40.sp,
                                                               decoration: BoxDecoration(
                                                                 shape: BoxShape
                                                                     .circle,
