@@ -6,11 +6,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+// import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hassanallamportalflutter/bloc/apps_screen_bloc/apps_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/hr_request_export.dart';
 import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
-import 'package:hassanallamportalflutter/bloc/notification_bloc/bloc/user_notification_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/statistics_bloc/statistics_cubit.dart';
@@ -46,6 +46,10 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 

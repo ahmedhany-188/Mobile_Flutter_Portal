@@ -115,10 +115,14 @@ dependencies:
 
 
 
-#  flutter_native_splash: any
+#  flutter_native_splash: ^2.2.8
 #flutter_native_splash:
-#    background_image: assets/images/native_splash.png
-#    fullscreen: false
+#    image: assets/images/login_image_logo.png
+#    fullscreen: true
+#    color: "#031A27"
+#    android_gravity: center
+#    ios_content_mode: center
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -136,7 +140,7 @@ dev_dependencies:
 
 
 
-lutter_gen:
+flutter_gen:
   output: lib/gen/ # Optional (default: lib/gen/)
   line_length: 80   # Optional (default: 80)
 
