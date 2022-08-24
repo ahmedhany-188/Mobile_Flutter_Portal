@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/responsible_vacation_request/responsible_vacation_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/hr_request_bloc/vacation_request/vacation_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/contacts_related_models/contacts_data_from_api.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
@@ -100,7 +101,7 @@ class _VacationScreenState extends State<VacationScreen> {
                             heroTag: null,
                             onPressed: () {
                               context.read<VacationCubit>()
-                                  .submitAction(true);
+                                  .submitAction(ActionValueStatus.accept,currentRequestData[VacationScreen.requestNoKey]);
                             },
                             icon: const Icon(Icons.verified),
                             label: const Text('Accept'),
@@ -114,7 +115,8 @@ class _VacationScreenState extends State<VacationScreen> {
                           backgroundColor: Colors.white,
                           heroTag: null,
                           onPressed: () {
-
+                            context.read<VacationCubit>()
+                                .submitAction(ActionValueStatus.reject,currentRequestData[VacationScreen.requestNoKey]);
                           },
                           icon: const Icon(Icons.dangerous,
                             color: ConstantsColors.buttonColors,),
@@ -151,7 +153,6 @@ class _VacationScreenState extends State<VacationScreen> {
                             dismissOnTap: false,);
                         }
                         if (state.status.isSubmissionSuccess) {
-                          // LoadingDialog.hide(context);
                           EasyLoading.dismiss(animation: true);
                           if (state.requestStatus == RequestStatus.newRequest) {
                             Navigator.of(context).pushReplacement(
@@ -160,6 +161,10 @@ class _VacationScreenState extends State<VacationScreen> {
                                         "Error Number",
                                       routName: VacationScreen.routeName,
                                       requestName: 'Vacation',)));
+                          }
+                          else if (state.requestStatus == RequestStatus.oldRequest){
+                            EasyLoading.showSuccess(state.successMessage ?? "").then((value) => Navigator.pop(context));
+                            BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();
                           }
                         }
                         if (state.status.isSubmissionFailure) {
@@ -174,6 +179,9 @@ class _VacationScreenState extends State<VacationScreen> {
                           //           state.errorMessage ?? 'Request Failed'),
                           //     ),
                           //   );
+                        }
+                        if (state.status.isValid) {
+                          EasyLoading.dismiss(animation: true);
                         }
                       },
                       child: Padding(

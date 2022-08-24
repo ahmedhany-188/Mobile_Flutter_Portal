@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
+import 'package:hassanallamportalflutter/constants/enums.dart';
 import 'package:hassanallamportalflutter/data/data_providers/requests_data_providers/request_data_providers.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/business_card_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
@@ -21,6 +22,7 @@ import '../../constants/request_service_id.dart';
 import '../models/it_requests_form_models/equipments_models/equipments_requested_model.dart';
 import '../models/requests_form_models/request_business_mission_data_model.dart';
 import '../models/requests_form_models/request_permission_data_model.dart';
+import '../models/response_take_action.dart';
 
 class RequestRepository {
   final RequestDataProviders requestDataProviders = RequestDataProviders();
@@ -348,25 +350,21 @@ class RequestRepository {
   }
 
 
-  Future<RequestResponse> postTakeActionRequest(bool takeAction) async{
+  Future<ResponseTakeAction> postTakeActionRequest({required ActionValueStatus valueStatus,required String serviceID,required String requestNo,required String requesterHRCode,required String actionComment}) async{
     var bodyString = jsonEncode(<String, dynamic>{
-      // "serviceId": serviceID,
-      // "reqno": requestNo,
-      // "Approve": takeAction? 1 : 2,
-      // "requesterhrcode": requesterHRCode ,
+      "serviceId": serviceID,
+      "reqno": int.parse(requestNo),
+      "Approve": valueStatus == ActionValueStatus.accept ? 1 : 2,
+      "requesterhrcode": requesterHRCode ,
       "mangerHrCode": userData.user?.userHRCode ?? "0",
-      "comment" :""
+      "comment" :actionComment
     });
-    final http.Response rawPermission = await requestDataProviders
+    final http.Response rawResponse = await requestDataProviders
         .postTakeActionOnRequest(bodyString);
-    final json = await jsonDecode(rawPermission.body);
-    final RequestResponse response = RequestResponse.fromJson(json);
+    final json = await jsonDecode(rawResponse.body);
+    final ResponseTakeAction response = ResponseTakeAction.fromJson(json);
     return response;
   }
-
-
-
-
 
 
 

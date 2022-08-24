@@ -10,3 +10,8 @@ enum TakeActionStatus {
   takeAction,
   view
 }
+
+enum ActionValueStatus {
+  accept,
+  reject
+}
