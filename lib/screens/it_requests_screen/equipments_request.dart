@@ -49,6 +49,7 @@ class EquipmentsRequest extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    controller.text = '1';
     final user = context.select((AppBloc bloc) => bloc.state.userData);
     double shake(double animation) =>
         2 * (0.5 - (0.5 - Curves.ease.transform(animation)).abs());
@@ -1423,7 +1424,11 @@ class EquipmentsRequest extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  Text(name,style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold),),
+                  Text(
+                    name,
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
               actions: [
@@ -1633,7 +1638,6 @@ class EquipmentsRequest extends StatelessWidget {
   }
 
   buildTextFormField() {
-    controller.text = '1';
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.center,
@@ -1681,7 +1685,7 @@ class EquipmentsRequest extends StatelessWidget {
             splashColor: Colors.transparent,
             onPressed: () {
               int currentValue = int.parse(controller.text);
-              currentValue++;
+              if (currentValue < 100) currentValue++;
               controller.text = (currentValue).toString(); // incrementing value
             },
           ),

@@ -36,8 +36,8 @@ class EquipmentsItemModel {
   String? inDate;
   String? inUser;
   String? unitType;
-  String? isParent;
-  String? parentItemId;
+  bool? isParent;
+  int? parentItemId;
 
   EquipmentsItemModel(
       {this.hardWareItemId,
