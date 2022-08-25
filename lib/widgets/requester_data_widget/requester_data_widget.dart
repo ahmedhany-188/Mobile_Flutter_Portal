@@ -1,7 +1,9 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
 
 class RequesterDataWidget extends StatelessWidget {
@@ -14,6 +16,8 @@ class RequesterDataWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final imageProfile = requesterData.imgProfile ?? "";
     return Container(
       width: double.infinity,
       margin: EdgeInsets.only(bottom: 1.h),
@@ -36,23 +40,37 @@ class RequesterDataWidget extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    radius: 29,
-                    // borderRadius: BorderRadius.circular(50),
-                    backgroundImage: NetworkImage(
-                      'https://portal.hassanallam.com/Apps/images/Profile/${requesterData
-                          .imgProfile}',
-                    ),
-                    onBackgroundImageError: (_, __) {
-                      Image.asset(
-                        'assets/images/logo.png',
-                        fit: BoxFit.fitHeight,
-                        width: 65,
-                        height: 65,
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 5,),
+                  imageProfile.isNotEmpty
+                      ? CachedNetworkImage(
+                    imageUrl: 'https://portal.hassanallam.com/Apps/images/Profile/$imageProfile',
+                    imageBuilder: (context,
+                        imageProvider) =>
+                        Container(
+                          width: 40.sp,
+                          height: 40.sp,
+                          decoration: BoxDecoration(
+                            shape: BoxShape
+                                .circle,
+                            image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit
+                                    .cover),
+                          ),
+                        ),
+                    placeholder: (context,
+                        url) =>
+                        Assets.images.logo
+                            .image(
+                            height: 60.sp),
+                    errorWidget: (context,
+                        url, error) =>
+                        Assets.images.logo
+                            .image(
+                            height: 60.sp),
+                  )
+                      : Assets.images.logo
+                      .image(height: 60.sp),
+                  const SizedBox(width: 10,),
                   SizedBox(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

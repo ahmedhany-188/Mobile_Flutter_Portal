@@ -8,13 +8,13 @@ class NewsInitial extends NewsState {}
 class NewsLoadingState extends NewsState {}
 
 class NewsSuccessState extends NewsState {
-  final List<Data> newsList;
+  final List<NewsData> newsList;
   final List<AnimatedText> announcment;
 
   NewsSuccessState(this.newsList,this.announcment);
 }
 class LatestNewsSuccessState extends NewsState {
-  final List<Data> latestNewsList;
+  final List<NewsData> latestNewsList;
 
   LatestNewsSuccessState(this.latestNewsList);
 }

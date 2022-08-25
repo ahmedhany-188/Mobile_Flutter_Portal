@@ -25,7 +25,7 @@ class _LifeCycleStateState extends State<LifeCycleState> with WidgetsBindingObse
   @override
   Widget build(BuildContext context) {
     print("life cycle --> started");
-    precacheImage(Assets.images.defaultBg.image().image, context);
+    precacheImage(Assets.images.mainBackground.image().image, context);
         return widget.child;
   }
   @override
@@ -39,7 +39,7 @@ class _LifeCycleStateState extends State<LifeCycleState> with WidgetsBindingObse
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // TODO: implement didChangeAppLifecycleState
     super.didChangeAppLifecycleState(state);
-    precacheImage(Assets.images.defaultBg.image().image, context);
+    precacheImage(Assets.images.mainBackground.image().image, context);
     final status = context
         .read<AppBloc>().state.status;
     if(state == AppLifecycleState.resumed){

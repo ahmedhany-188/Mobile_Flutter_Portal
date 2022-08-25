@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
@@ -10,8 +12,16 @@ import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 
 class ContactsWidget extends StatelessWidget {
   final List<ContactsDataFromApi> listFromContactsScreen;
-  const ContactsWidget(this.listFromContactsScreen, {Key? key})
+  ContactsWidget(this.listFromContactsScreen, {Key? key})
       : super(key: key);
+
+  static final ScrollController _scrollController = ScrollController();
+
+  static scrollToTop() {
+    Timer(
+      const Duration(seconds: 0), () => _scrollController.animateTo(0.0, curve: Curves.easeOut, duration: const Duration(milliseconds: 300)),
+    );
+  }
 
   void contactDetails(BuildContext context, int contactIndex) {
     // Navigator.of(context).pushNamed(
@@ -19,7 +29,7 @@ class ContactsWidget extends StatelessWidget {
     //   arguments: listFromContactsScreen[contactIndex],
     // );
 
-    print('pope'+listFromContactsScreen[contactIndex].phoneNumber.toString());
+    // print('pope'+listFromContactsScreen[contactIndex].phoneNumber.toString());
     Navigator.of(context).pushNamed(
       DirectManagerProfileScreen.routeName,
       arguments: {DirectManagerProfileScreen.employeeHrCode: "0",
@@ -29,13 +39,16 @@ class ContactsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // scrollToTop();
     return Sizer(
       builder: (c, o, d) => ConditionalBuilder(
         condition: listFromContactsScreen.isNotEmpty,
         builder: (context) => ListView.separated(
           physics: const BouncingScrollPhysics(),
-          itemBuilder: (context, index) {
+          controller: _scrollController,
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
 
+          itemBuilder: (context, index) {
             var imageProfile = listFromContactsScreen[index].imgProfile ?? "";
             return Padding(
               padding: const EdgeInsets.all(15.0),

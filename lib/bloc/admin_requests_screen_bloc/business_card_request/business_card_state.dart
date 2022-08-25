@@ -11,8 +11,8 @@ abstract class BusinessCardState  extends Equatable{
 
 class BusinessCardInitial  extends BusinessCardState {
   const BusinessCardInitial({
-    this.requestDate = const RequestDate.pure(),
 
+    this.requestDate = const RequestDate.pure(),
     this.employeeNameCard = const RequestDate.pure(),
     this.employeeMobile = const RequestDate.pure(),
     this.employeeExt = "",
@@ -24,7 +24,8 @@ class BusinessCardInitial  extends BusinessCardState {
     this.statusAction,
     this.errorMessage,
     this.successMessage,
-
+    this.requesterData = EmployeeData.empty,
+    this.actionComment = "",
 
   });
 
@@ -40,6 +41,8 @@ class BusinessCardInitial  extends BusinessCardState {
   final String? statusAction;
   final String? errorMessage;
   final String? successMessage;
+  final EmployeeData requesterData;
+  final String actionComment;
 
   @override
   List<Object> get props =>
@@ -49,7 +52,8 @@ class BusinessCardInitial  extends BusinessCardState {
         employeeExt,
         employeeFaxNO,
         comment,
-        status
+        status,
+  requesterData,actionComment
       ];
 
 
@@ -66,6 +70,8 @@ class BusinessCardInitial  extends BusinessCardState {
     RequestStatus? requestStatus,
     String? statusAction,
     TakeActionStatus? takeActionStatus,
+    EmployeeData? requesterData,
+    String? actionComment,
   }) {
     return BusinessCardInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -80,6 +86,8 @@ class BusinessCardInitial  extends BusinessCardState {
       takeActionStatus: takeActionStatus ?? this.takeActionStatus,
       statusAction: statusAction ?? this.statusAction,
       requestStatus: requestStatus ?? this.requestStatus,
+      requesterData: requesterData ?? this.requesterData,
+      actionComment: actionComment ?? this.actionComment,
     );
   }
 }

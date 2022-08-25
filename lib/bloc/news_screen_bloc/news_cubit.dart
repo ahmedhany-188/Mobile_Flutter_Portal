@@ -29,8 +29,8 @@ class NewsCubit extends Cubit<NewsState> {
 
   static NewsCubit get(context) => BlocProvider.of<NewsCubit>(context);
 
-  List<Data> newsList = [];
-  List<Data> latestNewsList = [];
+  List<NewsData> newsList = [];
+  List<NewsData> latestNewsList = [];
   List<AnimatedText> announcment = [];
 
   void getNews() {

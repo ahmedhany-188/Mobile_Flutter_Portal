@@ -8,6 +8,7 @@ import 'package:conditional_builder_null_safety/conditional_builder_null_safety.
 import '../../bloc/subsidiaries_screen_bloc/subsidiaries_cubit.dart';
 import '../../constants/url_links.dart';
 import '../../data/helpers/assist_function.dart';
+import 'subsidiaries_details_screen.dart';
 
 class SubsidiariesScreen extends StatefulWidget {
   static const routeName = 'subsidiaries-screen';
@@ -27,7 +28,7 @@ class _SubsidiariesScreenState extends State<SubsidiariesScreen> {
         // appBar: internalAppBar(context: context, title: 'Subsidiaries'),
         appBar: AppBar(
           centerTitle: true,
-          title: Text('Subsidiaries'),
+          title: const Text('Subsidiaries'),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
@@ -72,13 +73,15 @@ class _SubsidiariesScreenState extends State<SubsidiariesScreen> {
                                 var list = state.subsidiariesList[index];
                                 return InkWell(
                                   onTap: () {
+                                    Navigator.of(context).pushNamed(SubsidiariesDetailsScreen.routeName,arguments: list);
+
                                     // showDialog(
                                     //     context: context,
                                     //     builder: (context) {
                                     //       return AlertDialog(
                                     //           backgroundColor: Theme.of(context)
                                     //               .colorScheme
-                                    //               .background,
+                                    //               .secondary,
                                     //           title:
                                     //               Text(list.subName.toString()),
                                     //           elevation: 20,

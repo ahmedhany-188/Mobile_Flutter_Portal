@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hassanallamportalflutter/constants/constants.dart';
 
 import '../../constants/colors.dart';
 import '../../gen/assets.gen.dart';
@@ -9,14 +8,40 @@ class CustomBackground extends StatelessWidget {
   final Widget child;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: Assets.images.defaultBg.image().image,
-          fit: BoxFit.cover,
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        ConstantsColors.backgroundStartColor,
+                        ConstantsColors.backgroundEndColor,
+                      ],
+                    )
+                ),),
+            ),
+            Container(
+              child: Assets.images.mainBackground.image(),
+            )
+          ],
         ),
-      ),
-      child: child,
+        Container(
+          // decoration: BoxDecoration(
+          //   image: DecorationImage(
+          //     image: Assets.images.defaultBg.image().image,
+          //     fit: BoxFit.cover,
+          //   ),
+          // ),
+          child: child,
+        )
+      ],
     );
   }
 }
@@ -35,10 +60,14 @@ class CustomTheme extends StatelessWidget {
             .apply(bodyColor: Colors.white,),
         unselectedWidgetColor: Colors.white70,
         canvasColor: ConstantsColors.bottomSheetBackground,
+        scaffoldBackgroundColor: Colors.transparent,
+        appBarTheme: const AppBarTheme(elevation: 0,color: Colors.transparent,centerTitle: true),
+        splashColor: Colors.transparent,
 
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xff0F3C5B),
           secondary: const Color(0xff0F3C5B),
+          background: const Color(0xFF031A27),
           primary: Colors.white70,
           // primary: Colors.white30
 
@@ -47,15 +76,15 @@ class CustomTheme extends StatelessWidget {
         inputDecorationTheme: InputDecorationTheme(
           disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.white30)
+              borderSide: const BorderSide(color: Colors.white30)
           ),
           enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.white)
+              borderSide: const BorderSide(color: Colors.white)
           ),
           border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(color: Colors.white)
+              borderSide: const BorderSide(color: Colors.white)
           ),
         ),
       ),

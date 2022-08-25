@@ -1265,7 +1265,7 @@ class HomeScreen extends StatelessWidget {
                 buildWhen: (previous, current) {
                   if (current is LatestNewsSuccessState) {
                     current.latestNewsList.add(
-                        Data(newsID: 0, newsBody: "Test", newsTitle: "Test"));
+                        NewsData(newsID: 0, newsBody: "Test", newsTitle: "Test"));
                     return current.latestNewsList.isNotEmpty;
                   } else {
                     return false;
@@ -1705,7 +1705,7 @@ class NewsSliderList extends StatelessWidget {
     required this.heroProperties,
   }) : super(key: key);
 
-  final List<Data> newsAllData;
+  final List<NewsData> newsAllData;
   final List<Widget> assets;
   final List<ImageGalleryHeroProperties> heroProperties;
 
@@ -1717,7 +1717,7 @@ class NewsSliderList extends StatelessWidget {
       itemCount: newsAllData.length,
       physics: const BouncingScrollPhysics(),
       itemBuilder: (ctx, index) {
-        Data news = newsAllData[index];
+        NewsData news = newsAllData[index];
 
         /// adding the view that will appear when tap on the news photo
         if (news.newsID != 0) {
@@ -1763,7 +1763,7 @@ class NewsSliderList extends StatelessWidget {
     );
   }
 
-  Widget _buildAssetGridTile(Data news) {
+  Widget _buildAssetGridTile(NewsData news) {
     return Scaffold(
       body: GridTile(
         header: GridTileBar(
@@ -1797,7 +1797,7 @@ class NewsSliderList extends StatelessWidget {
     );
   }
 
-  GridTile _buildHomeScreenGridTile(Data news) {
+  GridTile _buildHomeScreenGridTile(NewsData news) {
     return GridTile(
       footer: (news.newsID != 0)
           ?

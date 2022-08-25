@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:shimmer/shimmer.dart';
@@ -55,6 +56,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+    // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+    // FlutterNativeSplash.remove();
+
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
@@ -136,7 +143,7 @@ class _SplashScreenState extends State<SplashScreen> {
                       curve: Curves.linear,
                       splashIconSize: deviceHeight,
                       splashTransition: SplashTransition.fadeTransition,
-                      animationDuration: const Duration(milliseconds: 1000),
+                      // animationDuration: const Duration(milliseconds: 1000),
                       splash: Stack(
                         children: [
                           Align(
@@ -178,7 +185,7 @@ class _SplashScreenState extends State<SplashScreen> {
                         return PageTransitionAnimation(
                           transitionDuration: 500,
                           context: context,
-                          delayedDuration: 2500,
+                          delayedDuration: 1500,
                           pageDirection: BlocBuilder<AppBloc, AppState>(
                             builder: (ctx, state) {
                               switch (state.status) {

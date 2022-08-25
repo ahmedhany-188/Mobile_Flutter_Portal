@@ -46,6 +46,17 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   final Connectivity connectivity = Connectivity();
   final RequestRepository _requestRepository;
 
+  void commentChanged(String value) {
+
+    // final permissionTime = PermissionTime.dirty(value);
+    // print(permissionTime.value);
+    emit(
+      state.copyWith(
+        comment: value,
+      ),
+    );
+  }
+
   void getRequestData(
       {required RequestStatus requestStatus,
       String? requestNo,

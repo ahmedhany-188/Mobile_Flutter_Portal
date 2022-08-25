@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/data/models/response_news.dart';
 
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
@@ -23,15 +24,18 @@ import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreen.dart';
 import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreenDirectManager.dart';
+import 'package:hassanallamportalflutter/screens/news_screen/news_details_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
+import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_details_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
 import '../data/models/contacts_related_models/contacts_data_from_api.dart';
+import '../data/models/subsidiares_model/subsidiares_model.dart';
 import '../screens/apps_screen/apps_screen.dart';
 import '../screens/my_requests_screen/add_request_screen.dart';
 import '../screens/notification_screen/notifications_screen.dart';
@@ -158,7 +162,7 @@ class AppRouter {
 
       case BusinessCardScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => BusinessCardScreen(requestNo: settings.arguments),
+          builder: (_) => BusinessCardScreen(requestData: settings.arguments),
         );
 
       case EmbassyLetterScreen.routeName:
@@ -223,6 +227,14 @@ class AppRouter {
       case ContactsScreen.routeName:
         return MaterialPageRoute(
             builder: (_) => const ContactsScreen());
+
+      case NewsDetailsScreen.routeName:
+        return MaterialPageRoute(
+            builder: (_) =>  NewsDetailsScreen(newsData: settings.arguments as NewsData,));
+
+      case SubsidiariesDetailsScreen.routeName:
+        return MaterialPageRoute(
+            builder: (_) =>  SubsidiariesDetailsScreen(subsidiariesData: settings.arguments as SubsidiariesData,));
 
       default:
         return null;
