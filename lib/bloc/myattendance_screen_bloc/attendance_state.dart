@@ -1,24 +1,23 @@
 part of 'attendance_cubit.dart';
 
-
-enum AttendanceDataEnumStates {loading, success, failed,noConnection}
-
+enum AttendanceDataEnumStates {loading, success, failed,noConnection,fullSuccess}
 
   class AttendanceState  extends Equatable {
 
     final AttendanceDataEnumStates attendanceDataEnumStates;
-    final List<MyAttendanceModel> getAttendanceList;
-    final int month;
+    final  List<List<MyAttendanceModel>> getAttendanceList;
+    int month;
 
-    const AttendanceState({
+     AttendanceState({
       this.attendanceDataEnumStates = AttendanceDataEnumStates.loading,
-      this.getAttendanceList = const <MyAttendanceModel>[],
-      this.month = 1,
+      // this.getAttendanceList = const <MyAttendanceModel>[],
+      this.getAttendanceList = const <List<MyAttendanceModel>>[],
+       required this.month,
     });
 
     AttendanceState copyWith({
       AttendanceDataEnumStates? attendanceDataEnumStates,
-      List<MyAttendanceModel>? getAttendanceList,
+      List<List<MyAttendanceModel>>? getAttendanceList,
       int? month,
     }) {
       return AttendanceState(
@@ -30,13 +29,14 @@ enum AttendanceDataEnumStates {loading, success, failed,noConnection}
 
     @override
     List<Object> get props => [
-      attendanceDataEnumStates,getAttendanceList,month];
+      attendanceDataEnumStates,getAttendanceList,month
+    ];
 
     static AttendanceState? fromMap(Map<String, dynamic> json) {
       if (json.isEmpty) {
-        return const AttendanceState(
+        return  AttendanceState(
             attendanceDataEnumStates :AttendanceDataEnumStates.loading,
-            getAttendanceList : <MyAttendanceModel>[],
+            getAttendanceList : <List<MyAttendanceModel>>[],
             month:1,
         );
       }
@@ -44,8 +44,11 @@ enum AttendanceDataEnumStates {loading, success, failed,noConnection}
       int monthVal = json['month'];
       return AttendanceState(
         attendanceDataEnumStates : AttendanceDataEnumStates.values[val],
-        getAttendanceList : List<MyAttendanceModel>.from(
+        // getAttendanceList : List<MyAttendanceModel>.from(
+        //     json['getAttendanceList']?.map((p) => MyAttendanceModel.fromJson(p))),
+        getAttendanceList : List<List<MyAttendanceModel>>.from(
             json['getAttendanceList']?.map((p) => MyAttendanceModel.fromJson(p))),
+
         month: monthVal
       );
     }

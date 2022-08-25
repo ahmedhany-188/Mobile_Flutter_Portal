@@ -12,12 +12,11 @@ class MyRequestsCubit extends Cubit<MyRequestsState> with HydratedMixin {
   MyRequestsCubit(this.requestRepository) : super(const MyRequestsState()){
 
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
-      if (state.userRequestsEnumStates == UserRequestsEnumStates.failed) {
+      if (state.userRequestsEnumStates == UserRequestsEnumStates.failed || state.userRequestsEnumStates == UserRequestsEnumStates.noConnection) {
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
           try {
             getRequests();
-
           } catch (e) {
             emit(state.copyWith(
               userRequestsEnumStates: UserRequestsEnumStates.failed,

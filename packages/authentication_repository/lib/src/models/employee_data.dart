@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 class EmployeeData extends Equatable {
  //TODO: change null data types
   final String? userHrCode;
-  final Null? applications;
+  final String? applications;
   final int? fingerPrintGroup;
   final String? departmentId;
   final String? locationId;
@@ -29,7 +29,7 @@ class EmployeeData extends Equatable {
   final String? mobile;
   final String? mobile1;
   final String? hireDate;
-  final Null? projectId;
+  final String? projectId;
   final String? status;
   final String? linkedIn;
   final String? skype;

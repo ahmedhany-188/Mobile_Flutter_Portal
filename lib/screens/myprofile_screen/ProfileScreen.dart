@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreenDirectManager.dart';
+import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_userprofile.dart';
 import 'package:http/http.dart';
 import 'package:qr_flutter/qr_flutter.dart';
@@ -51,14 +52,8 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
     vCard.workPhone = user.employeeData!.deskPhone!;
     vCard.cellPhone = user.employeeData!.mobile;
 
-    return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-            image: Assets.images.defaultBg
-                .image()
-                .image,
-            fit: BoxFit.cover,
-          )),
+    return CustomBackground(
+
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -115,7 +110,8 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                           Column(
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween,
                                 children: [
                                   Flexible(
                                     flex: 2,
@@ -130,24 +126,35 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: Center(
-                                        child:  imageProfile.isNotEmpty ? CachedNetworkImage(
-                                          imageUrl: "https://portal.hassanallam.com/Apps/images/Profile/"+user.employeeData!.imgProfile.toString(),
-                                            imageBuilder: (context, imageProvider) => Container(
-                                              width: 120,
-                                              height: 120,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                image: DecorationImage(
-                                                    image: imageProvider, fit: BoxFit.cover),
+                                        child: imageProfile.isNotEmpty
+                                            ? CachedNetworkImage(
+                                          imageUrl: "https://portal.hassanallam.com/Apps/images/Profile/" +
+                                              user.employeeData!.imgProfile
+                                                  .toString(),
+                                          imageBuilder: (context,
+                                              imageProvider) =>
+                                              Container(
+                                                width: 120,
+                                                height: 120,
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  image: DecorationImage(
+                                                      image: imageProvider,
+                                                      fit: BoxFit.cover),
+                                                ),
                                               ),
-                                            ),
-                                          placeholder: (context, url) => Assets.images.logo.image(height: 70),
-                                          errorWidget: (context, url, error) => Assets.images.logo.image(height: 70),
-                                        ) :
+                                          placeholder: (context, url) =>
+                                              Assets.images.logo.image(
+                                                  height: 70),
+                                          errorWidget: (context, url, error) =>
+                                              Assets.images.logo.image(
+                                                  height: 70),
+                                        )
+                                            :
                                         Assets.images.logo.image(height: 70),
-                                        ),
                                       ),
                                     ),
+                                  ),
 
                                   Flexible(
                                     flex: 2,
@@ -155,12 +162,16 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                       icon: const Icon(Icons.edit),
                                       color: Colors.white,
                                       onPressed: () {
-                                        showModalBottomSheet<void>(context: context,shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.vertical(
-                                            top: Radius.circular(20),),
-                                        ),
+                                        showModalBottomSheet<void>(
+                                            context: context,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius
+                                                  .vertical(
+                                                top: Radius.circular(20),),
+                                            ),
                                             builder: (BuildContext context) {
-                                              return ShowUserProfileBottomSheet(user);
+                                              return ShowUserProfileBottomSheet(
+                                                  user);
                                             });
                                       },
                                     ),
@@ -284,7 +295,8 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                               child: Container(
                                                 width: double.infinity,
                                                 child: Text(
-                                                  user.employeeData!.managerName!,
+                                                  user.employeeData!
+                                                      .managerName!,
                                                   style: const TextStyle(
                                                     color: Colors.white70,
                                                     fontSize: 14,
@@ -300,7 +312,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                     Flexible(
                                       flex: 1,
                                       child: Icon(Icons.navigate_next_rounded,
-                                        color: Colors.white,size: 40.0,),
+                                        color: Colors.white, size: 40.0,),
                                     ),
                                   ],
                                 ),
@@ -322,6 +334,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
           ),
         ),
       ),
+
     );
   }
 
