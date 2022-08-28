@@ -30,8 +30,6 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
 
   ScrollController scrollController = ScrollController();
 
-
-
   @override
   Widget build(BuildContext context) {
     // double width = MediaQuery
@@ -91,20 +89,25 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
             ],
           ),
 
-
           resizeToAvoidBottomInset: false,
 
           body: BlocProvider<ProfileManagerCubit>(
               create: (context) =>
 
-              currentRequestData[DirectManagerProfileScreen.employeeHrCode]!="0"?
-              (ProfileManagerCubit()..getManagerData(currentRequestData[DirectManagerProfileScreen.employeeHrCode])):
-              (ProfileManagerCubit()..getUserOffline(currentRequestData[DirectManagerProfileScreen.selectedContactDataAsMap])),
+              currentRequestData[DirectManagerProfileScreen.employeeHrCode] !=
+                  "0" ?
+              (ProfileManagerCubit()
+                ..getManagerData(currentRequestData[DirectManagerProfileScreen
+                    .employeeHrCode])) :
+              (ProfileManagerCubit()
+                ..getUserOffline(currentRequestData[DirectManagerProfileScreen
+                    .selectedContactDataAsMap])),
 
               child: BlocConsumer<ProfileManagerCubit, ProfileManagerState>(
                   listener: (context, state) {
-
                     if (state is BlocGetManagerDataSuccessState) {
+
+                      print("00-" + state.managerData.toJson().toString());
 
                       // print("00-"+state.managerData.toJson().toString());
                       ///Set properties
@@ -114,25 +117,9 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                       vCard.jobTitle = state.managerData.titleName!;
                       vCard.email = state.managerData.email!;
                       vCard.url = "https://hassanallam.com";
-                      vCard.workPhone = state.managerData.deskPhone!;
-                      vCard.cellPhone = state.managerData.mobile;
-
-
+                      vCard.workPhone = state.managerData.deskPhone;
+                      vCard.cellPhone = state.managerData.mobile!;
                     }
-
-                    // if(state is BlocGetManagerDataSuccessOfflineState){
-                    //
-                    //   ///Set properties
-                    //   vCard.firstName = state.employeeData.name!.toString();
-                    //   vCard.organization = state.employeeData.companyName!;
-                    //   // vCard.photo.attachFromUrl('/path/to/image/file.png', 'PNG');
-                    //   vCard.jobTitle = state.employeeData.titleName!;
-                    //   vCard.email = state.employeeData.email!;
-                    //   vCard.url = "https://hassanallam.com";
-                    //   vCard.workPhone = state.employeeData.deskPhone!;
-                    //   vCard.cellPhone = state.employeeData.mobile!;
-                    //
-                    // }
 
                     if (state is BlocGetManagerDataErrorState) {
                       ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -140,8 +127,10 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                         const SnackBar(
                           content: Text("error"),
                         ),
-                      );                  }
+                      );
+                    }
                   },
+
                   builder: (context, state) {
                     return SingleChildScrollView(
                       physics: const BouncingScrollPhysics(),

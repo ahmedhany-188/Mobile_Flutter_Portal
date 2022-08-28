@@ -126,7 +126,7 @@ class ActionCommentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       // controller: commentController,
-      key: UniqueKey(),
+      // key: UniqueKey(),
       enabled: true,
       onChanged: (comment) => onChanged(comment),
       keyboardType: TextInputType.multiline,

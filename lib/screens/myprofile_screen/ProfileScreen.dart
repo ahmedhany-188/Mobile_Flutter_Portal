@@ -52,6 +52,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
     vCard.cellPhone = user.employeeData!.mobile;
 
     return CustomBackground(
+
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(

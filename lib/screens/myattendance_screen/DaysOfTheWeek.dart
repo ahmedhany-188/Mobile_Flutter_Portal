@@ -44,7 +44,7 @@ class DayOfTheWeek extends StatelessWidget{
               );
           },
         ),
-        fallback: (context) => const Center(child: LinearProgressIndicator()),
+        fallback:null, //(context) => const Center(child: LinearProgressIndicator()),
       )
     );
   }

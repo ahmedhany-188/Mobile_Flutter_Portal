@@ -18,6 +18,7 @@ import 'package:hassanallamportalflutter/widgets/background/custom_background.da
 import 'package:hassanallamportalflutter/widgets/drawer/main_drawer.dart';
 import 'package:intl/intl.dart';
 
+import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../constants/enums.dart';
 import '../../../widgets/success/success_request_widget.dart';
 import '../../widgets/requester_data_widget/requester_data_widget.dart';
@@ -94,7 +95,11 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                             TakeActionStatus.takeAction)FloatingActionButton
                             .extended(
                           heroTag: null,
-                          onPressed: () {},
+                          onPressed: () {
+                            context.read<EmbassyLetterCubit>()
+                                .submitAction(ActionValueStatus.accept,currentRequestData[EmbassyLetterScreen.requestNoKey]);
+
+                          },
                           icon: const Icon(Icons.verified),
                           label: const Text('Accept'),
                         ),
@@ -105,7 +110,11 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                             .extended(
                           backgroundColor: Colors.white,
                           heroTag: null,
-                          onPressed: () {},
+                          onPressed: () {
+                            context.read<EmbassyLetterCubit>()
+                                .submitAction(ActionValueStatus.reject,currentRequestData[EmbassyLetterScreen.requestNoKey]);
+
+                          },
                           icon: const Icon(Icons.dangerous,color: ConstantsColors.buttonColors,),
 
                           label: const Text('Reject',style: TextStyle(color: ConstantsColors.buttonColors,),),
@@ -142,6 +151,10 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                   SuccessScreen(text: state.successMessage ??
                                       "Error Number",routName: EmbassyLetterScreen.routeName, requestName: 'Embassy Letter',)));
                         }
+                        else if (state.requestStatus == RequestStatus.oldRequest){
+                          EasyLoading.showSuccess(state.successMessage ?? "").then((value) => Navigator.pop(context));
+                          BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();
+                        }
                       }
                       else if (state.status.isSubmissionInProgress) {
                         EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
@@ -150,6 +163,9 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                       else if (state.status.isSubmissionFailure) {
                         EasyLoading.showError(state.errorMessage.toString(),);
 
+                      }
+                      else if (state.status.isValid) {
+                        EasyLoading.dismiss(animation: true);
                       }
                     },
                     child: Padding(

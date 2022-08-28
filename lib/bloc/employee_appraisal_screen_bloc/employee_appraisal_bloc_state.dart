@@ -11,7 +11,7 @@ class BlocGetEmployeeAppraisalBlocInitialLoadingState extends EmployeeAppraisalB
 // ignore: must_be_immutable
 class BlocGetEmployeeAppraisalBlocInitialSuccessState extends EmployeeAppraisalBlocState{
 
-  String employeeAppraisaleList;
+  EmployeeAppraisalModel employeeAppraisaleList;
   BlocGetEmployeeAppraisalBlocInitialSuccessState(this.employeeAppraisaleList);
 
 }

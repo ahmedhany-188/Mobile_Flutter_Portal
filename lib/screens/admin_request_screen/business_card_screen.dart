@@ -12,6 +12,7 @@ import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mis
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import '../../../widgets/success/success_request_widget.dart';
+import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../widgets/requester_data_widget/requester_data_widget.dart';
 
 class BusinessCardScreen extends StatefulWidget {
@@ -89,7 +90,10 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                                       .takeAction )FloatingActionButton
                               .extended(
                             heroTag: null,
-                            onPressed: () {},
+                            onPressed: () {
+                              context.read<BusinessCardCubit>()
+                                  .submitAction(ActionValueStatus.accept,currentRequestData[BusinessCardScreen.requestNoKey]);
+                            },
                             icon: const Icon(Icons.verified),
                             label: const Text('Accept'),
                           ),
@@ -102,7 +106,10 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                               .extended(
                             backgroundColor: Colors.white,
                             heroTag: null,
-                            onPressed: () {},
+                            onPressed: () {
+                              context.read<BusinessCardCubit>()
+                                  .submitAction(ActionValueStatus.reject,currentRequestData[BusinessCardScreen.requestNoKey]);
+                            },
                             icon: const Icon(Icons.dangerous,
                               color: ConstantsColors.buttonColors,),
                             label: const Text('Reject', style: TextStyle(
@@ -146,15 +153,25 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                                         routName: BusinessCardScreen.routeName,
                                         requestName: 'Business Card',)));
                             }
-                          } else if (state.status.isSubmissionInProgress) {
+                            else if (state.requestStatus == RequestStatus.oldRequest){
+                              EasyLoading.showSuccess(state.successMessage ?? "").then((value) => Navigator.pop(context));
+                              BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();
+                            }
+                          }
+                          else if (state.status.isSubmissionInProgress) {
                             EasyLoading.show(status: 'loading...',
                               maskType: EasyLoadingMaskType.black,
                               dismissOnTap: false,);
                           }
                           else if (state.status.isSubmissionFailure) {
                             EasyLoading.showError(
-                              state.errorMessage.toString(),);
+                              state.errorMessage ??
+                                  'Request Failed');
                           }
+                          else if (state.status.isValid) {
+                            EasyLoading.dismiss(animation: true);
+                          }
+
                         },
 
                         child: Padding(
