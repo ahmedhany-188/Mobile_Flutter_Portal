@@ -11,6 +11,7 @@ import 'package:hassanallamportalflutter/data/models/requests_form_models/reques
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:meta/meta.dart';
 
+import '../../../constants/request_service_id.dart';
 import '../../../data/repositories/employee_repository.dart';
 
 part 'business_card_state.dart';
@@ -73,7 +74,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
             employeeExt: employeeExt,
             employeeFaxNO: faxNo,
             comment: employeeComments,
-            status: FormzStatus.submissionSuccess,
+            status: FormzStatus.valid,
             requestStatus: RequestStatus.oldRequest,
             requesterData: requesterData,
             statusAction: status,
@@ -208,6 +209,41 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
     ));
   }
 
+
+  submitAction(ActionValueStatus valueStatus,String requestNo) async {
+    // EasyLoading.show(status: 'Loading...',
+    //   maskType: EasyLoadingMaskType.black,
+    //   dismissOnTap: false,);
+
+    emit(state.copyWith(status: FormzStatus.submissionInProgress,));
+
+    final businessCardResultResponse = await requestRepository.postTakeActionRequest(
+        valueStatus: valueStatus,
+        requestNo: requestNo,
+        actionComment: state.actionComment,
+        serviceID: RequestServiceID.businessCardServiceID,
+        requesterHRCode: state.requesterData.userHrCode ?? "");
+
+    final result = businessCardResultResponse.result ?? "false";
+    if (result.toLowerCase().contains("true")) {
+      emit(
+        state.copyWith(
+          successMessage: "#$requestNo \n ${valueStatus == ActionValueStatus.accept ? "Request has been Accepted":"Request has been Rejected"}",
+          status: FormzStatus.submissionSuccess,
+        ),
+      );
+    }
+    else {
+      emit(
+        state.copyWith(
+          errorMessage:"An error occurred",
+          status: FormzStatus.submissionFailure,
+        ),
+      );
+      // }
+    }
+
+  }
 
   @override
   Future<void> close() {
