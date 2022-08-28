@@ -268,10 +268,10 @@ class _MyAppState extends State<MyApp> {
                 ),
           ),
           BlocProvider<AppsCubit>(
-            create: (contactsCubitContext) =>
+            create: (appsCubitContext) =>
             AppsCubit(GeneralDio(
                 BlocProvider
-                    .of<AppBloc>(contactsCubitContext)
+                    .of<AppBloc>(appsCubitContext)
                     .state
                     .userData))
               ..getApps(),
@@ -283,7 +283,7 @@ class _MyAppState extends State<MyApp> {
                         BlocProvider
                             .of<AppBloc>(myRequestCubitContext)
                             .state
-                            .userData)),
+                            .userData))..getRequests(),
           ),
 
           BlocProvider<AttendanceCubit>(

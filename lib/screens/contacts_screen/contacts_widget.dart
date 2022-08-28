@@ -12,15 +12,17 @@ import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 
 class ContactsWidget extends StatelessWidget {
   final List<ContactsDataFromApi> listFromContactsScreen;
-  ContactsWidget(this.listFromContactsScreen, {Key? key})
+  const ContactsWidget(this.listFromContactsScreen, {Key? key})
       : super(key: key);
 
   static final ScrollController _scrollController = ScrollController();
 
   static scrollToTop() {
-    Timer(
+    if(_scrollController.positions.isNotEmpty) {
+      Timer(
       const Duration(seconds: 0), () => _scrollController.animateTo(0.0, curve: Curves.easeOut, duration: const Duration(milliseconds: 300)),
     );
+    }
   }
 
   void contactDetails(BuildContext context, int contactIndex) {

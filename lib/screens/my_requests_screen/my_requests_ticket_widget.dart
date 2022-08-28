@@ -198,7 +198,7 @@ class MyRequestsItemWidget extends StatelessWidget {
       //   },
       // ),
       fallback: (context) =>
-      const Center(child: LinearProgressIndicator()),
+      const Center(child: Text('No Data Found')),
     );});
   }
 
