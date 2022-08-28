@@ -15,6 +15,7 @@ import 'package:hassanallamportalflutter/widgets/dialogpopoup/custom_date_picker
 import 'package:meta/meta.dart';
 
 import '../../../constants/enums.dart';
+import '../../../constants/request_service_id.dart';
 import '../../../data/models/admin_requests_models/passport_form_model.dart';
 import '../../../data/repositories/employee_repository.dart';
 
@@ -80,7 +81,7 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
             passportNumber: passportNumber,
             salary: salary,
             comments: comments,
-            status: FormzStatus.submissionSuccess,
+            status: FormzStatus.valid,
             requestStatus: RequestStatus.oldRequest,
             requesterData: requesterData,
             statusAction: status,
@@ -288,6 +289,38 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
     );
   }
 
+  submitAction(ActionValueStatus valueStatus,String requestNo) async {
+    // EasyLoading.show(status: 'Loading...',
+    //   maskType: EasyLoadingMaskType.black,
+    //   dismissOnTap: false,);
+    emit(state.copyWith(status: FormzStatus.submissionInProgress,));
+    final embassyResultResponse = await _requestRepository.postTakeActionRequest(
+        valueStatus: valueStatus,
+        requestNo: requestNo,
+        actionComment: state.actionComment,
+        serviceID: RequestServiceID.embassyServiceID,
+        requesterHRCode: state.requesterData.userHrCode ?? "");
+
+    final result = embassyResultResponse.result ?? "false";
+    if (result.toLowerCase().contains("true")) {
+      emit(
+        state.copyWith(
+          successMessage: "#$requestNo \n ${valueStatus == ActionValueStatus.accept ? "Request has been Accepted":"Request has been Rejected"}",
+          status: FormzStatus.submissionSuccess,
+        ),
+      );
+    }
+    else {
+      emit(
+        state.copyWith(
+          errorMessage:"An error occurred",
+          status: FormzStatus.submissionFailure,
+        ),
+      );
+      // }
+    }
+
+  }
 
   @override
   Future<void> close() {
