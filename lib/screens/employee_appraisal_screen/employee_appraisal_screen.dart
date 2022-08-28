@@ -63,7 +63,7 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
               builder: (context, state) {
                 if (state is BlocGetEmployeeAppraisalBlocInitialSuccessState) {
                   employeeAppraisalModel = state.employeeAppraisaleList;
-                  dataEmployeeAppraisalModel = employeeAppraisalModel?.data![0];
+                  dataEmployeeAppraisalModel = employeeAppraisalModel?.data?[0];
 
                   if (dataEmployeeAppraisalModel != null) {
                     appraisalDataList.add(ObjectAppraisalModel(
@@ -103,7 +103,7 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
     return Column(
       children: [
         Padding(
-          padding: EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(15.0),
           child: LinearPercentIndicator(
             width: MediaQuery
                 .of(context)
@@ -114,8 +114,8 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
             animationDuration: 2000,
             percent: value / 100,
             center: Text(value.toString()),
-            linearStrokeCap: LinearStrokeCap.roundAll,
-            barRadius: Radius.circular(10),
+            // linearStrokeCap: LinearStrokeCap.roundAll,
+            barRadius: const Radius.circular(10),
             progressColor: Colors.indigo,
           ),
         ),
