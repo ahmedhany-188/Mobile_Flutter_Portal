@@ -1,53 +1,101 @@
 part of 'my_requests_cubit.dart';
 
-enum UserRequestsEnumStates {loading, success, failed,noConnection}
+enum UserRequestsEnumStates { loading, success, failed, noConnection }
 
 @immutable
- class MyRequestsState extends Equatable {
-
+class MyRequestsState extends Equatable {
   final UserRequestsEnumStates userRequestsEnumStates;
   final List<MyRequestsModelData> getMyRequests;
+  final List<MyRequestsModelData> gettempMyRequests;
+  final List<MyRequestsModelData> getApproved;
+  final List<MyRequestsModelData> getPending;
+  final List<MyRequestsModelData> getRejected;
+  final String writtenText;
+  final bool isFiltered;
+  final bool approved;
+  final bool pending;
+  final bool rejected;
 
   const MyRequestsState({
     this.userRequestsEnumStates = UserRequestsEnumStates.loading,
     this.getMyRequests = const <MyRequestsModelData>[],
+    this.gettempMyRequests = const <MyRequestsModelData>[],
+    this.getApproved = const <MyRequestsModelData>[],
+    this.getPending = const <MyRequestsModelData>[],
+    this.getRejected = const <MyRequestsModelData>[],
+    this.writtenText = '',
+    this.isFiltered = false,
+    this.approved = false,
+    this.pending = false,
+    this.rejected = false,
   });
 
   MyRequestsState copyWith({
     UserRequestsEnumStates? userRequestsEnumStates,
     List<MyRequestsModelData>? getMyRequests,
+    List<MyRequestsModelData>? gettempMyRequests,
+    List<MyRequestsModelData>? getApproved,
+    List<MyRequestsModelData>? getPending,
+    List<MyRequestsModelData>? getRejected,
+    String? writtenText,
+    bool? isFiltered,
+    bool? approved,
+    bool? pending,
+    bool? rejected,
   }) {
     return MyRequestsState(
-      userRequestsEnumStates: userRequestsEnumStates ?? this.userRequestsEnumStates,
+      userRequestsEnumStates:
+          userRequestsEnumStates ?? this.userRequestsEnumStates,
       getMyRequests: getMyRequests ?? this.getMyRequests,
+      gettempMyRequests: gettempMyRequests ?? this.gettempMyRequests,
+      writtenText: writtenText ?? this.writtenText,
+      getApproved: getApproved ?? this.getApproved,
+      getPending: getPending ?? this.getPending,
+      getRejected: getRejected ?? this.getRejected,
+      isFiltered: isFiltered ?? this.isFiltered,
+      approved: approved ?? this.approved,
+      pending: pending ?? this.pending,
+      rejected: rejected ?? this.rejected,
     );
   }
+
   @override
-  List<Object> get props => [userRequestsEnumStates,getMyRequests];
+  List<Object> get props => [
+        userRequestsEnumStates,
+        getMyRequests,
+        writtenText,
+        isFiltered,
+        getApproved,
+        getPending,
+        getRejected,
+        gettempMyRequests,
+        approved,
+        pending,
+        rejected,
+      ];
 
   static MyRequestsState? fromMap(Map<String, dynamic> json) {
     if (json.isEmpty) {
       return const MyRequestsState(
-        userRequestsEnumStates :UserRequestsEnumStates.loading,
-        getMyRequests : <MyRequestsModelData>[],
+        userRequestsEnumStates: UserRequestsEnumStates.loading,
+        getMyRequests: <MyRequestsModelData>[],
       );
     }
     int val = json['userRequestsEnumStates'];
     return MyRequestsState(
-      userRequestsEnumStates :UserRequestsEnumStates.values[val],
-      getMyRequests : List<MyRequestsModelData>.from(
-          json['userNotificationList']?.map((p) => MyRequestsModelData.fromJson(p))),
+      userRequestsEnumStates: UserRequestsEnumStates.values[val],
+      getMyRequests: List<MyRequestsModelData>.from(json['userNotificationList']
+          ?.map((p) => MyRequestsModelData.fromJson(p))),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'userRequestsEnumStates':userRequestsEnumStates.index,
+      'userRequestsEnumStates': userRequestsEnumStates.index,
       'userNotificationList': getMyRequests,
     };
   }
 }
-
 
 // class MyRequestsInitial extends MyRequestsState {}
 //
@@ -66,5 +114,3 @@ enum UserRequestsEnumStates {loading, success, failed,noConnection}
 //   BlocGetMyRequestsErrorState(this.error);
 //
 // }
-
-

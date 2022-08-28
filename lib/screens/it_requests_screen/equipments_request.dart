@@ -591,7 +591,7 @@ class EquipmentsRequest extends StatelessWidget {
                                                 softWrap: true,
                                               ),
                                               children: [
-                                                Row(
+                                               if(state.requestedData!.data![index].type != null) Row(
                                                   children: [
                                                     Text(
                                                       'Request for: ${(state.requestStatus == RequestStatus.oldRequest) ? EquipmentsCubit.get(context).getRequestForFromType(state.requestedData!.data![index].type!)!.trim() : state.chosenList[index].requestFor!.trim()}',
@@ -606,7 +606,7 @@ class EquipmentsRequest extends StatelessWidget {
                                                 //     Text(
                                                 //       'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].qty : state.chosenList[index].quantity}',
                                                 //       softWrap: true,
-                                                //       style: const TextStyle(fontSize: 18),
+                                                //       style: const TextStyle(fontSize: 15),
                                                 //     ),
                                                 //   ],
                                                 // ),
