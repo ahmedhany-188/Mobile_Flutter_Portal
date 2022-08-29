@@ -9,6 +9,8 @@ import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/emplo
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
+import '../../constants/colors.dart';
+
 class EmployeeAppraisalScreen extends StatefulWidget {
   static const routeName = "/employee-appraisal-list";
   const EmployeeAppraisalScreen({Key? key}) : super(key: key);
@@ -51,12 +53,12 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
                 if (state is BlocGetEmployeeAppraisalBlocInitialSuccessState) {}
                 else
                 if (state is BlocGetEmployeeAppraisalBlocInitialErrorState) {
-                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("error"),
-                    ),
-                  );
+                  // ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  // ScaffoldMessenger.of(context).showSnackBar(
+                  //   const SnackBar(
+                  //     content: Text("error"),
+                  //   ),
+                  // );
                 } else if (state
                 is BlocGetEmployeeAppraisalBlocInitialLoadingState) {}
               },
@@ -108,18 +110,23 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
             width: MediaQuery
                 .of(context)
                 .size
-                .width - 50,
+                .width - 40,
             animation: true,
-            lineHeight: 20.0,
-            animationDuration: 2000,
+            lineHeight: 25.0,
+            animationDuration: 2500,
             percent: value / 100,
             center: Text(value.toString()),
             // linearStrokeCap: LinearStrokeCap.roundAll,
             barRadius: const Radius.circular(10),
-            progressColor: Colors.indigo,
+            progressColor: ConstantsColors.backgroundStartColor,
           ),
         ),
-        Text(name),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(name, style:TextStyle(
+                fontWeight: FontWeight.normal, fontSize: 17.0),
+          ),
+        ),
       ],
     );
   }

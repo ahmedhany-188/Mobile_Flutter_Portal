@@ -23,43 +23,32 @@ class AttendanceScreen extends StatefulWidget {
 
 class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
+  List<List<MyAttendanceModel>> getAttendanceListSuccess = [];
 
-  List<List<MyAttendanceModel>> getAttendanceListSuccess=[];
-
-  List<MyAttendanceModel> getAttendanceListSuccess0=[];
-  List<MyAttendanceModel> getAttendanceListSuccess1=[];
-  List<MyAttendanceModel> getAttendanceListSuccess2=[];
-  List<MyAttendanceModel> getAttendanceListSuccess3=[];
-  List<MyAttendanceModel> getAttendanceListSuccess4=[];
-  List<MyAttendanceModel> getAttendanceListSuccess5=[];
-  List<MyAttendanceModel> getAttendanceListSuccess6=[];
-  List<MyAttendanceModel> getAttendanceListSuccess7=[];
-  List<MyAttendanceModel> getAttendanceListSuccess8=[];
-  List<MyAttendanceModel> getAttendanceListSuccess9=[];
-  List<MyAttendanceModel> getAttendanceListSuccess10=[];
-  List<MyAttendanceModel> getAttendanceListSuccess11=[];
-
+  List<MyAttendanceModel> getAttendanceListEmpty = [];
 
   int selectedPage = DateTime
       .now()
       .month - 1;
 
-  int dayNumber = DateTime.now().day;
+  int dayNumber = DateTime
+      .now()
+      .day;
 
   @override
   Widget build(BuildContext context) {
-
-
-     int monthNumber = DateTime.now().month;
+    int monthNumber = DateTime
+        .now()
+        .month;
 
     getAttendanceListSuccess = [
-      getAttendanceListSuccess0,
-      getAttendanceListSuccess1, getAttendanceListSuccess2,
-      getAttendanceListSuccess3, getAttendanceListSuccess4,
-      getAttendanceListSuccess5, getAttendanceListSuccess6,
-      getAttendanceListSuccess7, getAttendanceListSuccess8,
-      getAttendanceListSuccess9, getAttendanceListSuccess10,
-      getAttendanceListSuccess11
+      getAttendanceListEmpty,
+      getAttendanceListEmpty, getAttendanceListEmpty,
+      getAttendanceListEmpty, getAttendanceListEmpty,
+      getAttendanceListEmpty, getAttendanceListEmpty,
+      getAttendanceListEmpty, getAttendanceListEmpty,
+      getAttendanceListEmpty, getAttendanceListEmpty,
+      getAttendanceListEmpty
     ];
 
     if (dayNumber > 15) {
@@ -71,9 +60,8 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
-     context.read<AttendanceCubit>().monthValueChanged(monthNumber);
+    context.read<AttendanceCubit>().monthValueChanged(monthNumber);
 
-    
 
     return CustomBackground(
 
@@ -97,145 +85,200 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
             //     },
             //     child:
 
-                BlocProvider.value(value: AttendanceCubit.get(context)
-                  ..getFirstAttendanceList(user.user!.userHRCode.toString(),monthNumber),
-                  child: BlocConsumer<AttendanceCubit, AttendanceState>(
-                      listener: (context, state) {
-                        if (state.attendanceDataEnumStates == AttendanceDataEnumStates.success) {}
-                        else if (state.attendanceDataEnumStates == AttendanceDataEnumStates.fullSuccess) {
-                        }
+            BlocProvider.value(value: AttendanceCubit.get(context)
+              ..getFirstAttendanceList(
+                user.user!.userHRCode.toString(), monthNumber),
 
-                        else if (state.attendanceDataEnumStates == AttendanceDataEnumStates.loading) {}
-                        else if (state.attendanceDataEnumStates == AttendanceDataEnumStates.failed) {
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("error"),
-                            ),
-                          );
-                        }
-                      },
+        // ..getAllAttendanceList(
+        //       user.user!.userHRCode.toString()),
+              child: BlocConsumer<AttendanceCubit, AttendanceState>(
+                  listener: (context, state) {
+                    if (state.attendanceDataEnumStates ==
+                        AttendanceDataEnumStates.success) {
+                    }
+                    else if (state.attendanceDataEnumStates ==
+                        AttendanceDataEnumStates.fullSuccess) {}
 
-                      builder: (context, state) {
-                        return SizedBox(
-                          height: MediaQuery.of(context).size.height,
-                          child: Column(children: [
-                            SizedBox(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  TextButton.icon(
-                                      onPressed: () {
-                                        if(state.attendanceDataEnumStates == AttendanceDataEnumStates.success
-                                            || state.attendanceDataEnumStates == AttendanceDataEnumStates.fullSuccess){
-                                          monthNumber--;
-                                          pageController.jumpToPage(monthNumber - 1);
-                                          if (monthNumber < 1) {
-                                            monthNumber = 12;
-                                            pageController.jumpToPage(11);
-                                          };
-                                          context.read<AttendanceCubit>().monthValueChanged(monthNumber);
-                                        }
-                                      },
-                                      icon: const Icon(
-                                        Icons.arrow_back_ios,
-                                        color: Colors.white,
-                                      ),
-                                      label: const Text("")),
-                                  Text(
-                                    DateFormat('MMMM')
-                                        .format(DateTime(0,state.month)),
-                                    style: const TextStyle(
-                                        fontSize: 25, color: Colors.white),
+                    else if (state.attendanceDataEnumStates ==
+                        AttendanceDataEnumStates.loading) {}
+                    else if (state.attendanceDataEnumStates ==
+                        AttendanceDataEnumStates.failed) {
+                      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text("error"),
+                        ),
+                      );
+                    }
+                  },
 
-                                ),
-                                  TextButton.icon(
-                                      onPressed: () {
-                                        if(state.attendanceDataEnumStates == AttendanceDataEnumStates.success
-                                        || state.attendanceDataEnumStates == AttendanceDataEnumStates.fullSuccess){
-                                          monthNumber++;
-                                          pageController.jumpToPage(
-                                              monthNumber - 1);
-                                          if (monthNumber > 12) {
-                                            monthNumber = 1;
-                                            pageController.jumpToPage(0);
-                                          }
-                                          context.read<AttendanceCubit>().monthValueChanged(monthNumber);
-                                        }
-                                      },
-                                      icon: const Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Colors.white,
-                                      ),
-                                      label: const Text(""))
-                                ],
+                  builder: (context, state) {
+                    return SizedBox(
+                      height: MediaQuery
+                          .of(context)
+                          .size
+                          .height,
+                      child: Column(children: [
+                        SizedBox(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              TextButton.icon(
+                                  onPressed: () {
+                                    if (state.attendanceDataEnumStates ==
+                                        AttendanceDataEnumStates.success
+                                        || state.attendanceDataEnumStates ==
+                                            AttendanceDataEnumStates
+                                                .fullSuccess) {
+                                      monthNumber--;
+                                      pageController.jumpToPage(
+                                          monthNumber - 1);
+                                      if (monthNumber < 1) {
+                                        monthNumber = 12;
+                                        pageController.jumpToPage(11);
+                                      };
+                                      context.read<AttendanceCubit>()
+                                          .monthValueChanged(monthNumber);
+                                    }
+                                  },
+                                  icon: const Icon(
+                                    Icons.arrow_back_ios,
+                                    color: Colors.white,
+                                  ),
+                                  label: const Text("")),
+                              Text(
+                                DateFormat('MMMM')
+                                    .format(DateTime(0, state.month)),
+                                style: const TextStyle(
+                                    fontSize: 25, color: Colors.white),
                               ),
-                            ),
-                            SizedBox(
-                              height: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .height * 0.70,
-                              child : state.attendanceDataEnumStates ==
-                                      AttendanceDataEnumStates.success
-                                  || state.attendanceDataEnumStates ==
-                                      AttendanceDataEnumStates.fullSuccess?
-                              PageView(
-                                onPageChanged: (index) {
-                                  monthNumber = index + 1;
-                                  context.read<AttendanceCubit>().monthValueChanged(monthNumber);
-                                  if(state.getAttendanceList[monthNumber-1].toString()=="[]"){
-                                    BlocProvider.of<AttendanceCubit>(context)
-                                        .getAllAttendanceList(user.user!.userHRCode);
-                                    selectedPage=monthNumber-1;
-                                     pageController = PageController(initialPage: selectedPage);
+                              TextButton.icon(
+                                  onPressed: () {
+                                    if (state.attendanceDataEnumStates ==
+                                        AttendanceDataEnumStates.success
+                                        || state.attendanceDataEnumStates ==
+                                            AttendanceDataEnumStates
+                                                .fullSuccess) {
+                                      monthNumber++;
+                                      pageController.jumpToPage(
+                                          monthNumber - 1);
+                                      if (monthNumber > 12) {
+                                        monthNumber = 1;
+                                        pageController.jumpToPage(0);
+                                      }
+                                      context.read<AttendanceCubit>()
+                                          .monthValueChanged(monthNumber);
+                                    }
+                                  },
+                                  icon: const Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Colors.white,
+                                  ),
+                                  label: const Text(""))
+                            ],
+                          ),
+                        ),
 
-                                  }
-                                },
-                                controller: pageController,
-                                children: [
-                                  attendanceLoad(
-                                      state.getAttendanceList[0], user),
-                                  attendanceLoad(
-                                      state.getAttendanceList[1], user),
-                                  attendanceLoad(
-                                      state.getAttendanceList[2], user),
-                                  attendanceLoad(
-                                      state.getAttendanceList[3], user),
-                                  attendanceLoad(
-                                      state.getAttendanceList[4], user),
-                                  attendanceLoad(
-                                      state.getAttendanceList[5], user),
+                        SizedBox(
+                            height: MediaQuery
+                                .of(context)
+                                .size
+                                .height * 0.80,
+                            child: state.attendanceDataEnumStates ==
+                                AttendanceDataEnumStates.success
+                                || state.attendanceDataEnumStates ==
+                                    AttendanceDataEnumStates.fullSuccess ?
+                            PageView(
+                              onPageChanged: (index) {
+                                monthNumber = index + 1;
+                                context.read<AttendanceCubit>()
+                                    .monthValueChanged(monthNumber);
+                                if (state.getAttendanceList[monthNumber - 1]
+                                    .toString() == "[]") {
+                                  BlocProvider.of<AttendanceCubit>(context)
+                                      .getAllAttendanceList(
+                                      user.user!.userHRCode);
+                                  selectedPage = monthNumber - 1;
+                                  pageController =
+                                      PageController(initialPage: selectedPage);
+                                }
+                              },
+                              controller: pageController,
+                              children: [
+                                // attendanceLoad(
+                                //     state.getAttendanceList[0], user),
+                                // attendanceLoad(
+                                //     state.getAttendanceList[1], user),
+                                // attendanceLoad(
+                                //     state.getAttendanceList[2], user),
+                                // attendanceLoad(
+                                //     state.getAttendanceList[3], user),
+                                // attendanceLoad(
+                                //     state.getAttendanceList[4], user),
+                                // attendanceLoad(
+                                //     state.getAttendanceList[5], user),
+                                // attendanceLoad(
+                                //     state.getAttendanceList[6], user),
+                                // attendanceLoad(
+                                //     state.getAttendanceList[7], user),
+                                // attendanceLoad(
+                                //     state.getAttendanceList[8], user),
+                                // attendanceLoad(
+                                //     state.getAttendanceList[9], user),
+                                // attendanceLoad(
+                                //     state.getAttendanceList[10], user),
+                                // attendanceLoad(
+                                //     state.getAttendanceList[11], user),
 
-                                  attendanceLoad(
-                                      state.getAttendanceList[6], user),
-                                  attendanceLoad(
-                                      state.getAttendanceList[7], user),
-                                  attendanceLoad(
-                                      state.getAttendanceList[8], user),
-                                  attendanceLoad(
-                                      state.getAttendanceList[9], user),
-                                  attendanceLoad(
-                                      state.getAttendanceList[10], user),
-                                  attendanceLoad(
-                                      state.getAttendanceList[11], user),
+                                getShimmer(state,0,user),
+                                getShimmer(state,1,user),
+                                getShimmer(state,2,user),
+                                getShimmer(state,3,user),
+                                getShimmer(state,4,user),
+                                getShimmer(state,5,user),
+                                getShimmer(state,6,user),
+                                getShimmer(state,7,user),
+                                getShimmer(state,8,user),
+                                getShimmer(state,9,user),
+                                getShimmer(state,10,user),
+                                getShimmer(state,11,user),
+                              ],
+                            ) :
+                            PageView(
+                              onPageChanged: (index) {
+                                monthNumber = index + 1;
+                                context.read<AttendanceCubit>()
+                                    .monthValueChanged(monthNumber);
+                                  selectedPage = monthNumber - 1;
+                                  pageController = PageController(initialPage: selectedPage);
+                              },
+                              controller: pageController,
+                              children: [
 
-                                ],
-                              ):
-                              attendanceShimmer()
-
-                            ),
-                          ]),
-                        );
-                      }),
-                )
+                                getShimmer(state,0,user),
+                                getShimmer(state,1,user),
+                                getShimmer(state,2,user),
+                                getShimmer(state,3,user),
+                                getShimmer(state,4,user),
+                                getShimmer(state,5,user),
+                                getShimmer(state,6,user),
+                                getShimmer(state,7,user),
+                                getShimmer(state,8,user),
+                                getShimmer(state,9,user),
+                                getShimmer(state,10,user),
+                                getShimmer(state,11,user),
+                              ],
+                            )
+                        ),
+                      ]),
+                    );
+                  }),
+            )
         )
     );
-    //   ),
-    // );
   }
 
-  Container attendanceLoad(List<MyAttendanceModel> list,MainUserData user,){
+  Container attendanceLoad(List<MyAttendanceModel> list, MainUserData user,) {
     return Container(
         child: Padding(
             padding: const EdgeInsets.all(5),
@@ -244,14 +287,30 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                 child: DayOfTheWeek(list),
               ),
               SizedBox(
-                child: AttendanceTicketWidget(list,user.user!.userHRCode.toString()),
+                child: AttendanceTicketWidget(
+                    list, user.user!.userHRCode.toString()),
               ),
             ],)
         )
     );
   }
 
-  Container attendanceShimmer(){
+  Container getShimmer(AttendanceState state,int number, MainUserData user){
+
+    if(state.getAttendanceList.isEmpty){
+      return attendanceShimmer();
+    }else{
+      if(state.getAttendanceList[number]
+          .toString() == "[]"){
+        return attendanceShimmer();
+      }else{
+        return attendanceLoad(state.getAttendanceList[number],user);
+      }
+    }
+
+  }
+
+  Container attendanceShimmer() {
     return Container(
         child: Padding(
           padding: const EdgeInsets.all(5),
