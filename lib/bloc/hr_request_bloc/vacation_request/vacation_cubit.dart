@@ -384,10 +384,10 @@ class VacationCubit extends Cubit<VacationInitial> {
   }
 
   submitAction(ActionValueStatus valueStatus,String requestNo) async {
-    EasyLoading.show(status: 'Loading...',
-      maskType: EasyLoadingMaskType.black,
-      dismissOnTap: false,);
-
+    // EasyLoading.show(status: 'Loading...',
+    //   maskType: EasyLoadingMaskType.black,
+    //   dismissOnTap: false,);
+    emit(state.copyWith(status: FormzStatus.submissionInProgress,));
     final vacationResultResponse = await _requestRepository.postTakeActionRequest(
         valueStatus: valueStatus,
         requestNo: requestNo,

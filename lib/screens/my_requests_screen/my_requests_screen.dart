@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/my_requests_screen_bloc/my_requests_cubit.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_requests_model_form.dart';
-import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_ticket_widget.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 
@@ -15,43 +13,41 @@ class MyRequestsScreen extends StatefulWidget {
   State<MyRequestsScreen> createState() => MyRequestsScreenClass();
 }
 
-class MyRequestsScreenClass extends State<MyRequestsScreen>
-    with RestorationMixin {
+class MyRequestsScreenClass extends State<MyRequestsScreen> {
+  // with RestorationMixin {
   FocusNode searchTextFieldFocusNode = FocusNode();
   TextEditingController textController = TextEditingController();
   List<MyRequestsModelData> searchResult = [];
 
-  final isSelected = [
-    RestorableBool(false),
-    RestorableBool(false),
-    RestorableBool(false),
-  ];
-  @override
-  String get restorationId => 'toggle_button_demo';
-
-  @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    registerForRestoration(isSelected[0], 'first_item');
-    registerForRestoration(isSelected[1], 'second_item');
-    registerForRestoration(isSelected[2], 'third_item');
-  }
-
-  @override
-  void dispose() {
-    for (final restorableBool in isSelected) {
-      restorableBool.dispose();
-    }
-    super.dispose();
-  }
+  // // final isSelected = [
+  // //   RestorableBool(false),
+  // //   RestorableBool(false),
+  // //   RestorableBool(false),
+  // // ];
+  // @override
+  // String get restorationId => 'toggle_button_demo';
+  //
+  // @override
+  // void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+  //   // registerForRestoration(isSelected[0], 'first_item');
+  //   // registerForRestoration(isSelected[1], 'second_item');
+  //   // registerForRestoration(isSelected[2], 'third_item');
+  // }
+  //
+  // @override
+  // void dispose() {
+  //   // for (final restorableBool in isSelected) {
+  //   //   restorableBool.dispose();
+  //   // }
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     var deviceSize = MediaQuery.of(context).size;
-    final user = context.select((AppBloc bloc) => bloc.state.userData);
 
-    return BlocProvider.value
-      (value:MyRequestsCubit.get(context)
-          ..getRequests(),
+    return BlocProvider.value(
+      value: MyRequestsCubit.get(context),
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: CustomBackground(
@@ -64,7 +60,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                 title: const Text('My Requests'),
                 centerTitle: true,
                 bottom: PreferredSize(
-                  preferredSize: const Size(double.infinity, 20),
+                  preferredSize: const Size(double.infinity, 25),
                   child: BlocBuilder<MyRequestsCubit, MyRequestsState>(
                     builder: (context, state) {
                       return ToggleButtons(
@@ -72,10 +68,15 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                         selectedColor: Colors.lightBlue,
                         selectedBorderColor: Colors.transparent,
                         color: Colors.white,
+                        isSelected: [
+                          state.approved,
+                          state.pending,
+                          state.rejected
+                        ],
                         onPressed: (index) {
-
-                          if (state.userRequestsEnumStates == UserRequestsEnumStates.success) {
-                            if (index == 0 && isSelected[index].value == false) {
+                          if (state.userRequestsEnumStates ==
+                              UserRequestsEnumStates.success) {
+                            if (index == 0 && state.approved == false) {
                               searchResult.addAll(state.getMyRequests
                                   .where((element) => element.reqStatus
                                       .toString()
@@ -83,8 +84,10 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                                       .trim()
                                       .contains('1'))
                                   .toList());
+                              MyRequestsCubit.get(context)
+                                  .onApprovedSelected(searchResult);
                             }
-                            if (index == 1 && isSelected[index].value == false) {
+                            if (index == 1 && state.pending == false) {
                               searchResult.addAll(state.getMyRequests
                                   .where((element) => element.reqStatus
                                       .toString()
@@ -92,8 +95,10 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                                       .trim()
                                       .contains('0'))
                                   .toList());
+                              MyRequestsCubit.get(context)
+                                  .onPendingSelected(searchResult);
                             }
-                            if (index == 2 && isSelected[index].value == false) {
+                            if (index == 2 && state.rejected == false) {
                               searchResult.addAll(state.getMyRequests
                                   .where((element) => element.reqStatus
                                       .toString()
@@ -101,31 +106,38 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                                       .trim()
                                       .contains('2'))
                                   .toList());
+                              MyRequestsCubit.get(context)
+                                  .onRejectedSelected(searchResult);
                             }
 
-                            if (index == 0 && isSelected[index].value == true) {
-                              searchResult
-                                  .removeWhere((element) => element.reqStatus == 1);
+                            if (index == 0 && state.approved == true) {
+                              searchResult.removeWhere(
+                                  (element) => element.reqStatus == 1);
+                              MyRequestsCubit.get(context)
+                                  .onApprovedUnSelected(searchResult);
                             }
-                            if (index == 1 && isSelected[index].value == true) {
-                              searchResult
-                                  .removeWhere((element) => element.reqStatus == 0);
+                            if (index == 1 && state.pending == true) {
+                              searchResult.removeWhere(
+                                  (element) => element.reqStatus == 0);
+                              MyRequestsCubit.get(context)
+                                  .onPendingUnSelected(searchResult);
                             }
-                            if (index == 2 && isSelected[index].value == true) {
-                              searchResult
-                                  .removeWhere((element) => element.reqStatus == 2);
+                            if (index == 2 && state.rejected == true) {
+                              searchResult.removeWhere(
+                                  (element) => element.reqStatus == 2);
+                              MyRequestsCubit.get(context)
+                                  .onRejectedUnSelected(searchResult);
                             }
+
+                            MyRequestsCubit.get(context).checkAllFilters();
+
+                            //sorting after selecting
+                            searchResult.sort((a, b) =>
+                                b.reqDate?.compareTo(a.reqDate!) ?? 0);
+
+                            // isSelected[index].value = !isSelected[index].value;
                           }
-
-                          //sorting after selecting
-                          searchResult.sort((a,b) => b.reqDate?.compareTo(a.reqDate!) ?? 0);
-
-                          setState(() {
-                            isSelected[index].value = !isSelected[index].value;
-                          });
                         },
-                        isSelected:
-                            isSelected.map((element) => element.value).toList(),
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
@@ -138,7 +150,8 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                                 Text(
                                   ' Approved',
                                   style: TextStyle(
-                                      fontSize: 15, fontWeight: FontWeight.bold),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
@@ -154,7 +167,8 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                                 Text(
                                   ' In Progress',
                                   style: TextStyle(
-                                      fontSize: 15, fontWeight: FontWeight.bold),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
                                 )
                               ],
                             ),
@@ -170,7 +184,8 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                                 Text(
                                   ' Rejected',
                                   style: TextStyle(
-                                      fontSize: 15, fontWeight: FontWeight.bold),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -192,7 +207,8 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                   builder: (context, state) {
                     return SizedBox(
                       height: deviceSize.height,
-                      child: state.userRequestsEnumStates == UserRequestsEnumStates.success
+                      child: (state.userRequestsEnumStates ==
+                              UserRequestsEnumStates.success)
                           ? Column(
                               children: [
                                 Container(
@@ -200,48 +216,35 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                                   padding: const EdgeInsets.all(10.0),
                                   child: TextField(
                                     controller: textController,
-                                    onChanged: (_) {
-                                      setState(() {
-                                        searchResult = (searchResult.isEmpty)
-                                            ? state.getMyRequests
-                                            : searchResult
-                                                .where(
-                                                  (element) =>
-                                                      element.requestNo
-                                                          .toString()
-                                                          .toLowerCase()
-                                                          .trim()
-                                                          .contains(
-                                                              textController.text) ||
-                                                      element.serviceName
-                                                          .toString()
-                                                          .toLowerCase()
-                                                          .trim()
-                                                          .contains(
-                                                              textController.text),
-                                                )
-                                                .toList();
-                                      });
+                                    focusNode: searchTextFieldFocusNode,
+                                    onChanged: (text) {
+                                      MyRequestsCubit.get(context)
+                                          .writenText(text);
+                                      // if(text.isEmpty){searchTextFieldFocusNode.unfocus();}
                                     },
                                     decoration: InputDecoration(
                                       contentPadding: const EdgeInsets.all(10),
                                       filled: true,
-                                      prefixIcon: const Icon(Icons.search,color: Colors.white,),
+                                      prefixIcon: const Icon(
+                                        Icons.search,
+                                        color: Colors.white,
+                                      ),
                                       border: const OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.all(Radius.circular(10.0)),
-                                          borderSide: BorderSide.none),
-                                      // labelText: 'Search',
-                                      hintText: "Search by 'request number, request name'",
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10.0)),
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      hintText:
+                                          "Search by 'request number, request name'",
                                       suffixIcon: (textController.text.isEmpty)
                                           ? null
                                           : IconButton(
                                               onPressed: () {
-                                                setState(() {
-                                                  searchResult.clear();
-                                                  textController.clear();
-                                                  searchTextFieldFocusNode.unfocus();
-                                                });
+                                                textController.clear();
+                                                searchTextFieldFocusNode
+                                                    .unfocus();
+                                                MyRequestsCubit.get(context)
+                                                    .onClearData();
                                               },
                                               icon: const Icon(
                                                 Icons.clear,
@@ -252,14 +255,12 @@ class MyRequestsScreenClass extends State<MyRequestsScreen>
                                   ),
                                 ),
                                 SizedBox(
-                                  height: deviceSize.height * 0.73,
-                                  child: (searchResult.isEmpty)
-                                      ? (textController.text.isNotEmpty)
-                                          ? const Center(
-                                              child: Text('No Data Found'),
-                                            )
-                                          : MyRequestsItemWidget(state.getMyRequests)
-                                      : MyRequestsItemWidget(searchResult),
+                                  height: deviceSize.height * 0.72,
+                                  child: (!state.isFiltered)
+                                      ? MyRequestsItemWidget(
+                                          state.getMyRequests)
+                                      : MyRequestsItemWidget(
+                                          state.gettempMyRequests),
                                 ),
                               ],
                             )
