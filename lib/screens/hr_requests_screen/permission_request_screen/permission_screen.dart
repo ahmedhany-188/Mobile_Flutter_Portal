@@ -9,6 +9,7 @@ import 'package:hassanallamportalflutter/widgets/background/custom_background.da
 import 'package:sizer/sizer.dart';
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../bloc/hr_request_bloc/permission_request/permission_cubit.dart';
+import '../../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
 import '../../../widgets/requester_data_widget/requester_data_widget.dart';
@@ -77,7 +78,11 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                 TakeActionStatus.takeAction)FloatingActionButton
                             .extended(
                           heroTag: null,
-                          onPressed: () {},
+                          onPressed: () {
+                            context.read<PermissionCubit>()
+                                .submitAction(ActionValueStatus.accept,currentRequestData[PermissionScreen.requestNoKey]);
+
+                          },
                           icon: const Icon(Icons.verified),
                           label: const Text('Accept'),
                         ),
@@ -90,7 +95,11 @@ class _PermissionScreenState extends State<PermissionScreen> {
                             .extended(
                           backgroundColor: Colors.white,
                           heroTag: null,
-                          onPressed: () {},
+                          onPressed: () {
+                            context.read<PermissionCubit>()
+                                .submitAction(ActionValueStatus.reject,currentRequestData[PermissionScreen.requestNoKey]);
+
+                          },
                           icon: const Icon(Icons.dangerous,color: ConstantsColors.buttonColors,),
                           label: const Text('Reject',style: TextStyle(color: ConstantsColors.buttonColors),),
                         ),
@@ -127,6 +136,10 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                       routName: PermissionScreen.routeName,
                                       requestName: 'Permission',)));
                           }
+                          else if (state.requestStatus == RequestStatus.oldRequest){
+                            EasyLoading.showSuccess(state.successMessage ?? "").then((value) => Navigator.pop(context));
+                            BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();
+                          }
                           // LoadingDialog.hide(context);
                           // Navigator.of(context).pushReplacement(
                           //     MaterialPageRoute(builder: (_) =>
@@ -145,6 +158,9 @@ class _PermissionScreenState extends State<PermissionScreen> {
                           //           state.errorMessage ?? 'Request Failed'),
                           //     ),
                           //   );
+                        }
+                        if (state.status.isValid) {
+                          EasyLoading.dismiss(animation: true);
                         }
                       },
                       child: Padding(

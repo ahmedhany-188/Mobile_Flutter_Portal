@@ -8,6 +8,7 @@ import 'package:hassanallamportalflutter/data/models/requests_form_models/reques
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../bloc/hr_request_bloc/hr_request_export.dart';
+import '../../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
 import '../../../widgets/requester_data_widget/requester_data_widget.dart';
@@ -67,25 +68,29 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                   floatingActionButton: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      if(state
-                          .requestStatus ==
+                      if(state.requestStatus ==
                           RequestStatus.oldRequest && state.takeActionStatus ==
                           TakeActionStatus.takeAction)FloatingActionButton
                           .extended(
                         heroTag: null,
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<BusinessMissionCubit>()
+                              .submitAction(ActionValueStatus.accept,currentRequestData[BusinessMissionScreen.requestNoKey]);
+                        },
                         icon: const Icon(Icons.verified),
                         label: const Text('Accept'),
                       ),
                       const SizedBox(height: 12),
-                      if(state
-                          .requestStatus ==
+                      if(state.requestStatus ==
                           RequestStatus.oldRequest && state.takeActionStatus ==
                           TakeActionStatus.takeAction)FloatingActionButton
                           .extended(
                         backgroundColor: Colors.white,
                         heroTag: null,
-                        onPressed: () {},
+                        onPressed: () {
+                          context.read<BusinessMissionCubit>()
+                              .submitAction(ActionValueStatus.reject,currentRequestData[BusinessMissionScreen.requestNoKey]);
+                        },
                         icon: const Icon(Icons.dangerous,
                           color: ConstantsColors.buttonColors,),
 
@@ -93,8 +98,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                             color: ConstantsColors.buttonColors),),
                       ),
                       const SizedBox(height: 12),
-                      if(state
-                          .requestStatus == RequestStatus.newRequest)
+                      if(state.requestStatus == RequestStatus.newRequest)
                         FloatingActionButton.extended(
                           heroTag: null,
                           onPressed: () {
@@ -126,6 +130,10 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                     routName: BusinessMissionScreen.routeName,
                                     requestName: 'Business Mission',)));
                         }
+                        else if (state.requestStatus == RequestStatus.oldRequest){
+                          EasyLoading.showSuccess(state.successMessage ?? "").then((value) => Navigator.pop(context));
+                          BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();
+                        }
                       }
                       if (state.status.isSubmissionFailure) {
                         EasyLoading.showError(
@@ -139,6 +147,9 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                         //           state.errorMessage ?? 'Request Failed'),
                         //     ),
                         //   );
+                      }
+                      if (state.status.isValid) {
+                        EasyLoading.dismiss(animation: true);
                       }
                     },
                     child: Padding(

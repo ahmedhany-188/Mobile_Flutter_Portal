@@ -30,6 +30,8 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
 
   ScrollController scrollController = ScrollController();
 
+  VCard vCard = VCard();
+
   @override
   Widget build(BuildContext context) {
     // double width = MediaQuery
@@ -44,7 +46,7 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
     ///Create a new vCard
-    VCard vCard = VCard();
+
 
     final currentRequestData = widget.requestData;
 
@@ -107,9 +109,8 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                   listener: (context, state) {
                     if (state is BlocGetManagerDataSuccessState) {
 
-                      print("00-" + state.managerData.toJson().toString());
+                      print("0000-" + state.managerData.toJson().toString());
 
-                      // print("00-"+state.managerData.toJson().toString());
                       ///Set properties
                       vCard.firstName = state.managerData.name!.toString();
                       vCard.organization = state.managerData.companyName!;
@@ -307,7 +308,8 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                         child: SizedBox(
                                           width: double.infinity,
 
-                                          child:getManagerCodeText(state is BlocGetManagerDataSuccessState?state.managerData.managerName.toString():"not Found")
+                                          // child:getManagerCodeText(state is BlocGetManagerDataSuccessState?state.managerData.managerName.toString():"not Found")
+                                            child:getManagerCodeText(state)
 
                                         ),
                                       ),
@@ -329,6 +331,8 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
 
                     getHead("Ext:"),
                     getLine(getExt(state)),
+
+                      getQRData(state),
                     ])
                     )
                     ),
@@ -342,6 +346,27 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
           )
       ),
     );
+  }
+
+  Container getQRData(ProfileManagerState state){
+
+    if(state is BlocGetManagerDataSuccessState){
+
+      vCard.firstName = state.managerData.name!.toString();
+      vCard.organization = state.managerData.companyName!;
+      // vCard.photo.attachFromUrl('/path/to/image/file.png', 'PNG');
+      vCard.jobTitle = state.managerData.titleName!;
+      vCard.email = state.managerData.email!;
+      vCard.url = "https://hassanallam.com";
+      vCard.workPhone = state.managerData.deskPhone;
+      vCard.cellPhone = state.managerData.mobile!;
+
+    }
+
+
+
+    return Container();
+
   }
 
   String getEmail(ProfileManagerState state){
@@ -416,7 +441,16 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
     );
   }
 
-  Text getManagerCodeText(String managerCode) {
+  Text getManagerCodeText(ProfileManagerState state) {
+
+    String managerCode="Not found";
+    if(state is BlocGetManagerDataSuccessState) {
+      if (state.managerData.managerName.toString() != "null") {
+        managerCode = state.managerData.managerName!.toString();
+      } else {
+        managerCode = state.managerData.managerCode!.toString();
+      }
+    }
     return Text(
         managerCode,
         style: const TextStyle(

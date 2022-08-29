@@ -1,6 +1,7 @@
 import 'package:circular/circular.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/appraisal_models/object_appraisal_model.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
@@ -48,14 +49,17 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget {
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20.0),
                       ),
-                      footer: Text(
-                        employeeAppraisaleList[index].name,
-                        style:
-                        const TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 17.0),
+                      footer: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Text(
+                          employeeAppraisaleList[index].name,
+                          style:
+                          const TextStyle(
+                              fontWeight: FontWeight.normal, fontSize: 15.0),
+                        ),
                       ),
                       circularStrokeCap: CircularStrokeCap.round,
-                      progressColor: Colors.blueAccent,
+                      progressColor: ConstantsColors.backgroundEndColor,
                     ),
                   );
                 }

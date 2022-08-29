@@ -11,6 +11,7 @@ import 'package:hassanallamportalflutter/widgets/dialogpopoup/custom_date_picker
 import 'package:intl/intl.dart';
 
 import '../../../constants/enums.dart';
+import '../../../constants/request_service_id.dart';
 import '../../../data/models/requests_form_models/request_date.dart';
 import '../../../data/models/requests_form_models/request_date_from.dart';
 import '../../../data/models/requests_form_models/request_time_from.dart';
@@ -80,7 +81,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
             comment: comments,
             timeFrom: hoursFrom,
             timeTo: hoursTo,
-            status: FormzStatus.submissionSuccess,
+            status: FormzStatus.valid,
             requesterData: requesterData,
             // status: Formz.validate([requestDate,
             //   state.timeFrom , state.dateFrom]),
@@ -280,5 +281,36 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
         );
       }
     }
+  }
+
+  submitAction(ActionValueStatus valueStatus,String requestNo) async {
+
+    emit(state.copyWith(status: FormzStatus.submissionInProgress,));
+    final vacationResultResponse = await _requestRepository.postTakeActionRequest(
+        valueStatus: valueStatus,
+        requestNo: requestNo,
+        actionComment: state.actionComment,
+        serviceID: RequestServiceID.businessMissionServiceID,
+        requesterHRCode: state.requesterData.userHrCode ?? "");
+
+    final result = vacationResultResponse.result ?? "false";
+    if (result.toLowerCase().contains("true")) {
+      emit(
+        state.copyWith(
+          successMessage: "#$requestNo \n ${valueStatus == ActionValueStatus.accept ? "Request has been Accepted":"Request has been Rejected"}",
+          status: FormzStatus.submissionSuccess,
+        ),
+      );
+    }
+    else {
+      emit(
+        state.copyWith(
+          errorMessage:"An error occurred",
+          status: FormzStatus.submissionFailure,
+        ),
+      );
+      // }
+    }
+
   }
 }
