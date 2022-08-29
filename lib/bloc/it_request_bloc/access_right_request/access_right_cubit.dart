@@ -14,6 +14,7 @@ import 'package:hassanallamportalflutter/data/models/requests_form_models/reques
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:intl/intl.dart';
 
+import '../../../constants/request_service_id.dart';
 import '../../../data/repositories/employee_repository.dart';
 import '../../../widgets/dialogpopoup/custom_date_picker.dart';
 
@@ -112,7 +113,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
           comments: comments,
           requestItemsList: requestItems,
           requesterData : requesterData,
-          status: FormzStatus.submissionSuccess,
+          status: FormzStatus.valid,
           requestStatus: RequestStatus.oldRequest,
           statusAction: status,
           takeActionStatus: (requestRepository.userData.user?.userHRCode ==
@@ -343,6 +344,39 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
         // status: Formz.validate([state.requestDate,state.permissionDate,state.permissionTime]),
       ),
     );
+  }
+
+  submitAction(ActionValueStatus valueStatus,String requestNo) async {
+    // EasyLoading.show(status: 'Loading...',
+    //   maskType: EasyLoadingMaskType.black,
+    //   dismissOnTap: false,);
+    emit(state.copyWith(status: FormzStatus.submissionInProgress,));
+    final vacationResultResponse = await requestRepository.postTakeActionRequest(
+        valueStatus: valueStatus,
+        requestNo: requestNo,
+        actionComment: state.actionComment,
+        serviceID: RequestServiceID.accessRightServiceID,
+        requesterHRCode: state.requesterData.userHrCode ?? "");
+
+    final result = vacationResultResponse.result ?? "false";
+    if (result.toLowerCase().contains("true")) {
+      emit(
+        state.copyWith(
+          successMessage: "#$requestNo \n ${valueStatus == ActionValueStatus.accept ? "Request has been Accepted":"Request has been Rejected"}",
+          status: FormzStatus.submissionSuccess,
+        ),
+      );
+    }
+    else {
+      emit(
+        state.copyWith(
+          errorMessage:"An error occurred",
+          status: FormzStatus.submissionFailure,
+        ),
+      );
+      // }
+    }
+
   }
 
   @override

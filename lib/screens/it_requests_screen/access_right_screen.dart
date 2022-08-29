@@ -20,6 +20,7 @@ import 'package:flutter_web_browser/flutter_web_browser.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../constants/enums.dart';
 import '../../../widgets/success/success_request_widget.dart';
 import '../../widgets/requester_data_widget/requester_data_widget.dart';
@@ -99,7 +100,10 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                         .takeAction )FloatingActionButton
                                 .extended(
                               heroTag: null,
-                              onPressed: () {},
+                              onPressed: () {
+                                context.read<AccessRightCubit>()
+                                    .submitAction(ActionValueStatus.accept,currentRequestData[AccessRightScreen.requestNoKey]);
+                              },
                               icon: const Icon(Icons.verified),
                               label: const Text('Accept'),
                             ),
@@ -113,7 +117,10 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                 .extended(
                               backgroundColor: Colors.white,
                               heroTag: null,
-                              onPressed: () {},
+                              onPressed: () {
+                                context.read<AccessRightCubit>()
+                                    .submitAction(ActionValueStatus.reject,currentRequestData[AccessRightScreen.requestNoKey]);
+                              },
                               icon: const Icon(Icons.dangerous,
                                 color: ConstantsColors.buttonColors,),
 
@@ -131,11 +138,6 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                   context.read<AccessRightCubit>()
                                       .getSubmitAccessRight();
                                 },
-                                // formBloc.state.status.isValidated
-                                //       ? () => formBloc.submitPermissionRequest()
-                                //       : null,
-                                // formBloc.submitPermissionRequest();
-
                                 icon: const Icon(Icons.send),
                                 label: const Text('SUBMIT'),
                               ),
@@ -163,10 +165,17 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                           routName: AccessRightScreen.routeName,
                                           requestName: 'Access Right',)));
                               }
+                              else if (state.requestStatus == RequestStatus.oldRequest){
+                                EasyLoading.showSuccess(state.successMessage ?? "").then((value) => Navigator.pop(context));
+                                BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();
+                              }
                             }
                             if (state.status.isSubmissionFailure) {
                               EasyLoading.showError(state.errorMessage
                                   .toString(),);
+                            }
+                            if (state.status.isValid) {
+                              EasyLoading.dismiss(animation: true);
                             }
                           },
 
@@ -229,6 +238,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                             }
                                         ),
                                       ),
+
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 8, vertical: 8),
@@ -260,7 +270,6 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                           }
                                       ),
                                     ),
-
 
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
@@ -401,11 +410,13 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                 )
                                                     :
                                                 ListView.separated(
+                                                    physics: const NeverScrollableScrollPhysics(),
                                                     separatorBuilder: (context,
                                                         i) {
                                                       return const SizedBox(
                                                         height: 2,);
                                                     },
+
                                                     shrinkWrap: true,
                                                     itemCount: state
                                                         .requestItemsList
@@ -694,7 +705,6 @@ class _AccessRightScreen extends State<AccessRightScreen> {
 
                                       ),
                                     ),
-
 
                                     Padding(
                                       padding: const EdgeInsets.only(right: 8.0,
