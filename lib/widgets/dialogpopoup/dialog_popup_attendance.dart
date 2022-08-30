@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
@@ -42,7 +41,7 @@ class ShowAttendanceBottomSheetClass extends State<ShowAttendanceBottomSheet> {
       child: Column(
         children: <Widget>[
           Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               color: Colors.white,
@@ -77,12 +76,14 @@ class ShowAttendanceBottomSheetClass extends State<ShowAttendanceBottomSheet> {
                   style: TextStyle(color: Colors.grey, fontSize: 20),),),
 
               Row(children: [
-
-                Expanded(child:               sizeBoxRequest("Permission", Icon(Icons.timelapse,size: 50.0,)),
+                Expanded(child: sizeBoxRequest(
+                    "Permission", Icon(Icons.timelapse, size: 50.0,)),
                 ),
-                Expanded(child:               sizeBoxRequest("Business Mission", Icon(Icons.hail,size: 50.0,)),
+                Expanded(child: sizeBoxRequest(
+                    "Business Mission", Icon(Icons.hail, size: 50.0,)),
                 ),
-                Expanded(child:               sizeBoxRequest("Vacation", Icon(Icons.beach_access,size: 50.0,)),
+                Expanded(child: sizeBoxRequest(
+                    "Vacation", Icon(Icons.beach_access, size: 50.0,)),
                 ),
                 // sizeBoxRequest("Forget sign", const Icon(Icons.fingerprint)),
               ]),
@@ -105,9 +106,6 @@ class ShowAttendanceBottomSheetClass extends State<ShowAttendanceBottomSheet> {
     }
   }
 
-
-
-
   String requestCase() {
     if (widget.attendanceListData.permission != null) {
       return "Permission";
@@ -124,9 +122,7 @@ class ShowAttendanceBottomSheetClass extends State<ShowAttendanceBottomSheet> {
     }
   }
 
-
-  Padding requestForm(String requestType, Icon requestIcon){
-
+  Padding requestForm(String requestType, Icon requestIcon) {
     return Padding(
         padding: EdgeInsets.only(top: 15),
         child: SizedBox(
@@ -153,7 +149,7 @@ class ShowAttendanceBottomSheetClass extends State<ShowAttendanceBottomSheet> {
                         height: 40.0,
                         alignment: Alignment.centerLeft,
                         decoration: BoxDecoration(
-                          color:Colors.blueGrey,
+                          color: Colors.blueGrey,
                           borderRadius: BorderRadius.all(
                             Radius.circular(8.0),
                           ),
@@ -162,15 +158,14 @@ class ShowAttendanceBottomSheetClass extends State<ShowAttendanceBottomSheet> {
                             alignment: Alignment.center,
                             child: requestIcon)
                     ),
-                    Expanded(
-                        child: Center(
-                          child: Text(requestType,
-                              style: Theme
-                                  .of(context)
-                                  .textTheme
-                                  .headline6
-                                  ?.copyWith(color: Colors.black)),
-                        )),
+                    Center(
+                      child: Text(requestType,
+                          style: Theme
+                              .of(context)
+                              .textTheme
+                              .headline6
+                              ?.copyWith(color: Colors.black)),
+                    )
                   ],
                 ),
                 SizedBox.expand(
@@ -180,8 +175,6 @@ class ShowAttendanceBottomSheetClass extends State<ShowAttendanceBottomSheet> {
                       switch (requestType) {
                         case "View Form":
                           if (widget.attendanceListData.vacation != null) {
-                            print("---" +
-                                widget.attendanceListData.vacation.toString());
                             Navigator.of(context)
                                 .pushNamed(VacationScreen.routeName, arguments:
                             {
@@ -225,91 +218,76 @@ class ShowAttendanceBottomSheetClass extends State<ShowAttendanceBottomSheet> {
           ),
         )
     );
-
-
   }
 
   Padding sizeBoxRequest(String requestType, Icon requestIcon) {
-    return  Padding(
+    return Padding(
       padding: const EdgeInsets.all(5.0),
-      child: Expanded(
-        child: Container(
-                  height: 130,
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8.0),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                            color:Colors.grey,
-                            offset: Offset(1.0, 2.0),
-                            blurRadius: 8.0,
-                            spreadRadius: 2.0)
-                      ]),
-                  child: Stack(
-                    children: <Widget>[
-                      Column(
-                        children: <Widget>[
-                          Expanded(
-                            // width: 40.0,
-                            // height: 40.0,
-                            // alignment: Alignment.centerLeft,
-                            // decoration: BoxDecoration(
-                            //   color:Colors.grey,
-                            //   borderRadius: BorderRadius.all(
-                            //     Radius.circular(8.0),
-                            //   ),
-                            // ),
-                                child: Align(
-                                    alignment: Alignment.center,
-                                    child: requestIcon,)
-                          ),
-                          Expanded(
-                              child: Center(
-                                child: Text(requestType,
-                                    style:
-                                    TextStyle(color: Colors.black),
-                                ),
-                              )),
-                        ],
-                      ),
-                      SizedBox.expand(
-                        child: Material(
-                          type: MaterialType.transparency,
-                          child: InkWell(onTap: () {
-                            switch (requestType) {
-                              case "Permission":
-                                Navigator.of(context)
-                                    .pushNamed(
-                                    PermissionScreen.routeName, arguments: {
-                                  PermissionScreen.requestNoKey: "0",
-                                  PermissionScreen.requestDateAttendance: widget
-                                      .attendanceListData.date});
-                                break;
-                              case "Vacation":
-                                Navigator.of(context)
-                                    .pushNamed(VacationScreen.routeName,
-                                    arguments: {VacationScreen.requestNoKey: "0",
-                                      VacationScreen.requestDateAttendance: widget
-                                          .attendanceListData.date});
-                                break;
-                              case "Business Mission":
-                                Navigator.of(context)
-                                    .pushNamed(BusinessMissionScreen.routeName,
-                                    arguments: {BusinessMissionScreen
-                                        .requestNoKey: "0",
-                                      BusinessMissionScreen
-                                          .requestDateAttendance: widget
-                                          .attendanceListData.date});
-                                break;
-                            }
-                          }),
-                        ),
-                      ),
-                    ],
+      child: Container(
+        height: 130,
+        decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(8.0),
+            ),
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.grey,
+                  offset: Offset(1.0, 2.0),
+                  blurRadius: 8.0,
+                  spreadRadius: 2.0)
+            ]),
+        child: Stack(
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: <Widget>[
+                Align(
+                  alignment: Alignment.center,
+                  child: requestIcon,),
+                Center(
+                  child: Text(requestType,
+                    style:
+                    TextStyle(color: Colors.black),
                   ),
-                ),
+                )
+              ],
+            ),
+            SizedBox.expand(
+              child: Material(
+                type: MaterialType.transparency,
+                child: InkWell(onTap: () {
+                  switch (requestType) {
+                    case "Permission":
+                      Navigator.of(context)
+                          .pushNamed(
+                          PermissionScreen.routeName, arguments: {
+                        PermissionScreen.requestNoKey: "0",
+                        PermissionScreen.requestDateAttendance: widget
+                            .attendanceListData.date});
+                      break;
+                    case "Vacation":
+                      Navigator.of(context)
+                          .pushNamed(VacationScreen.routeName,
+                          arguments: {VacationScreen.requestNoKey: "0",
+                            VacationScreen.requestDateAttendance: widget
+                                .attendanceListData.date});
+                      break;
+                    case "Business Mission":
+                      Navigator.of(context)
+                          .pushNamed(BusinessMissionScreen.routeName,
+                          arguments: {BusinessMissionScreen
+                              .requestNoKey: "0",
+                            BusinessMissionScreen
+                                .requestDateAttendance: widget
+                                .attendanceListData.date});
+                      break;
+                  }
+                }),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

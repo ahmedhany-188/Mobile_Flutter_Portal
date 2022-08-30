@@ -75,22 +75,10 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
             ),
             resizeToAvoidBottomInset: false,
 
-            body:
-            // RefreshIndicator(
-            //     onRefresh: () async {
-            //       await AttendanceCubit(user.user!.userHRCode.toString())
-            //           ..getAttendanceList(user.user!.userHRCode.toString());
-            //       // await Future.delayed(const Duration(milliseconds: 1000));
-            //       return Future(() => null);
-            //     },
-            //     child:
-
-            BlocProvider.value(value: AttendanceCubit.get(context)
+            body: BlocProvider.value(value: AttendanceCubit.get(context)
               ..getFirstAttendanceList(
                 user.user!.userHRCode.toString(), monthNumber),
 
-        // ..getAllAttendanceList(
-        //       user.user!.userHRCode.toString()),
               child: BlocConsumer<AttendanceCubit, AttendanceState>(
                   listener: (context, state) {
                     if (state.attendanceDataEnumStates ==
@@ -205,30 +193,6 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                               },
                               controller: pageController,
                               children: [
-                                // attendanceLoad(
-                                //     state.getAttendanceList[0], user),
-                                // attendanceLoad(
-                                //     state.getAttendanceList[1], user),
-                                // attendanceLoad(
-                                //     state.getAttendanceList[2], user),
-                                // attendanceLoad(
-                                //     state.getAttendanceList[3], user),
-                                // attendanceLoad(
-                                //     state.getAttendanceList[4], user),
-                                // attendanceLoad(
-                                //     state.getAttendanceList[5], user),
-                                // attendanceLoad(
-                                //     state.getAttendanceList[6], user),
-                                // attendanceLoad(
-                                //     state.getAttendanceList[7], user),
-                                // attendanceLoad(
-                                //     state.getAttendanceList[8], user),
-                                // attendanceLoad(
-                                //     state.getAttendanceList[9], user),
-                                // attendanceLoad(
-                                //     state.getAttendanceList[10], user),
-                                // attendanceLoad(
-                                //     state.getAttendanceList[11], user),
 
                                 getShimmer(state,0,user),
                                 getShimmer(state,1,user),
