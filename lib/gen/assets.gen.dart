@@ -92,6 +92,14 @@ class $AssetsImagesGen {
   AssetGenImage get nativeSplash =>
       const AssetGenImage('assets/images/native_splash.png');
 
+  /// File path: assets/images/no_data_found.png
+  AssetGenImage get noDataFound =>
+      const AssetGenImage('assets/images/no_data_found.png');
+
+  /// File path: assets/images/no_search_icon.png
+  AssetGenImage get noSearchIcon =>
+      const AssetGenImage('assets/images/no_search_icon.png');
+
   /// File path: assets/images/welcomeImage.gif
   AssetGenImage get welcomeImage =>
       const AssetGenImage('assets/images/welcomeImage.gif');

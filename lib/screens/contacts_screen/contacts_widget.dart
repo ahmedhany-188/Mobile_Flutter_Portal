@@ -9,6 +9,7 @@ import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreenD
 import 'package:sizer/sizer.dart';
 
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
+import '../../widgets/error/error_widget.dart';
 
 class ContactsWidget extends StatelessWidget {
   final List<ContactsDataFromApi> listFromContactsScreen;
@@ -18,10 +19,12 @@ class ContactsWidget extends StatelessWidget {
   static final ScrollController _scrollController = ScrollController();
 
   static scrollToTop() {
-    if(_scrollController.positions.isNotEmpty) {
+    if (_scrollController.positions.isNotEmpty) {
       Timer(
-      const Duration(seconds: 0), () => _scrollController.animateTo(0.0, curve: Curves.easeOut, duration: const Duration(milliseconds: 300)),
-    );
+        const Duration(seconds: 0),
+        () => _scrollController.animateTo(0.0,
+            curve: Curves.easeOut, duration: const Duration(milliseconds: 300)),
+      );
     }
   }
 
@@ -34,14 +37,16 @@ class ContactsWidget extends StatelessWidget {
     // print('pope'+listFromContactsScreen[contactIndex].phoneNumber.toString());
     Navigator.of(context).pushNamed(
       DirectManagerProfileScreen.routeName,
-      arguments: {DirectManagerProfileScreen.employeeHrCode: "0",
-        DirectManagerProfileScreen.selectedContactDataAsMap: listFromContactsScreen[contactIndex]},
+      arguments: {
+        DirectManagerProfileScreen.employeeHrCode: "0",
+        DirectManagerProfileScreen.selectedContactDataAsMap:
+            listFromContactsScreen[contactIndex]
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    // scrollToTop();
     return Sizer(
       builder: (c, o, d) => ConditionalBuilder(
         condition: listFromContactsScreen.isNotEmpty,
@@ -49,7 +54,6 @@ class ContactsWidget extends StatelessWidget {
           physics: const BouncingScrollPhysics(),
           controller: _scrollController,
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-
           itemBuilder: (context, index) {
             var imageProfile = listFromContactsScreen[index].imgProfile ?? "";
             return Padding(
@@ -89,21 +93,27 @@ class ContactsWidget extends StatelessWidget {
                       Flexible(
                         fit: FlexFit.tight,
                         flex: 1,
-                        child:
-                        imageProfile.isNotEmpty ? CachedNetworkImage(
-                          imageUrl: 'https://portal.hassanallam.com/Apps/images/Profile/$imageProfile',
-                          imageBuilder: (context, imageProvider) => Container(
-                            width: 80.sp,
-                            height: 80.sp,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image: imageProvider, fit: BoxFit.cover),
-                            ),
-                          ),
-                          placeholder: (context, url) => Assets.images.logo.image(height: 60.sp),
-                          errorWidget: (context, url, error) => Assets.images.logo.image(height: 60.sp),
-                        ) : Assets.images.logo.image(height: 60.sp),
+                        child: imageProfile.isNotEmpty
+                            ? CachedNetworkImage(
+                                imageUrl:
+                                    'https://portal.hassanallam.com/Apps/images/Profile/$imageProfile',
+                                imageBuilder: (context, imageProvider) =>
+                                    Container(
+                                  width: 80.sp,
+                                  height: 80.sp,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        image: imageProvider,
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
+                                placeholder: (context, url) =>
+                                    Assets.images.logo.image(height: 60.sp),
+                                errorWidget: (context, url, error) =>
+                                    Assets.images.logo.image(height: 60.sp),
+                              )
+                            : Assets.images.logo.image(height: 60.sp),
                         // CircleAvatar(
                         //   radius: 40.sp,
                         //   backgroundColor: Colors.transparent,
@@ -159,8 +169,8 @@ class ContactsWidget extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 5, bottom: 5),
+                                padding:
+                                    const EdgeInsets.only(top: 5, bottom: 5),
                                 child: Container(
                                   width: double.infinity,
                                   height: 0.5.sp,
@@ -175,8 +185,7 @@ class ContactsWidget extends StatelessWidget {
                                   // mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      '${listFromContactsScreen[index]
-                                          .titleName}'
+                                      '${listFromContactsScreen[index].titleName}'
                                           .trim(),
                                       style: const TextStyle(
                                         fontSize: 14.0,
@@ -187,8 +196,7 @@ class ContactsWidget extends StatelessWidget {
                                       textAlign: TextAlign.center,
                                     ),
                                     Text(
-                                      '${listFromContactsScreen[index]
-                                          .projectName}',
+                                      '${listFromContactsScreen[index].projectName}',
                                       style: const TextStyle(
                                         fontSize: 13.0,
                                         color: Colors.white,
@@ -220,12 +228,9 @@ class ContactsWidget extends StatelessWidget {
           ),
           itemCount: listFromContactsScreen.length,
         ),
-        fallback: (context) => const Center(
-          child: Center(
-            child: Text('No data found'),
-          ),
-        ),
+        fallback: (context) => noDataFoundContainer(),
       ),
     );
   }
 }
+

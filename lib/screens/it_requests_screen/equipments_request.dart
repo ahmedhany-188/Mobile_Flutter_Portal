@@ -587,11 +587,11 @@ class EquipmentsRequest extends StatelessWidget {
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                               subtitle: Text(
-                                                'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].qty : state.chosenList[index].quantity}',
+                                                'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData?.data![index].qty : state.chosenList[index].quantity}',
                                                 softWrap: true,
                                               ),
                                               children: [
-                                               if(state.requestedData!.data![index].type != null) Row(
+                                               if(state.requestedData?.data![index].type != 0) Row(
                                                   children: [
                                                     Text(
                                                       'Request for: ${(state.requestStatus == RequestStatus.oldRequest) ? EquipmentsCubit.get(context).getRequestForFromType(state.requestedData!.data![index].type!)!.trim() : state.chosenList[index].requestFor!.trim()}',
