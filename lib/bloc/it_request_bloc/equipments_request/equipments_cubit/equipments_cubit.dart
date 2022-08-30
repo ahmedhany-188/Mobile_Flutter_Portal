@@ -87,7 +87,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         dismissOnTap: false,
       );
       final requestData = await _requestRepository.getEquipmentData(
-          requestNo!, requesterHRCode!);
+          requestNo??'', requesterHRCode!);
 
       // ContactsDataFromApi responsiblePerson;
       // if(requestData.ownerName != null){
@@ -128,10 +128,10 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
           // status: FormzStatus.submissionSuccess,
           requestStatus: RequestStatus.oldRequest,
           statusAction: status,
-          //     takeActionStatus: (_requestRepository.userData.user?.userHRCode ==
-          //         requestData.requestHrCode)
-          //         ? TakeActionStatus.view
-          //         : TakeActionStatus.takeAction
+              takeActionStatus: (_requestRepository.userData.user?.userHRCode ==
+                  requestData.data?[0].requestHRCode)
+                  ? TakeActionStatus.view
+                  : TakeActionStatus.takeAction
         ),
       );
       EasyLoading.dismiss();

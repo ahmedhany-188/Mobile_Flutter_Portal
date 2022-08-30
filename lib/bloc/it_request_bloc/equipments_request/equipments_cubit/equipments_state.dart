@@ -17,6 +17,8 @@ class EquipmentsCubitStates extends Equatable {
   final RequestStatus? requestStatus;
   final RequestDate? requestDate;
   final EquipmentsRequestedModel? requestedData;
+  final TakeActionStatus? takeActionStatus;
+
   // final FormzStatus status;
 
   const EquipmentsCubitStates({
@@ -34,6 +36,7 @@ class EquipmentsCubitStates extends Equatable {
     this.chosenList = const <SelectedEquipmentsModel>[],
     this.requestDate,
     this.requestedData,
+    this.takeActionStatus,
   });
 
   EquipmentsCubitStates copyWith({
@@ -49,6 +52,7 @@ class EquipmentsCubitStates extends Equatable {
     RequestStatus? requestStatus,
     RequestDate? requestDate,
     EquipmentsRequestedModel? requestedData,
+    TakeActionStatus? takeActionStatus,
     // FormzStatus? status,
   }) {
     return EquipmentsCubitStates(
@@ -66,6 +70,7 @@ class EquipmentsCubitStates extends Equatable {
       // status: status ?? this.status,
       statusAction: statusAction ?? this.statusAction,
       comment: comment ?? this.comment,
+      takeActionStatus: takeActionStatus ?? this.takeActionStatus,
     );
   }
 

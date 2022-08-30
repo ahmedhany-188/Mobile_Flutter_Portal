@@ -212,6 +212,8 @@ flutter:
     - assets/images/homepage/mediaCenterIcon.png
     - assets/images/homepage/newsIcon.png
     - assets/images/homepage/staffDashboardIcon.png
+    - assets/images/no_data_found.png
+    - assets/images/no_search_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

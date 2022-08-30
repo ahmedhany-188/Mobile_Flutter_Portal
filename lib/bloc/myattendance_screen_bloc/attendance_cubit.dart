@@ -37,209 +37,208 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin{
 
   Future<void> getAllAttendanceList(userHRCode) async {
 
-    List<List<MyAttendanceModel>> getAttendanceListSuccess=[];
+    if (state.getAttendanceList[0].isEmpty) {
+      List<List<MyAttendanceModel>> getAttendanceListSuccess = [];
 
-    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
-      try {
-        emit(state.copyWith(
-          attendanceDataEnumStates: AttendanceDataEnumStates.loading,
-        ));
+      if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+        try {
+          emit(state.copyWith(
+            attendanceDataEnumStates: AttendanceDataEnumStates.loading,
+          ));
 
-        await AttendanceRepository().getAttendanceData(userHRCode, 1)
-            .then((value) async {
-          print("-----------start weight");
-          getAttendanceListSuccess.add(value);
-        }).catchError((error) {
+          await AttendanceRepository().getAttendanceData(userHRCode, 1)
+              .then((value) async {
+            print("-----------start weight");
+            getAttendanceListSuccess.add(value);
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+
+          await AttendanceRepository().getAttendanceData(userHRCode, 2)
+              .then((value) async {
+            getAttendanceListSuccess.add(value);
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+
+          await AttendanceRepository().getAttendanceData(userHRCode, 3)
+              .then((value) async {
+            getAttendanceListSuccess.add(value);
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+
+          await AttendanceRepository().getAttendanceData(userHRCode, 4)
+              .then((value) async {
+            getAttendanceListSuccess.add(value);
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+
+          await AttendanceRepository().getAttendanceData(userHRCode, 5)
+              .then((value) async {
+            getAttendanceListSuccess.add(value);
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+
+          await AttendanceRepository().getAttendanceData(userHRCode, 6)
+              .then((value) async {
+            print("-----------half weight");
+            getAttendanceListSuccess.add(value);
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+
+          await AttendanceRepository().getAttendanceData(userHRCode, 7)
+              .then((value) async {
+            getAttendanceListSuccess.add(value);
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+
+          await AttendanceRepository().getAttendanceData(userHRCode, 8)
+              .then((value) async {
+            getAttendanceListSuccess.add(value);
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+
+          await AttendanceRepository().getAttendanceData(userHRCode, 9)
+              .then((value) async {
+            print("-----------Third quarter weight");
+            getAttendanceListSuccess.add(value);
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+
+          await AttendanceRepository().getAttendanceData(userHRCode, 10)
+              .then((value) async {
+            getAttendanceListSuccess.add(value);
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+
+          await AttendanceRepository().getAttendanceData(userHRCode, 11)
+              .then((value) async {
+            getAttendanceListSuccess.add(value);
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+
+          await AttendanceRepository().getAttendanceData(userHRCode, 12)
+              .then((value) async {
+            getAttendanceListSuccess.add(value);
+            print("-----------end weight");
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+
+          emit(state.copyWith(
+            attendanceDataEnumStates: AttendanceDataEnumStates.fullSuccess,
+            getAttendanceList: getAttendanceListSuccess,
+          ));
+        } catch (e) {
           emit(state.copyWith(
             attendanceDataEnumStates: AttendanceDataEnumStates.failed,
           ));
-        });
-
-        await AttendanceRepository().getAttendanceData(userHRCode, 2)
-            .then((value) async {
-          getAttendanceListSuccess.add(value);
-        }).catchError((error) {
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-          ));
-        });
-
-        await AttendanceRepository().getAttendanceData(userHRCode, 3)
-            .then((value) async {
-          getAttendanceListSuccess.add(value);
-        }).catchError((error) {
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-          ));
-        });
-
-        await AttendanceRepository().getAttendanceData(userHRCode, 4)
-            .then((value) async {
-          getAttendanceListSuccess.add(value);
-        }).catchError((error) {
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-          ));
-        });
-
-        await AttendanceRepository().getAttendanceData(userHRCode, 5)
-            .then((value) async {
-          getAttendanceListSuccess.add(value);
-        }).catchError((error) {
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-          ));
-        });
-
-        await AttendanceRepository().getAttendanceData(userHRCode, 6)
-            .then((value) async {
-              print("-----------half weight");
-              getAttendanceListSuccess.add(value);
-        }).catchError((error) {
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-          ));
-        });
-
-        await AttendanceRepository().getAttendanceData(userHRCode, 7)
-            .then((value) async {
-          getAttendanceListSuccess.add(value);
-        }).catchError((error) {
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-          ));
-        });
-
-        await AttendanceRepository().getAttendanceData(userHRCode, 8)
-            .then((value) async {
-          getAttendanceListSuccess.add(value);
-        }).catchError((error) {
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-          ));
-        });
-
-        await AttendanceRepository().getAttendanceData(userHRCode, 9)
-            .then((value) async {
-          print("-----------Third quarter weight");
-          getAttendanceListSuccess.add(value);
-        }).catchError((error) {
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-          ));
-        });
-
-        await AttendanceRepository().getAttendanceData(userHRCode, 10)
-            .then((value) async {
-          getAttendanceListSuccess.add(value);
-        }).catchError((error) {
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-          ));
-        });
-
-        await AttendanceRepository().getAttendanceData(userHRCode, 11)
-            .then((value) async {
-          getAttendanceListSuccess.add(value);
-        }).catchError((error) {
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-          ));
-        });
-
-        await AttendanceRepository().getAttendanceData(userHRCode, 12)
-            .then((value) async {
-          getAttendanceListSuccess.add(value);
-          print("-----------end weight");
-        }).catchError((error) {
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-          ));
-        });
-
-        emit(state.copyWith(
-          attendanceDataEnumStates: AttendanceDataEnumStates.fullSuccess,
-          getAttendanceList: getAttendanceListSuccess,
-        ));
-
-      } catch (e) {
-        emit(state.copyWith(
-          attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-        ));
-      }
-    }else{
+        }
+      } else {
         emit(state.copyWith(
           attendanceDataEnumStates: AttendanceDataEnumStates.noConnection,
         ));
       }
     }
-
+  }
   Future<void> getFirstAttendanceList(userHRCode,int month) async {
+    if (state.getAttendanceList.isEmpty) {
+      List<List<MyAttendanceModel>> getAttendanceListSuccess = [];
 
-    List<List<MyAttendanceModel>> getAttendanceListSuccess=[];
+      List<MyAttendanceModel> emptyLit = [];
 
-    List<MyAttendanceModel> emptyLit=[];
+      getAttendanceListSuccess.add(emptyLit);
+      getAttendanceListSuccess.add(emptyLit);
+      getAttendanceListSuccess.add(emptyLit);
+      getAttendanceListSuccess.add(emptyLit);
+      getAttendanceListSuccess.add(emptyLit);
+      getAttendanceListSuccess.add(emptyLit);
+      getAttendanceListSuccess.add(emptyLit);
+      getAttendanceListSuccess.add(emptyLit);
+      getAttendanceListSuccess.add(emptyLit);
 
-    getAttendanceListSuccess.add(emptyLit);
-    getAttendanceListSuccess.add(emptyLit);
-    getAttendanceListSuccess.add(emptyLit);
-    getAttendanceListSuccess.add(emptyLit);
-    getAttendanceListSuccess.add(emptyLit);
-    getAttendanceListSuccess.add(emptyLit);
-    getAttendanceListSuccess.add(emptyLit);
-    getAttendanceListSuccess.add(emptyLit);
-    getAttendanceListSuccess.add(emptyLit);
+      if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+        try {
+          emit(state.copyWith(
+            attendanceDataEnumStates: AttendanceDataEnumStates.loading,
+          ));
 
-    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
-      try {
-        emit(state.copyWith(
-          attendanceDataEnumStates: AttendanceDataEnumStates.loading,
-        ));
+          await AttendanceRepository().getAttendanceData(userHRCode, month - 1)
+              .then((value) async {
+            getAttendanceListSuccess.insert(month - 2, value);
+            print("-----------start weight");
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
 
-        await AttendanceRepository().getAttendanceData(userHRCode, month-1)
-            .then((value) async {
-          getAttendanceListSuccess.insert(month-2,value);
-          print("-----------start weight");
-        }).catchError((error) {
+          await AttendanceRepository().getAttendanceData(userHRCode, month)
+              .then((value) async {
+            getAttendanceListSuccess.insert(month - 1, value);
+            print("-----------half weight");
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+
+          await AttendanceRepository().getAttendanceData(userHRCode, month + 1)
+              .then((value) async {
+            getAttendanceListSuccess.insert(month, value);
+            print("-----------end weight");
+          }).catchError((error) {
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+            ));
+          });
+          emit(state.copyWith(
+            attendanceDataEnumStates: AttendanceDataEnumStates.success,
+            getAttendanceList: getAttendanceListSuccess,
+          ));
+        } catch (e) {
           emit(state.copyWith(
             attendanceDataEnumStates: AttendanceDataEnumStates.failed,
           ));
-        });
-
-        await AttendanceRepository().getAttendanceData(userHRCode, month)
-            .then((value) async {
-          getAttendanceListSuccess.insert(month-1,value);
-          print("-----------half weight");
-        }).catchError((error) {
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-          ));
-        });
-
-        await AttendanceRepository().getAttendanceData(userHRCode, month+1)
-            .then((value) async {
-          getAttendanceListSuccess.insert(month,value);
-          print("-----------end weight");
-        }).catchError((error) {
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.failed,
-          ));
-        });
-
+        }
+      } else {
         emit(state.copyWith(
-          attendanceDataEnumStates: AttendanceDataEnumStates.success,
-          getAttendanceList: getAttendanceListSuccess,
-        ));
-
-      } catch (e) {
-        emit(state.copyWith(
-          attendanceDataEnumStates: AttendanceDataEnumStates.failed,
+          attendanceDataEnumStates: AttendanceDataEnumStates.noConnection,
         ));
       }
-    }else{
-      emit(state.copyWith(
-        attendanceDataEnumStates: AttendanceDataEnumStates.noConnection,
-      ));
     }
   }
 

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../../constants/colors.dart';
 import '../../constants/enums.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../data/repositories/request_repository.dart';
@@ -587,20 +588,23 @@ class EquipmentsRequest extends StatelessWidget {
                                                 overflow: TextOverflow.ellipsis,
                                               ),
                                               subtitle: Text(
-                                                'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].qty : state.chosenList[index].quantity}',
+                                                'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData?.data![index].qty : state.chosenList[index].quantity}',
                                                 softWrap: true,
                                               ),
                                               children: [
-                                               if(state.requestedData!.data![index].type != null) Row(
-                                                  children: [
-                                                    Text(
-                                                      'Request for: ${(state.requestStatus == RequestStatus.oldRequest) ? EquipmentsCubit.get(context).getRequestForFromType(state.requestedData!.data![index].type!)!.trim() : state.chosenList[index].requestFor!.trim()}',
-                                                      softWrap: true,
-                                                      style: const TextStyle(
-                                                          fontSize: 15),
-                                                    ),
-                                                  ],
-                                                ),
+                                                if (state.requestedData
+                                                        ?.data![index].type !=
+                                                    0)
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        'Request for: ${(state.requestStatus == RequestStatus.oldRequest) ? EquipmentsCubit.get(context).getRequestForFromType(state.requestedData!.data![index].type!)!.trim() : state.chosenList[index].requestFor!.trim()}',
+                                                        softWrap: true,
+                                                        style: const TextStyle(
+                                                            fontSize: 15),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 // Row(
                                                 //   children: [
                                                 //     Text(
@@ -1033,7 +1037,9 @@ class EquipmentsRequest extends StatelessWidget {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if (state.requestStatus == RequestStatus.oldRequest)
+                        if (state.requestStatus == RequestStatus.oldRequest &&
+                            state.takeActionStatus ==
+                                TakeActionStatus.takeAction)
                           FloatingActionButton.extended(
                             heroTag: null,
                             onPressed: () {
@@ -1044,13 +1050,22 @@ class EquipmentsRequest extends StatelessWidget {
                             label: const Text('Accept'),
                           ),
                         const SizedBox(height: 12),
-                        if (state.requestStatus == RequestStatus.oldRequest)
+                        if (state.requestStatus == RequestStatus.oldRequest &&
+                            state.takeActionStatus == TakeActionStatus.takeAction)
                           FloatingActionButton.extended(
-                            backgroundColor: Colors.red,
+                            backgroundColor: Colors.white,
                             heroTag: null,
                             onPressed: () {},
-                            icon: const Icon(Icons.dangerous),
-                            label: const Text('Reject'),
+                            icon: const Icon(
+                              Icons.dangerous,
+                              color: ConstantsColors.bottomSheetBackground,
+                            ),
+                            label: const Text(
+                              'Reject',
+                              style: TextStyle(
+                                color: ConstantsColors.bottomSheetBackground,
+                              ),
+                            ),
                           ),
                         const SizedBox(height: 12),
                         if (state.requestStatus == RequestStatus.newRequest)
