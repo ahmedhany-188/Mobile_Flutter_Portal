@@ -15,6 +15,7 @@ import 'package:heroicons/heroicons.dart';
 import 'package:meta/meta.dart';
 import 'package:intl/intl.dart';
 
+import '../../../constants/request_service_id.dart';
 import '../../../data/repositories/employee_repository.dart';
 
 part 'email_useraccount_state.dart';
@@ -77,7 +78,7 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
           userLocation: location,
           userTitle: title,
           comments: comments,
-          status: FormzStatus.submissionSuccess,
+          status: FormzStatus.valid,
           requesterData: requesterData,
           requestStatus: RequestStatus.oldRequest,
           statusAction: status,
@@ -269,6 +270,39 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
     EasyLoading.dismiss();
 
     return super.close();
+  }
+
+  submitAction(ActionValueStatus valueStatus,String requestNo) async {
+    // EasyLoading.show(status: 'Loading...',
+    //   maskType: EasyLoadingMaskType.black,
+    //   dismissOnTap: false,);
+    emit(state.copyWith(status: FormzStatus.submissionInProgress,));
+    final vacationResultResponse = await requestRepository.postTakeActionRequest(
+        valueStatus: valueStatus,
+        requestNo: requestNo,
+        actionComment: state.actionComment,
+        serviceID: RequestServiceID.emailUserAccountServiceID,
+        requesterHRCode: state.requesterData.userHrCode ?? "");
+
+    final result = vacationResultResponse.result ?? "false";
+    if (result.toLowerCase().contains("true")) {
+      emit(
+        state.copyWith(
+          successMessage: "#$requestNo \n ${valueStatus == ActionValueStatus.accept ? "Request has been Accepted":"Request has been Rejected"}",
+          status: FormzStatus.submissionSuccess,
+        ),
+      );
+    }
+    else {
+      emit(
+        state.copyWith(
+          errorMessage:"An error occurred",
+          status: FormzStatus.submissionFailure,
+        ),
+      );
+      // }
+    }
+
   }
 
 }

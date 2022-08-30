@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -10,6 +10,7 @@ import 'package:hassanallamportalflutter/constants/enums.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import '../../../widgets/success/success_request_widget.dart';
+import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../widgets/requester_data_widget/requester_data_widget.dart';
 
 
@@ -87,7 +88,10 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                     .takeAction)FloatingActionButton
                             .extended(
                           heroTag: null,
-                          onPressed: () {},
+                          onPressed: () {
+                            context.read<EmailUserAccountCubit>()
+                                .submitAction(ActionValueStatus.accept,currentRequestData[EmailAndUserAccountScreen.requestNoKey]);
+                          },
                           icon: const Icon(Icons.verified),
                           label: const Text('Accept'),
                         ),
@@ -99,7 +103,10 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                             .extended(
                           backgroundColor: Colors.white,
                           heroTag: null,
-                          onPressed: () {},
+                          onPressed: () {
+                            context.read<EmailUserAccountCubit>()
+                                .submitAction(ActionValueStatus.reject,currentRequestData[EmailAndUserAccountScreen.requestNoKey]);
+                          },
                           icon: const Icon(Icons.dangerous,color: ConstantsColors.buttonColors,),
                           label: const Text('Reject',style: TextStyle(color: ConstantsColors.buttonColors),),
                         ),
@@ -156,9 +163,16 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                           .routeName,
                                       requestName: 'User Account',)));
                           }
+                          else if (state.requestStatus == RequestStatus.oldRequest){
+                            EasyLoading.showSuccess(state.successMessage ?? "").then((value) => Navigator.pop(context));
+                            BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();
+                          }
                         }
                         if (state.status.isSubmissionFailure) {
                           EasyLoading.showError(state.errorMessage.toString(),);
+                        }
+                        if (state.status.isValid) {
+                          EasyLoading.dismiss(animation: true);
                         }
                       },
 
@@ -405,7 +419,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                               },
                                               builder: (context, state) {
                                                 return TextFormField(
-                                                  initialValue: state.fullName,
+                                                  initialValue: state.fullName.toTitleCase(),
 
                                                   key: UniqueKey(),
                                                   // state.requestStatus ==
