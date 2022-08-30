@@ -71,72 +71,78 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                         isSelected: [
                           state.approved,
                           state.pending,
-                          state.rejected
+                          state.rejected,
                         ],
                         onPressed: (index) {
                           if (state.userRequestsEnumStates ==
                               UserRequestsEnumStates.success) {
+                            // searchResult = [];
+
                             if (index == 0 && state.approved == false) {
-                              searchResult.addAll(state.getMyRequests
-                                  .where((element) => element.reqStatus
-                                      .toString()
-                                      .toLowerCase()
-                                      .trim()
-                                      .contains('1'))
-                                  .toList());
+                              // searchResult.addAll(state.getMyRequests
+                              //     .where((element) => element.reqStatus == 1)
+                              //     .toList());
                               MyRequestsCubit.get(context)
-                                  .onApprovedSelected(searchResult);
+                                  .onApprovedSelected([...state.getTempMyRequests,...state.getMyRequests
+                                  .where((element) => element.reqStatus == 1)
+                                  .toList(),
+                              ]);
                             }
                             if (index == 1 && state.pending == false) {
-                              searchResult.addAll(state.getMyRequests
-                                  .where((element) => element.reqStatus
-                                      .toString()
-                                      .toLowerCase()
-                                      .trim()
-                                      .contains('0'))
-                                  .toList());
+                              // state.gettempMyRequests...addAll(state.getMyRequests
+                              //     .where((element) => element.reqStatus == 0)
+                              //     .toList());
                               MyRequestsCubit.get(context)
-                                  .onPendingSelected(searchResult);
+                                  .onPendingSelected( [...state.getTempMyRequests, ...state.getMyRequests
+                                  .where((element) => element.reqStatus == 0)
+                                  .toList()
+                              ]);
                             }
                             if (index == 2 && state.rejected == false) {
-                              searchResult.addAll(state.getMyRequests
-                                  .where((element) => element.reqStatus
-                                      .toString()
-                                      .toLowerCase()
-                                      .trim()
-                                      .contains('2'))
-                                  .toList());
+                              // searchResult.addAll(state.getMyRequests
+                              //     .where((element) => element.reqStatus == 2)
+                              //     .toList());
                               MyRequestsCubit.get(context)
-                                  .onRejectedSelected(searchResult);
+                                  .onRejectedSelected([...state.getTempMyRequests, ...state.getMyRequests
+                                  .where((element) => element.reqStatus == 2)
+                                  .toList()
+                              ]);
                             }
 
                             if (index == 0 && state.approved == true) {
-                              searchResult.removeWhere(
-                                  (element) => element.reqStatus == 1);
+                              // searchResult.removeWhere(
+                              //     (element) => element.reqStatus == 1);
                               MyRequestsCubit.get(context)
-                                  .onApprovedUnSelected(searchResult);
+                                  .onApprovedUnSelected([
+                                ...state.getTempMyRequests
+                              ]..removeWhere((element) => element.reqStatus == 1));
                             }
                             if (index == 1 && state.pending == true) {
-                              searchResult.removeWhere(
-                                  (element) => element.reqStatus == 0);
+                              // searchResult.removeWhere(
+                              //     (element) => element.reqStatus == 0);
                               MyRequestsCubit.get(context)
-                                  .onPendingUnSelected(searchResult);
+                                  .onPendingUnSelected([
+                                ...state.getTempMyRequests
+                              ]..removeWhere((element) => element.reqStatus == 0));
                             }
                             if (index == 2 && state.rejected == true) {
-                              searchResult.removeWhere(
-                                  (element) => element.reqStatus == 2);
+                              // searchResult.removeWhere(
+                              //     (element) => element.reqStatus == 2);
                               MyRequestsCubit.get(context)
-                                  .onRejectedUnSelected(searchResult);
+                                  .onRejectedUnSelected([
+                                ...state.getTempMyRequests
+                              ]..removeWhere((element) => element.reqStatus == 2));
                             }
+                            // MyRequestsCubit.get(context).setTemp(searchResult);
 
-                            MyRequestsCubit.get(context).checkAllFilters();
-
+                            // MyRequestsCubit.get(context).checkAllFilters();
                             //sorting after selecting
-                            searchResult.sort((a, b) =>
-                                b.reqDate?.compareTo(a.reqDate!) ?? 0);
+                            // searchResult.sort((a, b) =>
+                            //     b.reqDate?.compareTo(a.reqDate!) ?? 0);
 
                             // isSelected[index].value = !isSelected[index].value;
                           }
+                          MyRequestsCubit.get(context).checkAllFilters();
                         },
                         children: [
                           Padding(
@@ -152,7 +158,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                                   style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.bold),
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -260,7 +266,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                                       ? MyRequestsItemWidget(
                                           state.getMyRequests)
                                       : MyRequestsItemWidget(
-                                          state.gettempMyRequests),
+                                          state.getResult),
                                 ),
                               ],
                             )

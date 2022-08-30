@@ -11,7 +11,8 @@ part 'my_requests_state.dart';
 class MyRequestsCubit extends Cubit<MyRequestsState> with HydratedMixin {
   MyRequestsCubit(this.requestRepository) : super(const MyRequestsState()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
-      if (state.userRequestsEnumStates == UserRequestsEnumStates.failed || state.userRequestsEnumStates == UserRequestsEnumStates.noConnection) {
+      if (state.userRequestsEnumStates == UserRequestsEnumStates.failed ||
+          state.userRequestsEnumStates == UserRequestsEnumStates.noConnection) {
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
           try {
@@ -34,8 +35,6 @@ class MyRequestsCubit extends Cubit<MyRequestsState> with HydratedMixin {
   final Connectivity connectivity = Connectivity();
   final RequestRepository requestRepository;
 
-  // List<MyRequestsModelData> fullRequestList = [];
-
   Future<void> getRequests() async {
     try {
       emit(state.copyWith(
@@ -46,7 +45,6 @@ class MyRequestsCubit extends Cubit<MyRequestsState> with HydratedMixin {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
         requestRepository.getMyRequestsData().then((value) async {
-          // fullRequestList = value;
           emit(state.copyWith(
               userRequestsEnumStates: UserRequestsEnumStates.success,
               getMyRequests: value));
@@ -72,10 +70,6 @@ class MyRequestsCubit extends Cubit<MyRequestsState> with HydratedMixin {
     checkAllFilters();
   }
 
-  setTemp(List<MyRequestsModelData> list) {
-    emit(state.copyWith(gettempMyRequests: list));
-  }
-
   checkAllFilters() {
     List<MyRequestsModelData> myRequestSearchResultsList = [];
     if (!state.approved &&
@@ -85,34 +79,37 @@ class MyRequestsCubit extends Cubit<MyRequestsState> with HydratedMixin {
       onClearData();
     } else {
       var splitQuery = state.writtenText.toLowerCase().trim().split(' ');
-      myRequestSearchResultsList =
-          state.getMyRequests.where((myRequestElement) {
-        return ((state.writtenText.isNotEmpty)
-                ? splitQuery.every((singleSplitElement) =>
-                    myRequestElement.requestNo
-                        .toString()
-                        .toLowerCase()
-                        .trim()
-                        .contains(singleSplitElement) ||
-                    myRequestElement.serviceName
-                        .toString()
-                        .toLowerCase()
-                        .trim()
-                        .contains(singleSplitElement))
-                : true) &&
-            ((state.approved)
-                ? myRequestElement.reqStatus!.toString().contains('1')
-                : true) &&
-            ((state.pending)
-                ? myRequestElement.reqStatus!.toString().contains('0')
-                : true) &&
-            ((state.rejected)
-                ? myRequestElement.reqStatus!.toString().contains('2')
-                : true);
-      }).toList();
+      myRequestSearchResultsList = state.getMyRequests
+          .where((myRequestElement) =>
+              ((state.writtenText.isNotEmpty)
+                  ? splitQuery.every((singleSplitElement) =>
+                      myRequestElement.requestNo
+                          .toString()
+                          .toLowerCase()
+                          .trim()
+                          .contains(singleSplitElement) ||
+                      myRequestElement.serviceName
+                          .toString()
+                          .toLowerCase()
+                          .trim()
+                          .contains(singleSplitElement))
+                  : true) &&
+              ((state.approved)
+                  ? state.getTempMyRequests.contains(myRequestElement)
+                  : true) &&
+              ((state.pending)
+                  ? state.getTempMyRequests.contains(myRequestElement)
+                  : true) &&
+              ((state.rejected)
+                  ? state.getTempMyRequests.contains(myRequestElement)
+                  : true))
+          .toList()
+        ..sort((a, b) => b.reqDate?.compareTo(a.reqDate!) ?? 0);
 
       emit(state.copyWith(
-          gettempMyRequests: myRequestSearchResultsList, isFiltered:true,));
+        getResult: myRequestSearchResultsList,
+        isFiltered: true,
+      ));
     }
   }
 
@@ -120,7 +117,7 @@ class MyRequestsCubit extends Cubit<MyRequestsState> with HydratedMixin {
     emit(
       state.copyWith(
         approved: true,
-        getApproved: list,
+        getTempMyRequests: list,
       ),
     );
   }
@@ -128,35 +125,35 @@ class MyRequestsCubit extends Cubit<MyRequestsState> with HydratedMixin {
   onPendingSelected(List<MyRequestsModelData> list) {
     emit(state.copyWith(
       pending: true,
-      getPending: list,
+      getTempMyRequests: list,
     ));
   }
 
   onRejectedSelected(List<MyRequestsModelData> list) {
     emit(state.copyWith(
       rejected: true,
-      getRejected: list,
+      getTempMyRequests: list,
     ));
   }
 
   onApprovedUnSelected(List<MyRequestsModelData> list) {
     emit(state.copyWith(
       approved: false,
-      getApproved: list,
+      getTempMyRequests: list,
     ));
   }
 
   onPendingUnSelected(List<MyRequestsModelData> list) {
     emit(state.copyWith(
       pending: false,
-      getPending: list,
+      getTempMyRequests: list,
     ));
   }
 
   onRejectedUnSelected(List<MyRequestsModelData> list) {
     emit(state.copyWith(
       rejected: false,
-      getRejected: list,
+      getTempMyRequests: list,
     ));
   }
 
@@ -165,14 +162,14 @@ class MyRequestsCubit extends Cubit<MyRequestsState> with HydratedMixin {
       state.copyWith(
         writtenText: '',
         isFiltered: false,
-        getApproved: [],
-        getPending: [],
-        getRejected: [],
+        getResult: [],
+        // getPending: [],
+        // getRejected: [],
         approved: false,
         rejected: false,
         pending: false,
-        gettempMyRequests: [],
-        getMyRequests: state.getMyRequests,
+        getTempMyRequests: [],
+        // getMyRequests: state.getMyRequests,
       ),
     );
   }

@@ -6,10 +6,10 @@ enum UserRequestsEnumStates { loading, success, failed, noConnection }
 class MyRequestsState extends Equatable {
   final UserRequestsEnumStates userRequestsEnumStates;
   final List<MyRequestsModelData> getMyRequests;
-  final List<MyRequestsModelData> gettempMyRequests;
-  final List<MyRequestsModelData> getApproved;
-  final List<MyRequestsModelData> getPending;
-  final List<MyRequestsModelData> getRejected;
+  final List<MyRequestsModelData> getTempMyRequests;
+  final List<MyRequestsModelData> getResult;
+  // final List<MyRequestsModelData> getPending;
+  // final List<MyRequestsModelData> getRejected;
   final String writtenText;
   final bool isFiltered;
   final bool approved;
@@ -19,10 +19,10 @@ class MyRequestsState extends Equatable {
   const MyRequestsState({
     this.userRequestsEnumStates = UserRequestsEnumStates.loading,
     this.getMyRequests = const <MyRequestsModelData>[],
-    this.gettempMyRequests = const <MyRequestsModelData>[],
-    this.getApproved = const <MyRequestsModelData>[],
-    this.getPending = const <MyRequestsModelData>[],
-    this.getRejected = const <MyRequestsModelData>[],
+    this.getTempMyRequests = const <MyRequestsModelData>[],
+    this.getResult = const <MyRequestsModelData>[],
+    // this.getPending = const <MyRequestsModelData>[],
+    // this.getRejected = const <MyRequestsModelData>[],
     this.writtenText = '',
     this.isFiltered = false,
     this.approved = false,
@@ -33,10 +33,10 @@ class MyRequestsState extends Equatable {
   MyRequestsState copyWith({
     UserRequestsEnumStates? userRequestsEnumStates,
     List<MyRequestsModelData>? getMyRequests,
-    List<MyRequestsModelData>? gettempMyRequests,
-    List<MyRequestsModelData>? getApproved,
-    List<MyRequestsModelData>? getPending,
-    List<MyRequestsModelData>? getRejected,
+    List<MyRequestsModelData>? getTempMyRequests,
+    List<MyRequestsModelData>? getResult,
+    // List<MyRequestsModelData>? getPending,
+    // List<MyRequestsModelData>? getRejected,
     String? writtenText,
     bool? isFiltered,
     bool? approved,
@@ -47,11 +47,11 @@ class MyRequestsState extends Equatable {
       userRequestsEnumStates:
           userRequestsEnumStates ?? this.userRequestsEnumStates,
       getMyRequests: getMyRequests ?? this.getMyRequests,
-      gettempMyRequests: gettempMyRequests ?? this.gettempMyRequests,
+      getTempMyRequests: getTempMyRequests ?? this.getTempMyRequests,
       writtenText: writtenText ?? this.writtenText,
-      getApproved: getApproved ?? this.getApproved,
-      getPending: getPending ?? this.getPending,
-      getRejected: getRejected ?? this.getRejected,
+      getResult: getResult ?? this.getResult,
+      // getPending: getPending ?? this.getPending,
+      // getRejected: getRejected ?? this.getRejected,
       isFiltered: isFiltered ?? this.isFiltered,
       approved: approved ?? this.approved,
       pending: pending ?? this.pending,
@@ -65,10 +65,10 @@ class MyRequestsState extends Equatable {
         getMyRequests,
         writtenText,
         isFiltered,
-        getApproved,
-        getPending,
-        getRejected,
-        gettempMyRequests,
+        getResult,
+        // getPending,
+        // getRejected,
+        getTempMyRequests,
         approved,
         pending,
         rejected,
