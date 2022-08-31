@@ -108,7 +108,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                       Expanded(
                                         flex: 2,
                                         child: SizedBox(
-                                          height: 22.0.h,
+                                          height: MediaQuery.of(context).size.height * 0.20,
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment
                                                 .start,
