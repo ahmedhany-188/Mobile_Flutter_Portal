@@ -52,7 +52,7 @@ class HomeGridViewScreen extends StatelessWidget {
             title: const Text('Hassan Allam Holding'),
             actions: [
               BlocProvider.value(
-                value: BlocProvider.of<UserNotificationApiCubit>(context),
+                value: BlocProvider.of<UserNotificationApiCubit>(context)..getNotifications(),
                 child: BlocBuilder<UserNotificationApiCubit,
                     UserNotificationApiState>(
                   builder: (context, state) {

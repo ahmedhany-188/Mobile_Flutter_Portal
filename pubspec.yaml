@@ -85,7 +85,7 @@ dependencies:
 
   #Bloc libiraries
   flutter_bloc: any
-  hydrated_bloc: any
+  hydrated_bloc: ^8.1.0
   bloc: any
   connectivity_plus: any
 

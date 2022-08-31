@@ -46,6 +46,7 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // FlutterServicesBinding.ensureInitialized();
 
   // WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -53,19 +54,28 @@ void main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
-  final storage = await HydratedStorage.build(
-    storageDirectory: await getApplicationDocumentsDirectory(),
-  );
 
   await FlutterDownloader.initialize(debug: true);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform, //This line is necessary
   );
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
+  final storage = await HydratedStorage.build(
+    storageDirectory: await getApplicationDocumentsDirectory(),
+  );
   HydratedBlocOverrides.runZoned(
         () =>
         runApp(MyApp(appRouter: AppRouter(), connectivity: Connectivity())),
     storage: storage,
+    // createStorage: () async {
+    //   WidgetsFlutterBinding.ensureInitialized();
+    //   return HydratedStorage.build(
+    //     storageDirectory: kIsWeb
+    //         ? HydratedStorage.webStorageDirectory
+    //         : await getTemporaryDirectory(),
+    //   );
+    // },
     blocObserver: AppBlocObserver(),
   );
 
@@ -214,6 +224,7 @@ class _MyAppState extends State<MyApp> {
                 AppBloc(
                   authenticationRepository: authenticationRepository,
                 ),
+
           ),
 
           BlocProvider<LoginCubit>(
@@ -241,16 +252,15 @@ class _MyAppState extends State<MyApp> {
           // ),
 
           BlocProvider<UserNotificationApiCubit>(
-            lazy: true,
+            // lazy: true,
             create: (userNotificationContext) =>
             UserNotificationApiCubit(
               RequestRepository(
-                  BlocProvider
-                      .of<AppBloc>(userNotificationContext)
+                  userNotificationContext.read<AppBloc>()
                       .state
                       .userData),
             )
-              ..getNotifications(),
+              // ..getNotifications(),
           ),
           BlocProvider<AppUpgraderCubit>(
             lazy: false,
