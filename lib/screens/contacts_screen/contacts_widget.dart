@@ -218,13 +218,9 @@ class ContactsWidget extends StatelessWidget {
               ),
             );
           },
-          separatorBuilder: (context, index) => Padding(
-            padding: const EdgeInsetsDirectional.only(start: 20.0, end: 20.0),
-            child: Container(
-              width: double.infinity,
-              height: 0.5.sp,
-              color: Colors.grey[300],
-            ),
+          separatorBuilder: (context, index) => const Padding(
+            padding: EdgeInsetsDirectional.only(start: 20.0, end: 20.0),
+            child: Divider(color: Colors.white54,height: 1,thickness: 0.6),
           ),
           itemCount: listFromContactsScreen.length,
         ),

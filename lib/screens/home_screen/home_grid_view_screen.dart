@@ -387,7 +387,7 @@ Widget benefitsMenuItems(BuildContext context) {
             ),
           ),
         ),
-        const Divider(),
+        const Divider(color: Colors.white54),
         InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
@@ -432,7 +432,7 @@ Widget hrRequestMenuItems(BuildContext context) {
             ),
           ),
         ),
-        const Divider(),
+        const Divider(color: Colors.white54),
         InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
@@ -450,7 +450,7 @@ Widget hrRequestMenuItems(BuildContext context) {
             ),
           ),
         ),
-        const Divider(),
+        const Divider(color: Colors.white54),
         InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
@@ -467,7 +467,7 @@ Widget hrRequestMenuItems(BuildContext context) {
             ),
           ),
         ),
-        const Divider(),
+        const Divider(color: Colors.white54),
         InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
@@ -485,7 +485,7 @@ Widget hrRequestMenuItems(BuildContext context) {
             ),
           ),
         ),
-        const Divider(),
+        const Divider(color: Colors.white54),
         InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
@@ -531,7 +531,7 @@ Widget itRequestMenuItems(BuildContext context) {
             ),
           ),
         ),
-        const Divider(),
+        const Divider(color: Colors.white54),
         InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
@@ -549,7 +549,7 @@ Widget itRequestMenuItems(BuildContext context) {
             ),
           ),
         ),
-        const Divider(),
+        const Divider(color: Colors.white54),
         InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
@@ -593,7 +593,7 @@ Widget mediaCenterMenuItems(BuildContext context) {
             ),
           ),
         ),
-        const Divider(),
+        const Divider(color: Colors.white54),
         InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
@@ -638,7 +638,7 @@ Widget newsLetterMenuItems(BuildContext context) {
             ),
           ),
         ),
-        const Divider(),
+        const Divider(color: Colors.white54),
         InkWell(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
