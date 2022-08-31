@@ -14,22 +14,24 @@ class EquipmentsCubitStates extends Equatable {
 
   final String? statusAction;
   final String comment;
+  final String actionComment;
   final RequestStatus? requestStatus;
   final RequestDate? requestDate;
   final EquipmentsRequestedModel? requestedData;
   final TakeActionStatus? takeActionStatus;
 
-  // final FormzStatus status;
+  final FormzStatus status;
+  final EmployeeData requesterData;
 
   const EquipmentsCubitStates({
     this.businessUnitEnumStates = EquipmentsEnumState.initial,
     this.locationEnumStates = EquipmentsEnumState.initial,
     this.departmentEnumStates = EquipmentsEnumState.initial,
-
-    // this.status = FormzStatus.pure,
+    this.status = FormzStatus.pure,
     this.requestStatus,
     this.statusAction,
     this.comment = '',
+    this.actionComment = "",
     this.listBusinessUnit = const <BusinessUnitModel>[],
     this.listLocation = const <EquipmentsLocationModel>[],
     this.listDepartment = const <DepartmentsModel>[],
@@ -37,6 +39,7 @@ class EquipmentsCubitStates extends Equatable {
     this.requestDate,
     this.requestedData,
     this.takeActionStatus,
+    this.requesterData = EmployeeData.empty,
   });
 
   EquipmentsCubitStates copyWith({
@@ -53,7 +56,9 @@ class EquipmentsCubitStates extends Equatable {
     RequestDate? requestDate,
     EquipmentsRequestedModel? requestedData,
     TakeActionStatus? takeActionStatus,
-    // FormzStatus? status,
+    FormzStatus? status,
+    EmployeeData? requesterData,
+    String? actionComment,
   }) {
     return EquipmentsCubitStates(
       businessUnitEnumStates:
@@ -67,10 +72,12 @@ class EquipmentsCubitStates extends Equatable {
       requestStatus: requestStatus ?? this.requestStatus,
       requestDate: requestDate ?? this.requestDate,
       requestedData: requestedData ?? this.requestedData,
-      // status: status ?? this.status,
+      status: status ?? this.status,
       statusAction: statusAction ?? this.statusAction,
       comment: comment ?? this.comment,
       takeActionStatus: takeActionStatus ?? this.takeActionStatus,
+      requesterData: requesterData ?? this.requesterData,
+      actionComment: actionComment ?? this.actionComment,
     );
   }
 
@@ -84,6 +91,8 @@ class EquipmentsCubitStates extends Equatable {
         listDepartment,
         chosenList,
         comment,
-        // status,
+        status,
+        requesterData,
+        actionComment,
       ];
 }

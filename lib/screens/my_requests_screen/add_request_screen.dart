@@ -2,7 +2,7 @@ import 'package:hassanallamportalflutter/widgets/appbar/internal_appbar.dart';
 import 'package:sizer/sizer.dart';
 import 'package:flutter/material.dart';
 
-import '../it_requests_screen/equipments_request.dart';
+import '../it_requests_screen/equipments_request_screen.dart';
 import '../it_requests_screen/access_right_screen.dart';
 import '../admin_request_screen/business_card_screen.dart';
 import '../admin_request_screen/embassy_letter_screen.dart';
@@ -73,7 +73,7 @@ class AddRequestScreen extends StatelessWidget {
                         child: const Text('Equipments'),
                         onPressed: () {
                           Navigator.of(context)
-                              .pushNamed(EquipmentsRequest.routeName,arguments: {EquipmentsRequest.requestNoKey: '0'});
+                              .pushNamed(EquipmentsRequestScreen.routeName,arguments: {EquipmentsRequestScreen.requestNoKey: '0'});
                         },
                       ),
                     ),

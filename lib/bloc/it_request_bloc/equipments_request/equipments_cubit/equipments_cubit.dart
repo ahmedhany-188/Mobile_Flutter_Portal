@@ -1,8 +1,10 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/request_service_id.dart';
 import 'package:heroicons/heroicons.dart';
 
@@ -47,12 +49,22 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   final RequestRepository _requestRepository;
 
   void commentChanged(String value) {
-
     // final permissionTime = PermissionTime.dirty(value);
     // print(permissionTime.value);
     emit(
       state.copyWith(
         comment: value,
+      ),
+    );
+  }
+
+  void commentRequesterChanged(String value) {
+    // final permissionTime = PermissionTime.dirty(value);
+    // print(permissionTime.value);
+    emit(
+      state.copyWith(
+        actionComment: value,
+        // status: Formz.validate([state.requestDate,state.permissionDate,state.permissionTime]),
       ),
     );
   }
@@ -87,7 +99,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         dismissOnTap: false,
       );
       final requestData = await _requestRepository.getEquipmentData(
-          requestNo??'', requesterHRCode!);
+          requestNo ?? '', requesterHRCode!);
 
       // ContactsDataFromApi responsiblePerson;
       // if(requestData.ownerName != null){
@@ -117,30 +129,27 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         status = "Rejected";
       }
 
-
       emit(
         state.copyWith(
-          requestedData: requestData,
-          // requestDate: requestDate,
-          // vacationType: int.parse(requestData.vacationType ?? "1"),
-          // responsiblePerson: responsiblePerson,
-          // comment: comments,
-          // status: FormzStatus.submissionSuccess,
-          requestStatus: RequestStatus.oldRequest,
-          statusAction: status,
-              takeActionStatus: (_requestRepository.userData.user?.userHRCode ==
-                  requestData.data?[0].requestHRCode)
-                  ? TakeActionStatus.view
-                  : TakeActionStatus.takeAction
-        ),
+            requestedData: requestData,
+            // requestDate: requestDate,
+            // vacationType: int.parse(requestData.vacationType ?? "1"),
+            // responsiblePerson: responsiblePerson,
+            // comment: comments,
+            status: FormzStatus.submissionSuccess,
+            requestStatus: RequestStatus.oldRequest,
+            statusAction: status,
+            takeActionStatus: (_requestRepository.userData.user?.userHRCode ==
+                    requestData.data?[0].requestHRCode)
+                ? TakeActionStatus.view
+                : TakeActionStatus.takeAction),
       );
       EasyLoading.dismiss();
     }
   }
 
-
-  Widget getIconByGroupName(String groupName){
-    switch (groupName){
+  Widget getIconByGroupName(String groupName) {
+    switch (groupName) {
       case 'Accessories':
         return const Icon(Icons.keyboard_alt_outlined);
       case 'Laptop':
@@ -163,13 +172,11 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         return const Icon(Icons.network_wifi_outlined);
       case 'Fingerprint':
         return const Icon(Icons.fingerprint);
-
-
     }
     return const Icon(Icons.access_alarm_outlined);
-
   }
-  String? getRequestForFromType(int type){
+
+  String? getRequestForFromType(int type) {
     switch (type) {
       case 1:
         return 'New Hire';
@@ -181,6 +188,42 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         return 'Mobilization';
     }
     return null;
+  }
+
+  // void validateForm(){
+  //   emit(state.copyWith(status: Formz.validate([state.requestDate!],)));
+  // }
+
+  submitAction(ActionValueStatus valueStatus, String requestNo) async {
+    emit(state.copyWith(
+      status: FormzStatus.submissionInProgress,
+    ));
+    final equipmentResultResponse =
+        await _requestRepository.postEquipmentTakeActionRequest(
+      valueStatus: valueStatus,
+      requestNo: requestNo,
+      actionComment: state.actionComment,
+      serviceID: RequestServiceID.equipmentServiceID,
+      requesterHRCode: state.requesterData.userHrCode ?? "",
+    );
+
+    final result = equipmentResultResponse.result ?? "false";
+    if (result.toLowerCase().contains("true")) {
+      emit(
+        state.copyWith(
+          // successMessage: "#$requestNo \n ${valueStatus == ActionValueStatus.accept ? "Request has been Accepted":"Request has been Rejected"}",
+          status: FormzStatus.submissionSuccess,
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(
+          // errorMessage:"An error occurred",
+          status: FormzStatus.submissionFailure,
+        ),
+      );
+      // }
+    }
   }
 
   void postEquipmentsRequest({

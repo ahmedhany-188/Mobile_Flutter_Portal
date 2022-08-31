@@ -6,6 +6,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/constants/enums.dart';
+import 'package:hassanallamportalflutter/data/data_providers/general_dio/general_dio.dart';
 import 'package:hassanallamportalflutter/data/data_providers/requests_data_providers/request_data_providers.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/business_card_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
@@ -31,9 +32,14 @@ class RequestRepository {
   RequestRepository(this.userData);
 
   Future<RequestResponse> postPermissionRequest(
-      {required String requestDate, required String comments,
-        required String dateFromAmpm, required String dateTo, required int type,
-        required String dateFrom, required String dateToAmpm, required String permissionDate}) async {
+      {required String requestDate,
+      required String comments,
+      required String dateFromAmpm,
+      required String dateTo,
+      required int type,
+      required String dateFrom,
+      required String dateToAmpm,
+      required String permissionDate}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "date": requestDate,
       "comments": comments,
@@ -46,8 +52,8 @@ class RequestRepository {
       "dateToAmpm": dateToAmpm,
       "permissionDate": permissionDate,
     });
-    final http.Response rawPermission = await requestDataProviders
-        .postPermissionRequest(bodyString);
+    final http.Response rawPermission =
+        await requestDataProviders.postPermissionRequest(bodyString);
     final json = await jsonDecode(rawPermission.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
@@ -55,14 +61,12 @@ class RequestRepository {
 
   Future<RequestResponse> postAccessRightRequest(
       {required AccessRightModel accessRightModel}) async {
-    var bodyString = jsonEncode(<String, dynamic>
-    {
+    var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": RequestServiceID.accessRightServiceID,
       "requestHrCode": userData.employeeData!.userHrCode,
       "date": accessRightModel.requestDate,
-      "filePdf": (accessRightModel.filePDF != null)
-          ? accessRightModel.filePDF
-          : null,
+      "filePdf":
+          (accessRightModel.filePDF != null) ? accessRightModel.filePDF : null,
       "comments": accessRightModel.comments,
       //"requestHrCode": userData.user?.userHRCode!,
 
@@ -76,91 +80,107 @@ class RequestRepository {
       "localAdmin": accessRightModel.localAdmin,
     });
 
-    final http.Response rawAccess = await requestDataProviders
-        .postAccessAccountAccessRequest(bodyString);
+    final http.Response rawAccess =
+        await requestDataProviders.postAccessAccountAccessRequest(bodyString);
     final json = await jsonDecode(rawAccess.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
   }
 
-
-
-  Future<DurationResponse> getDurationVacation(int type,String dateFrom,String dateTo) async{
-    final http.Response rawPermission = await requestDataProviders
-        .getDurationVacation(type,dateFrom,dateTo);
+  Future<DurationResponse> getDurationVacation(
+      int type, String dateFrom, String dateTo) async {
+    final http.Response rawPermission =
+        await requestDataProviders.getDurationVacation(type, dateFrom, dateTo);
     final json = await jsonDecode(rawPermission.body);
     final DurationResponse response = DurationResponse.fromJson(json);
     return response;
   }
 
-  Future<BusinessCardFormModel> geBusinessCard(String requestNo,String requesterHRCode) async{
-    final http.Response rawPermission = await requestDataProviders
-        .getBusinessCardRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
+  Future<BusinessCardFormModel> geBusinessCard(
+      String requestNo, String requesterHRCode) async {
+    final http.Response rawPermission =
+        await requestDataProviders.getBusinessCardRequestData(
+            requesterHRCode.isNotEmpty
+                ? requesterHRCode
+                : userData.user?.userHRCode ?? "",
+            requestNo);
     final json = await jsonDecode(rawPermission.body);
-    print(json);
-    final BusinessCardFormModel response = BusinessCardFormModel.fromJson(json[0]);
+    final BusinessCardFormModel response =
+        BusinessCardFormModel.fromJson(json[0]);
 
     return response;
   }
 
-  Future<AccessRightModel> getAccessRight(String requestNo,String requesterHRCode) async{
-    final http.Response rawPermission = await requestDataProviders
-        .getAccessRightRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
+  Future<AccessRightModel> getAccessRight(
+      String requestNo, String requesterHRCode) async {
+    final http.Response rawPermission =
+        await requestDataProviders.getAccessRightRequestData(
+            requesterHRCode.isNotEmpty
+                ? requesterHRCode
+                : userData.user?.userHRCode ?? "",
+            requestNo);
     final json = await jsonDecode(rawPermission.body);
     final AccessRightModel response = AccessRightModel.fromJson(json[0]);
 
     return response;
-
   }
 
-  Future<EmailUserFormModel> getEmailAccount(String requestNo,String requesterHRCode) async{
-    final http.Response rawPermission = await requestDataProviders
-        .getEmailAccountRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
+  Future<EmailUserFormModel> getEmailAccount(
+      String requestNo, String requesterHRCode) async {
+    final http.Response rawPermission =
+        await requestDataProviders.getEmailAccountRequestData(
+            requesterHRCode.isNotEmpty
+                ? requesterHRCode
+                : userData.user?.userHRCode ?? "",
+            requestNo);
     final json = await jsonDecode(rawPermission.body);
     final EmailUserFormModel response = EmailUserFormModel.fromJson(json[0]);
 
     return response;
   }
 
-  Future<dynamic> getEmailData(String hrCode) async{
-    final http.Response rawPermission = await requestDataProviders
-        .getEmailAccountData(hrCode);
+  Future<dynamic> getEmailData(String hrCode) async {
+    final http.Response rawPermission =
+        await requestDataProviders.getEmailAccountData(hrCode);
     final json = await jsonDecode(rawPermission.body);
     final EmployeeData response;
-    try{
+    try {
       response = EmployeeData.fromJson(json[0]);
-    }catch(e){
+    } catch (e) {
       return "error";
     }
     return response;
   }
 
-  Future<dynamic> setNewUserMobileNumber(String mobile,String hrCode)async{
-
-    var bodyString=jsonEncode(<String, dynamic>{
-      "hrCode" : hrCode,
-      "mobile" : mobile,
+  Future<dynamic> setNewUserMobileNumber(String mobile, String hrCode) async {
+    var bodyString = jsonEncode(<String, dynamic>{
+      "hrCode": hrCode,
+      "mobile": mobile,
     });
-    final http.Response rawPermission = await requestDataProviders
-        .getNewMobileNumberData(bodyString);
+    final http.Response rawPermission =
+        await requestDataProviders.getNewMobileNumberData(bodyString);
     final json = await jsonDecode(rawPermission.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
   }
 
-  Future<EmbassyLetterFormModel> getEmbassyLetter(String requestNo,String requesterHRCode) async{
-    final http.Response rawPermission = await requestDataProviders
-        .getEmbassyLetterRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
+  Future<EmbassyLetterFormModel> getEmbassyLetter(
+      String requestNo, String requesterHRCode) async {
+    final http.Response rawPermission =
+        await requestDataProviders.getEmbassyLetterRequestData(
+            requesterHRCode.isNotEmpty
+                ? requesterHRCode
+                : userData.user?.userHRCode ?? "",
+            requestNo);
     final json = await jsonDecode(rawPermission.body);
-    final EmbassyLetterFormModel response = EmbassyLetterFormModel.fromJson(json[0]);
+    final EmbassyLetterFormModel response =
+        EmbassyLetterFormModel.fromJson(json[0]);
     return response;
   }
 
-
   Future<RequestResponse> postBusinessCard(
-        {required BusinessCardFormModel businessCardFormModel}) async {
-
-    var bodyString=jsonEncode(<String, dynamic>{
+      {required BusinessCardFormModel businessCardFormModel}) async {
+    var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": RequestServiceID.businessCardServiceID,
       "requestHrCode": userData.employeeData!.userHrCode,
       "ownerHrCode": userData.employeeData!.userHrCode,
@@ -172,22 +192,21 @@ class RequestRepository {
       "mobileNo": businessCardFormModel.employeeMobil
     });
 
-    final http.Response rawBusinessCard = await requestDataProviders
-        .postBusinessCardRequest(bodyString);
+    final http.Response rawBusinessCard =
+        await requestDataProviders.postBusinessCardRequest(bodyString);
     final json = await jsonDecode(rawBusinessCard.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
   }
 
   Future<List<MyRequestsModelData>> getMyRequestsData() async {
-     http.Response rawMyRequests = await requestDataProviders
+    http.Response rawMyRequests = await requestDataProviders
         .getMyRequestsData(userData.user?.userHRCode ?? "");
-     final json = await jsonDecode(rawMyRequests.body);
+    final json = await jsonDecode(rawMyRequests.body);
 
-     List<MyRequestsModelData> myRequestsData = List<MyRequestsModelData>.from(
-         json.map((model) => MyRequestsModelData.fromJson(model)));
+    List<MyRequestsModelData> myRequestsData = List<MyRequestsModelData>.from(
+        json.map((model) => MyRequestsModelData.fromJson(model)));
     return myRequestsData;
-
   }
 
   Future<List<UserNotificationApi>> getMyNotificationData() async {
@@ -202,11 +221,10 @@ class RequestRepository {
     List<UserNotificationApi> myRequestsData = List<UserNotificationApi>.from(
         json.map((model) => UserNotificationApi.fromJson(model)));
     return myRequestsData;
-
   }
 
-
-  Future<RequestResponse> postEmailUserAccount({required EmailUserFormModel emailUserFormModel}) async {
+  Future<RequestResponse> postEmailUserAccount(
+      {required EmailUserFormModel emailUserFormModel}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "ServiceId": RequestServiceID.emailUserAccountServiceID,
       "RequestHrCode": userData.user!.userHRCode,
@@ -224,49 +242,51 @@ class RequestRepository {
       "EmailAccount": emailUserFormModel.accountType,
     });
 
-    final http.Response rawEmailUserAccount = await requestDataProviders
-        .postEmailUserAccount(bodyString);
+    final http.Response rawEmailUserAccount =
+        await requestDataProviders.postEmailUserAccount(bodyString);
     final json = await jsonDecode(rawEmailUserAccount.body);
     final RequestResponse response = RequestResponse.fromJson(json);
 
     return response;
   }
 
-
-  Future<RequestResponse> postEmbassyLetter({required EmbassyLetterFormModel embassyLetterFormModel}) async {
-    var bodyString = jsonEncode(<String, dynamic>
-    {
+  Future<RequestResponse> postEmbassyLetter(
+      {required EmbassyLetterFormModel embassyLetterFormModel}) async {
+    var bodyString = jsonEncode(<String, dynamic>{
       "ServiceId": RequestServiceID.embassyServiceID,
       "RequestHrCode": userData.employeeData!.userHrCode,
       "OwnerHrCode": userData.employeeData!.userHrCode,
-
-      "date": GlobalConstants.dateFormatServer.format(
-          GlobalConstants.dateFormatViewed.parse(
-              embassyLetterFormModel.requestDate!)),
+      "date": GlobalConstants.dateFormatServer.format(GlobalConstants
+          .dateFormatViewed
+          .parse(embassyLetterFormModel.requestDate!)),
       "comments": embassyLetterFormModel.comments.toString(),
-      "dateFrom": GlobalConstants.dateFormatServer.format(
-          GlobalConstants.dateFormatViewed.parse(
-              embassyLetterFormModel.dateFrom!)),
-      "dateTo": GlobalConstants.dateFormatServer.format(
-          GlobalConstants.dateFormatViewed.parse(
-              embassyLetterFormModel.dateTo!)),
+      "dateFrom": GlobalConstants.dateFormatServer.format(GlobalConstants
+          .dateFormatViewed
+          .parse(embassyLetterFormModel.dateFrom!)),
+      "dateTo": GlobalConstants.dateFormatServer.format(GlobalConstants
+          .dateFormatViewed
+          .parse(embassyLetterFormModel.dateTo!)),
       "purpose": embassyLetterFormModel.purpose.toString(),
       "embassyId": embassyLetterFormModel.embassy,
       "passportNo": embassyLetterFormModel.passportNo.toString(),
       "addSalary": embassyLetterFormModel.addSalary.toString(),
     });
 
-    final http.Response rawEmbassyLetter = await requestDataProviders
-        .postEmbassyLetterRequest(bodyString);
+    final http.Response rawEmbassyLetter =
+        await requestDataProviders.postEmbassyLetterRequest(bodyString);
     final json = await jsonDecode(rawEmbassyLetter.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
   }
 
   Future<RequestResponse> postVacationRequest(
-      { required String requestDate, required String comments,
-        required String dateTo, required String type,required String responsibleHRCode,required int noOfDays,
-        required String dateFrom}) async {
+      {required String requestDate,
+      required String comments,
+      required String dateTo,
+      required String type,
+      required String responsibleHRCode,
+      required int noOfDays,
+      required String dateFrom}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "date": requestDate,
       "comments": comments,
@@ -282,17 +302,23 @@ class RequestRepository {
       // data.put("replacedWith",selectedReplaceFrom);
       // data.put("replacedWithTo",selectedReplaceTo);
     });
-    final http.Response rawPermission = await requestDataProviders
-        .postVacationRequest(bodyString);
+    final http.Response rawPermission =
+        await requestDataProviders.postVacationRequest(bodyString);
     final json = await jsonDecode(rawPermission.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
   }
 
   Future<RequestResponse> postBusinessMission(
-      { required String requestDate, required String comments,
-        required String dateTo, required String type, required String dateFromAmpm,required String dateToAmpm,
-        required String dateFrom,required String hourFrom,required String hourTo}) async {
+      {required String requestDate,
+      required String comments,
+      required String dateTo,
+      required String type,
+      required String dateFromAmpm,
+      required String dateToAmpm,
+      required String dateFrom,
+      required String hourFrom,
+      required String hourTo}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": RequestServiceID.businessMissionServiceID,
       "requestHrCode": userData.user?.userHRCode!,
@@ -305,67 +331,126 @@ class RequestRepository {
       "hourFrom": hourFrom,
       "hourTo": hourTo,
       "missionLocation": type,
-
     });
-    final http.Response rawRequest = await requestDataProviders
-        .postBusinessMissionRequest(bodyString);
+    final http.Response rawRequest =
+        await requestDataProviders.postBusinessMissionRequest(bodyString);
     final json = await jsonDecode(rawRequest.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
   }
 
-  Future<VacationRequestData> getVacationRequestData(String requestNo,String requesterHRCode) async{
-    final http.Response rawRequestData = await requestDataProviders
-        .getVacationRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
+  Future<VacationRequestData> getVacationRequestData(
+      String requestNo, String requesterHRCode) async {
+    final http.Response rawRequestData =
+        await requestDataProviders.getVacationRequestData(
+            requesterHRCode.isNotEmpty
+                ? requesterHRCode
+                : userData.user?.userHRCode ?? "",
+            requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final VacationRequestData response = VacationRequestData.fromJson(json[0]);
 
     return response;
   }
 
-  Future<EquipmentsRequestedModel> getEquipmentData(String requestNo,String requesterHRCode) async{
+  Future<EquipmentsRequestedModel> getEquipmentData(
+      String requestNo, String requesterHRCode) async {
     final http.Response rawRequestData = await requestDataProviders
-        .getEquipmentRequestData(requesterHRCode,requestNo);
+        .getEquipmentRequestData(requesterHRCode, requestNo);
 
     final json = await jsonDecode(rawRequestData.body);
-    final EquipmentsRequestedModel response = EquipmentsRequestedModel.fromJson(json);
+    final EquipmentsRequestedModel response =
+        EquipmentsRequestedModel.fromJson(json);
 
     return response;
   }
 
-  Future<BusinessMissionRequestData> getBusinessMissionRequestData(String requestNo,String requesterHRCode) async{
-    final http.Response rawRequestData = await requestDataProviders
-        .getBusinessMissionRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
+  Future<BusinessMissionRequestData> getBusinessMissionRequestData(
+      String requestNo, String requesterHRCode) async {
+    final http.Response rawRequestData =
+        await requestDataProviders.getBusinessMissionRequestData(
+            requesterHRCode.isNotEmpty
+                ? requesterHRCode
+                : userData.user?.userHRCode ?? "",
+            requestNo);
     final json = await jsonDecode(rawRequestData.body);
-    final BusinessMissionRequestData response = BusinessMissionRequestData.fromJson(json[0]);
+    final BusinessMissionRequestData response =
+        BusinessMissionRequestData.fromJson(json[0]);
 
     return response;
   }
-  Future<PermissionRequestData> getPermissionRequestData(String requestNo,String requesterHRCode) async{
-    final http.Response rawRequestData = await requestDataProviders
-        .getPermissionRequestData(requesterHRCode.isNotEmpty? requesterHRCode :  userData.user?.userHRCode ?? "",requestNo);
+
+  Future<PermissionRequestData> getPermissionRequestData(
+      String requestNo, String requesterHRCode) async {
+    final http.Response rawRequestData =
+        await requestDataProviders.getPermissionRequestData(
+            requesterHRCode.isNotEmpty
+                ? requesterHRCode
+                : userData.user?.userHRCode ?? "",
+            requestNo);
     final json = await jsonDecode(rawRequestData.body);
-    final PermissionRequestData response = PermissionRequestData.fromJson(json[0]);
+    final PermissionRequestData response =
+        PermissionRequestData.fromJson(json[0]);
     return response;
   }
 
-
-  Future<ResponseTakeAction> postTakeActionRequest({required ActionValueStatus valueStatus,required String serviceID,required String requestNo,required String requesterHRCode,required String actionComment}) async{
+  Future<ResponseTakeAction> postTakeActionRequest(
+      {required ActionValueStatus valueStatus,
+      required String serviceID,
+      required String requestNo,
+      required String requesterHRCode,
+      required String actionComment}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": serviceID,
       "reqno": int.parse(requestNo),
       "Approve": valueStatus == ActionValueStatus.accept ? 1 : 2,
-      "requesterhrcode": requesterHRCode ,
+      "requesterhrcode": requesterHRCode,
       "mangerHrCode": userData.user?.userHRCode ?? "0",
-      "comment" :actionComment
+      "comment": actionComment
     });
-    final http.Response rawResponse = await requestDataProviders
-        .postTakeActionOnRequest(bodyString);
+    final http.Response rawResponse =
+        await requestDataProviders.postTakeActionOnRequest(bodyString);
     final json = await jsonDecode(rawResponse.body);
     final ResponseTakeAction response = ResponseTakeAction.fromJson(json);
     return response;
   }
 
+  Future<ResponseTakeAction> postEquipmentTakeActionRequest({
+    required ActionValueStatus valueStatus,
+    required String serviceID,
+    required String requestNo,
+    required String requesterHRCode,
+    required String actionComment,
+  }) async {
+    List? nextObject;
+    if(valueStatus == ActionValueStatus.accept){
+      GeneralDio.getNextStepWorkFlow(
+              serviceId: serviceID,
+              userHrCode: requesterHRCode,
+              reqNo: int.parse(requestNo))
+          .then((value) => nextObject = value.data);
+    }
 
-
+    var bodyString = jsonEncode(<String, dynamic>{
+      "serviceId": serviceID,
+      "reqno": int.parse(requestNo),
+      "Approve": valueStatus == ActionValueStatus.accept ? 1 : 2,
+      "requesterhrcode": requesterHRCode,
+      "mangerHrCode": userData.user?.userHRCode ?? "0",
+      "comment": actionComment,
+      "nextStep": nextObject ?? [],
+      // [
+      //   {
+      //     "user_HR_Code": "string",
+      //     "name": "string",
+      //     "title_ID": "string"
+      //   }
+      // ],
+    });
+    final http.Response rawResponse =
+        await requestDataProviders.postTakeEquipmentActionOnRequest(bodyString);
+    final json = await jsonDecode(rawResponse.body);
+    final ResponseTakeAction response = ResponseTakeAction.fromJson(json);
+    return response;
+  }
 }

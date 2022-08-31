@@ -217,5 +217,18 @@ class RequestDataProviders {
     return vacationFeedbackRequest;
   }
 
+  Future<http.Response> postTakeEquipmentActionOnRequest(String bodyString) async {
+    http.Response equipmentFeedbackRequest = await http.post(
+      Uri.parse(
+          "https://api.hassanallam.com/api/SelfService/TakeActionEquipment"
+      ),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: bodyString,
+    ).timeout(const Duration(seconds: 10));
+    return equipmentFeedbackRequest;
+  }
+
 
 }

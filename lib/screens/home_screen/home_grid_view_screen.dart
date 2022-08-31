@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
+import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
@@ -12,7 +13,7 @@ import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_r
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
-import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
@@ -366,7 +367,7 @@ Widget benefitsMenuItems(BuildContext context) {
   return Scrollbar(
     child: ListView(
       shrinkWrap: true,
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(10),
       children: [
         InkWell(
           splashColor: Colors.transparent,
@@ -412,7 +413,7 @@ Widget hrRequestMenuItems(BuildContext context) {
   return Scrollbar(
     child: ListView(
       shrinkWrap: true,
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(10),
       children: [
         InkWell(
           splashColor: Colors.transparent,
@@ -511,7 +512,7 @@ Widget itRequestMenuItems(BuildContext context) {
   return Scrollbar(
     child: ListView(
       shrinkWrap: true,
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(10),
       children: [
         InkWell(
           splashColor: Colors.transparent,
@@ -553,7 +554,7 @@ Widget itRequestMenuItems(BuildContext context) {
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
           onTap: () => Navigator.of(context).pushNamed(
-              EquipmentsRequest.routeName,
+              EquipmentsRequestScreen.routeName,
               arguments: {'request-No': '0'}),
           child: const SizedBox(
             height: 25,
@@ -575,7 +576,7 @@ Widget mediaCenterMenuItems(BuildContext context) {
   return Scrollbar(
     child: ListView(
       shrinkWrap: true,
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(10),
       children: [
         InkWell(
           splashColor: Colors.transparent,
@@ -617,7 +618,7 @@ Widget newsLetterMenuItems(BuildContext context) {
   return Scrollbar(
     child: ListView(
       shrinkWrap: true,
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.all(10),
       children: [
         InkWell(
           splashColor: Colors.transparent,
@@ -683,7 +684,7 @@ class MenuPopupWidget extends StatelessWidget {
           bodyBuilder: (context) => widgetFunction,
           direction: PopoverDirection.top,
           width: 150,
-          backgroundColor: Colors.grey.shade500,
+          backgroundColor: ConstantsColors.bottomSheetBackgroundDark.withOpacity(0.9),
           arrowHeight: 15,
           arrowWidth: 30,
         );
