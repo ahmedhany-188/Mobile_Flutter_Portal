@@ -29,8 +29,6 @@ class _ContactsScreenState extends State<ContactsScreen>
       enableDrag: true,
       clipBehavior: Clip.none,
       backgroundColor: Colors.transparent,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       transitionAnimationController:
           BottomSheet.createAnimationController(this),
       builder: (_) => BlocProvider<ContactsFiltersCubit>.value(
@@ -38,7 +36,7 @@ class _ContactsScreenState extends State<ContactsScreen>
         child: Container(
           height: MediaQuery.of(context).size.height * 0.75,
           decoration: const BoxDecoration(
-              color: ConstantsColors.bottomSheetBackground,
+              color: ConstantsColors.bottomSheetBackgroundDark,
               borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
