@@ -85,7 +85,7 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
             requestStatus: RequestStatus.oldRequest,
             requesterData: requesterData,
             statusAction: status,
-            takeActionStatus: (_requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
+            takeActionStatus: (_requestRepository.userData?.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
         ),
       );
     }

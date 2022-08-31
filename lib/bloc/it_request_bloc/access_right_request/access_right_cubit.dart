@@ -116,7 +116,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
           status: FormzStatus.valid,
           requestStatus: RequestStatus.oldRequest,
           statusAction: status,
-          takeActionStatus: (requestRepository.userData.user?.userHRCode ==
+          takeActionStatus: (requestRepository.userData?.user?.userHRCode ==
               requestData.requestHrCode)
               ? TakeActionStatus.view
               : TakeActionStatus.takeAction

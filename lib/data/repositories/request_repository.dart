@@ -27,9 +27,19 @@ import '../models/response_take_action.dart';
 
 class RequestRepository {
   final RequestDataProviders requestDataProviders = RequestDataProviders();
-  final MainUserData userData;
+  MainUserData? userData;
 
-  RequestRepository(this.userData);
+  // RequestRepository(this.userData?);
+
+  static final RequestRepository _inst = RequestRepository._internal();
+
+  RequestRepository._internal();
+
+  factory RequestRepository(MainUserData userData) {
+    _inst.userData = userData;
+    return _inst;
+  }
+
 
   Future<RequestResponse> postPermissionRequest(
       {required String requestDate,
@@ -44,7 +54,7 @@ class RequestRepository {
       "date": requestDate,
       "comments": comments,
       "dateFromAmpm": dateFromAmpm,
-      "requestHrCode": userData.user?.userHRCode!,
+      "requestHrCode": userData?.user?.userHRCode!,
       "dateTo": dateTo,
       "serviceId": RequestServiceID.permissionServiceID,
       "type": type,
@@ -63,12 +73,12 @@ class RequestRepository {
       {required AccessRightModel accessRightModel}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": RequestServiceID.accessRightServiceID,
-      "requestHrCode": userData.employeeData!.userHrCode,
+      "requestHrCode": userData?.employeeData!.userHrCode,
       "date": accessRightModel.requestDate,
       "filePdf":
           (accessRightModel.filePDF != null) ? accessRightModel.filePDF : null,
       "comments": accessRightModel.comments,
-      //"requestHrCode": userData.user?.userHRCode!,
+      //"requestHrCode": userData?.user?.userHRCode!,
 
       "reqType": accessRightModel.requestType,
       "startDate": accessRightModel.fromDate,
@@ -102,7 +112,7 @@ class RequestRepository {
         await requestDataProviders.getBusinessCardRequestData(
             requesterHRCode.isNotEmpty
                 ? requesterHRCode
-                : userData.user?.userHRCode ?? "",
+                : userData?.user?.userHRCode ?? "",
             requestNo);
     final json = await jsonDecode(rawPermission.body);
     final BusinessCardFormModel response =
@@ -117,7 +127,7 @@ class RequestRepository {
         await requestDataProviders.getAccessRightRequestData(
             requesterHRCode.isNotEmpty
                 ? requesterHRCode
-                : userData.user?.userHRCode ?? "",
+                : userData?.user?.userHRCode ?? "",
             requestNo);
     final json = await jsonDecode(rawPermission.body);
     final AccessRightModel response = AccessRightModel.fromJson(json[0]);
@@ -131,7 +141,7 @@ class RequestRepository {
         await requestDataProviders.getEmailAccountRequestData(
             requesterHRCode.isNotEmpty
                 ? requesterHRCode
-                : userData.user?.userHRCode ?? "",
+                : userData?.user?.userHRCode ?? "",
             requestNo);
     final json = await jsonDecode(rawPermission.body);
     final EmailUserFormModel response = EmailUserFormModel.fromJson(json[0]);
@@ -170,7 +180,7 @@ class RequestRepository {
         await requestDataProviders.getEmbassyLetterRequestData(
             requesterHRCode.isNotEmpty
                 ? requesterHRCode
-                : userData.user?.userHRCode ?? "",
+                : userData?.user?.userHRCode ?? "",
             requestNo);
     final json = await jsonDecode(rawPermission.body);
     final EmbassyLetterFormModel response =
@@ -182,8 +192,8 @@ class RequestRepository {
       {required BusinessCardFormModel businessCardFormModel}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": RequestServiceID.businessCardServiceID,
-      "requestHrCode": userData.employeeData!.userHrCode,
-      "ownerHrCode": userData.employeeData!.userHrCode,
+      "requestHrCode": userData?.employeeData!.userHrCode,
+      "ownerHrCode": userData?.employeeData!.userHrCode,
       "date": businessCardFormModel.requestDate,
       "comments": businessCardFormModel.employeeComments,
       "cardName": businessCardFormModel.employeeNameCard,
@@ -201,7 +211,7 @@ class RequestRepository {
 
   Future<List<MyRequestsModelData>> getMyRequestsData() async {
     http.Response rawMyRequests = await requestDataProviders
-        .getMyRequestsData(userData.user?.userHRCode ?? "");
+        .getMyRequestsData(userData?.user?.userHRCode ?? "");
     final json = await jsonDecode(rawMyRequests.body);
 
     List<MyRequestsModelData> myRequestsData = List<MyRequestsModelData>.from(
@@ -211,7 +221,7 @@ class RequestRepository {
 
   Future<List<UserNotificationApi>> getMyNotificationData() async {
     http.Response rawMyRequests = await requestDataProviders
-        .getMyNotificationData(userData.user?.userHRCode ?? "");
+        .getMyNotificationData(userData?.user?.userHRCode ?? "");
     final json = await jsonDecode(rawMyRequests.body);
 
     if (kDebugMode) {
@@ -227,14 +237,14 @@ class RequestRepository {
       {required EmailUserFormModel emailUserFormModel}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "ServiceId": RequestServiceID.emailUserAccountServiceID,
-      "RequestHrCode": userData.user!.userHRCode,
+      "RequestHrCode": userData?.user!.userHRCode,
       "Date": emailUserFormModel.requestDate,
       "OwnerHrCode": emailUserFormModel.requestHrCode,
       "OwnerFullName": emailUserFormModel.fullName,
       "OwnerTitle": emailUserFormModel.title,
       "OwnerLocation": emailUserFormModel.location,
       "OwnerMobile": emailUserFormModel.userMobile,
-      "OwnerEmailDisabled": userData.user!.email,
+      "OwnerEmailDisabled": userData?.user!.email,
       "Status": 0,
       "ReRequestCode": 0,
       "ReqType": emailUserFormModel.requestType,
@@ -254,8 +264,8 @@ class RequestRepository {
       {required EmbassyLetterFormModel embassyLetterFormModel}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "ServiceId": RequestServiceID.embassyServiceID,
-      "RequestHrCode": userData.employeeData!.userHrCode,
-      "OwnerHrCode": userData.employeeData!.userHrCode,
+      "RequestHrCode": userData?.employeeData!.userHrCode,
+      "OwnerHrCode": userData?.employeeData!.userHrCode,
       "date": GlobalConstants.dateFormatServer.format(GlobalConstants
           .dateFormatViewed
           .parse(embassyLetterFormModel.requestDate!)),
@@ -290,7 +300,7 @@ class RequestRepository {
     var bodyString = jsonEncode(<String, dynamic>{
       "date": requestDate,
       "comments": comments,
-      "requestHrCode": userData.user?.userHRCode!,
+      "requestHrCode": userData?.user?.userHRCode!,
       "dateFrom": dateFrom,
       "dateTo": dateTo,
       "serviceId": RequestServiceID.vacationServiceID,
@@ -321,7 +331,7 @@ class RequestRepository {
       required String hourTo}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": RequestServiceID.businessMissionServiceID,
-      "requestHrCode": userData.user?.userHRCode!,
+      "requestHrCode": userData?.user?.userHRCode!,
       "date": requestDate,
       "comments": comments,
       "dateFrom": dateFrom,
@@ -345,7 +355,7 @@ class RequestRepository {
         await requestDataProviders.getVacationRequestData(
             requesterHRCode.isNotEmpty
                 ? requesterHRCode
-                : userData.user?.userHRCode ?? "",
+                : userData?.user?.userHRCode ?? "",
             requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final VacationRequestData response = VacationRequestData.fromJson(json[0]);
@@ -371,7 +381,7 @@ class RequestRepository {
         await requestDataProviders.getBusinessMissionRequestData(
             requesterHRCode.isNotEmpty
                 ? requesterHRCode
-                : userData.user?.userHRCode ?? "",
+                : userData?.user?.userHRCode ?? "",
             requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final BusinessMissionRequestData response =
@@ -386,7 +396,7 @@ class RequestRepository {
         await requestDataProviders.getPermissionRequestData(
             requesterHRCode.isNotEmpty
                 ? requesterHRCode
-                : userData.user?.userHRCode ?? "",
+                : userData?.user?.userHRCode ?? "",
             requestNo);
     final json = await jsonDecode(rawRequestData.body);
     final PermissionRequestData response =
@@ -405,7 +415,7 @@ class RequestRepository {
       "reqno": int.parse(requestNo),
       "Approve": valueStatus == ActionValueStatus.accept ? 1 : 2,
       "requesterhrcode": requesterHRCode,
-      "mangerHrCode": userData.user?.userHRCode ?? "0",
+      "mangerHrCode": userData?.user?.userHRCode ?? "0",
       "comment": actionComment
     });
     final http.Response rawResponse =
@@ -436,7 +446,7 @@ class RequestRepository {
       "reqno": int.parse(requestNo),
       "Approve": valueStatus == ActionValueStatus.accept ? 1 : 2,
       "requesterhrcode": requesterHRCode,
-      "mangerHrCode": userData.user?.userHRCode ?? "0",
+      "mangerHrCode": userData?.user?.userHRCode ?? "0",
       "comment": actionComment,
       "nextStep": nextObject ?? [],
       // [

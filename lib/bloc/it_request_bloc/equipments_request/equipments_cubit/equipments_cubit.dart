@@ -139,7 +139,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
             status: FormzStatus.submissionSuccess,
             requestStatus: RequestStatus.oldRequest,
             statusAction: status,
-            takeActionStatus: (_requestRepository.userData.user?.userHRCode ==
+            takeActionStatus: (_requestRepository.userData?.user?.userHRCode ==
                     requestData.data?[0].requestHRCode)
                 ? TakeActionStatus.view
                 : TakeActionStatus.takeAction),

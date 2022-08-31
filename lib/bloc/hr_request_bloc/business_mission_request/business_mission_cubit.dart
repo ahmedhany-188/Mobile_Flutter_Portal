@@ -87,7 +87,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
             //   state.timeFrom , state.dateFrom]),
             requestStatus: RequestStatus.oldRequest,
             statusAction: status,
-            takeActionStatus: (_requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
+            takeActionStatus: (_requestRepository.userData?.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
         ),
       );
     }
