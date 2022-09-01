@@ -589,7 +589,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               .pushNamed(EquipmentsRequestScreen.routeName, arguments: {
             EquipmentsRequestScreen.requestNoKey: notification.requestNo.toString(),
             EquipmentsRequestScreen.requesterHrCode: notification.requestHRCode
-                .toString()
+                .toString(),"date":notification.reqDate
           });
           break;
         }
