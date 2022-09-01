@@ -39,9 +39,10 @@
         </intent>
     </queries>
    <application
-        android:label="hassanallamportalflutter"
+        android:label="HAH Portal"
         android:name="${applicationName}"
         android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
