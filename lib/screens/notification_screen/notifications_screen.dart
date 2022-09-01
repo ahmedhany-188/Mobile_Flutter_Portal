@@ -24,7 +24,7 @@ import '../../gen/assets.gen.dart';
 import '../admin_request_screen/business_card_screen.dart';
 import '../it_requests_screen/access_right_screen.dart';
 import '../it_requests_screen/email_and_useraccount_screen.dart';
-import '../it_requests_screen/equipments_request.dart';
+import '../it_requests_screen/equipments_request_screen.dart';
 
 
 class NotificationsScreen extends StatefulWidget {
@@ -108,7 +108,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                       Expanded(
                                         flex: 2,
                                         child: SizedBox(
-                                          height: 22.0.h,
+                                          height: MediaQuery.of(context).size.height * 0.20,
                                           child: Column(
                                             crossAxisAlignment: CrossAxisAlignment
                                                 .start,
@@ -561,9 +561,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       case RequestServiceID.equipmentServiceID:
         {
           Navigator.of(context)
-              .pushNamed(EquipmentsRequest.routeName, arguments: {
-            EquipmentsRequest.requestNoKey: notification.requestNo.toString(),
-            EquipmentsRequest.requesterHrCode: notification.requestHRCode
+              .pushNamed(EquipmentsRequestScreen.routeName, arguments: {
+            EquipmentsRequestScreen.requestNoKey: notification.requestNo.toString(),
+            EquipmentsRequestScreen.requesterHrCode: notification.requestHRCode
                 .toString()
           });
           break;

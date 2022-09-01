@@ -17,6 +17,7 @@ class ConstantsColors{
   static const Color buttonColors =  Color(0xff0F3C5B);
 
   static const Color bottomSheetBackground = Color(0xff0F3C55);
+  static const Color bottomSheetBackgroundDark = Color(0xff0b2d40);
 
   static const Color backgroundStartColor = Color(0xff021c2d);
 

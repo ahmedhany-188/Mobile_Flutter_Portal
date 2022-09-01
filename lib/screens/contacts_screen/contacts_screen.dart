@@ -5,9 +5,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 
+import '../../bloc/contacts_screen_bloc/contacts_cubit.dart';
 import '../../bloc/contacts_screen_bloc/contacts_filters_cubit.dart';
 import '../../screens/contacts_screen/contacts_widget.dart';
-import '../../bloc/contacts_screen_bloc/contacts_cubit.dart';
 import '../../widgets/filters/multi_selection_chips_filters.dart';
 
 class ContactsScreen extends StatefulWidget {
@@ -20,397 +20,177 @@ class ContactsScreen extends StatefulWidget {
 
 class _ContactsScreenState extends State<ContactsScreen>
     with TickerProviderStateMixin {
-  // static final UniqueKey uniqueKey = UniqueKey();
   TextEditingController textController = TextEditingController();
   FocusNode textFoucus = FocusNode();
 
-  _showDialogAndGetFiltersResults(BuildContext context) async {
-    showModalBottomSheet(
-      isScrollControlled: true,
+  _showDialogAndGetFiltersResults(BuildContext context) {
+    showBottomSheet(
       context: context,
       enableDrag: true,
+      clipBehavior: Clip.none,
       backgroundColor: Colors.transparent,
       transitionAnimationController:
           BottomSheet.createAnimationController(this),
-      builder: (c) => BlocProvider<ContactsFiltersCubit>.value(
+      builder: (_) => BlocProvider<ContactsFiltersCubit>.value(
         value: ContactsFiltersCubit.get(context),
-        child: SizedBox(
+        child: Container(
           height: MediaQuery.of(context).size.height * 0.75,
-          child: ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
-            child: BottomSheet(
-              elevation: 10,
-              backgroundColor: ConstantsColors.bottomSheetBackground,
-              enableDrag: true,
-              animationController: BottomSheet.createAnimationController(this),
-              // insetPadding: const EdgeInsets.all(10),
-              builder: (_) {
-                return SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Column(
-                    children: [
-                      AppBar(
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                        title: const Text(
-                          'Filters',
-                        ),
-                        centerTitle: true,
-                        leadingWidth: 110,
-                        leading: MaterialButton(
-                          onPressed: () {
-                            ContactsFiltersCubit.get(context).onClearDialog();
-                          },
-                          splashColor: Theme.of(context)
-                              .colorScheme
-                              .background
-                              .withOpacity(0.01),
-                          child: const Text(
-                            'Clear Filters',
-                            style: TextStyle(
-                              color: Colors.white,
-                              decoration: TextDecoration.underline,
-                            ),
-                          ),
-                        ),
-                        actions: [
-                          MaterialButton(
-                            onPressed: () {
-                              ContactsFiltersCubit.get(context).checkAllFilters();
-                              Navigator.pop(context);
-                            },
-                            textColor: Colors.white,
-                            splashColor: Theme.of(context)
-                                .colorScheme
-                                .background
-                                .withOpacity(0.01),
-                            materialTapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
-                            child: const Text(
-                              'Done',
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      BlocBuilder<ContactsFiltersCubit, ContactsFiltersInitial>(
-                        buildWhen: (previous, current) {
-                          return previous.chosenCompaniesFilter !=
-                              current.chosenCompaniesFilter;
-                        },
-                        builder: (cubitContext, state) {
-                          return Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: MultiSelectionChipsFilters(
-                              filtersList: ContactsCubit.get(context)
-                                  .state
-                                  .companiesFilter,
-                              filterName: 'Company',
-                              initialValue: state.chosenCompaniesFilter,
-                              onTap: (item) {
-                                ContactsFiltersCubit.get(cubitContext)
-                                    .chosenCompaniesOptions([
-                                  ...state.chosenCompaniesFilter
-                                ]..remove(item));
-                              },
-                              onConfirm: (selectedFilters) {
-                                ContactsFiltersCubit.get(context)
-                                    .chosenCompaniesOptions(selectedFilters
-                                        .map((e) => e.toString())
-                                        .toList());
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                      BlocBuilder<ContactsFiltersCubit, ContactsFiltersInitial>(
-                        builder: (context, state) {
-                          return Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: MultiSelectionChipsFilters(
-                              filtersList:
-                                  ContactsCubit.get(context).state.projectsFilter,
-                              filterName: 'Project',
-                              onConfirm: (selectedFilters) {
-                                ContactsFiltersCubit.get(context)
-                                    .chosenProjectsOptions(selectedFilters
-                                        .map((e) => e.toString())
-                                        .toList());
-                              },
-                              initialValue: state.chosenProjectsFilter,
-                              onTap: (item) {
-                                ContactsFiltersCubit.get(context)
-                                    .chosenProjectsOptions([
-                                  ...state.chosenProjectsFilter
-                                ]..remove(item));
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                      BlocBuilder<ContactsFiltersCubit, ContactsFiltersInitial>(
-                        builder: (context, state) {
-                          return Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: MultiSelectionChipsFilters(
-                              filtersList: ContactsCubit.get(context)
-                                  .state
-                                  .departmentFilter,
-                              filterName: 'Department',
-                              initialValue: state.chosenDepartmentFilter,
-                              onConfirm: (selectedFilters) {
-                                ContactsFiltersCubit.get(context)
-                                    .chosenDepartmentsOptions(selectedFilters
-                                        .map((e) => e.toString())
-                                        .toList());
-                              },
-                              onTap: (item) {
-                                ContactsFiltersCubit.get(context)
-                                    .chosenDepartmentsOptions([
-                                  ...state.chosenDepartmentFilter
-                                ]..remove(item));
-                              },
-                            ),
-                          );
-                        },
-                      ),
-                      BlocBuilder<ContactsFiltersCubit, ContactsFiltersInitial>(
-                        builder: (context, state) {
-                          return Padding(
-                            padding: const EdgeInsets.all(5.0),
-                            child: MultiSelectionChipsFilters(
-                              filtersList:
-                                  ContactsCubit.get(context).state.titleFilter,
-                              filterName: 'Title',
-                              onConfirm: (selectedFilters) {
-                                ContactsFiltersCubit.get(context)
-                                    .chosenTitlesOptions(selectedFilters
-                                        .map((e) => e.toString())
-                                        .toList());
-                              },
-                              initialValue: state.chosenTitleFilter,
-                              onTap: (item) {
-                                ContactsFiltersCubit.get(context)
-                                    .chosenTitlesOptions([
-                                  ...state.chosenTitleFilter
-                                ]..remove(item));
-                              },
-                            ),
-                          );
-                        },
-                      ),
-
-                      // BlocBuilder<ContactsFiltersCubit, ContactsFiltersInitial>(
-                      //   builder: (context, state) {
-                      // Container(
-                      //   padding: const EdgeInsets.all(5),
-                      //   child: Column(
-                      //     crossAxisAlignment: CrossAxisAlignment.end,
-                      //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      //     children: [
-                      //
-                      //     ],
-                      //   ),
-                      // ),
-                      //   },
-                      // ),
-                    ],
+          decoration: const BoxDecoration(
+              color: ConstantsColors.bottomSheetBackgroundDark,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
+          child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Column(
+              children: [
+                AppBar(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  title: const Text(
+                    'Filters',
                   ),
-                );
-                //   ClipRRect(
-                //   borderRadius: const BorderRadius.vertical(top:Radius.circular(20)),
-                //   child: Container(
-                //     color: ConstantsColors.bottomSheetBackground,
-                //     child: SingleChildScrollView(
-                //       physics: const BouncingScrollPhysics(),
-                //       child: Column(
-                //         children: [
-                //           AppBar(
-                //             backgroundColor: Colors.transparent,
-                //             elevation: 0,
-                //             title: const Text(
-                //               'Filters',
-                //             ),
-                //             centerTitle: true,
-                //             leadingWidth: 110,
-                //             leading: MaterialButton(
-                //               onPressed: () {
-                //                 ContactsFiltersCubit.get(context).onClearDialog();
-                //               },
-                //               splashColor: Theme.of(context)
-                //                   .colorScheme
-                //                   .background
-                //                   .withOpacity(0.01),
-                //               child: const Text(
-                //                 'Clear Filters',
-                //                 style: TextStyle(
-                //                   color: Colors.white,
-                //                   decoration: TextDecoration.underline,
-                //                 ),
-                //               ),
-                //             ),
-                //             actions: [
-                //               MaterialButton(
-                //                 onPressed: () {
-                //                   ContactsFiltersCubit.get(context).checkAllFilters();
-                //                   Navigator.pop(context);
-                //                 },
-                //                 textColor: Colors.white,
-                //                 splashColor: Theme.of(context)
-                //                     .colorScheme
-                //                     .background
-                //                     .withOpacity(0.01),
-                //                 materialTapTargetSize:
-                //                 MaterialTapTargetSize.shrinkWrap,
-                //                 child: const Text(
-                //                   'Done',
-                //                   style: TextStyle(
-                //                     decoration: TextDecoration.underline,
-                //                     color: Colors.white,
-                //                   ),
-                //                 ),
-                //               )
-                //             ],
-                //           ),
-                //
-                //           BlocBuilder<ContactsFiltersCubit,
-                //               ContactsFiltersInitial>(
-                //             buildWhen: (previous, current) {
-                //               return previous.chosenCompaniesFilter !=
-                //                   current.chosenCompaniesFilter;
-                //             },
-                //             builder: (cubitContext, state) {
-                //               return Padding(
-                //                 padding: const EdgeInsets.all(5.0),
-                //                 child: MultiSelectionChipsFilters(
-                //                   filtersList: ContactsCubit.get(context)
-                //                       .state
-                //                       .companiesFilter,
-                //                   filterName: 'Company',
-                //                   initialValue: state.chosenCompaniesFilter,
-                //                   onTap: (item) {
-                //                     ContactsFiltersCubit.get(cubitContext)
-                //                         .chosenCompaniesOptions([
-                //                       ...state.chosenCompaniesFilter
-                //                     ]..remove(item));
-                //                   },
-                //                   onConfirm: (selectedFilters) {
-                //                     ContactsFiltersCubit.get(context)
-                //                         .chosenCompaniesOptions(selectedFilters
-                //                         .map((e) => e.toString())
-                //                         .toList());
-                //                   },
-                //                 ),
-                //               );
-                //             },
-                //           ),
-                //           BlocBuilder<ContactsFiltersCubit,
-                //               ContactsFiltersInitial>(
-                //             builder: (context, state) {
-                //               return Padding(
-                //                 padding: const EdgeInsets.all(5.0),
-                //                 child: MultiSelectionChipsFilters(
-                //                   filtersList: ContactsCubit.get(context)
-                //                       .state
-                //                       .projectsFilter,
-                //                   filterName: 'Project',
-                //                   onConfirm: (selectedFilters) {
-                //                     ContactsFiltersCubit.get(context)
-                //                         .chosenProjectsOptions(selectedFilters
-                //                         .map((e) => e.toString())
-                //                         .toList());
-                //                   },
-                //                   initialValue: state.chosenProjectsFilter,
-                //                   onTap: (item) {
-                //                     ContactsFiltersCubit.get(context)
-                //                         .chosenProjectsOptions([
-                //                       ...state.chosenProjectsFilter
-                //                     ]..remove(item));
-                //                   },
-                //                 ),
-                //               );
-                //             },
-                //           ),
-                //           BlocBuilder<ContactsFiltersCubit,
-                //               ContactsFiltersInitial>(
-                //             builder: (context, state) {
-                //               return Padding(
-                //                 padding: const EdgeInsets.all(5.0),
-                //                 child: MultiSelectionChipsFilters(
-                //                   filtersList: ContactsCubit.get(context)
-                //                       .state
-                //                       .departmentFilter,
-                //                   filterName: 'Department',
-                //                   initialValue: state.chosenDepartmentFilter,
-                //                   onConfirm: (selectedFilters) {
-                //                     ContactsFiltersCubit.get(context)
-                //                         .chosenDepartmentsOptions(
-                //                         selectedFilters
-                //                             .map((e) => e.toString())
-                //                             .toList());
-                //                   },
-                //                   onTap: (item) {
-                //                     ContactsFiltersCubit.get(context)
-                //                         .chosenDepartmentsOptions([
-                //                       ...state.chosenDepartmentFilter
-                //                     ]..remove(item));
-                //                   },
-                //                 ),
-                //               );
-                //             },
-                //           ),
-                //           BlocBuilder<ContactsFiltersCubit,
-                //               ContactsFiltersInitial>(
-                //             builder: (context, state) {
-                //               return Padding(
-                //                 padding: const EdgeInsets.all(5.0),
-                //                 child: MultiSelectionChipsFilters(
-                //                   filtersList: ContactsCubit.get(context)
-                //                       .state
-                //                       .titleFilter,
-                //                   filterName: 'Title',
-                //                   onConfirm: (selectedFilters) {
-                //                     ContactsFiltersCubit.get(context)
-                //                         .chosenTitlesOptions(selectedFilters
-                //                         .map((e) => e.toString())
-                //                         .toList());
-                //                   },
-                //                   initialValue: state.chosenTitleFilter,
-                //                   onTap: (item) {
-                //                     ContactsFiltersCubit.get(context)
-                //                         .chosenTitlesOptions([
-                //                       ...state.chosenTitleFilter
-                //                     ]..remove(item));
-                //                   },
-                //                 ),
-                //               );
-                //             },
-                //           ),
-                //
-                //           // BlocBuilder<ContactsFiltersCubit, ContactsFiltersInitial>(
-                //           //   builder: (context, state) {
-                //           // Container(
-                //           //   padding: const EdgeInsets.all(5),
-                //           //   child: Column(
-                //           //     crossAxisAlignment: CrossAxisAlignment.end,
-                //           //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                //           //     children: [
-                //           //
-                //           //     ],
-                //           //   ),
-                //           // ),
-                //           //   },
-                //           // ),
-                //         ],
-                //       ),
-                //     ),
-                //   ),
-                // );
-              },
-              onClosing: () {},
+                  centerTitle: true,
+                  leadingWidth: 110,
+                  leading: MaterialButton(
+                    onPressed: () {
+                      ContactsFiltersCubit.get(context).onClearDialog();
+                    },
+                    splashColor: Theme.of(context)
+                        .colorScheme
+                        .background
+                        .withOpacity(0.01),
+                    child: const Text(
+                      'Clear Filters',
+                      style: TextStyle(
+                        color: Colors.white,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                  actions: [
+                    MaterialButton(
+                      onPressed: () {
+                        ContactsFiltersCubit.get(context).checkAllFilters();
+                        Navigator.pop(context);
+                      },
+                      textColor: Colors.white,
+                      splashColor: Theme.of(context)
+                          .colorScheme
+                          .background
+                          .withOpacity(0.01),
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      child: const Text(
+                        'Done',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+                BlocBuilder<ContactsFiltersCubit, ContactsFiltersInitial>(
+                  buildWhen: (previous, current) {
+                    return previous.chosenCompaniesFilter !=
+                        current.chosenCompaniesFilter;
+                  },
+                  builder: (cubitContext, state) {
+                    return Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: MultiSelectionChipsFilters(
+                        filtersList:
+                            ContactsCubit.get(context).state.companiesFilter,
+                        filterName: 'Company',
+                        initialValue: state.chosenCompaniesFilter,
+                        onTap: (item) {
+                          ContactsFiltersCubit.get(cubitContext)
+                              .chosenCompaniesOptions([
+                            ...state.chosenCompaniesFilter
+                          ]..remove(item));
+                        },
+                        onConfirm: (selectedFilters) {
+                          ContactsFiltersCubit.get(context)
+                              .chosenCompaniesOptions(selectedFilters
+                                  .map((e) => e.toString())
+                                  .toList());
+                        },
+                      ),
+                    );
+                  },
+                ),
+                BlocBuilder<ContactsFiltersCubit, ContactsFiltersInitial>(
+                  builder: (context, state) {
+                    return Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: MultiSelectionChipsFilters(
+                        filtersList:
+                            ContactsCubit.get(context).state.projectsFilter,
+                        filterName: 'Project',
+                        onConfirm: (selectedFilters) {
+                          ContactsFiltersCubit.get(context)
+                              .chosenProjectsOptions(selectedFilters
+                                  .map((e) => e.toString())
+                                  .toList());
+                        },
+                        initialValue: state.chosenProjectsFilter,
+                        onTap: (item) {
+                          ContactsFiltersCubit.get(context)
+                              .chosenProjectsOptions([
+                            ...state.chosenProjectsFilter
+                          ]..remove(item));
+                        },
+                      ),
+                    );
+                  },
+                ),
+                BlocBuilder<ContactsFiltersCubit, ContactsFiltersInitial>(
+                  builder: (context, state) {
+                    return Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: MultiSelectionChipsFilters(
+                        filtersList:
+                            ContactsCubit.get(context).state.departmentFilter,
+                        filterName: 'Department',
+                        initialValue: state.chosenDepartmentFilter,
+                        onConfirm: (selectedFilters) {
+                          ContactsFiltersCubit.get(context)
+                              .chosenDepartmentsOptions(selectedFilters
+                                  .map((e) => e.toString())
+                                  .toList());
+                        },
+                        onTap: (item) {
+                          ContactsFiltersCubit.get(context)
+                              .chosenDepartmentsOptions([
+                            ...state.chosenDepartmentFilter
+                          ]..remove(item));
+                        },
+                      ),
+                    );
+                  },
+                ),
+                BlocBuilder<ContactsFiltersCubit, ContactsFiltersInitial>(
+                  builder: (context, state) {
+                    return Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: MultiSelectionChipsFilters(
+                        filtersList:
+                            ContactsCubit.get(context).state.titleFilter,
+                        filterName: 'Title',
+                        onConfirm: (selectedFilters) {
+                          ContactsFiltersCubit.get(context).chosenTitlesOptions(
+                              selectedFilters
+                                  .map((e) => e.toString())
+                                  .toList());
+                        },
+                        initialValue: state.chosenTitleFilter,
+                        onTap: (item) {
+                          ContactsFiltersCubit.get(context).chosenTitlesOptions(
+                              [...state.chosenTitleFilter]..remove(item));
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ),
@@ -423,7 +203,9 @@ class _ContactsScreenState extends State<ContactsScreen>
     var deviceSize = MediaQuery.of(context).size;
     return CustomBackground(
       child: GestureDetector(
-        onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
+        onTap: () {
+          FocusManager.instance.primaryFocus!.unfocus();
+        },
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.transparent,
@@ -460,12 +242,13 @@ class _ContactsScreenState extends State<ContactsScreen>
                         children: [
                           BlocConsumer<ContactsFiltersCubit,
                               ContactsFiltersInitial>(
-                            listener:
-                                (filtersCubitContext, filtersCubitState) {
+                            listener: (filtersCubitContext, filtersCubitState) {
                               if (filtersCubitState.isFiltered) {
                                 ContactsCubit.get(context).updateContacts(
                                     filtersCubitState.listContacts);
-                                ContactsWidget.scrollToTop();
+                                if(filtersCubitState.listContacts.isNotEmpty){
+                                  ContactsWidget.scrollToTop();
+                                }
                               }
                             },
                             builder: (ctx, state) {
@@ -494,8 +277,8 @@ class _ContactsScreenState extends State<ContactsScreen>
                                               .withOpacity(0.4),
                                           // labelText: "Search contact",
                                           hintText: 'Name or HR Code',
-                                          hintStyle:
-                                              const TextStyle(color: Colors.white),
+                                          hintStyle: const TextStyle(
+                                              color: Colors.white),
                                           prefixIcon: const Icon(Icons.search,
                                               color: Colors.white),
                                           border: const OutlineInputBorder(
@@ -507,15 +290,13 @@ class _ContactsScreenState extends State<ContactsScreen>
                                   Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       ElevatedButton.icon(
                                         onPressed: () {
                                           ContactsFiltersCubit.get(ctx)
                                               .updateFilters();
-                                          _showDialogAndGetFiltersResults(
-                                              ctx);
+                                          _showDialogAndGetFiltersResults(ctx);
                                         },
                                         label: const Text('Filter Contacts'),
                                         icon: const Icon(
@@ -525,8 +306,7 @@ class _ContactsScreenState extends State<ContactsScreen>
                                       ),
                                       const SizedBox(width: 10),
                                       ElevatedButton.icon(
-                                        onPressed: (state.isFiltered ==
-                                                    false &&
+                                        onPressed: (state.isFiltered == false &&
                                                 textController.text.isEmpty)
                                             ? null
                                             : () {
@@ -551,8 +331,8 @@ class _ContactsScreenState extends State<ContactsScreen>
                             },
                           ),
                           Scrollbar(
-                            child: BlocBuilder<ContactsCubit,
-                                ContactCubitStates>(
+                            child:
+                                BlocBuilder<ContactsCubit, ContactCubitStates>(
                               builder: (context, state) {
                                 return SizedBox(
                                   height: deviceSize.height * 0.70,

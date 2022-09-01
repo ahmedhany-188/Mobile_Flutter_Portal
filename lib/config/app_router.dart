@@ -17,7 +17,7 @@ import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_r
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
-import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_screen.dart';
@@ -223,9 +223,9 @@ class AppRouter {
         return MaterialPageRoute(
             builder: (_) => const NewsLetterScreen());
 
-      case EquipmentsRequest.routeName:
+      case EquipmentsRequestScreen.routeName:
         return MaterialPageRoute(
-            builder: (_) => EquipmentsRequest(requestData: settings.arguments,));
+            builder: (_) => EquipmentsRequestScreen(requestData: settings.arguments,));
 
       case AddRequestScreen.routeName:
         return MaterialPageRoute(

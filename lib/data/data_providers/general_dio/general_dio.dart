@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:authentication_repository/authentication_repository.dart';
@@ -113,6 +112,14 @@ class GeneralDio {
 
   Future<Response> getStatistics() async {
     String url = 'SelfService/GetStatistics?HRCode=${userData.user!.userHRCode}';
+
+    return await dio!.get(url).catchError((err) {
+      throw err;
+    });
+  }
+
+  static Future<Response> getNextStepWorkFlow({required String serviceId, required String userHrCode, required int reqNo}) async {
+    String url = 'SelfService/GetNextStepWorkFlow?ServiceID=$serviceId&RequestNo=$reqNo&HRCode=$userHrCode';
 
     return await dio!.get(url).catchError((err) {
       throw err;

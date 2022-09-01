@@ -13,7 +13,7 @@ import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right
 import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
 import 'package:sizer/sizer.dart';
 
-import '../it_requests_screen/equipments_request.dart';
+import '../it_requests_screen/equipments_request_screen.dart';
 
 class MyRequestsItemWidget extends StatelessWidget {
 
@@ -283,7 +283,7 @@ class MyRequestsItemWidget extends StatelessWidget {
       case RequestServiceID.equipmentServiceID:
         {
           Navigator.of(context)
-              .pushNamed(EquipmentsRequest.routeName,arguments: {EquipmentsRequest.requestNoKey: myRequestsModelData.requestNo.toString(),EquipmentsRequest.requesterHrCode: myRequestsModelData.requestHRCode.toString()});
+              .pushNamed(EquipmentsRequestScreen.routeName,arguments: {EquipmentsRequestScreen.requestNoKey: myRequestsModelData.requestNo.toString(),EquipmentsRequestScreen.requesterHrCode: myRequestsModelData.requestHRCode.toString()});
           break;
         }
 

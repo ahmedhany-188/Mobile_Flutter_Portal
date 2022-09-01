@@ -78,7 +78,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
             requestStatus: RequestStatus.oldRequest,
             requesterData: requesterData,
             statusAction: status,
-            takeActionStatus: (requestRepository.userData.user?.userHRCode ==
+            takeActionStatus: (requestRepository.userData?.user?.userHRCode ==
                 requestData.requestHrCode)
                 ? TakeActionStatus.view
                 : TakeActionStatus.takeAction

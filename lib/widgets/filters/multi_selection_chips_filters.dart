@@ -24,8 +24,8 @@ class MultiSelectionChipsFilters extends StatelessWidget {
         filtersList.map((string) => MultiSelectItem(string, string)).toList();
 
     return MultiSelectBottomSheetField(
+      key: GlobalKey(),
       items: items,
-      onSelectionChanged: onConfirm,
       searchTextStyle: const TextStyle(color: Colors.white),
       searchIcon: const Icon(Icons.search, color: Colors.white),
       closeSearchIcon: const Icon(Icons.close, color: Colors.white),
@@ -42,10 +42,10 @@ class MultiSelectionChipsFilters extends StatelessWidget {
       ),
       searchHintStyle: const TextStyle(color: Colors.white),
       unselectedColor: Colors.white,
-      selectedColor: ConstantsColors.bottomSheetBackground,
+      selectedColor: ConstantsColors.bottomSheetBackgroundDark,
       initialValue: initialValue,
       searchable: true,
-      backgroundColor: ConstantsColors.bottomSheetBackground,
+      backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
       listType: MultiSelectListType.LIST,
       title: Text(filterName.toUpperCase(),
           style: const TextStyle(color: Colors.white)),
