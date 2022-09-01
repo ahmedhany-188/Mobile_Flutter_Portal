@@ -34,22 +34,22 @@ enum AttendanceDataEnumStates {loading, success, failed,noConnection,fullSuccess
 
     static AttendanceState? fromMap(Map<String, dynamic> json) {
       if (json.isEmpty) {
-        return  AttendanceState(
-            attendanceDataEnumStates :AttendanceDataEnumStates.loading,
-            getAttendanceList : <List<MyAttendanceModel>>[],
-            month:1,
+        return AttendanceState(
+          attendanceDataEnumStates: AttendanceDataEnumStates.loading,
+          getAttendanceList: <List<MyAttendanceModel>>[],
+          month: 1,
         );
       }
       int val = json['attendanceDataEnumStates'];
       int monthVal = json['month'];
       return AttendanceState(
-        attendanceDataEnumStates : AttendanceDataEnumStates.values[val],
-        // getAttendanceList : List<MyAttendanceModel>.from(
-        //     json['getAttendanceList']?.map((p) => MyAttendanceModel.fromJson(p))),
-        getAttendanceList : List<List<MyAttendanceModel>>.from(
-            json['getAttendanceList']?.map((p) => MyAttendanceModel.fromJson(p))),
-
-        month: monthVal
+          attendanceDataEnumStates: AttendanceDataEnumStates.values[val],
+          // getAttendanceList : List<MyAttendanceModel>.from(
+          //     json['getAttendanceList']?.map((p) => MyAttendanceModel.fromJson(p))),
+          getAttendanceList: List<List<MyAttendanceModel>>.from(
+              json['getAttendanceList']?.map((p) =>
+                  MyAttendanceModel.fromJson(p))),
+          month: monthVal
       );
     }
 

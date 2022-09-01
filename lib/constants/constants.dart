@@ -1,8 +1,13 @@
 import 'package:intl/intl.dart';
 class GlobalConstants{
 
+
   static final DateFormat dateFormatViewed = DateFormat("EEEE dd-MM-yyyy");
+
+  static final DateFormat dateFormatServerDashBoard = DateFormat("yyyy-MM-dd");
+
   static final DateFormat dateFormatServer = DateFormat("yyyy-MM-dd'T'HH:mm:ss");
+
   static final DateFormat dateFormatViewedDaysAndHours = DateFormat("EEEE dd-MM-yyyy hh:mm aa");
 
   // static final List<dynamic> accountsTypesList = [

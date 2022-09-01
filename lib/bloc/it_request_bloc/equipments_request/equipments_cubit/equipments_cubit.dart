@@ -15,8 +15,10 @@ import '../../../../data/models/it_requests_form_models/equipments_models/depart
 import '../../../../data/models/it_requests_form_models/equipments_models/business_unit_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/equipments_location_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/equipments_requested_model.dart';
+import '../../../../data/models/it_requests_form_models/equipments_models/history_work_flow_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
 import '../../../../data/models/requests_form_models/request_date.dart';
+import '../../../../data/repositories/employee_repository.dart';
 import '../../../../data/repositories/request_repository.dart';
 
 part 'equipments_state.dart';
@@ -99,7 +101,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         dismissOnTap: false,
       );
       final requestData = await _requestRepository.getEquipmentData(
-          requestNo ?? '', requesterHRCode!);
+          requestNo ?? '', requesterHRCode ?? '');
 
       // ContactsDataFromApi responsiblePerson;
       // if(requestData.ownerName != null){
@@ -129,9 +131,13 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         status = "Rejected";
       }
 
+      final requesterData = await GetEmployeeRepository()
+          .getEmployeeData(requestData.data![0].requestHRCode ?? "");
+
       emit(
         state.copyWith(
             requestedData: requestData,
+            requesterData: requesterData,
             // requestDate: requestDate,
             // vacationType: int.parse(requestData.vacationType ?? "1"),
             // responsiblePerson: responsiblePerson,
@@ -176,7 +182,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     return const Icon(Icons.access_alarm_outlined);
   }
 
-  String? getRequestForFromType(int type) {
+  String? getRequestForFromType(int? type) {
     switch (type) {
       case 1:
         return 'New Hire';
@@ -190,9 +196,17 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     return null;
   }
 
-  // void validateForm(){
-  //   emit(state.copyWith(status: Formz.validate([state.requestDate!],)));
-  // }
+  void validateForm({
+    FormzStatus? businessUnit,
+    FormzStatus? location,
+    FormzStatus? department,
+  }) {
+    emit(state.copyWith(
+      businessUnitStatus: businessUnit,
+      locationStatus: location,
+      departmentStatus: department,
+    ));
+  }
 
   submitAction(ActionValueStatus valueStatus, String requestNo) async {
     emit(state.copyWith(
@@ -232,6 +246,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     required EquipmentsLocationModel locationObject,
     required String userHrCode,
     required List<SelectedEquipmentsModel> selectedItem,
+    String? comment,
   }) {
     var masterDataPost = {
       "requestNo": 0,
@@ -241,7 +256,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       "locationId": locationObject.projectId.toString(),
       "requestHrCode": userHrCode,
       "date": DateTime.now().toString(),
-      "comments": "",
+      "comments": comment ?? "No Comment",
       "newComer": true,
       "approvalPathId": 0,
       "status": 0,
@@ -298,7 +313,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     } else if (state.chosenList.any((element) =>
         element.selectedItem?.hardWareItemName ==
         chosenObject.selectedItem?.hardWareItemName)) {
-      throw 'ew3a';
+      throw 'chosen list exception';
     } else {
       emit(state.copyWith(
         chosenList: [...state.chosenList, chosenObject],
@@ -359,6 +374,19 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
           listDepartment: departments));
     }).catchError((err) {
       emit(state.copyWith(departmentEnumStates: EquipmentsEnumState.failed));
+    });
+  }
+
+  void getHistory({required String serviceId, required int requestNumber}) {
+    GeneralDio.getHistoryWorkFlow(serviceId: serviceId, reqNo: requestNumber)
+        .then((value) {
+      List<HistoryWorkFlowModel> history;
+      history = List<HistoryWorkFlowModel>.from(
+          value.data.map((model) => HistoryWorkFlowModel.fromJson(model)));
+
+      emit(state.copyWith(
+          historyWorkFlow: history
+            ..sort((a, b) => a.createdate!.compareTo(b.createdate!))));
     });
   }
 }

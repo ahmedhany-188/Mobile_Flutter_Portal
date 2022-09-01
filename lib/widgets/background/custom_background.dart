@@ -88,6 +88,7 @@ class CustomTheme extends StatelessWidget {
         ),
         // primaryColor: Colors.white30,
         inputDecorationTheme: InputDecorationTheme(
+          isDense: true,
           disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
               borderSide: const BorderSide(color: Colors.white30)),

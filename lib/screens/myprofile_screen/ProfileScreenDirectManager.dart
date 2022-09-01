@@ -51,7 +51,7 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
 
     final currentRequestData = widget.requestData;
 
-    var imageProfile="";
+    var imageProfile = "";
 
     return CustomBackground(
       child: Scaffold(
@@ -110,7 +110,6 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
               child: BlocConsumer<ProfileManagerCubit, ProfileManagerState>(
                   listener: (context, state) {
                     if (state is BlocGetManagerDataSuccessState) {
-
                       print("0000-" + state.managerData.toJson().toString());
 
                       ///Set properties
@@ -123,8 +122,7 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                       vCard.workPhone = state.managerData.deskPhone;
                       vCard.cellPhone = state.managerData.mobile!;
 
-                      imageProfile=state.managerData.imgProfile ?? "";
-
+                      imageProfile = state.managerData.imgProfile ?? "";
                     }
 
                     if (state is BlocGetManagerDataErrorState) {
@@ -146,62 +144,74 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                             horizontal: 8, vertical: 15),
                         child: Column(
                           children: [
-
                             Padding(
-                                padding: const EdgeInsets.all(5.0),
-
-
-                                child:Column(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Column(
                                 children: [
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        children: [
-                                        Flexible(
-                                          flex: 2,
-                                            child: IconButton(
-                                              icon: const Icon(Icons.phone),
-                                              color: Colors.white,
-                                              onPressed: () {
-                                                url_launcher.launchUrl(Uri.parse('tel:+${getMobile(state)}'));
-                                              },
-                                            ),
-                                          ),
-                                          Flexible(
-                                            flex: 3,
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(5.0),
-                                              child: Center(
-                                                // child: state is BlocGetManagerDataSuccessState && state.managerData.imgProfile !=null && state.managerData.imgProfile.toString()!="" && state.managerData.imgProfile.toString()!="null"?
-                                                child: state is BlocGetManagerDataSuccessState && imageProfile.isNotEmpty?
-                                                  CachedNetworkImage(imageUrl: "https://portal.hassanallam.com/Apps/images/Profile/${state.managerData.imgProfile}",
-                                                    imageBuilder: (context, imageProvider) => Container(
-                                                      width: 120.sp,
-                                                      height: 120.sp,
-                                                      decoration: BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        image: DecorationImage(
-                                                            image: imageProvider, fit: BoxFit.cover),
-                                                      ),
-                                                    ),
-                                                    placeholder: (context, url) => Assets.images.logo.image(height: 80.sp),
-                                                    errorWidget: (context, url, error) => Assets.images.logo.image(height: 80.sp),
-                                                  ) :
-                                                Assets.images.logo.image(height: 80.sp),
-                                              ),
-                                            ),
-                                          ),
-                                          Flexible(
-                                            flex: 2,
-                                            child: IconButton(
-                                              icon: const Icon(Icons.mail),
-                                              color: Colors.white,
-                                              onPressed: () {
-                                                url_launcher.launchUrl(Uri.parse('mailto:${getEmail(state)}'));
-                                              },
-                                            ),
-                                          ),
-                                        ],
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .spaceBetween,
+                                    children: [
+                                      Flexible(
+                                        flex: 2,
+                                        child: IconButton(
+                                          icon: const Icon(Icons.phone),
+                                          color: Colors.white,
+                                          onPressed: () {
+                                            url_launcher.launchUrl(Uri.parse(
+                                                'tel:+${getMobile(state)}'));
+                                          },
+                                        ),
                                       ),
+                                      Flexible(
+                                        flex: 3,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: Center(
+                                            // child: state is BlocGetManagerDataSuccessState && state.managerData.imgProfile !=null && state.managerData.imgProfile.toString()!="" && state.managerData.imgProfile.toString()!="null"?
+                                            child: state is BlocGetManagerDataSuccessState &&
+                                                imageProfile.isNotEmpty ?
+                                            CachedNetworkImage(
+                                              imageUrl: "https://portal.hassanallam.com/Apps/images/Profile/${state
+                                                  .managerData.imgProfile}",
+                                              imageBuilder: (context,
+                                                  imageProvider) =>
+                                                  Container(
+                                                    width: 120.sp,
+                                                    height: 120.sp,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      image: DecorationImage(
+                                                          image: imageProvider,
+                                                          fit: BoxFit.cover),
+                                                    ),
+                                                  ),
+                                              placeholder: (context, url) =>
+                                                  Assets.images.logo.image(
+                                                      height: 80.sp),
+                                              errorWidget: (context, url,
+                                                  error) =>
+                                                  Assets.images.logo.image(
+                                                      height: 80.sp),
+                                            ) :
+                                            Assets.images.logo.image(
+                                                height: 80.sp),
+                                          ),
+                                        ),
+                                      ),
+                                      Flexible(
+                                        flex: 2,
+                                        child: IconButton(
+                                          icon: const Icon(Icons.mail),
+                                          color: Colors.white,
+                                          onPressed: () {
+                                            url_launcher.launchUrl(Uri.parse(
+                                                'mailto:${getEmail(state)}'));
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   Container(
                                     padding: const EdgeInsets.all(10.0),
                                     decoration: BoxDecoration(
@@ -220,7 +230,9 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                           width: double.infinity,
 
                                           child: Text(
-                                            state is BlocGetManagerDataSuccessState ?state.managerData.name!:"",
+                                            state is BlocGetManagerDataSuccessState
+                                                ? state.managerData.name!
+                                                : "",
 
                                             style: const TextStyle(
                                               color: Colors.white,
@@ -233,115 +245,143 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                       ),
 
                                       getFirstSection(
-                                        state is BlocGetManagerDataSuccessState?state.managerData.titleName!:"",
+                                        state is BlocGetManagerDataSuccessState
+                                            ? state.managerData.titleName!
+                                            : "",
                                       ),
-                                      getFirstSection( 'HRCode: ${state is BlocGetManagerDataSuccessState?state.managerData.userHrCode!:""}',
+                                      getFirstSection(
+                                        'HRCode: ${state is BlocGetManagerDataSuccessState
+                                            ? state.managerData.userHrCode!
+                                            : ""}',
                                       ),
 
                                     ]),
                                   ),
-
-
-
-                                        ],),
-
-
+                                ],),
                             ),
 
-                    Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                    border: Border.all(
-                    width: 2, color: Colors.black
-                    ),
-                    borderRadius: const BorderRadius.all(
-                    Radius.circular(5)),
-                    color: Colors.black26,
-                    ),
-
-                    child: Column(
-                    children: [
-                    const Padding(
-                      padding: EdgeInsets.all(5.0),
-                      child: Text(
-                        'My Info',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontFamily: 'Nunito',
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                    const Divider(
-                      thickness: 2.5,
-                    ),
-
-                    getHead("Department:"),
-                    getLine(state is BlocGetManagerDataSuccessState?state.managerData.projectName!:""),
-
-                    getHead("Job Title:"),
-                    getLine(state is BlocGetManagerDataSuccessState?state.managerData.titleName!:""),
-
-                    getHead("Email:"),
-                    getLine(state is BlocGetManagerDataSuccessState?state.managerData.email!:""),
-
-                    SizedBox(
-                        width: double.infinity,
-                        child: InkWell(
-                          onTap: (){
-                            scrollController.animateTo(scrollController.position.minScrollExtent,  duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                            BlocProvider.of<ProfileManagerCubit>(context).getManagerData(
-                                state is BlocGetManagerDataSuccessState?state.managerData.managerCode!:
-                                user.employeeData!.managerCode!
-                            );
-                          },
-                          child: Row(
-                            children: [
-                              Flexible(
-                                flex: 6,
-                                child: Column(
-                                    children: [
-                                      getHead("Direct Manager:"),
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 15,
-                                            right: 3,
-                                            top: 3,
-                                            bottom: 3),
-                                        child: SizedBox(
-                                          width: double.infinity,
-
-                                          // child:getManagerCodeText(state is BlocGetManagerDataSuccessState?state.managerData.managerName.toString():"not Found")
-                                            child:getManagerCodeText(state)
-
-                                        ),
+                            Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 2, color: Colors.black
                                       ),
-                                    ]
-                                ),
-                              ),
-                              const Flexible(
-                                flex: 1,
-                                child: Icon(Icons.navigate_next_rounded,
-                                  color: Colors.white,size: 40.0,),
-                              ),
-                            ],
-                          ),
-                        )
-                    ),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(5)),
+                                      color: Colors.black26,
+                                    ),
 
-                    getHead("Mobile Number:"),
-                    getLine(getMobile(state)),
+                                    child: Column(
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.all(5.0),
+                                            child: Text(
+                                              'My Info',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                fontFamily: 'Nunito',
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          const Divider(
+                                            thickness: 2.5,
+                                          ),
 
-                    getHead("Ext:"),
-                    getLine(getExt(state)),
+                                          getHead("Department:"),
+                                          getLine(
+                                              state is BlocGetManagerDataSuccessState
+                                                  ? state.managerData
+                                                  .projectName!
+                                                  : ""),
 
-                      getQRData(state),
-                    ])
-                    )
-                    ),
+                                          getHead("Job Title:"),
+                                          getLine(
+                                              state is BlocGetManagerDataSuccessState
+                                                  ? state.managerData.titleName!
+                                                  : ""),
+
+                                          getHead("Email:"),
+                                          getLine(
+                                              state is BlocGetManagerDataSuccessState
+                                                  ? state.managerData.email!
+                                                  : ""),
+
+                                          SizedBox(
+                                              width: double.infinity,
+                                              child: InkWell(
+                                                onTap: () {
+                                                  scrollController.animateTo(
+                                                      scrollController.position
+                                                          .minScrollExtent,
+                                                      duration: const Duration(
+                                                          milliseconds: 500),
+                                                      curve: Curves.ease);
+                                                  BlocProvider.of<
+                                                      ProfileManagerCubit>(
+                                                      context).getManagerData(
+                                                      state is BlocGetManagerDataSuccessState
+                                                          ? state.managerData
+                                                          .managerCode!
+                                                          :
+                                                      user.employeeData!
+                                                          .managerCode!
+                                                  );
+                                                },
+                                                child: Row(
+                                                  children: [
+                                                    Flexible(
+                                                      flex: 6,
+                                                      child: Column(
+                                                          children: [
+                                                            getHead(
+                                                                "Direct Manager:"),
+                                                            Padding(
+                                                              padding: const EdgeInsets
+                                                                  .only(
+                                                                  left: 15,
+                                                                  right: 3,
+                                                                  top: 3,
+                                                                  bottom: 3),
+                                                              child: SizedBox(
+                                                                  width: double
+                                                                      .infinity,
+
+                                                                  // child:getManagerCodeText(state is BlocGetManagerDataSuccessState?state.managerData.managerName.toString():"not Found")
+                                                                  child: getManagerCodeText(
+                                                                      state)
+
+                                                              ),
+                                                            ),
+                                                          ]
+                                                      ),
+                                                    ),
+                                                    const Flexible(
+                                                      flex: 1,
+                                                      child: Icon(Icons
+                                                          .navigate_next_rounded,
+                                                        color: Colors.white,
+                                                        size: 40.0,),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                          ),
+
+                                          getHead("Mobile Number:"),
+                                          getLine(getMobile(state)),
+
+                                          getHead("Ext:"),
+                                          getLine(getExt(state)),
+
+                                          getQRData(state),
+                                        ])
+                                )
+                            ),
 
                           ],
                         ),

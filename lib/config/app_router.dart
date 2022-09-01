@@ -31,6 +31,7 @@ import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dar
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
+import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_details_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 
@@ -103,6 +104,11 @@ class AppRouter {
       case EmployeeAppraisalScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => const EmployeeAppraisalScreen(),
+        );
+
+      case StaffDashBoardScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const StaffDashBoardScreen(),
         );
 
       case MedicalRequestScreen.routeName:
@@ -185,6 +191,7 @@ class AppRouter {
         return MaterialPageRoute(
           builder: (_) => const MyRequestsScreen(),
         );
+
 
       case BusinessMissionScreen.routeName:
         return MaterialPageRoute(
