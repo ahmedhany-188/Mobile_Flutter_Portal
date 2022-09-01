@@ -1,16 +1,22 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/enums.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
+import '../../constants/request_service_id.dart';
+import '../../constants/url_links.dart';
 import '../../data/repositories/request_repository.dart';
+import '../../gen/assets.gen.dart';
 import '../../widgets/requester_data_widget/requester_data_widget.dart';
 import '../../widgets/success/success_request_widget.dart';
 import '../../bloc/contacts_screen_bloc/contacts_cubit.dart';
@@ -83,6 +89,52 @@ class EquipmentsRequestScreen extends StatelessWidget {
                   return Scaffold(
                     appBar: AppBar(
                       title: const Text('Equipment request'),
+                      actions: [
+                        if (EquipmentsCubit.get(context).state.requestStatus ==
+                            RequestStatus.newRequest)
+                          BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+                            builder: (context, state) {
+                              return TextButton.icon(
+                                onPressed: () {
+                                  showAddRequestBottomSheet(context);
+                                },
+                                icon: const Icon(
+                                  Icons.add,
+                                  color: Colors.white,
+                                ),
+                                label: const Text(
+                                  'Item',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              );
+                            },
+                          ),
+                        if (EquipmentsCubit.get(context).state.requestStatus ==
+                            RequestStatus.oldRequest)
+                          BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+                            builder: (context, state) {
+                              return TextButton.icon(
+                                onPressed: () => showEquipmentRequestHistory(
+                                    context: context,
+                                    serviceId:
+                                        RequestServiceID.equipmentServiceID,
+                                    requestNumber: int.parse(requestData[
+                                        EquipmentsRequestScreen.requestNoKey])),
+                                icon: const Icon(
+                                  Icons.history,
+                                  color: Colors.white,
+                                ),
+                                label: const Text(
+                                  'History',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                // style: TextButton.styleFrom(
+                                //     tapTargetSize: MaterialTapTargetSize.padded,
+                                //     ),
+                              );
+                            },
+                          ),
+                      ],
                     ),
                     resizeToAvoidBottomInset: false,
                     body: SingleChildScrollView(
@@ -99,6 +151,30 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                 SizedBox(
                                   child: Text(state.statusAction ?? ''),
                                 ),
+                              BlocBuilder<EquipmentsCubit,
+                                      EquipmentsCubitStates>(
+                                  buildWhen: (previous, current) {
+                                return (previous.requestDate !=
+                                        current.requestDate) ||
+                                    previous.status != current.status;
+                              }, builder: (context, state) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    key: UniqueKey(),
+                                    initialValue: (state.requestStatus ==
+                                            RequestStatus.oldRequest)
+                                        ? DateFormat('EEEE dd-MM-yyyy').format(
+                                            DateTime.parse(requestData['date']))
+                                        : state.requestDate?.value,
+                                    enabled: false,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Request Date',
+                                      prefixIcon: Icon(Icons.date_range),
+                                    ),
+                                  ),
+                                );
+                              }),
                               if (state.requestStatus ==
                                       RequestStatus.oldRequest &&
                                   state.takeActionStatus ==
@@ -131,6 +207,13 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                       items: state.listBusinessUnit,
                                       itemAsString: (businessUnit) =>
                                           businessUnit.departmentName!,
+                                      onChanged: (item) =>
+                                          EquipmentsCubit.get(context)
+                                              .validateForm(
+                                                  businessUnit:
+                                                      (item!.toString().isEmpty)
+                                                          ? FormzStatus.invalid
+                                                          : FormzStatus.pure),
                                       selectedItem: (state.requestStatus ==
                                               RequestStatus.oldRequest)
                                           ? (BusinessUnitModel.fromJson({
@@ -140,20 +223,6 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                   .departmentName
                                             }))
                                           : null,
-                                      autoValidateMode: (state.requestStatus ==
-                                              RequestStatus.oldRequest)
-                                          ? AutovalidateMode.disabled
-                                          : AutovalidateMode.always,
-                                      validator: (state.requestStatus ==
-                                              RequestStatus.newRequest)
-                                          ? (item) {
-                                              if (item == null) {
-                                                return "Required field";
-                                              } else {
-                                                return null;
-                                              }
-                                            }
-                                          : null,
                                       enabled: (state.requestStatus ==
                                               RequestStatus.oldRequest)
                                           ? false
@@ -162,20 +231,17 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                           const DropdownButtonProps(
                                               color: Colors.white),
                                       dropdownDecoratorProps:
-                                          const DropDownDecoratorProps(
+                                          DropDownDecoratorProps(
                                         dropdownSearchDecoration:
                                             InputDecoration(
                                           labelText: 'Business Unit',
-                                          isDense: true,
+                                          floatingLabelAlignment:
+                                              FloatingLabelAlignment.start,
+                                          errorText: (state
+                                                  .businessUnitStatus.isInvalid)
+                                              ? 'Required'
+                                              : null,
                                         ),
-                                        // InputDecoration(
-                                        //   floatingLabelAlignment:
-                                        //   FloatingLabelAlignment.start,
-                                        //   labelText: 'Business Unit',
-                                        //   errorText: (state.status.isInvalid)
-                                        //       ? 'Required'
-                                        //       : null,
-                                        // ),
                                       ),
                                       popupProps: PopupProps.modalBottomSheet(
                                         showSearchBox: true,
@@ -223,6 +289,13 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                       key: locationFormKey,
                                       items: state.listLocation,
                                       itemAsString: (loc) => loc.projectName!,
+                                      onChanged: (item) =>
+                                          EquipmentsCubit.get(context)
+                                              .validateForm(
+                                                  location:
+                                                      (item!.toString().isEmpty)
+                                                          ? FormzStatus.invalid
+                                                          : FormzStatus.pure),
                                       selectedItem: (state.requestStatus ==
                                               RequestStatus.oldRequest)
                                           ? (EquipmentsLocationModel.fromJson({
@@ -232,30 +305,21 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                   .projectName
                                             }))
                                           : null,
-                                      autoValidateMode: (state.requestStatus ==
-                                              RequestStatus.oldRequest)
-                                          ? AutovalidateMode.disabled
-                                          : AutovalidateMode.always,
-                                      validator: (state.requestStatus ==
-                                              RequestStatus.newRequest)
-                                          ? (item) {
-                                              if (item == null) {
-                                                return "Required field";
-                                              } else {
-                                                return null;
-                                              }
-                                            }
-                                          : null,
                                       enabled: (state.requestStatus ==
                                               RequestStatus.oldRequest)
                                           ? false
                                           : true,
                                       dropdownDecoratorProps:
-                                          const DropDownDecoratorProps(
+                                          DropDownDecoratorProps(
                                         dropdownSearchDecoration:
                                             InputDecoration(
                                           labelText: 'Location',
-                                          isDense: true,
+                                          floatingLabelAlignment:
+                                              FloatingLabelAlignment.start,
+                                          errorText:
+                                              (state.locationStatus.isInvalid)
+                                                  ? 'Required'
+                                                  : null,
                                         ),
                                       ),
                                       dropdownButtonProps:
@@ -301,6 +365,13 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                     child: DropdownSearch<DepartmentsModel>(
                                       key: departmentFormKey,
                                       items: state.listDepartment,
+                                      onChanged: (item) =>
+                                          EquipmentsCubit.get(context)
+                                              .validateForm(
+                                                  department:
+                                                      (item!.toString().isEmpty)
+                                                          ? FormzStatus.invalid
+                                                          : FormzStatus.pure),
                                       itemAsString: (dept) =>
                                           dept.departmentName!,
                                       // selectedItem: (state.requestStatus ==
@@ -310,31 +381,23 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                       //       .requestedData!.data![0].departmentName
                                       // }))
                                       //     : null,
-                                      autoValidateMode: (state.requestStatus ==
-                                              RequestStatus.oldRequest)
-                                          ? AutovalidateMode.disabled
-                                          : AutovalidateMode.always,
-                                      validator: (state.requestStatus ==
-                                              RequestStatus.newRequest)
-                                          ? (item) {
-                                              if (item == null) {
-                                                return "Required field";
-                                              } else {
-                                                return null;
-                                              }
-                                            }
-                                          : null,
                                       enabled: (state.requestStatus ==
                                               RequestStatus.oldRequest)
                                           ? false
                                           : true,
                                       dropdownDecoratorProps:
-                                          const DropDownDecoratorProps(
-                                              dropdownSearchDecoration:
-                                                  InputDecoration(
-                                        labelText: 'Department',
-                                        isDense: true,
-                                      )),
+                                          DropDownDecoratorProps(
+                                        dropdownSearchDecoration:
+                                            InputDecoration(
+                                          labelText: 'Department',
+                                          floatingLabelAlignment:
+                                              FloatingLabelAlignment.start,
+                                          errorText:
+                                              (state.departmentStatus.isInvalid)
+                                                  ? 'Required'
+                                                  : null,
+                                        ),
+                                      ),
                                       dropdownButtonProps:
                                           const DropdownButtonProps(
                                               color: Colors.white),
@@ -372,7 +435,8 @@ class EquipmentsRequestScreen extends StatelessWidget {
                               BlocBuilder<EquipmentsCubit,
                                       EquipmentsCubitStates>(
                                   buildWhen: (pre, curr) {
-                                return pre.comment != curr.comment;
+                                return pre.requestedData?.data![0].comments !=
+                                    curr.requestedData?.data![0].comments;
                               }, builder: (context, state) {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -381,9 +445,9 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                             RequestStatus.oldRequest
                                         ? UniqueKey()
                                         : null,
-                                    initialValue: state.requestStatus ==
-                                            RequestStatus.oldRequest
-                                        ? state.comment
+                                    initialValue: (state.requestStatus ==
+                                            RequestStatus.oldRequest)
+                                        ? state.requestedData?.data![0].comments
                                         : "",
                                     enabled: state.requestStatus ==
                                             RequestStatus.newRequest
@@ -405,28 +469,6 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                   ),
                                 );
                               }),
-                              if (EquipmentsCubit.get(context)
-                                      .state
-                                      .requestStatus ==
-                                  RequestStatus.newRequest)
-                                BlocBuilder<EquipmentsCubit,
-                                    EquipmentsCubitStates>(
-                                  builder: (context, state) {
-                                    return ElevatedButton.icon(
-                                      onPressed: () {
-                                        showAddRequestBottomSheet(context);
-                                      },
-                                      icon: const Icon(Icons.add),
-                                      label: const Text('Request Item'),
-                                      style: ElevatedButton.styleFrom(
-                                          tapTargetSize:
-                                              MaterialTapTargetSize.padded,
-                                          shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(20))),
-                                    );
-                                  },
-                                ),
                               BlocBuilder<EquipmentsCubit,
                                   EquipmentsCubitStates>(
                                 buildWhen: (prev, current) {
@@ -641,7 +683,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                       Row(
                                                         children: [
                                                           Text(
-                                                            'Request for: ${(state.requestStatus == RequestStatus.oldRequest) ? EquipmentsCubit.get(context).getRequestForFromType(state.requestedData!.data![index].type!)!.trim() : state.chosenList[index].requestFor!.trim()}',
+                                                            'Request for: ${(state.requestStatus == RequestStatus.oldRequest) ? EquipmentsCubit.get(context).getRequestForFromType(state.requestedData?.data![0].type)?.trim() : state.chosenList[index].requestFor!.trim()}',
                                                             softWrap: true,
                                                             style:
                                                                 const TextStyle(
@@ -650,15 +692,6 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                           ),
                                                         ],
                                                       ),
-                                                    // Row(
-                                                    //   children: [
-                                                    //     Text(
-                                                    //       'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].qty : state.chosenList[index].quantity}',
-                                                    //       softWrap: true,
-                                                    //       style: const TextStyle(fontSize: 15),
-                                                    //     ),
-                                                    //   ],
-                                                    // ),
                                                     Row(
                                                       children: [
                                                         Flexible(
@@ -1149,6 +1182,25 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                           null) {
                                     // businessUnitFormKey.currentState!
                                     //     .popupOnValidate();
+                                    EquipmentsCubit.get(context).validateForm(
+                                      businessUnit: (businessUnitFormKey
+                                                  .currentState!
+                                                  .getSelectedItem ==
+                                              null)
+                                          ? FormzStatus.invalid
+                                          : FormzStatus.pure,
+                                      location: (locationFormKey.currentState!
+                                                  .getSelectedItem ==
+                                              null)
+                                          ? FormzStatus.invalid
+                                          : FormzStatus.pure,
+                                      department: (departmentFormKey
+                                                  .currentState!
+                                                  .getSelectedItem ==
+                                              null)
+                                          ? FormzStatus.invalid
+                                          : FormzStatus.pure,
+                                    );
                                     EasyLoading.showInfo(
                                       'Fill All the fields',
                                       maskType: EasyLoadingMaskType.black,
@@ -1172,6 +1224,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                       userHrCode:
                                           user.employeeData!.userHrCode!,
                                       selectedItem: state.chosenList,
+                                      comment: state.comment,
                                     );
                                     Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
@@ -1201,6 +1254,95 @@ class EquipmentsRequestScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  showEquipmentRequestHistory({
+    required BuildContext context,
+    required String serviceId,
+    required int requestNumber,
+  }) {
+    showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        enableDrag: true,
+        builder: (_) {
+          return SizedBox(
+            height: MediaQuery.of(context).size.height * 0.75,
+            child: BlocProvider.value(
+              value: EquipmentsCubit.get(context)
+                ..getHistory(
+                    serviceId: serviceId, requestNumber: requestNumber),
+              child: BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+                  builder: (context, state) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: state.historyWorkFlow.length,
+                    itemBuilder: (_, index) {
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          height: 50,
+                          width: double.infinity,
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: 40,
+                                  margin: const EdgeInsets.only(right: 10),
+                                  decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: (state.historyWorkFlow[index]
+                                                      .imgProfile !=
+                                                  null)
+                                              ? CachedNetworkImageProvider(
+                                                  getUserProfilePicture(state
+                                                      .historyWorkFlow[index]
+                                                      .imgProfile!))
+                                              : Assets.images.favicon
+                                                  .image()
+                                                  .image)),
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                        state.historyWorkFlow[index].empFrom!
+                                            .trim(),
+                                        softWrap: true,
+                                        style: const TextStyle(fontSize: 18),
+                                        overflow: TextOverflow.ellipsis),
+                                    Text(
+                                        state.historyWorkFlow[index].titleName!
+                                            .trim(),
+                                        softWrap: true,
+                                        style: const TextStyle(fontSize: 15),
+                                        overflow: TextOverflow.ellipsis),
+                                  ],
+                                ),
+                              ]),
+                        ),
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) {
+                      return const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        child: Divider(
+                          color: Colors.white,
+                        ),
+                      );
+                    },
+                  ),
+                );
+              }),
+            ),
+          );
+        });
   }
 
   showAddRequestBottomSheet(BuildContext context) {
