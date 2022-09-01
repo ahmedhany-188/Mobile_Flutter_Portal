@@ -202,7 +202,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
     ));
   }
 
-  void EemployeeComment(String value) {
+  void employeeComment(String value) {
     emit(state.copyWith(
       comment: value,
       status: Formz.validate([state.employeeNameCard, state.employeeMobile]),
