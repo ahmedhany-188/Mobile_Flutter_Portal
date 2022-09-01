@@ -13,6 +13,7 @@ import 'package:hassanallamportalflutter/bloc/hr_request_bloc/hr_request_export.
 import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/staff_dashboard_bloc/staff_dashboard_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/statistics_bloc/statistics_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.dart';
 import 'package:hassanallamportalflutter/data/repositories/upgrader_repository.dart';
@@ -293,6 +294,15 @@ class _MyAppState extends State<MyApp> {
                     .of<AppBloc>(attendanceCubitContext)
                     .state
                     .userData.employeeData!.userHrCode.toString()),
+          ),
+
+          BlocProvider<StaffDashboardCubit>(
+            create: (staffDashBoardCubitContext) =>
+                StaffDashboardCubit(
+                    BlocProvider
+                        .of<AppBloc>(staffDashBoardCubitContext)
+                        .state
+                        .userData.employeeData!.userHrCode.toString()),
           ),
 
           BlocProvider<StatisticsCubit>(
