@@ -11,6 +11,7 @@ class EquipmentsCubitStates extends Equatable {
   final List<EquipmentsLocationModel> listLocation;
   final List<DepartmentsModel> listDepartment;
   final List<SelectedEquipmentsModel> chosenList;
+  final List<HistoryWorkFlowModel> historyWorkFlow;
 
   final String? statusAction;
   final String comment;
@@ -21,6 +22,9 @@ class EquipmentsCubitStates extends Equatable {
   final TakeActionStatus? takeActionStatus;
 
   final FormzStatus status;
+  final FormzStatus businessUnitStatus;
+  final FormzStatus locationStatus;
+  final FormzStatus departmentStatus;
   final EmployeeData requesterData;
 
   const EquipmentsCubitStates({
@@ -28,6 +32,9 @@ class EquipmentsCubitStates extends Equatable {
     this.locationEnumStates = EquipmentsEnumState.initial,
     this.departmentEnumStates = EquipmentsEnumState.initial,
     this.status = FormzStatus.pure,
+    this.businessUnitStatus = FormzStatus.pure,
+    this.locationStatus = FormzStatus.pure,
+    this.departmentStatus = FormzStatus.pure,
     this.requestStatus,
     this.statusAction,
     this.comment = '',
@@ -36,6 +43,7 @@ class EquipmentsCubitStates extends Equatable {
     this.listLocation = const <EquipmentsLocationModel>[],
     this.listDepartment = const <DepartmentsModel>[],
     this.chosenList = const <SelectedEquipmentsModel>[],
+    this.historyWorkFlow = const <HistoryWorkFlowModel>[],
     this.requestDate,
     this.requestedData,
     this.takeActionStatus,
@@ -49,6 +57,7 @@ class EquipmentsCubitStates extends Equatable {
     List<BusinessUnitModel>? listBusinessUnit,
     List<EquipmentsLocationModel>? listLocation,
     List<DepartmentsModel>? listDepartment,
+    List<HistoryWorkFlowModel>? historyWorkFlow,
     List<SelectedEquipmentsModel>? chosenList,
     String? statusAction,
     String? comment,
@@ -57,6 +66,9 @@ class EquipmentsCubitStates extends Equatable {
     EquipmentsRequestedModel? requestedData,
     TakeActionStatus? takeActionStatus,
     FormzStatus? status,
+    FormzStatus? businessUnitStatus,
+    FormzStatus? locationStatus,
+    FormzStatus? departmentStatus,
     EmployeeData? requesterData,
     String? actionComment,
   }) {
@@ -68,11 +80,15 @@ class EquipmentsCubitStates extends Equatable {
       listBusinessUnit: listBusinessUnit ?? this.listBusinessUnit,
       listLocation: listLocation ?? this.listLocation,
       listDepartment: listDepartment ?? this.listDepartment,
+      historyWorkFlow: historyWorkFlow ?? this.historyWorkFlow,
       chosenList: chosenList ?? this.chosenList,
       requestStatus: requestStatus ?? this.requestStatus,
       requestDate: requestDate ?? this.requestDate,
       requestedData: requestedData ?? this.requestedData,
       status: status ?? this.status,
+      businessUnitStatus: businessUnitStatus ?? this.businessUnitStatus,
+      locationStatus: locationStatus ?? this.locationStatus,
+      departmentStatus: departmentStatus ?? this.departmentStatus,
       statusAction: statusAction ?? this.statusAction,
       comment: comment ?? this.comment,
       takeActionStatus: takeActionStatus ?? this.takeActionStatus,
@@ -89,9 +105,13 @@ class EquipmentsCubitStates extends Equatable {
         listBusinessUnit,
         listLocation,
         listDepartment,
+        historyWorkFlow,
         chosenList,
         comment,
         status,
+        businessUnitStatus,
+        locationStatus,
+        departmentStatus,
         requesterData,
         actionComment,
       ];
