@@ -1,6 +1,9 @@
 photosLinks(String photoName) {
   return "https://portal.hassanallam.com/images/Albums/$photoName";
 }
+getUserProfilePicture(String imageProfile){
+  return 'https://portal.hassanallam.com/Apps/images/Profile/$imageProfile';
+}
 benefitsLogosLink(String benefitsId){
   return 'https://portal.hassanallam.com/images/Benefits/$benefitsId.jpg';
 }

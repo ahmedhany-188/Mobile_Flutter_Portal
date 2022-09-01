@@ -283,7 +283,7 @@ class MyRequestsItemWidget extends StatelessWidget {
       case RequestServiceID.equipmentServiceID:
         {
           Navigator.of(context)
-              .pushNamed(EquipmentsRequestScreen.routeName,arguments: {EquipmentsRequestScreen.requestNoKey: myRequestsModelData.requestNo.toString(),EquipmentsRequestScreen.requesterHrCode: myRequestsModelData.requestHRCode.toString()});
+              .pushNamed(EquipmentsRequestScreen.routeName,arguments: {EquipmentsRequestScreen.requestNoKey: myRequestsModelData.requestNo.toString(),EquipmentsRequestScreen.requesterHrCode: myRequestsModelData.requestHRCode.toString(),'date': myRequestsModelData.reqDate });
           break;
         }
 

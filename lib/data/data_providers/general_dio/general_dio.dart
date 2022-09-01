@@ -126,6 +126,13 @@ class GeneralDio {
     });
   }
 
+  static Future<Response> getHistoryWorkFlow({required String serviceId,required int reqNo}) async {
+    String url = 'SelfService/GetWorkflowhistory?requestno=$reqNo&ServiceID=$serviceId';
+
+    return await dio!.get(url).catchError((err) {
+      throw err;
+    });
+  }
   static Future<Response> postMasterEquipmentsRequest(
       dynamic dataToPost) async {
     String url = 'SelfService/AddITEquipment_M';

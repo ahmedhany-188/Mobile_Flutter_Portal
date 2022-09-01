@@ -41,6 +41,7 @@ dependencies:
   cached_network_image: ^3.2.1
   card_swiper: ^2.0.4
   full_screen_image_null_safe: any
+  intl: ^0.17.0
 
 
   #design libiraries
