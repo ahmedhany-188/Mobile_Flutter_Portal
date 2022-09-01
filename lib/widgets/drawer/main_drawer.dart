@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
+import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -563,6 +564,15 @@ class _MainDrawerState extends State<MainDrawer> {
                       () {
                         Navigator.popAndPushNamed(
                             context, EmployeeAppraisalScreen.routeName);
+                      },
+                    ),
+
+                    buildListTile(
+                      'Staff Dashboard',
+                      Icons.dashboard,
+                      () {
+                        Navigator.popAndPushNamed(
+                            context, StaffDashBoardScreen.routeName);
                       },
                     ),
 

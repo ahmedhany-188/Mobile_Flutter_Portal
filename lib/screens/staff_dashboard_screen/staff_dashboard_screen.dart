@@ -38,10 +38,11 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: AppBar(
+
                 backgroundColor: Colors.transparent,
                 elevation: 0,
 
-                title: Text(formattedDateTitle),
+                title: Text("Dashboard"),
                 // title: Text('Dashboard $formattedDateTitle'),
 
                 centerTitle: true,
@@ -55,6 +56,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
 
                         context.read<StaffDashboardCubit>()
                             .staffDashBoardDateChanged(context);
+
                       }
                   )
                 ]
@@ -74,10 +76,10 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                 ),
               ],),
 
-            body: BlocProvider.value(value: StaffDashboardCubit.get(context)
-              ..getStaffBoardCompanies(
-                // TODO: --------------change hr,date
-                  "10203520", formattedDateServer),
+            body: BlocProvider.value(value: StaffDashboardCubit.get(context),
+              // ..getStaffBoardCompanies(
+              //   // TODO: --------------change hr,date
+              //     "10203520", formattedDateServer),
 
                 child: BlocConsumer<StaffDashboardCubit, StaffDashboardState>(
                     listener: (context, state) {
@@ -101,6 +103,15 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                         padding: const EdgeInsets.all(10.0),
                         child: Column(
                           children: [
+
+                           //  formattedDateTitle
+
+                            Center(
+                              child: Text(
+                                state.companyStaffDashBoardEnumStates == CompanyStaffDashBoardEnumStates.success ?
+                                formatterTitle.format(DateTime.now()) : "Day",
+                                style: const TextStyle(color: Colors.white, fontSize: 20),),
+                            ),
                             InputDecorator(
                               decoration: const InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(
