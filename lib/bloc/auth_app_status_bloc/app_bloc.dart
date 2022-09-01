@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:meta/meta.dart';
 
 
@@ -30,6 +31,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   Future<void> _onUserChanged(AppUserChanged event, Emitter<AppState> emit) async {
     if(event.userData.isNotEmpty){
       FirebaseProvider(event.userData).updateUserOnline(AppLifecycleStatus.online);
+      RequestRepository(event.userData);
     }
 
     emit(

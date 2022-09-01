@@ -132,7 +132,7 @@ class VacationCubit extends Cubit<VacationInitial> {
             requestStatus: RequestStatus.oldRequest,
             statusAction: status,
             requesterData: requesterData,
-            takeActionStatus: (_requestRepository.userData.user?.userHRCode ==
+            takeActionStatus: (_requestRepository.userData?.user?.userHRCode ==
                 requestData.requestHrCode)
                 ? TakeActionStatus.view
                 : TakeActionStatus.takeAction

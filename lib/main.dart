@@ -252,11 +252,12 @@ class _MyAppState extends State<MyApp> {
           // ),
 
           BlocProvider<UserNotificationApiCubit>(
-            // lazy: true,
+            lazy: true,
             create: (userNotificationContext) =>
             UserNotificationApiCubit(
               RequestRepository(
-                  userNotificationContext.read<AppBloc>()
+                  BlocProvider
+                      .of<AppBloc>(userNotificationContext)
                       .state
                       .userData),
             )

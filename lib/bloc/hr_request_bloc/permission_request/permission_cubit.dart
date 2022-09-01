@@ -97,7 +97,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
             requestStatus: RequestStatus.oldRequest,
             comment: comments,
             statusAction: status,
-            takeActionStatus: (_requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
+            takeActionStatus: (_requestRepository.userData?.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
 
         ),
       );

@@ -82,7 +82,7 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
           requesterData: requesterData,
           requestStatus: RequestStatus.oldRequest,
           statusAction: status,
-          takeActionStatus: (requestRepository.userData.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
+          takeActionStatus: (requestRepository.userData?.user?.userHRCode == requestData.requestHrCode)? TakeActionStatus.view : TakeActionStatus.takeAction
 
       ));
     }
