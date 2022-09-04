@@ -7,7 +7,6 @@ import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreenD
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_userprofile.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:sizer/sizer.dart';
 import 'package:vcard_maintained/vcard_maintained.dart';
 
 class UserProfileScreen extends StatefulWidget {
@@ -21,18 +20,8 @@ class UserProfileScreen extends StatefulWidget {
 
 class UserProfileScreenClass extends State<UserProfileScreen> {
 
-  late final dynamic user;
-
   @override
   Widget build(BuildContext context) {
-    // double width = MediaQuery
-    //     .of(context)
-    //     .size
-    //     .width;
-    // double height = MediaQuery
-    //     .of(context)
-    //     .size
-    //     .height;
 
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
@@ -127,18 +116,18 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                       child:  imageProfile.isNotEmpty ?
                                       CachedNetworkImage(imageUrl: "https://portal.hassanallam.com/Apps/images/Profile/${user.employeeData!.imgProfile}",
                                           imageBuilder: (context, imageProvider) => Container(
-                                            width: 120.sp,
-                                            height: 120.sp,
+                                            width: 120,
+                                            height: 120,
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               image: DecorationImage(
                                                   image: imageProvider, fit: BoxFit.cover),
                                             ),
                                           ),
-                                        placeholder: (context, url) => Assets.images.logo.image(height: 80.sp),
-                                        errorWidget: (context, url, error) => Assets.images.logo.image(height: 80.sp),
+                                        placeholder: (context, url) => Assets.images.logo.image(height: 80),
+                                        errorWidget: (context, url, error) => Assets.images.logo.image(height: 80),
                                       ) :
-                                      Assets.images.logo.image(height: 80.sp),
+                                      Assets.images.logo.image(height: 80),
                                       ),
                                     ),
                                   ),
