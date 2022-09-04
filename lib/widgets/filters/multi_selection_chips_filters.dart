@@ -8,6 +8,7 @@ class MultiSelectionChipsFilters extends StatelessWidget {
   final List<String> initialValue;
   final Function(List<Object?>) onConfirm;
   final Function(Object?) onTap;
+  final bool searchable;
 
   const MultiSelectionChipsFilters({
     Key? key,
@@ -16,6 +17,7 @@ class MultiSelectionChipsFilters extends StatelessWidget {
     required this.initialValue,
     required this.onConfirm,
     required this.onTap,
+    this.searchable = true,
   }) : super(key: key);
 
   @override
@@ -44,7 +46,7 @@ class MultiSelectionChipsFilters extends StatelessWidget {
       unselectedColor: Colors.white,
       selectedColor: ConstantsColors.bottomSheetBackgroundDark,
       initialValue: initialValue,
-      searchable: true,
+      searchable: searchable,
       backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
       listType: MultiSelectListType.LIST,
       title: Text(filterName.toUpperCase(),
