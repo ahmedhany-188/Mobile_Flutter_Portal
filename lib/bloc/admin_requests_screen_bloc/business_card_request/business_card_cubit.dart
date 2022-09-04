@@ -42,7 +42,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
     }
     else {
       EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
-      final requestData = await requestRepository.geBusinessCard(requestNo ?? "",requesterHRCode ?? "");
+      final requestData = await requestRepository.getBusinessCard(requestNo ?? "",requesterHRCode ?? "");
       final requestDate = RequestDate.dirty(
           GlobalConstants.dateFormatViewed.format(
               GlobalConstants.dateFormatServer.parse(

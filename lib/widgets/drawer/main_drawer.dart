@@ -613,10 +613,10 @@ class _MainDrawerState extends State<MainDrawer> {
                       'Sign Out',
                       () async {
                         // HydratedBloc.storage.clear();
-                        await BlocProvider.of<UserNotificationApiCubit>(context).clearState();
-                        if (!mounted) return;
-                        await BlocProvider.of<MyRequestsCubit>(context).clearState();
-                        if (!mounted) return;
+                        // await BlocProvider.of<UserNotificationApiCubit>(context).clearState();
+                        // if (!mounted) return;
+                        // await BlocProvider.of<MyRequestsCubit>(context).clearState();
+                        // if (!mounted) return;
                         context.read<AppBloc>().add(AppLogoutRequested());
                         context.read<LoginCubit>().clearCubit();
 
