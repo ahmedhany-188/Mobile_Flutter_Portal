@@ -5,6 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
+import '../../screens/myprofile_screen/ProfileScreenDirectManager.dart';
 
 class RequesterDataWidget extends StatelessWidget {
   const RequesterDataWidget({
@@ -37,70 +38,79 @@ class RequesterDataWidget extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  imageProfile.isNotEmpty
-                      ? CachedNetworkImage(
-                    imageUrl: 'https://portal.hassanallam.com/Apps/images/Profile/$imageProfile',
-                    imageBuilder: (context,
-                        imageProvider) =>
-                        Container(
-                          width: 40.sp,
-                          height: 40.sp,
-                          decoration: BoxDecoration(
-                            shape: BoxShape
-                                .circle,
-                            image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit
-                                    .cover),
+              InkWell(
+                onTap: (){
+                  Navigator.of(context).pushNamed(
+                      DirectManagerProfileScreen.routeName,
+                      arguments: {
+                        DirectManagerProfileScreen
+                            .employeeHrCode: requesterData.userHrCode});
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    imageProfile.isNotEmpty
+                        ? CachedNetworkImage(
+                      imageUrl: 'https://portal.hassanallam.com/Apps/images/Profile/$imageProfile',
+                      imageBuilder: (context,
+                          imageProvider) =>
+                          Container(
+                            width: 40.sp,
+                            height: 40.sp,
+                            decoration: BoxDecoration(
+                              shape: BoxShape
+                                  .circle,
+                              image: DecorationImage(
+                                  image: imageProvider,
+                                  fit: BoxFit
+                                      .cover),
+                            ),
                           ),
-                        ),
-                    placeholder: (context,
-                        url) =>
-                        Assets.images.logo
-                            .image(
-                            height: 60.sp),
-                    errorWidget: (context,
-                        url, error) =>
-                        Assets.images.logo
-                            .image(
-                            height: 60.sp),
-                  )
-                      : Assets.images.logo
-                      .image(height: 60.sp),
-                  const SizedBox(width: 10,),
-                  SizedBox(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(requesterData.name!.toTitleCase(),
-                            maxLines: 1,
-                            style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: FontFamily.robotoFlex,
-                                color: Colors.white)),
-                        Text('${requesterData.titleName}',
-                            maxLines: 1,
-                            overflow: TextOverflow.fade,
-                            style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.white)),
-                        Text('#${requesterData.userHrCode}',
-                            maxLines: 1,
-                            overflow: TextOverflow.fade,
-                            style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal,
-                                color: Colors.white)),
-                      ],
+                      placeholder: (context,
+                          url) =>
+                          Assets.images.logo
+                              .image(
+                              height: 60.sp),
+                      errorWidget: (context,
+                          url, error) =>
+                          Assets.images.logo
+                              .image(
+                              height: 60.sp),
+                    )
+                        : Assets.images.logo
+                        .image(height: 60.sp),
+                    const SizedBox(width: 10,),
+                    SizedBox(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(requesterData.name!.toTitleCase(),
+                              maxLines: 1,
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: FontFamily.robotoFlex,
+                                  color: Colors.white)),
+                          Text('${requesterData.titleName}',
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white)),
+                          Text('#${requesterData.userHrCode}',
+                              maxLines: 1,
+                              overflow: TextOverflow.fade,
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white)),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               const SizedBox(height: 10,),
               Padding(
