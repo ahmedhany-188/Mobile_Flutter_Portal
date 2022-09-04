@@ -296,7 +296,9 @@ class PermissionCubit extends Cubit<PermissionInitial> {
         requestNo: requestNo,
         actionComment: state.actionComment,
         serviceID: RequestServiceID.permissionServiceID,
-        requesterHRCode: state.requesterData.userHrCode ?? "");
+        serviceName: GlobalConstants.requestCategoryPermissionActivity,
+        requesterHRCode: state.requesterData.userHrCode ?? "",
+        requesterEmail: state.requesterData.email ?? "");
 
     final result = vacationResultResponse.result ?? "false";
     if (result.toLowerCase().contains("true")) {

@@ -8,7 +8,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'my_requests_state.dart';
 
-class MyRequestsCubit extends Cubit<MyRequestsState> with HydratedMixin {
+class MyRequestsCubit extends HydratedCubit<MyRequestsState> {
   MyRequestsCubit(this.requestRepository) : super(const MyRequestsState()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (state.userRequestsEnumStates == UserRequestsEnumStates.failed ||
@@ -40,7 +40,6 @@ class MyRequestsCubit extends Cubit<MyRequestsState> with HydratedMixin {
       emit(state.copyWith(
         userRequestsEnumStates: UserRequestsEnumStates.loading,
       ));
-
       var connectivityResult = await connectivity.checkConnectivity();
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
@@ -190,11 +189,15 @@ class MyRequestsCubit extends Cubit<MyRequestsState> with HydratedMixin {
   @override
   Map<String, dynamic>? toJson(MyRequestsState state) {
     // TODO: implement toJson
-    if (state.userRequestsEnumStates == UserRequestsEnumStates.success &&
-        state.getMyRequests.isNotEmpty) {
+    if (state.userRequestsEnumStates == UserRequestsEnumStates.success) {
       return state.toMap();
     } else {
       return null;
     }
+  }
+  Future<void> clearState() async {
+    onClearData();
+    // emit(state.copyWith(userNotificationEnumStates: UserNotificationEnumStates.success,userNotificationList: [],));
+    await clear();
   }
 }

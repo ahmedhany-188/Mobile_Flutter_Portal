@@ -42,7 +42,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
     }
     else {
       EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
-      final requestData = await requestRepository.geBusinessCard(requestNo ?? "",requesterHRCode ?? "");
+      final requestData = await requestRepository.getBusinessCard(requestNo ?? "",requesterHRCode ?? "");
       final requestDate = RequestDate.dirty(
           GlobalConstants.dateFormatViewed.format(
               GlobalConstants.dateFormatServer.parse(
@@ -202,7 +202,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
     ));
   }
 
-  void EemployeeComment(String value) {
+  void employeeComment(String value) {
     emit(state.copyWith(
       comment: value,
       status: Formz.validate([state.employeeNameCard, state.employeeMobile]),
@@ -222,7 +222,9 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
         requestNo: requestNo,
         actionComment: state.actionComment,
         serviceID: RequestServiceID.businessCardServiceID,
-        requesterHRCode: state.requesterData.userHrCode ?? "");
+        serviceName: GlobalConstants.requestCategoryBusniessCardActivity,
+        requesterHRCode: state.requesterData.userHrCode ?? "",
+    requesterEmail: state.requesterData.email ?? "");
 
     final result = businessCardResultResponse.result ?? "false";
     if (result.toLowerCase().contains("true")) {

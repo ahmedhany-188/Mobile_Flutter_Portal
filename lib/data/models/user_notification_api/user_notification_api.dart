@@ -16,6 +16,7 @@ class UserNotificationApi {
   String? reqName;
   String? projectName;
   String? imgProfile;
+  String? requesterEmail;
 
   UserNotificationApi(
       {this.id,
@@ -34,7 +35,8 @@ class UserNotificationApi {
         this.reqComment,
         this.reqName,
         this.projectName,
-        this.imgProfile});
+        this.imgProfile,
+      this.requesterEmail});
 
   UserNotificationApi.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -54,6 +56,7 @@ class UserNotificationApi {
     reqName = json['req_Name'];
     projectName = json['projectName'];
     imgProfile = json['imgProfile'];
+    requesterEmail = json['requesterEmail'];
   }
 
   Map<String, dynamic> toJson() {
@@ -75,6 +78,7 @@ class UserNotificationApi {
     data['req_Name'] = this.reqName;
     data['projectName'] = this.projectName;
     data['imgProfile'] = this.imgProfile;
+    data['requesterEmail'] = this.requesterEmail;
     return data;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:hassanallamportalflutter/bloc/my_requests_screen_bloc/my_requests_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
@@ -610,9 +611,15 @@ class _MainDrawerState extends State<MainDrawer> {
                     ),
                     buildNoIconTile(
                       'Sign Out',
-                      () {
+                      () async {
+                        // HydratedBloc.storage.clear();
+                        // await BlocProvider.of<UserNotificationApiCubit>(context).clearState();
+                        // if (!mounted) return;
+                        // await BlocProvider.of<MyRequestsCubit>(context).clearState();
+                        // if (!mounted) return;
                         context.read<AppBloc>().add(AppLogoutRequested());
                         context.read<LoginCubit>().clearCubit();
+
                       },
                     ),
                     buildDivider(),

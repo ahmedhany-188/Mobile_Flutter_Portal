@@ -52,15 +52,14 @@ class FirebaseProvider {
 
 
     await _databaseReferenceUsers.child(user!.email.encodeEmail()).update({
-      // "device_token": token,
+      "device_token": token,
       "hrcode": user.userHRCode,
       "imgProfile": employeeData?.imgProfile,
       "managerCode":employeeData?.managerCode,
-      // "managerEmail":,
+      "managerEmail":employeeData?.managerEmail?.encodeEmail(),
       "title":employeeData?.titleName,
       "userID":_firebaseAuth.currentUser?.uid,
       "username":employeeData?.name,
-
     });
   }
 
@@ -76,4 +75,28 @@ class FirebaseProvider {
   //   });
   // }
 
+  addSubmitFirebaseNotification(String requestNo,String requestType,String type)async{
+    final managerEmail = this.currentUser?.employeeData?.managerEmail ?? "";
+    final employeeData = this.currentUser?.employeeData;
+    if(managerEmail.isNotEmpty){
+      await notificationReference.child(managerEmail.encodeEmail()).push().update({
+        "from": employeeData?.email?.encodeEmail(),
+        "requestType": requestType,
+        "requestNo": requestNo,
+        "type": type,
+      });
+    }
+  }
+  addTakeActionFirebaseNotification(String requesterEmail,String requestNo,String requestType,String type)async{
+    // final requesterEmail = requesterData.email ?? "";
+    final employeeData = this.currentUser?.employeeData;
+    if(requesterEmail.isNotEmpty){
+      await notificationReference.child(requesterEmail.encodeEmail()).push().update({
+        "from": employeeData?.email?.encodeEmail(),
+        "requestType": requestType,
+        "requestNo": requestNo,
+        "type": type,
+      });
+    }
+  }
 }

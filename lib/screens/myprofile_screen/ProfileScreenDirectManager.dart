@@ -6,7 +6,6 @@ import 'package:hassanallamportalflutter/bloc/profile_manager_screen_bloc/profil
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:sizer/sizer.dart';
 import 'package:vcard_maintained/vcard_maintained.dart';
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
@@ -110,7 +109,7 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
               child: BlocConsumer<ProfileManagerCubit, ProfileManagerState>(
                   listener: (context, state) {
                     if (state is BlocGetManagerDataSuccessState) {
-                      print("0000-" + state.managerData.toJson().toString());
+                      // print("0000-" + state.managerData.toJson().toString());
 
                       ///Set properties
                       vCard.firstName = state.managerData.name!.toString();
@@ -177,8 +176,8 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                               imageBuilder: (context,
                                                   imageProvider) =>
                                                   Container(
-                                                    width: 120.sp,
-                                                    height: 120.sp,
+                                                    width: 120,
+                                                    height: 120,
                                                     decoration: BoxDecoration(
                                                       shape: BoxShape.circle,
                                                       image: DecorationImage(
@@ -188,14 +187,14 @@ class DirectManagerProfileScreenClass extends State<DirectManagerProfileScreen> 
                                                   ),
                                               placeholder: (context, url) =>
                                                   Assets.images.logo.image(
-                                                      height: 80.sp),
+                                                      height: 80),
                                               errorWidget: (context, url,
                                                   error) =>
                                                   Assets.images.logo.image(
-                                                      height: 80.sp),
+                                                      height: 80),
                                             ) :
                                             Assets.images.logo.image(
-                                                height: 80.sp),
+                                                height: 80),
                                           ),
                                         ),
                                       ),

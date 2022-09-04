@@ -66,6 +66,11 @@ class RequestRepository {
         await requestDataProviders.postPermissionRequest(bodyString);
     final json = await jsonDecode(rawPermission.body);
     final RequestResponse response = RequestResponse.fromJson(json);
+    if (response.id == 1) {
+      await FirebaseProvider(userData ?? MainUserData.empty)
+          .addSubmitFirebaseNotification(
+          response.requestNo.toString(), GlobalConstants.requestCategoryPermissionActivity, "Submit");
+    }
     return response;
   }
 
@@ -94,6 +99,11 @@ class RequestRepository {
         await requestDataProviders.postAccessAccountAccessRequest(bodyString);
     final json = await jsonDecode(rawAccess.body);
     final RequestResponse response = RequestResponse.fromJson(json);
+    if (response.id == 1) {
+      await FirebaseProvider(userData ?? MainUserData.empty)
+          .addSubmitFirebaseNotification(
+          response.requestNo.toString(), GlobalConstants.requestCategoryAccessRight, "Submit");
+    }
     return response;
   }
 
@@ -106,7 +116,7 @@ class RequestRepository {
     return response;
   }
 
-  Future<BusinessCardFormModel> geBusinessCard(
+  Future<BusinessCardFormModel> getBusinessCard(
       String requestNo, String requesterHRCode) async {
     final http.Response rawPermission =
         await requestDataProviders.getBusinessCardRequestData(
@@ -206,6 +216,11 @@ class RequestRepository {
         await requestDataProviders.postBusinessCardRequest(bodyString);
     final json = await jsonDecode(rawBusinessCard.body);
     final RequestResponse response = RequestResponse.fromJson(json);
+    if (response.id == 1) {
+      await FirebaseProvider(userData ?? MainUserData.empty)
+          .addSubmitFirebaseNotification(
+          response.requestNo.toString(), GlobalConstants.requestCategoryBusniessCardActivity, "Submit");
+    }
     return response;
   }
 
@@ -256,7 +271,11 @@ class RequestRepository {
         await requestDataProviders.postEmailUserAccount(bodyString);
     final json = await jsonDecode(rawEmailUserAccount.body);
     final RequestResponse response = RequestResponse.fromJson(json);
-
+    if (response.id == 1) {
+      await FirebaseProvider(userData ?? MainUserData.empty)
+          .addSubmitFirebaseNotification(
+          response.requestNo.toString(), GlobalConstants.requestCategoryUserAccount, "Submit");
+    }
     return response;
   }
 
@@ -286,6 +305,11 @@ class RequestRepository {
         await requestDataProviders.postEmbassyLetterRequest(bodyString);
     final json = await jsonDecode(rawEmbassyLetter.body);
     final RequestResponse response = RequestResponse.fromJson(json);
+    if (response.id == 1) {
+      await FirebaseProvider(userData ?? MainUserData.empty)
+          .addSubmitFirebaseNotification(
+          response.requestNo.toString(), GlobalConstants.requestCategoryEmbassyActivity, "Submit");
+    }
     return response;
   }
 
@@ -313,9 +337,15 @@ class RequestRepository {
       // data.put("replacedWithTo",selectedReplaceTo);
     });
     final http.Response rawPermission =
-        await requestDataProviders.postVacationRequest(bodyString);
+    await requestDataProviders.postVacationRequest(bodyString);
     final json = await jsonDecode(rawPermission.body);
+
     final RequestResponse response = RequestResponse.fromJson(json);
+    if (response.id == 1) {
+      await FirebaseProvider(userData ?? MainUserData.empty)
+          .addSubmitFirebaseNotification(
+          response.requestNo.toString(), GlobalConstants.requestCategoryVacationActivity, "Submit");
+    }
     return response;
   }
 
@@ -346,6 +376,11 @@ class RequestRepository {
         await requestDataProviders.postBusinessMissionRequest(bodyString);
     final json = await jsonDecode(rawRequest.body);
     final RequestResponse response = RequestResponse.fromJson(json);
+    if (response.id == 1) {
+      await FirebaseProvider(userData ?? MainUserData.empty)
+          .addSubmitFirebaseNotification(
+          response.requestNo.toString(), GlobalConstants.requestCategoryBusinessMissionActivity, "Submit");
+    }
     return response;
   }
 
@@ -406,10 +441,12 @@ class RequestRepository {
 
   Future<ResponseTakeAction> postTakeActionRequest(
       {required ActionValueStatus valueStatus,
-      required String serviceID,
-      required String requestNo,
-      required String requesterHRCode,
-      required String actionComment}) async {
+        required String serviceID,
+        required String serviceName,
+        required String requestNo,
+        required String requesterHRCode,
+        required String requesterEmail,
+        required String actionComment}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": serviceID,
       "reqno": int.parse(requestNo),
@@ -419,9 +456,17 @@ class RequestRepository {
       "comment": actionComment
     });
     final http.Response rawResponse =
-        await requestDataProviders.postTakeActionOnRequest(bodyString);
+    await requestDataProviders.postTakeActionOnRequest(bodyString);
     final json = await jsonDecode(rawResponse.body);
     final ResponseTakeAction response = ResponseTakeAction.fromJson(json);
+    final result = response.result ?? "false";
+    if (result.toLowerCase().contains("true")) {
+      await FirebaseProvider(userData ?? MainUserData.empty)
+          .addTakeActionFirebaseNotification(requesterEmail,
+          response.requestNo.toString(), serviceName,
+          valueStatus == ActionValueStatus.accept ? "Accept" : "Reject");
+    }
+
     return response;
   }
 

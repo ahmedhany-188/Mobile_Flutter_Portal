@@ -426,7 +426,7 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                                           onChanged: (value) =>
                                               context.read<
                                                   BusinessCardCubit>()
-                                                  .EemployeeComment(
+                                                  .employeeComment(
                                                   value),
                                           keyboardType: TextInputType
                                               .text,

@@ -282,7 +282,9 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
         requestNo: requestNo,
         actionComment: state.actionComment,
         serviceID: RequestServiceID.emailUserAccountServiceID,
-        requesterHRCode: state.requesterData.userHrCode ?? "");
+        serviceName: GlobalConstants.requestCategoryUserAccount,
+        requesterHRCode: state.requesterData.userHrCode ?? "",
+        requesterEmail: state.requesterData.email ?? "");
 
     final result = vacationResultResponse.result ?? "false";
     if (result.toLowerCase().contains("true")) {

@@ -116,11 +116,9 @@ class AuthenticationRepository {
                   EmployeeData employeeData = EmployeeData.fromJson(employeeDataJson[0]);
 
 
-                  var managerResponse = await authenticationProvider.getEmployeeData(employeeData.managerCode!);
-                  final managerDataJson = await jsonDecode(managerResponse.body);
-                  EmployeeData managerEmployeeData = EmployeeData.fromJson(managerDataJson[0]);
-
-                  //TODO : Add manager data in employee data
+                  // var managerResponse = await authenticationProvider.getEmployeeData(employeeData.managerCode!);
+                  // final managerDataJson = await jsonDecode(managerResponse.body);
+                  // EmployeeData managerEmployeeData = EmployeeData.fromJson(managerDataJson[0]);
 
                   String employeeDataString = jsonEncode(employeeData.toJson());
                   shared_User.setString(employeeCacheKey, employeeDataString);

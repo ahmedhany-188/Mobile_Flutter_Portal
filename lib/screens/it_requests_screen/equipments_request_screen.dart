@@ -94,17 +94,28 @@ class EquipmentsRequestScreen extends StatelessWidget {
                             RequestStatus.newRequest)
                           BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
                             builder: (context, state) {
-                              return TextButton.icon(
-                                onPressed: () {
-                                  showAddRequestBottomSheet(context);
-                                },
-                                icon: const Icon(
-                                  Icons.add,
-                                  color: Colors.white,
-                                ),
-                                label: const Text(
-                                  'Item',
-                                  style: TextStyle(color: Colors.white),
+                              return TweenAnimationBuilder<double>(
+                                duration: const Duration(milliseconds: 1000),
+                                tween: Tween(begin: 0.5, end: 0.0),
+                                builder: (context, animation, child) =>
+                                    Transform.translate(
+                                  offset: (state.requestStatus ==
+                                          RequestStatus.oldRequest)
+                                      ? const Offset(0, 0)
+                                      : Offset(-20 * shake(animation), 0),
+                                  child: TextButton.icon(
+                                    onPressed: () {
+                                      showAddRequestBottomSheet(context);
+                                    },
+                                    icon: const Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                    ),
+                                    label: const Text(
+                                      'Item',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
                                 ),
                               );
                             },
@@ -1201,17 +1212,15 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                           ? FormzStatus.invalid
                                           : FormzStatus.pure,
                                     );
-                                    EasyLoading.showInfo(
-                                      'Fill All the fields',
-                                      maskType: EasyLoadingMaskType.black,
-                                    );
                                   } else if (EquipmentsCubit.get(context)
                                       .state
                                       .chosenList
                                       .isEmpty) {
                                     EasyLoading.showInfo(
-                                        'Add at least one item to request',
-                                        maskType: EasyLoadingMaskType.black);
+                                      'Add at least one item to request',
+                                      dismissOnTap: true,
+                                      maskType: EasyLoadingMaskType.black,
+                                    );
                                   } else {
                                     EquipmentsCubit.get(context)
                                         .postEquipmentsRequest(
@@ -1284,46 +1293,61 @@ class EquipmentsRequestScreen extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: SizedBox(
-                          height: 50,
+                          // height: 60,
                           width: double.infinity,
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Container(
-                                  width: 40,
-                                  margin: const EdgeInsets.only(right: 10),
-                                  decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: (state.historyWorkFlow[index]
-                                                      .imgProfile !=
-                                                  null)
-                                              ? CachedNetworkImageProvider(
-                                                  getUserProfilePicture(state
-                                                      .historyWorkFlow[index]
-                                                      .imgProfile!))
-                                              : Assets.images.favicon
-                                                  .image()
-                                                  .image)),
+                                Expanded(
+                                  flex: 1,
+                                  child: Container(
+                                    width: 40,
+                                    height: 60,
+                                    margin: const EdgeInsets.only(right: 10),
+                                    decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            fit: BoxFit.contain,
+                                            image: (state.historyWorkFlow[index]
+                                                        .imgProfile !=
+                                                    null)
+                                                ? CachedNetworkImageProvider(
+                                                    getUserProfilePicture(state
+                                                        .historyWorkFlow[index]
+                                                        .imgProfile!))
+                                                : Assets.images.favicon
+                                                    .image(scale: 7)
+                                                    .image)),
+                                  ),
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        state.historyWorkFlow[index].empFrom!
-                                            .trim(),
-                                        softWrap: true,
-                                        style: const TextStyle(fontSize: 18),
-                                        overflow: TextOverflow.ellipsis),
-                                    Text(
-                                        state.historyWorkFlow[index].titleName!
-                                            .trim(),
-                                        softWrap: true,
-                                        style: const TextStyle(fontSize: 15),
-                                        overflow: TextOverflow.ellipsis),
-                                  ],
+                                Expanded(
+                                  flex: 6,
+                                  child: SizedBox(
+                                    // width: MediaQuery.of(context).size.width - 70,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          state.historyWorkFlow[index].empFrom!
+                                              .trim(),
+                                          style: const TextStyle(fontSize: 18),
+                                        ),
+                                        Text(
+                                          state
+                                              .historyWorkFlow[index].titleName!
+                                              .trim(),
+                                          style: const TextStyle(fontSize: 15),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child:
+                                      myRequestStatus(state.statusAction ?? ''),
                                 ),
                               ]),
                         ),
@@ -1343,6 +1367,32 @@ class EquipmentsRequestScreen extends StatelessWidget {
             ),
           );
         });
+  }
+
+  Widget myRequestStatus(String statusName) {
+    switch (statusName) {
+      case "Approved":
+        {
+          return const Icon(
+            Icons.verified,
+            color: Colors.green,
+          );
+        }
+      case "Rejected":
+        {
+          return const Icon(
+            Icons.cancel,
+            color: Colors.red,
+          );
+        }
+      default:
+        {
+          return const Icon(
+            Icons.camera,
+            color: Colors.yellow,
+          );
+        }
+    }
   }
 
   showAddRequestBottomSheet(BuildContext context) {
@@ -1651,80 +1701,85 @@ class EquipmentsRequestScreen extends StatelessWidget {
                 ],
               ),
               actions: [
-                TextButton.icon(
+                TextButton(
                   onPressed: () => onSubmitRequest(context, icon),
-                  label: const Text(
-                    'Done',
+                  child: const Text(
+                    'Add',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: ConstantsColors.greenAttendance,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
                     ),
                   ),
-                  icon: const Icon(
-                    Icons.done,
-                    color: Colors.white,
-                  ),
+                  // icon: const Icon(
+                  //   Icons.done,
+                  //   color: Colors.white,
+                  // ),
                 ),
               ],
               centerTitle: true,
               elevation: 0,
               backgroundColor: Colors.transparent,
             ),
-            body: Column(
-              // mainAxisAlignment: MainAxisAlignment.spaceAround,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                BlocProvider(
-                  create: (context) =>
-                      EquipmentsItemsCubit()..getEquipmentsItems(id: id),
-                  child:
-                      BlocBuilder<EquipmentsItemsCubit, EquipmentsItemsInitial>(
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  BlocProvider(
+                    create: (context) =>
+                        EquipmentsItemsCubit()..getEquipmentsItems(id: id),
+                    child: BlocBuilder<EquipmentsItemsCubit,
+                        EquipmentsItemsInitial>(
+                      builder: (context, state) {
+                        return buildDynamicDropDownMenu(
+                          items: state.listEquipmentsItem,
+                          listName: 'Select Item',
+                          context: context,
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: buildTextFormField(),
+                  ),
+                  BlocBuilder<ContactsCubit, ContactCubitStates>(
                     builder: (context, state) {
-                      return buildDynamicDropDownMenu(
-                        items: state.listEquipmentsItem,
-                        listName: 'Select Item',
-                        context: context,
-                      );
+                      return buildContactsDropDownMenu(
+                          listName: 'Owner Employee',
+                          items: ContactsCubit.get(context).state.listContacts,
+                          context: context);
                     },
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: buildTextFormField(),
-                ),
-                BlocBuilder<ContactsCubit, ContactCubitStates>(
-                  builder: (context, state) {
-                    return buildContactsDropDownMenu(
-                        listName: 'Owner Employee',
-                        items: ContactsCubit.get(context).state.listContacts,
-                        context: context);
-                  },
-                ),
-                buildDropDownMenu(
-                  items: [
-                    'New Hire',
-                    'Replacement / New Item',
-                    'Training',
-                    'Mobilization'
-                  ],
-                  listName: 'Request For',
-                  context: context,
-                ),
-                // ElevatedButton.icon(
-                //   onPressed: () => onSubmitRequest(context, icon),
-                //   label: Text('Done',
-                //       style: TextStyle(
-                //           color: ConstantsColors.bottomSheetBackgroundDark)),
-                //   icon: Icon(
-                //     Icons.done,
-                //     color: ConstantsColors.bottomSheetBackgroundDark,
-                //   ),
-                //   style: ElevatedButton.styleFrom(
-                //     primary: Colors.white,
-                //     shape: RoundedRectangleBorder(
-                //         borderRadius: BorderRadius.circular(20)),
-                //   ),
-                // ),
-              ],
+                  buildDropDownMenu(
+                    items: [
+                      'New Hire',
+                      'Replacement / New Item',
+                      'Training',
+                      'Mobilization'
+                    ],
+                    listName: 'Request For',
+                    context: context,
+                  ),
+                  // ElevatedButton.icon(
+                  //   onPressed: () => onSubmitRequest(context, icon),
+                  //   label: Text('Done',
+                  //       style: TextStyle(
+                  //           color: ConstantsColors.bottomSheetBackgroundDark)),
+                  //   icon: Icon(
+                  //     Icons.done,
+                  //     color: ConstantsColors.bottomSheetBackgroundDark,
+                  //   ),
+                  //   style: ElevatedButton.styleFrom(
+                  //     primary: Colors.white,
+                  //     shape: RoundedRectangleBorder(
+                  //         borderRadius: BorderRadius.circular(20)),
+                  //   ),
+                  // ),
+                ],
+              ),
             ),
           ),
         );
@@ -1739,7 +1794,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
   }) {
     return Flexible(
       child: Padding(
-        padding: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(8.0),
         child: DropdownSearch<ContactsDataFromApi>(
           items: items,
           itemAsString: (contactKey) => contactKey.name!.trim(),
@@ -1748,8 +1803,8 @@ class EquipmentsRequestScreen extends StatelessWidget {
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
               labelText: listName,
-              contentPadding: const EdgeInsets.all(10),
-              icon: const Icon(
+              // contentPadding: const EdgeInsets.all(10),
+              prefixIcon: const Icon(
                 Icons.people,
                 color: Colors.white,
               ),
@@ -1789,7 +1844,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
       bool showSearch = false}) {
     return Flexible(
       child: Padding(
-        padding: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(8.0),
         child: DropdownSearch<EquipmentsItemModel>(
           items: items,
           key: itemFormKey,
@@ -1805,8 +1860,8 @@ class EquipmentsRequestScreen extends StatelessWidget {
           dropdownDecoratorProps: DropDownDecoratorProps(
               dropdownSearchDecoration: InputDecoration(
                   labelText: listName,
-                  contentPadding: const EdgeInsets.all(10),
-                  icon: const Icon(
+                  // contentPadding: const EdgeInsets.all(10),
+                  prefixIcon: const Icon(
                     Icons.question_mark,
                     color: Colors.white,
                   ))),
@@ -1835,7 +1890,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
       bool showSearch = false}) {
     return Flexible(
       child: Padding(
-        padding: const EdgeInsets.all(5.0),
+        padding: const EdgeInsets.all(8.0),
         child: DropdownSearch<String?>(
           items: items,
           key: requestForFormKey,
@@ -1843,8 +1898,8 @@ class EquipmentsRequestScreen extends StatelessWidget {
           dropdownDecoratorProps: DropDownDecoratorProps(
             dropdownSearchDecoration: InputDecoration(
               labelText: listName,
-              contentPadding: const EdgeInsets.all(10),
-              icon: const Icon(
+              // contentPadding: const EdgeInsets.all(10),
+              prefixIcon: const Icon(
                 Icons.question_mark,
                 color: Colors.white,
               ),
@@ -1896,14 +1951,14 @@ class EquipmentsRequestScreen extends StatelessWidget {
           child: TextFormField(
             textAlign: TextAlign.center,
             enabled: false,
-            decoration: InputDecoration(
-              contentPadding: const EdgeInsets.all(8.0),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(5.0),
-              ),
-            ),
+            // decoration: InputDecoration(
+            //   contentPadding: const EdgeInsets.all(8.0),
+            //   border: OutlineInputBorder(
+            //     borderRadius: BorderRadius.circular(5.0),
+            //   ),
+            // ),
             controller: controller,
-            keyboardType: TextInputType.number,
+            // keyboardType: TextInputType.number,
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(RegExp(r'^[1-9][0-9]*'))
             ],
