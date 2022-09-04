@@ -65,6 +65,7 @@ class CustomTheme extends StatelessWidget {
         appBarTheme: const AppBarTheme(
             elevation: 0, color: Colors.transparent, centerTitle: true),
         splashColor: Colors.transparent,
+        elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(primary: ConstantsColors.bottomSheetBackgroundDark,shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))))),
 
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xff0F3C5B),
