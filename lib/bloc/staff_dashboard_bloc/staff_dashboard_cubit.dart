@@ -50,11 +50,8 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
   final Connectivity connectivity = Connectivity();
   String userHRCode;
 
-  Future<void> getStaffBoardCompanies(userHRCode, date) async {
-    // if (state.companyStaffDashBoardList.isEmpty) {
-
-
-    print("date+"+date);
+  Future<void> getFirstStaffBoardCompanies(userHRCode, date) async {
+    if (state.companyStaffDashBoardList.isEmpty) {
       if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
         try {
           emit(state.copyWith(
@@ -64,9 +61,6 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
           await StaffDashBoardRepository().getStaffDashBoardData(
               userHRCode, date)
               .then((value) async {
-
-                print("----my visit");
-            // insert data getCompanyStaffDashBoardSuccess
             emit(state.copyWith(
               companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates
                   .success,
@@ -74,17 +68,13 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
               date:date
             ));
           }).catchError((error) {
-            print("Failed 1" + error.toString());
             emit(state.copyWith(
-              companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates
-                  .failed,
+              companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates.failed,
             ));
           });
         } catch (e) {
-          print("Failed 2" + e.toString());
           emit(state.copyWith(
-            companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates
-                .failed,
+            companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates.failed,
           ));
         }
       } else {
@@ -93,7 +83,42 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
               .noConnection,
         ));
       }
-    // }
+    }
+  }
+
+  Future<void> getStaffBoardCompanies(userHRCode, date) async {
+      if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+        try {
+          emit(state.copyWith(
+            companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates
+                .loading,
+          ));
+          await StaffDashBoardRepository().getStaffDashBoardData(
+              userHRCode, date)
+              .then((value) async {
+            emit(state.copyWith(
+                companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates
+                    .success,
+                companyStaffDashBoardList: value,
+                date:date
+            ));
+          }).catchError((error) {
+            emit(state.copyWith(
+              companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates.failed,
+            ));
+          });
+        } catch (e) {
+          emit(state.copyWith(
+            companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates.failed,
+          ));
+        }
+      } else {
+        emit(state.copyWith(
+          companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates
+              .noConnection,
+        ));
+      }
+
   }
 
   @override
@@ -127,8 +152,6 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
     var formatter = GlobalConstants.dateFormatServerDashBoard;
     String formattedDate = formatter.format(
         date ?? DateTime.now());
-
-    print("number of times -- = ");
 
     context.read<StaffDashboardCubit>()
         .getStaffBoardCompanies(
