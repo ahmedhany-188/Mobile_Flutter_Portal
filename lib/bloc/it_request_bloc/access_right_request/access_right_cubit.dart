@@ -356,7 +356,9 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
         requestNo: requestNo,
         actionComment: state.actionComment,
         serviceID: RequestServiceID.accessRightServiceID,
-        requesterHRCode: state.requesterData.userHrCode ?? "");
+        serviceName: GlobalConstants.requestCategoryAccessRight,
+        requesterHRCode: state.requesterData.userHrCode ?? "",
+        requesterEmail: state.requesterData.email ?? "");
 
     final result = vacationResultResponse.result ?? "false";
     if (result.toLowerCase().contains("true")) {

@@ -222,7 +222,9 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
         requestNo: requestNo,
         actionComment: state.actionComment,
         serviceID: RequestServiceID.businessCardServiceID,
-        requesterHRCode: state.requesterData.userHrCode ?? "");
+        serviceName: GlobalConstants.requestCategoryBusniessCardActivity,
+        requesterHRCode: state.requesterData.userHrCode ?? "",
+    requesterEmail: state.requesterData.email ?? "");
 
     final result = businessCardResultResponse.result ?? "false";
     if (result.toLowerCase().contains("true")) {

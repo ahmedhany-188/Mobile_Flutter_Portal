@@ -441,10 +441,12 @@ class RequestRepository {
 
   Future<ResponseTakeAction> postTakeActionRequest(
       {required ActionValueStatus valueStatus,
-      required String serviceID,
-      required String requestNo,
-      required String requesterHRCode,
-      required String actionComment}) async {
+        required String serviceID,
+        required String serviceName,
+        required String requestNo,
+        required String requesterHRCode,
+        required String requesterEmail,
+        required String actionComment}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": serviceID,
       "reqno": int.parse(requestNo),
@@ -454,9 +456,17 @@ class RequestRepository {
       "comment": actionComment
     });
     final http.Response rawResponse =
-        await requestDataProviders.postTakeActionOnRequest(bodyString);
+    await requestDataProviders.postTakeActionOnRequest(bodyString);
     final json = await jsonDecode(rawResponse.body);
     final ResponseTakeAction response = ResponseTakeAction.fromJson(json);
+    final result = response.result ?? "false";
+    if (result.toLowerCase().contains("true")) {
+      await FirebaseProvider(userData ?? MainUserData.empty)
+          .addTakeActionFirebaseNotification(requesterEmail,
+          response.requestNo.toString(), serviceName,
+          valueStatus == ActionValueStatus.accept ? "Accept" : "Reject");
+    }
+
     return response;
   }
 

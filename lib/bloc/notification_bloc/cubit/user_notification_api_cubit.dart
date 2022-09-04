@@ -79,7 +79,9 @@ class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState>{
         requestNo: notification.requestNo.toString(),
         actionComment: "",
         serviceID: notification.serviceID ?? "",
-        requesterHRCode: notification.requestHRCode ?? "");
+        serviceName: notification.serviceName ?? "",
+        requesterHRCode: notification.requestHRCode ?? "",
+        requesterEmail: notification.requesterEmail ?? "");
 
     final result = vacationResultResponse.result ?? "false";
     if (result.toLowerCase().contains("true")) {

@@ -291,7 +291,9 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
         requestNo: requestNo,
         actionComment: state.actionComment,
         serviceID: RequestServiceID.businessMissionServiceID,
-        requesterHRCode: state.requesterData.userHrCode ?? "");
+        serviceName: GlobalConstants.requestCategoryBusinessMissionActivity,
+        requesterHRCode: state.requesterData.userHrCode ?? "",
+        requesterEmail: state.requesterData.email ?? "");
 
     final result = vacationResultResponse.result ?? "false";
     if (result.toLowerCase().contains("true")) {

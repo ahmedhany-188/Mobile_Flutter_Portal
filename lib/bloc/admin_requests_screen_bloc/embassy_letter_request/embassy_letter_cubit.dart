@@ -297,7 +297,9 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
         requestNo: requestNo,
         actionComment: state.actionComment,
         serviceID: RequestServiceID.embassyServiceID,
-        requesterHRCode: state.requesterData.userHrCode ?? "");
+        serviceName: GlobalConstants.requestCategoryEmbassyActivity,
+        requesterHRCode: state.requesterData.userHrCode ?? "",
+    requesterEmail: state.requesterData.email ?? "");
 
     final result = embassyResultResponse.result ?? "false";
     if (result.toLowerCase().contains("true")) {
