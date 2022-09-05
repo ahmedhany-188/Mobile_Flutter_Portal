@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:formz/formz.dart';
-import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -12,6 +11,7 @@ import 'package:intl/intl.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/enums.dart';
+import '../../widgets/background/custom_background.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../constants/request_service_id.dart';
 import '../../constants/url_links.dart';
@@ -443,6 +443,73 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                   );
                                 },
                               ),
+                              BlocBuilder<EquipmentsCubit,
+                                      EquipmentsCubitStates>(
+                                  buildWhen: (pre, curr) {
+                                return pre.chosenFileName !=
+                                    curr.chosenFileName;
+                              }, builder: (context, state) {
+                                return SingleChildScrollView(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: TextFormField(
+                                            key: UniqueKey(),
+                                            enabled: false,
+                                            initialValue: (state
+                                                        .requestStatus ==
+                                                    RequestStatus.newRequest)
+                                                ? state.chosenFileName
+                                                : 'TODO:', //TODO: add fileName from API
+                                            // keyboardType:
+                                            //     TextInputType.multiline,
+                                            maxLines: 1,
+                                            decoration: const InputDecoration(
+                                              labelText: "Upload file",
+                                              prefixIcon: Icon(
+                                                Icons.upload_file,
+                                                color: Colors.white70,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: (state.requestStatus ==
+                                                  RequestStatus.newRequest)
+                                              ? ElevatedButton.icon(
+                                                  onPressed: () {
+                                                    EquipmentsCubit.get(context)
+                                                        .setChosenFileName();
+                                                  },
+                                                  label: const Text('Upload',
+                                                      style: TextStyle(
+                                                          color: Colors.white)),
+                                                  icon: const Icon(
+                                                      Icons.cloud_upload_sharp,
+                                                      color: Colors.white),
+                                                )
+                                              : ElevatedButton.icon(
+                                                  onPressed: () {},
+                                                  label: const Text('View File',
+                                                      style: TextStyle(
+                                                          color: Colors.white)),
+                                                  icon: const Icon(
+                                                      Icons.cloud_upload_sharp,
+                                                      color: Colors.white),
+                                                ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
                               BlocBuilder<EquipmentsCubit,
                                       EquipmentsCubitStates>(
                                   buildWhen: (pre, curr) {

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 
 class GeneralDio {
   static Dio? dio;
@@ -111,28 +112,36 @@ class GeneralDio {
   }
 
   Future<Response> getStatistics() async {
-    String url = 'SelfService/GetStatistics?HRCode=${userData.user!.userHRCode}';
+    String url =
+        'SelfService/GetStatistics?HRCode=${userData.user!.userHRCode}';
 
     return await dio!.get(url).catchError((err) {
       throw err;
     });
   }
 
-  static Future<Response> getNextStepWorkFlow({required String serviceId, required String userHrCode, required int reqNo}) async {
-    String url = 'SelfService/GetNextStepWorkFlow?ServiceID=$serviceId&RequestNo=$reqNo&HRCode=$userHrCode';
+  static Future<Response> getNextStepWorkFlow(
+      {required String serviceId,
+      required String userHrCode,
+      required int reqNo}) async {
+    String url =
+        'SelfService/GetNextStepWorkFlow?ServiceID=$serviceId&RequestNo=$reqNo&HRCode=$userHrCode';
 
     return await dio!.get(url).catchError((err) {
       throw err;
     });
   }
 
-  static Future<Response> getHistoryWorkFlow({required String serviceId,required int reqNo}) async {
-    String url = 'SelfService/GetWorkflowhistory?requestno=$reqNo&ServiceID=$serviceId';
+  static Future<Response> getHistoryWorkFlow(
+      {required String serviceId, required int reqNo}) async {
+    String url =
+        'SelfService/GetWorkflowhistory?requestno=$reqNo&ServiceID=$serviceId';
 
     return await dio!.get(url).catchError((err) {
       throw err;
     });
   }
+
   static Future<Response> postMasterEquipmentsRequest(
       dynamic dataToPost) async {
     String url = 'SelfService/AddITEquipment_M';
@@ -161,5 +170,47 @@ class GeneralDio {
         .catchError((err) {
       throw err;
     });
+  }
+
+  // static Future<Response> postEquipmentsRequestFile(dynamic dataToPost) async {
+  //   String url = 'SelfService/UploadEquipmentFile';
+  //
+  //   return await dio!
+  //       .post(
+  //     url,
+  //     options: Options(headers: {
+  //       HttpHeaders.contentTypeHeader: "multipart/form-data",
+  //     }),
+  //     data: dataToPost,
+  //   )
+  //       .catchError((err) {
+  //     throw err;
+  //   });
+  // }
+
+  static Future<Response> uploadEquipmentImage(
+      FilePickerResult file, String fileName, String fileExtension) async {
+    String url = 'SelfService/UploadEquipmentFile';
+
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(file.paths.single!,
+          filename: "$fileName.$fileExtension"),
+    });
+    return await dio!
+        .post(url, data: formData)
+        .catchError((onError) => throw onError);
+  }
+
+  static Future<Response> uploadAccessRightImage(
+      FilePickerResult file, String fileName, String fileExtension) async {
+    String url = 'SelfService/UploadAccessRightFile';
+
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(file.paths.single!,
+          filename: "$fileName.$fileExtension"),
+    });
+    return await dio!
+        .post(url, data: formData)
+        .catchError((onError) => throw onError);
   }
 }

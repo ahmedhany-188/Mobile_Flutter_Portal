@@ -13,7 +13,11 @@ class EquipmentsCubitStates extends Equatable {
   final List<SelectedEquipmentsModel> chosenList;
   final List<HistoryWorkFlowModel> historyWorkFlow;
 
+  final FilePickerResult fileResult;
+
   final String? statusAction;
+  final String extension;
+  final String chosenFileName;
   final String comment;
   final String actionComment;
   final RequestStatus? requestStatus;
@@ -28,6 +32,7 @@ class EquipmentsCubitStates extends Equatable {
   final EmployeeData requesterData;
 
   const EquipmentsCubitStates({
+    this.fileResult = const FilePickerResult([]),
     this.businessUnitEnumStates = EquipmentsEnumState.initial,
     this.locationEnumStates = EquipmentsEnumState.initial,
     this.departmentEnumStates = EquipmentsEnumState.initial,
@@ -39,6 +44,8 @@ class EquipmentsCubitStates extends Equatable {
     this.statusAction,
     this.comment = '',
     this.actionComment = "",
+    this.extension = "",
+    this.chosenFileName = "",
     this.listBusinessUnit = const <BusinessUnitModel>[],
     this.listLocation = const <EquipmentsLocationModel>[],
     this.listDepartment = const <DepartmentsModel>[],
@@ -51,6 +58,7 @@ class EquipmentsCubitStates extends Equatable {
   });
 
   EquipmentsCubitStates copyWith({
+    FilePickerResult? fileResult,
     EquipmentsEnumState? businessUnitEnumStates,
     EquipmentsEnumState? locationEnumStates,
     EquipmentsEnumState? departmentEnumStates,
@@ -61,6 +69,8 @@ class EquipmentsCubitStates extends Equatable {
     List<SelectedEquipmentsModel>? chosenList,
     String? statusAction,
     String? comment,
+    String? extension,
+    String? chosenFileName,
     RequestStatus? requestStatus,
     RequestDate? requestDate,
     EquipmentsRequestedModel? requestedData,
@@ -73,6 +83,7 @@ class EquipmentsCubitStates extends Equatable {
     String? actionComment,
   }) {
     return EquipmentsCubitStates(
+      fileResult: fileResult ?? this.fileResult,
       businessUnitEnumStates:
           businessUnitEnumStates ?? this.businessUnitEnumStates,
       locationEnumStates: locationEnumStates ?? this.locationEnumStates,
@@ -91,6 +102,8 @@ class EquipmentsCubitStates extends Equatable {
       departmentStatus: departmentStatus ?? this.departmentStatus,
       statusAction: statusAction ?? this.statusAction,
       comment: comment ?? this.comment,
+      extension: extension ?? this.extension,
+      chosenFileName: chosenFileName ?? this.chosenFileName,
       takeActionStatus: takeActionStatus ?? this.takeActionStatus,
       requesterData: requesterData ?? this.requesterData,
       actionComment: actionComment ?? this.actionComment,
@@ -99,6 +112,7 @@ class EquipmentsCubitStates extends Equatable {
 
   @override
   List<Object> get props => [
+        fileResult,
         businessUnitEnumStates,
         locationEnumStates,
         departmentEnumStates,
@@ -108,6 +122,8 @@ class EquipmentsCubitStates extends Equatable {
         historyWorkFlow,
         chosenList,
         comment,
+        extension,
+        chosenFileName,
         status,
         businessUnitStatus,
         locationStatus,
