@@ -5,7 +5,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
-import '../../screens/myprofile_screen/ProfileScreenDirectManager.dart';
+import '../../screens/myprofile_screen/profile_screen_direct_manager.dart';
 
 class RequesterDataWidget extends StatelessWidget {
   const RequesterDataWidget({

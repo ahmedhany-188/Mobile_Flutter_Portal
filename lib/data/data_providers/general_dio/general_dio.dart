@@ -213,4 +213,17 @@ class GeneralDio {
         .post(url, data: formData)
         .catchError((onError) => throw onError);
   }
+
+  static Future<Response> uploadUserImage(
+      FilePickerResult file, String fileName, String fileExtension) async {
+    String url = 'Images/UploadImage';
+
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(file.paths.single!,
+          filename: "$fileName.$fileExtension"),
+    });
+    return await dio!
+        .post(url, data: formData)
+        .catchError((onError) => throw onError);
+  }
 }

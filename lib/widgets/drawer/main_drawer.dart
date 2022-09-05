@@ -1,6 +1,5 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:hassanallamportalflutter/bloc/my_requests_screen_bloc/my_requests_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
@@ -18,7 +17,7 @@ import '../../screens/about_value_screen/value_screen.dart';
 import '../../screens/get_direction_screen/get_direction_screen.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../screens/payslip_screen/payslip_screen.dart';
-import '../../screens/myprofile_screen/ProfileScreen.dart';
+import '../../screens/myprofile_screen/profile_screen.dart';
 import '../../screens/about_value_screen/about_screen.dart';
 import '../../screens/my_requests_screen/my_requests_screen.dart';
 import '../../screens/myattendance_screen/attendance_screen.dart';
