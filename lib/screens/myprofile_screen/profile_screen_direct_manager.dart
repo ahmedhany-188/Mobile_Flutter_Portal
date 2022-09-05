@@ -34,8 +34,6 @@ class DirectManagerProfileScreenClass
 
   @override
   Widget build(BuildContext context) {
-    // final user = context.select((AppBloc bloc) => bloc.state.userData);
-
     ///Create a new vCard
 
     final currentRequestData = widget.requestData;
@@ -154,7 +152,10 @@ class DirectManagerProfileScreenClass
                                             child: Center(
                                               // child: state is BlocGetManagerDataSuccessState && state.managerData.imgProfile !=null && state.managerData.imgProfile.toString()!="" && state.managerData.imgProfile.toString()!="null"?
                                               child: CachedNetworkImage(
-                                                imageUrl: getUserProfilePicture(state.managerData.imgProfile!),
+                                                imageUrl: getUserProfilePicture(
+                                                    state.managerData
+                                                            .imgProfile ??
+                                                        ''),
                                                 imageBuilder:
                                                     (context, imageProvider) =>
                                                         Container(
