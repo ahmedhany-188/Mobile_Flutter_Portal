@@ -10,6 +10,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:vcard_maintained/vcard_maintained.dart';
 
 import '../../constants/colors.dart';
+import '../../constants/url_links.dart';
 
 class UserProfileScreen extends StatefulWidget {
   static const routeName = "/my-profile-screen";
@@ -108,8 +109,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                       child: Center(
                                         child: imageProfile.isNotEmpty
                                             ? CachedNetworkImage(
-                                                imageUrl:
-                                                    "https://portal.hassanallam.com/Apps/images/Profile/${user.employeeData!.imgProfile}",
+                                                imageUrl: getUserProfilePicture(user.employeeData!.imgProfile!),
                                                 imageBuilder:
                                                     (context, imageProvider) =>
                                                         Container(

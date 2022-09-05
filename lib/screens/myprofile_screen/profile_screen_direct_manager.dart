@@ -6,6 +6,7 @@ import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:vcard_maintained/vcard_maintained.dart';
+import '../../constants/url_links.dart';
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
@@ -153,8 +154,7 @@ class DirectManagerProfileScreenClass
                                             child: Center(
                                               // child: state is BlocGetManagerDataSuccessState && state.managerData.imgProfile !=null && state.managerData.imgProfile.toString()!="" && state.managerData.imgProfile.toString()!="null"?
                                               child: CachedNetworkImage(
-                                                imageUrl:
-                                                    "https://portal.hassanallam.com/Apps/images/Profile/${state.managerData.imgProfile}",
+                                                imageUrl: getUserProfilePicture(state.managerData.imgProfile!),
                                                 imageBuilder:
                                                     (context, imageProvider) =>
                                                         Container(

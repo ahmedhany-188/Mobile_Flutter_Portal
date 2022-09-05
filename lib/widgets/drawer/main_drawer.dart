@@ -209,10 +209,10 @@ class _MainDrawerState extends State<MainDrawer> {
           children: [
             /// commented code below is for centered image and text
             Container(
-              clipBehavior: Clip.none,
-              height: MediaQuery.of(context).size.height * 0.20,
+              // clipBehavior: Clip.none,
+              height: MediaQuery.of(context).size.height * 0.25,
               width: double.infinity,
-              margin: const EdgeInsets.only(bottom: 15),
+              // margin: const EdgeInsets.only(bottom: 15),
               alignment: Alignment.center,
               color: Colors.transparent,
               child: Column(
@@ -223,7 +223,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     radius: 30,
                     // borderRadius: BorderRadius.circular(50),
                     backgroundImage: CachedNetworkImageProvider(
-                      'https://portal.hassanallam.com/Apps/images/Profile/${user!.imgProfile}',
+                      getUserProfilePicture(user!.imgProfile!),
                     ),
                     backgroundColor: Colors.transparent,
                     onBackgroundImageError: (_, __) {
@@ -473,7 +473,7 @@ class _MainDrawerState extends State<MainDrawer> {
             //       )),
             // ),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.77,
+              height: MediaQuery.of(context).size.height * 0.74,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -489,14 +489,14 @@ class _MainDrawerState extends State<MainDrawer> {
                       Icons.wallpaper,
                       () {
                         Navigator.of(context)
-                            .popAndPushNamed(MyRequestsScreen.routeName);
+                            .pushNamed(MyRequestsScreen.routeName);
                       },
                     ),
                     buildListTile(
                       'My Profile',
                       Icons.person,
                       () {
-                        Navigator.popAndPushNamed(
+                        Navigator.pushNamed(
                             context, UserProfileScreen.routeName);
                       },
                     ),
@@ -506,12 +506,12 @@ class _MainDrawerState extends State<MainDrawer> {
                       'My Attendance',
                       Icons.fingerprint,
                       () {
-                        Navigator.popAndPushNamed(
+                        Navigator.pushNamed(
                             context, AttendanceScreen.routeName);
                       },
                     ),
                     InkWell(
-                      onTap: ()=>Navigator.popAndPushNamed(
+                      onTap: () => Navigator.pushNamed(
                           context, NotificationsScreen.routeName),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -519,24 +519,33 @@ class _MainDrawerState extends State<MainDrawer> {
                           buildListTile(
                             'Notification',
                             Icons.notifications,
-                            null, /// to stop the navigation function to make the whole row navigate
+                            null,
+
+                            /// to stop the navigation function to make the whole row navigate
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 25.0),
                             child: BlocProvider.value(
-                              value: BlocProvider.of<UserNotificationApiCubit>(context)..getNotifications(),
-                              child: BlocBuilder<UserNotificationApiCubit, UserNotificationApiState>(
+                              value: BlocProvider.of<UserNotificationApiCubit>(
+                                  context)
+                                ..getNotifications(),
+                              child: BlocBuilder<UserNotificationApiCubit,
+                                  UserNotificationApiState>(
                                 builder: (context, state) {
                                   return Badge(
-                                    showBadge: state.userNotificationList.isNotEmpty ? true : false,
+                                    showBadge:
+                                        state.userNotificationList.isNotEmpty
+                                            ? true
+                                            : false,
                                     toAnimate: false,
-                                    animationDuration: const Duration(milliseconds: 1000),
+                                    animationDuration:
+                                        const Duration(milliseconds: 1000),
                                     animationType: BadgeAnimationType.scale,
                                     badgeColor: Colors.red,
                                     badgeContent: Text(
                                       "${state.userNotificationList.length}",
-                                      style:
-                                      const TextStyle(color: Colors.white, fontSize: 10),
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 10),
                                     ),
                                     position: const BadgePosition(
                                       start: 5,
@@ -555,14 +564,14 @@ class _MainDrawerState extends State<MainDrawer> {
                       Icons.nature_people,
                       () {
                         Navigator.of(context)
-                            .popAndPushNamed(PayslipScreen.routeName);
+                            .pushNamed(PayslipScreen.routeName);
                       },
                     ),
                     buildListTile(
                       'My Appraisal',
                       Icons.quiz,
                       () {
-                        Navigator.popAndPushNamed(
+                        Navigator.pushNamed(
                             context, EmployeeAppraisalScreen.routeName);
                       },
                     ),
@@ -571,7 +580,7 @@ class _MainDrawerState extends State<MainDrawer> {
                       'Staff Dashboard',
                       Icons.dashboard,
                       () {
-                        Navigator.popAndPushNamed(
+                        Navigator.pushNamed(
                             context, StaffDashBoardScreen.routeName);
                       },
                     ),
@@ -584,28 +593,26 @@ class _MainDrawerState extends State<MainDrawer> {
                       'Get Direction',
                       () {
                         Navigator.of(context)
-                            .popAndPushNamed(GetDirectionScreen.routeName);
+                            .pushNamed(GetDirectionScreen.routeName);
                       },
                     ),
                     buildNoIconTile(
                       'Subsidiaries',
                       () {
                         Navigator.of(context)
-                            .popAndPushNamed(SubsidiariesScreen.routeName);
+                            .pushNamed(SubsidiariesScreen.routeName);
                       },
                     ),
                     buildNoIconTile(
                       'Values',
                       () {
-                        Navigator.of(context)
-                            .popAndPushNamed(ValueScreen.routeName);
+                        Navigator.of(context).pushNamed(ValueScreen.routeName);
                       },
                     ),
                     buildNoIconTile(
                       'About',
                       () {
-                        Navigator.of(context)
-                            .popAndPushNamed(AboutScreen.routeName);
+                        Navigator.of(context).pushNamed(AboutScreen.routeName);
                       },
                     ),
                     buildNoIconTile(
@@ -618,7 +625,6 @@ class _MainDrawerState extends State<MainDrawer> {
                         // if (!mounted) return;
                         context.read<AppBloc>().add(AppLogoutRequested());
                         context.read<LoginCubit>().clearCubit();
-
                       },
                     ),
                     buildDivider(),
@@ -659,7 +665,9 @@ class _MainDrawerState extends State<MainDrawer> {
                                             .toString());
                                   })
                               : const Text(
-                                  'You Have No Application To Be Shown',style: TextStyle(color: Colors.white),);
+                                  'You Have No Application To Be Shown',
+                                  style: TextStyle(color: Colors.white),
+                                );
                         },
                       ),
                     ),
@@ -670,7 +678,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     //   Icons.list,
                     //   () {
                     //     Navigator.of(context)
-                    //         .popAndPushNamed(NewsScreen.routeName);
+                    //         .pushNamed(NewsScreen.routeName);
                     //   },
                     // ),
                     // buildDivider(),
@@ -678,7 +686,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     //   'EconomyNews',
                     //   Icons.waterfall_chart,
                     //   () {
-                    //     Navigator.popAndPushNamed(
+                    //     Navigator.pushNamed(
                     //         context, EconomyNewsScreen.routeName);
                     //   },
                     // ),
