@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:formz/formz.dart';
-import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:heroicons/heroicons.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -12,6 +11,7 @@ import 'package:intl/intl.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/enums.dart';
+import '../../widgets/background/custom_background.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../constants/request_service_id.dart';
 import '../../constants/url_links.dart';
@@ -28,6 +28,7 @@ import '../../data/models/it_requests_form_models/equipments_models/equipments_i
 import '../../data/models/it_requests_form_models/equipments_models/equipments_location_model.dart';
 import '../../data/models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
 import '../../bloc/it_request_bloc/equipments_request/equipments_items_cubit/equipments_items_cubit.dart';
+import '../myprofile_screen/profile_screen_direct_manager.dart';
 
 class EquipmentsRequestScreen extends StatelessWidget {
   static const routeName = 'request-equipments-screen';
@@ -446,6 +447,75 @@ class EquipmentsRequestScreen extends StatelessWidget {
                               BlocBuilder<EquipmentsCubit,
                                       EquipmentsCubitStates>(
                                   buildWhen: (pre, curr) {
+                                return pre.chosenFileName !=
+                                    curr.chosenFileName;
+                              }, builder: (context, state) {
+                                return SingleChildScrollView(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: TextFormField(
+                                            key: UniqueKey(),
+                                            enabled: false,
+                                            initialValue: (state
+                                                        .requestStatus ==
+                                                    RequestStatus.newRequest)
+                                                ? state.chosenFileName
+                                                : 'TODO:', //TODO: add fileName from API
+                                            // keyboardType:
+                                            //     TextInputType.multiline,
+                                            maxLines: 1,
+                                            decoration: const InputDecoration(
+                                              labelText: "Upload file",
+                                              prefixIcon: Icon(
+                                                Icons.upload_file,
+                                                color: Colors.white70,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        Flexible(
+                                          child: (state.requestStatus ==
+                                                  RequestStatus.newRequest)
+                                              ? ElevatedButton.icon(
+                                                  onPressed: () {
+                                                    EquipmentsCubit.get(context)
+                                                        .setChosenFileName();
+                                                  },
+                                                  label: const Text('Upload',
+                                                      style: TextStyle(
+                                                          color: Colors.white)),
+                                                  icon: const Icon(
+                                                      Icons.cloud_upload_sharp,
+                                                      color: Colors.white),
+                                                )
+                                              : ElevatedButton.icon(
+                                                  onPressed: () {},
+                                                  label: const Text('View File',
+                                                      style: TextStyle(
+                                                          color: Colors.white)),
+                                                  icon: const Icon(
+                                                      Icons.cloud_upload_sharp,
+                                                      color: Colors.white),
+                                                ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+                              BlocBuilder<EquipmentsCubit,
+                                      EquipmentsCubitStates>(
+                                  buildWhen: (pre, curr) {
                                 return pre.requestedData?.data![0].comments !=
                                     curr.requestedData?.data![0].comments;
                               }, builder: (context, state) {
@@ -760,364 +830,8 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                   ],
                                                 ),
                                               ),
-                                              // Container(
-                                              //   key: Key('value$index'),
-                                              //   margin: const EdgeInsets.only(
-                                              //     bottom: 8,
-                                              //   ),
-                                              //   padding: const EdgeInsets.all(10.0),
-                                              //   width: MediaQuery.of(context).size.width,
-                                              //   decoration: BoxDecoration(
-                                              //       color: Colors.blueGrey,
-                                              //       borderRadius: BorderRadius.circular(25)),
-                                              //   child: Column(
-                                              //     mainAxisAlignment: MainAxisAlignment.center,
-                                              //     crossAxisAlignment: CrossAxisAlignment.start,
-                                              //     children: [
-                                              //       Center(
-                                              //           child: (state.requestStatus ==
-                                              //                   RequestStatus.oldRequest)
-                                              //               ? EquipmentsCubit.get(context)
-                                              //                   .getIconByGroupName(state
-                                              //                       .requestedData!
-                                              //                       .data![0]
-                                              //                       .groupName!)
-                                              //               : state.chosenList[index].icon!),
-                                              //       Text(
-                                              //         (state.requestStatus ==
-                                              //                 RequestStatus.oldRequest)
-                                              //             ? state.requestedData!.data![index]
-                                              //                 .hardWareItemName!
-                                              //                 .trim()
-                                              //             : state.chosenList[index]
-                                              //                 .selectedItem!.hardWareItemName!
-                                              //                 .trim(),
-                                              //         softWrap: true,
-                                              //         style: const TextStyle(fontSize: 18),
-                                              //       ),
-                                              //       Text(
-                                              //         (state.requestStatus ==
-                                              //                 RequestStatus.oldRequest)
-                                              //             ? EquipmentsCubit.get(context)
-                                              //                 .getRequestForFromType(state
-                                              //                     .requestedData!
-                                              //                     .data![index]
-                                              //                     .type!)!
-                                              //                 .trim()
-                                              //             : state.chosenList[index].requestFor!
-                                              //                 .trim(),
-                                              //         softWrap: true,
-                                              //         style: const TextStyle(fontSize: 18),
-                                              //       ),
-                                              //       Text(
-                                              //         'Qty: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].qty : state.chosenList[index].quantity}',
-                                              //         softWrap: true,
-                                              //         style: const TextStyle(fontSize: 18),
-                                              //       ),
-                                              //       Text(
-                                              //         'Owner: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].ownerName!.trim() : state.chosenList[index].selectedContact!.name!.trim().toLowerCase()}',
-                                              //         softWrap: false,
-                                              //         maxLines: 2,
-                                              //         overflow: TextOverflow.ellipsis,
-                                              //         style: const TextStyle(fontSize: 18),
-                                              //       ),
-                                              //     ],
-                                              //   ),
-                                              // ),
                                             ),
                                           ),
-                                          // child: Dismissible(
-                                          //                                           direction: (state.requestStatus ==
-                                          //                                               RequestStatus.oldRequest)
-                                          //                                               ? DismissDirection.none
-                                          //                                               : DismissDirection.endToStart,
-                                          //                                           key: UniqueKey(),
-                                          //                                           confirmDismiss: (dismissDirection) async {
-                                          //                                             if (dismissDirection ==
-                                          //                                                 DismissDirection.startToEnd) {
-                                          //                                               return false;
-                                          //                                             } else {
-                                          //                                               return await showDialog(
-                                          //                                                 context: context,
-                                          //                                                 builder: (_) {
-                                          //                                                   return AlertDialog(
-                                          //                                                     backgroundColor: Theme.of(context)
-                                          //                                                         .colorScheme
-                                          //                                                         .background,
-                                          //                                                     title: const Text('Caution',
-                                          //                                                         style: TextStyle(
-                                          //                                                             color: Colors.red)),
-                                          //                                                     content: const Text(
-                                          //                                                       'Are you sure you want to delete this item?',
-                                          //                                                     ),
-                                          //                                                     actions: [
-                                          //                                                       TextButton(
-                                          //                                                         onPressed: () {
-                                          //                                                           Navigator.of(context)
-                                          //                                                               .pop(false);
-                                          //                                                         },
-                                          //                                                         child: const Text(
-                                          //                                                           'Cancel',
-                                          //                                                           style: TextStyle(
-                                          //                                                             fontSize: 16,
-                                          //                                                           ),
-                                          //                                                         ),
-                                          //                                                       ),
-                                          //                                                       TextButton(
-                                          //                                                         onPressed: () {
-                                          //                                                           Navigator.of(context)
-                                          //                                                               .pop(true);
-                                          //                                                         },
-                                          //                                                         child: const Text(
-                                          //                                                           'Delete',
-                                          //                                                           style: TextStyle(
-                                          //                                                               fontSize: 16,
-                                          //                                                               color: Colors.red),
-                                          //                                                         ),
-                                          //                                                       ),
-                                          //                                                     ],
-                                          //                                                   );
-                                          //                                                 },
-                                          //                                               );
-                                          //                                             }
-                                          //                                           },
-                                          //                                           onDismissed: (dismissDirection) {
-                                          //                                             if (dismissDirection ==
-                                          //                                                 DismissDirection.endToStart) {
-                                          //                                               state.chosenList.removeAt(index);
-                                          //                                             }
-                                          //                                           },
-                                          //                                           background: Container(
-                                          //                                             clipBehavior: Clip.none,
-                                          //                                             margin: const EdgeInsets.only(
-                                          //                                               bottom: 8,
-                                          //                                             ),
-                                          //                                             padding: const EdgeInsets.all(10.0),
-                                          //                                             width: MediaQuery.of(context).size.width,
-                                          //                                             decoration: BoxDecoration(
-                                          //                                                 color: Colors.transparent,
-                                          //                                                 borderRadius:
-                                          //                                                 BorderRadius.circular(25)),
-                                          //                                             child: const Align(
-                                          //                                               alignment: Alignment.centerRight,
-                                          //                                               child: Icon(
-                                          //                                                 Icons.delete,
-                                          //                                                 size: 30,
-                                          //                                                 color: Colors.red,
-                                          //                                               ),
-                                          //                                             ),
-                                          //                                           ),
-                                          //                                           // secondaryBackground:Container(
-                                          //                                           //   clipBehavior: Clip.none,
-                                          //                                           //   margin: const EdgeInsets.only(
-                                          //                                           //     bottom: 8,
-                                          //                                           //   ),
-                                          //                                           //   padding: const EdgeInsets.all(10.0),
-                                          //                                           //   width: MediaQuery.of(context).size.width,
-                                          //                                           //   decoration: BoxDecoration(
-                                          //                                           //       color: Colors.transparent,
-                                          //                                           //       borderRadius: BorderRadius.circular(25)),
-                                          //                                           //   child: const Align(
-                                          //                                           //     alignment: Alignment.centerLeft,
-                                          //                                           //     child: Icon(
-                                          //                                           //       Icons.edit,
-                                          //                                           //       size: 30,
-                                          //                                           //       color: Colors.green,
-                                          //                                           //     ),
-                                          //                                           //   ),
-                                          //                                           // ),
-                                          //                                           child: ClipRRect(
-                                          //                                             borderRadius: const BorderRadius.all(
-                                          //                                                 Radius.circular(20)),
-                                          //                                             child: ExpansionTile(
-                                          //                                               backgroundColor: Colors.white54,
-                                          //                                               collapsedBackgroundColor:
-                                          //                                               Colors.white38,
-                                          //                                               childrenPadding:
-                                          //                                               const EdgeInsets.all(10),
-                                          //                                               leading: (state.requestStatus ==
-                                          //                                                   RequestStatus.oldRequest)
-                                          //                                                   ? EquipmentsCubit.get(context)
-                                          //                                                   .getIconByGroupName(state
-                                          //                                                   .requestedData!
-                                          //                                                   .data![0]
-                                          //                                                   .groupName!)
-                                          //                                                   : state.chosenList[index].icon!,
-                                          //                                               title: Text(
-                                          //                                                 (state.requestStatus ==
-                                          //                                                     RequestStatus.oldRequest)
-                                          //                                                     ? state
-                                          //                                                     .requestedData!
-                                          //                                                     .data![index]
-                                          //                                                     .hardWareItemName!
-                                          //                                                     .trim()
-                                          //                                                     : state
-                                          //                                                     .chosenList[index]
-                                          //                                                     .selectedItem!
-                                          //                                                     .hardWareItemName!
-                                          //                                                     .trim(),
-                                          //                                                 softWrap: true,
-                                          //                                                 style: const TextStyle(fontSize: 18),
-                                          //                                                 overflow: TextOverflow.ellipsis,
-                                          //                                               ),
-                                          //                                               subtitle: Text(
-                                          //                                                 'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].qty : state.chosenList[index].quantity}',
-                                          //                                                 softWrap: true,
-                                          //                                               ),
-                                          //                                               children: [
-                                          //                                                 Row(
-                                          //                                                   children: [
-                                          //                                                     const Text(
-                                          //                                                       'Request for: ',
-                                          //                                                       softWrap: true,
-                                          //                                                       style:
-                                          //                                                       TextStyle(fontSize: 18),
-                                          //                                                     ),
-                                          //                                                     Flexible(
-                                          //                                                       child: Text(
-                                          //                                                         (state.requestStatus ==
-                                          //                                                             RequestStatus
-                                          //                                                                 .oldRequest)
-                                          //                                                             ? EquipmentsCubit.get(
-                                          //                                                             context)
-                                          //                                                             .getRequestForFromType(
-                                          //                                                             state
-                                          //                                                                 .requestedData!
-                                          //                                                                 .data![index]
-                                          //                                                                 .type!)!
-                                          //                                                             .trim()
-                                          //                                                             : state.chosenList[index]
-                                          //                                                             .requestFor!
-                                          //                                                             .trim(),
-                                          //                                                         softWrap: true,
-                                          //                                                         style: const TextStyle(
-                                          //                                                             fontSize: 18),
-                                          //                                                       ),
-                                          //                                                     ),
-                                          //                                                   ],
-                                          //                                                 ),
-                                          //                                                 // Row(
-                                          //                                                 //   children: [
-                                          //                                                 //     Text(
-                                          //                                                 //       'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].qty : state.chosenList[index].quantity}',
-                                          //                                                 //       softWrap: true,
-                                          //                                                 //       style: const TextStyle(fontSize: 18),
-                                          //                                                 //     ),
-                                          //                                                 //   ],
-                                          //                                                 // ),
-                                          //                                                 Row(
-                                          //                                                   children: [
-                                          //                                                     Flexible(
-                                          //                                                       child: Text(
-                                          //                                                         'Owner: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].ownerName!.trim().toTitleCase() : state.chosenList[index].selectedContact!.name!.trim().toTitleCase()}',
-                                          //                                                         softWrap: false,
-                                          //                                                         maxLines: 2,
-                                          //                                                         overflow:
-                                          //                                                         TextOverflow.ellipsis,
-                                          //                                                         style: const TextStyle(
-                                          //                                                             fontSize: 18),
-                                          //                                                       ),
-                                          //                                                     ),
-                                          //                                                   ],
-                                          //                                                 ),
-                                          //                                                 Row(
-                                          //                                                   children: [
-                                          //                                                     Flexible(
-                                          //                                                       child: Text(
-                                          //                                                         'Estimate Price: ${(state.requestStatus == RequestStatus.oldRequest) ? ((state.requestedData!.data![index].estimatePrice == null) ? 'NO' : state.requestedData!.data![index].estimatePrice!.trim()) : (int.parse(state.chosenList[index].selectedItem!.estimatePrice!) * state.chosenList[index].quantity!).toString().trim()} LE',
-                                          //                                                         softWrap: false,
-                                          //                                                         maxLines: 2,
-                                          //                                                         overflow:
-                                          //                                                         TextOverflow.ellipsis,
-                                          //                                                         style: const TextStyle(
-                                          //                                                             fontSize: 18),
-                                          //                                                       ),
-                                          //                                                     ),
-                                          //                                                   ],
-                                          //                                                 ),
-                                          //                                                 Row(
-                                          //                                                   children: [
-                                          //                                                     Flexible(
-                                          //                                                       child: Text(
-                                          //                                                         'Group name: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].groupName!.trim() : state.chosenList[index].selectedItem!.groupId!.toString().trim()}',
-                                          //                                                         softWrap: false,
-                                          //                                                         maxLines: 2,
-                                          //                                                         overflow:
-                                          //                                                         TextOverflow.ellipsis,
-                                          //                                                         style: const TextStyle(
-                                          //                                                             fontSize: 18),
-                                          //                                                       ),
-                                          //                                                     ),
-                                          //                                                   ],
-                                          //                                                 ),
-                                          //                                               ],
-                                          //                                             ),
-                                          //                                           ),
-                                          //                                           // Container(
-                                          //                                           //   key: Key('value$index'),
-                                          //                                           //   margin: const EdgeInsets.only(
-                                          //                                           //     bottom: 8,
-                                          //                                           //   ),
-                                          //                                           //   padding: const EdgeInsets.all(10.0),
-                                          //                                           //   width: MediaQuery.of(context).size.width,
-                                          //                                           //   decoration: BoxDecoration(
-                                          //                                           //       color: Colors.blueGrey,
-                                          //                                           //       borderRadius: BorderRadius.circular(25)),
-                                          //                                           //   child: Column(
-                                          //                                           //     mainAxisAlignment: MainAxisAlignment.center,
-                                          //                                           //     crossAxisAlignment: CrossAxisAlignment.start,
-                                          //                                           //     children: [
-                                          //                                           //       Center(
-                                          //                                           //           child: (state.requestStatus ==
-                                          //                                           //                   RequestStatus.oldRequest)
-                                          //                                           //               ? EquipmentsCubit.get(context)
-                                          //                                           //                   .getIconByGroupName(state
-                                          //                                           //                       .requestedData!
-                                          //                                           //                       .data![0]
-                                          //                                           //                       .groupName!)
-                                          //                                           //               : state.chosenList[index].icon!),
-                                          //                                           //       Text(
-                                          //                                           //         (state.requestStatus ==
-                                          //                                           //                 RequestStatus.oldRequest)
-                                          //                                           //             ? state.requestedData!.data![index]
-                                          //                                           //                 .hardWareItemName!
-                                          //                                           //                 .trim()
-                                          //                                           //             : state.chosenList[index]
-                                          //                                           //                 .selectedItem!.hardWareItemName!
-                                          //                                           //                 .trim(),
-                                          //                                           //         softWrap: true,
-                                          //                                           //         style: const TextStyle(fontSize: 18),
-                                          //                                           //       ),
-                                          //                                           //       Text(
-                                          //                                           //         (state.requestStatus ==
-                                          //                                           //                 RequestStatus.oldRequest)
-                                          //                                           //             ? EquipmentsCubit.get(context)
-                                          //                                           //                 .getRequestForFromType(state
-                                          //                                           //                     .requestedData!
-                                          //                                           //                     .data![index]
-                                          //                                           //                     .type!)!
-                                          //                                           //                 .trim()
-                                          //                                           //             : state.chosenList[index].requestFor!
-                                          //                                           //                 .trim(),
-                                          //                                           //         softWrap: true,
-                                          //                                           //         style: const TextStyle(fontSize: 18),
-                                          //                                           //       ),
-                                          //                                           //       Text(
-                                          //                                           //         'Qty: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].qty : state.chosenList[index].quantity}',
-                                          //                                           //         softWrap: true,
-                                          //                                           //         style: const TextStyle(fontSize: 18),
-                                          //                                           //       ),
-                                          //                                           //       Text(
-                                          //                                           //         'Owner: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].ownerName!.trim() : state.chosenList[index].selectedContact!.name!.trim().toLowerCase()}',
-                                          //                                           //         softWrap: false,
-                                          //                                           //         maxLines: 2,
-                                          //                                           //         overflow: TextOverflow.ellipsis,
-                                          //                                           //         style: const TextStyle(fontSize: 18),
-                                          //                                           //       ),
-                                          //                                           //     ],
-                                          //                                           //   ),
-                                          //                                           // ),
-                                          //                                         ),
                                         ),
                                       );
                                     },
@@ -1290,66 +1004,82 @@ class EquipmentsRequestScreen extends StatelessWidget {
                     physics: const BouncingScrollPhysics(),
                     itemCount: state.historyWorkFlow.length,
                     itemBuilder: (_, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: SizedBox(
-                          // height: 60,
-                          width: double.infinity,
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  flex: 1,
-                                  child: Container(
-                                    width: 40,
-                                    height: 60,
-                                    margin: const EdgeInsets.only(right: 10),
-                                    decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        image: DecorationImage(
-                                            fit: BoxFit.contain,
-                                            image: (state.historyWorkFlow[index]
-                                                        .imgProfile !=
-                                                    null)
-                                                ? CachedNetworkImageProvider(
-                                                    getUserProfilePicture(state
-                                                        .historyWorkFlow[index]
-                                                        .imgProfile!))
-                                                : Assets.images.favicon
-                                                    .image(scale: 7)
-                                                    .image)),
-                                  ),
-                                ),
-                                Expanded(
-                                  flex: 6,
-                                  child: SizedBox(
-                                    // width: MediaQuery.of(context).size.width - 70,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          state.historyWorkFlow[index].empFrom!
-                                              .trim(),
-                                          style: const TextStyle(fontSize: 18),
-                                        ),
-                                        Text(
-                                          state
-                                              .historyWorkFlow[index].titleName!
-                                              .trim(),
-                                          style: const TextStyle(fontSize: 15),
-                                        ),
-                                      ],
+                      return InkWell(
+                        onTap: () => Navigator.of(context).pushNamed(
+                            DirectManagerProfileScreen.routeName,
+                            arguments: {
+                              DirectManagerProfileScreen.employeeHrCode:
+                                  state.historyWorkFlow[index].empFromHRCode
+                            }),
+                        child: Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: SizedBox(
+                            // height: 60,
+                            width: double.infinity,
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: Container(
+                                      width: 40,
+                                      height: 60,
+                                      margin: const EdgeInsets.only(right: 10),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              fit: BoxFit.contain,
+                                              image: (state
+                                                          .historyWorkFlow[
+                                                              index]
+                                                          .imgProfile !=
+                                                      null)
+                                                  ? CachedNetworkImageProvider(
+                                                      getUserProfilePicture(
+                                                          state
+                                                              .historyWorkFlow[
+                                                                  index]
+                                                              .imgProfile!))
+                                                  : Assets.images.favicon
+                                                      .image(scale: 7)
+                                                      .image)),
                                     ),
                                   ),
-                                ),
-                                Expanded(
-                                  child:
-                                      myRequestStatus(state.statusAction ?? ''),
-                                ),
-                              ]),
+                                  Expanded(
+                                    flex: 6,
+                                    child: SizedBox(
+                                      // width: MediaQuery.of(context).size.width - 70,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            state
+                                                .historyWorkFlow[index].empFrom!
+                                                .trim(),
+                                            style:
+                                                const TextStyle(fontSize: 18),
+                                          ),
+                                          Text(
+                                            state.historyWorkFlow[index]
+                                                .titleName!
+                                                .trim(),
+                                            style:
+                                                const TextStyle(fontSize: 15),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: myRequestStatus(
+                                        state.statusAction ?? ''),
+                                  ),
+                                ]),
+                          ),
                         ),
                       );
                     },

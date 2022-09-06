@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
-import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreenDirectManager.dart';
+import 'package:hassanallamportalflutter/screens/myprofile_screen/profile_screen_direct_manager.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';

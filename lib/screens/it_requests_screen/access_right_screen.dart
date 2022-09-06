@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,8 +10,6 @@ import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:hassanallamportalflutter/widgets/filters/multi_selection_chips_filters.dart';
-// import 'package:flutter_web_browser/flutter_web_browser.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -462,8 +458,6 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                           color: Colors.white),
                                                     ),
                                                   ),
-                                                  if (state.requestStatus ==
-                                                      RequestStatus.newRequest)
                                                     Padding(
                                                       padding:
                                                           const EdgeInsets.all(
@@ -473,46 +467,77 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                           AccessRightInitial>(
                                                         builder:
                                                             (context, state) {
-                                                          return ElevatedButton
-                                                              .icon(
-                                                            onPressed:
-                                                                () async {
-                                                              FilePickerResult?
-                                                                  result =
-                                                                  await FilePicker
-                                                                      .platform
-                                                                      .pickFiles();
+                                                          return (state
+                                                                      .requestStatus ==
+                                                                  RequestStatus
+                                                                      .newRequest)
+                                                              ? ElevatedButton
+                                                                  .icon(
+                                                                  style: ElevatedButton.styleFrom(
+                                                                      primary: (state
+                                                                              .chosenFileName
+                                                                              .isNotEmpty)
+                                                                          ? Colors
+                                                                              .green
+                                                                          : null),
+                                                                  onPressed:
+                                                                      () {
+                                                                    AccessRightCubit.get(
+                                                                            context)
+                                                                        .setChosenFileName();
+                                                                    // FilePickerResult?
+                                                                    //     result =
+                                                                    //     await FilePicker
+                                                                    //         .platform
+                                                                    //         .pickFiles();
+                                                                    //
+                                                                    // if (result !=
+                                                                    //     null) {
+                                                                    //   Uint8List?
+                                                                    //       fileBytes =
+                                                                    //       result
+                                                                    //           .files
+                                                                    //           .first
+                                                                    //           .bytes;
+                                                                    //   String
+                                                                    //       fileName =
+                                                                    //       result
+                                                                    //           .files
+                                                                    //           .first
+                                                                    //           .name;
+                                                                    //
+                                                                    //   // Upload file
+                                                                    //   // await FirebaseStorage.instance.ref('uploads/$fileName').putData(fileBytes);
+                                                                    // }
+                                                                  },
+                                                                  label: const Text(
+                                                                      'Upload',
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              Colors.white)),
+                                                                  icon: const Icon(
+                                                                      Icons
+                                                                          .cloud_upload_sharp,
+                                                                      color: Colors
+                                                                          .white),
+                                                                )
+                                                              : ElevatedButton
+                                                                  .icon(
+                                                                  onPressed:
+                                                                      () {
 
-                                                              if (result !=
-                                                                  null) {
-                                                                Uint8List?
-                                                                    fileBytes =
-                                                                    result
-                                                                        .files
-                                                                        .first
-                                                                        .bytes;
-                                                                String
-                                                                    fileName =
-                                                                    result
-                                                                        .files
-                                                                        .first
-                                                                        .name;
-
-                                                                // Upload file
-                                                                // await FirebaseStorage.instance.ref('uploads/$fileName').putData(fileBytes);
-                                                              }
-                                                            },
-                                                            label: const Text(
-                                                                ' Upload ',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .white)),
-                                                            icon: const Icon(
-                                                                Icons
-                                                                    .cloud_upload_sharp,
-                                                                color: Colors
-                                                                    .white),
-                                                          );
+                                                                      },
+                                                                  label: const Text(
+                                                                      'View',
+                                                                      style: TextStyle(
+                                                                          color:
+                                                                              Colors.white)),
+                                                                  icon: const Icon(
+                                                                      Icons
+                                                                          .cloud_upload_sharp,
+                                                                      color: Colors
+                                                                          .white),
+                                                                );
                                                         },
                                                       ),
                                                     ),

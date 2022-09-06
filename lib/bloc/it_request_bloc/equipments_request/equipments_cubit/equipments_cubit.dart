@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -265,6 +266,10 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       "reRequestCode": 0
     };
     GeneralDio.postMasterEquipmentsRequest(masterDataPost).then((value) {
+      var fileName = value.data['requestNo'];
+      if (state.fileResult.isSinglePick) {
+        GeneralDio.uploadEquipmentImage(state.fileResult,fileName,state.extension);
+      }
       for (int i = 0; i < selectedItem.length; i++) {
         int type = 1;
         switch (selectedItem[i].requestFor) {
@@ -319,6 +324,19 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         chosenList: [...state.chosenList, chosenObject],
       ));
     }
+  }
+
+  void uploadEquipmentRequestFile() {}
+  void setChosenFileName() async {
+    String extension = '';
+    String chosenFileName = '';
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null) {
+      extension = result.files.first.extension!;
+      chosenFileName = result.files.first.name;
+    }
+    emit(state.copyWith(extension: extension, fileResult: result,chosenFileName: chosenFileName));
   }
 
   void getAll() {
