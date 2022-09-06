@@ -34,9 +34,25 @@ class NotificationWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final userMainData = context.select((AppBloc bloc) => bloc.state.userData);
     return ConditionalBuilder(
-      condition: listFromnotificationScreen.isNotEmpty,
+      condition: (UserNotificationApiCubit.get(context)
+                  .state
+                  .userNotificationEnumStates ==
+              UserNotificationEnumStates.success ||
+          (UserNotificationApiCubit.get(context)
+                      .state
+                      .userNotificationEnumStates ==
+                  UserNotificationEnumStates.noConnection &&
+              UserNotificationApiCubit.get(context)
+                  .state
+                  .userNotificationList
+                  .isNotEmpty) ||
+          (UserNotificationApiCubit.get(context)
+                      .state
+                      .userNotificationEnumStates ==
+                  UserNotificationEnumStates.failed &&
+              listFromnotificationScreen.isNotEmpty)),
       builder: (context) {
-        return Padding(
+        return listFromnotificationScreen.isNotEmpty? Padding(
           padding: const EdgeInsets.all(8.0),
           child: ListView.separated(
             physics: const BouncingScrollPhysics(),
@@ -308,7 +324,7 @@ class NotificationWidget extends StatelessWidget {
               ),
             ),
           ),
-        );
+        ):const Center(child: Text('No Data Found'),);
       },
       fallback: (_) => Shimmer.fromColors(
         baseColor: Colors.white,
