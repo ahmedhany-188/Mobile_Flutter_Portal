@@ -87,116 +87,106 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                 children: [
                   Padding(
                       padding: const EdgeInsets.all(5.0),
-                      child: Stack(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Flexible(
-                                    flex: 2,
-                                    child: IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      color: Colors.transparent,
-                                      onPressed: () {},
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 3,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5.0),
-                                      child: Center(
-                                        child: imageProfile.isNotEmpty
-                                            ? CachedNetworkImage(
-                                                imageUrl: getUserProfilePicture(user.employeeData!.imgProfile!),
-                                                imageBuilder:
-                                                    (context, imageProvider) =>
-                                                        Container(
-                                                  width: 120,
-                                                  height: 120,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    image: DecorationImage(
-                                                        image: imageProvider,
-                                                        fit: BoxFit.cover),
-                                                  ),
-                                                ),
-                                                placeholder: (context, url) =>
-                                                    Assets.images.logo
-                                                        .image(height: 80),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Assets.images.logo
-                                                            .image(height: 80),
-                                              )
-                                            : Assets.images.logo
-                                                .image(height: 80),
-                                      ),
-                                    ),
-                                  ),
-                                  Flexible(
-                                    flex: 2,
-                                    child: IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      color: Colors.white,
-                                      onPressed: () {
-                                        showModalBottomSheet<void>(
-                                            context: context,
-                                            isScrollControlled: true,
-                                            backgroundColor: ConstantsColors
-                                                .bottomSheetBackgroundDark,
-                                            shape: const RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius.vertical(
-                                                        top: Radius.circular(
-                                                            20))),
-                                            builder: (BuildContext context) {
-                                              return ShowUserProfileBottomSheet(
-                                                  user);
-                                            });
-                                      },
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(10.0),
-                                decoration: BoxDecoration(
-                                  border:
-                                      Border.all(width: 2, color: Colors.black),
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                  color: Colors.black26,
-                                ),
-                                child: Column(children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: SizedBox(
-                                      width: double.infinity,
-                                      child: Text(
-                                        user.employeeData!.name!,
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontFamily: 'Nunito',
-                                          fontSize: 18,
+                          Flexible(
+                            flex: 2,
+                            child: IconButton(
+                              icon: const Icon(Icons.edit),
+                              color: Colors.transparent,
+                              onPressed: () {},
+                            ),
+                          ),
+                          Flexible(
+                            flex: 3,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: Center(
+                                child: imageProfile.isNotEmpty
+                                    ? CachedNetworkImage(
+                                        imageUrl: getUserProfilePicture(
+                                            user.employeeData!.imgProfile!),
+                                        imageBuilder:
+                                            (context, imageProvider) =>
+                                                Container(
+                                          width: 120,
+                                          height: 120,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            image: DecorationImage(
+                                                image: imageProvider,
+                                                fit: BoxFit.cover),
+                                          ),
                                         ),
-                                        textAlign: TextAlign.left,
-                                      ),
-                                    ),
-                                  ),
-                                  getFirstSection(
-                                      user.employeeData!.titleName!.toString()),
-                                  getFirstSection(
-                                      'HRCode: ${user.employeeData!.userHrCode!}'),
-                                  getFirstSection(
-                                      'Grade: ${user.employeeData!.gradeName}'),
-                                ]),
+                                        placeholder: (context, url) => Assets
+                                            .images.logo
+                                            .image(height: 80),
+                                        errorWidget: (context, url, error) =>
+                                            Assets.images.logo
+                                                .image(height: 80),
+                                      )
+                                    : Assets.images.logo.image(height: 80),
                               ),
-                            ],
+                            ),
+                          ),
+                          Flexible(
+                            flex: 2,
+                            child: IconButton(
+                              icon: const Icon(Icons.edit),
+                              color: Colors.white,
+                              onPressed: () {
+                                showModalBottomSheet<void>(
+                                    context: context,
+                                    isScrollControlled: true,
+                                    backgroundColor: ConstantsColors
+                                        .bottomSheetBackgroundDark,
+                                    shape: const RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.vertical(
+                                            top: Radius.circular(20))),
+                                    builder: (BuildContext context) {
+                                      return ShowUserProfileBottomSheet(user);
+                                    });
+                              },
+                            ),
                           ),
                         ],
                       )),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 2, color: Colors.black),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(20)),
+                        color: Colors.black26,
+                      ),
+                      child: Column(children: [
+                        Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: SizedBox(
+                            width: double.infinity,
+                            child: Text(
+                              user.employeeData!.name!,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'Nunito',
+                                fontSize: 18,
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                        ),
+                        getFirstSection(
+                            user.employeeData!.titleName!.toString()),
+                        getFirstSection(
+                            'HRCode: ${user.employeeData!.userHrCode!}'),
+                        getFirstSection(
+                            'Grade: ${user.employeeData!.gradeName}'),
+                      ]),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.all(5.0),
                     child: Container(
@@ -289,7 +279,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                         ],
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
