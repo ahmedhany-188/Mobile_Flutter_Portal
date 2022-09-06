@@ -129,6 +129,7 @@ class AuthenticationRepository {
                     print("FCM --> $token");
                     await FirebaseProvider(MainUserData(employeeData: employeeData,user: user)).updateUserWithData(token!);
                   });
+                  await _firebaseMessaging.subscribeToTopic("all");
                   _controller.add(MainUserData(employeeData: employeeData,user: user));
                 }
               });

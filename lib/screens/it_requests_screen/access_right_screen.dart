@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
@@ -24,7 +25,7 @@ import '../../widgets/requester_data_widget/requester_data_widget.dart';
 class AccessRightScreen extends StatefulWidget {
   static const routeName = "/access-user-account-screen";
   static const requestNoKey = 'request-No';
-  static const requestHrCode = 'request-HrCode';
+  static const requesterHRCode = 'request-HrCode';
 
   const AccessRightScreen({Key? key, this.requestData}) : super(key: key);
 
@@ -63,7 +64,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                 requestNo: currentRequestData[
                                     AccessRightScreen.requestNoKey],
                                 requesterHRCode: currentRequestData[
-                                    AccessRightScreen.requestHrCode]))),
+                                    AccessRightScreen.requesterHRCode]))),
               // ..getRequestData(currentRequestNo == null ?RequestStatus.newRequest : RequestStatus.oldRequest,currentRequestNo == null?"":currentRequestNo[VacationScreen.requestNoKey])),
             ],
             child: BlocBuilder<AccessRightCubit, AccessRightInitial>(
@@ -162,10 +163,14 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                         )));
                           } else if (state.requestStatus ==
                               RequestStatus.oldRequest) {
-                            EasyLoading.showSuccess(state.successMessage ?? "")
-                                .then((value) => Navigator.pop(context));
-                            BlocProvider.of<UserNotificationApiCubit>(context)
-                                .getNotifications();
+                            EasyLoading.showSuccess(state.successMessage ?? "").then((value) {
+                              if (Navigator.of(context).canPop()) {
+                                Navigator.of(context,rootNavigator: true).pop();
+                              }else{
+                                SystemNavigator.pop();
+                              }
+                            });
+                            BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();
                           }
                         }
                         if (state.status.isSubmissionFailure) {
