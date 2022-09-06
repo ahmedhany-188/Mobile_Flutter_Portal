@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
@@ -35,6 +36,11 @@ class HomeGridViewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    // bool autoPlay = true;
+    double shake(double animation) =>
+        2 * (0.5 - (0.5 - Curves.ease.transform(animation)).abs());
+
     return CustomBackground(
       child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -43,17 +49,39 @@ class HomeGridViewScreen extends StatelessWidget {
             backgroundColor: Colors.transparent,
             elevation: 0,
             leading: Builder(builder: (context) {
-              return InkWell(
+              return
+              //   ShakeWidget(
+              //   shakeConstant: ShakeHorizontalConstant2(),
+              //   autoPlay: true,
+              //   child: InkWell(
+              //     splashColor: Colors.transparent,
+              //     highlightColor: Colors.transparent,
+              //     onTap: () => Scaffold.of(context).openDrawer(),
+              //     child: Image.asset(Assets.images.logo.path, scale: 30),
+              //   ),
+              // );
+                TweenAnimationBuilder<double>(
+                duration: const Duration(milliseconds: 1500),
+                tween: Tween(begin: 0.3, end: 0.0),
+                builder: (context, animation, child) => Transform.translate(
+                  offset: Offset(50 * shake(animation), 0),
+                  filterQuality: FilterQuality.high,
+                  child: child,
+                ),
+                child: InkWell(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
                   onTap: () => Scaffold.of(context).openDrawer(),
-                  child: Image.asset(Assets.images.logo.path, scale: 30));
+                  child: Image.asset(Assets.images.logo.path, scale: 30),
+                ),
+              );
             }),
             centerTitle: true,
             title: const Text('Hassan Allam Holding'),
             actions: [
               BlocProvider.value(
-                value: BlocProvider.of<UserNotificationApiCubit>(context)..getNotifications(),
+                value: BlocProvider.of<UserNotificationApiCubit>(context)
+                  ..getNotifications(),
                 child: BlocBuilder<UserNotificationApiCubit,
                     UserNotificationApiState>(
                   builder: (context, state) {
@@ -684,7 +712,8 @@ class MenuPopupWidget extends StatelessWidget {
           bodyBuilder: (context) => widgetFunction,
           direction: PopoverDirection.top,
           width: 150,
-          backgroundColor: ConstantsColors.bottomSheetBackgroundDark.withOpacity(0.9),
+          backgroundColor:
+              ConstantsColors.bottomSheetBackgroundDark.withOpacity(0.9),
           arrowHeight: 15,
           arrowWidth: 30,
         );
