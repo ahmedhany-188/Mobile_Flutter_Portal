@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
@@ -131,7 +132,13 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                     requestName: 'Business Mission',)));
                         }
                         else if (state.requestStatus == RequestStatus.oldRequest){
-                          EasyLoading.showSuccess(state.successMessage ?? "").then((value) => Navigator.pop(context));
+                          EasyLoading.showSuccess(state.successMessage ?? "").then((value) {
+                            if (Navigator.of(context).canPop()) {
+                              Navigator.of(context,rootNavigator: true).pop();
+                            }else{
+                              SystemNavigator.pop();
+                            }
+                          });
                           BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();
                         }
                       }

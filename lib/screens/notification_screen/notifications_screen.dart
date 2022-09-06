@@ -556,7 +556,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               .pushNamed(AccessRightScreen.routeName, arguments: {
             AccessRightScreen.requestNoKey: notification.requestNo.toString()
             ,
-            AccessRightScreen.requestHrCode: notification.requestHRCode
+            AccessRightScreen.requesterHRCode: notification.requestHRCode
                 .toString()
           });
           break;

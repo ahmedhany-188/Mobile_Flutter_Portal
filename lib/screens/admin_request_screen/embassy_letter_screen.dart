@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
@@ -152,9 +153,14 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                       "Error Number",routName: EmbassyLetterScreen.routeName, requestName: 'Embassy Letter',)));
                         }
                         else if (state.requestStatus == RequestStatus.oldRequest){
-                          EasyLoading.showSuccess(state.successMessage ?? "").then((value) => Navigator.pop(context));
-                          BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();
-                        }
+                          EasyLoading.showSuccess(state.successMessage ?? "").then((value) {
+                            if (Navigator.of(context).canPop()) {
+                              Navigator.of(context,rootNavigator: true).pop();
+                            }else{
+                              SystemNavigator.pop();
+                            }
+                          });
+                          BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();}
                       }
                       else if (state.status.isSubmissionInProgress) {
                         EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
