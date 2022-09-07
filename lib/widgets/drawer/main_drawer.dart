@@ -208,15 +208,15 @@ class MainDrawer extends StatelessWidget {
         child: Column(
           children: [
             /// commented code below is for centered image and text
-            Container(
+            Flexible(
               // clipBehavior: Clip.none,
-              height: MediaQuery.of(context).size.height * 0.25,
-              width: double.infinity,
-              // margin: const EdgeInsets.only(bottom: 15),
-              alignment: Alignment.center,
-              color: Colors.transparent,
+              // height: MediaQuery.of(context).size.height * 0.20,
+              // width: double.infinity,
+              // margin: const EdgeInsets.only(top: 20),
+              // alignment: Alignment.center,
+              // color: Colors.transparent,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CircleAvatar(
@@ -472,8 +472,9 @@ class MainDrawer extends StatelessWidget {
             //         },
             //       )),
             // ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.74,
+            Expanded(
+              flex: 3,
+              // height: MediaQuery.of(context).size.height * 0.74,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
