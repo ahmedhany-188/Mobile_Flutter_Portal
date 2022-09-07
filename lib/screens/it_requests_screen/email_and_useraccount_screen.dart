@@ -14,7 +14,6 @@ import '../../../widgets/success/success_request_widget.dart';
 import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../widgets/requester_data_widget/requester_data_widget.dart';
 
-
 class EmailAndUserAccountScreen  extends StatefulWidget{
 
   static const routeName = "/email-user-account-screen";
@@ -33,10 +32,7 @@ class EmailAndUserAccountScreen  extends StatefulWidget{
 class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
 
   var mobileKey = false;
-
-  bool hrCodeUpdated = false;
   String hrCodeEmail = "";
-
 
   @override
   Widget build(BuildContext context) {
@@ -124,16 +120,17 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                   state.hrCodeUser.value) {
                                 EasyLoading.showError("Invalid same hr code",);
                               }
-                              else if (hrCodeUpdated) {
-                                EasyLoading.showError("Data not added");
-                              }
-                              else if (user.employeeData!.userHrCode !=
-                                  state.hrCodeUser.value) {
-                                context.read<EmailUserAccountCubit>()
-                                    .submitEmailAccount();
+                              else if (state.hrcodeUpdated) {
+                                EasyLoading.showError("User data not submitted");
                               }
                               else {
-                                EasyLoading.showError("error",);
+                                // if (user.employeeData!.userHrCode !=
+                                //   state.hrCodeUser.value) {
+                                context.read<EmailUserAccountCubit>()
+                                    .submitEmailAccount();
+                              // }
+                              // else {
+                              //   EasyLoading.showError("error",);
                               }
                             },
                             icon: const Icon(Icons.send),
@@ -353,18 +350,13 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                           {
                                             context.read<
                                                 EmailUserAccountCubit>()
-                                                .hrCodeChanged(hrCode),
-                                            context.read<
-                                                EmailUserAccountCubit>()
                                                 .clearStateHRCode(),
-                                            hrCodeUpdated = true,
                                             hrCodeEmail = hrCode.toString()
                                           },
                                           onFieldSubmitted: (value) {
                                             hrCodeEmail = value.toString();
                                             context.read<
                                                 EmailUserAccountCubit>()
-                                            // .hrCodeSubmittedGetData(state.hrCodeUser.value);
                                                 .hrCodeSubmittedGetData(
                                                 hrCodeEmail);
                                           },

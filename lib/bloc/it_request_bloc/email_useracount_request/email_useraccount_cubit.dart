@@ -89,6 +89,7 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
   }
 
   void clearStateHRCode(){
+    emit(state.copyWith(hrcodeUpdated:true));
     const hrCodeUser = const RequestDate.dirty("");
     const userMobile = const RequestDate.dirty("");
 
@@ -99,7 +100,7 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
       email: "",
       userMobile: userMobile,
       hrCodeUser:hrCodeUser,
-      status: Formz.validate([userMobile, hrCodeUser]),
+      // status: Formz.validate([userMobile, hrCodeUser]),
     ));
   }
 
@@ -111,7 +112,7 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
 
       clearStateHRCode();
 
-      emit(state.copyWith(errorMessage: "Invalid hr code", status:FormzStatus.submissionFailure ));
+      emit(state.copyWith(errorMessage: "Invalid hr code", hrcodeUpdated:true,status:FormzStatus.submissionFailure ));
     } else {
 
       final fullName = requestData.name.toString();
@@ -119,6 +120,7 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
       final locationEmployee = requestData.projectName.toString();
       final emailEmployee = requestData.email.toString();
       final userMobile = RequestDate.dirty(requestData.mobile.toString());
+      final hrCodeUser = RequestDate.dirty(hrCode);
 
       emit(state.copyWith(
         fullName: fullName,
@@ -126,7 +128,9 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
         userLocation: locationEmployee,
         email: emailEmployee,
         userMobile: userMobile,
-        status: Formz.validate([userMobile, state.hrCodeUser]),
+        hrCodeUser: hrCodeUser,
+        hrcodeUpdated: false,
+        status: Formz.validate([userMobile, ]),
       ));
     }
   }
@@ -240,16 +244,6 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
     ));
   }
 
-
-
-  void hrCodeChanged(String value){
-    final hrCodeUser = RequestDate.dirty(value);
-    emit(state.copyWith(
-      hrCodeUser: hrCodeUser,
-      status: Formz.validate([state.userMobile,hrCodeUser]),
-    ));
-  }
-
   void commentRequesterChanged(String value) {
 
     // final permissionTime = PermissionTime.dirty(value);
@@ -261,7 +255,6 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
       ),
     );
   }
-
 
   @override
   Future<void> close() {

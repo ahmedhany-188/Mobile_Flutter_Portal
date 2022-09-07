@@ -40,7 +40,7 @@ class StaffDashBoardProjectScreenClass extends State<StaffDashBoardProjectScreen
               image: Assets.images.staffdashboard.dashboardbgsub
                   .image()
                   .image,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
             ),),
           child: Scaffold(
             backgroundColor: Colors.transparent,

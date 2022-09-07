@@ -49,7 +49,8 @@ class StaffDashBoardDetailScreenClass extends State<StaffDashBoardDetailScreen> 
                 appBar: AppBar(
                     backgroundColor: ConstantsColors.petrolTextAttendance,
                     elevation: 0,
-                    title:  Text("Subsidiaries "+currentRequestData[StaffDashBoardDetailScreen.date]),
+                    title:  Text("Subsidiaries"),
+                    // +currentRequestData[StaffDashBoardDetailScreen.date]
                     // title: Text('Dashboard $formattedDateTitle'),
                     centerTitle: true,
                     actions: <Widget>[
@@ -76,6 +77,8 @@ class StaffDashBoardDetailScreenClass extends State<StaffDashBoardDetailScreen> 
                           EasyLoading.dismiss(animation: true);
                           currentRequestData[StaffDashBoardDetailScreen
                               .staffDashboardList]=state.companyStaffDashBoardList;
+                          currentRequestData[StaffDashBoardDetailScreen
+                              .date]=state.date;
                         }
                         else if (state.companyStaffDashBoardEnumStates ==
                             CompanyStaffDashBoardEnumStates.loading) {
@@ -95,11 +98,24 @@ class StaffDashBoardDetailScreenClass extends State<StaffDashBoardDetailScreen> 
                         }
                       },
                       builder: (context, state) {
-                        return Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: StaffDashBoardTicketWidget(
-                              currentRequestData[StaffDashBoardDetailScreen
-                                  .staffDashboardList],state.date),
+                        return
+                          // Column(
+                          // children: [
+                            // Center(
+                            //   child: Text(
+                            //     state.companyStaffDashBoardEnumStates ==
+                            //         CompanyStaffDashBoardEnumStates.success ?
+                            //     state.date : "Day",
+                            //     style: const TextStyle(
+                            //         color: Colors.white, fontSize: 20),),
+                            // ),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: StaffDashBoardTicketWidget(
+                                  currentRequestData[StaffDashBoardDetailScreen
+                                      .staffDashboardList],state.date),
+                          //   ),
+                          // ],
                         );
                       },
                     )

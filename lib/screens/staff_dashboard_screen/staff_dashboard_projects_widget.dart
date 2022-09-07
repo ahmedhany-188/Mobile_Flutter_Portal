@@ -120,7 +120,7 @@ class StaffDashboardProjectWidget extends StatelessWidget {
   Padding getHeader(String header,int number){
 
     return Padding(
-      padding:number==0?EdgeInsets.only(top: 20,bottom: 2.0):EdgeInsets.only(top: 2.0,bottom: 20.0) ,
+      padding:number==0?EdgeInsets.only(top: 30,bottom: 2.0):EdgeInsets.only(top: 2.0,bottom: 30.0) ,
       child: Center(
         child: Text(header,
             style: TextStyle(color: Colors.white)),
@@ -148,12 +148,7 @@ class StaffDashboardProjectWidget extends StatelessWidget {
             animationDuration: 2000,
             percent: value / 100,
             // center: Text("$value%"),
-
-            trailing: Padding(
-              padding: const EdgeInsets.all(0.0),
-              child: Text("$value%"),
-            ),
-
+            trailing: Text("$value%"),
             // linearStrokeCap: LinearStrokeCap.roundAll,
             barRadius: const Radius.circular(10),
             progressColor: ConstantsColors.petrolTextAttendance,

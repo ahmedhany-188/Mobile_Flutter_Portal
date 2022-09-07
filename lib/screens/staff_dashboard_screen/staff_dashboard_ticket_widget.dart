@@ -186,10 +186,10 @@ class StaffDashBoardTicketWidget extends StatelessWidget {
     int percentage = ((value / total) * 100).round();
     return LinearPercentIndicator(
       animation: true,
-      lineHeight: 15.0,
+      lineHeight: 5.0,
       animationDuration: 2000,
       percent: percentage / 100,
-      center: Text(percentage.toString() + "%"),
+      trailing: Text("$percentage%",style: TextStyle(color: Colors.white),),
       // linearStrokeCap: LinearStrokeCap.roundAll,
       barRadius: const Radius.circular(10),
       progressColor: ConstantsColors.greenAttendance,
@@ -201,10 +201,11 @@ class StaffDashBoardTicketWidget extends StatelessWidget {
     int percentage = ((value / total) * 100).round();
     return LinearPercentIndicator(
       animation: true,
-      lineHeight: 15.0,
+      lineHeight: 5.0,
       animationDuration: 2000,
       percent: percentage / 100,
-      center: Text(percentage.toString() + "%"),
+      trailing: Text("$percentage%",style: TextStyle(color: Colors.white),),
+
       // linearStrokeCap: LinearStrokeCap.roundAll,
       barRadius: const Radius.circular(10),
       progressColor: ConstantsColors.redAttendance,
@@ -214,7 +215,7 @@ class StaffDashBoardTicketWidget extends StatelessWidget {
   LinearPercentIndicator getLinearContractors(context) {
     return LinearPercentIndicator(
       animation: true,
-      lineHeight: 15.0,
+      lineHeight: 5.0,
       animationDuration: 2000,
       percent: 20 / 100,
       // center: Text(percentage.toString()+"%"),
