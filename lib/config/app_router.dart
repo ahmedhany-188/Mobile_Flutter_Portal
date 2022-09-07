@@ -32,6 +32,8 @@ import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.d
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_detail_screen.dart';
+import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_jobs_screen.dart';
+import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_projects_screen.dart';
 import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_details_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
@@ -115,6 +117,16 @@ class AppRouter {
       case StaffDashBoardDetailScreen.routeName:
         return MaterialPageRoute(
           builder: (_) =>  StaffDashBoardDetailScreen(requestData:settings.arguments),
+        );
+
+      case StaffDashBoardProjectScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) =>  StaffDashBoardProjectScreen(requestData:settings.arguments),
+        );
+
+      case StaffDashboardJobScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) =>  StaffDashboardJobScreen(requestData:settings.arguments),
         );
 
       case MedicalRequestScreen.routeName:

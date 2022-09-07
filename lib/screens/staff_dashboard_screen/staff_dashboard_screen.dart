@@ -231,7 +231,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                                                       0.0, getTotalStaff(state
                                                   .companyStaffDashBoardList) +
                                                   0.0) :
-                                              getAttendancePercentage(1.0, 1.0),
+                                              getAttendancePercentage(0.0, 1.0),
                                             ),
                                           ],),
 
@@ -254,6 +254,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                                                   style: TextStyle(
                                                       color: Colors.white),),
                                               ),
+
                                               Padding(
                                                 padding: EdgeInsets.all(
                                                     8.0),
@@ -274,7 +275,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                                                     .companyStaffDashBoardList) +
                                                     0.0) :
                                                 getAttendancePercentage(
-                                                    1.0, 1.0),),
+                                                    0.0, 1.0),),
                                             ],),
                                         ],
                                       ),
@@ -292,7 +293,8 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                                       Navigator.of(context).pushNamed(
                                           StaffDashBoardDetailScreen.routeName,
                                           arguments: {
-                                            StaffDashBoardDetailScreen.staffDashboardList: state.companyStaffDashBoardList
+                                            StaffDashBoardDetailScreen.staffDashboardList: state.companyStaffDashBoardList,
+                                            StaffDashBoardDetailScreen.date: state.date
                                           });
                                     }
                                   },

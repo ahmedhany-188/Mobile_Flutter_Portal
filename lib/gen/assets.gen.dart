@@ -100,6 +100,9 @@ class $AssetsImagesGen {
   AssetGenImage get noSearchIcon =>
       const AssetGenImage('assets/images/no_search_icon.png');
 
+  $AssetsImagesStaffdashboardGen get staffdashboard =>
+      const $AssetsImagesStaffdashboardGen();
+
   /// File path: assets/images/welcomeImage.gif
   AssetGenImage get welcomeImage =>
       const AssetGenImage('assets/images/welcomeImage.gif');
@@ -147,6 +150,82 @@ class $AssetsImagesHomepageGen {
   /// File path: assets/images/homepage/staffDashboardIcon.png
   AssetGenImage get staffDashboardIcon =>
       const AssetGenImage('assets/images/homepage/staffDashboardIcon.png');
+}
+
+class $AssetsImagesStaffdashboardGen {
+  const $AssetsImagesStaffdashboardGen();
+
+  /// File path: assets/images/staffdashboard/boxlayer.png
+  AssetGenImage get boxlayer =>
+      const AssetGenImage('assets/images/staffdashboard/boxlayer.png');
+
+  /// File path: assets/images/staffdashboard/dashboard1.png
+  AssetGenImage get dashboard1 =>
+      const AssetGenImage('assets/images/staffdashboard/dashboard1.png');
+
+  /// File path: assets/images/staffdashboard/dashboard2.png
+  AssetGenImage get dashboard2 =>
+      const AssetGenImage('assets/images/staffdashboard/dashboard2.png');
+
+  /// File path: assets/images/staffdashboard/dashboard3.jpg
+  AssetGenImage get dashboard3 =>
+      const AssetGenImage('assets/images/staffdashboard/dashboard3.jpg');
+
+  /// File path: assets/images/staffdashboard/dashboardbgsub.jpg
+  AssetGenImage get dashboardbgsub =>
+      const AssetGenImage('assets/images/staffdashboard/dashboardbgsub.jpg');
+
+  /// File path: assets/images/staffdashboard/dashboardicon.png
+  AssetGenImage get dashboardicon =>
+      const AssetGenImage('assets/images/staffdashboard/dashboardicon.png');
+
+  /// File path: assets/images/staffdashboard/dashboardsub1.png
+  AssetGenImage get dashboardsub1 =>
+      const AssetGenImage('assets/images/staffdashboard/dashboardsub1.png');
+
+  /// File path: assets/images/staffdashboard/dashboardsub2.png
+  AssetGenImage get dashboardsub2 =>
+      const AssetGenImage('assets/images/staffdashboard/dashboardsub2.png');
+
+  /// File path: assets/images/staffdashboard/dashboardsub3.png
+  AssetGenImage get dashboardsub3 =>
+      const AssetGenImage('assets/images/staffdashboard/dashboardsub3.png');
+
+  /// File path: assets/images/staffdashboard/dashboardsub4.png
+  AssetGenImage get dashboardsub4 =>
+      const AssetGenImage('assets/images/staffdashboard/dashboardsub4.png');
+
+  /// File path: assets/images/staffdashboard/empicon.png
+  AssetGenImage get empicon =>
+      const AssetGenImage('assets/images/staffdashboard/empicon.png');
+
+  /// File path: assets/images/staffdashboard/employee.png
+  AssetGenImage get employee =>
+      const AssetGenImage('assets/images/staffdashboard/employee.png');
+
+  /// File path: assets/images/staffdashboard/labor.png
+  AssetGenImage get labor =>
+      const AssetGenImage('assets/images/staffdashboard/labor.png');
+
+  /// File path: assets/images/staffdashboard/laborbox.png
+  AssetGenImage get laborbox =>
+      const AssetGenImage('assets/images/staffdashboard/laborbox.png');
+
+  /// File path: assets/images/staffdashboard/laboreffect.png
+  AssetGenImage get laboreffect =>
+      const AssetGenImage('assets/images/staffdashboard/laboreffect.png');
+
+  /// File path: assets/images/staffdashboard/laboricon.png
+  AssetGenImage get laboricon =>
+      const AssetGenImage('assets/images/staffdashboard/laboricon.png');
+
+  /// File path: assets/images/staffdashboard/staffbox.png
+  AssetGenImage get staffbox =>
+      const AssetGenImage('assets/images/staffdashboard/staffbox.png');
+
+  /// File path: assets/images/staffdashboard/staffeffect.png
+  AssetGenImage get staffeffect =>
+      const AssetGenImage('assets/images/staffdashboard/staffeffect.png');
 }
 
 class Assets {
