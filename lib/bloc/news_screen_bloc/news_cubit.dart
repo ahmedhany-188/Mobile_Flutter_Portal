@@ -74,49 +74,29 @@ class NewsCubit extends Cubit<NewsState> {
       if (value.data != null) {
         List<NewsDataModel> newsDataList = List<NewsDataModel>.from(value.data.map((model) => NewsDataModel.fromJson(model)));
         newsList = newsDataList;
-        GeneralDio.newsDataOld(type: '1').then((value) {
-          List<NewsDataModel> newsDataListAnnouncment = List<NewsDataModel>.from(value.data.map((model) => NewsDataModel.fromJson(model)));
-          for (int i = 0; i < newsDataListAnnouncment.length - 1; i++) {
-            if (newsDataListAnnouncment[i].newsType == 1) {
-              announcment.add(
-                TyperAnimatedText(
-                  newsDataListAnnouncment[i].newsDescription!,
-                  speed: const Duration(milliseconds: 50),
-                  textAlign: TextAlign.center,
-                  curve: Curves.linear,
-                  textStyle: const TextStyle(
-                      color: Colors.white,
-                      overflow: TextOverflow.visible,
-                      fontFamily: 'RobotoFlex',
-                      fontSize: 14),
-                ),
-              );
-            }
-          }
-        });
         emit(NewsSuccessState(newsDataList, announcment));
       }
     });
-    // GeneralDio.newsDataOld(type: '1').then((value) {
-    //   for (int i = 0; i < newsList.length - 1; i++) {
-    //     if (newsList[i].newsType == 1) {
-    //       announcment.add(
-    //         TyperAnimatedText(
-    //           newsList[i].newsDescription!,
-    //           speed: const Duration(milliseconds: 50),
-    //           textAlign: TextAlign.center,
-    //           curve: Curves.linear,
-    //           textStyle: const TextStyle(
-    //               color: Colors.white,
-    //               overflow: TextOverflow.visible,
-    //               fontFamily: 'RobotoFlex',
-    //               fontSize: 14),
-    //         ),
-    //       );
-    //     }
-    //   }
-    // });
-
+    GeneralDio.newsDataOld(type: 1).then((value) {
+      List<NewsDataModel> newsDataListAnnouncment = List<NewsDataModel>.from(value.data.map((model) => NewsDataModel.fromJson(model)));
+      for (int i = 0; i < newsDataListAnnouncment.length; i++) {
+        if (newsDataListAnnouncment[i].newsType == 1) {
+          announcment.add(
+            TyperAnimatedText(
+              newsDataListAnnouncment[i].newsDescription!,
+              speed: const Duration(milliseconds: 50),
+              textAlign: TextAlign.center,
+              curve: Curves.linear,
+              textStyle: const TextStyle(
+                  color: Colors.white,
+                  overflow: TextOverflow.visible,
+                  fontFamily: 'RobotoFlex',
+                  fontSize: 14),
+            ),
+          );
+        }
+      }
+    });
   }
 
   void getLatestNews() {
