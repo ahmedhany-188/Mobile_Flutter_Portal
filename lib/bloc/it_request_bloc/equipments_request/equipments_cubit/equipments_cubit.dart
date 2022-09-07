@@ -213,14 +213,18 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     emit(state.copyWith(
       status: FormzStatus.submissionInProgress,
     ));
-    final equipmentResultResponse =
-        await _requestRepository.postEquipmentTakeActionRequest(
+    final equipmentResultResponse = await _requestRepository
+        .postEquipmentTakeActionRequest(
       valueStatus: valueStatus,
       requestNo: requestNo,
       actionComment: state.actionComment,
       serviceID: RequestServiceID.equipmentServiceID,
       requesterHRCode: state.requesterData.userHrCode ?? "",
-    );
+    )
+        .catchError((err) {
+      EasyLoading.showError('Something went wrong');
+      throw err;
+    });
 
     final result = equipmentResultResponse.result ?? "false";
     if (result.toLowerCase().contains("true")) {
@@ -268,7 +272,14 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     GeneralDio.postMasterEquipmentsRequest(masterDataPost).then((value) {
       var fileName = value.data['requestNo'];
       if (state.fileResult.isSinglePick) {
-        GeneralDio.uploadEquipmentImage(state.fileResult,fileName,state.extension);
+        GeneralDio.uploadEquipmentImage(
+                state.fileResult, fileName, state.extension)
+            .whenComplete(
+                () => EasyLoading.showSuccess('Image uploaded successfully'))
+            .catchError((err) {
+          EasyLoading.showError('Something went wrong');
+          throw err;
+        });
       }
       for (int i = 0; i < selectedItem.length; i++) {
         int type = 1;
@@ -300,10 +311,12 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         };
         GeneralDio.postDetailEquipmentsRequest(detailedDataPost)
             .catchError((e) {
+          EasyLoading.showError('Something went wrong');
           throw e;
         });
       }
     }).catchError((e) {
+      EasyLoading.showError('Something went wrong');
       throw e;
     });
   }
@@ -336,7 +349,10 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       extension = result.files.first.extension!;
       chosenFileName = result.files.first.name;
     }
-    emit(state.copyWith(extension: extension, fileResult: result,chosenFileName: chosenFileName));
+    emit(state.copyWith(
+        extension: extension,
+        fileResult: result,
+        chosenFileName: chosenFileName));
   }
 
   void getAll() {

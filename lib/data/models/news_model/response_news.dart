@@ -19,10 +19,10 @@ class ResponseNews {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    data['error'] = this.error;
-    data['message'] = this.message;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['code'] = code;
+    data['error'] = error;
+    data['message'] = message;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -78,19 +78,19 @@ class NewsData {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['news_ID'] = this.newsID;
-    data['news_Description'] = this.newsDescription;
-    data['news_Body'] = this.newsBody;
-    data['news_Title_ar'] = this.newsTitleAr;
-    data['news_Body_ar'] = this.newsBodyAr;
-    data['news_Date'] = this.newsDate;
-    data['news_Title'] = this.newsTitle;
-    data['fIndex'] = this.fIndex;
-    data['ftype'] = this.ftype;
-    data['active'] = this.active;
-    data['noOfDays'] = this.noOfDays;
-    data['news_type'] = this.newsType;
-    data['news_Img'] = this.newsImg;
+    data['news_ID'] = newsID;
+    data['news_Description'] = newsDescription;
+    data['news_Body'] = newsBody;
+    data['news_Title_ar'] = newsTitleAr;
+    data['news_Body_ar'] = newsBodyAr;
+    data['news_Date'] = newsDate;
+    data['news_Title'] = newsTitle;
+    data['fIndex'] = fIndex;
+    data['ftype'] = ftype;
+    data['active'] = active;
+    data['noOfDays'] = noOfDays;
+    data['news_type'] = newsType;
+    data['news_Img'] = newsImg;
     return data;
   }
 }

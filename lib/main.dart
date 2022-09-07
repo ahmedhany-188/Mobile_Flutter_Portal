@@ -388,7 +388,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<NewsCubit>(
             create: (newsContext) =>
             NewsCubit()
-              ..getNews()
+              ..getNewsOld()
               ..getLatestNews(),
             lazy: true,
           ),

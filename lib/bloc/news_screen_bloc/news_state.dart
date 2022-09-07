@@ -8,7 +8,7 @@ class NewsInitial extends NewsState {}
 class NewsLoadingState extends NewsState {}
 
 class NewsSuccessState extends NewsState {
-  final List<NewsData> newsList;
+  final List<NewsDataModel> newsList;
   final List<AnimatedText> announcment;
 
   NewsSuccessState(this.newsList,this.announcment);

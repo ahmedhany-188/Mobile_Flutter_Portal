@@ -23,14 +23,14 @@ import '../../screens/my_requests_screen/my_requests_screen.dart';
 import '../../screens/myattendance_screen/attendance_screen.dart';
 import '../../screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 
-class MainDrawer extends StatefulWidget {
+class MainDrawer extends StatelessWidget {
   const MainDrawer({Key? key}) : super(key: key);
 
-  @override
-  State<MainDrawer> createState() => _MainDrawerState();
-}
-
-class _MainDrawerState extends State<MainDrawer> {
+//   @override
+//   State<MainDrawer> createState() => _MainDrawerState();
+// }
+//
+// class _MainDrawerState extends State<MainDrawer> {
   Widget buildListTile(String title, IconData icon, tapHandler) {
     return InkWell(
       onTap: tapHandler,
@@ -489,14 +489,14 @@ class _MainDrawerState extends State<MainDrawer> {
                       Icons.wallpaper,
                       () {
                         Navigator.of(context)
-                            .pushNamed(MyRequestsScreen.routeName);
+                            .popAndPushNamed(MyRequestsScreen.routeName);
                       },
                     ),
                     buildListTile(
                       'My Profile',
                       Icons.person,
                       () {
-                        Navigator.pushNamed(
+                        Navigator.popAndPushNamed(
                             context, UserProfileScreen.routeName);
                       },
                     ),
@@ -506,12 +506,13 @@ class _MainDrawerState extends State<MainDrawer> {
                       'My Attendance',
                       Icons.fingerprint,
                       () {
-                        Navigator.pushNamed(
+
+                        Navigator.popAndPushNamed(
                             context, AttendanceScreen.routeName);
                       },
                     ),
                     InkWell(
-                      onTap: () => Navigator.pushNamed(
+                      onTap: () => Navigator.popAndPushNamed(
                           context, NotificationsScreen.routeName),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -564,14 +565,14 @@ class _MainDrawerState extends State<MainDrawer> {
                       Icons.nature_people,
                       () {
                         Navigator.of(context)
-                            .pushNamed(PayslipScreen.routeName);
+                            .popAndPushNamed(PayslipScreen.routeName);
                       },
                     ),
                     buildListTile(
                       'My Appraisal',
                       Icons.quiz,
                       () {
-                        Navigator.pushNamed(
+                        Navigator.popAndPushNamed(
                             context, EmployeeAppraisalScreen.routeName);
                       },
                     ),
@@ -580,7 +581,7 @@ class _MainDrawerState extends State<MainDrawer> {
                       'Staff Dashboard',
                       Icons.dashboard,
                       () {
-                        Navigator.pushNamed(
+                        Navigator.popAndPushNamed(
                             context, StaffDashBoardScreen.routeName);
                       },
                     ),
@@ -593,26 +594,26 @@ class _MainDrawerState extends State<MainDrawer> {
                       'Get Direction',
                       () {
                         Navigator.of(context)
-                            .pushNamed(GetDirectionScreen.routeName);
+                            .popAndPushNamed(GetDirectionScreen.routeName);
                       },
                     ),
                     buildNoIconTile(
                       'Subsidiaries',
                       () {
                         Navigator.of(context)
-                            .pushNamed(SubsidiariesScreen.routeName);
+                            .popAndPushNamed(SubsidiariesScreen.routeName);
                       },
                     ),
                     buildNoIconTile(
                       'Values',
                       () {
-                        Navigator.of(context).pushNamed(ValueScreen.routeName);
+                        Navigator.of(context).popAndPushNamed(ValueScreen.routeName);
                       },
                     ),
                     buildNoIconTile(
                       'About',
                       () {
-                        Navigator.of(context).pushNamed(AboutScreen.routeName);
+                        Navigator.of(context).popAndPushNamed(AboutScreen.routeName);
                       },
                     ),
                     buildNoIconTile(
@@ -678,7 +679,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     //   Icons.list,
                     //   () {
                     //     Navigator.of(context)
-                    //         .pushNamed(NewsScreen.routeName);
+                    //         .popAndPushNamed(NewsScreen.routeName);
                     //   },
                     // ),
                     // buildDivider(),
@@ -686,7 +687,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     //   'EconomyNews',
                     //   Icons.waterfall_chart,
                     //   () {
-                    //     Navigator.pushNamed(
+                    //     Navigator.popAndPushNamed(
                     //         context, EconomyNewsScreen.routeName);
                     //   },
                     // ),
@@ -698,7 +699,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     //   Icons.apps,
                     //       () {
                     //     Navigator.of(context)
-                    //         .pushNamed(NewsLetterScreen.routeName);
+                    //         .popAndPushNamed(NewsLetterScreen.routeName);
                     //   },
                     // ),
                   ],

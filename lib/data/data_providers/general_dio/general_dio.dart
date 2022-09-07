@@ -52,6 +52,12 @@ class GeneralDio {
       url,
     );
   }
+  static Future<Response> newsDataOld({String type = '2'}) async {
+    String url = 'Portal/GetNews?Type=$type';
+    return await dio!.get(
+      url,
+    );
+  }
 
   static Future<Response> latestNewsData(
       {String url = 'portal/News/GetLatest'}) async {

@@ -128,104 +128,103 @@ class DirectManagerProfileScreenClass
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(5.0),
-                                child: Column(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.center,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Flexible(
-                                          flex: 2,
-                                          child: IconButton(
-                                            icon: const Icon(Icons.phone),
-                                            color: Colors.white,
-                                            onPressed: () {
-                                              url_launcher.launchUrl(Uri.parse(
-                                                  'tel:+${getMobile(state)}'));
-                                            },
-                                          ),
-                                        ),
-                                        Flexible(
-                                          flex: 3,
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(5.0),
-                                            child: Center(
-                                              // child: state is BlocGetManagerDataSuccessState && state.managerData.imgProfile !=null && state.managerData.imgProfile.toString()!="" && state.managerData.imgProfile.toString()!="null"?
-                                              child: CachedNetworkImage(
-                                                imageUrl: getUserProfilePicture(
-                                                    state.managerData
-                                                            .imgProfile ??
-                                                        ''),
-                                                imageBuilder:
-                                                    (context, imageProvider) =>
-                                                        Container(
-                                                  width: 120,
-                                                  height: 120,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    image: DecorationImage(
-                                                        image: imageProvider,
-                                                        fit: BoxFit.cover),
-                                                  ),
-                                                ),
-                                                placeholder: (context, url) =>
+                                    Flexible(
+                                      flex: 2,
+                                      child: IconButton(
+                                        icon: const Icon(Icons.phone),
+                                        color: Colors.white,
+                                        onPressed: () {
+                                          url_launcher.launchUrl(Uri.parse(
+                                              'tel:+${getMobile(state)}'));
+                                        },
+                                      ),
+                                    ),
+                                    Flexible(
+                                      flex: 3,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Center(
+                                          // child: state is BlocGetManagerDataSuccessState && state.managerData.imgProfile !=null && state.managerData.imgProfile.toString()!="" && state.managerData.imgProfile.toString()!="null"?
+                                          child: CachedNetworkImage(
+                                            imageUrl: getUserProfilePicture(
+                                                state.managerData
+                                                        .imgProfile ??
+                                                    ''),
+                                            imageBuilder:
+                                                (context, imageProvider) =>
+                                                    Container(
+                                              width: 120,
+                                              height: 120,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: DecorationImage(
+                                                    image: imageProvider,
+                                                    fit: BoxFit.cover),
+                                              ),
+                                            ),
+                                            placeholder: (context, url) =>
+                                                Assets.images.logo
+                                                    .image(height: 80),
+                                            errorWidget:
+                                                (context, url, error) =>
                                                     Assets.images.logo
                                                         .image(height: 80),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Assets.images.logo
-                                                            .image(height: 80),
-                                              ),
-                                            ),
                                           ),
                                         ),
-                                        Flexible(
-                                          flex: 2,
-                                          child: IconButton(
-                                            icon: const Icon(Icons.mail),
-                                            color: Colors.white,
-                                            onPressed: () {
-                                              url_launcher.launchUrl(Uri.parse(
-                                                  'mailto:${getEmail(state)}'));
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.all(10.0),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: 2, color: Colors.black),
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(5)),
-                                        color: Colors.black26,
                                       ),
-                                      child: Column(children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: SizedBox(
-                                            width: double.infinity,
-                                            child: Text(
-                                              state.managerData.name!,
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: 'Nunito',
-                                                fontSize: 18,
-                                              ),
-                                              textAlign: TextAlign.left,
-                                            ),
-                                          ),
-                                        ),
-                                        getFirstSection(
-                                          state.managerData.titleName!,
-                                        ),
-                                        getFirstSection(
-                                          'HRCode: ${state.managerData.userHrCode!}',
-                                        ),
-                                      ]),
+                                    ),
+                                    Flexible(
+                                      flex: 2,
+                                      child: IconButton(
+                                        icon: const Icon(Icons.mail),
+                                        color: Colors.white,
+                                        onPressed: () {
+                                          url_launcher.launchUrl(Uri.parse(
+                                              'mailto:${getEmail(state)}'));
+                                        },
+                                      ),
                                     ),
                                   ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Container(
+                                  padding: const EdgeInsets.all(10.0),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color: Colors.black),
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(20)),
+                                    color: Colors.black26,
+                                  ),
+                                  child: Column(children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: SizedBox(
+                                        width: double.infinity,
+                                        child: Text(
+                                          state.managerData.name!,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: 'Nunito',
+                                            fontSize: 18,
+                                          ),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ),
+                                    ),
+                                    getFirstSection(
+                                      state.managerData.titleName!,
+                                    ),
+                                    getFirstSection(
+                                      'HRCode: ${state.managerData.userHrCode!}',
+                                    ),
+                                  ]),
                                 ),
                               ),
                               Padding(
@@ -237,7 +236,7 @@ class DirectManagerProfileScreenClass
                                         border: Border.all(
                                             width: 2, color: Colors.black),
                                         borderRadius: const BorderRadius.all(
-                                            Radius.circular(5)),
+                                            Radius.circular(20)),
                                         color: Colors.black26,
                                       ),
                                       child: Column(children: [

@@ -9,7 +9,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../news_screen/news_screen.dart';
 import '../videos_screen/videos_screen.dart';
 import '../photos_screen/photos_screen.dart';
-import '../../data/models/response_news.dart';
+import '../../data/models/news_model/response_news.dart';
 import '../about_value_screen/value_screen.dart';
 import '../benefits_screen/benefits_screen.dart';
 import '../../bloc/news_screen_bloc/news_cubit.dart';
