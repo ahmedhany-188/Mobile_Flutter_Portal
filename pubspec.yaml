@@ -220,6 +220,25 @@ flutter:
     - assets/images/homepage/staffDashboardIcon.png
     - assets/images/no_data_found.png
     - assets/images/no_search_icon.png
+    - assets/images/staffdashboard/
+    - assets/images/staffdashboard/dashboard1.png
+    - assets/images/staffdashboard/dashboard2.png
+    - assets/images/staffdashboard/dashboard3.jpg
+    - assets/images/staffdashboard/dashboardbgsub.jpg
+    - assets/images/staffdashboard/dashboardicon.png
+    - assets/images/staffdashboard/dashboardsub1.png
+    - assets/images/staffdashboard/dashboardsub2.png
+    - assets/images/staffdashboard/dashboardsub3.png
+    - assets/images/staffdashboard/dashboardsub4.png
+    - assets/images/staffdashboard/empicon.png
+    - assets/images/staffdashboard/labor.png
+    - assets/images/staffdashboard/laborbox.png
+    - assets/images/staffdashboard/laboreffect.png
+    - assets/images/staffdashboard/laboricon.png
+    - assets/images/staffdashboard/staffbox.png
+    - assets/images/staffdashboard/staffeffect.png
+    - assets/images/staffdashboard/boxlayer.png
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

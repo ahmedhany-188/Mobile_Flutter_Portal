@@ -16,6 +16,8 @@ import 'package:hassanallamportalflutter/bloc/news_screen_bloc/news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/photos_screen_bloc/photos_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/staff_dashboard_bloc/staff_dashboard_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/staff_dashboard_job_bloc/staff_dashboard_job_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/staff_dashboard_project_bloc/staff_dashboard_project_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/statistics_bloc/statistics_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/upgrader_bloc/app_upgrader_cubit.dart';
 import 'package:hassanallamportalflutter/data/repositories/upgrader_repository.dart';
@@ -372,6 +374,24 @@ class _MyAppState extends State<MyApp> {
                 StaffDashboardCubit(
                     BlocProvider
                         .of<AppBloc>(staffDashBoardCubitContext)
+                        .state
+                        .userData.employeeData!.userHrCode.toString()),
+          ),
+
+          BlocProvider<StaffDashboardProjectCubit>(
+            create: (staffDashBoardProjectCubitContext) =>
+                StaffDashboardProjectCubit(
+                    BlocProvider
+                        .of<AppBloc>(staffDashBoardProjectCubitContext)
+                        .state
+                        .userData.employeeData!.userHrCode.toString()),
+          ),
+
+          BlocProvider<StaffDashboardJobCubit>(
+            create: (staffDashBoardJobCubitContext) =>
+                StaffDashboardJobCubit(
+                    BlocProvider
+                        .of<AppBloc>(staffDashBoardJobCubitContext)
                         .state
                         .userData.employeeData!.userHrCode.toString()),
           ),

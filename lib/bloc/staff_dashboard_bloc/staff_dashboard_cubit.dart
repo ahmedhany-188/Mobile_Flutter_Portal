@@ -144,19 +144,22 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
   }
 
   void staffDashBoardDateChanged(BuildContext context) async {
-
     DateTime? date = DateTime.now();
     FocusScope.of(context).requestFocus(
         FocusNode());
+
     date = await openShowDatePicker(context);
     var formatter = GlobalConstants.dateFormatServerDashBoard;
     String formattedDate = formatter.format(
         date ?? DateTime.now());
 
-    context.read<StaffDashboardCubit>()
-        .getStaffBoardCompanies(
-        "10203520",formattedDate);
-
+    if(formattedDate!=state.date){
+      context.read<StaffDashboardCubit>()
+          .getStaffBoardCompanies(
+          "10203520",formattedDate);
+    }
+    print("formatted :"+formattedDate.toString());
+    print("state date :"+state.date.toString());
   }
 
 }
