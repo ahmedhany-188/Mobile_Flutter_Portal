@@ -1,15 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:hassanallamportalflutter/data/models/response_news.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 
 import '../../data/helpers/convert_from_html.dart';
+import '../../data/models/news_model/news_data_model.dart';
 
 class NewsDetailsScreen extends StatelessWidget {
   const NewsDetailsScreen({Key? key, required this.newsData}) : super(key: key);
 
   static const routeName = 'news-details-screen';
-  final NewsData newsData;
+  final NewsDataModel newsData;
 
   @override
   Widget build(BuildContext context) {
@@ -31,14 +31,14 @@ class NewsDetailsScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                         child: CachedNetworkImage(
                             imageUrl:
-                                'https://portal.hassanallam.com/images/imgs/${newsData.newsID}.jpg',
-                            fit: BoxFit.scaleDown,
-                            width: 250),
+                                'https://portal.hassanallam.com/images/imgs/${newsData.newsId}.jpg',
+                            fit: BoxFit.cover,
+                            ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(10.0),
-                      child: Text(newsData.newsTitle ?? "",
+                      child: (newsData.newsTitle.toString().contains('<'))? convertFromHtml(dataToConvert: newsData.newsTitle.toString(), context: context) :Text(newsData.newsTitle ?? "",
                           style: const TextStyle(
                               fontSize: 20, fontWeight: FontWeight.bold)),
                     ),
@@ -47,8 +47,7 @@ class NewsDetailsScreen extends StatelessWidget {
                     ),
                     // Text(newsData.newsDescription ?? ""),
                     convertFromHtml(
-                        dataToConvert: newsData.newsBody ?? "", context: context),
-
+                        dataToConvert: newsData.newsBody ?? '${newsData.newsDescription}', context: context),
                   ],
                 ),
               ),

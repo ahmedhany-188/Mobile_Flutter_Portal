@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:hassanallamportalflutter/data/models/news_model/news_data_model.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_details_screen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:sizer/sizer.dart';
@@ -7,7 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 
 import '../../bloc/news_screen_bloc/news_cubit.dart';
-import '../../data/models/response_news.dart';
+import '../../data/helpers/convert_from_html.dart';
 import '../../gen/assets.gen.dart';
 
 class NewsScreen extends StatelessWidget {
@@ -50,7 +51,7 @@ class NewsScreen extends StatelessWidget {
             builder: (context, state) {
               return Sizer(builder: (ctx, ori, dt) {
                 return ConditionalBuilder(
-                  condition: NewsCubit.get(context).newsList.isNotEmpty,
+                  condition: state is NewsSuccessState,
                   builder: (context) {
                     // List<Data> newsList = newsAllData;
                     return Padding(
@@ -65,7 +66,7 @@ class NewsScreen extends StatelessWidget {
                           mainAxisSpacing: 9.sp,
                         ),
                         itemBuilder: (ctx, index) {
-                          NewsData news = NewsCubit.get(context).newsList[index];
+                          NewsDataModel news = NewsCubit.get(context).newsList[index];
                           return InkWell(
                             onTap: () {
                               Navigator.of(context).pushNamed(NewsDetailsScreen.routeName,arguments: news);
@@ -75,7 +76,7 @@ class NewsScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(20),
                               child: GridTile(
                                 footer: GridTileBar(
-                                  title: Text(
+                                  title:(news.newsTitle.toString().contains('>'))?convertFromHtml(dataToConvert: news.newsTitle.toString(), context: context)  :Text(
                                     news.newsTitle ?? "Tap to see more details",
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
@@ -89,7 +90,7 @@ class NewsScreen extends StatelessWidget {
                                   placeholder:
                                       AssetImage(Assets.images.loginImageLogo.path),
                                   image: CachedNetworkImageProvider(
-                                    'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg',
+                                    'https://portal.hassanallam.com/images/imgs/${news.newsId}.jpg',
                                   ),
                                   fit: BoxFit.fill,
                                 ),

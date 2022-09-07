@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hassanallamportalflutter/data/models/response_news.dart';
+import 'package:hassanallamportalflutter/data/models/news_model/news_data_model.dart';
 
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
@@ -243,7 +243,7 @@ class AppRouter {
 
       case NewsDetailsScreen.routeName:
         return MaterialPageRoute(
-            builder: (_) =>  NewsDetailsScreen(newsData: settings.arguments as NewsData,));
+            builder: (_) =>  NewsDetailsScreen(newsData: settings.arguments as NewsDataModel,));
 
       case SubsidiariesDetailsScreen.routeName:
         return MaterialPageRoute(
