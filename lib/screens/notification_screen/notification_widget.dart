@@ -76,138 +76,220 @@ class NotificationWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15.0),
                       color: Colors.grey.shade400.withOpacity(0.4),
                     ),
-                    child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.25,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Flexible(
-                            flex: 2,
-                            child: Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.start,
-                              crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                              children: [
-                                Center(
-                                  child: SizedBox(
-                                    // fit: FlexFit.tight,
-                                    height: 50,
-                                    width: 50,
-                                    child: imageProfile.isNotEmpty
-                                        ? CachedNetworkImage(
-                                            imageUrl: getUserProfilePicture(
-                                                imageProfile),
-                                            imageBuilder:
-                                                (context, imageProvider) =>
-                                                    Container(
-                                              // width: 50,
-                                              // height: 50,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                image: DecorationImage(
-                                                    image: imageProvider,
-                                                    fit: BoxFit.cover),
-                                              ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Flexible(
+                          child: Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.center,
+                            crossAxisAlignment:
+                                CrossAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                fit: FlexFit.tight,
+                                child: Center(
+                                  child: imageProfile.isNotEmpty
+                                      ? CachedNetworkImage(
+                                          imageUrl: getUserProfilePicture(
+                                              imageProfile),
+                                          imageBuilder:
+                                              (context, imageProvider) =>
+                                                  Container(
+                                            width: 50,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              image: DecorationImage(
+                                                  image: imageProvider,
+                                                  fit: BoxFit.cover),
                                             ),
-                                            placeholder: (context, url) =>
-                                                Assets.images.favicon
-                                                    .image(height: 40),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    Assets.images.favicon
-                                                        .image(height: 50),
-                                          )
-                                        : Assets.images.favicon
-                                            .image(height: 40),
-                                  ),
+                                          ),
+                                          placeholder: (context, url) =>
+                                              Assets.images.favicon
+                                                  .image(height: 40),
+                                          errorWidget:
+                                              (context, url, error) =>
+                                                  Assets.images.favicon
+                                                      .image(height: 50),
+                                        )
+                                      : Assets.images.favicon
+                                          .image(height: 40),
                                 ),
-                                Expanded(
-                                  flex: 4,
-                                  child: Column(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '${notification.reqName?.toTitleCase()}'
-                                            .trim(),
-                                        style: const TextStyle(
-                                          fontSize: 14.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                          fontFamily:
-                                              FontFamily.robotoFlex,
-                                        ),
-                                        maxLines: 1,
-                                        // overflow: TextOverflow.ellipsis,
+                              ),
+                              Expanded(
+                                flex: 4,
+                                child: Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '${notification.reqName?.toTitleCase()}'
+                                          .trim(),
+                                      style: const TextStyle(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontFamily:
+                                            FontFamily.robotoFlex,
                                       ),
-                                      Text(
-                                        '${notification.projectName}'
-                                            .trim(),
+                                      maxLines: 1,
+                                      // overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      '${notification.projectName}'
+                                          .trim(),
 
-                                        style: const TextStyle(
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                          fontFamily:
-                                              FontFamily.robotoFlex,
-                                        ),
-                                        maxLines: 1,
-                                        // overflow: TextOverflow.ellipsis,
+                                      style: const TextStyle(
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontFamily:
+                                            FontFamily.robotoFlex,
                                       ),
-                                      Text(
-                                        '${notification.requestHRCode}'
-                                            .trim(),
-                                        style: const TextStyle(
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: Colors.white,
-                                          fontFamily:
-                                              FontFamily.robotoFlex,
-                                        ),
-                                        maxLines: 1,
-                                        // overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      // overflow: TextOverflow.ellipsis,
+                                    ),
+                                    Text(
+                                      '${notification.requestHRCode}'
+                                          .trim(),
+                                      style: const TextStyle(
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.white,
+                                        fontFamily:
+                                            FontFamily.robotoFlex,
                                       ),
-                                    ],
+                                      maxLines: 1,
+                                      // overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding:
+                              const EdgeInsets.only(top: 5, bottom: 5),
+                          child: Container(
+                            width: double.infinity,
+                            height: 0.5,
+                            color: Colors.white,
+                          ),
+                        ),
+                        Flexible(
+                          child: Container(
+                            clipBehavior: Clip.none,
+                            alignment: Alignment.center,
+                            child: Column(
+                              children: [
+                                Text(
+                                  ' ${notification.status} ${notification.serviceName} #${notification.requestNo}',
+                                  style: const TextStyle(
+                                    fontSize: 13.0,
+                                    color: Colors.white,
+                                    fontFamily: FontFamily.robotoFlex,
                                   ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
+                                ),
+                                // MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
+                                Text(
+                                  'comment: ${notification.reqComment}',
+                                  style: const TextStyle(
+                                    fontSize: 13.0,
+                                    color: Colors.white,
+                                    fontFamily: FontFamily.robotoFlex,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.center,
                                 ),
                               ],
                             ),
                           ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(top: 5, bottom: 5),
-                            child: Container(
-                              width: double.infinity,
-                              height: 0.5,
-                              color: Colors.white,
-                            ),
-                          ),
+                        ),
+                        if (notification.requestHRCode !=
+                            userMainData.employeeData?.userHrCode)
                           Flexible(
-
+                            flex: 1,
+                            // padding: const EdgeInsets.all(5.0),
                             child: Container(
                               clipBehavior: Clip.none,
                               alignment: Alignment.center,
                               child: Column(
                                 children: [
-                                  Text(
-                                    ' ${notification.status} ${notification.serviceName} #${notification.requestNo}',
-                                    style: const TextStyle(
-                                      fontSize: 13.0,
-                                      color: Colors.white,
-                                      fontFamily: FontFamily.robotoFlex,
-                                    ),
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Expanded(
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            BlocProvider.of<
+                                                        UserNotificationApiCubit>(
+                                                    context)
+                                                .submitRequestAction(
+                                                    ActionValueStatus
+                                                        .accept,
+                                                    notification);
+                                          },
+                                          style:
+                                              OutlinedButton.styleFrom(
+                                                  backgroundColor:
+                                                      ConstantsColors
+                                                          .buttonColors),
+                                          child: const Text('Accept',
+                                              style: TextStyle(
+                                                  color: Colors.white)),
+                                          // color: Colors.white,
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        width: 12,
+                                      ),
+                                      // MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
+                                      Expanded(
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            BlocProvider.of<
+                                                        UserNotificationApiCubit>(
+                                                    context)
+                                                .submitRequestAction(
+                                                    ActionValueStatus
+                                                        .reject,
+                                                    notification);
+                                          },
+                                          style:
+                                              OutlinedButton.styleFrom(
+                                                  backgroundColor:
+                                                      Colors.white),
+                                          child: const Text(
+                                            'Reject',
+                                            style: TextStyle(
+                                                color: ConstantsColors
+                                                    .buttonColors),
+                                          ),
+
+                                          // color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  // MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
                                   Text(
-                                    'comment: ${notification.reqComment}',
+                                    GlobalConstants
+                                        .dateFormatViewedDaysAndHours
+                                        .format(GlobalConstants
+                                            .dateFormatServer
+                                            .parse(
+                                                notification.reqDate ??
+                                                    "")),
                                     style: const TextStyle(
-                                      fontSize: 13.0,
+                                      fontSize: 10.0,
                                       color: Colors.white,
                                       fontFamily: FontFamily.robotoFlex,
                                     ),
@@ -219,96 +301,7 @@ class NotificationWidget extends StatelessWidget {
                               ),
                             ),
                           ),
-                          if (notification.requestHRCode !=
-                              userMainData.employeeData?.userHrCode)
-                            Flexible(
-                              flex: 2,
-                              // padding: const EdgeInsets.all(5.0),
-                              child: Container(
-                                clipBehavior: Clip.none,
-                                alignment: Alignment.center,
-                                child: Column(
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Expanded(
-                                          child: OutlinedButton(
-                                            onPressed: () {
-                                              BlocProvider.of<
-                                                          UserNotificationApiCubit>(
-                                                      context)
-                                                  .submitRequestAction(
-                                                      ActionValueStatus
-                                                          .accept,
-                                                      notification);
-                                            },
-                                            style:
-                                                OutlinedButton.styleFrom(
-                                                    backgroundColor:
-                                                        ConstantsColors
-                                                            .buttonColors),
-                                            child: const Text('Accept',
-                                                style: TextStyle(
-                                                    color: Colors.white)),
-                                            // color: Colors.white,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 12,
-                                        ),
-                                        // MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
-                                        Expanded(
-                                          child: OutlinedButton(
-                                            onPressed: () {
-                                              BlocProvider.of<
-                                                          UserNotificationApiCubit>(
-                                                      context)
-                                                  .submitRequestAction(
-                                                      ActionValueStatus
-                                                          .reject,
-                                                      notification);
-                                            },
-                                            style:
-                                                OutlinedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.white),
-                                            child: const Text(
-                                              'Reject',
-                                              style: TextStyle(
-                                                  color: ConstantsColors
-                                                      .buttonColors),
-                                            ),
-
-                                            // color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Text(
-                                      GlobalConstants
-                                          .dateFormatViewedDaysAndHours
-                                          .format(GlobalConstants
-                                              .dateFormatServer
-                                              .parse(
-                                                  notification.reqDate ??
-                                                      "")),
-                                      style: const TextStyle(
-                                        fontSize: 10.0,
-                                        color: Colors.white,
-                                        fontFamily: FontFamily.robotoFlex,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
                 ),
