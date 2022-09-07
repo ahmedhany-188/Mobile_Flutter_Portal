@@ -23,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
                   state.emailNotifications.toString().toUpperCase(),
             ),
           );
-          Scaffold.of(context).showSnackBar(notificationSnackBar);
+          // Scaffold.of(context).showSnackBar(notificationSnackBar);
         },
         child: BlocBuilder<SettingsCubit, SettingsState>(
           builder: (context, state) {

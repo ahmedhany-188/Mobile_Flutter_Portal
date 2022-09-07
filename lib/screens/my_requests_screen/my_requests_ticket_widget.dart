@@ -263,7 +263,7 @@ class MyRequestsItemWidget extends StatelessWidget {
         {
           Navigator.of(context)
               .pushNamed(AccessRightScreen.routeName,arguments: {AccessRightScreen.requestNoKey: myRequestsModelData.requestNo.toString()
-            ,AccessRightScreen.requestHrCode: myRequestsModelData.requestHRCode.toString()});
+            ,AccessRightScreen.requesterHRCode: myRequestsModelData.requestHRCode.toString()});
           break;
         }
       case RequestServiceID.emailUserAccountServiceID:

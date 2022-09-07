@@ -109,14 +109,6 @@ class DownloadPdfHelper{
       OpenFile.open(obj['filePath']);
     } else {
       failed();
-
-      // showDialog(
-      //   context: context,
-      //   builder: (_) => AlertDialog(
-      //     title: Text('Error'),
-      //     content: Text('${obj['error']}'),
-      //   ),
-      // );
     }
   }
 
@@ -204,7 +196,12 @@ class DownloadPdfHelper{
       failed();
     } finally {
       success();
-      await _showNotification(result);
+      // await _showNotification(result);
+      if (result['isSuccess']) {
+        OpenFile.open(result['filePath']);
+      } else {
+        failed();
+      }
     }
   }
 

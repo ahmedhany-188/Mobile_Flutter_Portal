@@ -1,6 +1,5 @@
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:hassanallamportalflutter/bloc/my_requests_screen_bloc/my_requests_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
@@ -18,20 +17,20 @@ import '../../screens/about_value_screen/value_screen.dart';
 import '../../screens/get_direction_screen/get_direction_screen.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../screens/payslip_screen/payslip_screen.dart';
-import '../../screens/myprofile_screen/ProfileScreen.dart';
+import '../../screens/myprofile_screen/profile_screen.dart';
 import '../../screens/about_value_screen/about_screen.dart';
 import '../../screens/my_requests_screen/my_requests_screen.dart';
 import '../../screens/myattendance_screen/attendance_screen.dart';
 import '../../screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 
-class MainDrawer extends StatefulWidget {
+class MainDrawer extends StatelessWidget {
   const MainDrawer({Key? key}) : super(key: key);
 
-  @override
-  State<MainDrawer> createState() => _MainDrawerState();
-}
-
-class _MainDrawerState extends State<MainDrawer> {
+//   @override
+//   State<MainDrawer> createState() => _MainDrawerState();
+// }
+//
+// class _MainDrawerState extends State<MainDrawer> {
   Widget buildListTile(String title, IconData icon, tapHandler) {
     return InkWell(
       onTap: tapHandler,
@@ -209,22 +208,22 @@ class _MainDrawerState extends State<MainDrawer> {
         child: Column(
           children: [
             /// commented code below is for centered image and text
-            Container(
-              clipBehavior: Clip.none,
-              height: MediaQuery.of(context).size.height * 0.20,
-              width: double.infinity,
-              margin: const EdgeInsets.only(bottom: 15),
-              alignment: Alignment.center,
-              color: Colors.transparent,
+            Flexible(
+              // clipBehavior: Clip.none,
+              // height: MediaQuery.of(context).size.height * 0.20,
+              // width: double.infinity,
+              // margin: const EdgeInsets.only(top: 20),
+              // alignment: Alignment.center,
+              // color: Colors.transparent,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   CircleAvatar(
                     radius: 30,
                     // borderRadius: BorderRadius.circular(50),
                     backgroundImage: CachedNetworkImageProvider(
-                      'https://portal.hassanallam.com/Apps/images/Profile/${user!.imgProfile}',
+                      getUserProfilePicture(user!.imgProfile!),
                     ),
                     backgroundColor: Colors.transparent,
                     onBackgroundImageError: (_, __) {
@@ -473,8 +472,9 @@ class _MainDrawerState extends State<MainDrawer> {
             //         },
             //       )),
             // ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.77,
+            Expanded(
+              flex: 3,
+              // height: MediaQuery.of(context).size.height * 0.74,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
@@ -507,12 +507,13 @@ class _MainDrawerState extends State<MainDrawer> {
                       'My Attendance',
                       Icons.fingerprint,
                       () {
+
                         Navigator.popAndPushNamed(
                             context, AttendanceScreen.routeName);
                       },
                     ),
                     InkWell(
-                      onTap: ()=>Navigator.popAndPushNamed(
+                      onTap: () => Navigator.popAndPushNamed(
                           context, NotificationsScreen.routeName),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -520,24 +521,33 @@ class _MainDrawerState extends State<MainDrawer> {
                           buildListTile(
                             'Notification',
                             Icons.notifications,
-                            null, /// to stop the navigation function to make the whole row navigate
+                            null,
+
+                            /// to stop the navigation function to make the whole row navigate
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 25.0),
                             child: BlocProvider.value(
-                              value: BlocProvider.of<UserNotificationApiCubit>(context)..getNotifications(),
-                              child: BlocBuilder<UserNotificationApiCubit, UserNotificationApiState>(
+                              value: BlocProvider.of<UserNotificationApiCubit>(
+                                  context)
+                                ..getNotifications(),
+                              child: BlocBuilder<UserNotificationApiCubit,
+                                  UserNotificationApiState>(
                                 builder: (context, state) {
                                   return Badge(
-                                    showBadge: state.userNotificationList.isNotEmpty ? true : false,
+                                    showBadge:
+                                        state.userNotificationList.isNotEmpty
+                                            ? true
+                                            : false,
                                     toAnimate: false,
-                                    animationDuration: const Duration(milliseconds: 1000),
+                                    animationDuration:
+                                        const Duration(milliseconds: 1000),
                                     animationType: BadgeAnimationType.scale,
                                     badgeColor: Colors.red,
                                     badgeContent: Text(
                                       "${state.userNotificationList.length}",
-                                      style:
-                                      const TextStyle(color: Colors.white, fontSize: 10),
+                                      style: const TextStyle(
+                                          color: Colors.white, fontSize: 10),
                                     ),
                                     position: const BadgePosition(
                                       start: 5,
@@ -598,15 +608,13 @@ class _MainDrawerState extends State<MainDrawer> {
                     buildNoIconTile(
                       'Values',
                       () {
-                        Navigator.of(context)
-                            .popAndPushNamed(ValueScreen.routeName);
+                        Navigator.of(context).popAndPushNamed(ValueScreen.routeName);
                       },
                     ),
                     buildNoIconTile(
                       'About',
                       () {
-                        Navigator.of(context)
-                            .popAndPushNamed(AboutScreen.routeName);
+                        Navigator.of(context).popAndPushNamed(AboutScreen.routeName);
                       },
                     ),
                     buildNoIconTile(
@@ -619,7 +627,6 @@ class _MainDrawerState extends State<MainDrawer> {
                         // if (!mounted) return;
                         context.read<AppBloc>().add(AppLogoutRequested());
                         context.read<LoginCubit>().clearCubit();
-
                       },
                     ),
                     buildDivider(),
@@ -660,7 +667,9 @@ class _MainDrawerState extends State<MainDrawer> {
                                             .toString());
                                   })
                               : const Text(
-                                  'You Have No Application To Be Shown',style: TextStyle(color: Colors.white),);
+                                  'You Have No Application To Be Shown',
+                                  style: TextStyle(color: Colors.white),
+                                );
                         },
                       ),
                     ),
@@ -691,7 +700,7 @@ class _MainDrawerState extends State<MainDrawer> {
                     //   Icons.apps,
                     //       () {
                     //     Navigator.of(context)
-                    //         .pushNamed(NewsLetterScreen.routeName);
+                    //         .popAndPushNamed(NewsLetterScreen.routeName);
                     //   },
                     // ),
                   ],

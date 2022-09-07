@@ -32,6 +32,10 @@ class AccessRightInitial extends Equatable {
     this.statusAction,
     this.requesterData = EmployeeData.empty,
     this.actionComment = "",
+    this.extension = "",
+    this.chosenFileName = "",
+    this.fileResult = const FilePickerResult([]),
+
   });
 
   final RequestDate requestDate;
@@ -58,6 +62,10 @@ class AccessRightInitial extends Equatable {
   final EmployeeData requesterData;
   final String actionComment;
 
+  final String extension;
+  final String chosenFileName;
+  final FilePickerResult fileResult;
+
 
   @override
   List<Object> get props =>
@@ -76,7 +84,10 @@ class AccessRightInitial extends Equatable {
         comments,
         requestItemsList,
         requesterData,
-        actionComment
+        actionComment,
+        extension,
+        chosenFileName,
+        fileResult,
       ];
 
   AccessRightInitial copyWith({
@@ -101,6 +112,10 @@ class AccessRightInitial extends Equatable {
     String? statusAction,
     EmployeeData? requesterData,
     String? actionComment,
+    String? extension,
+    String? chosenFileName,
+    FilePickerResult? fileResult,
+
 
   }) {
     return AccessRightInitial(
@@ -125,6 +140,10 @@ class AccessRightInitial extends Equatable {
       statusAction: statusAction ?? this.statusAction,
       requesterData: requesterData ?? this.requesterData,
       actionComment: actionComment ?? this.actionComment,
+      extension: extension ?? this.extension,
+      chosenFileName: chosenFileName ?? this.chosenFileName,
+      fileResult: fileResult ?? this.fileResult,
+
 
     );
   }

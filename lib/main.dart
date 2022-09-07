@@ -1,11 +1,13 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hassanallamportalflutter/bloc/apps_screen_bloc/apps_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
@@ -64,6 +66,8 @@ void main() async {
   );
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
   final storage = await HydratedStorage.build(
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
@@ -86,6 +90,58 @@ void main() async {
   await GeneralDio.init();
   await AlbumDio.initAlbums();
 }
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  if (kDebugMode) {
+    print("_firebaseMessagingBackgroundHandler");
+  }
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await setupFlutterNotifications();
+  // showFlutterNotification(message);
+  // If you're going to use other Firebase services in the background, such as Firestore,
+  // make sure you call `initializeApp` before using other Firebase services.
+  if (kDebugMode) {
+    print('Handling a background message ${message.messageId}');
+  }
+}
+Future<void> setupFlutterNotifications() async {
+  if (kDebugMode) {
+    print("setupFlutterNotifications");
+  }
+  if (isFlutterLocalNotificationsInitialized) {
+    return;
+  }
+  channel = const AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    description:
+    'This channel is used for important notifications.', // description
+    importance: Importance.high,
+  );
+
+  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  /// Create an Android Notification Channel.
+  ///
+  /// We use this channel in the `AndroidManifest.xml` file to override the
+  /// default FCM channel to enable heads up notifications.
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  /// Update the iOS foreground notification presentation options to allow
+  /// heads up notifications.
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+  isFlutterLocalNotificationsInitialized = true;
+}
+late AndroidNotificationChannel channel;
+
+bool isFlutterLocalNotificationsInitialized = false;
+late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
 void configLoading() {
   EasyLoading.instance
@@ -121,6 +177,10 @@ class CustomAnimation extends EasyLoadingAnimation {
   }
 }
 
+class NavigationService {
+  static GlobalKey<NavigatorState> navigatorKey =
+  GlobalKey<NavigatorState>();
+}
 class MyApp extends StatefulWidget {
   final AppRouter appRouter;
   final Connectivity connectivity;
@@ -348,7 +408,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<NewsCubit>(
             create: (newsContext) =>
             NewsCubit()
-              ..getNews()
+              ..getNewsOld()
               ..getLatestNews(),
             lazy: true,
           ),
@@ -373,6 +433,7 @@ class _MyAppState extends State<MyApp> {
             },
             child: MaterialApp(
               title: 'Hassan Allam Portal',
+              navigatorKey: NavigationService.navigatorKey,
               debugShowCheckedModeBanner: false,
               builder: EasyLoading.init(),
               theme: ThemeData(

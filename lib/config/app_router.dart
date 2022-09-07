@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:hassanallamportalflutter/data/models/response_news.dart';
+import 'package:hassanallamportalflutter/data/models/news_model/news_data_model.dart';
 
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
 import 'package:hassanallamportalflutter/screens/about_value_screen/value_screen.dart';
@@ -22,8 +22,8 @@ import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_screen.dart';
 import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
-import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreen.dart';
-import 'package:hassanallamportalflutter/screens/myprofile_screen/ProfileScreenDirectManager.dart';
+import 'package:hassanallamportalflutter/screens/myprofile_screen/profile_screen.dart';
+import 'package:hassanallamportalflutter/screens/myprofile_screen/profile_screen_direct_manager.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_details_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
@@ -255,7 +255,7 @@ class AppRouter {
 
       case NewsDetailsScreen.routeName:
         return MaterialPageRoute(
-            builder: (_) =>  NewsDetailsScreen(newsData: settings.arguments as NewsData,));
+            builder: (_) =>  NewsDetailsScreen(newsData: settings.arguments as NewsDataModel,));
 
       case SubsidiariesDetailsScreen.routeName:
         return MaterialPageRoute(

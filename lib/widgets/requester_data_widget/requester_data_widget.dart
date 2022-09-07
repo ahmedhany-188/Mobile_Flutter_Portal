@@ -3,9 +3,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../constants/url_links.dart';
 import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
-import '../../screens/myprofile_screen/ProfileScreenDirectManager.dart';
+import '../../screens/myprofile_screen/profile_screen_direct_manager.dart';
 
 class RequesterDataWidget extends StatelessWidget {
   const RequesterDataWidget({
@@ -51,7 +52,7 @@ class RequesterDataWidget extends StatelessWidget {
                   children: [
                     imageProfile.isNotEmpty
                         ? CachedNetworkImage(
-                      imageUrl: 'https://portal.hassanallam.com/Apps/images/Profile/$imageProfile',
+                      imageUrl: getUserProfilePicture(imageProfile),
                       imageBuilder: (context,
                           imageProvider) =>
                           Container(

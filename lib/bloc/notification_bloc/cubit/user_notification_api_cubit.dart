@@ -9,23 +9,25 @@ import '../../../data/repositories/request_repository.dart';
 
 part 'user_notification_api_state.dart';
 
-class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState>{
-  UserNotificationApiCubit(this.requestRepository) : super(const UserNotificationApiState()){
+class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState> {
+  UserNotificationApiCubit(this.requestRepository)
+      : super(const UserNotificationApiState()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
-      if (state.userNotificationEnumStates == UserNotificationEnumStates.failed ||
-          state.userNotificationEnumStates == UserNotificationEnumStates.noConnection && state.userNotificationList.isNotEmpty) {
+      if (state.userNotificationEnumStates ==
+              UserNotificationEnumStates.failed ||
+          state.userNotificationEnumStates ==
+                  UserNotificationEnumStates.noConnection &&
+              state.userNotificationList.isNotEmpty) {
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
           try {
             getNotifications();
-
           } catch (e) {
             emit(state.copyWith(
               userNotificationEnumStates: UserNotificationEnumStates.failed,
             ));
           }
-        }
-        else if (connectivityResult == ConnectivityResult.none) {
+        } else if (connectivityResult == ConnectivityResult.none) {
           emit(state.copyWith(
             userNotificationEnumStates: UserNotificationEnumStates.noConnection,
           ));
@@ -34,77 +36,114 @@ class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState>{
     });
   }
 
-  static UserNotificationApiCubit get(context) =>BlocProvider.of(context);
+  static UserNotificationApiCubit get(context) => BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();
   final RequestRepository requestRepository;
+
+  writenTextSearch(String searchString) {
+    emit(state.copyWith(searchString: searchString));
+    checkAllFilters();
+  }
+
+  checkAllFilters() {
+    List<UserNotificationApi> notificationSearchResultsList = [];
+    if (state.searchString.isEmpty) {
+      onClearData();
+    } else {
+      var splitQuery = state.searchString.toLowerCase().trim().split(' ');
+      notificationSearchResultsList =
+          state.userNotificationList.where((notificationElement) {
+        return ((state.searchString.isNotEmpty)
+            ? splitQuery.every((singleSplitElement) =>
+                notificationElement.requestNo
+                    .toString()
+                    .toLowerCase()
+                    .trim()
+                    .contains(singleSplitElement) ||
+                notificationElement.reqName
+                    .toString()
+                    .toLowerCase()
+                    .trim()
+                    .contains(singleSplitElement))
+            : true);
+      }).toList();
+      emit(state.copyWith(
+          userNotificationResultList: notificationSearchResultsList,
+          isFiltered: true));
+    }
+  }
+
+  onClearData() {
+    emit(state.copyWith(
+      searchString: null,
+      userNotificationList: state.userNotificationList,
+      userNotificationResultList: [],
+      isFiltered: false,
+    ));
+  }
 
   Future<void> getNotifications() async {
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       try {
         emit(state.copyWith(
-          userNotificationEnumStates: UserNotificationEnumStates.loading,
-          status: FormzStatus.pure
-        ));
+            userNotificationEnumStates: UserNotificationEnumStates.loading,
+            status: FormzStatus.pure));
         // await Future.delayed(Duration(minutes: 1));
-        await requestRepository.getMyNotificationData()
-            .then((value) async {
+        await requestRepository.getMyNotificationData().then((value) async {
           emit(state.copyWith(
               userNotificationList: value,
-              userNotificationEnumStates: UserNotificationEnumStates.success
-          ));
+              userNotificationEnumStates: UserNotificationEnumStates.success));
         }).catchError((error) {
           emit(state.copyWith(
             userNotificationEnumStates: UserNotificationEnumStates.failed,
           ));
         });
-      }
-      catch (e) {
+      } catch (e) {
         emit(state.copyWith(
           userNotificationEnumStates: UserNotificationEnumStates.failed,
         ));
       }
-    }else{
+    } else {
       emit(state.copyWith(
         userNotificationEnumStates: UserNotificationEnumStates.noConnection,
       ));
     }
   }
 
-
-
-  submitRequestAction(ActionValueStatus valueStatus,UserNotificationApi notification) async {
-    emit(state.copyWith(status: FormzStatus.submissionInProgress,));
-    final vacationResultResponse = await requestRepository.postTakeActionRequest(
-        valueStatus: valueStatus,
-        requestNo: notification.requestNo.toString(),
-        actionComment: "",
-        serviceID: notification.serviceID ?? "",
-        serviceName: notification.serviceName ?? "",
-        requesterHRCode: notification.requestHRCode ?? "",
-        requesterEmail: notification.requesterEmail ?? "");
+  submitRequestAction(
+      ActionValueStatus valueStatus, UserNotificationApi notification) async {
+    emit(state.copyWith(
+      status: FormzStatus.submissionInProgress,
+    ));
+    final vacationResultResponse =
+        await requestRepository.postTakeActionRequest(
+            valueStatus: valueStatus,
+            requestNo: notification.requestNo.toString(),
+            actionComment: "",
+            serviceID: notification.serviceID ?? "",
+            serviceName: notification.serviceName ?? "",
+            requesterHRCode: notification.requestHRCode ?? "",
+            requesterEmail: notification.requesterEmail ?? "");
 
     final result = vacationResultResponse.result ?? "false";
     if (result.toLowerCase().contains("true")) {
       emit(
         state.copyWith(
-          successMessage: "#${notification.requestNo} \n ${valueStatus == ActionValueStatus.accept ? "Request has been Accepted":"Request has been Rejected"}",
+          successMessage:
+              "#${notification.requestNo} \n ${valueStatus == ActionValueStatus.accept ? "Request has been Accepted" : "Request has been Rejected"}",
           status: FormzStatus.submissionSuccess,
         ),
       );
-    }
-    else {
+    } else {
       emit(
         state.copyWith(
-          errorMessage:"An error occurred",
+          errorMessage: "An error occurred",
           status: FormzStatus.submissionFailure,
         ),
       );
       // }
     }
-
   }
-
-
 
   @override
   Future<void> close() {
@@ -122,15 +161,19 @@ class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState>{
   @override
   Map<String, dynamic>? toJson(UserNotificationApiState state) {
     // TODO: implement toJson
-    if (state.userNotificationEnumStates == UserNotificationEnumStates.success) {
+    if (state.userNotificationEnumStates ==
+        UserNotificationEnumStates.success) {
       return state.toMap();
     } else {
       return null;
     }
   }
+
   Future<void> clearState() async {
-    emit(state.copyWith(userNotificationEnumStates: UserNotificationEnumStates.success,userNotificationList: [],));
+    emit(state.copyWith(
+      userNotificationEnumStates: UserNotificationEnumStates.success,
+      userNotificationList: [],
+    ));
     await clear();
   }
-
 }

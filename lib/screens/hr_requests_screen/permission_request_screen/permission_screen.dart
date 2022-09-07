@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
@@ -137,14 +138,15 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                       requestName: 'Permission',)));
                           }
                           else if (state.requestStatus == RequestStatus.oldRequest){
-                            EasyLoading.showSuccess(state.successMessage ?? "").then((value) => Navigator.pop(context));
+                            EasyLoading.showSuccess(state.successMessage ?? "").then((value) {
+                              if (Navigator.of(context).canPop()) {
+                                Navigator.of(context,rootNavigator: true).pop();
+                              }else{
+                                SystemNavigator.pop();
+                              }
+                            });
                             BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();
                           }
-                          // LoadingDialog.hide(context);
-                          // Navigator.of(context).pushReplacement(
-                          //     MaterialPageRoute(builder: (_) =>
-                          //         SuccessScreen(text: state.successMessage ??
-                          //             "Error Number",)));
                         }
                         if (state.status.isSubmissionFailure) {
                           EasyLoading.showError(state.errorMessage ??
