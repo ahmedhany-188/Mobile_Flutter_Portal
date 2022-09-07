@@ -56,7 +56,7 @@ class ShowUserProfileBottomSheetClass
               padding: const EdgeInsets.all(10.0),
               child: InkWell(
                 onTap: () async {
-                  await FilePicker.platform.pickFiles().then((value) {
+                  await FilePicker.platform.pickFiles(type: FileType.image,).then((value) {
                     String? fileName = widget.user.employeeData?.userHrCode;
                     String? fileExtension = value?.files.first.extension;
                     GeneralDio.uploadUserImage(

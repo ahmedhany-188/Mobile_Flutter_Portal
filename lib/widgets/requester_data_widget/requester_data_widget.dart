@@ -1,7 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:sizer/sizer.dart';
 
 import '../../constants/url_links.dart';
 import '../../gen/assets.gen.dart';
@@ -22,7 +21,7 @@ class RequesterDataWidget extends StatelessWidget {
     final imageProfile = requesterData.imgProfile ?? "";
     return Container(
       width: double.infinity,
-      margin: EdgeInsets.only(bottom: 1.h),
+      margin: const EdgeInsets.only(bottom: 1),
       alignment: Alignment.bottomLeft,
       color: Colors.transparent,
       child: InputDecorator(
@@ -56,8 +55,8 @@ class RequesterDataWidget extends StatelessWidget {
                       imageBuilder: (context,
                           imageProvider) =>
                           Container(
-                            width: 40.sp,
-                            height: 40.sp,
+                            width: 40,
+                            height: 40,
                             decoration: BoxDecoration(
                               shape: BoxShape
                                   .circle,
@@ -71,15 +70,15 @@ class RequesterDataWidget extends StatelessWidget {
                           url) =>
                           Assets.images.logo
                               .image(
-                              height: 60.sp),
+                              height: 60),
                       errorWidget: (context,
                           url, error) =>
                           Assets.images.logo
                               .image(
-                              height: 60.sp),
+                              height: 60),
                     )
                         : Assets.images.logo
-                        .image(height: 60.sp),
+                        .image(height: 60),
                     const SizedBox(width: 10,),
                     SizedBox(
                       child: Column(

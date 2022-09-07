@@ -236,4 +236,7 @@ class GlobalConstants {
   static const String requestCategoryEquipment = "Equipment Request";
   static const String requestCategoryApplication = "Applications";
   static const String requestCategoryTravelRequestActivity = "Travel Request";
+
+  static const String allNotificationVideoType = "Video";
+  static const String allNotificationNewsType = "News";
 }
