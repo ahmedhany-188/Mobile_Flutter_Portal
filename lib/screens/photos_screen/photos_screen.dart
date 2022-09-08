@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:hassanallamportalflutter/data/helpers/assist_function.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
-import 'package:sizer/sizer.dart';
+// import 'package:sizer/sizer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -46,20 +46,35 @@ class _PhotosScreenState extends State<PhotosScreen> {
                 }
               },
               builder: (context, state) {
-                return Sizer(
-                  builder: (c, or, dt) {
-                    return (state is PhotosSuccessState)
-                        ? ListView.builder(shrinkWrap: true,
-                            itemCount: state.photosList.length,
-                            itemBuilder: (ctx, index) => SizedBox(
-                              height: 30.h,
-                              child: albumSwiper(
-                                  state.photosList[index].id.toString()),
+                return (state is PhotosSuccessState)
+                    ? ListView.builder(
+                        shrinkWrap: true,
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: state.photosList.length,
+                        itemBuilder: (ctx, index) => Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Container(
+                            decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20)),color: Colors.black38,),
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(state.photosList[index].albumName.toString(),style: const TextStyle(fontSize: 18)),
+                                ),
+                                SizedBox(
+                                  height: 200,
+                                  child: albumSwiper(
+                                      state.photosList[index].id.toString()),
+                                ),
+                              ],
                             ),
-                          )
-                        : const Center(child: CircularProgressIndicator());
-                  },
-                );
+                          ),
+                        ),
+                      )
+                    : const Center(
+                        child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ));
               },
             ),
           ),
@@ -87,43 +102,52 @@ Widget albumSwiper(String albumId) {
       },
       builder: (context, state) {
         return (state is AlbumSuccessState)
-            ? Padding(
-                padding: EdgeInsets.all(3.0.h),
-                child: Swiper(
-                  itemHeight: 30.h,
-                  // itemWidth: double.infinity,
-                  itemBuilder: (context, index) {
-                    return FullScreenWidget(
-                      disposeLevel: DisposeLevel.Low,
-                      child: Hero(
-                        key: Key('${state.albumList[index].photoName.toString()}$index'),
-                        tag: "${state.albumList[index].photoName.toString()}${index * Random(1).nextInt(5000)}",
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(15),
-                          child: CachedNetworkImage(
-                            imageUrl: photosLinks(
-                                state.albumList[index].photoName.toString()),
-                            placeholder: (c, m) => const Center(
-                                child: CircularProgressIndicator()),
-                            errorWidget: (c, s, d) => Image.asset(
-                              'assets/images/logo.png',
-                              scale: 7.sp,
-                            ),
-                            fit: BoxFit.fill,
-                          ),
+            ? Swiper(
+              // itemHeight: 30,
+              // itemWidth: double.infinity,
+              itemBuilder: (context, index) {
+                return FullScreenWidget(
+                  disposeLevel: DisposeLevel.Low,
+                  child: Hero(
+                    key: Key(
+                        '${state.albumList[index].photoName.toString()}$index'),
+                    tag:
+                        "${state.albumList[index].photoName.toString()}${index * Random(1).nextInt(5000)}",
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(15),
+                      child: CachedNetworkImage(
+                        imageUrl: photosLinks(
+                            state.albumList[index].photoName.toString()),
+                        placeholder: (c, m) => const Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.white,
+                        )),
+                        errorWidget: (c, s, d) => Image.asset(
+                          'assets/images/logo.png',
+                          scale: 7,
                         ),
+                        fit: BoxFit.fill,
                       ),
-                    );
-                  },
-                  layout: SwiperLayout.DEFAULT,
-                  indicatorLayout: PageIndicatorLayout.COLOR,
-                  autoplay: true, duration: 3000, autoplayDelay: 10000,
-                  itemCount: state.albumList.length,
-                  pagination: SwiperPagination.fraction,
-                  physics: const BouncingScrollPhysics(),
-                  control: const SwiperControl(color: Colors.transparent),
-                ),
-              )
+                    ),
+                  ),
+                );
+              },
+              layout: SwiperLayout.DEFAULT,
+              indicatorLayout: PageIndicatorLayout.COLOR,
+              autoplay: false,
+              itemCount: state.albumList.length,
+              pagination: const SwiperPagination(
+                alignment: Alignment.topLeft,
+                margin: EdgeInsets.all(5),
+                builder: FractionPaginationBuilder(
+                    color: Colors.white,
+                    activeColor: Colors.white,
+                    fontSize: 20,
+                    activeFontSize: 25),
+              ),
+              physics: const BouncingScrollPhysics(),
+              control: const SwiperControl(color: Colors.white),
+            )
             : Container();
 
         ///TODO: error widget

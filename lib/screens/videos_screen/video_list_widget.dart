@@ -11,6 +11,7 @@ class VideoListWidget extends StatefulWidget {
   const VideoListWidget({Key? key, this.videoListData}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _VideoListWidgetState createState() => _VideoListWidgetState();
 }
 
@@ -24,7 +25,7 @@ class _VideoListWidgetState extends State<VideoListWidget> {
     super.initState();
     controller = BetterPlayerListVideoPlayerController();
     betterPlayerConfiguration = const BetterPlayerConfiguration(
-        autoPlay: false,
+        autoPlay: true,
         controlsConfiguration: BetterPlayerControlsConfiguration(
             playerTheme: BetterPlayerTheme.cupertino));
   }
@@ -40,7 +41,8 @@ class _VideoListWidgetState extends State<VideoListWidget> {
       child: Card(
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         color: Colors.black38,
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20))),
         elevation: 0,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +59,7 @@ class _VideoListWidgetState extends State<VideoListWidget> {
             ClipRRect(
               borderRadius: const BorderRadius.all(Radius.circular(20)),
               child: AspectRatio(
-                aspectRatio: 15/9,
+                aspectRatio: 15 / 9,
                 child: BetterPlayerListVideoPlayer(
                   BetterPlayerDataSource(
                     BetterPlayerDataSourceType.network,
@@ -68,10 +70,10 @@ class _VideoListWidgetState extends State<VideoListWidget> {
                     ),
                     bufferingConfiguration:
                         const BetterPlayerBufferingConfiguration(
-                            minBufferMs: 2000,
-                            maxBufferMs: 10000,
-                            bufferForPlaybackMs: 1000,
-                            bufferForPlaybackAfterRebufferMs: 2000),
+                            minBufferMs: 0,
+                            maxBufferMs: 0,
+                            bufferForPlaybackMs: 0,
+                            bufferForPlaybackAfterRebufferMs: 0),
                   ),
                   configuration: const BetterPlayerConfiguration(
                       controlsConfiguration: BetterPlayerControlsConfiguration(
