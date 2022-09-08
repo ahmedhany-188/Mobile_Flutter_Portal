@@ -31,7 +31,7 @@ class EmailUserAccountInitial extends Equatable {
     this.requesterData = EmployeeData.empty,
     this.actionComment = "",
     this.hrcodeUpdated = true,
-
+    this.mobileKey=true,
   });
 
   final RequestDate requestDate;
@@ -53,6 +53,7 @@ class EmailUserAccountInitial extends Equatable {
   final EmployeeData requesterData;
   final String actionComment;
   final bool hrcodeUpdated;
+  final bool mobileKey;
 
   @override
   List<Object> get props =>
@@ -63,7 +64,7 @@ class EmailUserAccountInitial extends Equatable {
         accountType,
         comments,
         fullName, userTitle, userLocation, email,
-        requesterData, actionComment, hrcodeUpdated
+        requesterData, actionComment, hrcodeUpdated,mobileKey
       ];
 
   EmailUserAccountInitial copyWith({
@@ -86,6 +87,7 @@ class EmailUserAccountInitial extends Equatable {
     EmployeeData? requesterData,
     String? actionComment,
     bool? hrcodeUpdated,
+    bool? mobileKey,
   }) {
     return EmailUserAccountInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -107,6 +109,7 @@ class EmailUserAccountInitial extends Equatable {
       requesterData: requesterData ?? this.requesterData,
       actionComment: actionComment ?? this.actionComment,
       hrcodeUpdated: hrcodeUpdated ?? this.hrcodeUpdated,
+      mobileKey: mobileKey??this.mobileKey,
     );
   }
 }

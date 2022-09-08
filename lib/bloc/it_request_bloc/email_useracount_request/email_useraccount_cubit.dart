@@ -1,5 +1,4 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,9 +10,6 @@ import 'package:hassanallamportalflutter/constants/enums.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
-import 'package:heroicons/heroicons.dart';
-import 'package:meta/meta.dart';
-import 'package:intl/intl.dart';
 
 import '../../../constants/request_service_id.dart';
 import '../../../data/repositories/employee_repository.dart';
@@ -89,16 +85,17 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
   }
 
   void clearStateHRCode(){
+
     emit(state.copyWith(hrcodeUpdated:true));
-    const hrCodeUser = const RequestDate.dirty("");
-    const userMobile = const RequestDate.dirty("");
+    const hrCodeUser =  RequestDate.dirty("");
+    // const userMobile =  RequestDate.dirty("");
 
     emit(state.copyWith(
       fullName: "",
       userTitle: "",
       userLocation: "",
       email: "",
-      userMobile: userMobile,
+      // userMobile: userMobile,
       hrCodeUser:hrCodeUser,
       // status: Formz.validate([userMobile, hrCodeUser]),
     ));
@@ -107,14 +104,12 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
   void hrCodeSubmittedGetData(String hrCode) async {
 
     final requestData = await requestRepository.getEmailData(hrCode);
-
     if (requestData == "error") {
-
       clearStateHRCode();
-
       emit(state.copyWith(errorMessage: "Invalid hr code", hrcodeUpdated:true,status:FormzStatus.submissionFailure ));
     } else {
 
+      emit(state.copyWith(mobileKey:false));
       final fullName = requestData.name.toString();
       final titleEmployee = requestData.titleName.toString();
       final locationEmployee = requestData.projectName.toString();
@@ -122,17 +117,24 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
       final userMobile = RequestDate.dirty(requestData.mobile.toString());
       final hrCodeUser = RequestDate.dirty(hrCode);
 
+     emit(state.copyWith(  userMobile: userMobile,));
+      //
+
       emit(state.copyWith(
         fullName: fullName,
         userTitle: titleEmployee,
         userLocation: locationEmployee,
         email: emailEmployee,
-        userMobile: userMobile,
         hrCodeUser: hrCodeUser,
         hrcodeUpdated: false,
+        // mobileKey: true,
         status: Formz.validate([userMobile, ]),
       ));
     }
+  }
+
+  void clearMobileField() async{
+    emit(state.copyWith(mobileKey:true));
   }
 
 
@@ -170,7 +172,7 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
 
         emailUserFormModel=EmailUserFormModel(requestDateValue,
             state.requestType, state.userMobile.value, state.accountType,false,0,"",location.value,
-            title.value,fullName.value,email.value,state.hrCodeUser.value,state.hrCodeUser.value);
+            title.value,fullName.value,email.value,state.hrCodeUser.value,"hrCodeRequester");
         //TODO: creation of Object; yeah object error in it between requester hr code and owner hr code ;)
 
         emit(state.copyWith(
@@ -210,7 +212,6 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
             );
           }
         } catch (e) {
-          print("------------can you see me");
           emit(
             state.copyWith(
               errorMessage: e.toString(),

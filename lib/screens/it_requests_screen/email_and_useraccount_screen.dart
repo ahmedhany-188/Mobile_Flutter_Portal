@@ -31,7 +31,7 @@ class EmailAndUserAccountScreen  extends StatefulWidget{
 
 class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
 
-  var mobileKey = false;
+  var mobileKeyClear = true;
   String hrCodeEmail = "";
 
   @override
@@ -170,6 +170,13 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                               }
                             });
                             BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();}
+                        }
+                        if(state.mobileKey){
+                          mobileKeyClear=true;
+                          print("here33");
+                        }else{
+                          mobileKeyClear=false;
+                          print("here44");
                         }
                         if (state.status.isSubmissionFailure) {
                           EasyLoading.showError(state.errorMessage.toString(),);
@@ -348,6 +355,11 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                           initialValue: state.hrCodeUser.value,
                                           onChanged: (hrCode) =>
                                           {
+                                            if(state.mobileKey==false){
+                                              context.read<
+                                                  EmailUserAccountCubit>()
+                                                  .clearMobileField(),
+                                            },
                                             context.read<
                                                 EmailUserAccountCubit>()
                                                 .clearStateHRCode(),
@@ -377,13 +389,9 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                               color: Colors.white70,),
                                             suffixIcon: state.requestStatus ==
                                                 RequestStatus.newRequest ?IconButton(
-
                                               icon: Icon(Icons.done,color: Colors.white70,),
                                               onPressed: () {
-                                                context.read<
-                                                    EmailUserAccountCubit>()
-                                                    .hrCodeSubmittedGetData(
-                                                    hrCodeEmail);
+                                                context.read<EmailUserAccountCubit>().hrCodeSubmittedGetData(hrCodeEmail);
                                               },):null,
                                             labelText: 'Search hr Code',
                                           ),
@@ -506,33 +514,30 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                           child: BlocBuilder<
                                               EmailUserAccountCubit,
                                               EmailUserAccountInitial>(
-                                            // buildWhen: (previous, current) {
-                                            //   // return (previous.requestDate !=
-                                            //   //     current.requestDate) ||
-                                            //   //     previous.status != current.status;
-                                            //   return (state.requestStatus == RequestStatus.newRequest) ;
-                                            // },
+                                            buildWhen: (previous, current) {
+                                              // return (previous.requestDate !=
+                                              //     current.requestDate) ||
+                                              //     previous.status != current.status;
+                                              return (state.requestStatus == RequestStatus.newRequest) ;
+                                            },
                                             builder: (context, state) {
                                               return TextFormField(
-
-
-                                                key: mobileKey == false
-                                                    ? UniqueKey()
-                                                    : null,
+                                                key: mobileKeyClear
+                                                    ? null :  UniqueKey(),
                                                 initialValue: state.userMobile
                                                     .value,
-
-
                                                 onChanged: (phoneValue) =>
                                                 {
-                                                  mobileKey = true,
+                                                  if(state.mobileKey==false){
+                                                context.read<
+                                                EmailUserAccountCubit>()
+                                                    .clearMobileField(),
+                                                },
                                                   context.read<
                                                       EmailUserAccountCubit>()
                                                       .phoneNumberChanged(
                                                       phoneValue.toString()),
                                                 },
-
-
                                                 keyboardType: TextInputType
                                                     .phone,
                                                 readOnly: state.requestStatus ==
