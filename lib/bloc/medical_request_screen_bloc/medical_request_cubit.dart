@@ -12,6 +12,8 @@ import 'package:hassanallamportalflutter/data/models/requests_form_models/reques
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_medical_benefit.dart';
 import 'package:hassanallamportalflutter/data/repositories/medical_request_repository.dart';
 import 'package:intl/intl.dart';
+
+import '../../widgets/dialogpopoup/custom_date_picker.dart';
 part 'medical_request_state.dart';
 
 class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
@@ -31,8 +33,8 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
 
     final requestDate = RequestDate.dirty(state.requestDate.value);
 
-    DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(requestDate.value);
-    final requestDateValue = GlobalConstants.dateFormatServer.format(requestDateTemp);
+
+
 
 
     emit(state.copyWith(
@@ -70,6 +72,8 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
           selectedService = "1";
           break;
       }
+      DateTime requestDateTemp = GlobalConstants.dateFormatViewed.parse(requestDate.value);
+      final requestDateValue = GlobalConstants.dateFormatServer.format(requestDateTemp);
 
       RequestMedicalBenefit requestMedicalBenefit = RequestMedicalBenefit(
           hrCode, patientNameMedicalRequest.value.toString(),
@@ -144,40 +148,7 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
     DateTime? currentDate = DateTime.now();
 
 
-    if (defaultTargetPlatform == TargetPlatform.macOS ||
-        defaultTargetPlatform == TargetPlatform.iOS) {
-      await showCupertinoModalPopup(
-          context: context,
-          builder: (BuildContext builder) {
-            return Container(
-              height: MediaQuery
-                  .of(context)
-                  .copyWith()
-                  .size
-                  .height * 0.25,
-              color: Colors.white,
-              child: CupertinoDatePicker(
-                mode: CupertinoDatePickerMode.date,
-                onDateTimeChanged: (value) {
-                  currentDate = value;
-                },
-                initialDateTime: DateTime.now(),
-                minimumYear: 2020,
-                maximumYear: 2023,
-              ),
-            );
-          });
-    } else {
-      final DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: currentDate,
-          firstDate: DateTime.now(),
-          lastDate: DateTime(2101));
-
-      if (picked != null && picked != currentDate) {
-        currentDate = picked;
-      }
-    }
+    currentDate = await openShowDatePicker(context);
 
     var formatter = GlobalConstants.dateFormatViewed;
     String formattedDate = formatter.format(
