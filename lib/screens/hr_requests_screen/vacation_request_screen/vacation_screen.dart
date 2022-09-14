@@ -102,7 +102,9 @@ class _VacationScreenState extends State<VacationScreen> {
                             heroTag: null,
                             onPressed: () {
                               context.read<VacationCubit>()
-                                  .submitAction(ActionValueStatus.accept,currentRequestData[VacationScreen.requestNoKey]);
+                                  .submitAction(ActionValueStatus.accept,
+                                  currentRequestData[VacationScreen
+                                      .requestNoKey]);
                             },
                             icon: const Icon(Icons.verified),
                             label: const Text('Accept'),
@@ -117,7 +119,9 @@ class _VacationScreenState extends State<VacationScreen> {
                           heroTag: null,
                           onPressed: () {
                             context.read<VacationCubit>()
-                                .submitAction(ActionValueStatus.reject,currentRequestData[VacationScreen.requestNoKey]);
+                                .submitAction(ActionValueStatus.reject,
+                                currentRequestData[VacationScreen
+                                    .requestNoKey]);
                           },
                           icon: const Icon(Icons.dangerous,
                             color: ConstantsColors.buttonColors,),
@@ -163,15 +167,20 @@ class _VacationScreenState extends State<VacationScreen> {
                                       routName: VacationScreen.routeName,
                                       requestName: 'Vacation',)));
                           }
-                          else if (state.requestStatus == RequestStatus.oldRequest){
-                            EasyLoading.showSuccess(state.successMessage ?? "").then((value) {
+                          else if (state.requestStatus ==
+                              RequestStatus.oldRequest) {
+                            EasyLoading.showSuccess(state.successMessage ?? "")
+                                .then((value) {
                               if (Navigator.of(context).canPop()) {
-                                Navigator.of(context,rootNavigator: true).pop();
-                              }else{
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                              } else {
                                 SystemNavigator.pop();
                               }
                             });
-                            BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();}
+                            BlocProvider.of<UserNotificationApiCubit>(context)
+                                .getNotifications();
+                          }
                         }
                         if (state.status.isSubmissionFailure) {
                           EasyLoading.showError(state.errorMessage ??
@@ -677,7 +686,7 @@ class _VacationScreenState extends State<VacationScreen> {
                 }
             ),
           );
-        });
+        }).then((value) => BlocProvider.of<ResponsibleVacationCubit>(context).clearAll());
   }
 
 }
@@ -817,11 +826,18 @@ class ItemView extends StatelessWidget {
   Widget _showBottomSheetWithSearch(int index,
       List<ContactsDataFromApi> listOfCities) {
     return SizedBox(
-      height: 30,
-      child: Center(
-        child: Text(listOfCities[index].name?.toTitleCase() ?? "",
-            // style: const TextStyle(color: Colors.black, fontSize: 16),
-            textAlign: TextAlign.center),
+      height: 50,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(listOfCities[index].name?.toTitleCase() ?? "",
+              textAlign: TextAlign.left,style: const TextStyle(fontSize: 14),),
+            Text(listOfCities[index].titleName?.toTitleCase() ?? "",
+              textAlign: TextAlign.left,style: const TextStyle(fontSize: 12),),
+          ],
+        ),
       ),
     );
   }

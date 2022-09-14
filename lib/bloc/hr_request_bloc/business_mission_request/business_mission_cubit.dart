@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/bloc/get_direction_screen_bloc/get_direction_cubit.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
+import 'package:hassanallamportalflutter/data/models/get_location_model/location_data.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/widgets/dialogpopoup/custom_date_picker.dart';
@@ -25,7 +27,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
   final RequestRepository _requestRepository;
 
 
-  void getRequestData({required RequestStatus requestStatus, String? requestNo,String? date,String? requesterHRCode}) async{
+  void getRequestData({required RequestStatus requestStatus, String? requestNo,String? date,String? requesterHRCode,context}) async{
     if (requestStatus == RequestStatus.newRequest){
       var now = DateTime.now();
       String formattedDate = GlobalConstants.dateFormatViewed.format(now);
@@ -59,7 +61,9 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
       final requestFromDate = DateFrom.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateFrom!)));
       final requestToDate = DateTo.dirty(value: GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateTo!)), dateFrom: requestFromDate.value);
       final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.date!)));
-      final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
+
+      var commentsRequested = requestData.comments ?? "No Comment";
+      final comments = CommentCharacterCheck.dirty(commentsRequested);
       final hoursFrom  = TimeFrom.dirty("${requestData.hourFrom} ${requestData.dateFromAmpm}");
       final hoursTo  = TimeTo.dirty("${requestData.hourTo} ${requestData.dateToAmpm}");
       var status = "Pending";
@@ -72,6 +76,12 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
       }else if (requestData.status == 2){
         status = "Rejected";
       }
+      final projectId = requestData.projectId ?? "";
+      var missionLocation = const LocationDataCheck.dirty(type: 0, value: LocationData.empty);
+      if(projectId.isNotEmpty){
+        missionLocation =  LocationDataCheck.dirty(value:BlocProvider.of<GetDirectionCubit>(context).getLocationByID(projectId),type: 0);
+      }
+
       emit(
         state.copyWith(
             requestDate: requestDate,
@@ -83,6 +93,7 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
             timeTo: hoursTo,
             status: FormzStatus.valid,
             requesterData: requesterData,
+            missionLocation: missionLocation,
             // status: Formz.validate([requestDate,
             //   state.timeFrom , state.dateFrom]),
             requestStatus: RequestStatus.oldRequest,
@@ -92,6 +103,8 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
       );
     }
   }
+
+
 
   void businessDateFromChanged(BuildContext context) async{
     DateTime? date = DateTime.now();
@@ -136,10 +149,13 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
   }
   void missionTypeChanged(int value) {
     final missionType = value;
+    print("--> value type $value");
+    final location = LocationDataCheck.dirty(value: state.missionLocation.value,type: missionType);
     emit(
       state.copyWith(
         missionType: missionType,
-        status: Formz.validate([state.requestDate,state.dateFrom,state.timeFrom]),
+        missionLocation: location,
+        status: Formz.validate([state.requestDate,state.dateFrom,state.timeFrom,location]),
       ),
     );
   }
@@ -185,10 +201,11 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
     );
   }
   void commentChanged(String value) {
+    var comment = CommentCharacterCheck.dirty(value);
     emit(
       state.copyWith(
-        comment: value,
-        status: Formz.validate([state.requestDate,state.dateFrom,state.timeFrom]),
+        comment: comment,
+        status: Formz.validate([state.requestDate,state.dateFrom,state.timeFrom,comment]),
       ),
     );
   }
@@ -204,20 +221,36 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
     );
   }
 
+  void getLocationChanged(LocationData value) {
+    // final locationData = value;
+    emit(
+      state.copyWith(
+        missionLocation: LocationDataCheck.dirty(value: value,type: state.missionType) ,
+        status: Formz.validate([state.requestDate,state.dateFrom,state.timeFrom]),
+      ),
+    );
+  }
+
   Future<void> submitBusinessMissionRequest() async {
-    print("submit permission");
+    print("submit Business Mission");
     final requestDate = RequestDate.dirty(state.requestDate.value);
     final dateFrom = DateFrom.dirty(state.dateFrom.value);
     final dateTo = DateTo.dirty(value: state.dateTo.value,dateFrom: dateFrom.value);
     final timeFrom = TimeFrom.dirty(state.timeFrom.value);
     final timeTo = TimeTo.dirty(state.timeTo.value);
+    print("mission type in submit ${state.missionType}");
+    final location = LocationDataCheck.dirty(value: state.missionLocation.value,type: state.missionType);
+    final comment = CommentCharacterCheck.dirty(state.comment.value);
+
     emit(state.copyWith(
       requestDate: requestDate,
       dateFrom: dateFrom,
       dateTo: dateTo,
       timeTo: timeTo,
       timeFrom: timeFrom,
-      status: Formz.validate([requestDate, dateFrom,dateTo,timeFrom,timeTo]),
+      missionLocation: location,
+      comment: comment,
+      status: Formz.validate([requestDate, dateFrom,dateTo,timeFrom,timeTo,location,comment]),
     ));
     if (state.status.isValidated) {
       // print("Done permission");
@@ -259,11 +292,15 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
       final type = "${state.missionType}";
       print("type $type");
 
+      final locations = state.missionLocation.value;
+      // print("type $type");
+
       // print(hrCode);
 
 
-      final businessMissionResponse = await _requestRepository.postBusinessMission(comments: comment,
-          dateFrom: dateFromValue,dateTo: dateToValue,requestDate: requestDateValue,type: type, hourFrom: hourFromValue,hourTo: hourToValue, dateToAmpm: dateToAmpm,dateFromAmpm: dateFromAmpm);
+      final businessMissionResponse = await _requestRepository.postBusinessMission(comments: comment.value,
+          dateFrom: dateFromValue,dateTo: dateToValue,requestDate: requestDateValue,type: type, hourFrom: hourFromValue,hourTo: hourToValue, dateToAmpm: dateToAmpm,dateFromAmpm: dateFromAmpm,locationData:locations
+      );
 
       if (businessMissionResponse.id == 1){
         emit(
