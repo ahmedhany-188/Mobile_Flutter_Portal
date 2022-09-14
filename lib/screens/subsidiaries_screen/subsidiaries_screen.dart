@@ -36,7 +36,7 @@ class _SubsidiariesScreenState extends State<SubsidiariesScreen> {
         /// basicAppBar(context, 'Subsidiaries'),
         backgroundColor: Colors.transparent,
         body: BlocProvider<SubsidiariesCubit>.value(
-          value: BlocProvider.of(context)..getSubsidiaries(),
+          value: SubsidiariesCubit.get(context)..getSubsidiaries(),
               // (context) => SubsidiariesCubit()..getSubsidiaries(),
           child: BlocConsumer<SubsidiariesCubit, SubsidiariesState>(
             listener: (context, state) {
@@ -130,7 +130,7 @@ class _SubsidiariesScreenState extends State<SubsidiariesScreen> {
                           ],
                         ),
                       )
-                    : Container();
+                    : const Center(child: CircularProgressIndicator(color: Colors.white,));
               });
             },
           ),

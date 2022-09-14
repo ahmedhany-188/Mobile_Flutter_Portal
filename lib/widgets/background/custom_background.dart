@@ -14,7 +14,6 @@ class CustomBackground extends StatelessWidget {
         fit: StackFit.expand,
         children: [
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
                 child: Container(
@@ -29,9 +28,7 @@ class CustomBackground extends StatelessWidget {
                   )),
                 ),
               ),
-              Container(
-                child: Assets.images.mainBackground.image(),
-              )
+              Container(child: Assets.images.mainBackground.image()),
             ],
           ),
           Container(

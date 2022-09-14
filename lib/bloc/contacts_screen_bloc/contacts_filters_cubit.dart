@@ -42,11 +42,19 @@ class ContactsFiltersCubit extends Cubit<ContactsFiltersInitial> {
     List<String> departmentFilters = apiMap.toList();
     apiMap.clear();
 
-    state.listContacts
-        .where((element) => apiMap.add(element.titleName!))
-        .toList();
-    List<String> titleFilters = apiMap.toList();
-    apiMap.clear();
+    // state.listContacts
+    // .where((element) => apiMap.add(element.titleName!))
+    // .toList();
+    List<String> titleFilters = [
+      'Top Management',
+      'Director',
+      'Senior Manager',
+      'Manager',
+      'Team Leader',
+      'Senior',
+      'Other'
+    ];
+    // apiMap.clear();
 
     emit(state.copyWith(
         companiesFilter: companiesFilters,
@@ -67,15 +75,17 @@ class ContactsFiltersCubit extends Cubit<ContactsFiltersInitial> {
       var splitQuery = state.searchString.toLowerCase().trim().split(' ');
       contactSearchResultsList = contactsList.where((contactElement) {
         return ((state.searchString.isNotEmpty)
-                ? splitQuery.every((singleSplitElement) => contactElement.name
-                    .toString()
-                    .toLowerCase()
-                    .trim()
-                    .contains(singleSplitElement) || contactElement.userHrCode
-            .toString()
-            .toLowerCase()
-            .trim()
-            .contains(singleSplitElement))
+                ? splitQuery.every((singleSplitElement) =>
+                    contactElement.name
+                        .toString()
+                        .toLowerCase()
+                        .trim()
+                        .contains(singleSplitElement) ||
+                    contactElement.userHrCode
+                        .toString()
+                        .toLowerCase()
+                        .trim()
+                        .contains(singleSplitElement))
                 : true) &&
             ((state.chosenCompaniesFilter.isNotEmpty)
                 ? state.chosenCompaniesFilter
@@ -89,8 +99,50 @@ class ContactsFiltersCubit extends Cubit<ContactsFiltersInitial> {
                 ? state.chosenDepartmentFilter
                     .contains(contactElement.mainDepartment!)
                 : true) &&
+            // ((state.chosenTitleFilter.isNotEmpty)
+            //     ? state.chosenTitleFilter.contains(contactElement.titleName!)
+            //     : true) &&
             ((state.chosenTitleFilter.isNotEmpty)
-                ? state.chosenTitleFilter.contains(contactElement.titleName!)
+                ? state.chosenTitleFilter.every((element) {
+                    var mainDepartment = contactElement.mainDepartment ?? "";
+                    if (element.contains('Top Management')) {
+                      return mainDepartment.contains(element);
+                    }
+                    if (element.split(' ').length > 1) {
+                      return contactElement.titleName!
+                              .contains(element.split(' ').first) &&
+                          contactElement.titleName!
+                              .contains(element.split(' ').last);
+                    }
+                    if (element == 'Senior') {
+                      return contactElement.titleName!.contains(element) &&
+                          (contactElement.titleName!.contains('Manager') ==
+                              false) &&
+                          (contactElement.titleName!.contains('Leader') ==
+                              false);
+                    }
+                    if (element == 'Manager') {
+                      return contactElement.titleName!.contains(element) &&
+                          (contactElement.titleName!.contains('Senior') ==
+                              false);
+                    }
+                    if (element == 'Director') {
+                      return contactElement.titleName!.contains(element);
+                    }
+                    if (element.contains('Other')) {
+                      return (contactElement.titleName!.contains('Senior') ==
+                              false) &&
+                          (contactElement.titleName!.contains('Manager') ==
+                              false) &&
+                          (contactElement.titleName!.contains('Leader') ==
+                              false) &&
+                          (mainDepartment.contains('Top Management') ==
+                              false) &&
+                          (contactElement.titleName!.contains('Director') ==
+                              false);
+                    }
+                    return true;
+                  })
                 : true);
       }).toList();
       emit(state.copyWith(
