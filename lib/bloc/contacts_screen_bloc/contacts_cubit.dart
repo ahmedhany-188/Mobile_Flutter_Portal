@@ -8,7 +8,7 @@ import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 
 part 'contacts_states.dart';
 
-class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin{
+class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin {
   ContactsCubit() : super(const ContactCubitStates()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (state.contactStates == ContactsEnumStates.failed) {
@@ -60,9 +60,17 @@ class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin{
         List<String> departmentFilters = apiMap.toList();
         apiMap.clear();
 
-        contacts.where((element) => apiMap.add(element.titleName!)).toList();
-        List<String> titleFilters = apiMap.toList();
-        apiMap.clear();
+        // contacts.where((element) => apiMap.add(element.titleName!)).toList();
+        List<String> titleFilters = [
+          'Top Management',
+          'Director',
+          'Senior Manager',
+          'Manager',
+          'Team Leader',
+          'Senior',
+          'Other'
+        ];
+        // apiMap.clear();
 
         emit(state.copyWith(
             contactStates: ContactsEnumStates.success,
@@ -101,13 +109,13 @@ class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin{
   @override
   Map<String, dynamic>? toJson(ContactCubitStates state) {
     // TODO: implement toJson
-    if (state.contactStates == ContactsEnumStates.success && state.listContacts.isNotEmpty) {
+    if (state.contactStates == ContactsEnumStates.success &&
+        state.listContacts.isNotEmpty) {
       return state.toMap();
     } else {
       return null;
     }
     // return state.toMap();
     // throw UnimplementedError();
-
   }
 }

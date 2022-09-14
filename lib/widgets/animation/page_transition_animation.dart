@@ -54,6 +54,18 @@ class PageTransitionAnimation {
       )).catchError((err){});
     });
   }
+  Future<void> navigateFromBottomWithoutReplace() {
+    return Future.delayed(Duration(milliseconds: delayedDuration), () async {
+      return await Navigator.of(context).push(PageTransition(
+        type: PageTransitionType.bottomToTop,
+        curve: Curves.elasticIn,
+        child: pageDirection,
+        alignment: Alignment.bottomCenter,
+        duration: Duration(milliseconds: transitionDuration),
+        reverseDuration: const Duration(milliseconds: 500),
+      )).catchError((err){throw err;});
+    });
+  }
   //
   // Future<Widget> navigateFromBottomToTopJoined(Widget currentPage) async {
   //   return Future.delayed(Duration(milliseconds: delayedDuration), () async {

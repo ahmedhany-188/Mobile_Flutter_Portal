@@ -259,6 +259,7 @@ class _MyAppState extends State<MyApp> {
             create: (subsidiariesCubitContext) =>
             SubsidiariesCubit()
               ..getSubsidiaries(),
+            lazy: false,
           ),
 
           // BlocProvider<MedicalRequestCubit>(
