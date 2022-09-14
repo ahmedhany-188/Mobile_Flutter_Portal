@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -35,34 +36,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
     hrUserMedicalRequest.text = user.employeeData!.userHrCode!;
 
     return CustomBackground(
-      child: Theme(
-        data: Theme.of(context).copyWith(
-          inputDecorationTheme: InputDecorationTheme(
-            labelStyle: const TextStyle(color: Colors.white),
-            fillColor: Colors.white,
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: const BorderSide(
-                  color: Colors.white,
-                )),
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: const BorderSide(color: Colors.white)),
-            disabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: const BorderSide(color: Colors.white)),
-            errorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: const BorderSide(color: Colors.red)),
-            focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(20),
-                borderSide: const BorderSide(
-                  color: Colors.red,
-                )),
-            iconColor: Colors.white,
-            hoverColor: Colors.white,
-          ),
-        ),
+      child: CustomTheme(
         child: BlocProvider<MedicalRequestCubit>(
           create: (medicalRequestContext) => MedicalRequestCubit(),
           child: Builder(builder: (context) {
@@ -113,7 +87,9 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                             mode: LaunchMode.externalApplication,
                           );
                         } catch (e, s) {
-                          print(s);
+                          if (kDebugMode) {
+                            print(s);
+                          }
                         }
                       } else if (state.status.isSubmissionInProgress) {
                         EasyLoading.show(
@@ -129,212 +105,209 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 8),
-                              child: BlocBuilder<MedicalRequestCubit,
-                                      MedicalRequestInitial>(
-                                  builder: (context, state) {
-                                return TextField(
+                      child: Form(
+                        child: SingleChildScrollView(
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 8),
+                                child: BlocBuilder<MedicalRequestCubit,
+                                        MedicalRequestInitial>(
+                                    builder: (context, state) {
+                                  return TextField(
+                                      style: const TextStyle(color: Colors.white),
+                                      cursorColor: Colors.white,
+                                      onChanged: (name) {
+                                        context
+                                            .read<MedicalRequestCubit>()
+                                            .patientName(name);
+                                      },
+                                      decoration: InputDecoration(
+                                        labelText: "Patient Name",
+                                        prefixIcon: const Icon(Icons.people,color: Colors.white70,),
+                                        errorText: state
+                                                .patientNameMedicalRequest.invalid
+                                            ? 'invalid Name'
+                                            : null,
+                                      ));
+                                }),
+                              ),
+
+                              // Container(height: 20),
+
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 8),
+                                child: TextField(
+                                    enabled: false,
                                     style: const TextStyle(color: Colors.white),
                                     cursorColor: Colors.white,
-                                    onChanged: (name) {
-                                      context
-                                          .read<MedicalRequestCubit>()
-                                          .patientName(name);
-                                    },
-                                    decoration: InputDecoration(
-                                      labelText: "Patient Name",
+                                    controller: hrUserMedicalRequest,
+                                    decoration: const InputDecoration(
+                                      prefixIcon: Icon(Icons.lock),
                                       // labelStyle: const TextStyle(
                                       //     color: Colors.black, fontSize: 15),
-                                      prefixIcon: const Icon(Icons.people),
-                                      // border: myInputBorder(),
-                                      // // enabledBorder: myInputBorder(),
-                                      // // focusedBorder: myfocusborder(),
-                                      errorText: state
-                                              .patientNameMedicalRequest.invalid
-                                          ? 'invalid Name'
-                                          : null,
-                                    ));
-                              }),
-                            ),
-
-                            // Container(height: 20),
-
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 8),
-                              child: TextField(
-                                  enabled: false,
-                                  style: const TextStyle(color: Colors.white),
-                                  cursorColor: Colors.white,
-                                  controller: hrUserMedicalRequest,
-                                  decoration: const InputDecoration(
-                                    prefixIcon: Icon(Icons.lock),
-                                    // labelStyle: const TextStyle(
-                                    //     color: Colors.black, fontSize: 15),
-                                    labelText: "HR Code",
-                                    // enabledBorder: myInputBorder(),
-                                    // focusedBorder: myfocusborder(),
-                                  )),
-                            ),
-
-                            // Container(height: 20),
-
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 8),
-                              child: BlocBuilder<MedicalRequestCubit,
-                                  MedicalRequestInitial>(
-                                builder: (context, state) {
-                                  return TextFormField(
-                                    initialValue: state.requestDate.value,
-                                    key: UniqueKey(),
-                                    readOnly: true,
-                                    style: const TextStyle(color: Colors.white),
-                                    cursorColor: Colors.white,
-                                    decoration: InputDecoration(
-                                      floatingLabelAlignment:
-                                          FloatingLabelAlignment.start,
-                                      labelText: 'Select Date',
-                                      errorText: state.requestDate.invalid
-                                          ? 'invalid Date'
-                                          : null,
-                                      prefixIcon:
-                                          const Icon(Icons.calendar_today),
-                                    ),
-                                    onTap: () async {
-                                      context
-                                          .read<MedicalRequestCubit>()
-                                          .selectDate(context);
-                                    },
-                                  );
-                                },
+                                      labelText: "HR Code",
+                                      // enabledBorder: myInputBorder(),
+                                      // focusedBorder: myfocusborder(),
+                                    )),
                               ),
-                            ),
 
-                            // Container(height: 20),
+                              // Container(height: 20),
 
-                            // const Text("Lab Type",
-                            //     style: TextStyle(
-                            //       color: Colors.black, fontSize: 15,
-                            //       fontFamily: 'Nunito',)),
-
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 8),
-                              child: BlocBuilder<MedicalRequestCubit,
-                                  MedicalRequestInitial>(
-                                builder: (context, state) {
-                                  return DropdownButtonFormField(
-                                    iconEnabledColor: Colors.white,
-                                    dropdownColor:
-                                        ConstantsColors.bottomSheetBackground,
-                                    style: const TextStyle(color: Colors.white),
-                                    decoration: InputDecoration(
-                                      labelText: "Lab Type",
-                                      prefixIcon: const Icon(Icons.vaccines),
-                                      errorText: state.selectedValueLab.invalid
-                                          ? 'select lab'
-                                          : null,
-                                    ),
-                                    hint: Text(
-                                      selectedValueLab,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 8),
+                                child: BlocBuilder<MedicalRequestCubit,
+                                    MedicalRequestInitial>(
+                                  builder: (context, state) {
+                                    return TextFormField(
+                                      initialValue: state.requestDate.value,
+                                      key: UniqueKey(),
+                                      readOnly: true,
+                                      style: const TextStyle(color: Colors.white),
+                                      cursorColor: Colors.white,
+                                      decoration: InputDecoration(
+                                        floatingLabelAlignment:
+                                            FloatingLabelAlignment.start,
+                                        labelText: 'Select Date',
+                                        errorText: state.requestDate.invalid
+                                            ? 'invalid Date'
+                                            : null,
+                                        prefixIcon:
+                                            const Icon(Icons.calendar_today,color: Colors.white70,),
                                       ),
-                                    ),
-                                    items: GlobalConstants.labsType
-                                        .map((item) => DropdownMenuItem<String>(
-                                              value: item,
-                                              child: Text(
-                                                item,
-                                                style: const TextStyle(
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                            ))
-                                        .toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedValueLab = value.toString();
-
-                                        if (selectedValueLab == "ELmokhtaber") {
-                                          servicesListState = GlobalConstants
-                                              .serviceTypeElMokhtabr;
-                                        } else {
-                                          servicesListState =
-                                              GlobalConstants.serviceTypeElBorg;
-                                        }
-                                      });
-                                      context
-                                          .read<MedicalRequestCubit>()
-                                          .addSelectedLab(selectedValueLab);
-                                    },
-                                  );
-                                },
+                                      onTap: () async {
+                                        context
+                                            .read<MedicalRequestCubit>()
+                                            .selectDate(context);
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
 
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 8, vertical: 8),
-                              child: BlocBuilder<MedicalRequestCubit,
-                                  MedicalRequestInitial>(
-                                builder: (context, state) {
-                                  return DropdownButtonFormField(
-                                    iconEnabledColor: Colors.white,
-                                    dropdownColor:
-                                        ConstantsColors.bottomSheetBackground,
-                                    style: const TextStyle(color: Colors.white),
-                                    decoration: InputDecoration(
-                                      labelText: 'Service Type',
-                                      hintText: "Service Type",
-                                      floatingLabelAlignment:
-                                          FloatingLabelAlignment.start,
-                                      prefixIcon:
-                                          const Icon(Icons.design_services),
-                                      errorText:
-                                          state.selectedValueService.invalid
-                                              ? 'select service'
-                                              : null,
-                                    ),
-                                    hint: Text(
-                                      selectedValueService,
-                                      style: const TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.black,
+                              // Container(height: 20),
+
+                              // const Text("Lab Type",
+                              //     style: TextStyle(
+                              //       color: Colors.black, fontSize: 15,
+                              //       fontFamily: 'Nunito',)),
+
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 8),
+                                child: BlocBuilder<MedicalRequestCubit,
+                                    MedicalRequestInitial>(
+                                  builder: (context, state) {
+                                    return DropdownButtonFormField(
+                                      iconEnabledColor: Colors.white,
+                                      dropdownColor:
+                                          ConstantsColors.bottomSheetBackground,
+                                      style: const TextStyle(color: Colors.white),
+                                      decoration: InputDecoration(
+                                        labelText: "Lab Type",
+                                        prefixIcon: const Icon(Icons.vaccines,color: Colors.white70,),
+                                        errorText: state.selectedValueLab.invalid
+                                            ? 'select lab'
+                                            : null,
                                       ),
-                                    ),
-                                    items: servicesListState
-                                        .map((item) => DropdownMenuItem<String>(
-                                              value: item,
-                                              child: Text(
-                                                item,
-                                                style: const TextStyle(
-                                                  fontSize: 14,
+                                      hint: Text(
+                                        selectedValueLab,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      items: GlobalConstants.labsType
+                                          .map((item) => DropdownMenuItem<String>(
+                                                value: item,
+                                                child: Text(
+                                                  item,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
                                                 ),
-                                              ),
-                                            ))
-                                        .toList(),
-                                    onChanged: (value) {
-                                      setState(() {
-                                        selectedValueService = value.toString();
-                                      });
-                                      context
-                                          .read<MedicalRequestCubit>()
-                                          .addSelectedService(
-                                              selectedValueService);
-                                    },
-                                  );
-                                },
+                                              ))
+                                          .toList(),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedValueLab = value.toString();
+
+                                          if (selectedValueLab == "ELmokhtaber") {
+                                            servicesListState = GlobalConstants
+                                                .serviceTypeElMokhtabr;
+                                          } else {
+                                            servicesListState =
+                                                GlobalConstants.serviceTypeElBorg;
+                                          }
+                                        });
+                                        context
+                                            .read<MedicalRequestCubit>()
+                                            .addSelectedLab(selectedValueLab);
+                                      },
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                          ],
+
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8, vertical: 8),
+                                child: BlocBuilder<MedicalRequestCubit,
+                                    MedicalRequestInitial>(
+                                  builder: (context, state) {
+                                    return DropdownButtonFormField(
+                                      iconEnabledColor: Colors.white,
+                                      dropdownColor:
+                                          ConstantsColors.bottomSheetBackground,
+                                      style: const TextStyle(color: Colors.white),
+                                      decoration: InputDecoration(
+                                        labelText: 'Service Type',
+                                        hintText: "Service Type",
+                                        floatingLabelAlignment:
+                                            FloatingLabelAlignment.start,
+                                        prefixIcon:
+                                            const Icon(Icons.design_services,color: Colors.white70,),
+                                        errorText:
+                                            state.selectedValueService.invalid
+                                                ? 'select service'
+                                                : null,
+                                      ),
+                                      hint: Text(
+                                        selectedValueService,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      items: servicesListState
+                                          .map((item) => DropdownMenuItem<String>(
+                                                value: item,
+                                                child: Text(
+                                                  item,
+                                                  style: const TextStyle(
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ))
+                                          .toList(),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          selectedValueService = value.toString();
+                                        });
+                                        context
+                                            .read<MedicalRequestCubit>()
+                                            .addSelectedService(
+                                                selectedValueService);
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -360,7 +333,7 @@ OutlineInputBorder myInputBorder() {
       ));
 }
 
-OutlineInputBorder myfocusborder() {
+OutlineInputBorder myFocusBorder() {
   return const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(20)),
       borderSide: BorderSide(
@@ -369,7 +342,7 @@ OutlineInputBorder myfocusborder() {
       ));
 }
 
-BoxDecoration outlineboxTypes() {
+BoxDecoration outlineBoxTypes() {
   return BoxDecoration(
       borderRadius: const BorderRadius.all(Radius.circular(20)),
       border: Border.all(width: 3, color: Colors.black));
