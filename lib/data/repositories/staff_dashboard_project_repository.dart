@@ -14,12 +14,10 @@ class StaffDashBoardProjectRepository {
     final http.Response rawStaffDashboard = await staffDashBoardProjectDataProvider.getProjectsBySubs(company,project,director,date);
     final json = await jsonDecode(rawStaffDashboard.body);
 
-    print("-----"+json.toString());
 
     List<ProjectStaffDashboardModel> myProjectDashBoardList = List<ProjectStaffDashboardModel>.from(
         json.map((model) => ProjectStaffDashboardModel.fromJson(model)));
 
-    print("-----"+myProjectDashBoardList.toString());
 
     return myProjectDashBoardList;
 

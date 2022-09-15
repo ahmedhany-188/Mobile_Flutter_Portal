@@ -1,48 +1,54 @@
 part of 'staff_dashboard_job_cubit.dart';
 
-enum JobStaffDashBoardEnumStates {loading, success, failed,noConnection}
+enum JobStaffDashBoardEnumStates { loading, success, failed, noConnection }
 
 class StaffDashboardJobState extends Equatable {
-
   final JobStaffDashBoardEnumStates jobStaffDashBoardEnumStates;
   final List<JobStaffDashboardModel> jobStaffDashBoardList;
-  String date;
+  final List<JobStaffDashboardModel> jobStaffDashBoardSearchList;
+  final bool isFiltered;
+  final String date;
 
-  StaffDashboardJobState({
-    this.jobStaffDashBoardEnumStates = JobStaffDashBoardEnumStates
-        .loading,
+  const StaffDashboardJobState({
+    this.jobStaffDashBoardEnumStates = JobStaffDashBoardEnumStates.loading,
     this.jobStaffDashBoardList = const <JobStaffDashboardModel>[],
+    this.jobStaffDashBoardSearchList = const <JobStaffDashboardModel>[],
+    this.isFiltered = false,
     required this.date,
   });
 
   StaffDashboardJobState copyWith({
     JobStaffDashBoardEnumStates? jobStaffDashBoardEnumStates,
-    // List<List<CompanyStaffDashBoard>>? companyStaffDashBoardList,
     List<JobStaffDashboardModel>? jobStaffDashBoardList,
-
+    List<JobStaffDashboardModel>? jobStaffDashBoardSearchList,
+    bool? isFiltered,
     String? date,
   }) {
     return StaffDashboardJobState(
-      jobStaffDashBoardEnumStates: jobStaffDashBoardEnumStates ??
-          this.jobStaffDashBoardEnumStates,
-      jobStaffDashBoardList: jobStaffDashBoardList ??
-          this.jobStaffDashBoardList,
+      jobStaffDashBoardEnumStates:
+          jobStaffDashBoardEnumStates ?? this.jobStaffDashBoardEnumStates,
+      jobStaffDashBoardList:
+          jobStaffDashBoardList ?? this.jobStaffDashBoardList,
+      jobStaffDashBoardSearchList:
+          jobStaffDashBoardSearchList ?? this.jobStaffDashBoardSearchList,
+      isFiltered: isFiltered ?? this.isFiltered,
       date: date ?? this.date,
     );
   }
 
   @override
-  List<Object> get props =>
-      [
-        jobStaffDashBoardEnumStates, jobStaffDashBoardList,date
+  List<Object> get props => [
+        jobStaffDashBoardEnumStates,
+        jobStaffDashBoardList,
+        date,
+        jobStaffDashBoardSearchList,
+        isFiltered
       ];
 
   static StaffDashboardJobState? fromMap(Map<String, dynamic> json) {
     if (json.isEmpty) {
-      return StaffDashboardJobState(
-        jobStaffDashBoardEnumStates: JobStaffDashBoardEnumStates
-            .loading,
-        // companyStaffDashBoardList: <List<CompanyStaffDashBoard>>[],
+      return const StaffDashboardJobState(
+        jobStaffDashBoardEnumStates: JobStaffDashBoardEnumStates.loading,
         jobStaffDashBoardList: <JobStaffDashboardModel>[],
         date: "",
       );
@@ -50,16 +56,15 @@ class StaffDashboardJobState extends Equatable {
     int val = json['projectStaffDashBoardEnumStates'];
     String date = json['date'];
     return StaffDashboardJobState(
-      jobStaffDashBoardEnumStates: JobStaffDashBoardEnumStates
-          .values[val],
+      jobStaffDashBoardEnumStates: JobStaffDashBoardEnumStates.values[val],
       // getAttendanceList : List<MyAttendanceModel>.from(
       //     json['getAttendanceList']?.map((p) => MyAttendanceModel.fromJson(p))),
       // companyStaffDashBoardList: List<List<CompanyStaffDashBoard>>.from(
       //     json['getAttendanceList']?.map((p) =>
       //         CompanyStaffDashBoard.fromJson(p))),
       jobStaffDashBoardList: List<JobStaffDashboardModel>.from(
-          json['getAttendanceList']?.map((p) =>
-              JobStaffDashboardModel.fromJson(p))),
+          json['getAttendanceList']
+              ?.map((p) => JobStaffDashboardModel.fromJson(p))),
       date: date,
     );
   }
@@ -71,6 +76,4 @@ class StaffDashboardJobState extends Equatable {
       'date': date
     };
   }
-
-
 }
