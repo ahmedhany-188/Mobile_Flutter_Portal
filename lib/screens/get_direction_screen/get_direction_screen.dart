@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/data/models/get_location_model/location_data.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_widget.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:hassanallamportalflutter/widgets/search/general_search.dart';
@@ -16,8 +17,8 @@ class GetDirectionScreen extends StatefulWidget {
 }
 
 class _GetDirectionScreenState extends State<GetDirectionScreen> {
-  List<dynamic> projectsDirectionData = [];
-  List<dynamic> projectsSearchResult = [];
+  List<LocationData> projectsDirectionData = [];
+  List<LocationData> projectsSearchResult = [];
   FocusNode searchTextFieldFocusNode = FocusNode();
   TextEditingController textController = TextEditingController();
 
@@ -36,16 +37,16 @@ class _GetDirectionScreenState extends State<GetDirectionScreen> {
         ),
         body: BlocProvider(
           create: (context) => GetDirectionCubit()..getDirection(),
-          child: BlocConsumer<GetDirectionCubit, GetDirectionState>(
+          child: BlocConsumer<GetDirectionCubit, GetDirectionInitial>(
             listener: (context, state) {
-              if (state is GetDirectionSuccessState) {
-                projectsDirectionData = state.getDirectionList;
+              if(state.status == GetDirectionStatus.success){
+                projectsDirectionData = state.mappedItems;
                 setState(() {});
               }
             },
             builder: (context, state) {
-              return (state is GetDirectionSuccessState ||
-                      state is GetDirectionLoadingState)
+              return (state.status == GetDirectionStatus.success ||
+                  state.status == GetDirectionStatus.loading)
                   ? Sizer(
                     builder: (c,v,b) => SingleChildScrollView(
                         physics: const NeverScrollableScrollPhysics(),
@@ -63,7 +64,7 @@ class _GetDirectionScreenState extends State<GetDirectionScreen> {
                                 onChanged: (_) {
                                   setState(() {
                                     projectsSearchResult =
-                                        GeneralSearch().setGeneralSearch(
+                                        GeneralSearch().setGeneralSearchLocation(
                                       query: textController.text,
                                       listKeyForCondition: 'projectName',
                                       listFromApi: projectsDirectionData,

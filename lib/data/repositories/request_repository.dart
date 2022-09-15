@@ -10,6 +10,7 @@ import 'package:hassanallamportalflutter/data/data_providers/general_dio/general
 import 'package:hassanallamportalflutter/data/data_providers/requests_data_providers/request_data_providers.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/business_card_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/admin_requests_models/embassy_letter_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/get_location_model/location_data.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_requests_model_form.dart';
@@ -358,7 +359,8 @@ class RequestRepository {
       required String dateToAmpm,
       required String dateFrom,
       required String hourFrom,
-      required String hourTo}) async {
+      required String hourTo,
+      required LocationData locationData}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": RequestServiceID.businessMissionServiceID,
       "requestHrCode": userData?.user?.userHRCode!,
@@ -371,6 +373,7 @@ class RequestRepository {
       "hourFrom": hourFrom,
       "hourTo": hourTo,
       "missionLocation": type,
+      "projectId": locationData.projectId == 0 ? null : locationData.projectId.toString()
     });
     final http.Response rawRequest =
         await requestDataProviders.postBusinessMissionRequest(bodyString);

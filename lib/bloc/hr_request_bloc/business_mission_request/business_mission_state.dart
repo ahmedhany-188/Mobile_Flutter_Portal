@@ -19,11 +19,12 @@ class BusinessMissionInitial extends BusinessMissionState {
     this.errorMessage,
     this.successMessage,
     this.requestStatus,
-    this.comment = "",
+    this.comment = const CommentCharacterCheck.pure(),
     this.statusAction,
     this.takeActionStatus,
     this.requesterData = EmployeeData.empty,
     this.actionComment = "",
+    this.missionLocation = const LocationDataCheck.pure(),
   });
 
   final RequestDate requestDate;
@@ -36,14 +37,15 @@ class BusinessMissionInitial extends BusinessMissionState {
   final String? errorMessage;
   final String? successMessage;
   final RequestStatus? requestStatus;
-  final String comment;
+  final CommentCharacterCheck comment;
   final TakeActionStatus? takeActionStatus;
   final String? statusAction;
   final EmployeeData requesterData;
   final String actionComment;
+  final LocationDataCheck missionLocation;
 
   @override
-  List<Object> get props => [requestDate, dateFrom,dateTo,missionType,timeFrom,timeTo, status,comment,requesterData,actionComment];
+  List<Object> get props => [requestDate, dateFrom,dateTo,missionType,timeFrom,timeTo, status,comment,requesterData,actionComment,missionLocation];
 
   BusinessMissionInitial copyWith({
     RequestDate? requestDate,
@@ -56,11 +58,12 @@ class BusinessMissionInitial extends BusinessMissionState {
     String? errorMessage,
     String? successMessage,
     RequestStatus? requestStatus,
-    String? comment,
+    CommentCharacterCheck? comment,
     TakeActionStatus? takeActionStatus,
     String? statusAction,
     EmployeeData? requesterData,
     String? actionComment,
+    LocationDataCheck? missionLocation,
   }) {
     return BusinessMissionInitial(
       requestDate: requestDate ?? this.requestDate,
@@ -78,7 +81,7 @@ class BusinessMissionInitial extends BusinessMissionState {
       takeActionStatus: takeActionStatus ?? this.takeActionStatus,
       requesterData: requesterData ?? this.requesterData,
       actionComment: actionComment ?? this.actionComment,
-
+      missionLocation: missionLocation ?? this.missionLocation,
     );
   }
 }
