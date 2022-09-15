@@ -49,56 +49,36 @@ class StaffDashboardJobCubit extends Cubit<StaffDashboardJobState>
         builder: (_) => Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Padding(
+                Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            'All',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                        ],
-                      ),
-                      onTap: () {
-                        updateList('All');
-                        Navigator.pop(context);
-                      }),
+                  child: TextButton(
+                    child: const Text('All',style: TextStyle(color: Colors.white, fontSize: 18),),
+                    // style: TextStyle(color: Colors.white, fontSize: 18),
+                    onPressed: (){updateList('All');
+                  Navigator.pop(context);},
+                  ),
                 ),
-                Padding(
+                Container(
                   padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            'Staff',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                        ],
-                      ),
-                      onTap: () {
+                  width: double.infinity,
+                  child: TextButton(
+                    child: const Text('Staff',style: TextStyle(color: Colors.white, fontSize: 18),),
+                         onPressed: () {
                         updateList('Staff');
                         Navigator.pop(context);
-                      }),
+                      }
+                  ),
                 ),
-                Padding(
+                Container(
+                  width: double.infinity,
                   padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
-                          Text(
-                            'Labor',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                        ],
-                      ),
-                      onTap: () {
-                        updateList('Labor');
-                        Navigator.pop(context);
-                      }),
+                  child: TextButton(
+                    child: const Text('Labor',style: TextStyle(color: Colors.white, fontSize: 18),),
+                    onPressed: () {
+                      updateList('Labor');
+                      Navigator.pop(context);
+                    },),
                 ),
               ],
             ));
