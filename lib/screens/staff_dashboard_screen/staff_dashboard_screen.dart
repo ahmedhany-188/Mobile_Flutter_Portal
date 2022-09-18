@@ -113,7 +113,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
                         margin:
-                            const EdgeInsets.only(top: 10, bottom: 10),
+                            const EdgeInsets.only(top: 15, bottom: 10),
                         child: InputDecorator(
                           decoration: const InputDecoration(
                             enabledBorder: OutlineInputBorder(
@@ -194,8 +194,6 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                           ),
                         ),
                       ),
-
-                      // const SizedBox(height: 40),
 
                       Badge(
                         toAnimate: false,
