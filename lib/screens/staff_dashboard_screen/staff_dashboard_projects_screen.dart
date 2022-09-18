@@ -69,8 +69,11 @@ class StaffDashBoardProjectScreenClass
                               ),
                               onPressed: () {
                                 context
-                                    .read<StaffDashboardCubit>()
-                                    .staffDashBoardDateChanged(context);
+                                    .read<StaffDashboardProjectCubit>()
+                                    .getStaffBoardChangedProjects( currentRequestData[StaffDashBoardProjectScreen.companyID],
+                                    currentRequestData[StaffDashBoardProjectScreen.project],
+                                    currentRequestData[
+                                    StaffDashBoardProjectScreen.director],context);
                               });
                         },
                       ),
@@ -80,10 +83,10 @@ class StaffDashBoardProjectScreenClass
                   value: StaffDashboardProjectCubit.get(context)
                     ..getFirstStaffBoardProjects(
                         currentRequestData[
-                            StaffDashBoardProjectScreen.companyID],
+                        StaffDashBoardProjectScreen.companyID],
                         currentRequestData[StaffDashBoardProjectScreen.project],
                         currentRequestData[
-                            StaffDashBoardProjectScreen.director],
+                        StaffDashBoardProjectScreen.director],
                         currentRequestData[StaffDashBoardProjectScreen.date])
                     ..onClearData(),
                   child: BlocConsumer<StaffDashboardProjectCubit,
@@ -140,23 +143,23 @@ class StaffDashBoardProjectScreenClass
                                     color: Colors.black),
                                 border: const OutlineInputBorder(
                                     borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
+                                    BorderRadius.all(Radius.circular(10.0)),
                                     borderSide: BorderSide.none),
                                 suffixIcon: (textController.text.isEmpty)
                                     ? null
                                     : IconButton(
-                                        onPressed: () {
-                                          textController.clear();
-                                          textFoucus.unfocus();
-                                          StaffDashboardProjectCubit.get(
-                                                  context)
-                                              .onClearData();
-                                        },
-                                        icon: const Icon(
-                                          Icons.clear,
-                                          color: Colors.red,
-                                        ),
-                                      ),
+                                  onPressed: () {
+                                    textController.clear();
+                                    textFoucus.unfocus();
+                                    StaffDashboardProjectCubit.get(
+                                        context)
+                                        .onClearData();
+                                  },
+                                  icon: const Icon(
+                                    Icons.clear,
+                                    color: Colors.red,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -165,19 +168,19 @@ class StaffDashBoardProjectScreenClass
                             child: _showModal(context),
                           ),
                           state.projectStaffDashBoardEnumStates ==
-                                  ProjectStaffDashBoardEnumStates.success
+                              ProjectStaffDashBoardEnumStates.success
                               ? Flexible(
-                                  child: (state.isFiltered)
-                                      ? StaffDashboardProjectWidget(
-                                          state.getResult, state.date)
-                                      : StaffDashboardProjectWidget(
-                                          state.projectStaffDashBoardList,
-                                          state.date),
-                                )
+                            child: (state.isFiltered)
+                                ? StaffDashboardProjectWidget(
+                                state.getResult, state.date)
+                                : StaffDashboardProjectWidget(
+                                state.projectStaffDashBoardList,
+                                state.date),
+                          )
                               : Center(
-                                  child: (EasyLoading.isShow)
-                                      ? Container()
-                                      : const CircularProgressIndicator()),
+                              child: (EasyLoading.isShow)
+                                  ? Container()
+                                  : const CircularProgressIndicator()),
                         ],
                       );
                     },
@@ -191,16 +194,16 @@ class StaffDashBoardProjectScreenClass
     StaffDashboardProjectCubit.get(context).updateFilters();
 
     return DropdownSearch(
-        // key: UniqueKey(),
+      // key: UniqueKey(),
         items: StaffDashboardProjectCubit.get(context).state.directorFilter,
         selectedItem: StaffDashboardProjectCubit.get(context)
-                .state
-                .chosenDirectorFilter
-                .isEmpty
+            .state
+            .chosenDirectorFilter
+            .isEmpty
             ? null
             : StaffDashboardProjectCubit.get(context)
-                .state
-                .chosenDirectorFilter,
+            .state
+            .chosenDirectorFilter,
         dropdownDecoratorProps: DropDownDecoratorProps(
           dropdownSearchDecoration: InputDecoration(
             contentPadding: const EdgeInsets.all(10),

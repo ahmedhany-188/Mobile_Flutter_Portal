@@ -1,8 +1,11 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/staff_dashboard_models/projectstaffdashboard_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/staff_dashboard_project_repository.dart';
+import 'package:hassanallamportalflutter/widgets/dialogpopoup/custom_date_picker.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 part 'staff_dashboard_project_state.dart';
@@ -110,6 +113,24 @@ class StaffDashboardProjectCubit extends Cubit<StaffDashboardProjectState>
 
       ),
     );
+  }
+
+  void getStaffBoardChangedProjects(company,project,director,BuildContext context) async {
+    DateTime? date = DateTime.now();
+    FocusScope.of(context).requestFocus(
+        FocusNode());
+
+    date = await openShowDatePicker(context);
+    var formatter = GlobalConstants.dateFormatServerDashBoard;
+    String formattedDate = formatter.format(
+        date ?? DateTime.now());
+
+    if(formattedDate!=state.date){
+      context.read<StaffDashboardProjectCubit>()
+          .getFirstStaffBoardProjects(company,project,director,formattedDate);
+    }
+    print("formatted :"+formattedDate.toString());
+    print("state date :"+state.date.toString());
   }
 
   Future<void> getFirstStaffBoardProjects(
