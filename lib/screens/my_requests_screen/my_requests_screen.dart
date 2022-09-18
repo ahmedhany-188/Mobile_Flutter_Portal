@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/my_requests_screen_bloc/my_requests_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/statistics_bloc/statistics_cubit.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_requests_model_form.dart';
 import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_ticket_widget.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 class MyRequestsScreen extends StatefulWidget {
   static const routeName = "my-requests-screen";
@@ -59,6 +61,113 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                 backgroundColor: Colors.transparent,
                 title: const Text('My Requests'),
                 centerTitle: true,
+                actions: [
+                  BlocProvider<StatisticsCubit>(
+                    create: (context) =>
+                        StatisticsCubit.get(context)..getStatistics(),
+                    child: BlocBuilder<StatisticsCubit, StatisticsInitial>(
+                      builder: (context, state) {
+                        return IconButton(
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  context: context,
+                                  builder: (_) {
+                                    return Container(
+                                        // padding: const EdgeInsets.all(10),
+                                        margin: const EdgeInsets.all(10),
+                                        child: Column(
+                                          // mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            const Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 10,
+                                                  horizontal: 2.5),
+                                              child: Text(
+                                                'Statistics',
+                                                style: TextStyle(fontSize: 20),
+                                              ),
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Expanded(child: Text('Vacations')),
+                                                Expanded(
+                                                  flex:3,
+                                                  child: SfSlider(
+                                                    value: double.parse(state
+                                                            .statisticsList[0]
+                                                            .consumed!) /
+                                                        double.parse(state
+                                                            .statisticsList[0]
+                                                            .balance!),
+                                                    onChanged: (_) {},
+                                                    thumbIcon: Center(
+                                                      child: Text(
+                                                          '${state.statisticsList[0].consumed}'),
+                                                    ),
+                                                    activeColor: Colors.red,
+                                                    inactiveColor:
+                                                        Colors.white70,
+                                                  ),
+                                                ),
+                                                Expanded(child: Text('${state.statisticsList[0].balance} days')),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Expanded(child: Text('Permissions',)),
+                                                Expanded(
+                                                  flex:3,
+                                                  child: SfSlider(
+                                                    value: double.parse(state
+                                                            .statisticsList[2]
+                                                            .consumed!) /
+                                                        double.parse(state
+                                                            .statisticsList[2]
+                                                            .balance!),
+                                                    onChanged: (_) {},
+                                                    thumbIcon: Center(
+                                                      child: Text(
+                                                          '${state.statisticsList[2].consumed}'),
+                                                    ),
+                                                    activeColor: Colors.yellow,
+                                                    inactiveColor: Colors.white70,
+                                                  ),
+                                                ),
+                                                Expanded(child: Text('${state.statisticsList[2].balance} hours')),
+                                              ],
+                                            ),
+                                            Row(
+                                              children: [
+                                                const Expanded(child: Text('Business Mission',)),
+                                                Expanded(
+                                                  flex:3,
+                                                  child: SfSlider(
+                                                    value: double.parse(state
+                                                            .statisticsList[1]
+                                                            .consumed!) /
+                                                        31,
+                                                    onChanged: (_) {},
+                                                    thumbIcon: Center(
+                                                      child: Text(
+                                                          '${state.statisticsList[1].consumed}'),
+                                                    ),
+                                                    activeColor: Colors.green,
+                                                    inactiveColor: Colors.white70,
+                                                  ),
+                                                ),
+                                                const Expanded(child: Text('No Limit')),
+                                              ],
+                                            ),
+                                          ],
+                                        ));
+                                  });
+                            },
+                            icon: const Icon(Icons.stacked_bar_chart));
+                      },
+                    ),
+                  )
+                ],
                 bottom: PreferredSize(
                   preferredSize: const Size(double.infinity, 25),
                   child: BlocBuilder<MyRequestsCubit, MyRequestsState>(
@@ -82,56 +191,57 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                               // searchResult.addAll(state.getMyRequests
                               //     .where((element) => element.reqStatus == 1)
                               //     .toList());
-                              MyRequestsCubit.get(context)
-                                  .onApprovedSelected([...state.getTempMyRequests,...state.getMyRequests
-                                  .where((element) => element.reqStatus == 1)
-                                  .toList(),
+                              MyRequestsCubit.get(context).onApprovedSelected([
+                                ...state.getTempMyRequests,
+                                ...state.getMyRequests
+                                    .where((element) => element.reqStatus == 1)
+                                    .toList(),
                               ]);
                             }
                             if (index == 1 && state.pending == false) {
                               // state.gettempMyRequests...addAll(state.getMyRequests
                               //     .where((element) => element.reqStatus == 0)
                               //     .toList());
-                              MyRequestsCubit.get(context)
-                                  .onPendingSelected( [...state.getTempMyRequests, ...state.getMyRequests
-                                  .where((element) => element.reqStatus == 0)
-                                  .toList()
+                              MyRequestsCubit.get(context).onPendingSelected([
+                                ...state.getTempMyRequests,
+                                ...state.getMyRequests
+                                    .where((element) => element.reqStatus == 0)
+                                    .toList()
                               ]);
                             }
                             if (index == 2 && state.rejected == false) {
                               // searchResult.addAll(state.getMyRequests
                               //     .where((element) => element.reqStatus == 2)
                               //     .toList());
-                              MyRequestsCubit.get(context)
-                                  .onRejectedSelected([...state.getTempMyRequests, ...state.getMyRequests
-                                  .where((element) => element.reqStatus == 2)
-                                  .toList()
+                              MyRequestsCubit.get(context).onRejectedSelected([
+                                ...state.getTempMyRequests,
+                                ...state.getMyRequests
+                                    .where((element) => element.reqStatus == 2)
+                                    .toList()
                               ]);
                             }
 
                             if (index == 0 && state.approved == true) {
                               // searchResult.removeWhere(
                               //     (element) => element.reqStatus == 1);
-                              MyRequestsCubit.get(context)
-                                  .onApprovedUnSelected([
-                                ...state.getTempMyRequests
-                              ]..removeWhere((element) => element.reqStatus == 1));
+                              MyRequestsCubit.get(context).onApprovedUnSelected(
+                                  [...state.getTempMyRequests]..removeWhere(
+                                      (element) => element.reqStatus == 1));
                             }
                             if (index == 1 && state.pending == true) {
                               // searchResult.removeWhere(
                               //     (element) => element.reqStatus == 0);
-                              MyRequestsCubit.get(context)
-                                  .onPendingUnSelected([
+                              MyRequestsCubit.get(context).onPendingUnSelected([
                                 ...state.getTempMyRequests
-                              ]..removeWhere((element) => element.reqStatus == 0));
+                              ]..removeWhere(
+                                  (element) => element.reqStatus == 0));
                             }
                             if (index == 2 && state.rejected == true) {
                               // searchResult.removeWhere(
                               //     (element) => element.reqStatus == 2);
-                              MyRequestsCubit.get(context)
-                                  .onRejectedUnSelected([
-                                ...state.getTempMyRequests
-                              ]..removeWhere((element) => element.reqStatus == 2));
+                              MyRequestsCubit.get(context).onRejectedUnSelected(
+                                  [...state.getTempMyRequests]..removeWhere(
+                                      (element) => element.reqStatus == 2));
                             }
                             // MyRequestsCubit.get(context).setTemp(searchResult);
 
@@ -265,8 +375,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                                   child: (!state.isFiltered)
                                       ? MyRequestsItemWidget(
                                           state.getMyRequests)
-                                      : MyRequestsItemWidget(
-                                          state.getResult),
+                                      : MyRequestsItemWidget(state.getResult),
                                 ),
                               ],
                             )

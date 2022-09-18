@@ -44,7 +44,7 @@ class StatisticsCubit extends Cubit<StatisticsInitial> {
         List<Statistics> statisticsList = List<Statistics>.from(value.data.map((model) => Statistics.fromJson(model)));
 
         emit(state.copyWith(
-            statisicsList: statisticsList,
+            statisticsList: statisticsList,
             statisticsStates: StatisticsEnumStates.success));
       } else {
         emit(state.copyWith(statisticsStates: StatisticsEnumStates.failed));
