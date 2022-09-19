@@ -2,6 +2,7 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/staff_dashboard_bloc/staff_dashboard_cubit.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
@@ -24,6 +25,10 @@ class StaffDashBoardScreen extends StatefulWidget {
 class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
   @override
   Widget build(BuildContext context) {
+
+    final user = context.select((AppBloc bloc) => bloc.state.userData);
+
+
     return WillPopScope(
       onWillPop: () async {
         await EasyLoading.dismiss(animation: true);
@@ -39,7 +44,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
             value: StaffDashboardCubit.get(context)
               ..getFirstStaffBoardCompanies(
                   // TODO: --------------change hr,date
-                  "10203520",
+                  user.employeeData?.userHrCode,
                   GlobalConstants.dateFormatServerDashBoard
                       .format(DateTime.now())),
             child: BlocConsumer<StaffDashboardCubit, StaffDashboardState>(
@@ -64,6 +69,12 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                     ),
                   );
                 }
+                else if (state.companyStaffDashBoardEnumStates ==
+                    CompanyStaffDashBoardEnumStates.noDataFound) {
+                  EasyLoading.dismiss(animation: true);
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  EasyLoading.showError( "Don't have access");
+                }
               },
               builder: (context, state) {
                 return Scaffold(
@@ -83,7 +94,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                             onPressed: () {
                               context
                                   .read<StaffDashboardCubit>()
-                                  .staffDashBoardDateChanged(context);
+                                  .staffDashBoardDateChanged(context,user.employeeData?.userHrCode);
                             })
                       ]),
                   body: Column(

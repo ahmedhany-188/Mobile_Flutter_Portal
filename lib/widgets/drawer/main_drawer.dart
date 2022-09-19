@@ -504,12 +504,12 @@ class MainDrawer extends StatelessWidget {
                     // buildDivider(),
 
                     buildListTile(
-                      'My Attendance',
-                      Icons.fingerprint,
+                      'Staff DashBoard',
+                      Icons.pie_chart_outline_sharp,
                       () {
 
                         Navigator.popAndPushNamed(
-                            context, AttendanceScreen.routeName);
+                            context, StaffDashBoardScreen.routeName);
                       },
                     ),
                     InkWell(

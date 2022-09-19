@@ -4,7 +4,7 @@ class AccessRightModel {
 
   final int ?requestType, status;
   final bool ?permanent, usbException, vpnAccount, ipPhone,
-      localAdmin; //colorPrinting;
+      localAdmin, printing;
   final String ?requestDate, fromDate, toDate, filePDF, comments, requestHrCode;
 
   AccessRightModel(this.requestType,
@@ -13,8 +13,7 @@ class AccessRightModel {
       this.vpnAccount,
       this.ipPhone,
       this.localAdmin,
-
-      // this.colorPrinting,
+      this.printing,
       this.permanent,
       this.requestDate,
       this.fromDate,
@@ -31,6 +30,7 @@ class AccessRightModel {
         vpnAccount=json["vpnAccount"],
         ipPhone=json["ipPhone"],
         localAdmin=json["localAdmin"],
+        printing=json["printing"],
         permanent=json["isPermanent"],
         requestDate=json["date"],
         fromDate=json["startDate"],

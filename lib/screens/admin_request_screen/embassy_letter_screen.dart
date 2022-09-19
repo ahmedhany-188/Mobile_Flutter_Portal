@@ -309,10 +309,10 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                               ),
                                               )).toList(),
                                           onChanged: (value) {
+
                                               context.read<EmbassyLetterCubit>()
                                                   .addSelectedEmbassy(
-                                                  //value.toString()
-                                                   GlobalConstants.embassyLetterList.indexOf(value.toString()).toString()
+                                                   GlobalConstants.embassyLetterList.indexOf((value).toString()),
                                               );
                                           },
                                         ),

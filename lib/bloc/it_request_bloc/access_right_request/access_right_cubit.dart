@@ -59,6 +59,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
       final vpnAccount = requestData.vpnAccount;
       final ipPhone = requestData.ipPhone;
       final localAdmin = requestData.localAdmin;
+      final printing = requestData.printing;
 
       List<String> requestItems = [];
       if (usbException == true) {
@@ -72,6 +73,9 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
       }
       if (localAdmin == true) {
         requestItems.add("Local Admin");
+      }
+      if(printing == true){
+        requestItems.add("Color Printing");
       }
 
       final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed
@@ -109,6 +113,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
             vpnAccount: vpnAccount,
             ipPhone: ipPhone,
             usbException: usbException,
+            printing: printing,
             fromDate: fromDate,
             toDate: toDate,
             permanent: permanent,
@@ -127,35 +132,41 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
   }
 
   void getSubmitAccessRight() async {
+
     final requestItem = RequestDate.dirty(state.requestItems.value);
     final fromDate = RequestDate.dirty(state.fromDate.value);
     final toDate = RequestDate.dirty(state.toDate.value);
-
-    AccessRightModel accessRightModel;
-
     final requestDate = RequestDate.dirty(state.requestDate.value);
-    DateTime requestDateTemp =
-        GlobalConstants.dateFormatViewed.parse(requestDate.value);
-    final requestDateValue =
-        GlobalConstants.dateFormatServer.format(requestDateTemp);
 
-    DateTime requestDateTempFrom =
-        GlobalConstants.dateFormatViewed.parse(fromDate.value);
-    final requestDateValueFrom =
-        GlobalConstants.dateFormatServer.format(requestDateTempFrom);
 
-    DateTime requestDateTempTo =
-        GlobalConstants.dateFormatViewed.parse(toDate.value);
-    final requestDateValueTo =
-        GlobalConstants.dateFormatServer.format(requestDateTempTo);
 
     emit(state.copyWith(
         requestItems: requestItem,
+        requestDate: requestDate,
         fromDate: fromDate,
         toDate: toDate,
         status: Formz.validate([requestItem, fromDate, toDate])));
 
     if (state.status.isValidated) {
+
+      AccessRightModel accessRightModel;
+
+      DateTime requestDateTemp =
+          GlobalConstants.dateFormatViewed.parse(requestDate.value);
+      final requestDateValue =
+          GlobalConstants.dateFormatServer.format(requestDateTemp);
+
+      DateTime requestDateTempFrom =
+          GlobalConstants.dateFormatViewed.parse(fromDate.value);
+      final requestDateValueFrom =
+          GlobalConstants.dateFormatServer.format(requestDateTempFrom);
+
+      DateTime requestDateTempTo =
+          GlobalConstants.dateFormatViewed.parse(toDate.value);
+      final requestDateValueTo =
+          GlobalConstants.dateFormatServer.format(requestDateTempTo);
+
+
       accessRightModel = AccessRightModel(
           state.requestType,
           0,
@@ -163,6 +174,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
           state.vpnAccount,
           state.ipPhone,
           state.localAdmin,
+          state.printing,
           state.permanent,
           requestDateValue,
           requestDateValueFrom,
@@ -177,6 +189,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
             connectivityResult == ConnectivityResult.mobile) {
           emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
+
           final accessResponse = await requestRepository.postAccessRightRequest(
               accessRightModel: accessRightModel);
           ///TODO: check error
@@ -190,8 +203,6 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
               throw err;
             });
           }
-
-
 
           if (accessResponse.id == 1) {
             emit(
@@ -335,6 +346,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
       vpnAccount: value.contains("VPN"),
       ipPhone: value.contains("IP"),
       localAdmin: value.contains("Local"),
+      printing: value.contains("Color"),
       status: Formz.validate([valueNew, state.fromDate, state.toDate]),
     ));
   }

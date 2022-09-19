@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/staff_dashboard_bloc/staff_dashboard_cubit.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/staff_dashboard_models/companystaffdashboard_model.dart';
@@ -28,6 +29,8 @@ class StaffDashBoardDetailScreenClass
   @override
   Widget build(BuildContext context) {
     final currentRequestData = widget.requestData;
+
+    final user = context.select((AppBloc bloc) => bloc.state.userData);
 
     return WillPopScope(
         onWillPop: () async {
@@ -60,7 +63,7 @@ class StaffDashBoardDetailScreenClass
                       onPressed: () {
                         context
                             .read<StaffDashboardCubit>()
-                            .staffDashBoardDateChanged(context);
+                            .staffDashBoardDateChanged(context,user.employeeData?.userHrCode);
                       })
                 ]),
             body: BlocProvider.value(

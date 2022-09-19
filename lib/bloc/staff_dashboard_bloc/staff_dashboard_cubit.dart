@@ -61,12 +61,19 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
           await StaffDashBoardRepository().getStaffDashBoardData(
               userHRCode, date)
               .then((value) async {
-            emit(state.copyWith(
-              companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates
-                  .success,
-              companyStaffDashBoardList: value,
-              date:date
-            ));
+                if(value.length>1){
+                  emit(state.copyWith(
+                      companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates
+                          .success,
+                      companyStaffDashBoardList: value,
+                      date:date
+                  ));
+                }else{
+                  emit(state.copyWith(
+                    companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates.noDataFound,
+                  ));
+                }
+
           }).catchError((error) {
             emit(state.copyWith(
               companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates.failed,
@@ -143,12 +150,13 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
     }
   }
 
-  void staffDashBoardDateChanged(BuildContext context) async {
+  void staffDashBoardDateChanged(BuildContext context, hrCode) async {
     DateTime? date = DateTime.now();
     FocusScope.of(context).requestFocus(
         FocusNode());
 
     date = await openShowDatePicker(context);
+
     var formatter = GlobalConstants.dateFormatServerDashBoard;
     String formattedDate = formatter.format(
         date ?? DateTime.now());
@@ -156,10 +164,9 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
     if(formattedDate!=state.date){
       context.read<StaffDashboardCubit>()
           .getStaffBoardCompanies(
-          "10203520",formattedDate);
+          hrCode,formattedDate);
     }
-    print("formatted :"+formattedDate.toString());
-    print("state date :"+state.date.toString());
+
   }
 
 }

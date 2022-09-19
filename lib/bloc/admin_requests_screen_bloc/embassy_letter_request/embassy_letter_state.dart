@@ -15,6 +15,7 @@ class EmbassyLetterInitial extends EmbassyLetterState {
     this.requestDate = const RequestDate.pure(),
     this.purpose = "Tourism",
     this.embassy = "0",
+    this.embassyID="1",
     this.dateFrom = const RequestDate.pure(),
     this.dateTo = const RequestDate.pure(),
     this.passportNumber = const PassportNumber.pure(),
@@ -34,6 +35,7 @@ class EmbassyLetterInitial extends EmbassyLetterState {
 
   final String purpose;
   final String embassy;
+  final String embassyID;
 
   final RequestDate dateFrom;
   final RequestDate dateTo;
@@ -62,6 +64,7 @@ class EmbassyLetterInitial extends EmbassyLetterState {
     RequestDate? requestDate,
     String ?purpose,
     String ?embassy,
+    String ?embassyID,
     RequestDate ?dateFrom,
     RequestDate ?dateTo,
     PassportNumber? passportNumber,
@@ -83,6 +86,7 @@ class EmbassyLetterInitial extends EmbassyLetterState {
       requestDate: requestDate ?? this.requestDate,
       purpose: purpose ?? this.purpose,
       embassy: embassy ?? this.embassy,
+      embassyID: embassyID ?? this.embassyID,
       dateFrom: dateFrom ?? this.dateFrom,
       dateTo: dateTo ?? this.dateTo,
       passportNumber: passportNumber ?? this.passportNumber,
@@ -98,4 +102,5 @@ class EmbassyLetterInitial extends EmbassyLetterState {
       actionComment: actionComment ?? this.actionComment,
     );
   }
+
 }

@@ -23,6 +23,7 @@ class AccessRightInitial extends Equatable {
     this.vpnAccount = false,
     this.ipPhone = false,
     this.localAdmin = false,
+    this.printing = false,
     this.comments = "",
     this.filePDF = "",
     this.status = FormzStatus.pure,
@@ -49,6 +50,7 @@ class AccessRightInitial extends Equatable {
   final bool vpnAccount;
   final bool ipPhone;
   final bool localAdmin;
+  final bool printing;
 
   final String comments;
   final String filePDF;
@@ -81,6 +83,7 @@ class AccessRightInitial extends Equatable {
         localAdmin,
         vpnAccount,
         ipPhone,
+        printing,
         comments,
         requestItemsList,
         requesterData,
@@ -102,6 +105,7 @@ class AccessRightInitial extends Equatable {
     bool ?vpnAccount,
     bool ?ipPhone,
     bool ?localAdmin,
+    bool ?printing,
     String ?comments,
     String ?filePDF,
     FormzStatus ?status,
@@ -130,6 +134,7 @@ class AccessRightInitial extends Equatable {
       vpnAccount: vpnAccount ?? this.vpnAccount,
       ipPhone: ipPhone ?? this.ipPhone,
       localAdmin: localAdmin ?? this.localAdmin,
+      printing: printing ?? this.printing,
       comments: comments ?? this.comments,
       filePDF: filePDF ?? this.filePDF,
       status: status ?? this.status,
