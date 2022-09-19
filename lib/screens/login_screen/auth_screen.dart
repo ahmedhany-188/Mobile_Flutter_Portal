@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'auth_form.dart';
@@ -43,7 +44,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       statusBarColor: Colors.transparent,
     ));
 
-    final deviceSize = MediaQuery.of(context).size;
+    // final deviceSize = MediaQuery.of(context).size;
 
     return GestureDetector(
       onTap: () {
@@ -156,20 +157,11 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
 
             /// Centered Logo on the screen
             Positioned(
-              top: (MediaQuery.of(context).viewInsets.bottom != 0)? MediaQuery.of(context).viewInsets.top :120,
+              top: (MediaQuery.of(context).viewInsets.bottom != 0)? MediaQuery.of(context).viewInsets.top :110,
               // child: DelayedDisplay(
               //   delay: const Duration(milliseconds: 1500),
               //   slidingCurve: Sprung.underDamped,
-              child: Container(
-                width: deviceSize.width / 1.5,
-                height: deviceSize.height / 5,
-                decoration: const BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/login_image_logo.png'),
-                      fit: BoxFit.fitWidth),
-                ),
-              ),
-              // ),
+              child: Assets.images.loginImageLogo.image(scale: 1.6),
             ),
 
             /// down buildings
