@@ -95,6 +95,7 @@ class StaffDashBoardTicketWidget extends StatelessWidget {
                             alignment: Alignment.center,
                             child: CachedNetworkImage(
                                 imageUrl: subsidiariesIconLink(getSubsidiariesPhotoLink(staffDashboardList[index].id!)),
+                              placeholder: (_,__) => Assets.images.favicon.image(),
                               errorWidget: (_,__,___) => Assets.images.favicon.image(),
                             ),
                           ),
@@ -302,7 +303,7 @@ class StaffDashBoardTicketWidget extends StatelessWidget {
       case 5: return 'HATE.png';
       case 3: return '3s.png';
       case 20: return 'flag-circle-algeria.png';
-      case 22: return 'legacy.png';
+      // case 22: return 'legacy.png';
       case 7: return 'Util.png';
       case 6: return 'HAR.png';
 

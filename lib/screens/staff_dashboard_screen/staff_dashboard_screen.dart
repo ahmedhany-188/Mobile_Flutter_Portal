@@ -25,9 +25,7 @@ class StaffDashBoardScreen extends StatefulWidget {
 class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
   @override
   Widget build(BuildContext context) {
-
     final user = context.select((AppBloc bloc) => bloc.state.userData);
-
 
     return WillPopScope(
       onWillPop: () async {
@@ -68,15 +66,17 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                       content: Text("error"),
                     ),
                   );
-                }
-                else if (state.companyStaffDashBoardEnumStates ==
+                } else if (state.companyStaffDashBoardEnumStates ==
                     CompanyStaffDashBoardEnumStates.noDataFound) {
                   EasyLoading.dismiss(animation: true);
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  EasyLoading.showError( "You don't have access");
+                  EasyLoading.showError("You don't have access");
                 }
               },
-              buildWhen: (pre,curr){return curr.companyStaffDashBoardEnumStates == CompanyStaffDashBoardEnumStates.success; },
+              buildWhen: (pre, curr) {
+                return curr.companyStaffDashBoardEnumStates ==
+                    CompanyStaffDashBoardEnumStates.success;
+              },
               builder: (context, state) {
                 return Scaffold(
                   backgroundColor: Colors.transparent,
@@ -84,21 +84,22 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                       backgroundColor: Colors.transparent,
                       elevation: 0,
                       title: Text(
-                          "Dashboard ${StaffDashboardCubit.get(context).state.date}"),
+                          "Dashboard ${(state.companyStaffDashBoardEnumStates == CompanyStaffDashBoardEnumStates.success) ? state.date : ''}"),
                       centerTitle: true,
                       actions: <Widget>[
-                        if(state.companyStaffDashBoardEnumStates ==
+                        if (state.companyStaffDashBoardEnumStates ==
                             CompanyStaffDashBoardEnumStates.noDataFound)
                           IconButton(
-                            icon: const Icon(
-                              Icons.date_range,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              context
-                                  .read<StaffDashboardCubit>()
-                                  .staffDashBoardDateChanged(context,user.employeeData?.userHrCode);
-                            })
+                              icon: const Icon(
+                                Icons.date_range,
+                                color: Colors.white,
+                              ),
+                              onPressed: () {
+                                context
+                                    .read<StaffDashboardCubit>()
+                                    .staffDashBoardDateChanged(
+                                        context, user.employeeData?.userHrCode);
+                              })
                       ]),
                   body: Column(
                     children: [
@@ -115,9 +116,9 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                       // const SizedBox(height: 50),
                       // Assets.images.logo.image(scale: 10,),
                       SizedBox(
-                        height: 100,
+                        height: 120,
                         child: AspectRatio(
-                            aspectRatio: 1.2,
+                            aspectRatio: 1,
                             child: Assets.images.logo.image(
                               scale: 1,
                               fit: BoxFit.fitWidth,
@@ -126,14 +127,12 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                        margin:
-                            const EdgeInsets.only(top: 15, bottom: 10),
+                        margin: const EdgeInsets.only(top: 15, bottom: 10),
                         child: InputDecorator(
                           decoration: const InputDecoration(
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.zero,
-                                borderSide:
-                                    BorderSide(color: Colors.white)),
+                                borderSide: BorderSide(color: Colors.white)),
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 20),
                             isCollapsed: true,
@@ -152,8 +151,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                           child: Padding(
                             padding: const EdgeInsets.all(0.0),
                             child: Row(
-                              mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Column(
                                   children: [
@@ -165,10 +163,13 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                                                   .companyStaffDashBoardList)
                                               .toString()
                                           : "----",
-                                      style: const TextStyle(
-                                          color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
-                                    whiteText("Attendance"),
+                                    const Text(
+                                      "Attendance",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ],
                                 ),
                                 Column(
@@ -181,10 +182,13 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                                                   .companyStaffDashBoardList)
                                               .toString()
                                           : "----",
-                                      style: const TextStyle(
-                                          color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
-                                    whiteText("Absents"),
+                                    const Text(
+                                      "Absents",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ],
                                 ),
                                 Column(
@@ -197,10 +201,13 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                                                   .companyStaffDashBoardList)
                                               .toString()
                                           : "----",
-                                      style: const TextStyle(
-                                          color: Colors.white),
+                                      style:
+                                          const TextStyle(color: Colors.white),
                                     ),
-                                    whiteText("Contractors"),
+                                    const Text(
+                                      "Contractors",
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ],
                                 ),
                               ],
@@ -230,7 +237,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                                         .toString()
                                     : "----",
                                 style: const TextStyle(
-                                    color: Colors.white, fontSize: 20),
+                                    color: Colors.white, fontSize: 18),
                               ),
                             ],
                           ),
@@ -244,7 +251,6 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                       ),
                       Expanded(
                         child: Container(
-                          padding: const EdgeInsets.all(10.0),
                           color: Colors.white,
                           child: Column(
                             children: [
@@ -261,29 +267,29 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                               //         color: Colors.white, fontSize: 20),
                               //   ),
                               // ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Column(
-                                    children: [
-                                      Assets.images.staffdashboard.empicon
-                                          .image(scale: 2),
-                                      whiteText("Total Staff"),
-                                      Text(
+                              Expanded(
+                                flex: 4,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Assets.images.staffdashboard.empicon
+                                            .image(scale: 1.7),
+                                        whiteText("Total Staff"),
+                                        Text(
+                                          state.companyStaffDashBoardEnumStates ==
+                                                  CompanyStaffDashBoardEnumStates
+                                                      .success
+                                              ? getTotalStaff(state
+                                                      .companyStaffDashBoardList)
+                                                  .toString()
+                                              : "----",
+                                          style: TextStyle(
+                                              color: Colors.grey.shade500),
+                                        ),
                                         state.companyStaffDashBoardEnumStates ==
-                                                CompanyStaffDashBoardEnumStates
-                                                    .success
-                                            ? getTotalStaff(state
-                                                    .companyStaffDashBoardList)
-                                                .toString()
-                                            : "----",
-                                        style: TextStyle(
-                                            color: Colors.grey.shade500),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: state.companyStaffDashBoardEnumStates ==
                                                 CompanyStaffDashBoardEnumStates
                                                     .success
                                             ? getAttendancePercentage(
@@ -296,28 +302,25 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                                                 ConstantsColors.buttonColors)
                                             : getAttendancePercentage(0.0, 1.0,
                                                 ConstantsColors.buttonColors),
-                                      ),
-                                    ],
-                                  ),
-                                  Column(
-                                    children: [
-                                      Assets.images.staffdashboard.laboricon
-                                          .image(scale: 2),
-                                      whiteText("Total Labor"),
-                                      Text(
+                                      ],
+                                    ),
+                                    Column(
+                                      children: [
+                                        Assets.images.staffdashboard.laboricon
+                                            .image(scale: 1.7),
+                                        whiteText("Total Labor"),
+                                        Text(
+                                          state.companyStaffDashBoardEnumStates ==
+                                                  CompanyStaffDashBoardEnumStates
+                                                      .success
+                                              ? getTotalLabor(state
+                                                      .companyStaffDashBoardList)
+                                                  .toString()
+                                              : "----",
+                                          style: TextStyle(
+                                              color: Colors.grey.shade500),
+                                        ),
                                         state.companyStaffDashBoardEnumStates ==
-                                                CompanyStaffDashBoardEnumStates
-                                                    .success
-                                            ? getTotalLabor(state
-                                                    .companyStaffDashBoardList)
-                                                .toString()
-                                            : "----",
-                                        style: TextStyle(
-                                            color: Colors.grey.shade500),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: state.companyStaffDashBoardEnumStates ==
                                                 CompanyStaffDashBoardEnumStates
                                                     .success
                                             ? getAttendancePercentage(
@@ -330,51 +333,55 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                                                 Colors.amber)
                                             : getAttendancePercentage(
                                                 0.0, 1.0, Colors.amber),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: TextButton(
-                                  onPressed: () {
-                                    if (state.companyStaffDashBoardEnumStates ==
-                                        CompanyStaffDashBoardEnumStates
-                                            .success) {
-                                      PageTransitionAnimation(
-                                        context: context,
-                                        transitionDuration: 500,
-                                        delayedDuration: 0,
-                                        pageDirection:
-                                            StaffDashBoardDetailScreen(
-                                                requestData: {
-                                              StaffDashBoardDetailScreen
-                                                      .staffDashboardList:
-                                                  state
-                                                      .companyStaffDashBoardList,
-                                              StaffDashBoardDetailScreen.date:
-                                                  state.date
-                                            }),
-                                      ).navigateFromBottomWithoutReplace();
-                                    }
-                                  },
-                                  child: Column(
-                                    children: const [
-                                      Text('SUBSIDIARIES',
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: TextButton(
+                                    onPressed: () {
+                                      if (state
+                                              .companyStaffDashBoardEnumStates ==
+                                          CompanyStaffDashBoardEnumStates
+                                              .success) {
+                                        PageTransitionAnimation(
+                                          context: context,
+                                          transitionDuration: 500,
+                                          delayedDuration: 0,
+                                          pageDirection:
+                                              StaffDashBoardDetailScreen(
+                                                  requestData: {
+                                                StaffDashBoardDetailScreen
+                                                        .staffDashboardList:
+                                                    state
+                                                        .companyStaffDashBoardList,
+                                                StaffDashBoardDetailScreen.date:
+                                                    state.date
+                                              }),
+                                        ).navigateFromBottomWithoutReplace();
+                                      }
+                                    },
+                                    child: Column(
+                                      children: [
+                                        const Text(
+                                          'SUBSIDIARIES',
                                           style: TextStyle(
-                                              fontSize: 20,
-                                              color: ConstantsColors
-                                                  .bottomSheetBackgroundDark)),
-                                      Icon(Icons.keyboard_double_arrow_down,
-                                          size: 30,
-                                          color: ConstantsColors
-                                              .bottomSheetBackgroundDark),
-                                    ],
+                                            fontSize: 18,
+                                            color: ConstantsColors
+                                                .bottomSheetBackgroundDark,
+                                          ),
+                                        ),
+                                        Assets.images.staffdashboard.arrowdown
+                                            .image(scale: 1.5),
+                                      ],
+                                    ),
+                                    // color: Colors.blue,
+                                    // textColor: ConstantsColors.backgroundStartColor,
+                                    // elevation: 5,
                                   ),
-                                  // color: Colors.blue,
-                                  // textColor: ConstantsColors.backgroundStartColor,
-                                  // elevation: 5,
                                 ),
                               ),
                             ],
