@@ -1,13 +1,10 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
-import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
-import 'package:sizer/sizer.dart';
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../bloc/hr_request_bloc/permission_request/permission_cubit.dart';
 import '../../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
@@ -263,7 +260,6 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                             previous.status != current.status;
                                       },
                                       builder: (context, state) {
-                                        print(state.permissionDate.value);
                                         return TextFormField(
                                           key: UniqueKey(),
                                           initialValue: state.permissionDate

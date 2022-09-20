@@ -84,8 +84,7 @@ class GlobalConstants {
     "Azerbaijan",
     "Bahrain",
     "Bangladesh",
-    "Belarus"
-    ,
+    "Belarus",
     "Belgium",
     "Bolivia",
     "Bosnia and Herzegovina",
@@ -126,8 +125,7 @@ class GlobalConstants {
     "Greece",
     "Guatemala",
     "Guinea",
-    "Holy See (Vatican City)"
-    ,
+    "Holy See (Vatican City)",
     "Hungary",
     "India",
     "Indonesia",
@@ -140,8 +138,7 @@ class GlobalConstants {
     "Jordan",
     "Kazakhstan",
     "Kenya",
-    "Korea (Democratic Republic)"
-    ,
+    "Korea (Democratic Republic)",
     "Korea (Republic)",
     "Kuwait",
     "Latvia",
@@ -153,8 +150,7 @@ class GlobalConstants {
     "Malawi",
     "Malaysia",
     "Mali",
-    "Malta"
-    ,
+    "Malta",
     "Mauritania",
     "Mauritius",
     "Mexico",
@@ -166,8 +162,7 @@ class GlobalConstants {
     "Nepal",
     "Netherlands",
     "New Zealand",
-    "Nicaragua"
-    ,
+    "Nicaragua",
     "Niger",
     "Nigeria",
     "Norway",
@@ -193,8 +188,7 @@ class GlobalConstants {
     "Somalia",
     "South Africa",
     "South Sudan",
-    "Spain"
-    ,
+    "Spain",
     "Sri Lanka",
     "Sudan",
     "Sweden",
@@ -207,8 +201,7 @@ class GlobalConstants {
     "Turkey",
     "Uganda",
     "Ukraine",
-    "United Arab Emirates"
-    ,
+    "United Arab Emirates",
     "United Kingdom",
     "United States",
     "Uruguay",

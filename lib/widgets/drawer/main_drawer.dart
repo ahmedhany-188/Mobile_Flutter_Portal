@@ -209,12 +209,6 @@ class MainDrawer extends StatelessWidget {
           children: [
             /// commented code below is for centered image and text
             Flexible(
-              // clipBehavior: Clip.none,
-              // height: MediaQuery.of(context).size.height * 0.20,
-              // width: double.infinity,
-              // margin: const EdgeInsets.only(top: 20),
-              // alignment: Alignment.center,
-              // color: Colors.transparent,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -487,7 +481,7 @@ class MainDrawer extends StatelessWidget {
                     ),
                     buildListTile(
                       'My Requests',
-                      Icons.wallpaper,
+                      Icons.request_page,
                       () {
                         Navigator.of(context)
                             .popAndPushNamed(MyRequestsScreen.routeName);
@@ -563,7 +557,7 @@ class MainDrawer extends StatelessWidget {
                     ),
                     buildListTile(
                       'My Payslip',
-                      Icons.nature_people,
+                      Icons.payment,
                       () {
                         Navigator.of(context)
                             .popAndPushNamed(PayslipScreen.routeName);
@@ -571,7 +565,7 @@ class MainDrawer extends StatelessWidget {
                     ),
                     buildListTile(
                       'My Appraisal',
-                      Icons.quiz,
+                      Icons.military_tech,
                       () {
                         Navigator.popAndPushNamed(
                             context, EmployeeAppraisalScreen.routeName);
@@ -580,7 +574,7 @@ class MainDrawer extends StatelessWidget {
 
                     buildListTile(
                       'Staff Dashboard',
-                      Icons.dashboard,
+                      Icons.pie_chart_rounded,
                       () {
                         Navigator.popAndPushNamed(
                             context, StaffDashBoardScreen.routeName);

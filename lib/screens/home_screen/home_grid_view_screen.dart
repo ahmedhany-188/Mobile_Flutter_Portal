@@ -2,7 +2,6 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
-import 'package:flutter_shake_animated/flutter_shake_animated.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
@@ -17,6 +16,7 @@ import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_us
 import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
+import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_screen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:popover/popover.dart';
 import 'package:shimmer/shimmer.dart';
@@ -28,7 +28,6 @@ import '../admin_request_screen/business_card_screen.dart';
 import '../news_screen/news_screen.dart';
 import '../notification_screen/notifications_screen.dart';
 import '../../screens/contacts_screen/contacts_screen.dart';
-import '../../screens/myattendance_screen/attendance_screen.dart';
 import '../videos_screen/videos_screen.dart';
 
 class HomeGridViewScreen extends StatefulWidget {
@@ -39,21 +38,14 @@ class HomeGridViewScreen extends StatefulWidget {
 }
 
 class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
-
-
-
-
-
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
+
   @override
   Widget build(BuildContext context) {
-
     // bool autoPlay = true;
     double shake(double animation) =>
         2 * (0.5 - (0.5 - Curves.ease.transform(animation)).abs());
@@ -67,17 +59,17 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
             elevation: 0,
             leading: Builder(builder: (context) {
               return
-              //   ShakeWidget(
-              //   shakeConstant: ShakeHorizontalConstant2(),
-              //   autoPlay: true,
-              //   child: InkWell(
-              //     splashColor: Colors.transparent,
-              //     highlightColor: Colors.transparent,
-              //     onTap: () => Scaffold.of(context).openDrawer(),
-              //     child: Image.asset(Assets.images.logo.path, scale: 30),
-              //   ),
-              // );
-                TweenAnimationBuilder<double>(
+                  //   ShakeWidget(
+                  //   shakeConstant: ShakeHorizontalConstant2(),
+                  //   autoPlay: true,
+                  //   child: InkWell(
+                  //     splashColor: Colors.transparent,
+                  //     highlightColor: Colors.transparent,
+                  //     onTap: () => Scaffold.of(context).openDrawer(),
+                  //     child: Image.asset(Assets.images.logo.path, scale: 30),
+                  //   ),
+                  // );
+                  TweenAnimationBuilder<double>(
                 duration: const Duration(milliseconds: 1500),
                 tween: Tween(begin: 0.3, end: 0.0),
                 builder: (context, animation, child) => Transform.translate(
@@ -209,7 +201,7 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                       children: [
                         InkWell(
                             onTap: () => Navigator.of(context)
-                                .pushNamed(AttendanceScreen.routeName),
+                                .pushNamed(StaffDashBoardScreen.routeName),
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             child: Column(
@@ -217,10 +209,11 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Image.asset(
-                                    Assets.images.homepage.attendanceIcon.path,
+                                    Assets.images.homepage.staffDashboardIcon
+                                        .path,
                                     scale: 3),
                                 const Text(
-                                  'Attendance',
+                                  'Staff Dashboard',
                                   softWrap: true,
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 14),

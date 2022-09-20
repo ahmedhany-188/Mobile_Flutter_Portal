@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -8,11 +8,13 @@ import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/staff_dashboard_models/companystaffdashboard_model.dart';
 import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_detail_screen.dart';
+import 'package:hassanallamportalflutter/widgets/animation/page_transition_animation.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
+import 'package:step_progress_indicator/step_progress_indicator.dart';
+
+import '../../gen/assets.gen.dart';
 
 class StaffDashBoardScreen extends StatefulWidget {
-
   static const routeName = "/staff-dashboard-screen";
   const StaffDashBoardScreen({Key? key}) : super(key: key);
 
@@ -21,300 +23,374 @@ class StaffDashBoardScreen extends StatefulWidget {
 }
 
 class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
-
   @override
   Widget build(BuildContext context) {
+
     final user = context.select((AppBloc bloc) => bloc.state.userData);
+
 
     return WillPopScope(
       onWillPop: () async {
         await EasyLoading.dismiss(animation: true);
         return true;
       },
-      child:
-
-      CustomBackground(
-          child: CustomTheme(
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              appBar: AppBar(
-                  backgroundColor: Colors.transparent,
-                  elevation: 0,
-                  title: Text("Dashboard"),
-                  // title: Text('Dashboard $formattedDateTitle'),
-                  centerTitle: true,
-                  actions: <Widget>[
-                    IconButton(
-                        icon: const Icon(
-                          Icons.date_range,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          context.read<StaffDashboardCubit>()
-                              .staffDashBoardDateChanged(context);
-                        }
-                    )
-                  ]
-              ),
-
-              body: BlocProvider.value(value: StaffDashboardCubit.get(context)
-                ..getFirstStaffBoardCompanies(
+      child: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                fit: BoxFit.fill,
+                image: Assets.images.staffdashboard.dashboard3.image().image)),
+        child: CustomTheme(
+          child: BlocProvider.value(
+            value: StaffDashboardCubit.get(context)
+              ..getFirstStaffBoardCompanies(
                   // TODO: --------------change hr,date
-                    "10203520",
-                    GlobalConstants.dateFormatServerDashBoard.format(
-                        DateTime.now())),
-
-                  child: BlocConsumer<StaffDashboardCubit, StaffDashboardState>(
-                      listener: (context, state) {
-                        if (state.companyStaffDashBoardEnumStates ==
-                            CompanyStaffDashBoardEnumStates.success) {
-                          EasyLoading.dismiss(animation: true);
-                        }
-                        else if (state.companyStaffDashBoardEnumStates ==
-                            CompanyStaffDashBoardEnumStates.loading) {
-                          EasyLoading.show(status: 'loading...',
-                            maskType: EasyLoadingMaskType.black,
-                            dismissOnTap: false,);
-                        }
-                        else if (state.companyStaffDashBoardEnumStates ==
-                            CompanyStaffDashBoardEnumStates.failed) {
-                          EasyLoading.dismiss(animation: true);
-                          ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("error"),
+                  user.employeeData?.userHrCode,
+                  GlobalConstants.dateFormatServerDashBoard
+                      .format(DateTime.now())),
+            child: BlocConsumer<StaffDashboardCubit, StaffDashboardState>(
+              listener: (context, state) {
+                if (state.companyStaffDashBoardEnumStates ==
+                    CompanyStaffDashBoardEnumStates.success) {
+                  EasyLoading.dismiss(animation: true);
+                } else if (state.companyStaffDashBoardEnumStates ==
+                    CompanyStaffDashBoardEnumStates.loading) {
+                  EasyLoading.show(
+                    status: 'loading...',
+                    maskType: EasyLoadingMaskType.black,
+                    dismissOnTap: false,
+                  );
+                } else if (state.companyStaffDashBoardEnumStates ==
+                    CompanyStaffDashBoardEnumStates.failed) {
+                  EasyLoading.dismiss(animation: true);
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("error"),
+                    ),
+                  );
+                }
+                else if (state.companyStaffDashBoardEnumStates ==
+                    CompanyStaffDashBoardEnumStates.noDataFound) {
+                  EasyLoading.dismiss(animation: true);
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                  EasyLoading.showError( "You don't have access");
+                }
+              },
+              buildWhen: (pre,curr){return curr.companyStaffDashBoardEnumStates == CompanyStaffDashBoardEnumStates.success; },
+              builder: (context, state) {
+                return Scaffold(
+                  backgroundColor: Colors.transparent,
+                  appBar: AppBar(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      title: Text(
+                          "Dashboard ${StaffDashboardCubit.get(context).state.date}"),
+                      centerTitle: true,
+                      actions: <Widget>[
+                        if(state.companyStaffDashBoardEnumStates ==
+                            CompanyStaffDashBoardEnumStates.noDataFound)
+                          IconButton(
+                            icon: const Icon(
+                              Icons.date_range,
+                              color: Colors.white,
                             ),
-                          );
-                        }
-                      },
+                            onPressed: () {
+                              context
+                                  .read<StaffDashboardCubit>()
+                                  .staffDashBoardDateChanged(context,user.employeeData?.userHrCode);
+                            })
+                      ]),
+                  body: Column(
+                    children: [
+                      // Center(
+                      //   child: Text(
+                      //     state.companyStaffDashBoardEnumStates ==
+                      //             CompanyStaffDashBoardEnumStates.success
+                      //         ? state.date
+                      //         : "Day",
+                      //     style: const TextStyle(
+                      //         color: Colors.white, fontSize: 20),
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 50),
+                      // Assets.images.logo.image(scale: 10,),
+                      SizedBox(
+                        height: 100,
+                        child: AspectRatio(
+                            aspectRatio: 1.2,
+                            child: Assets.images.logo.image(
+                              scale: 1,
+                              fit: BoxFit.fitWidth,
+                              alignment: FractionalOffset.topCenter,
+                            )),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        margin:
+                            const EdgeInsets.only(top: 15, bottom: 10),
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.zero,
+                                borderSide:
+                                    BorderSide(color: Colors.white)),
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 15, vertical: 20),
+                            isCollapsed: true,
 
-                      builder: (context, state) {
-                        return Padding(
-                          padding: const EdgeInsets.all(10.0),
+                            // label: Column(
+                            //       children: [
+                            //         Center(child: Assets.images.loginImageLogo.image(scale: 2)),
+                            //         // Text('Hassan Allam Holding')
+                            //       ],
+                            //     ),
+                            labelText: 'Hassan Allam Holding',
+                            labelStyle: TextStyle(fontSize: 30),
+                            floatingLabelAlignment:
+                                FloatingLabelAlignment.center,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(0.0),
+                            child: Row(
+                              mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  children: [
+                                    Text(
+                                      state.companyStaffDashBoardEnumStates ==
+                                              CompanyStaffDashBoardEnumStates
+                                                  .success
+                                          ? getAllAttendanceHolding(state
+                                                  .companyStaffDashBoardList)
+                                              .toString()
+                                          : "----",
+                                      style: const TextStyle(
+                                          color: Colors.white),
+                                    ),
+                                    whiteText("Attendance"),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      state.companyStaffDashBoardEnumStates ==
+                                              CompanyStaffDashBoardEnumStates
+                                                  .success
+                                          ? getAllAbsentHolding(state
+                                                  .companyStaffDashBoardList)
+                                              .toString()
+                                          : "----",
+                                      style: const TextStyle(
+                                          color: Colors.white),
+                                    ),
+                                    whiteText("Absents"),
+                                  ],
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      state.companyStaffDashBoardEnumStates ==
+                                              CompanyStaffDashBoardEnumStates
+                                                  .success
+                                          ? getAllContrator(state
+                                                  .companyStaffDashBoardList)
+                                              .toString()
+                                          : "----",
+                                      style: const TextStyle(
+                                          color: Colors.white),
+                                    ),
+                                    whiteText("Contractors"),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+
+                      Badge(
+                        toAnimate: false,
+                        badgeContent: Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.fitHeight,
+                                  image: Assets.images.staffdashboard.dashboard2
+                                      .image()
+                                      .image)),
                           child: Column(
                             children: [
-                              Center(
-                                child: Text(
-                                  state.companyStaffDashBoardEnumStates ==
-                                      CompanyStaffDashBoardEnumStates.success ?
-                                  state.date : "Day",
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 20),),
+                              const Text('Total Manpower'),
+                              Text(
+                                state.companyStaffDashBoardEnumStates ==
+                                        CompanyStaffDashBoardEnumStates.success
+                                    ? getAllManPower(
+                                            state.companyStaffDashBoardList)
+                                        .toString()
+                                    : "----",
+                                style: const TextStyle(
+                                    color: Colors.white, fontSize: 20),
                               ),
-                              const SizedBox(height: 50),
-                              InputDecorator(
-                                decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 0, vertical: 5),
-                                  labelText: 'Hassan Allam Holding',
-                                  floatingLabelAlignment:
-                                  FloatingLabelAlignment.center,
-                                  prefixIcon: Icon(Icons.stacked_bar_chart,
-                                      color: Colors.white70),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .spaceBetween,
+                            ],
+                          ),
+                        ),
+                        badgeColor: Colors.transparent,
+                        elevation: 0,
+                        position: BadgePosition.topStart(
+                            // top: -20,
+                            start: MediaQuery.of(context).size.width / 2.9),
+                        child: Assets.images.staffdashboard.dashboard1.image(),
+                      ),
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.all(10.0),
+                          color: Colors.white,
+                          child: Column(
+                            children: [
+                              // Center(
+                              //   child: Text(
+                              //     state.companyStaffDashBoardEnumStates ==
+                              //         CompanyStaffDashBoardEnumStates
+                              //             .success
+                              //         ? getAllManPower(state
+                              //         .companyStaffDashBoardList)
+                              //         .toString()
+                              //         : "----",
+                              //     style: const TextStyle(
+                              //         color: Colors.white, fontSize: 20),
+                              //   ),
+                              // ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Column(
                                     children: [
-                                      Column(children: [
-                                        Text(
-                                          state
-                                              .companyStaffDashBoardEnumStates ==
-                                              CompanyStaffDashBoardEnumStates
-                                                  .success ?
-                                          getAllAttendanceHolding(
-                                              state.companyStaffDashBoardList)
-                                              .toString() : "----",
-                                          style: const TextStyle(
-                                              color: Colors.white),),
-                                        whiteText("Attendance"),
-                                      ],),
-                                      Column(children: [
-                                        Text(
-                                          state
-                                              .companyStaffDashBoardEnumStates ==
-                                              CompanyStaffDashBoardEnumStates
-                                                  .success ?
-                                          getAllAbsentHolding(
-                                              state.companyStaffDashBoardList)
-                                              .toString() : "----",
-                                          style: const TextStyle(
-                                              color: Colors.white),),
-                                        whiteText("Absents"),
-                                      ],),
-                                      Column(children: [
-                                        Text(
-                                          state
-                                              .companyStaffDashBoardEnumStates ==
-                                              CompanyStaffDashBoardEnumStates
-                                                  .success ?
-                                          getAllContrator(
-                                              state.companyStaffDashBoardList)
-                                              .toString() : "----",
-                                          style: const TextStyle(
-                                              color: Colors.white),),
-                                        whiteText("Contractors"),
-                                      ],),
-                                    ],),
-                                ),
-                              ),
-
-                              const SizedBox(height: 25),
-
-                              InputDecorator(
-                                decoration: const InputDecoration(
-                                  contentPadding: EdgeInsets.symmetric(
-                                      horizontal: 0, vertical: 5),
-                                  labelText: 'Total Manpower \n ',
-                                  floatingLabelAlignment:
-                                  FloatingLabelAlignment.center,
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .spaceBetween,
-                                    children: [
-
-                                      Center(
-                                        child: Text(
-                                          state
-                                              .companyStaffDashBoardEnumStates ==
-                                              CompanyStaffDashBoardEnumStates
-                                                  .success ?
-                                          getAllManPower(
-                                              state.companyStaffDashBoardList)
-                                              .toString() : "----",
-                                          style: const TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 20),),
-                                      ),
-
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment
-                                            .spaceEvenly,
-                                        children: [
-
-                                          Column(children: [
-                                            Padding(
-                                              padding: const EdgeInsets.all(
-                                                  8.0),
-                                              child: Text(
-                                                state
-                                                    .companyStaffDashBoardEnumStates ==
-                                                    CompanyStaffDashBoardEnumStates
-                                                        .success ?
-                                                getTotalStaff(state
+                                      Assets.images.staffdashboard.empicon
+                                          .image(scale: 2),
+                                      whiteText("Total Staff"),
+                                      Text(
+                                        state.companyStaffDashBoardEnumStates ==
+                                                CompanyStaffDashBoardEnumStates
+                                                    .success
+                                            ? getTotalStaff(state
                                                     .companyStaffDashBoardList)
-                                                    .toString() : "----",
-                                                style: const TextStyle(
-                                                    color: Colors.white),),
-                                            ),
-
-                                            Padding(
-                                              padding: EdgeInsets.all(8.0),
-                                              child: whiteText("Total Staff"),
-                                            ),
-
-                                            Padding(
-                                              padding: const EdgeInsets.all(
-                                                  8.0),
-                                              child: state
-                                                  .companyStaffDashBoardEnumStates ==
-                                                  CompanyStaffDashBoardEnumStates
-                                                      .success ?
-                                              getAttendancePercentage(
-                                                  getAllAttendanceStaff(state
-                                                      .companyStaffDashBoardList) +
-                                                      0.0, getTotalStaff(state
-                                                  .companyStaffDashBoardList) +
-                                                  0.0) :
-                                              getAttendancePercentage(0.0, 1.0),
-                                            ),
-                                          ],),
-
-                                          Column(
-                                            mainAxisAlignment: MainAxisAlignment
-                                                .spaceEvenly,
-                                            children: [
-
-                                              Padding(
-                                                padding: const EdgeInsets.all(
-                                                    8.0),
-                                                child: Text(
-                                                  state
-                                                      .companyStaffDashBoardEnumStates ==
-                                                      CompanyStaffDashBoardEnumStates
-                                                          .success ?
-                                                  getTotalLabor(state
-                                                      .companyStaffDashBoardList)
-                                                      .toString() : "----",
-                                                  style: TextStyle(
-                                                      color: Colors.white),),
-                                              ),
-
-                                              Padding(
-                                                padding: EdgeInsets.all(
-                                                    8.0),
-                                                child: whiteText("Total Labor"),
-                                              ),
-
-                                              Padding(
-                                                padding: const EdgeInsets.all(
-                                                    8.0),
-                                                child: state
-                                                    .companyStaffDashBoardEnumStates ==
-                                                    CompanyStaffDashBoardEnumStates
-                                                        .success ?
-                                                getAttendancePercentage(
-                                                    getAllAttendanceLabor(state
-                                                        .companyStaffDashBoardList) +
-                                                        0.0, getTotalLabor(state
-                                                    .companyStaffDashBoardList) +
-                                                    0.0) :
-                                                getAttendancePercentage(
-                                                    0.0, 1.0),),
-                                            ],),
-                                        ],
+                                                .toString()
+                                            : "----",
+                                        style: TextStyle(
+                                            color: Colors.grey.shade500),
                                       ),
-                                    ],),
-                                ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: state.companyStaffDashBoardEnumStates ==
+                                                CompanyStaffDashBoardEnumStates
+                                                    .success
+                                            ? getAttendancePercentage(
+                                                getAllAttendanceStaff(state
+                                                        .companyStaffDashBoardList) +
+                                                    0.0,
+                                                getTotalStaff(state
+                                                        .companyStaffDashBoardList) +
+                                                    0.0,
+                                                ConstantsColors.buttonColors)
+                                            : getAttendancePercentage(0.0, 1.0,
+                                                ConstantsColors.buttonColors),
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Assets.images.staffdashboard.laboricon
+                                          .image(scale: 2),
+                                      whiteText("Total Labor"),
+                                      Text(
+                                        state.companyStaffDashBoardEnumStates ==
+                                                CompanyStaffDashBoardEnumStates
+                                                    .success
+                                            ? getTotalLabor(state
+                                                    .companyStaffDashBoardList)
+                                                .toString()
+                                            : "----",
+                                        style: TextStyle(
+                                            color: Colors.grey.shade500),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: state.companyStaffDashBoardEnumStates ==
+                                                CompanyStaffDashBoardEnumStates
+                                                    .success
+                                            ? getAttendancePercentage(
+                                                getAllAttendanceLabor(state
+                                                        .companyStaffDashBoardList) +
+                                                    0.0,
+                                                getTotalLabor(state
+                                                        .companyStaffDashBoardList) +
+                                                    0.0,
+                                                Colors.amber)
+                                            : getAttendancePercentage(
+                                                0.0, 1.0, Colors.amber),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
-                              //     icon: const Icon(Icons.arrow_forward_ios),
                               Align(
-                                alignment: Alignment.bottomRight,
-                                child: ElevatedButton(
+                                alignment: Alignment.bottomCenter,
+                                child: TextButton(
                                   onPressed: () {
                                     if (state.companyStaffDashBoardEnumStates ==
                                         CompanyStaffDashBoardEnumStates
                                             .success) {
-                                      Navigator.of(context).pushNamed(
-                                          StaffDashBoardDetailScreen.routeName,
-                                          arguments: {
-                                            StaffDashBoardDetailScreen.staffDashboardList: state.companyStaffDashBoardList,
-                                            StaffDashBoardDetailScreen.date: state.date
-                                          });
+                                      PageTransitionAnimation(
+                                        context: context,
+                                        transitionDuration: 500,
+                                        delayedDuration: 0,
+                                        pageDirection:
+                                            StaffDashBoardDetailScreen(
+                                                requestData: {
+                                              StaffDashBoardDetailScreen
+                                                      .staffDashboardList:
+                                                  state
+                                                      .companyStaffDashBoardList,
+                                              StaffDashBoardDetailScreen.date:
+                                                  state.date
+                                            }),
+                                      ).navigateFromBottomWithoutReplace();
                                     }
                                   },
-                                  child: Text('Subsidiaries', style: TextStyle(fontSize: 20)),
+                                  child: Column(
+                                    children: const [
+                                      Text('SUBSIDIARIES',
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              color: ConstantsColors
+                                                  .bottomSheetBackgroundDark)),
+                                      Icon(Icons.keyboard_double_arrow_down,
+                                          size: 30,
+                                          color: ConstantsColors
+                                              .bottomSheetBackgroundDark),
+                                    ],
+                                  ),
                                   // color: Colors.blue,
                                   // textColor: ConstantsColors.backgroundStartColor,
                                   // elevation: 5,
                                 ),
                               ),
-                            ],),
-                        );
-                      }
-                  )
-              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          )
+          ),
+        ),
       ),
     );
   }
-
 
   int getAllAttendanceHolding(List<CompanyStaffDashBoard> dataList) {
     double sum = 0;
@@ -381,30 +457,59 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
     return sum.round();
   }
 
-  Padding getAttendancePercentage(double attendance, double total) {
+  Padding getAttendancePercentage(
+      double attendance, double total, Color color) {
     int percentage = ((attendance / total) * 100).round();
     int attendanceNumber = attendance.round();
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: CircularPercentIndicator(
-        radius: 70.0,
-        lineWidth: 13.0,
-        animation: true,
-        animationDuration: 2500,
-        percent: attendance / total,
-        center: Text("$percentage%\n$attendanceNumber",
-          style: const TextStyle(
-              fontWeight: FontWeight.bold, fontSize: 15.0),
+      child: CircularStepProgressIndicator(
+        totalSteps: 100,
+        currentStep: percentage,
+        padding: 0.0,
+        // startingAngle: 3,
+        selectedColor: color,
+        selectedStepSize: 7,
+        stepSize: 3,
+
+        startingAngle: 3,
+        gradientColor: LinearGradient(colors: [color, color.withOpacity(0.4)]),
+        child: Center(
+          child: Text(
+            "$percentage%\n$attendanceNumber",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.grey.shade500,
+              fontWeight: FontWeight.w400,
+              fontSize: 15.0,
+            ),
+          ),
         ),
-        circularStrokeCap: CircularStrokeCap.round,
-        progressColor: ConstantsColors.backgroundEndColor,
       ),
+      // CircularPercentIndicator(
+      //   radius: 70.0,
+      //   lineWidth: 10.0,
+      //   animation: true,
+      //   animationDuration: 2500,
+      //   percent: attendance / total,
+      //   center: Text(
+      //     "$percentage%\n$attendanceNumber",textAlign: TextAlign.center,
+      //     style: TextStyle(color: Colors.grey.shade500,fontWeight: FontWeight.w400, fontSize: 15.0,),
+      //   ),
+      //   circularStrokeCap: CircularStrokeCap.round,
+      //   arcType: ArcType.FULL,
+      //
+      //   progressColor: ConstantsColors.backgroundEndColor,
+      //   arcBackgroundColor: Colors.red,
+      //   backgroundWidth: 5,
+      // ),
     );
   }
 
   Text whiteText(String text) {
-    return Text(text, style: const TextStyle(
-        color: Colors.white, fontSize: 15),);
+    return Text(
+      text,
+      style: TextStyle(color: Colors.grey.shade500, fontSize: 15),
+    );
   }
-
 }

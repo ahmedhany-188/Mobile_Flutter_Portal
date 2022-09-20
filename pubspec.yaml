@@ -49,10 +49,10 @@ dependencies:
   #design libiraries
   heroicons: ^0.5.0 #this is responsible for angular icons as the icons assets are in this libirary
   shimmer: ^2.0.0
-  entry: ^0.0.6
-  sprung: ^3.0.0
+#  entry: ^0.0.6
+#  sprung: ^3.0.0
 #  delayed_display: ^2.0.0
-  page_transition: ^2.0.5
+  page_transition: ^2.0.9
   conditional_builder_null_safety: ^0.0.6
   badges: ^2.0.2
   multi_select_flutter: ^4.1.2
@@ -62,7 +62,9 @@ dependencies:
   flutter_polls: ^0.0.6
   circular: ^0.0.5
   dropdown_search: ^5.0.2
-  percent_indicator: ^4.0.1
+  syncfusion_flutter_sliders: 20.2.49
+  syncfusion_flutter_gauges: 20.2.49
+  percent_indicator: ^4.2.2
   step_progress_indicator: ^1.0.2
 #  grouped_list: ^5.1.2 /// unused so far
   simple_grouped_listview: ^1.0.1
@@ -70,7 +72,7 @@ dependencies:
 
   #Animation libiraries
   animated_splash_screen: ^1.2.0
-  animations: ^2.0.2
+#  animations: ^2.0.2
   rounded_loading_button: ^2.0.8
   flutter_shake_animated: ^0.0.5
 
@@ -87,7 +89,7 @@ dependencies:
   firebase_crashlytics: ^2.8.6
   firebase_messaging: ^12.0.1
   dio: ^4.0.6
-  url_launcher: ^6.1.2
+  url_launcher: ^6.1.5
   flutter_cache_manager: ^3.3.0
 
   #Bloc libiraries

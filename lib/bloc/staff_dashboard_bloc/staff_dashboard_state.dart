@@ -1,7 +1,7 @@
 part of 'staff_dashboard_cubit.dart';
 
 
-enum CompanyStaffDashBoardEnumStates {loading, success, failed,noConnection}
+enum CompanyStaffDashBoardEnumStates {loading, success, failed,noConnection,noDataFound}
 
 class StaffDashboardState extends Equatable {
 

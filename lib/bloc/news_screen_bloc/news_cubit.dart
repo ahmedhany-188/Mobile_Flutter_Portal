@@ -73,7 +73,7 @@ class NewsCubit extends Cubit<NewsState> {
     GeneralDio.newsDataOld().then((value) {
       if (value.data != null) {
         List<NewsDataModel> newsDataList = List<NewsDataModel>.from(value.data.map((model) => NewsDataModel.fromJson(model)));
-        newsList = newsDataList;
+        newsList = newsDataList.reversed.toList();
         emit(NewsSuccessState(newsDataList, announcment));
       }
     });

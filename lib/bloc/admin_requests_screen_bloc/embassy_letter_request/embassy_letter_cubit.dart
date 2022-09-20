@@ -11,6 +11,7 @@ import 'package:hassanallamportalflutter/data/models/admin_requests_models/embas
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/widgets/dialogpopoup/custom_date_picker.dart';
+import 'package:html/parser.dart';
 
 import '../../../constants/enums.dart';
 import '../../../constants/request_service_id.dart';
@@ -97,6 +98,8 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
     final passportNO = PassportNumber.dirty(state.passportNumber.value);
 
 
+
+
     EmbassyLetterFormModel embassyLetterFormModel;
     emit(state.copyWith(
       requestDate: requestDate,
@@ -106,11 +109,10 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
       status: Formz.validate([fromDate, toDate, passportNO]),
     ));
 
-    print("salary:   "+state.salary+  "     "+state.comments);
     if (state.status.isValidated) {
       embassyLetterFormModel = EmbassyLetterFormModel(state.requestDate.value,
           state.purpose,
-          state.embassy,
+          state.embassyID,
           state.dateFrom.value,
           state.dateTo.value,
           state.passportNumber.value.toString(),
@@ -241,9 +243,14 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
     ));
   }
 
-  void addSelectedEmbassy(String value) {
+  void addSelectedEmbassy(int value) {
+
+    String id=value.toString();
+
+    String embassyID=(value+1).toString();
     emit(state.copyWith(
-      embassy: value,
+      embassy: id,
+      embassyID: embassyID,
       status: Formz.validate(
           [state.dateFrom, state.dateTo, state.passportNumber]),
     ));

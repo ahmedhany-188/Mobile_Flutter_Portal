@@ -40,8 +40,7 @@ class RequestRepository {
     _inst.userData = userData;
     return _inst;
   }
-
-
+  
   Future<RequestResponse> postPermissionRequest(
       {required String requestDate,
       required String comments,
@@ -77,6 +76,7 @@ class RequestRepository {
 
   Future<RequestResponse> postAccessRightRequest(
       {required AccessRightModel accessRightModel}) async {
+
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": RequestServiceID.accessRightServiceID,
       "requestHrCode": userData?.employeeData!.userHrCode,
@@ -94,7 +94,12 @@ class RequestRepository {
       "vpnAccount": accessRightModel.vpnAccount,
       "ipPhone": accessRightModel.ipPhone,
       "localAdmin": accessRightModel.localAdmin,
+      "printing":accessRightModel.printing,
     });
+
+
+    print("the body: ="+bodyString);
+
 
     final http.Response rawAccess =
         await requestDataProviders.postAccessAccountAccessRequest(bodyString);
