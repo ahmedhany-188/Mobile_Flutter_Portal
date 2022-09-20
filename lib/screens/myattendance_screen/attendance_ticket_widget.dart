@@ -102,28 +102,33 @@ class AttendanceTicketWidget extends StatelessWidget {
                     .contains("AM")) {
               return sizedDay(attendanceListData[index], context, "in", "out",
                   "red", "red", hrUser);
-            } else if (((int.parse(timeOut) >= 5) ||
-                    (int.parse(timeOut) == 4 && int.parse(timeOut2) == 59)) &&
-                ((int.parse(timeIn) < 8) ||
-                    (int.parse(timeIn) == 8 && int.parse(timeIn2) < 31))) {
+            }
+
+            else if (
+            ((int.parse(timeOut) >= 5) || (int.parse(timeOut) == 4 && int.parse(timeOut2) == 59)) &&
+                ((int.parse(timeIn) < 8) || (int.parse(timeIn) == 8 && int.parse(timeIn2) < 31))
+            ) {
               return sizedDay(attendanceListData[index], context, "in", "out",
                   "green", "green", hrUser);
-            } else if (((int.parse(timeOut) >= 5) ||
-                    (int.parse(timeOut) == 4 && int.parse(timeOut2) == 59)) &&
-                ((int.parse(timeIn) > 8) ||
-                    (int.parse(timeIn) == 8 && int.parse(timeIn2) > 30))) {
+            } else if (
+            ((int.parse(timeOut) >= 5) || (int.parse(timeOut) == 4 && int.parse(timeOut2) == 59)) &&
+                ((int.parse(timeIn) > 8) || (int.parse(timeIn) == 8 && int.parse(timeIn2) > 30))
+            ) {
               return sizedDay(attendanceListData[index], context, "in", "out",
                   "red", "green", hrUser);
-            } else if ((int.parse(timeOut) == 4 && int.parse(timeOut2) < 59) ||
-                (int.parse(timeOut) < 4) &&
-                    ((int.parse(timeIn) < 8) ||
-                        (int.parse(timeIn) == 8 && int.parse(timeIn2) < 31))) {
+            } else if (
+            ((int.parse(timeOut) == 4 && int.parse(timeOut2) < 59) || (int.parse(timeOut) < 4)) &&
+                ((int.parse(timeIn) < 8) || (int.parse(timeIn) == 8 && int.parse(timeIn2) < 31))
+            ) {
               return sizedDay(attendanceListData[index], context, "in", "out",
                   "green", "red", hrUser);
-            } else {
+            }
+            else {
               return sizedDay(attendanceListData[index], context, "in", "out",
                   "red", "red", hrUser);
             }
+
+
           } else if (attendanceListData[index].timeIN.toString() != "null" &&
                   attendanceListData[index].timeOUT.toString() == "null" ||
               attendanceListData[index].timeIN.toString() == "null" &&

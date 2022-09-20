@@ -237,6 +237,16 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
           ),
         );
       }
+    }else{
+      if(state.requestItemsList.toString()=="[]"){
+        emit(
+          state.copyWith(
+            errorMessage: "Select at least one item",
+            status: FormzStatus.submissionFailure,
+          ),
+        );
+      }
+
     }
   }
 
