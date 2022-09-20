@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,7 +7,6 @@ import 'package:hassanallamportalflutter/data/models/staff_dashboard_models/comp
 import 'package:hassanallamportalflutter/data/repositories/staff_dashboard_repository.dart';
 import 'package:hassanallamportalflutter/widgets/dialogpopoup/custom_date_picker.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:meta/meta.dart';
 
 part 'staff_dashboard_state.dart';
 
@@ -59,7 +57,7 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
                 .loading,
           ));
           await StaffDashBoardRepository().getStaffDashBoardData(
-              userHRCode, date)
+              "10203520", date)
               .then((value) async {
                 if(value.length>1){
                   emit(state.copyWith(
@@ -162,8 +160,9 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
         date ?? DateTime.now());
 
     if(formattedDate!=state.date){
-      context.read<StaffDashboardCubit>()
-          .getStaffBoardCompanies(
+      // context.read<StaffDashboardCubit>()
+      //     .
+      getStaffBoardCompanies(
           hrCode,formattedDate);
     }
 
