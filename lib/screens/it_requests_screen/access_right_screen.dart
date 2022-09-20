@@ -10,7 +10,6 @@ import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:hassanallamportalflutter/widgets/filters/multi_selection_chips_filters.dart';
-import 'package:sizer/sizer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
@@ -388,7 +387,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                 itemBuilder: (ctx, index) {
                                                   return Center(
                                                     child: Container(
-                                                        width: 30.h,
+                                                        width: 30,
                                                         color: Colors.white10,
                                                         child: Padding(
                                                           padding:
