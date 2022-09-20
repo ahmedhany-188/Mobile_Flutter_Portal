@@ -193,18 +193,18 @@ class MainDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FocusManager.instance.primaryFocus
-        ?.unfocus(disposition: UnfocusDisposition.previouslyFocusedChild);
-    FocusManager.instance.primaryFocus
-        ?.unfocus(disposition: UnfocusDisposition.scope);
+    // FocusManager.instance.primaryFocus
+    //     ?.unfocus(disposition: UnfocusDisposition.previouslyFocusedChild);
+    // FocusManager.instance.primaryFocus
+    //     ?.unfocus(disposition: UnfocusDisposition.scope);
     final user =
         context.select((AppBloc bloc) => bloc.state.userData.employeeData);
 
-    return CustomBackground(
-      child: Drawer(
-        elevation: 0,
-        width: double.infinity,
-        backgroundColor: Colors.transparent,
+    return Drawer(
+      elevation: 0,
+      width: MediaQuery.of(context).size.width,
+      backgroundColor: Colors.transparent,
+      child: CustomBackground(
         child: Column(
           children: [
             /// commented code below is for centered image and text
