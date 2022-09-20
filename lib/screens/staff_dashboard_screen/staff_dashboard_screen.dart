@@ -73,9 +73,10 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                     CompanyStaffDashBoardEnumStates.noDataFound) {
                   EasyLoading.dismiss(animation: true);
                   ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                  EasyLoading.showError( "Don't have access");
+                  EasyLoading.showError( "You don't have access");
                 }
               },
+              buildWhen: (pre,curr){return curr.companyStaffDashBoardEnumStates == CompanyStaffDashBoardEnumStates.success; },
               builder: (context, state) {
                 return Scaffold(
                   backgroundColor: Colors.transparent,
@@ -86,7 +87,9 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                           "Dashboard ${StaffDashboardCubit.get(context).state.date}"),
                       centerTitle: true,
                       actions: <Widget>[
-                        IconButton(
+                        if(state.companyStaffDashBoardEnumStates ==
+                            CompanyStaffDashBoardEnumStates.noDataFound)
+                          IconButton(
                             icon: const Icon(
                               Icons.date_range,
                               color: Colors.white,
