@@ -241,6 +241,8 @@ flutter:
     - assets/images/staffdashboard/staffbox.png
     - assets/images/staffdashboard/staffeffect.png
     - assets/images/staffdashboard/boxlayer.png
+    - assets/images/staffdashboard/arrowdown.png
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -397,6 +397,7 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                               RequestStatus.oldRequest ? state
                                               .passportNumber.value : "",
                                           // initialValue:state.passportNumber.value,
+                                          keyboardType: TextInputType.number,
                                           readOnly: state.requestStatus ==
                                               RequestStatus.oldRequest ? true : false,
                                           onChanged: (value) {
