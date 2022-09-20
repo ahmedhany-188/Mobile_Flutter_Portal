@@ -7,9 +7,6 @@ import 'download_pdf.dart';
 
 convertFromHtml(
     {required String dataToConvert, required BuildContext context}) {
-
-
-
   showErrorSnackBar() {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -24,7 +21,7 @@ convertFromHtml(
       onLinkTap: (String? url, RenderContext renderContext,
           Map<String, String> attributes, dom.Element? element) async {
         if (await canLaunchUrl(Uri.parse(url!))) {
-          launchUrl(Uri.parse(url),mode: LaunchMode.externalApplication);
+          launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
         } else {
           var urlNameIndex = url.lastIndexOf('/');
           var urlName = url.substring(urlNameIndex + 1, url.length);
@@ -39,12 +36,42 @@ convertFromHtml(
       },
       style: {
         '#': Style(
-            fontSize: const FontSize(15),color: Colors.white,
-            maxLines: dataToConvert.length,
-            textOverflow: TextOverflow.ellipsis,
-            margin: const EdgeInsets.all(10)),
-        'strong': Style(fontWeight: FontWeight.normal)
+          fontSize: const FontSize(15),
+          color: Colors.white,
+          maxLines: dataToConvert.length,
+          textOverflow: TextOverflow.ellipsis,
+          margin: const EdgeInsets.all(10),
+        ),
+        'strong': Style(
+          fontWeight: FontWeight.normal,
+          color: Colors.white,
+          maxLines: dataToConvert.length,
+        ),
+        'span': Style(
+          fontSize: const FontSize(15),
+          color: Colors.white,
+          maxLines: dataToConvert.length,
+          textOverflow: TextOverflow.ellipsis,
+          margin: const EdgeInsets.all(10),
+        ),
       },
     ),
+  );
+}
+
+convertTitleFromHtml(
+    {required String dataToConvert, required BuildContext context}) {
+  return Html(
+    shrinkWrap: false,
+    data: dataToConvert.toString(),
+    style: {
+      '#': Style(
+        fontSize: const FontSize(18),
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        textOverflow: TextOverflow.ellipsis,
+        maxLines: 1,
+      ),
+    },
   );
 }

@@ -4,6 +4,7 @@ import 'package:hassanallamportalflutter/widgets/background/custom_background.da
 
 import '../../data/helpers/convert_from_html.dart';
 import '../../data/models/news_model/news_data_model.dart';
+import '../../gen/assets.gen.dart';
 
 class NewsDetailsScreen extends StatelessWidget {
   const NewsDetailsScreen({Key? key, required this.newsData}) : super(key: key);
@@ -16,7 +17,7 @@ class NewsDetailsScreen extends StatelessWidget {
     return CustomBackground(
       child: CustomTheme(
         child: Scaffold(
-          appBar: AppBar(title: Text(newsData.newsTitle!)),
+          appBar: AppBar(title: convertTitleFromHtml(dataToConvert: newsData.newsTitle!, context: context),),
           body: Padding(
             padding: const EdgeInsets.all(10.0),
             child: SizedBox(
@@ -33,6 +34,7 @@ class NewsDetailsScreen extends StatelessWidget {
                             imageUrl:
                                 'https://portal.hassanallam.com/images/imgs/${newsData.newsId}.jpg',
                             fit: BoxFit.cover,
+                          errorWidget: (_,__,___)=>Assets.images.loginImageLogo.image() ,
                             ),
                       ),
                     ),
@@ -40,7 +42,7 @@ class NewsDetailsScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(10.0),
                       child: (newsData.newsTitle.toString().contains('<'))? convertFromHtml(dataToConvert: newsData.newsTitle.toString(), context: context) :Text(newsData.newsTitle ?? "",
                           style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
+                              fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white)),
                     ),
                     const Divider(
                       color: Colors.white,
