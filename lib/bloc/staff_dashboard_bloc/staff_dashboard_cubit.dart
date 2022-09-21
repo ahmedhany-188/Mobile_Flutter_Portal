@@ -57,7 +57,7 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
                 .loading,
           ));
           await StaffDashBoardRepository().getStaffDashBoardData(
-              "10203520", date)
+              userHRCode, date)
               .then((value) async {
                 if(value.length>1){
                   emit(state.copyWith(
@@ -90,7 +90,6 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
       }
     }
   }
-
   Future<void> getStaffBoardCompanies(userHRCode, date) async {
       if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
         try {
@@ -101,12 +100,19 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
           await StaffDashBoardRepository().getStaffDashBoardData(
               userHRCode, date)
               .then((value) async {
-            emit(state.copyWith(
-                companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates
-                    .success,
-                companyStaffDashBoardList: value,
-                date:date
-            ));
+            if(value.length>1){
+              emit(state.copyWith(
+                  companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates
+                      .success,
+                  companyStaffDashBoardList: value,
+                  date:date
+              ));
+            }else{
+              emit(state.copyWith(
+                companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates.noDataFound,
+              ));
+            }
+
           }).catchError((error) {
             emit(state.copyWith(
               companyStaffDashBoardEnumStates: CompanyStaffDashBoardEnumStates.failed,
