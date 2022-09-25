@@ -10,11 +10,11 @@ dependencies:
     sdk: flutter
 
   http: any
-  equatable: ^2.0.3
+  equatable: ^2.0.5
   shared_preferences: ^2.0.15
-  firebase_core: ^1.15.0
-  firebase_auth: ^3.3.15
-  firebase_messaging: ^12.0.1
+  firebase_core: ^1.23.0
+  firebase_auth: ^3.10.0
+  firebase_messaging: ^12.0.2
   device_info: ^2.0.3
-  firebase_database: ^9.0.13
+  firebase_database: ^9.1.5
 
