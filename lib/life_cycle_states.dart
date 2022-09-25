@@ -26,18 +26,27 @@ class LifeCycleState extends StatefulWidget  {
   const LifeCycleState({Key? key, required this.child}) : super(key: key);
 
   @override
-  _LifeCycleStateState createState() => _LifeCycleStateState();
+  LifeCycleStateState createState() => LifeCycleStateState();
 }
 
-class _LifeCycleStateState extends State<LifeCycleState> with WidgetsBindingObserver {
+class LifeCycleStateState extends State<LifeCycleState> with WidgetsBindingObserver {
 
+  late Image image1;
   @override
   void initState() {
     // TODO: implement initState
     WidgetsBinding.instance.addObserver(this);
     super.initState();
+    image1 = Assets.images.mainBackground.image();
     // FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
     SetupFirebaseMessaging(context);
+  }
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    precacheImage(image1.image, context);
+    super.didChangeDependencies();
+
   }
 
 
@@ -46,7 +55,7 @@ class _LifeCycleStateState extends State<LifeCycleState> with WidgetsBindingObse
     if (kDebugMode) {
       print("life cycle --> started");
     }
-    precacheImage(Assets.images.mainBackground.image().image, context);
+
         return widget.child;
   }
   @override
@@ -62,15 +71,18 @@ class _LifeCycleStateState extends State<LifeCycleState> with WidgetsBindingObse
   void didChangeAppLifecycleState(AppLifecycleState state) {
     // TODO: implement didChangeAppLifecycleState
     super.didChangeAppLifecycleState(state);
-    precacheImage(Assets.images.mainBackground.image().image, context);
+
     final status = context
         .read<AppBloc>().state.status;
     if(state == AppLifecycleState.resumed){
+      precacheImage(image1.image, context);
       if (kDebugMode) {
         print("life cycle -->resumed");
         print(status== AppStatus.authenticated ? "life cycle --> authenticated":"life cycle -->unauthenticated");
       }
+
       updateFirebaseWithStatus(AppLifecycleStatus.online);
+      // unityWidgetController.resume();
     }else if (state == AppLifecycleState.inactive){
       if (kDebugMode) {
         print("life cycle -->inactive");

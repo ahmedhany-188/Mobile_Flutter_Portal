@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
@@ -14,6 +15,7 @@ import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_us
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/videos_screen/videos_screen.dart';
 
+import 'bloc/auth_app_status_bloc/app_bloc.dart';
 import 'constants/constants.dart';
 import 'main.dart';
 
@@ -290,6 +292,8 @@ class SetupFirebaseMessaging{
         onDidReceiveNotificationResponse: (_)=> _onSelectNotificationMessage);
   }
   void _onSelectNotificationMessage(String? json) async {
+    final userHRCode = context
+        .read<AppBloc>().state.userData.employeeData?.userHrCode;
     final messageData = jsonDecode(json!);
     if (kDebugMode) {
       print("_handleMessage");
@@ -305,7 +309,7 @@ class SetupFirebaseMessaging{
                   PermissionScreen(requestData: {
                     PermissionScreen.requestNoKey: messageData['requestNo'],
                     PermissionScreen
-                        .requesterHRCode: messageData['requesterHRCode']
+                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:userHRCode
                   },)));
         });
       }
@@ -320,7 +324,8 @@ class SetupFirebaseMessaging{
                     BusinessMissionScreen
                         .requestNoKey: messageData['requestNo'],
                     BusinessMissionScreen
-                        .requesterHRCode: messageData['requesterHRCode']
+                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"?
+                    messageData['requesterHRCode']:userHRCode
                   },)));
         });
       }
@@ -334,7 +339,7 @@ class SetupFirebaseMessaging{
                   VacationScreen(requestData: {
                     VacationScreen.requestNoKey: messageData['requestNo'],
                     VacationScreen
-                        .requesterHRCode: messageData['requesterHRCode']
+                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:userHRCode
                   },)));
         });
       }
@@ -348,7 +353,7 @@ class SetupFirebaseMessaging{
                   EmbassyLetterScreen(requestData: {
                     EmbassyLetterScreen.requestNoKey: messageData['requestNo'],
                     EmbassyLetterScreen
-                        .requesterHRCode: messageData['requesterHRCode']
+                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:userHRCode
                   },)));
         });
       }
@@ -362,7 +367,7 @@ class SetupFirebaseMessaging{
                   BusinessCardScreen(requestData: {
                     BusinessCardScreen.requestNoKey: messageData['requestNo'],
                     BusinessCardScreen
-                        .requesterHRCode: messageData['requesterHRCode']
+                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:userHRCode
                   },)));
         });
       }
@@ -377,7 +382,7 @@ class SetupFirebaseMessaging{
                     EmailAndUserAccountScreen
                         .requestNoKey: messageData['requestNo'],
                     EmailAndUserAccountScreen
-                        .requesterHRCode: messageData['requesterHRCode']
+                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:userHRCode
                   },)));
         });
       }
@@ -391,7 +396,7 @@ class SetupFirebaseMessaging{
                   AccessRightScreen(requestData: {
                     AccessRightScreen.requestNoKey: messageData['requestNo'],
                     AccessRightScreen
-                        .requesterHRCode: messageData['requesterHRCode']
+                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:userHRCode
                   },)));
         });
       }

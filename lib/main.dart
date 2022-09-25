@@ -60,6 +60,7 @@ void main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
 
+  Paint.enableDithering = true;
   await FlutterDownloader.initialize(debug: true);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform, //This line is necessary
@@ -429,7 +430,7 @@ class _MyAppState extends State<MyApp> {
         child: LifeCycleState(
           child: WillPopScope(
             onWillPop: () async {
-              MoveToBackground.moveTaskToBack();
+              // MoveToBackground.moveTaskToBack();
               return false;
             },
             child: MaterialApp(
