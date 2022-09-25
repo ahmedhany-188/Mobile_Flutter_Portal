@@ -155,6 +155,10 @@ class $AssetsImagesHomepageGen {
 class $AssetsImagesStaffdashboardGen {
   const $AssetsImagesStaffdashboardGen();
 
+  /// File path: assets/images/staffdashboard/arrowdown.png
+  AssetGenImage get arrowdown =>
+      const AssetGenImage('assets/images/staffdashboard/arrowdown.png');
+
   /// File path: assets/images/staffdashboard/boxlayer.png
   AssetGenImage get boxlayer =>
       const AssetGenImage('assets/images/staffdashboard/boxlayer.png');

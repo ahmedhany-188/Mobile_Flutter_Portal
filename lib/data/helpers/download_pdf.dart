@@ -121,8 +121,8 @@ class DownloadPdfHelper{
         importance: Importance.max
     );
 
-    const iOS = IOSNotificationDetails();
-    const platform = const NotificationDetails(android: android,iOS:  iOS);
+    const iOS = DarwinNotificationDetails();
+    const platform = NotificationDetails(android: android,iOS:  iOS);
     final json = jsonEncode(downloadStatus);
     final isSuccess = downloadStatus['isSuccess'];
 
@@ -208,10 +208,10 @@ class DownloadPdfHelper{
   Future<void> download() async {
 
     const android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iOS = IOSInitializationSettings();
-    const initSettings = const InitializationSettings(android: android,iOS:  iOS);
+    const iOS = DarwinInitializationSettings();
+    const initSettings = InitializationSettings(android: android,iOS:  iOS);
 
-    await flutterLocalNotificationsPlugin.initialize(initSettings, onSelectNotification: _onSelectNotification);
+    await flutterLocalNotificationsPlugin.initialize(initSettings, onDidReceiveNotificationResponse: (_)=> _onSelectNotification);
 
 
     final dir = await _getDownloadDirectory();

@@ -1227,7 +1227,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                     context: context,
                     name: 'Network',
                     icon: const HeroIcon(
-                      HeroIcons.globe,
+                      HeroIcons.globeAlt,
                       color: Colors.white,
                     )),
                 const Divider(color: Colors.white),

@@ -282,12 +282,12 @@ class SetupFirebaseMessaging{
     }
     var initializationSettingsAndroid =
     const AndroidInitializationSettings('@drawable/logo');
-    var initializationSettingsIOs = const IOSInitializationSettings();
+    var initializationSettingsIOs = const DarwinInitializationSettings();
     var initSettings = InitializationSettings(
         android: initializationSettingsAndroid,
         iOS: initializationSettingsIOs);
     flutterLocalNotificationsPlugin.initialize(initSettings,
-        onSelectNotification: _onSelectNotificationMessage);
+        onDidReceiveNotificationResponse: (_)=> _onSelectNotificationMessage);
   }
   void _onSelectNotificationMessage(String? json) async {
     final messageData = jsonDecode(json!);

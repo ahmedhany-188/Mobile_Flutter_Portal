@@ -54,12 +54,25 @@ class StaffDashboardJobWidget extends StatelessWidget {
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        ListTile(
-                          title: Text(status,
-                              style: const TextStyle(
-                                  color: Colors.white, fontSize: 16)),
+                        IntrinsicHeight(
+                          child: Row(
+                            children: [
+                              Flexible(
+                                flex: 2,
+                                child: Text(status,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: (status.split(' ').length > 6)?13:15,
+                                      overflow: TextOverflow.ellipsis
+                                    ),
+                                    maxLines: 4,
+                                    ),
+                              ),
+                              const Flexible(child: SizedBox())
+                            ],
+                          ),
                         ),
                         IntrinsicHeight(
                           child: Row(

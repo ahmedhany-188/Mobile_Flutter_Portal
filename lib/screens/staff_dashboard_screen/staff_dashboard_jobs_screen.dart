@@ -112,7 +112,7 @@ class StaffDashboardJobScreenClass extends State<StaffDashboardJobScreen> {
                                 state.jobStaffDashBoardSearchList)
                             : StaffDashboardJobWidget(
                                 state.jobStaffDashBoardList)
-                        : const Center(child: Text("No Data Found"));
+                        : Center(child: (EasyLoading.isShow)? const SizedBox() :const CircularProgressIndicator());
                   },
                 )),
           ),
