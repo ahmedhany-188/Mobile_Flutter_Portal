@@ -54,7 +54,7 @@ class StaffDashboardJobWidget extends StatelessWidget {
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         IntrinsicHeight(
                           child: Row(
@@ -64,8 +64,8 @@ class StaffDashboardJobWidget extends StatelessWidget {
                                 child: Text(status,
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: (status.split(' ').length > 6)?13:15,
-                                      overflow: TextOverflow.ellipsis
+                                      fontSize: (status.split(' ').length >= 4)?13:15,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                     maxLines: 4,
                                     ),

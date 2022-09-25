@@ -16,6 +16,7 @@ class CustomBackground extends StatelessWidget {
           Column(
             children: [
               Expanded(
+                flex: 2,
                 child: Container(
                   decoration: const BoxDecoration(
                       gradient: LinearGradient(
@@ -28,7 +29,18 @@ class CustomBackground extends StatelessWidget {
                   )),
                 ),
               ),
-              Container(child: Assets.images.mainBackground.image()),
+              Flexible(
+                child: Container(
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                        fit: BoxFit.fill,
+                          image: Assets.images.mainBackground
+                              .image()
+                              .image)),
+                  // child:
+                  //     Assets.images.mainBackground.image(fit: BoxFit.fitWidth),
+                ),
+              ),
             ],
           ),
           Container(
@@ -67,7 +79,7 @@ class CustomTheme extends StatelessWidget {
         splashColor: Colors.transparent,
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-                primary: ConstantsColors.bottomSheetBackgroundDark,
+                backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
                 shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(20))))),
 
