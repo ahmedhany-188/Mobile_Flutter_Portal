@@ -83,11 +83,11 @@ dependencies:
   flutter_html: any
   http: any
   html: ^0.15.0
-  firebase_core: ^1.20.0
-  firebase_auth: ^3.6.2
-  firebase_database: ^9.1.0
-  firebase_crashlytics: ^2.8.6
-  firebase_messaging: ^12.0.1
+  firebase_core: ^1.23.0
+  firebase_auth: ^3.10.0
+  firebase_database: ^9.1.5
+  firebase_crashlytics: ^2.8.11
+  firebase_messaging: ^12.0.2
   dio: ^4.0.6
   url_launcher: ^6.1.5
   flutter_cache_manager: ^3.3.0
