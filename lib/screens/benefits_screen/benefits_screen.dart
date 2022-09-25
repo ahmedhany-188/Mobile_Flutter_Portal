@@ -209,7 +209,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
 
   Widget benefitsListView(List<dynamic> benefitsDataList) {
     return (benefitsDataList.isEmpty)
-        ? const Center(child: CircularProgressIndicator())
+        ? const Center(child: CircularProgressIndicator(color: Colors.white,))
         : Scrollbar(
             child: ListView.builder(
               keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,

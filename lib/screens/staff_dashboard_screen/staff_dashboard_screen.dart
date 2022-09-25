@@ -87,7 +87,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                           "Dashboard ${(state.companyStaffDashBoardEnumStates == CompanyStaffDashBoardEnumStates.success) ? state.date : ''}"),
                       centerTitle: true,
                       actions: <Widget>[
-                        if (state.companyStaffDashBoardEnumStates ==
+                        if (state.companyStaffDashBoardEnumStates !=
                             CompanyStaffDashBoardEnumStates.noDataFound)
                           IconButton(
                               icon: const Icon(
@@ -136,20 +136,13 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                             contentPadding: EdgeInsets.symmetric(
                                 horizontal: 15, vertical: 20),
                             isCollapsed: true,
-
-                            // label: Column(
-                            //       children: [
-                            //         Center(child: Assets.images.loginImageLogo.image(scale: 2)),
-                            //         // Text('Hassan Allam Holding')
-                            //       ],
-                            //     ),
                             labelText: 'Hassan Allam Holding',
                             labelStyle: TextStyle(fontSize: 30),
                             floatingLabelAlignment:
                                 FloatingLabelAlignment.center,
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.all(0.0),
+                            padding: const EdgeInsets.all(5.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -246,8 +239,13 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                         elevation: 0,
                         position: BadgePosition.topStart(
                             // top: -20,
-                            start: MediaQuery.of(context).size.width / 2.9),
-                        child: Assets.images.staffdashboard.dashboard1.image(),
+                            start: MediaQuery.of(context).size.width / 2.5),
+                        child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child:
+                                Assets.images.staffdashboard.dashboard1.image(
+                              fit: BoxFit.fill,
+                            )),
                       ),
                       Expanded(
                         child: Container(
