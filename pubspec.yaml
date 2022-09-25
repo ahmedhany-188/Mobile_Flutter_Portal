@@ -47,7 +47,7 @@ dependencies:
 
 
   #design libiraries
-  heroicons: ^0.5.0 #this is responsible for angular icons as the icons assets are in this libirary
+  heroicons: ^0.7.0 #this is responsible for angular icons as the icons assets are in this libirary
   shimmer: ^2.0.0
 #  entry: ^0.0.6
 #  sprung: ^3.0.0
@@ -59,11 +59,11 @@ dependencies:
   flutter_multiselect: ^1.0.0
   sizer: ^2.0.15
   flutter_svg: ^1.1.0
-  flutter_polls: ^0.0.6
+  flutter_polls: ^0.1.0
   circular: ^0.0.5
   dropdown_search: ^5.0.2
-  syncfusion_flutter_sliders: 20.2.49
-  syncfusion_flutter_gauges: 20.2.49
+  syncfusion_flutter_sliders: ^20.2.50
+  syncfusion_flutter_gauges: ^20.2.50
   percent_indicator: ^4.2.2
   step_progress_indicator: ^1.0.2
 #  grouped_list: ^5.1.2 /// unused so far
@@ -106,12 +106,12 @@ dependencies:
   formz: ^0.4.1
   device_info: ^2.0.3
   path: ^1.8.1
-  flutter_local_notifications: ^9.6.0
+  flutter_local_notifications: ^11.0.0
   path_provider: ^2.0.11
   flutter_downloader: ^1.7.4
   equatable: any
   flutter_form_builder: ^7.2.0
-  permission_handler: ^9.2.0
+  permission_handler: ^10.0.1
   open_file: ^3.2.1
   file_picker: ^4.6.1
   package_info_plus: ^1.4.2
@@ -144,7 +144,7 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   json_serializable: any
   build_runner: ^2.1.11
-  flutter_web_browser: ^0.17.1
+#  flutter_web_browser: ^0.17.1
   flutter_gen_runner: ^4.3.0
 
 

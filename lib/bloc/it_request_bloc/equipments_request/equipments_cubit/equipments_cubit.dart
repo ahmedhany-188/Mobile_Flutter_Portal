@@ -168,7 +168,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       case 'Toner/Ink':
         return const Icon(Icons.water_drop);
       case 'Network':
-        return const HeroIcon(HeroIcons.globe);
+        return const HeroIcon(HeroIcons.globeAlt);
       case 'Server':
         return const HeroIcon(HeroIcons.server);
       case 'Printer':
