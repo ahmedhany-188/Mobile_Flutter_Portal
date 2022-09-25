@@ -222,40 +222,54 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                           ),
                           child: Badge(
                             toAnimate: false,
+                            badgeColor: Colors.transparent,
+                            // position: BadgePosition.center(),
+                            elevation: 0,
                             badgeContent: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      // fit: BoxFit.fitWidth,
-                                      image: Assets
-                                          .images.staffdashboard.dashboard2
-                                          .image()
-                                          .image)),
-                              child: Column(
+                              padding: const EdgeInsets.all(8),
+                              // decoration: BoxDecoration(
+                              //   // image: DecorationImage(
+                              //   //     fit: BoxFit.scaleDown,
+                              //   //     image: Assets
+                              //   //         .images.staffdashboard.dashboard2
+                              //   //         .image()
+                              //   //         .image),
+                              // ),
+                              child: Stack(
+                                alignment: Alignment.center,
                                 children: [
-                                  const Text('Total Manpower'),
-                                  Text(
-                                    state.companyStaffDashBoardEnumStates ==
-                                            CompanyStaffDashBoardEnumStates
-                                                .success
-                                        ? getAllManPower(
-                                                state.companyStaffDashBoardList)
-                                            .toString()
-                                        : "----",
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 18),
+                                  Assets.images.staffdashboard.dashboard2
+                                      .image(),
+                                  Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      const Flexible(
+                                          child: Text('Total Manpower')),
+                                      Flexible(
+                                        child: Text(
+                                          state.companyStaffDashBoardEnumStates ==
+                                                  CompanyStaffDashBoardEnumStates
+                                                      .success
+                                              ? getAllManPower(state
+                                                      .companyStaffDashBoardList)
+                                                  .toString()
+                                              : "----",
+                                          style: const TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
                             ),
-                            badgeColor: Colors.transparent,
-                            elevation: 0,
-                            position: BadgePosition.center(),
                           ),
                         ),
                       ),
                       Expanded(
-                        flex: 6,
+                        flex: 5,
                         child: Container(
                           color: Colors.white,
                           child: Column(
