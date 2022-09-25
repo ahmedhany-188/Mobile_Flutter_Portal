@@ -387,7 +387,6 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                 itemBuilder: (ctx, index) {
                                                   return Center(
                                                     child: Container(
-                                                        width: 30,
                                                         color: Colors.white10,
                                                         child: Padding(
                                                           padding:
@@ -473,7 +472,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                               ? ElevatedButton
                                                                   .icon(
                                                                   style: ElevatedButton.styleFrom(
-                                                                      primary: (state
+                                                                      backgroundColor: (state
                                                                               .chosenFileName
                                                                               .isNotEmpty)
                                                                           ? Colors

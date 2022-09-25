@@ -61,7 +61,7 @@ class EconomyNewsTicketWidget extends StatelessWidget {
                   );
                 }
             ),
-        fallback: (context) => const Center(child: CircularProgressIndicator()),
+        fallback: (context) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
       ),
     );
   }
