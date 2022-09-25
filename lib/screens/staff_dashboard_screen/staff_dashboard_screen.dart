@@ -209,43 +209,57 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                         ),
                       ),
 
-                      Badge(
-                        toAnimate: false,
-                        badgeContent: Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  fit: BoxFit.fitHeight,
-                                  image: Assets.images.staffdashboard.dashboard2
-                                      .image()
-                                      .image)),
-                          child: Column(
-                            children: [
-                              const Text('Total Manpower'),
-                              Text(
-                                state.companyStaffDashBoardEnumStates ==
-                                        CompanyStaffDashBoardEnumStates.success
-                                    ? getAllManPower(
-                                            state.companyStaffDashBoardList)
-                                        .toString()
-                                    : "----",
-                                style: const TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                            ],
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.fill,
+                            image: Assets.images.staffdashboard.dashboard1
+                                .image()
+                                .image,
                           ),
                         ),
-                        badgeColor: Colors.transparent,
-                        elevation: 0,
-                        position: BadgePosition.topStart(
-                            // top: -20,
-                            start: MediaQuery.of(context).size.width / 2.5),
-                        child: SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            child:
-                                Assets.images.staffdashboard.dashboard1.image(
-                              fit: BoxFit.fill,
-                            )),
+                        child: Badge(
+                          toAnimate: false,
+                          badgeContent: Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    // fit: BoxFit.fitWidth,
+                                    image: Assets
+                                        .images.staffdashboard.dashboard2
+                                        .image()
+                                        .image)),
+                            child: Column(
+                              children: [
+                                const Text('Total Manpower'),
+                                Text(
+                                  state.companyStaffDashBoardEnumStates ==
+                                          CompanyStaffDashBoardEnumStates
+                                              .success
+                                      ? getAllManPower(
+                                              state.companyStaffDashBoardList)
+                                          .toString()
+                                      : "----",
+                                  style: const TextStyle(
+                                      color: Colors.white, fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
+                          badgeColor: Colors.transparent,
+                          elevation: 0,
+                          position: BadgePosition.center(
+                              // top: -20,
+                              // start: MediaQuery.of(context).size.width / 2.5,
+                              ),
+                          // child:
+                          //       Container(
+                          //         child: Assets.images.staffdashboard.dashboard1.image(
+                          //     fit: BoxFit.fill,
+                          //   ),
+                          //       ),
+                        ),
                       ),
                       Expanded(
                         child: Container(
