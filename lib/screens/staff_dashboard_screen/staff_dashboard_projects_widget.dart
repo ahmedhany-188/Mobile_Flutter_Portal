@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/staff_dashboard_models/projectstaffdashboard_model.dart';
@@ -33,9 +34,9 @@ class StaffDashboardProjectWidget extends StatelessWidget {
             physics: const BouncingScrollPhysics(),
             itemCount: staffDashboardProjectList.length,
             itemBuilder: (BuildContext context, int index) {
-              projectName = staffDashboardProjectList[index].projectName ?? "";
+              projectName = staffDashboardProjectList[index].projectName?.toTitleCase() ?? "";
               projectManager =
-                  staffDashboardProjectList[index].name ?? "Not Assigned";
+                  staffDashboardProjectList[index].name?.toTitleCase() ?? "Not Assigned";
               employees = staffDashboardProjectList[index].totalSignin ?? 0;
               totalEmployees =
                   ((staffDashboardProjectList[index].cEmployees ?? 0) +

@@ -21,7 +21,7 @@ convertFromHtml(
       onLinkTap: (String? url, RenderContext renderContext,
           Map<String, String> attributes, dom.Element? element) async {
         if (await canLaunchUrl(Uri.parse(url!))) {
-          launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+          await launchUrl(Uri.parse(url), mode: LaunchMode.platformDefault);
         } else {
           var urlNameIndex = url.lastIndexOf('/');
           var urlName = url.substring(urlNameIndex + 1, url.length);
@@ -53,6 +53,10 @@ convertFromHtml(
           maxLines: dataToConvert.length,
           textOverflow: TextOverflow.ellipsis,
           margin: const EdgeInsets.all(10),
+        ),
+        'a': Style(
+          color: Colors.blue,
+          textDecoration: TextDecoration.underline,
         ),
       },
     ),

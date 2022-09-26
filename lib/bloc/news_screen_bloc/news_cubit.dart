@@ -69,21 +69,24 @@ class NewsCubit extends Cubit<NewsState> {
   //   });
   // }
 
-  void getNewsOld(){
+  void getNewsOld() {
+    emit(NewsLoadingState());
     GeneralDio.newsDataOld().then((value) {
       if (value.data != null) {
-        List<NewsDataModel> newsDataList = List<NewsDataModel>.from(value.data.map((model) => NewsDataModel.fromJson(model)));
+        List<NewsDataModel> newsDataList = List<NewsDataModel>.from(
+            value.data.map((model) => NewsDataModel.fromJson(model)));
         newsList = newsDataList.reversed.toList();
         emit(NewsSuccessState(newsDataList, announcment));
       }
     });
     GeneralDio.newsDataOld(type: 1).then((value) {
-      List<NewsDataModel> newsDataListAnnouncment = List<NewsDataModel>.from(value.data.map((model) => NewsDataModel.fromJson(model)));
+      List<NewsDataModel> newsDataListAnnouncment = List<NewsDataModel>.from(
+          value.data.map((model) => NewsDataModel.fromJson(model)));
       for (int i = 0; i < newsDataListAnnouncment.length; i++) {
         if (newsDataListAnnouncment[i].newsType == 1) {
           announcment.add(
             TyperAnimatedText(
-              newsDataListAnnouncment[i].newsDescription!,
+              newsDataListAnnouncment[i].newsDescription ?? '',
               speed: const Duration(milliseconds: 50),
               textAlign: TextAlign.center,
               curve: Curves.linear,
