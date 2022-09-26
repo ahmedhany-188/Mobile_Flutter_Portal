@@ -24,7 +24,6 @@ class _GetDirectionScreenState extends State<GetDirectionScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var deviceSize = MediaQuery.of(context).size;
 
     return CustomBackground(
       child: Scaffold(
@@ -39,74 +38,70 @@ class _GetDirectionScreenState extends State<GetDirectionScreen> {
           create: (context) => GetDirectionCubit()..getDirection(),
           child: BlocConsumer<GetDirectionCubit, GetDirectionInitial>(
             listener: (context, state) {
-              if(state.status == GetDirectionStatus.success){
+              if (state.status == GetDirectionStatus.success) {
                 projectsDirectionData = state.mappedItems;
                 setState(() {});
               }
             },
             builder: (context, state) {
               return (state.status == GetDirectionStatus.success ||
-                  state.status == GetDirectionStatus.loading)
+                      state.status == GetDirectionStatus.loading)
                   ? Sizer(
-                    builder: (c,v,b) => SingleChildScrollView(
-                        physics: const NeverScrollableScrollPhysics(),
-                        child: Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 2.5.w, right: 2.5.w, top: 2.5.h),
-                              child: TextField(
-                                focusNode: searchTextFieldFocusNode,
-                                controller: textController,
-                                onSubmitted: (searchValue) {
-                                  searchTextFieldFocusNode.unfocus();
-                                  setState(() {});
-                                },
-                                onChanged: (_) {
-                                  setState(() {
-                                    projectsSearchResult =
-                                        GeneralSearch().setGeneralSearchLocation(
-                                      query: textController.text,
-                                      listKeyForCondition: 'projectName',
-                                      listFromApi: projectsDirectionData,
-                                    );
-                                  });
-                                },
-                                decoration: InputDecoration(
-                                    contentPadding:
-                                    const EdgeInsets.all(10),
-                                    filled: true,
-                                    focusColor: Colors.white,
-                                    fillColor: Colors.grey.shade400
-                                        .withOpacity(0.4),
-                                    // labelText: "Search contact",
-                                    hintText: 'Search by project name',
-                                    hintStyle:
-                                    const TextStyle(color: Colors.white),
-                                    prefixIcon: const Icon(Icons.search,
-                                        color: Colors.white),
-                                    border: const OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10.0)),
-                                        borderSide: BorderSide.none)),
-                              ),
+                      builder: (c, v, b) => Column(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(
+                                left: 2.5.w,
+                                right: 2.5.w,
+                                top: 2.5.h,
+                                bottom: 2.5.h),
+                            child: TextField(
+                              focusNode: searchTextFieldFocusNode,
+                              controller: textController,
+                              onSubmitted: (searchValue) {
+                                searchTextFieldFocusNode.unfocus();
+                                setState(() {});
+                              },
+                              onChanged: (_) {
+                                setState(() {
+                                  projectsSearchResult =
+                                      GeneralSearch().setGeneralSearchLocation(
+                                    query: textController.text,
+                                    listKeyForCondition: 'projectName',
+                                    listFromApi: projectsDirectionData,
+                                  );
+                                });
+                              },
+                              decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.all(10),
+                                  filled: true,
+                                  focusColor: Colors.white,
+                                  fillColor:
+                                      Colors.grey.shade400.withOpacity(0.4),
+                                  // labelText: "Search contact",
+                                  hintText: 'Search by project name',
+                                  hintStyle:
+                                      const TextStyle(color: Colors.white),
+                                  prefixIcon: const Icon(Icons.search,
+                                      color: Colors.white),
+                                  border: const OutlineInputBorder(
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(10.0)),
+                                      borderSide: BorderSide.none)),
                             ),
-                            SizedBox(
-                              height: deviceSize.height -
-                                  ((deviceSize.height * 0.24) -
-                                      MediaQuery.of(context).viewPadding.top),
-                              // color: Colors.white,
-                              child: (projectsSearchResult.isNotEmpty)
-                                  ? GetDirectionWidget(projectsSearchResult)
-                                  : (textController.text.isEmpty)
-                                      ? GetDirectionWidget(projectsDirectionData)
-                                      : const Center(
-                                          child: Text('No data found'),
-                                        ),
-                            )
-                          ],
-                        ),
+                          ),
+                          Flexible(
+                            child: (projectsSearchResult.isNotEmpty)
+                                ? GetDirectionWidget(projectsSearchResult)
+                                : (textController.text.isEmpty)
+                                    ? GetDirectionWidget(projectsDirectionData)
+                                    : const Center(
+                                        child: Text('No data found'),
+                                      ),
+                          )
+                        ],
                       ),
-                  )
+                    )
                   : const AlertDialog(
                       title: Text('Something went wrong!'),
                       content: Text('Kindly check your internet connection'),
