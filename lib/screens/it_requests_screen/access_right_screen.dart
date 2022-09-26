@@ -158,14 +158,17 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                         )));
                           } else if (state.requestStatus ==
                               RequestStatus.oldRequest) {
-                            EasyLoading.showSuccess(state.successMessage ?? "").then((value) {
+                            EasyLoading.showSuccess(state.successMessage ?? "")
+                                .then((value) {
                               if (Navigator.of(context).canPop()) {
-                                Navigator.of(context,rootNavigator: true).pop();
-                              }else{
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                              } else {
                                 SystemNavigator.pop();
                               }
                             });
-                            BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();
+                            BlocProvider.of<UserNotificationApiCubit>(context)
+                                .getNotifications();
                           }
                         }
                         if (state.status.isSubmissionFailure) {
@@ -456,89 +459,91 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                           color: Colors.white),
                                                     ),
                                                   ),
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              5.0),
-                                                      child: BlocBuilder<
-                                                          AccessRightCubit,
-                                                          AccessRightInitial>(
-                                                        builder:
-                                                            (context, state) {
-                                                          return (state
-                                                                      .requestStatus ==
-                                                                  RequestStatus
-                                                                      .newRequest)
-                                                              ? ElevatedButton
-                                                                  .icon(
-                                                                  style: ElevatedButton.styleFrom(
-                                                                      backgroundColor: (state
-                                                                              .chosenFileName
-                                                                              .isNotEmpty)
-                                                                          ? Colors
-                                                                              .green
-                                                                          : null),
-                                                                  onPressed:
-                                                                      () {
-                                                                    AccessRightCubit.get(
-                                                                            context)
-                                                                        .setChosenFileName();
-                                                                    // FilePickerResult?
-                                                                    //     result =
-                                                                    //     await FilePicker
-                                                                    //         .platform
-                                                                    //         .pickFiles();
-                                                                    //
-                                                                    // if (result !=
-                                                                    //     null) {
-                                                                    //   Uint8List?
-                                                                    //       fileBytes =
-                                                                    //       result
-                                                                    //           .files
-                                                                    //           .first
-                                                                    //           .bytes;
-                                                                    //   String
-                                                                    //       fileName =
-                                                                    //       result
-                                                                    //           .files
-                                                                    //           .first
-                                                                    //           .name;
-                                                                    //
-                                                                    //   // Upload file
-                                                                    //   // await FirebaseStorage.instance.ref('uploads/$fileName').putData(fileBytes);
-                                                                    // }
-                                                                  },
-                                                                  label: const Text(
-                                                                      'Upload',
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.white)),
-                                                                  icon: const Icon(
-                                                                      Icons
-                                                                          .cloud_upload_sharp,
-                                                                      color: Colors
-                                                                          .white),
-                                                                )
-                                                              : ElevatedButton
-                                                                  .icon(
-                                                                  onPressed:
-                                                                      () {
-
-                                                                      },
-                                                                  label: const Text(
-                                                                      'View',
-                                                                      style: TextStyle(
-                                                                          color:
-                                                                              Colors.white)),
-                                                                  icon: const Icon(
-                                                                      Icons
-                                                                          .cloud_upload_sharp,
-                                                                      color: Colors
-                                                                          .white),
-                                                                );
-                                                        },
-                                                      ),
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            5.0),
+                                                    child: BlocBuilder<
+                                                        AccessRightCubit,
+                                                        AccessRightInitial>(
+                                                      builder:
+                                                          (context, state) {
+                                                        return (state
+                                                                    .requestStatus ==
+                                                                RequestStatus
+                                                                    .newRequest)
+                                                            ? ElevatedButton
+                                                                .icon(
+                                                                style: ElevatedButton.styleFrom(
+                                                                    backgroundColor: (state
+                                                                            .chosenFileName
+                                                                            .isNotEmpty)
+                                                                        ? Colors
+                                                                            .green
+                                                                        : null),
+                                                                onPressed: () {
+                                                                  AccessRightCubit
+                                                                          .get(
+                                                                              context)
+                                                                      .setChosenFileName();
+                                                                  // FilePickerResult?
+                                                                  //     result =
+                                                                  //     await FilePicker
+                                                                  //         .platform
+                                                                  //         .pickFiles();
+                                                                  //
+                                                                  // if (result !=
+                                                                  //     null) {
+                                                                  //   Uint8List?
+                                                                  //       fileBytes =
+                                                                  //       result
+                                                                  //           .files
+                                                                  //           .first
+                                                                  //           .bytes;
+                                                                  //   String
+                                                                  //       fileName =
+                                                                  //       result
+                                                                  //           .files
+                                                                  //           .first
+                                                                  //           .name;
+                                                                  //
+                                                                  //   // Upload file
+                                                                  //   // await FirebaseStorage.instance.ref('uploads/$fileName').putData(fileBytes);
+                                                                  // }
+                                                                },
+                                                                label: const Text(
+                                                                    'Upload',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white)),
+                                                                icon: const Icon(
+                                                                    Icons
+                                                                        .cloud_upload_sharp,
+                                                                    color: Colors
+                                                                        .white),
+                                                              )
+                                                            : ElevatedButton
+                                                                .icon(
+                                                                onPressed: () {
+                                                                  print(state.filePDF);
+                                                                  launchUrl(
+                                                                      Uri.parse(
+                                                                          'https://portal.hassanallam.com/Apps/Files/${state.filePDF}'),mode: LaunchMode.externalApplication);
+                                                                },
+                                                                label: const Text(
+                                                                    'View',
+                                                                    style: TextStyle(
+                                                                        color: Colors
+                                                                            .white)),
+                                                                icon: const Icon(
+                                                                    Icons
+                                                                        .remove_red_eye_outlined,
+                                                                    color: Colors
+                                                                        .white),
+                                                              );
+                                                      },
                                                     ),
+                                                  ),
                                                 ],
                                               ),
                                             ),
