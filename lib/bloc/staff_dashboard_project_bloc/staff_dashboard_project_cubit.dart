@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
@@ -51,7 +52,7 @@ class StaffDashboardProjectCubit extends Cubit<StaffDashboardProjectState>
   updateFilters() {
     var apiMap = <String>{'All'};
     state.projectStaffDashBoardList
-        .where((element) => apiMap.add(element.name ?? 'Not Assigned'))
+        .where((element) => apiMap.add(element.name?.toTitleCase() ?? 'Not Assigned'))
         .toList();
     List<String> directorsFilters = apiMap.toList();
     apiMap.clear();
