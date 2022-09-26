@@ -17,41 +17,39 @@ class NewsDetailsScreen extends StatelessWidget {
     return CustomBackground(
       child: CustomTheme(
         child: Scaffold(
-          appBar: AppBar(title: convertTitleFromHtml(dataToConvert: newsData.newsTitle!, context: context),),
-          body: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(20),
-                        child: CachedNetworkImage(
-                            imageUrl:
-                                'https://portal.hassanallam.com/images/imgs/${newsData.newsId}.jpg',
-                            fit: BoxFit.cover,
-                          errorWidget: (_,__,___)=>Assets.images.loginImageLogo.image() ,
-                            ),
-                      ),
+          appBar: AppBar(title: convertTitleFromHtml(dataToConvert: newsData.newsTitle??'', context: context),),
+          body: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: CachedNetworkImage(
+                          imageUrl:
+                              'https://portal.hassanallam.com/images/imgs/${newsData.newsId}.jpg',
+                          fit: BoxFit.cover,
+                        errorWidget: (_,__,___)=>Assets.images.loginImageLogo.image() ,
+                          ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(10.0),
-                      child: (newsData.newsTitle.toString().contains('<'))? convertFromHtml(dataToConvert: newsData.newsTitle.toString(), context: context) :Text(newsData.newsTitle ?? "",
-                          style: const TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white)),
-                    ),
-                    const Divider(
-                      color: Colors.white,
-                    ),
-                    // Text(newsData.newsDescription ?? ""),
-                    convertFromHtml(
-                        dataToConvert: newsData.newsBody ?? '${newsData.newsDescription}', context: context),
-                  ],
-                ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: (newsData.newsTitle.toString().contains('<'))? convertFromHtml(dataToConvert: newsData.newsTitle.toString(), context: context) :Text(newsData.newsTitle ?? "",
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold,color: Colors.white)),
+                  ),
+                  const Divider(
+                    color: Colors.white,
+                  ),
+                  // Text(newsData.newsDescription ?? ""),
+                  convertFromHtml(
+                      dataToConvert: newsData.newsBody ?? '${newsData.newsDescription}', context: context),
+                  const Padding(padding: EdgeInsets.all(50)),
+                ],
               ),
             ),
           ),
@@ -60,32 +58,3 @@ class NewsDetailsScreen extends StatelessWidget {
     );
   }
 }
-
-// showDialog(
-// context: context,
-// builder: (context) {
-// return AlertDialog(
-// backgroundColor:
-// Theme.of(context).colorScheme.background,
-// title: Text(news.newsTitle ?? ""),
-// elevation: 20,
-// contentPadding: const EdgeInsets.all(10.0),
-// content: SingleChildScrollView(
-// child: Column(
-// children: [
-// Text(news.newsDescription ?? ""),
-// convertFromHtml(
-// dataToConvert: news.newsBody ?? "",
-// context: context),
-// ClipRRect(
-// borderRadius:
-// BorderRadius.circular(20),
-// child: Image.network(
-// 'https://portal.hassanallam.com/images/imgs/${news.newsID}.jpg'),
-// ),
-// ],
-// ),
-// ),
-// );
-// },
-// );
