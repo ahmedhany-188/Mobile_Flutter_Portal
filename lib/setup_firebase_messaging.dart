@@ -40,12 +40,12 @@ class SetupFirebaseMessaging{
     FirebaseMessaging.onMessage.listen(showFlutterNotification);
 
 
-    // NotificationSettings settings = await messaging.requestPermission(
-    //   alert: true,
-    //   badge: true,
-    //   provisional: false,
-    //   sound: true,
-    // );
+    NotificationSettings settings = await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      provisional: false,
+      sound: true,
+    );
     // const AndroidNotificationChannel channel = AndroidNotificationChannel(
     //   'high_importance_channel', // id
     //   'High Importance Notifications', // title
@@ -53,34 +53,34 @@ class SetupFirebaseMessaging{
     //   importance: Importance.max,
     // );
     //
-    // if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-    //   print('User granted permission');
-    //
-    //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    //     RemoteNotification? notification = message.notification;
-    //     AndroidNotification? android = message.notification?.android;
-    //
-    //     // If `onMessage` is triggered with a notification, construct our own
-    //     // local notification to show to users using the created channel.
-    //     if (android != null) {
-    //       FlutterLocalNotificationsPlugin.show(
-    //           notification.hashCode,
-    //           notification?.title,
-    //           notification?.body,
-    //           NotificationDetails(
-    //             android: AndroidNotificationDetails(
-    //               channel.id,
-    //               channel.name,
-    //               channelDescription: channel.description,
-    //               icon: android.smallIcon,
-    //               // other properties...
-    //             ),
-    //           ));
-    //     }
-    //   });
-    // } else {
-    //   print('User declined or has not accepted permission');
-    // }
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+
+      // FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      //   RemoteNotification? notification = message.notification;
+      //   AndroidNotification? android = message.notification?.android;
+      //
+      //   // If `onMessage` is triggered with a notification, construct our own
+      //   // local notification to show to users using the created channel.
+      //   // if (android != null) {
+      //   //   FlutterLocalNotificationsPlugin.show(
+      //   //       notification.hashCode,
+      //   //       notification?.title,
+      //   //       notification?.body,
+      //   //       NotificationDetails(
+      //   //         android: AndroidNotificationDetails(
+      //   //           channel.id,
+      //   //           channel.name,
+      //   //           channelDescription: channel.description,
+      //   //           icon: android.smallIcon,
+      //   //           // other properties...
+      //   //         ),
+      //   //       ));
+      //   // }
+      // });
+    } else {
+      print('User declined or has not accepted permission');
+    }
 
     // //open notif content from terminated state of the app
     // FirebaseMessaging.instance.getInitialMessage().then((message) {
@@ -292,8 +292,7 @@ class SetupFirebaseMessaging{
         onDidReceiveNotificationResponse: (_)=> _onSelectNotificationMessage);
   }
   void _onSelectNotificationMessage(String? json) async {
-    final userHRCode = context
-        .read<AppBloc>().state.userData.employeeData?.userHrCode;
+
     final messageData = jsonDecode(json!);
     if (kDebugMode) {
       print("_handleMessage");
@@ -309,7 +308,8 @@ class SetupFirebaseMessaging{
                   PermissionScreen(requestData: {
                     PermissionScreen.requestNoKey: messageData['requestNo'],
                     PermissionScreen
-                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:userHRCode
+                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:context
+                        .read<AppBloc>().state.userData.employeeData?.userHrCode
                   },)));
         });
       }
@@ -325,7 +325,8 @@ class SetupFirebaseMessaging{
                         .requestNoKey: messageData['requestNo'],
                     BusinessMissionScreen
                         .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"?
-                    messageData['requesterHRCode']:userHRCode
+                    messageData['requesterHRCode']:context
+                        .read<AppBloc>().state.userData.employeeData?.userHrCode
                   },)));
         });
       }
@@ -339,7 +340,8 @@ class SetupFirebaseMessaging{
                   VacationScreen(requestData: {
                     VacationScreen.requestNoKey: messageData['requestNo'],
                     VacationScreen
-                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:userHRCode
+                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:context
+                        .read<AppBloc>().state.userData.employeeData?.userHrCode
                   },)));
         });
       }
@@ -353,7 +355,8 @@ class SetupFirebaseMessaging{
                   EmbassyLetterScreen(requestData: {
                     EmbassyLetterScreen.requestNoKey: messageData['requestNo'],
                     EmbassyLetterScreen
-                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:userHRCode
+                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:context
+                        .read<AppBloc>().state.userData.employeeData?.userHrCode
                   },)));
         });
       }
@@ -367,7 +370,8 @@ class SetupFirebaseMessaging{
                   BusinessCardScreen(requestData: {
                     BusinessCardScreen.requestNoKey: messageData['requestNo'],
                     BusinessCardScreen
-                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:userHRCode
+                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:context
+                        .read<AppBloc>().state.userData.employeeData?.userHrCode
                   },)));
         });
       }
@@ -382,7 +386,8 @@ class SetupFirebaseMessaging{
                     EmailAndUserAccountScreen
                         .requestNoKey: messageData['requestNo'],
                     EmailAndUserAccountScreen
-                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:userHRCode
+                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:context
+                        .read<AppBloc>().state.userData.employeeData?.userHrCode
                   },)));
         });
       }
@@ -396,7 +401,8 @@ class SetupFirebaseMessaging{
                   AccessRightScreen(requestData: {
                     AccessRightScreen.requestNoKey: messageData['requestNo'],
                     AccessRightScreen
-                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:userHRCode
+                        .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:context
+                        .read<AppBloc>().state.userData.employeeData?.userHrCode
                   },)));
         });
       }
