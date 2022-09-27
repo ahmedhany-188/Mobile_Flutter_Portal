@@ -23,10 +23,6 @@ class AttendanceScreen extends StatefulWidget {
 
 class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
-  List<List<MyAttendanceModel>> getAttendanceListSuccess = [];
-
-  List<MyAttendanceModel> getAttendanceListEmpty = [];
-
   int selectedPage = DateTime
       .now()
       .month - 1;
@@ -37,20 +33,9 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     int monthNumber = DateTime
         .now()
         .month;
-
-    getAttendanceListSuccess = [
-      getAttendanceListEmpty,
-      getAttendanceListEmpty, getAttendanceListEmpty,
-      getAttendanceListEmpty, getAttendanceListEmpty,
-      getAttendanceListEmpty, getAttendanceListEmpty,
-      getAttendanceListEmpty, getAttendanceListEmpty,
-      getAttendanceListEmpty, getAttendanceListEmpty,
-      getAttendanceListEmpty
-    ];
 
     if (dayNumber > 15) {
       monthNumber += 1;
@@ -78,9 +63,7 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
               body: BlocProvider.value(value: AttendanceCubit.get(context)
                 ..getFirstAttendanceList(
-                    user.user!.userHRCode.toString()
-                  //"10203520"
-                    , monthNumber),
+                    user.user!.userHRCode.toString()),
 
                 child: BlocConsumer<AttendanceCubit, AttendanceState>(
                     listener: (context, state) {
@@ -88,7 +71,6 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                           AttendanceDataEnumStates.success) {}
                       else if (state.attendanceDataEnumStates ==
                           AttendanceDataEnumStates.fullSuccess) {}
-
                       else if (state.attendanceDataEnumStates ==
                           AttendanceDataEnumStates.loading) {}
                       else if (state.attendanceDataEnumStates ==
@@ -103,162 +85,156 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                     },
                     builder: (context, state) {
                       return
-                        // SingleChildScrollView(
-                        //   child:
-                          Column(
+                        Column(
                           children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment
-                                        .spaceBetween,
-                                    children: [
-                                      TextButton.icon(
-                                          onPressed: () {
-                                            if (state
-                                                .attendanceDataEnumStates ==
-                                                AttendanceDataEnumStates
-                                                    .success
-                                                || state
-                                                    .attendanceDataEnumStates ==
-                                                    AttendanceDataEnumStates
-                                                        .fullSuccess) {
-                                              monthNumber--;
-                                              pageController.jumpToPage(
-                                                  monthNumber - 1);
-                                              if (monthNumber < 1) {
-                                                monthNumber = 12;
-                                                pageController.jumpToPage(
-                                                    11);
-                                              }
-                                              context.read<
-                                                  AttendanceCubit>()
-                                                  .monthValueChanged(
-                                                  monthNumber);
-                                            }
-                                          },
-                                          icon: const Icon(
-                                            Icons.arrow_back_ios,
-                                            color: Colors.white,
-                                          ),
-                                          label: const Text("")),
-                                      Text(
-                                        DateFormat('MMMM')
-                                            .format(
-                                            DateTime(0, state.month)),
-                                        style: const TextStyle(
-                                            fontSize: 25,
-                                            color: Colors.white),
-                                      ),
-                                      TextButton.icon(
-                                          onPressed: () {
-                                            if (state
-                                                .attendanceDataEnumStates ==
-                                                AttendanceDataEnumStates
-                                                    .success
-                                                || state
-                                                    .attendanceDataEnumStates ==
-                                                    AttendanceDataEnumStates
-                                                        .fullSuccess) {
-                                              monthNumber++;
-                                              pageController.jumpToPage(
-                                                  monthNumber - 1);
-                                              if (monthNumber > 12) {
-                                                monthNumber = 1;
-                                                pageController.jumpToPage(
-                                                    0);
-                                              }
-                                              context.read<
-                                                  AttendanceCubit>()
-                                                  .monthValueChanged(
-                                                  monthNumber);
-                                            }
-                                          },
-                                          icon: const Icon(
-                                            Icons.arrow_forward_ios,
-                                            color: Colors.white,
-                                          ),
-                                          label: const Text(""))
-                                    ],
-                                  ),
-                                  Expanded(
-                                      child: state
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton.icon(
+                                    onPressed: () {
+                                      if (state
                                           .attendanceDataEnumStates ==
-                                          AttendanceDataEnumStates.success
-                                          ||
-                                          state.attendanceDataEnumStates ==
+                                          AttendanceDataEnumStates
+                                              .success
+                                          || state
+                                              .attendanceDataEnumStates ==
                                               AttendanceDataEnumStates
-                                                  .fullSuccess ?
-                                      PageView(
-                                        onPageChanged: (index) {
-                                          monthNumber = index + 1;
-                                          context.read<AttendanceCubit>()
-                                              .monthValueChanged(
-                                              monthNumber);
-                                          if (state
-                                              .getAttendanceList[monthNumber -
-                                              1]
-                                              .toString() == "[]") {
-                                            BlocProvider.of<
-                                                AttendanceCubit>(context)
-                                                .getAllAttendanceList(
-                                                user.user!.userHRCode
-                                            //   "10203520"
-                                            );
-                                            selectedPage = monthNumber - 1;
-                                            pageController =
-                                                PageController(
-                                                    initialPage: selectedPage);
-                                          }
-                                        },
-                                        controller: pageController,
-                                        children: [
+                                                  .fullSuccess) {
+                                        monthNumber--;
+                                        pageController.jumpToPage(
+                                            monthNumber - 1);
+                                        if (monthNumber < 1) {
+                                          monthNumber = 12;
+                                          pageController.jumpToPage(
+                                              11);
+                                        }
+                                        context.read<
+                                            AttendanceCubit>()
+                                            .monthValueChanged(
+                                            monthNumber);
+                                      }
+                                    },
+                                    icon: const Icon(
+                                      Icons.arrow_back_ios,
+                                      color: Colors.white,
+                                    ),
+                                    label: const Text("")),
+                                Text(
+                                  DateFormat('MMMM')
+                                      .format(
+                                      DateTime(0, state.month)),
+                                  style: const TextStyle(
+                                      fontSize: 25,
+                                      color: Colors.white),
+                                ),
+                                TextButton.icon(
+                                    onPressed: () {
+                                      if (state
+                                          .attendanceDataEnumStates ==
+                                          AttendanceDataEnumStates
+                                              .success
+                                          || state
+                                              .attendanceDataEnumStates ==
+                                              AttendanceDataEnumStates
+                                                  .fullSuccess) {
+                                        monthNumber++;
+                                        pageController.jumpToPage(
+                                            monthNumber - 1);
+                                        if (monthNumber > 12) {
+                                          monthNumber = 1;
+                                          pageController.jumpToPage(
+                                              0);
+                                        }
+                                        context.read<
+                                            AttendanceCubit>()
+                                            .monthValueChanged(
+                                            monthNumber);
+                                      }
+                                    },
+                                    icon: const Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Colors.white,
+                                    ),
+                                    label: const Text(""))
+                              ],
+                            ),
+                            Expanded(
+                                child: state
+                                    .attendanceDataEnumStates ==
+                                    AttendanceDataEnumStates.success
+                                    ||
+                                    state.attendanceDataEnumStates ==
+                                        AttendanceDataEnumStates
+                                            .fullSuccess ?
+                                PageView(
+                                  onPageChanged: (index) {
+                                    monthNumber = index + 1;
+                                    context.read<AttendanceCubit>()
+                                        .monthValueChanged(
+                                        monthNumber);
+                                    if (state
+                                        .getAttendanceList[monthNumber -
+                                        1]
+                                        .toString() == "[]") {
+                                      BlocProvider.of<
+                                          AttendanceCubit>(context)
+                                          .getAllAttendanceList(
+                                          user.user!.userHRCode
+                                      );
+                                      selectedPage = monthNumber - 1;
+                                      pageController =
+                                          PageController(
+                                              initialPage: selectedPage);
+                                    }
+                                  },
+                                  controller: pageController,
+                                  children: [
 
-                                          getShimmer(state, 0, user),
-                                          getShimmer(state, 1, user),
-                                          getShimmer(state, 2, user),
-                                          getShimmer(state, 3, user),
-                                          getShimmer(state, 4, user),
-                                          getShimmer(state, 5, user),
-                                          getShimmer(state, 6, user),
-                                          getShimmer(state, 7, user),
-                                          getShimmer(state, 8, user),
-                                          getShimmer(state, 9, user),
-                                          getShimmer(state, 10, user),
-                                          getShimmer(state, 11, user),
+                                    getShimmer(state, 0, user),
+                                    getShimmer(state, 1, user),
+                                    getShimmer(state, 2, user),
+                                    getShimmer(state, 3, user),
+                                    getShimmer(state, 4, user),
+                                    getShimmer(state, 5, user),
+                                    getShimmer(state, 6, user),
+                                    getShimmer(state, 7, user),
+                                    getShimmer(state, 8, user),
+                                    getShimmer(state, 9, user),
+                                    getShimmer(state, 10, user),
+                                    getShimmer(state, 11, user),
 
-                                        ],
-                                      ) :
-                                      PageView(
-                                        onPageChanged: (index) {
-                                          monthNumber = index + 1;
-                                          context.read<AttendanceCubit>()
-                                              .monthValueChanged(
-                                              monthNumber);
-                                          selectedPage = monthNumber - 1;
-                                          pageController =
-                                              PageController(
-                                                  initialPage: selectedPage);
-                                        },
-                                        controller: pageController,
-                                        children: [
+                                  ],
+                                ) :
+                                PageView(
+                                  onPageChanged: (index) {
+                                    monthNumber = index + 1;
+                                    context.read<AttendanceCubit>()
+                                        .monthValueChanged(
+                                        monthNumber);
+                                    selectedPage = monthNumber - 1;
+                                    pageController =
+                                        PageController(
+                                            initialPage: selectedPage);
+                                  },
+                                  controller: pageController,
+                                  children: [
+                                    getShimmer(state, 0, user),
+                                    getShimmer(state, 1, user),
+                                    getShimmer(state, 2, user),
+                                    getShimmer(state, 3, user),
+                                    getShimmer(state, 4, user),
+                                    getShimmer(state, 5, user),
+                                    getShimmer(state, 6, user),
+                                    getShimmer(state, 7, user),
+                                    getShimmer(state, 8, user),
+                                    getShimmer(state, 9, user),
+                                    getShimmer(state, 10, user),
+                                    getShimmer(state, 11, user),
+                                  ],
+                                )
 
-                                          getShimmer(state, 0, user),
-                                          getShimmer(state, 1, user),
-                                          getShimmer(state, 2, user),
-                                          getShimmer(state, 3, user),
-                                          getShimmer(state, 4, user),
-                                          getShimmer(state, 5, user),
-                                          getShimmer(state, 6, user),
-                                          getShimmer(state, 7, user),
-                                          getShimmer(state, 8, user),
-                                          getShimmer(state, 9, user),
-                                          getShimmer(state, 10, user),
-                                          getShimmer(state, 11, user),
-                                        ],
-                                      )
-
-                                  ),
+                            ),
                           ],
-                        // )
                         );
                     }),
               )
@@ -267,7 +243,7 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
     );
   }
 
-  getShimmer(AttendanceState state,int number, MainUserData user) {
+  getShimmer(AttendanceState state, int number, MainUserData user) {
     if (state.getAttendanceList.isEmpty) {
       return attendanceShimmer();
     } else {
@@ -290,7 +266,6 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
           SizedBox(
             child: AttendanceTicketWidget(
                 list, user.user!.userHRCode.toString()
-                // "10203520"
             ),
           ),
         ],)
