@@ -31,6 +31,9 @@ class EquipmentsCubitStates extends Equatable {
   final FormzStatus departmentStatus;
   final EmployeeData requesterData;
 
+  final String? errorMessage;
+  final String? successMessage;
+
   const EquipmentsCubitStates({
     this.fileResult = const FilePickerResult([]),
     this.businessUnitEnumStates = EquipmentsEnumState.initial,
@@ -55,6 +58,8 @@ class EquipmentsCubitStates extends Equatable {
     this.requestedData,
     this.takeActionStatus,
     this.requesterData = EmployeeData.empty,
+    this.errorMessage,
+    this.successMessage,
   });
 
   EquipmentsCubitStates copyWith({
@@ -81,6 +86,8 @@ class EquipmentsCubitStates extends Equatable {
     FormzStatus? departmentStatus,
     EmployeeData? requesterData,
     String? actionComment,
+    String? errorMessage,
+    String? successMessage,
   }) {
     return EquipmentsCubitStates(
       fileResult: fileResult ?? this.fileResult,
@@ -107,6 +114,8 @@ class EquipmentsCubitStates extends Equatable {
       takeActionStatus: takeActionStatus ?? this.takeActionStatus,
       requesterData: requesterData ?? this.requesterData,
       actionComment: actionComment ?? this.actionComment,
+      errorMessage: errorMessage ?? this.errorMessage,
+      successMessage: successMessage ?? this.successMessage,
     );
   }
 

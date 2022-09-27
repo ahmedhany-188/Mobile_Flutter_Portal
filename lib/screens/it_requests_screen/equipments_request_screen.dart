@@ -9,6 +9,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 
+import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/enums.dart';
 import '../../widgets/background/custom_background.dart';
@@ -149,696 +150,784 @@ class EquipmentsRequestScreen extends StatelessWidget {
                       ],
                     ),
                     resizeToAvoidBottomInset: false,
-                    body: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
-                        child: Form(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              if (state.requestStatus ==
-                                  RequestStatus.oldRequest)
-                                SizedBox(
-                                  child: Text(state.statusAction ?? ''),
-                                ),
-                              BlocBuilder<EquipmentsCubit,
-                                      EquipmentsCubitStates>(
-                                  buildWhen: (previous, current) {
-                                return (previous.requestDate !=
-                                        current.requestDate) ||
-                                    previous.status != current.status;
-                              }, builder: (context, state) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextFormField(
-                                    key: UniqueKey(),
-                                    initialValue: (state.requestStatus ==
-                                            RequestStatus.oldRequest)
-                                        ? DateFormat('EEEE dd-MM-yyyy').format(
-                                            DateTime.parse(requestData['date']))
-                                        : state.requestDate?.value,
-                                    enabled: false,
-                                    decoration: const InputDecoration(
-                                      labelText: 'Request Date',
-                                      prefixIcon: Icon(Icons.date_range),
-                                    ),
+                    body: BlocListener<EquipmentsCubit, EquipmentsCubitStates>(
+                      listener: (context, state) {
+                        if (state.status.isSubmissionInProgress) {
+                          EasyLoading.show(
+                            status: 'Loading...',
+                            maskType: EasyLoadingMaskType.black,
+                            dismissOnTap: false,
+                          );
+                        }
+                        if (state.status.isSubmissionSuccess) {
+                          // LoadingDialog.hide(context);
+                          EasyLoading.dismiss(animation: true);
+                          if (state.requestStatus == RequestStatus.newRequest) {
+                            Navigator.of(context)
+                                .pushReplacement(MaterialPageRoute(
+                                    builder: (_) => SuccessScreen(
+                                          text: state.successMessage ??
+                                              "Error Number",
+                                          routName:
+                                              EquipmentsRequestScreen.routeName,
+                                          requestName: 'Equipment Request',
+                                        )));
+                          } else if (state.requestStatus ==
+                              RequestStatus.oldRequest) {
+                            EasyLoading.showSuccess(state.successMessage ?? "")
+                                .then((value) {
+                              if (Navigator.of(context).canPop()) {
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                              } else {
+                                SystemNavigator.pop();
+                              }
+                            });
+                            BlocProvider.of<UserNotificationApiCubit>(context)
+                                .getNotifications();
+                          }
+                        }
+                        if (state.status.isSubmissionFailure) {
+                          EasyLoading.showError(
+                              state.errorMessage ?? 'Request Failed');
+                          // LoadingDialog.hide(context);
+                          // ScaffoldMessenger.of(context)
+                          //   ..hideCurrentSnackBar()
+                          //   ..showSnackBar(
+                          //     SnackBar(
+                          //       content: Text(
+                          //           state.errorMessage ?? 'Request Failed'),
+                          //     ),
+                          //   );
+                        }
+                        if (state.status.isValid) {
+                          EasyLoading.dismiss(animation: true);
+                        }
+                      },
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
+                          child: Form(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                if (state.requestStatus ==
+                                    RequestStatus.oldRequest)
+                                  SizedBox(
+                                    child: Text(state.statusAction ?? ''),
                                   ),
-                                );
-                              }),
-                              if (state.requestStatus ==
-                                      RequestStatus.oldRequest &&
-                                  state.takeActionStatus ==
-                                      TakeActionStatus.takeAction)
                                 BlocBuilder<EquipmentsCubit,
                                         EquipmentsCubitStates>(
                                     buildWhen: (previous, current) {
-                                  return (previous.requesterData !=
-                                      current.requesterData);
+                                  return (previous.requestDate !=
+                                          current.requestDate) ||
+                                      previous.status != current.status;
                                 }, builder: (context, state) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: RequesterDataWidget(
-                                      requesterData: state.requesterData,
-                                      actionComment: ActionCommentWidget(
-                                          onChanged: (commentValue) => context
-                                              .read<EquipmentsCubit>()
-                                              .commentRequesterChanged(
-                                                  commentValue)),
+                                    child: TextFormField(
+                                      key: UniqueKey(),
+                                      initialValue: (state.requestStatus ==
+                                              RequestStatus.oldRequest)
+                                          ? DateFormat('EEEE dd-MM-yyyy')
+                                              .format(DateTime.parse(
+                                                  requestData['date']))
+                                          : state.requestDate?.value,
+                                      enabled: false,
+                                      decoration: const InputDecoration(
+                                        labelText: 'Request Date',
+                                        prefixIcon: Icon(Icons.date_range),
+                                      ),
                                     ),
                                   );
                                 }),
-                              BlocBuilder<EquipmentsCubit,
-                                  EquipmentsCubitStates>(
-                                builder: (context, state) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: DropdownSearch<BusinessUnitModel>(
-                                      key: businessUnitFormKey,
-                                      items: state.listBusinessUnit,
-                                      itemAsString: (businessUnit) =>
-                                          businessUnit.departmentName!,
-                                      onChanged: (item) =>
-                                          EquipmentsCubit.get(context)
-                                              .validateForm(
-                                                  businessUnit:
-                                                      (item!.toString().isEmpty)
-                                                          ? FormzStatus.invalid
-                                                          : FormzStatus.pure),
-                                      selectedItem: (state.requestStatus ==
-                                              RequestStatus.oldRequest)
-                                          ? (BusinessUnitModel.fromJson({
-                                              'departmentName': state
-                                                  .requestedData!
-                                                  .data![0]
-                                                  .departmentName
-                                            }))
-                                          : null,
-                                      enabled: (state.requestStatus ==
-                                              RequestStatus.oldRequest)
-                                          ? false
-                                          : true,
-                                      dropdownButtonProps:
-                                          const DropdownButtonProps(
-                                              color: Colors.white),
-                                      dropdownDecoratorProps:
-                                          DropDownDecoratorProps(
-                                        dropdownSearchDecoration:
-                                            InputDecoration(
-                                          labelText: 'Business Unit',
-                                          floatingLabelAlignment:
-                                              FloatingLabelAlignment.start,
-                                          errorText: (state
-                                                  .businessUnitStatus.isInvalid)
-                                              ? 'Required'
-                                              : null,
-                                        ),
+                                if (state.requestStatus ==
+                                        RequestStatus.oldRequest &&
+                                    state.takeActionStatus ==
+                                        TakeActionStatus.takeAction)
+                                  BlocBuilder<EquipmentsCubit,
+                                          EquipmentsCubitStates>(
+                                      buildWhen: (previous, current) {
+                                    return (previous.requesterData !=
+                                        current.requesterData);
+                                  }, builder: (context, state) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: RequesterDataWidget(
+                                        requesterData: state.requesterData,
+                                        actionComment: ActionCommentWidget(
+                                            onChanged: (commentValue) => context
+                                                .read<EquipmentsCubit>()
+                                                .commentRequesterChanged(
+                                                    commentValue)),
                                       ),
-                                      popupProps: PopupProps.modalBottomSheet(
-                                        showSearchBox: true,
-                                        constraints: BoxConstraints(
-                                            maxHeight: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.75),
-                                        interceptCallBacks: true,
-                                        searchDelay: Duration.zero,
-                                        title: AppBar(
-                                            title: const Text('Business Unit'),
-                                            centerTitle: true,
-                                            backgroundColor: Colors.transparent,
-                                            elevation: 0),
-                                        listViewProps: const ListViewProps(
-                                            padding: EdgeInsets.zero,
-                                            physics: BouncingScrollPhysics(),
-                                            shrinkWrap: true,
-                                            keyboardDismissBehavior:
-                                                ScrollViewKeyboardDismissBehavior
-                                                    .onDrag),
-                                        searchFieldProps: const TextFieldProps(
-                                          padding: EdgeInsets.all(20),
-                                          decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.all(10),
-                                            filled: true,
-                                            hintText: "Search by name",
-                                            prefixIcon: Icon(Icons.search,
+                                    );
+                                  }),
+                                BlocBuilder<EquipmentsCubit,
+                                    EquipmentsCubitStates>(
+                                  builder: (context, state) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: DropdownSearch<BusinessUnitModel>(
+                                        key: businessUnitFormKey,
+                                        items: state.listBusinessUnit,
+                                        itemAsString: (businessUnit) =>
+                                            businessUnit.departmentName!,
+                                        onChanged: (item) =>
+                                            EquipmentsCubit.get(context)
+                                                .validateForm(
+                                                    businessUnit: (item!
+                                                            .toString()
+                                                            .isEmpty)
+                                                        ? FormzStatus.invalid
+                                                        : FormzStatus.pure),
+                                        selectedItem: (state.requestStatus ==
+                                                RequestStatus.oldRequest)
+                                            ? (BusinessUnitModel.fromJson({
+                                                'departmentName': state
+                                                    .requestedData!
+                                                    .data![0]
+                                                    .departmentName
+                                              }))
+                                            : null,
+                                        enabled: (state.requestStatus ==
+                                                RequestStatus.oldRequest)
+                                            ? false
+                                            : true,
+                                        dropdownButtonProps:
+                                            const DropdownButtonProps(
                                                 color: Colors.white),
+                                        dropdownDecoratorProps:
+                                            DropDownDecoratorProps(
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            labelText: 'Business Unit',
+                                            floatingLabelAlignment:
+                                                FloatingLabelAlignment.start,
+                                            errorText: (state.businessUnitStatus
+                                                    .isInvalid)
+                                                ? 'Required'
+                                                : null,
+                                          ),
+                                        ),
+                                        popupProps: PopupProps.modalBottomSheet(
+                                          showSearchBox: true,
+                                          constraints: BoxConstraints(
+                                              maxHeight: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.75),
+                                          interceptCallBacks: true,
+                                          searchDelay: Duration.zero,
+                                          title: AppBar(
+                                              title:
+                                                  const Text('Business Unit'),
+                                              centerTitle: true,
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              elevation: 0),
+                                          listViewProps: const ListViewProps(
+                                              padding: EdgeInsets.zero,
+                                              physics: BouncingScrollPhysics(),
+                                              shrinkWrap: true,
+                                              keyboardDismissBehavior:
+                                                  ScrollViewKeyboardDismissBehavior
+                                                      .onDrag),
+                                          searchFieldProps:
+                                              const TextFieldProps(
+                                            padding: EdgeInsets.all(20),
+                                            decoration: InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.all(10),
+                                              filled: true,
+                                              hintText: "Search by name",
+                                              prefixIcon: Icon(Icons.search,
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              BlocBuilder<EquipmentsCubit,
-                                  EquipmentsCubitStates>(
-                                builder: (context, state) {
-                                  return Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child:
-                                        DropdownSearch<EquipmentsLocationModel>(
-                                      key: locationFormKey,
-                                      items: state.listLocation,
-                                      itemAsString: (loc) => loc.projectName!,
-                                      onChanged: (item) =>
-                                          EquipmentsCubit.get(context)
-                                              .validateForm(
-                                                  location:
-                                                      (item!.toString().isEmpty)
-                                                          ? FormzStatus.invalid
-                                                          : FormzStatus.pure),
-                                      selectedItem: (state.requestStatus ==
-                                              RequestStatus.oldRequest)
-                                          ? (EquipmentsLocationModel.fromJson({
-                                              'projectName': state
-                                                  .requestedData!
-                                                  .data![0]
-                                                  .projectName
-                                            }))
-                                          : null,
-                                      enabled: (state.requestStatus ==
-                                              RequestStatus.oldRequest)
-                                          ? false
-                                          : true,
-                                      dropdownDecoratorProps:
-                                          DropDownDecoratorProps(
-                                        dropdownSearchDecoration:
-                                            InputDecoration(
-                                          labelText: 'Location',
-                                          floatingLabelAlignment:
-                                              FloatingLabelAlignment.start,
-                                          errorText:
-                                              (state.locationStatus.isInvalid)
-                                                  ? 'Required'
-                                                  : null,
+                                    );
+                                  },
+                                ),
+                                BlocBuilder<EquipmentsCubit,
+                                    EquipmentsCubitStates>(
+                                  builder: (context, state) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: DropdownSearch<
+                                          EquipmentsLocationModel>(
+                                        key: locationFormKey,
+                                        items: state.listLocation,
+                                        itemAsString: (loc) => loc.projectName!,
+                                        onChanged: (item) =>
+                                            EquipmentsCubit.get(context)
+                                                .validateForm(
+                                                    location: (item!
+                                                            .toString()
+                                                            .isEmpty)
+                                                        ? FormzStatus.invalid
+                                                        : FormzStatus.pure),
+                                        selectedItem: (state.requestStatus ==
+                                                RequestStatus.oldRequest)
+                                            ? (EquipmentsLocationModel
+                                                .fromJson({
+                                                'projectName': state
+                                                    .requestedData!
+                                                    .data![0]
+                                                    .projectName
+                                              }))
+                                            : null,
+                                        enabled: (state.requestStatus ==
+                                                RequestStatus.oldRequest)
+                                            ? false
+                                            : true,
+                                        dropdownDecoratorProps:
+                                            DropDownDecoratorProps(
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            labelText: 'Location',
+                                            floatingLabelAlignment:
+                                                FloatingLabelAlignment.start,
+                                            errorText:
+                                                (state.locationStatus.isInvalid)
+                                                    ? 'Required'
+                                                    : null,
+                                          ),
+                                        ),
+                                        dropdownButtonProps:
+                                            const DropdownButtonProps(
+                                                color: Colors.white),
+                                        popupProps: PopupProps.modalBottomSheet(
+                                          showSearchBox: true,
+                                          constraints: BoxConstraints(
+                                              maxHeight: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.75),
+                                          searchDelay: Duration.zero,
+                                          interceptCallBacks: true,
+                                          title: AppBar(
+                                              title: const Text('Location'),
+                                              centerTitle: true,
+                                              backgroundColor:
+                                                  Colors.transparent,
+                                              titleSpacing: 0,
+                                              elevation: 0),
+                                          searchFieldProps:
+                                              const TextFieldProps(
+                                            padding: EdgeInsets.all(20),
+                                            decoration: InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.all(10),
+                                              filled: true,
+                                              hintText: "Search for location",
+                                              prefixIcon: Icon(
+                                                Icons.search,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      dropdownButtonProps:
-                                          const DropdownButtonProps(
-                                              color: Colors.white),
-                                      popupProps: PopupProps.modalBottomSheet(
-                                        showSearchBox: true,
-                                        constraints: BoxConstraints(
-                                            maxHeight: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.75),
-                                        searchDelay: Duration.zero,
-                                        interceptCallBacks: true,
-                                        title: AppBar(
-                                            title: const Text('Location'),
+                                    );
+                                  },
+                                ),
+                                BlocBuilder<EquipmentsCubit,
+                                    EquipmentsCubitStates>(
+                                  builder: (context, state) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: DropdownSearch<DepartmentsModel>(
+                                        key: departmentFormKey,
+                                        items: state.listDepartment,
+                                        onChanged: (item) =>
+                                            EquipmentsCubit.get(context)
+                                                .validateForm(
+                                                    department: (item!
+                                                            .toString()
+                                                            .isEmpty)
+                                                        ? FormzStatus.invalid
+                                                        : FormzStatus.pure),
+                                        itemAsString: (dept) =>
+                                            dept.departmentName!,
+                                        // selectedItem: (state.requestStatus ==
+                                        //     RequestStatus.oldRequest)
+                                        //     ? (DepartmentsModel.fromJson({
+                                        //   'department_Name': state
+                                        //       .requestedData!.data![0].departmentName
+                                        // }))
+                                        //     : null,
+                                        enabled: (state.requestStatus ==
+                                                RequestStatus.oldRequest)
+                                            ? false
+                                            : true,
+                                        dropdownDecoratorProps:
+                                            DropDownDecoratorProps(
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            labelText: 'Department',
+                                            floatingLabelAlignment:
+                                                FloatingLabelAlignment.start,
+                                            errorText: (state
+                                                    .departmentStatus.isInvalid)
+                                                ? 'Required'
+                                                : null,
+                                          ),
+                                        ),
+                                        dropdownButtonProps:
+                                            const DropdownButtonProps(
+                                                color: Colors.white),
+                                        popupProps: PopupProps.modalBottomSheet(
+                                          showSearchBox: true,
+                                          constraints: BoxConstraints(
+                                              maxHeight: MediaQuery.of(context)
+                                                      .size
+                                                      .height *
+                                                  0.75),
+                                          searchDelay: Duration.zero,
+                                          title: AppBar(
+                                            title: const Text('Department'),
                                             centerTitle: true,
                                             backgroundColor: Colors.transparent,
-                                            titleSpacing: 0,
-                                            elevation: 0),
-                                        searchFieldProps: const TextFieldProps(
-                                          padding: EdgeInsets.all(20),
-                                          decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.all(10),
-                                            filled: true,
-                                            hintText: "Search for location",
-                                            prefixIcon: Icon(
-                                              Icons.search,
-                                              color: Colors.white,
+                                            elevation: 0,
+                                          ),
+                                          searchFieldProps:
+                                              const TextFieldProps(
+                                            padding: EdgeInsets.all(20),
+                                            decoration: InputDecoration(
+                                              contentPadding:
+                                                  EdgeInsets.all(10),
+                                              filled: true,
+                                              hintText: "Search for department",
+                                              prefixIcon: Icon(
+                                                Icons.search,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
+                                    );
+                                  },
+                                ),
+                                BlocBuilder<EquipmentsCubit,
+                                        EquipmentsCubitStates>(
+                                    buildWhen: (pre, curr) {
+                                  return pre.chosenFileName !=
+                                      curr.chosenFileName;
+                                }, builder: (context, state) {
+                                  return SingleChildScrollView(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    child: Container(
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            flex: 2,
+                                            child: TextFormField(
+                                              key: UniqueKey(),
+                                              enabled: false,
+                                              initialValue: (state
+                                                          .requestStatus ==
+                                                      RequestStatus.newRequest)
+                                                  ? state.chosenFileName
+                                                  : 'TODO:',
+                                              //TODO: add fileName from API
+                                              // keyboardType:
+                                              //     TextInputType.multiline,
+                                              maxLines: 1,
+                                              decoration: const InputDecoration(
+                                                labelText: "Upload file",
+                                                prefixIcon: Icon(
+                                                  Icons.upload_file,
+                                                  color: Colors.white70,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Flexible(
+                                            child: (state.requestStatus ==
+                                                    RequestStatus.newRequest)
+                                                ? ElevatedButton.icon(
+                                                    onPressed: () {
+                                                      EquipmentsCubit.get(
+                                                              context)
+                                                          .setChosenFileName();
+                                                    },
+                                                    label: const Text('Upload',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white)),
+                                                    icon: const Icon(
+                                                        Icons
+                                                            .cloud_upload_sharp,
+                                                        color: Colors.white),
+                                                  )
+                                                : ElevatedButton.icon(
+                                                    onPressed: () {},
+                                                    label: const Text(
+                                                        'View File',
+                                                        style: TextStyle(
+                                                            color:
+                                                                Colors.white)),
+                                                    icon: const Icon(
+                                                        Icons
+                                                            .cloud_upload_sharp,
+                                                        color: Colors.white),
+                                                  ),
+                                          )
+                                        ],
+                                      ),
                                     ),
                                   );
-                                },
-                              ),
-                              BlocBuilder<EquipmentsCubit,
-                                  EquipmentsCubitStates>(
-                                builder: (context, state) {
+                                }),
+                                BlocBuilder<EquipmentsCubit,
+                                        EquipmentsCubitStates>(
+                                    buildWhen: (pre, curr) {
+                                  return pre.requestedData?.data![0].comments !=
+                                      curr.requestedData?.data![0].comments;
+                                }, builder: (context, state) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: DropdownSearch<DepartmentsModel>(
-                                      key: departmentFormKey,
-                                      items: state.listDepartment,
-                                      onChanged: (item) =>
-                                          EquipmentsCubit.get(context)
-                                              .validateForm(
-                                                  department:
-                                                      (item!.toString().isEmpty)
-                                                          ? FormzStatus.invalid
-                                                          : FormzStatus.pure),
-                                      itemAsString: (dept) =>
-                                          dept.departmentName!,
-                                      // selectedItem: (state.requestStatus ==
-                                      //     RequestStatus.oldRequest)
-                                      //     ? (DepartmentsModel.fromJson({
-                                      //   'department_Name': state
-                                      //       .requestedData!.data![0].departmentName
-                                      // }))
-                                      //     : null,
-                                      enabled: (state.requestStatus ==
+                                    child: TextFormField(
+                                      key: state.requestStatus ==
+                                              RequestStatus.oldRequest
+                                          ? UniqueKey()
+                                          : null,
+                                      initialValue: (state.requestStatus ==
                                               RequestStatus.oldRequest)
-                                          ? false
-                                          : true,
-                                      dropdownDecoratorProps:
-                                          DropDownDecoratorProps(
-                                        dropdownSearchDecoration:
-                                            InputDecoration(
-                                          labelText: 'Department',
-                                          floatingLabelAlignment:
-                                              FloatingLabelAlignment.start,
-                                          errorText:
-                                              (state.departmentStatus.isInvalid)
-                                                  ? 'Required'
-                                                  : null,
+                                          ? state
+                                              .requestedData?.data![0].comments
+                                          : "",
+                                      enabled: state.requestStatus ==
+                                              RequestStatus.newRequest
+                                          ? true
+                                          : false,
+                                      onChanged: (commentValue) => context
+                                          .read<EquipmentsCubit>()
+                                          .commentChanged(commentValue),
+                                      keyboardType: TextInputType.multiline,
+                                      maxLines: null,
+                                      decoration: const InputDecoration(
+                                        labelText: "Add your comment",
+                                        prefixIcon: Icon(
+                                          Icons.comment,
+                                          color: Colors.white70,
                                         ),
-                                      ),
-                                      dropdownButtonProps:
-                                          const DropdownButtonProps(
-                                              color: Colors.white),
-                                      popupProps: PopupProps.modalBottomSheet(
-                                        showSearchBox: true,
-                                        constraints: BoxConstraints(
-                                            maxHeight: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                0.75),
-                                        searchDelay: Duration.zero,
-                                        title: AppBar(
-                                          title: const Text('Department'),
-                                          centerTitle: true,
-                                          backgroundColor: Colors.transparent,
-                                          elevation: 0,
-                                        ),
-                                        searchFieldProps: const TextFieldProps(
-                                          padding: EdgeInsets.all(20),
-                                          decoration: InputDecoration(
-                                            contentPadding: EdgeInsets.all(10),
-                                            filled: true,
-                                            hintText: "Search for department",
-                                            prefixIcon: Icon(
-                                              Icons.search,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
+                                        enabled: true,
                                       ),
                                     ),
                                   );
-                                },
-                              ),
-                              BlocBuilder<EquipmentsCubit,
-                                      EquipmentsCubitStates>(
-                                  buildWhen: (pre, curr) {
-                                return pre.chosenFileName !=
-                                    curr.chosenFileName;
-                              }, builder: (context, state) {
-                                return SingleChildScrollView(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  child: Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          flex: 2,
-                                          child: TextFormField(
-                                            key: UniqueKey(),
-                                            enabled: false,
-                                            initialValue: (state
-                                                        .requestStatus ==
-                                                    RequestStatus.newRequest)
-                                                ? state.chosenFileName
-                                                : 'TODO:', //TODO: add fileName from API
-                                            // keyboardType:
-                                            //     TextInputType.multiline,
-                                            maxLines: 1,
-                                            decoration: const InputDecoration(
-                                              labelText: "Upload file",
-                                              prefixIcon: Icon(
-                                                Icons.upload_file,
-                                                color: Colors.white70,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        Flexible(
-                                          child: (state.requestStatus ==
-                                                  RequestStatus.newRequest)
-                                              ? ElevatedButton.icon(
-                                                  onPressed: () {
-                                                    EquipmentsCubit.get(context)
-                                                        .setChosenFileName();
-                                                  },
-                                                  label: const Text('Upload',
-                                                      style: TextStyle(
-                                                          color: Colors.white)),
-                                                  icon: const Icon(
-                                                      Icons.cloud_upload_sharp,
-                                                      color: Colors.white),
-                                                )
-                                              : ElevatedButton.icon(
-                                                  onPressed: () {},
-                                                  label: const Text('View File',
-                                                      style: TextStyle(
-                                                          color: Colors.white)),
-                                                  icon: const Icon(
-                                                      Icons.cloud_upload_sharp,
-                                                      color: Colors.white),
-                                                ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }),
-                              BlocBuilder<EquipmentsCubit,
-                                      EquipmentsCubitStates>(
-                                  buildWhen: (pre, curr) {
-                                return pre.requestedData?.data![0].comments !=
-                                    curr.requestedData?.data![0].comments;
-                              }, builder: (context, state) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: TextFormField(
-                                    key: state.requestStatus ==
-                                            RequestStatus.oldRequest
-                                        ? UniqueKey()
-                                        : null,
-                                    initialValue: (state.requestStatus ==
-                                            RequestStatus.oldRequest)
-                                        ? state.requestedData?.data![0].comments
-                                        : "",
-                                    enabled: state.requestStatus ==
-                                            RequestStatus.newRequest
-                                        ? true
-                                        : false,
-                                    onChanged: (commentValue) => context
-                                        .read<EquipmentsCubit>()
-                                        .commentChanged(commentValue),
-                                    keyboardType: TextInputType.multiline,
-                                    maxLines: null,
-                                    decoration: const InputDecoration(
-                                      labelText: "Add your comment",
-                                      prefixIcon: Icon(
-                                        Icons.comment,
-                                        color: Colors.white70,
-                                      ),
-                                      enabled: true,
-                                    ),
-                                  ),
-                                );
-                              }),
-                              BlocBuilder<EquipmentsCubit,
-                                  EquipmentsCubitStates>(
-                                buildWhen: (prev, current) {
-                                  if (current.requestStatus ==
-                                      RequestStatus.newRequest) {
-                                    return prev.chosenList.length !=
-                                        current.chosenList.length;
-                                  } else {
-                                    return current
-                                        .requestedData!.data!.isNotEmpty;
-                                  }
-                                },
-                                builder: (context, state) {
-                                  return ListView.builder(
-                                    physics: const BouncingScrollPhysics(),
-                                    clipBehavior: Clip.hardEdge,
-                                    shrinkWrap: true,
-                                    itemCount: (state.requestStatus ==
-                                            RequestStatus.oldRequest)
-                                        ? state.requestedData!.data!.length
-                                        : state.chosenList.length,
-                                    // padding: const EdgeInsets.all(8),
-                                    itemBuilder: (listViewContext, index) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: TweenAnimationBuilder<double>(
-                                          duration: const Duration(
-                                              milliseconds: 1000),
-                                          tween: Tween(begin: 1.0, end: 0.0),
-                                          builder:
-                                              (context, animation, child) =>
-                                                  Transform.translate(
-                                            offset: (state.requestStatus ==
-                                                    RequestStatus.oldRequest)
-                                                ? const Offset(0, 0)
-                                                : Offset(
-                                                    -50 * shake(animation), 0),
-                                            child: Dismissible(
-                                              direction: (state.requestStatus ==
+                                }),
+                                BlocBuilder<EquipmentsCubit,
+                                    EquipmentsCubitStates>(
+                                  buildWhen: (prev, current) {
+                                    if (current.requestStatus ==
+                                        RequestStatus.newRequest) {
+                                      return prev.chosenList.length !=
+                                          current.chosenList.length;
+                                    } else {
+                                      return current
+                                          .requestedData!.data!.isNotEmpty;
+                                    }
+                                  },
+                                  builder: (context, state) {
+                                    return ListView.builder(
+                                      physics: const BouncingScrollPhysics(),
+                                      clipBehavior: Clip.hardEdge,
+                                      shrinkWrap: true,
+                                      itemCount: (state.requestStatus ==
+                                              RequestStatus.oldRequest)
+                                          ? state.requestedData!.data!.length
+                                          : state.chosenList.length,
+                                      // padding: const EdgeInsets.all(8),
+                                      itemBuilder: (listViewContext, index) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: TweenAnimationBuilder<double>(
+                                            duration: const Duration(
+                                                milliseconds: 1000),
+                                            tween: Tween(begin: 1.0, end: 0.0),
+                                            builder:
+                                                (context, animation, child) =>
+                                                    Transform.translate(
+                                              offset: (state.requestStatus ==
                                                       RequestStatus.oldRequest)
-                                                  ? DismissDirection.none
-                                                  : DismissDirection.endToStart,
-                                              key: UniqueKey(),
-                                              confirmDismiss:
-                                                  (dismissDirection) async {
-                                                if (dismissDirection ==
-                                                    DismissDirection
-                                                        .startToEnd) {
-                                                  return false;
-                                                } else {
-                                                  return await showDialog(
-                                                    context: context,
-                                                    builder: (_) {
-                                                      return AlertDialog(
-                                                        backgroundColor:
-                                                            Theme.of(context)
-                                                                .colorScheme
-                                                                .background,
-                                                        title: const Text(
-                                                            'Caution',
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .red)),
-                                                        content: const Text(
-                                                          'Are you sure you want to delete this item?',
-                                                        ),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop(false);
-                                                            },
-                                                            child: const Text(
-                                                              'Cancel',
-                                                              style: TextStyle(
-                                                                fontSize: 16,
-                                                              ),
-                                                            ),
-                                                          ),
-                                                          TextButton(
-                                                            onPressed: () {
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop(true);
-                                                            },
-                                                            child: const Text(
-                                                              'Delete',
-                                                              style: TextStyle(
-                                                                  fontSize: 16,
-                                                                  color: Colors
-                                                                      .red),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      );
-                                                    },
-                                                  );
-                                                }
-                                              },
-                                              onDismissed: (dismissDirection) {
-                                                if (dismissDirection ==
-                                                    DismissDirection
-                                                        .endToStart) {
-                                                  state.chosenList
-                                                      .removeAt(index);
-                                                }
-                                              },
-                                              background: Container(
-                                                clipBehavior: Clip.none,
-                                                margin: const EdgeInsets.only(
-                                                  bottom: 8,
-                                                ),
-                                                padding:
-                                                    const EdgeInsets.all(10.0),
-                                                width: MediaQuery.of(context)
-                                                    .size
-                                                    .width,
-                                                decoration: BoxDecoration(
-                                                    color: Colors.transparent,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25)),
-                                                child: const Align(
-                                                  alignment:
-                                                      Alignment.centerRight,
-                                                  child: Icon(
-                                                    Icons.delete,
-                                                    size: 30,
-                                                    color: Colors.red,
-                                                  ),
-                                                ),
-                                              ),
-                                              // secondaryBackground:Container(
-                                              //   clipBehavior: Clip.none,
-                                              //   margin: const EdgeInsets.only(
-                                              //     bottom: 8,
-                                              //   ),
-                                              //   padding: const EdgeInsets.all(10.0),
-                                              //   width: MediaQuery.of(context).size.width,
-                                              //   decoration: BoxDecoration(
-                                              //       color: Colors.transparent,
-                                              //       borderRadius: BorderRadius.circular(25)),
-                                              //   child: const Align(
-                                              //     alignment: Alignment.centerLeft,
-                                              //     child: Icon(
-                                              //       Icons.edit,
-                                              //       size: 30,
-                                              //       color: Colors.green,
-                                              //     ),
-                                              //   ),
-                                              // ),
-                                              child: ClipRRect(
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(20)),
-                                                child: ExpansionTile(
-                                                  backgroundColor:
-                                                      Colors.blueGrey.shade300,
-                                                  collapsedBackgroundColor:
-                                                      Colors.white38,
-                                                  maintainState: true,
-                                                  childrenPadding:
-                                                      const EdgeInsets.all(10),
-                                                  leading: Container(
-                                                      width: 40,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: (state
-                                                                  .requestStatus ==
-                                                              RequestStatus
-                                                                  .oldRequest)
-                                                          ? EquipmentsCubit.get(
-                                                                  context)
-                                                              .getIconByGroupName(state
-                                                                  .requestedData!
-                                                                  .data![0]
-                                                                  .groupName!)
-                                                          : state
-                                                              .chosenList[index]
-                                                              .icon!),
-                                                  title: Text(
+                                                  ? const Offset(0, 0)
+                                                  : Offset(
+                                                      -50 * shake(animation),
+                                                      0),
+                                              child: Dismissible(
+                                                direction:
                                                     (state.requestStatus ==
                                                             RequestStatus
                                                                 .oldRequest)
-                                                        ? state
-                                                            .requestedData!
-                                                            .data![index]
-                                                            .hardWareItemName!
-                                                            .trim()
-                                                        : state
-                                                            .chosenList[index]
-                                                            .selectedItem!
-                                                            .hardWareItemName!
-                                                            .trim(),
-                                                    softWrap: true,
-                                                    style: const TextStyle(
-                                                        fontSize: 18),
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
+                                                        ? DismissDirection.none
+                                                        : DismissDirection
+                                                            .endToStart,
+                                                key: UniqueKey(),
+                                                confirmDismiss:
+                                                    (dismissDirection) async {
+                                                  if (dismissDirection ==
+                                                      DismissDirection
+                                                          .startToEnd) {
+                                                    return false;
+                                                  } else {
+                                                    return await showDialog(
+                                                      context: context,
+                                                      builder: (_) {
+                                                        return AlertDialog(
+                                                          backgroundColor:
+                                                              Theme.of(context)
+                                                                  .colorScheme
+                                                                  .background,
+                                                          title: const Text(
+                                                              'Caution',
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .red)),
+                                                          content: const Text(
+                                                            'Are you sure you want to delete this item?',
+                                                          ),
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop(false);
+                                                              },
+                                                              child: const Text(
+                                                                'Cancel',
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 16,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop(true);
+                                                              },
+                                                              child: const Text(
+                                                                'Delete',
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        16,
+                                                                    color: Colors
+                                                                        .red),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  }
+                                                },
+                                                onDismissed:
+                                                    (dismissDirection) {
+                                                  if (dismissDirection ==
+                                                      DismissDirection
+                                                          .endToStart) {
+                                                    state.chosenList
+                                                        .removeAt(index);
+                                                  }
+                                                },
+                                                background: Container(
+                                                  clipBehavior: Clip.none,
+                                                  margin: const EdgeInsets.only(
+                                                    bottom: 8,
                                                   ),
-                                                  subtitle: Text(
-                                                    'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData?.data![index].qty : state.chosenList[index].quantity}',
-                                                    softWrap: true,
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  width: MediaQuery.of(context)
+                                                      .size
+                                                      .width,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.transparent,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25)),
+                                                  child: const Align(
+                                                    alignment:
+                                                        Alignment.centerRight,
+                                                    child: Icon(
+                                                      Icons.delete,
+                                                      size: 30,
+                                                      color: Colors.red,
+                                                    ),
                                                   ),
-                                                  children: [
-                                                    if (state
-                                                            .requestedData
-                                                            ?.data![index]
-                                                            .type !=
-                                                        0)
+                                                ),
+                                                // secondaryBackground:Container(
+                                                //   clipBehavior: Clip.none,
+                                                //   margin: const EdgeInsets.only(
+                                                //     bottom: 8,
+                                                //   ),
+                                                //   padding: const EdgeInsets.all(10.0),
+                                                //   width: MediaQuery.of(context).size.width,
+                                                //   decoration: BoxDecoration(
+                                                //       color: Colors.transparent,
+                                                //       borderRadius: BorderRadius.circular(25)),
+                                                //   child: const Align(
+                                                //     alignment: Alignment.centerLeft,
+                                                //     child: Icon(
+                                                //       Icons.edit,
+                                                //       size: 30,
+                                                //       color: Colors.green,
+                                                //     ),
+                                                //   ),
+                                                // ),
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(20)),
+                                                  child: ExpansionTile(
+                                                    backgroundColor: Colors
+                                                        .blueGrey.shade300,
+                                                    collapsedBackgroundColor:
+                                                        Colors.white38,
+                                                    maintainState: true,
+                                                    childrenPadding:
+                                                        const EdgeInsets.all(
+                                                            10),
+                                                    leading: Container(
+                                                        width: 40,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: (state
+                                                                    .requestStatus ==
+                                                                RequestStatus
+                                                                    .oldRequest)
+                                                            ? EquipmentsCubit
+                                                                    .get(
+                                                                        context)
+                                                                .getIconByGroupName(state
+                                                                    .requestedData!
+                                                                    .data![0]
+                                                                    .groupName!)
+                                                            : state
+                                                                .chosenList[
+                                                                    index]
+                                                                .icon!),
+                                                    title: Text(
+                                                      (state.requestStatus ==
+                                                              RequestStatus
+                                                                  .oldRequest)
+                                                          ? state
+                                                              .requestedData!
+                                                              .data![index]
+                                                              .hardWareItemName!
+                                                              .trim()
+                                                          : state
+                                                              .chosenList[index]
+                                                              .selectedItem!
+                                                              .hardWareItemName!
+                                                              .trim(),
+                                                      softWrap: true,
+                                                      style: const TextStyle(
+                                                          fontSize: 18),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                    subtitle: Text(
+                                                      'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData?.data![index].qty : state.chosenList[index].quantity}',
+                                                      softWrap: true,
+                                                    ),
+                                                    children: [
+                                                      if (state
+                                                              .requestedData
+                                                              ?.data![index]
+                                                              .type !=
+                                                          0)
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              'Request for: ${(state.requestStatus == RequestStatus.oldRequest) ? EquipmentsCubit.get(context).getRequestForFromType(state.requestedData?.data![0].type)?.trim() : state.chosenList[index].requestFor!.trim()}',
+                                                              softWrap: true,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      fontSize:
+                                                                          15),
+                                                            ),
+                                                          ],
+                                                        ),
                                                       Row(
                                                         children: [
-                                                          Text(
-                                                            'Request for: ${(state.requestStatus == RequestStatus.oldRequest) ? EquipmentsCubit.get(context).getRequestForFromType(state.requestedData?.data![0].type)?.trim() : state.chosenList[index].requestFor!.trim()}',
-                                                            softWrap: true,
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        15),
+                                                          Flexible(
+                                                            child: Text(
+                                                              'Owner: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].ownerName!.trim().toTitleCase() : state.chosenList[index].selectedContact!.name!.trim().toTitleCase()}',
+                                                              softWrap: false,
+                                                              maxLines: 2,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      fontSize:
+                                                                          15),
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
-                                                    Row(
-                                                      children: [
-                                                        Flexible(
-                                                          child: Text(
-                                                            'Owner: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].ownerName!.trim().toTitleCase() : state.chosenList[index].selectedContact!.name!.trim().toTitleCase()}',
-                                                            softWrap: false,
-                                                            maxLines: 2,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        15),
+                                                      Row(
+                                                        children: [
+                                                          Flexible(
+                                                            child: Text(
+                                                              'Estimate Price: ${(state.requestStatus == RequestStatus.oldRequest) ? ((state.requestedData!.data![index].estimatePrice == null) ? 'NO' : state.requestedData!.data![index].estimatePrice!.trim()) : (int.parse(state.chosenList[index].selectedItem!.estimatePrice!) * state.chosenList[index].quantity!).toString().trim()} LE',
+                                                              softWrap: false,
+                                                              maxLines: 2,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      fontSize:
+                                                                          15),
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Flexible(
-                                                          child: Text(
-                                                            'Estimate Price: ${(state.requestStatus == RequestStatus.oldRequest) ? ((state.requestedData!.data![index].estimatePrice == null) ? 'NO' : state.requestedData!.data![index].estimatePrice!.trim()) : (int.parse(state.chosenList[index].selectedItem!.estimatePrice!) * state.chosenList[index].quantity!).toString().trim()} LE',
-                                                            softWrap: false,
-                                                            maxLines: 2,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        15),
+                                                        ],
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Flexible(
+                                                            child: Text(
+                                                              'Group name: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].groupName!.trim() : state.chosenList[index].selectedItem!.groupId!.toString().trim()}',
+                                                              softWrap: false,
+                                                              maxLines: 2,
+                                                              overflow:
+                                                                  TextOverflow
+                                                                      .ellipsis,
+                                                              style:
+                                                                  const TextStyle(
+                                                                      fontSize:
+                                                                          15),
+                                                            ),
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    Row(
-                                                      children: [
-                                                        Flexible(
-                                                          child: Text(
-                                                            'Group name: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].groupName!.trim() : state.chosenList[index].selectedItem!.groupId!.toString().trim()}',
-                                                            softWrap: false,
-                                                            maxLines: 2,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style:
-                                                                const TextStyle(
-                                                                    fontSize:
-                                                                        15),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -949,16 +1038,16 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                       selectedItem: state.chosenList,
                                       comment: state.comment,
                                     );
-                                    Navigator.of(context).pushReplacement(
-                                      MaterialPageRoute(
-                                        builder: (_) => const SuccessScreen(
-                                          requestName: 'Equipment',
-                                          routName:
-                                              EquipmentsRequestScreen.routeName,
-                                          text: "Success",
-                                        ),
-                                      ),
-                                    );
+                                    // Navigator.of(context).pushReplacement(
+                                    //   MaterialPageRoute(
+                                    //     builder: (_) => const SuccessScreen(
+                                    //       requestName: 'Equipment',
+                                    //       routName:
+                                    //           EquipmentsRequestScreen.routeName,
+                                    //       text: "Success",
+                                    //     ),
+                                    //   ),
+                                    // );
                                   }
                                 },
                                 materialTapTargetSize:

@@ -3,7 +3,9 @@
 import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/constants/enums.dart';
 import 'package:hassanallamportalflutter/data/data_providers/general_dio/general_dio.dart';
@@ -21,7 +23,11 @@ import 'package:hassanallamportalflutter/data/models/user_notification_api/user_
 import 'package:http/http.dart' as http;
 
 import '../../constants/request_service_id.dart';
+import '../models/it_requests_form_models/equipments_models/business_unit_model.dart';
+import '../models/it_requests_form_models/equipments_models/departments_model.dart';
+import '../models/it_requests_form_models/equipments_models/equipments_location_model.dart';
 import '../models/it_requests_form_models/equipments_models/equipments_requested_model.dart';
+import '../models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
 import '../models/requests_form_models/request_business_mission_data_model.dart';
 import '../models/requests_form_models/request_permission_data_model.dart';
 import '../models/response_take_action.dart';
@@ -392,6 +398,111 @@ class RequestRepository {
     return response;
   }
 
+  Future<RequestResponse> postEquipmentRequest({
+  required DepartmentsModel departmentObject,
+  required BusinessUnitModel businessUnitObject,
+  required EquipmentsLocationModel locationObject,
+  required String userHrCode,
+  required List<SelectedEquipmentsModel> selectedItem,
+  String? comment,
+    required FilePickerResult fileResult,
+    required String extension,
+  }) async {
+    var masterDataPost = {
+      "requestNo": 0,
+      "serviceId": RequestServiceID.equipmentServiceID,
+      "departmentId": businessUnitObject.departmentId,
+      "projectId": '',
+      "locationId": locationObject.projectId.toString(),
+      "requestHrCode": userHrCode,
+      "date": DateTime.now().toString(),
+      "comments": comment ?? "No Comment",
+      "newComer": true,
+      "approvalPathId": 0,
+      "status": 0,
+      "nplusEmail": "",
+      "closedDate": DateTime.now().toString(),
+      "reRequestCode": 0
+    };
+
+    var value = await GeneralDio.postMasterEquipmentsRequest(masterDataPost);
+    if(value.toString().isNotEmpty) {
+      final json = await jsonDecode(value.toString());
+      final RequestResponse response = RequestResponse.fromJson(json);
+
+      var requestNo = response.requestNo ?? "";
+      if (requestNo.isNotEmpty) {
+        if (fileResult.isSinglePick) {
+          await GeneralDio.uploadEquipmentImage(
+              fileResult, requestNo, extension)
+              .whenComplete(
+                  () => EasyLoading.showSuccess('File uploaded successfully'))
+              .catchError((err) {
+            EasyLoading.showError('File failed');
+            throw err;
+          });
+        }
+        if (response.id == 1) {
+          await FirebaseProvider(userData ?? MainUserData.empty)
+              .addSubmitFirebaseNotification(
+              response.requestNo.toString(),
+              GlobalConstants.requestCategoryEquipment, "Submit");
+        }
+        for (int i = 0; i < selectedItem.length; i++) {
+          int type = 1;
+          switch (selectedItem[i].requestFor) {
+            case 'New Hire':
+              type = 1;
+              break;
+            case 'Replacement / New Item':
+              type = 2;
+              break;
+            case 'Training':
+              type = 3;
+              break;
+            case 'Mobilization':
+              type = 4;
+              break;
+          }
+          Map<String, dynamic> detailedDataPost = {
+            "requestNo": int.parse(value.data['requestNo']),
+            "hardWareItemId":
+            selectedItem[i].selectedItem!.hardWareItemId.toString(),
+            "ownerHrCode": selectedItem[i].selectedContact!.userHrCode
+                .toString(),
+            "type": type,
+            "qty": selectedItem[i].quantity,
+            "chk": true,
+            "estimatePrice": 0,
+            "approved": true,
+            "rejectedHrCode": ""
+          };
+          await GeneralDio.postDetailEquipmentsRequest(detailedDataPost)
+              .catchError((e) {
+            // return response;
+            // EasyLoading.showError('Something went wrong');
+            throw e;
+          });
+        }
+        return response;
+      }
+      else {
+        return RequestResponse.empty;
+      }
+    }else {
+      return RequestResponse.empty;
+    }
+    // await GeneralDio.postMasterEquipmentsRequest(masterDataPost).then((value) async {
+    //
+    //
+    // }).catchError((e) {
+    //   // return RequestResponse.empty;
+    //   // EasyLoading.showError('Something went wrong');
+    //   throw e;
+    // });
+
+  }
+
   Future<VacationRequestData> getVacationRequestData(
       String requestNo, String requesterHRCode) async {
     final http.Response rawRequestData =
@@ -487,7 +598,7 @@ class RequestRepository {
   }) async {
     List? nextObject;
     if(valueStatus == ActionValueStatus.accept){
-      GeneralDio.getNextStepWorkFlow(
+      await GeneralDio.getNextStepWorkFlow(
               serviceId: serviceID,
               userHrCode: requesterHRCode,
               reqNo: int.parse(requestNo))

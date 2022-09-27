@@ -19,6 +19,7 @@ import '../../../../data/models/it_requests_form_models/equipments_models/equipm
 import '../../../../data/models/it_requests_form_models/equipments_models/history_work_flow_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/selected_equipments_model.dart';
 import '../../../../data/models/requests_form_models/request_date.dart';
+import '../../../../data/models/requests_form_models/request_response.dart';
 import '../../../../data/repositories/employee_repository.dart';
 import '../../../../data/repositories/request_repository.dart';
 
@@ -143,7 +144,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
             // vacationType: int.parse(requestData.vacationType ?? "1"),
             // responsiblePerson: responsiblePerson,
             // comment: comments,
-            status: FormzStatus.submissionSuccess,
+            status: FormzStatus.valid,
             requestStatus: RequestStatus.oldRequest,
             statusAction: status,
             takeActionStatus: (_requestRepository.userData?.user?.userHRCode ==
@@ -252,73 +253,26 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     required String userHrCode,
     required List<SelectedEquipmentsModel> selectedItem,
     String? comment,
-  }) {
-    var masterDataPost = {
-      "requestNo": 0,
-      "serviceId": RequestServiceID.equipmentServiceID,
-      "departmentId": businessUnitObject.departmentId,
-      "projectId": '',
-      "locationId": locationObject.projectId.toString(),
-      "requestHrCode": userHrCode,
-      "date": DateTime.now().toString(),
-      "comments": comment ?? "No Comment",
-      "newComer": true,
-      "approvalPathId": 0,
-      "status": 0,
-      "nplusEmail": "",
-      "closedDate": DateTime.now().toString(),
-      "reRequestCode": 0
-    };
-    GeneralDio.postMasterEquipmentsRequest(masterDataPost).then((value) {
-      var fileName = value.data['requestNo'];
-      if (state.fileResult.isSinglePick) {
-        GeneralDio.uploadEquipmentImage(
-                state.fileResult, fileName, state.extension)
-            .whenComplete(
-                () => EasyLoading.showSuccess('Image uploaded successfully'))
-            .catchError((err) {
-          EasyLoading.showError('Something went wrong');
-          throw err;
-        });
-      }
-      for (int i = 0; i < selectedItem.length; i++) {
-        int type = 1;
-        switch (selectedItem[i].requestFor) {
-          case 'New Hire':
-            type = 1;
-            break;
-          case 'Replacement / New Item':
-            type = 2;
-            break;
-          case 'Training':
-            type = 3;
-            break;
-          case 'Mobilization':
-            type = 4;
-            break;
-        }
-        Map<String, dynamic> detailedDataPost = {
-          "requestNo": int.parse(value.data['requestNo']),
-          "hardWareItemId":
-              selectedItem[i].selectedItem!.hardWareItemId.toString(),
-          "ownerHrCode": selectedItem[i].selectedContact!.userHrCode.toString(),
-          "type": type,
-          "qty": selectedItem[i].quantity,
-          "chk": true,
-          "estimatePrice": 0,
-          "approved": true,
-          "rejectedHrCode": ""
-        };
-        GeneralDio.postDetailEquipmentsRequest(detailedDataPost)
-            .catchError((e) {
-          EasyLoading.showError('Something went wrong');
-          throw e;
-        });
-      }
-    }).catchError((e) {
-      EasyLoading.showError('Something went wrong');
-      throw e;
-    });
+  }) async {
+    emit(state.copyWith(status: FormzStatus.submissionInProgress));
+    RequestResponse equipmentResponse = await _requestRepository.postEquipmentRequest(departmentObject: departmentObject, businessUnitObject: businessUnitObject, locationObject: locationObject, userHrCode: userHrCode, selectedItem: selectedItem, fileResult: state.fileResult, extension: state.extension);
+    if (equipmentResponse.id == 1){
+      emit(
+        state.copyWith(
+          successMessage: equipmentResponse.requestNo,
+          status: FormzStatus.submissionSuccess,
+        ),
+      );
+    }else{
+      emit(
+        state.copyWith(
+          errorMessage: equipmentResponse.id == 0 ? equipmentResponse.result : "An error occurred",
+          status: FormzStatus.submissionFailure,
+        ),
+      );
+    }
+
+
   }
 
   void setChosenList({
