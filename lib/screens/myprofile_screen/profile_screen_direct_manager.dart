@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -208,7 +209,7 @@ class DirectManagerProfileScreenClass
                                       child: SizedBox(
                                         width: double.infinity,
                                         child: Text(
-                                          state.managerData.name!,
+                                          state.managerData.name!.toTitleCase(),
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontFamily: 'Nunito',
@@ -423,6 +424,7 @@ class DirectManagerProfileScreenClass
     if (state is BlocGetManagerDataSuccessState) {
       if (state.managerData.managerName.toString() != "null") {
         managerCode = state.managerData.managerName!.toString();
+        managerCode=managerCode.toTitleCase();
       } else {
         managerCode = state.managerData.managerCode!.toString();
       }

@@ -5,6 +5,7 @@ import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
 import '../../widgets/dialogpopoup/dialog_popup_attendance.dart';
 
 class AttendanceTicketWidget extends StatelessWidget {
+
   final List<MyAttendanceModel> attendanceListData;
   final String hrUser;
 
