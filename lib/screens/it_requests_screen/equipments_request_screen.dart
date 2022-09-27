@@ -516,10 +516,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                 ),
                                 BlocBuilder<EquipmentsCubit,
                                         EquipmentsCubitStates>(
-                                    buildWhen: (pre, curr) {
-                                  return pre.chosenFileName !=
-                                      curr.chosenFileName;
-                                }, builder: (context, state) {
+                                    builder: (context, state) {
                                   return SingleChildScrollView(
                                     physics:
                                         const NeverScrollableScrollPhysics(),

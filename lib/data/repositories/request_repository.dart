@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
@@ -102,10 +100,6 @@ class RequestRepository {
       "localAdmin": accessRightModel.localAdmin,
       "printing":accessRightModel.printing,
     });
-
-
-    print("the body: ="+bodyString);
-
 
     final http.Response rawAccess =
         await requestDataProviders.postAccessAccountAccessRequest(bodyString);
