@@ -46,23 +46,35 @@ class EquipmentsRequestedModelData {
   int? qty;
   double? max;
   String? approved;
+  String? mainDepartmentName;
+  String? equipmentFile;
+  String? date;
+  String? closedDate;
+  String? mainDepartment;
+  String? requestNo;
 
   EquipmentsRequestedModelData(
       {this.requestHRCode,
-        this.name,
-        this.departmentName,
-        this.projectName,
-        this.comments,
-        this.type,
-        this.status,
-        this.groupName,
-        this.hardWareItemName,
-        this.estimatePrice,
-        this.ownerHRCode,
-        this.ownerName,
-        this.qty,
-        this.max,
-        this.approved});
+      this.name,
+      this.departmentName,
+      this.projectName,
+      this.comments,
+      this.type,
+      this.status,
+      this.groupName,
+      this.hardWareItemName,
+      this.estimatePrice,
+      this.ownerHRCode,
+      this.ownerName,
+      this.qty,
+      this.max,
+      this.approved,
+      this.mainDepartmentName,
+      this.equipmentFile,
+      this.date,
+      this.closedDate,
+      this.mainDepartment,
+      this.requestNo});
 
   EquipmentsRequestedModelData.fromJson(Map<String, dynamic> json) {
     requestHRCode = json['request_HR_Code'];
@@ -80,6 +92,12 @@ class EquipmentsRequestedModelData {
     qty = json['qty'];
     max = json['max'];
     approved = json['approved'];
+    mainDepartmentName = json['mainDepartmentName'];
+    equipmentFile = json['equipment_File'];
+    date = json['date'];
+    closedDate = json['closedDate'];
+    mainDepartment = json['mainDepartment'];
+    requestNo = json['requestNo'];
   }
 
   Map<String, dynamic> toJson() {
@@ -99,6 +117,12 @@ class EquipmentsRequestedModelData {
     data['qty'] = qty;
     data['max'] = max;
     data['approved'] = approved;
+    data['mainDepartmentName'] = mainDepartmentName;
+    data['equipment_File'] = equipmentFile;
+    data['date'] = date;
+    data['closedDate'] = closedDate;
+    data['mainDepartment'] = mainDepartment;
+    data['requestNo'] = requestNo;
     return data;
   }
 }

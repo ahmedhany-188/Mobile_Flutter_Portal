@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -168,7 +169,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                           child: SizedBox(
                             width: double.infinity,
                             child: Text(
-                              user.employeeData!.name!,
+                              user.employeeData!.name!.toTitleCase(),
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Nunito',
@@ -247,7 +248,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                           child: SizedBox(
                                             width: double.infinity,
                                             child: Text(
-                                              user.employeeData!.managerName!,
+                                              getDirectManagerTile(user.employeeData!.managerName!),
                                               style: const TextStyle(
                                                 color: Colors.white70,
                                                 fontSize: 14,
@@ -323,6 +324,14 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
         ),
       ),
     );
+  }
+
+  String getDirectManagerTile(directManager){
+    if (int.tryParse(directManager) != null) {
+      return directManager.toTitleCase();
+    } else {
+      return directManager;
+    }
   }
 
   Padding getLine(String line) {

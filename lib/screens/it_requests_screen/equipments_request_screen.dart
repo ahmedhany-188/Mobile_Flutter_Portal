@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../constants/colors.dart';
@@ -515,10 +516,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                 ),
                                 BlocBuilder<EquipmentsCubit,
                                         EquipmentsCubitStates>(
-                                    buildWhen: (pre, curr) {
-                                  return pre.chosenFileName !=
-                                      curr.chosenFileName;
-                                }, builder: (context, state) {
+                                    builder: (context, state) {
                                   return SingleChildScrollView(
                                     physics:
                                         const NeverScrollableScrollPhysics(),
@@ -540,8 +538,8 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                           .requestStatus ==
                                                       RequestStatus.newRequest)
                                                   ? state.chosenFileName
-                                                  : 'TODO:',
-                                              //TODO: add fileName from API
+                                                  : state.requestedData
+                                                      ?.data![0].equipmentFile,
                                               // keyboardType:
                                               //     TextInputType.multiline,
                                               maxLines: 1,
@@ -554,37 +552,42 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                          Flexible(
-                                            child: (state.requestStatus ==
-                                                    RequestStatus.newRequest)
-                                                ? ElevatedButton.icon(
-                                                    onPressed: () {
-                                                      EquipmentsCubit.get(
-                                                              context)
-                                                          .setChosenFileName();
-                                                    },
-                                                    label: const Text('Upload',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white)),
-                                                    icon: const Icon(
-                                                        Icons
-                                                            .cloud_upload_sharp,
-                                                        color: Colors.white),
-                                                  )
-                                                : ElevatedButton.icon(
-                                                    onPressed: () {},
-                                                    label: const Text(
-                                                        'View File',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white)),
-                                                    icon: const Icon(
-                                                        Icons
-                                                            .cloud_upload_sharp,
-                                                        color: Colors.white),
-                                                  ),
-                                          )
+                                          if (state.requestStatus ==
+                                              RequestStatus.newRequest)
+                                            ElevatedButton.icon(
+                                              onPressed: () {
+                                                EquipmentsCubit.get(context)
+                                                    .setChosenFileName();
+                                              },
+                                              label: const Text('Upload',
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
+                                              icon: const Icon(
+                                                  Icons.cloud_upload_sharp,
+                                                  color: Colors.white),
+                                            )
+                                          else
+                                            ElevatedButton.icon(
+                                              onPressed: () {
+                                                if (state
+                                                        .requestedData
+                                                        ?.data![0]
+                                                        .equipmentFile !=
+                                                    null) {
+                                                  launchUrl(Uri.parse(
+                                                      'https://portal.hassanallam.com/Apps/Files/Equipments/${state.requestedData?.data![0].equipmentFile}'));
+                                                } else {
+                                                  EasyLoading.showError(
+                                                      'No File has been uploaded');
+                                                }
+                                              },
+                                              label: const Text('View File',
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
+                                              icon: const Icon(
+                                                  Icons.cloud_upload_sharp,
+                                                  color: Colors.white),
+                                            )
                                         ],
                                       ),
                                     ),
@@ -1165,7 +1168,8 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                   ),
                                   Expanded(
                                     child: myRequestStatus(
-                                        state.statusAction ?? ''),
+                                        state.historyWorkFlow[index].status ??
+                                            0),
                                   ),
                                 ]),
                           ),
@@ -1188,16 +1192,16 @@ class EquipmentsRequestScreen extends StatelessWidget {
         });
   }
 
-  Widget myRequestStatus(String statusName) {
-    switch (statusName) {
-      case "Approved":
+  Widget myRequestStatus(int? status) {
+    switch (status) {
+      case 1:
         {
           return const Icon(
             Icons.verified,
             color: Colors.green,
           );
         }
-      case "Rejected":
+      case 2:
         {
           return const Icon(
             Icons.cancel,
