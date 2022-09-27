@@ -74,7 +74,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
       if (localAdmin == true) {
         requestItems.add("Local Admin");
       }
-      if(printing == true){
+      if (printing == true) {
         requestItems.add("Color Printing");
       }
 
@@ -92,6 +92,8 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
       final permanent = requestData.permanent;
 
       final comments = requestData.comments ?? "No Comment";
+
+      final filePdf = requestData.filePDF ?? '';
 
       final requesterData = await GetEmployeeRepository()
           .getEmployeeData(requestData.requestHrCode ?? "");
@@ -123,7 +125,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
             status: FormzStatus.valid,
             requestStatus: RequestStatus.oldRequest,
             statusAction: status,
-            filePDF: requestData.filePDF,
+            filePDF: filePdf,
             takeActionStatus: (requestRepository.userData?.user?.userHRCode ==
                     requestData.requestHrCode)
                 ? TakeActionStatus.view
@@ -133,13 +135,10 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
   }
 
   void getSubmitAccessRight() async {
-
     final requestItem = RequestDate.dirty(state.requestItems.value);
     final fromDate = RequestDate.dirty(state.fromDate.value);
     final toDate = RequestDate.dirty(state.toDate.value);
     final requestDate = RequestDate.dirty(state.requestDate.value);
-
-
 
     emit(state.copyWith(
         requestItems: requestItem,
@@ -149,7 +148,6 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
         status: Formz.validate([requestItem, fromDate, toDate])));
 
     if (state.status.isValidated) {
-
       AccessRightModel accessRightModel;
 
       DateTime requestDateTemp =
@@ -166,7 +164,6 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
           GlobalConstants.dateFormatViewed.parse(toDate.value);
       final requestDateValueTo =
           GlobalConstants.dateFormatServer.format(requestDateTempTo);
-
 
       accessRightModel = AccessRightModel(
           state.requestType,
@@ -190,17 +187,17 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
             connectivityResult == ConnectivityResult.mobile) {
           emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
-
           final accessResponse = await requestRepository.postAccessRightRequest(
               accessRightModel: accessRightModel);
+
           ///TODO: check error
           var fileName = accessResponse.requestNo;
           if (state.fileResult.isSinglePick) {
             GeneralDio.uploadAccessRightImage(
-                state.fileResult, fileName!, state.extension).then((value) {
-            emit(state.copyWith(filePDF: value.data?[0]));
-            })
-                .catchError((err) {
+                    state.fileResult, fileName!, state.extension)
+                .then((value) {
+              emit(state.copyWith(filePDF: value.data?[0]));
+            }).catchError((err) {
               throw err;
             });
           }
@@ -238,8 +235,8 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
           ),
         );
       }
-    }else{
-      if(state.requestItemsList.toString()=="[]"){
+    } else {
+      if (state.requestItemsList.toString() == "[]") {
         emit(
           state.copyWith(
             errorMessage: "Select at least one item",
@@ -247,7 +244,6 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
           ),
         );
       }
-
     }
   }
 
