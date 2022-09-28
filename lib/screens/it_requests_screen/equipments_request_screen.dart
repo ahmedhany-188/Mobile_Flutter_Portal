@@ -232,9 +232,11 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                       key: UniqueKey(),
                                       initialValue: (state.requestStatus ==
                                               RequestStatus.oldRequest)
-                                          ? DateFormat('EEEE dd-MM-yyyy')
-                                              .format(DateTime.parse(
-                                                  requestData['date']))
+                                          ? ((requestData['date'] != null)
+                                              ? (DateFormat('EEEE dd-MM-yyyy')
+                                                  .format(DateTime.parse(
+                                                      requestData['date'])))
+                                              : '')
                                           : state.requestDate?.value,
                                       enabled: false,
                                       decoration: const InputDecoration(

@@ -12,6 +12,7 @@ import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_r
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
+import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/videos_screen/videos_screen.dart';
 
@@ -403,6 +404,24 @@ class SetupFirebaseMessaging{
                     AccessRightScreen
                         .requesterHRCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:context
                         .read<AppBloc>().state.userData.employeeData?.userHrCode
+                  },)));
+        });
+      }
+      ///equipment pushNotification redirect
+      else if (messageData['requestType'].toString()
+          .contains(GlobalConstants.requestCategoryEquipment)) {
+
+        Future.delayed(Duration.zero).then((_) {
+          print(messageData.toString());
+          Navigator.push(
+              NavigationService.navigatorKey.currentContext ?? context,
+              MaterialPageRoute(builder:
+                  (context) =>
+                  EquipmentsRequestScreen(requestData: {
+                    EquipmentsRequestScreen.requestNoKey: messageData['requestNo'],
+                    EquipmentsRequestScreen
+                        .requesterHrCode: messageData['type'].toString().toLowerCase() == "submit"? messageData['requesterHRCode']:context
+                        .read<AppBloc>().state.userData.employeeData?.userHrCode,
                   },)));
         });
       }
