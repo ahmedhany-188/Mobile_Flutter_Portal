@@ -257,7 +257,8 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     String? comment,
   }) async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
-    RequestResponse equipmentResponse = await _requestRepository.postEquipmentRequest(departmentObject: departmentObject, businessUnitObject: businessUnitObject, locationObject: locationObject, userHrCode: userHrCode, selectedItem: selectedItem, fileResult: state.fileResult, extension: state.extension);
+    RequestResponse equipmentResponse = await _requestRepository.postEquipmentRequest(departmentObject: departmentObject,
+        businessUnitObject: businessUnitObject, locationObject: locationObject, userHrCode: userHrCode, selectedItem: selectedItem, fileResult: state.fileResult, extension: state.extension);
     if (equipmentResponse.id == 1){
       emit(
         state.copyWith(
