@@ -1,9 +1,9 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
-import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -233,7 +233,7 @@ class MainDrawer extends StatelessWidget {
                     height: 10,
                   ),
                   Flexible(
-                      child: Text(user.name!.split(' ').take(5).join(' '),
+                      child: Text(user.name!.split(' ').take(5).join(' ').toTitleCase(),
                           style: const TextStyle(
                               fontSize: 18,
                               fontFamily: 'RobotoCondensed',
@@ -247,7 +247,7 @@ class MainDrawer extends StatelessWidget {
                               fontWeight: FontWeight.normal,
                               color: Colors.grey.shade500))),
                   Flexible(
-                      child: Text('Grade: ${user.gradeName}',
+                      child: Text('Grade: ${user.gradeName?.toTitleCase}',
                           style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'RobotoCondensed',
@@ -572,15 +572,6 @@ class MainDrawer extends StatelessWidget {
                       },
                     ),
 
-                    buildListTile(
-                      'Staff Dashboard',
-                      Icons.pie_chart_rounded,
-                      () {
-                        Navigator.popAndPushNamed(
-                            context, StaffDashBoardScreen.routeName);
-                      },
-                    ),
-
                     buildDivider(),
 
                     /// first Group
@@ -657,8 +648,7 @@ class MainDrawer extends StatelessWidget {
                                   itemBuilder: (ctx, index) {
                                     return buildExternalLinks(
                                         state.appsList[index].sysName!,
-                                        state.appsList[index].sysLink
-                                            .toString());
+                                        state.appsList[index].sysLink.toString());
                                   })
                               : const Text(
                                   'You Have No Application To Be Shown',

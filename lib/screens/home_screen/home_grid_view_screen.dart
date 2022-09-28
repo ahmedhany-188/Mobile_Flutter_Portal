@@ -2,8 +2,13 @@ import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:hassanallamportalflutter/bloc/apps_screen_bloc/apps_cubit.dart';
+import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
+import 'package:hassanallamportalflutter/data/models/apps_model/apps_model.dart';
+import 'package:hassanallamportalflutter/data/models/staff_dashboard_models/companystaffdashboard_model.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
@@ -15,7 +20,10 @@ import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right
 import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
+import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
+import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_detail_screen.dart';
+import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_projects_screen.dart';
 import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_screen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:popover/popover.dart';
@@ -47,6 +55,21 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
   @override
   Widget build(BuildContext context) {
     // bool autoPlay = true;
+
+    final user = context.select((AppBloc bloc) => bloc.state.userData);
+
+    List<AppsData> userApps = context.select((AppsCubit bloc) => bloc.appsList);
+    bool userStaffDashboard=false;
+
+
+    for(int i=0;i<userApps.length;i++){
+      if(userApps[i].sysName=="Staff Dashboard"){
+        userStaffDashboard=true;
+      }
+    }
+
+
+
     double shake(double animation) =>
         2 * (0.5 - (0.5 - Curves.ease.transform(animation)).abs());
 
@@ -200,8 +223,48 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                       physics: const NeverScrollableScrollPhysics(),
                       children: [
                         InkWell(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(StaffDashBoardScreen.routeName),
+                            onTap: () =>
+                            {
+                              if(user.employeeData?.isCEO != null && user.employeeData?.isTopManagement != null){
+                                 // 10
+                                if(user.employeeData?.isTopManagement == true){
+                                  Navigator.of(context)
+                                      .pushNamed(StaffDashBoardScreen.routeName),
+                                } // 11
+                                else if(user.employeeData?.isCEO == true){
+                                  Navigator.of(context).pushNamed(StaffDashBoardDetailScreen.routeName,
+                                      arguments: {
+                                        StaffDashBoardDetailScreen
+                                            .staffDashboardList: <CompanyStaffDashBoard>[],
+                                        StaffDashBoardDetailScreen.date: GlobalConstants.dateFormatServerDashBoard.format(DateTime.now())
+                                      }),
+                                  }
+                                  else if(userStaffDashboard){
+                                    Navigator.of(context)
+                                        .pushNamed(
+                                        StaffDashBoardProjectScreen.routeName,
+                                        arguments: {
+                                          StaffDashBoardProjectScreen
+                                              .companyID: "0",
+                                          StaffDashBoardProjectScreen
+                                              .project: "0",
+                                          StaffDashBoardProjectScreen
+                                              .director: user.employeeData
+                                              ?.userHrCode,
+                                          StaffDashBoardProjectScreen
+                                              .date: GlobalConstants.dateFormatServerDashBoard.format(DateTime.now()),
+                                        }),
+                                  }
+                                  else
+                                    {
+                                      Navigator.of(context).pushNamed(AttendanceScreen.routeName),
+                                    }
+                              } else
+                                {
+                                  Navigator.of(context).pushNamed(AttendanceScreen.routeName),
+                                }
+                            },
+
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             child: Column(
@@ -209,13 +272,12 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Image.asset(
-                                    Assets.images.homepage.staffDashboardIcon
-                                        .path,
+                                    userStaffDashboard?Assets.images.homepage.staffDashboardIcon.path:Assets.images.homepage.attendanceIcon.path,
                                     scale: 3),
-                                const Text(
-                                  'Staff Dashboard',
+                                 Text(
+                                  userStaffDashboard?'Staff Dashboard':"Attendance",
                                   softWrap: true,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       color: Colors.white, fontSize: 14),
                                 )
                               ],
@@ -700,11 +762,10 @@ Widget newsLetterMenuItems(BuildContext context) {
 }
 
 class MenuPopupWidget extends StatelessWidget {
-  const MenuPopupWidget(
-    this.widgetFunction,
-    this.childWidget, {
-    Key? key,
-  }) : super(key: key);
+  const MenuPopupWidget(this.widgetFunction,
+      this.childWidget, {
+        Key? key,
+      }) : super(key: key);
 
   final Widget widgetFunction;
   final Widget childWidget;
@@ -723,7 +784,7 @@ class MenuPopupWidget extends StatelessWidget {
           direction: PopoverDirection.top,
           width: 150,
           backgroundColor:
-              ConstantsColors.bottomSheetBackgroundDark.withOpacity(0.9),
+          ConstantsColors.bottomSheetBackgroundDark.withOpacity(0.9),
           arrowHeight: 15,
           arrowWidth: 30,
         );
