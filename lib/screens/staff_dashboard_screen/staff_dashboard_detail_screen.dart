@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/staff_dashboard_bloc/staff_dashboard_cubit.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/staff_dashboard_models/companystaffdashboard_model.dart';
 import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_ticket_widget.dart';
 
@@ -13,6 +14,8 @@ class StaffDashBoardDetailScreen extends StatefulWidget {
   static const List<CompanyStaffDashBoard> staffDashboardList = [];
   static const date = "/date";
   static const routeName = "/staff-dashboard-detail-screen";
+
+
 
   // List<CompanyStaffDashBoard> staffDashboardList;
   const StaffDashBoardDetailScreen({Key? key, this.requestData})
@@ -26,6 +29,9 @@ class StaffDashBoardDetailScreen extends StatefulWidget {
 
 class StaffDashBoardDetailScreenClass
     extends State<StaffDashBoardDetailScreen> {
+
+  bool firstTime=true;
+
   @override
   Widget build(BuildContext context) {
     final currentRequestData = widget.requestData;
@@ -97,6 +103,14 @@ class StaffDashBoardDetailScreenClass
                     }
                   },
                   builder: (context, state) {
+
+                    if(StaffDashBoardDetailScreen.staffDashboardList.isEmpty && firstTime){
+                      context
+                          .read<StaffDashboardCubit>()
+                          .getStaffBoardCompanies(user.employeeData?.userHrCode,
+                          GlobalConstants.dateFormatServerDashBoard.format(DateTime.now()));
+                      firstTime=false;
+                    }
                     return
                         // Column(
                         // children: [

@@ -528,11 +528,9 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                                   if (state
                                                                           .filePDF !=
                                                                       '') {
-                                                                    launchUrl(
-                                                                        Uri.parse(
-                                                                            'https://portal.hassanallam.com/Apps/Files/${state.filePDF}'),
-                                                                        mode: LaunchMode
-                                                                            .externalApplication);
+                                                                    launchUrl(Uri
+                                                                        .parse(
+                                                                            'https://portal.hassanallam.com/Apps/Files/${state.filePDF}'));
                                                                   } else {
                                                                     EasyLoading
                                                                         .showError(

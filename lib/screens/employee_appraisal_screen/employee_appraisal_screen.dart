@@ -89,7 +89,7 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
                         dataEmployeeAppraisalModel!.competencescore!));
 
                     return Padding(
-                      padding: const EdgeInsets.only(top: 10.0,bottom: 10.0),
+                      padding: const EdgeInsets.only(top: 10.0,bottom: 0.0),
                       child: SingleChildScrollView(
                         child: Column(
                           children: [

@@ -80,7 +80,6 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
               builder: (context, state) {
                 return Scaffold(
                   backgroundColor: Colors.transparent,
-                  primary: false,
                   appBar: AppBar(
                       backgroundColor: Colors.transparent,
                       elevation: 0,
@@ -116,15 +115,17 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                       // ),
                       // const SizedBox(height: 50),
                       // Assets.images.logo.image(scale: 10,),
-                      SizedBox(
-                        height: 100,
-                        child: AspectRatio(
-                            aspectRatio: 1,
-                            child: Assets.images.logo.image(
-                              scale: 1,
-                              fit: BoxFit.fitWidth,
-                              alignment: FractionalOffset.topCenter,
-                            )),
+                      Flexible(
+                        child: SizedBox(
+                          height: 100,
+                          child: AspectRatio(
+                              aspectRatio: 1,
+                              child: Assets.images.logo.image(
+                                scale: 1,
+                                fit: BoxFit.fitWidth,
+                                alignment: FractionalOffset.topCenter,
+                              )),
+                        ),
                       ),
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -328,7 +329,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                         ),
                       ),
                       Expanded(
-                        flex: 5,
+                        flex: 4,
                         child: Container(
                           color: Colors.white,
                           child: Column(

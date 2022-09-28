@@ -39,8 +39,6 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin{
 
     if (state.getAttendanceList[state.month-1].isEmpty) {
 
-      print("list is empty");
-
       if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
         try {
           emit(state.copyWith(
@@ -48,8 +46,15 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin{
           ));
           await AttendanceRepository().getAttendanceData(userHRCode, state.month)
               .then((value) async {
-            state.getAttendanceList.removeAt(state.month-1);
-            state.getAttendanceList.insert(state.month-1, value);
+
+            MyAttendanceModel lastModel = value.last;
+            if(lastModel.date!=null){
+            int monthCount1 = int.parse(lastModel.date!.split("-")[1]) ?? 0;
+
+            state.getAttendanceList.removeAt(monthCount1-1);
+            state.getAttendanceList.insert(monthCount1-1, value);
+            }
+
           }).catchError((error) {
             emit(state.copyWith(
               attendanceDataEnumStates: AttendanceDataEnumStates.failed,
