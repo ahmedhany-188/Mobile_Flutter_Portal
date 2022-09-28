@@ -221,6 +221,8 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       actionComment: state.actionComment,
       serviceID: RequestServiceID.equipmentServiceID,
       requesterHRCode: state.requesterData.userHrCode ?? "",
+      requesterEmail: state.requesterData.email ?? "",
+      serviceName: GlobalConstants.requestCategoryEquipment,
     )
         .catchError((err) {
       EasyLoading.showError('Something went wrong');

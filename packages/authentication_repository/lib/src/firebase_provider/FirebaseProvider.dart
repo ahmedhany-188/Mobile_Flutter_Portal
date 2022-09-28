@@ -99,4 +99,17 @@ class FirebaseProvider {
       });
     }
   }
+
+  addEquipmentTakeActionFirebaseNotification(String nextStepEmail, String requesterEmail,String requestNo,String requestType,String type)async{
+    // final requesterEmail = requesterData.email ?? "";
+    // final employeeData = this.currentUser?.employeeData;
+    if(requesterEmail.isNotEmpty){
+      await notificationReference.child(nextStepEmail.encodeEmail()).push().update({
+        "from": requesterEmail.encodeEmail(),
+        "requestType": requestType,
+        "requestNo": requestNo,
+        "type": type,
+      });
+    }
+  }
 }
