@@ -8,7 +8,4 @@ class RequestServiceID{
   static const String businessCardServiceID = "HAH-HR-FRM-06";
   static const String equipmentServiceID = "HAT-IT-FRM-03";
 
-
-
-
 }

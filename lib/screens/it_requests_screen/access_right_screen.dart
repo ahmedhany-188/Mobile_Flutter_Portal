@@ -525,10 +525,19 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                             : ElevatedButton
                                                                 .icon(
                                                                 onPressed: () {
-                                                                  print(state.filePDF);
-                                                                  launchUrl(
-                                                                      Uri.parse(
-                                                                          'https://portal.hassanallam.com/Apps/Files/${state.filePDF}'),mode: LaunchMode.externalApplication);
+                                                                  if (state
+                                                                          .filePDF !=
+                                                                      '') {
+                                                                    launchUrl(
+                                                                        Uri.parse(
+                                                                            'https://portal.hassanallam.com/Apps/Files/${state.filePDF}'),
+                                                                        mode: LaunchMode
+                                                                            .externalApplication);
+                                                                  } else {
+                                                                    EasyLoading
+                                                                        .showError(
+                                                                            'No file to be shown');
+                                                                  }
                                                                 },
                                                                 label: const Text(
                                                                     'View',

@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_null_comparison
-
 import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
@@ -15,11 +13,13 @@ import 'package:hassanallamportalflutter/data/models/admin_requests_models/embas
 import 'package:hassanallamportalflutter/data/models/get_location_model/location_data.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/access_right_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/it_requests_form_models/email_user_form_model.dart';
+import 'package:hassanallamportalflutter/data/models/it_requests_form_models/equipments_models/next_step_model.dart';
 import 'package:hassanallamportalflutter/data/models/my_requests_model/my_requests_model_form.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_duration_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_response.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_vacation_data_model.dart';
 import 'package:hassanallamportalflutter/data/models/user_notification_api/user_notification_api.dart';
+import 'package:hassanallamportalflutter/data/repositories/employee_repository.dart';
 import 'package:http/http.dart' as http;
 
 import '../../constants/request_service_id.dart';
@@ -102,10 +102,6 @@ class RequestRepository {
       "localAdmin": accessRightModel.localAdmin,
       "printing":accessRightModel.printing,
     });
-
-
-    print("the body: ="+bodyString);
-
 
     final http.Response rawAccess =
         await requestDataProviders.postAccessAccountAccessRequest(bodyString);
@@ -595,14 +591,21 @@ class RequestRepository {
     required String requestNo,
     required String requesterHRCode,
     required String actionComment,
+    required String requesterEmail,
+    required String serviceName,
   }) async {
-    List? nextObject;
+    dynamic nextObject;
     if(valueStatus == ActionValueStatus.accept){
       await GeneralDio.getNextStepWorkFlow(
               serviceId: serviceID,
               userHrCode: requesterHRCode,
               reqNo: int.parse(requestNo))
-          .then((value) => nextObject = value.data);
+          .then((value) {
+            nextObject = value.data;
+
+
+
+          });
     }
 
     var bodyString = jsonEncode(<String, dynamic>{
@@ -613,18 +616,33 @@ class RequestRepository {
       "mangerHrCode": userData?.user?.userHRCode ?? "0",
       "comment": actionComment,
       "nextStep": nextObject ?? [],
-      // [
-      //   {
-      //     "user_HR_Code": "string",
-      //     "name": "string",
-      //     "title_ID": "string"
-      //   }
-      // ],
     });
     final http.Response rawResponse =
         await requestDataProviders.postTakeEquipmentActionOnRequest(bodyString);
     final json = await jsonDecode(rawResponse.body);
     final ResponseTakeAction response = ResponseTakeAction.fromJson(json);
+    List<NextStepModel> nextStepList = List<NextStepModel>.from(
+        nextObject.map((model) => NextStepModel.fromJson(model)));
+    final result = response.result ?? "false";
+    if (result.toLowerCase().contains("true")) {
+      if(valueStatus == ActionValueStatus.accept){
+        for(int i = 0; i < nextStepList.length;i++){
+          var nextStepUserHRCode = nextStepList[i].userHRCode ?? "";
+          var nextStepContact =await GetEmployeeRepository().getEmployeeData(nextStepUserHRCode);
+          await FirebaseProvider(userData ?? MainUserData.empty)
+              .addEquipmentTakeActionFirebaseNotification(nextStepContact.email ?? "",requesterEmail,
+              response.requestNo.toString(), serviceName,
+              "Submit");
+        }
+      }
+      await FirebaseProvider(userData ?? MainUserData.empty)
+          .addTakeActionFirebaseNotification(requesterEmail,
+          response.requestNo.toString(), serviceName,
+          valueStatus == ActionValueStatus.accept ? "Accept" : "Reject");
+    }
+
+
+
     return response;
   }
 }
