@@ -1,16 +1,14 @@
-import 'package:circular/circular.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/appraisal_models/object_appraisal_model.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-// ignore: must_be_immutable
 class EmployeeAppraisalTicketWidget extends StatelessWidget {
 
-  List<ObjectAppraisalModel> employeeAppraisaleList;
+  final List<ObjectAppraisalModel> employeeAppraisaleList;
 
-  EmployeeAppraisalTicketWidget(this.employeeAppraisaleList, {Key? key})
+  const EmployeeAppraisalTicketWidget(this.employeeAppraisaleList, {Key? key})
       : super(key: key);
 
   @override
@@ -25,6 +23,7 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget {
                 keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior
                     .onDrag,
                 shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   // childAspectRatio: (1 / .4),
@@ -45,7 +44,7 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget {
                       animation: true,
                       percent: employeeAppraisaleList[index].value / 100,
                       center: Text(
-                        employeeAppraisaleList[index].value.toString() + "%",
+                        "${employeeAppraisaleList[index].value}%",
                         style: const TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20.0),
                       ),
@@ -64,7 +63,7 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget {
                   );
                 }
             ),
-        fallback: (context) => const Center(child: CircularProgressIndicator()),
+        fallback: (context) => const Center(child: CircularProgressIndicator(color: Colors.white,)),
       ),
     );
   }
