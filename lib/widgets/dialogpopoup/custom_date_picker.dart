@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:hassanallamportalflutter/constants/colors.dart';
 
 Future<DateTime?> openShowDatePicker(context) async {
+
   if (defaultTargetPlatform == TargetPlatform.macOS ||
       defaultTargetPlatform == TargetPlatform.iOS) {
-    return await showCupertinoModalPopup(
+  DateTime day = DateTime.now();
+
+  return await showCupertinoModalPopup(
         context: context,
         builder: (BuildContext builder) {
           return Container(
@@ -18,28 +20,26 @@ Future<DateTime?> openShowDatePicker(context) async {
             color: Colors.white,
             child: Column(
               children: [
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      CupertinoButton(
-                        child: const Text('Cancel', style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Colors.black, fontSize: 20),),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      CupertinoButton(
-                        child: const Text('Done', style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Colors.black, fontSize: 20),),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    CupertinoButton(
+                      child: const Text('Cancel', style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.black, fontSize: 20),),
+                      onPressed: () {
+                        Navigator.of(context).pop(day);
+                      },
+                    ),
+                    CupertinoButton(
+                      child: const Text('Done', style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          color: Colors.black, fontSize: 20),),
+                      onPressed: () {
+                        Navigator.of(context).pop(day);
+                      },
+                    ),
+                  ],
                 ),
                 const Divider(
                   height: 0,
@@ -52,22 +52,13 @@ Future<DateTime?> openShowDatePicker(context) async {
                       .copyWith()
                       .size
                       .height * 0.25,
-                  // child: CupertinoTheme(
-                  //   data: const CupertinoThemeData(
-                  //     textTheme: CupertinoTextThemeData(
-                  //       dateTimePickerTextStyle: TextStyle(
-                  //         color: Colors.white,
-                  //       ),
-                  //     ),
-                  //   ),
                   child: CupertinoDatePicker(
                     mode: CupertinoDatePickerMode.date,
                     initialDateTime: DateTime.now(),
                     minimumYear: 2020,
                     maximumYear: 2100,
                     onDateTimeChanged: (value) {
-                      // date = value;
-                      print("----date picker-----" + value.toString());
+                      day=value;
                     },
                   ),
                 ),
@@ -76,7 +67,6 @@ Future<DateTime?> openShowDatePicker(context) async {
             ),);
         });
 
-    // ---------------------------------------------------
   } else {
     return await showDatePicker(
         context: context,
@@ -97,7 +87,7 @@ Future<DateTime?> openShowDatePicker(context) async {
               ),
               textButtonTheme: TextButtonThemeData(
                 style: TextButton.styleFrom(
-                  primary: const Color(0xff0F3C5B), // button text color
+                  foregroundColor: const Color(0xff0F3C5B), // button text color
                 ),
               ),
             ),
@@ -107,75 +97,71 @@ Future<DateTime?> openShowDatePicker(context) async {
     );
   }
 }
+
 Future<TimeOfDay?> openShowTimePicker(context)async {
+  TimeOfDay time = TimeOfDay.now();
   if (defaultTargetPlatform == TargetPlatform.macOS ||
-      defaultTargetPlatform == TargetPlatform.iOS){
-  return await showCupertinoModalPopup(
-      context: context,
-      builder: (BuildContext builder) {
-        return Container(
-          height: MediaQuery.of(context).copyWith().size.height * 0.35,
-          color: Colors.white,
-          child: Column(
-            children: [
-              Container(
-                child: Row(
+      defaultTargetPlatform == TargetPlatform.iOS) {
+    return await showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext builder) {
+          return Container(
+            height: MediaQuery
+                .of(context)
+                .copyWith()
+                .size
+                .height * 0.35,
+            color: Colors.white,
+            child: Column(
+              children: [
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     CupertinoButton(
-                      child: const Text('Cancel',style: TextStyle(
+                      child: const Text('Cancel', style: TextStyle(
                           decoration: TextDecoration.underline,
                           color: Colors.black, fontSize: 20),),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop(time);
                       },
                     ),
                     CupertinoButton(
-                      child: const Text('Done',style: TextStyle(
+                      child: const Text('Done', style: TextStyle(
                           decoration: TextDecoration.underline,
                           color: Colors.black, fontSize: 20),),
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pop(time);
                       },
                     ),
                   ],
                 ),
-              ),
-              const Divider(
-                height: 0,
-                thickness: 1,
-                color: Colors.black38,
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).copyWith().size.height * 0.25,
-                // child: CupertinoTheme(
-                //   data: const CupertinoThemeData(
-                //     textTheme: CupertinoTextThemeData(
-                //       dateTimePickerTextStyle: TextStyle(
-                //         color: Colors.white,
-                //       ),
-                //     ),
-                //   ),
-                child: CupertinoDatePicker(
-                  mode: CupertinoDatePickerMode.time,
-                  initialDateTime: DateTime.now(),
-
-                  onDateTimeChanged: (value) {
-                    // date = value;
-                    print("----date picker-----" + value.toString());
-                  },
+                const Divider(
+                  height: 0,
+                  thickness: 1,
+                  color: Colors.black38,
                 ),
-              ),
-              // ),
-            ],
-          ),);
-      });
-
-  //------------------------------
-
+                SizedBox(
+                  height: MediaQuery
+                      .of(context)
+                      .copyWith()
+                      .size
+                      .height * 0.25,
+                  child: CupertinoDatePicker(
+                    mode: CupertinoDatePickerMode.time,
+                    initialDateTime: DateTime.now(),
+                    onDateTimeChanged: (value) {
+                      time = TimeOfDay.fromDateTime(value);
+                      print("----date picker-----" + time.toString());
+                    },
+                  ),
+                ),
+                // ),
+              ],
+            ),);
+        });
   }
-  else{
-  return await showTimePicker(context: context,
+  else {
+    return await showTimePicker(context: context,
         initialTime: TimeOfDay.now(),
         builder: (context, child) {
           return Theme(
@@ -191,12 +177,12 @@ Future<TimeOfDay?> openShowTimePicker(context)async {
               ),
               textButtonTheme: TextButtonThemeData(
                 style: TextButton.styleFrom(
-                  primary: const Color(0xff0F3C5B), // button text color
+                  foregroundColor: const Color(0xff0F3C5B), // button text color
                 ),
               ),
             ),
             child: child!,
           );
         });
-}
+  }
 }
