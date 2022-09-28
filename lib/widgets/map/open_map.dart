@@ -5,8 +5,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 Future<void> openMap(double latitude, double longitude) async {
 // String googleUrl ='https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+// String appleUrl ='https://maps.apple.com/?saddr=30.1074108,31.3818438&daddr=$latitude,$longitude&dirflg=d';
+
   String appleUrl =
-      'https://maps.apple.com/?saddr=30.1074108,31.3818438&daddr=$latitude,$longitude';
+      'https://maps.apple.com/?daddr=$latitude,$longitude&dirflg=d';
   String googleUrl =
       'https://www.google.com/maps/dir/?api=1&destination=$latitude,$longitude&travelmode=driving&dir_action=navigate';
 
