@@ -8,7 +8,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/payslip_screen_bloc/payslip_cubit.dart';
-import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 
 import '../../widgets/background/custom_background.dart';
 
@@ -58,8 +57,8 @@ class _PayslipScreenState extends State<PayslipScreen> {
   static void downloadCallback(String id, DownloadTaskStatus status,
       int progress) {
     // if (debug) {
-    print(
-        'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
+    // print(
+    //     'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
     // }
     final SendPort send =
     IsolateNameServer.lookupPortByName('downloader_send_port')!;
@@ -165,7 +164,7 @@ class _PayslipScreenState extends State<PayslipScreen> {
                             });
                           },
                           icon: showPassword
-                              ? Icon(
+                              ? const Icon(
                             Icons.visibility,
                             color: Colors.white70
                           )
@@ -193,9 +192,9 @@ class _PayslipScreenState extends State<PayslipScreen> {
                     const SizedBox(height: 10,),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          primary: Colors.blue[900],
-                          padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
-                          textStyle: TextStyle(
+                          backgroundColor: Colors.blue[900],
+                          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                          textStyle: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold)),
                       onPressed: () {

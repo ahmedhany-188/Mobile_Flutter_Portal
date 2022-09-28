@@ -316,7 +316,7 @@ class _ContactsScreenState extends State<ContactsScreen>
                                                 textFoucus.unfocus();
                                               },
                                         style: ElevatedButton.styleFrom(
-                                          onSurface: Colors.white,
+                                          backgroundColor: Colors.white,
                                         ),
                                         label: const Text('Clear Filters'),
                                         icon: const Icon(

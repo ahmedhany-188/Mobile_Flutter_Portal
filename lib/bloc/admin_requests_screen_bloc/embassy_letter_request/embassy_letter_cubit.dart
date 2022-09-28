@@ -11,7 +11,6 @@ import 'package:hassanallamportalflutter/data/models/admin_requests_models/embas
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/widgets/dialogpopoup/custom_date_picker.dart';
-import 'package:html/parser.dart';
 
 import '../../../constants/enums.dart';
 import '../../../constants/request_service_id.dart';
@@ -130,7 +129,6 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
           final embassyLetterResponse = await _requestRepository
               .postEmbassyLetter(embassyLetterFormModel: embassyLetterFormModel);
 
-          print("-------"+embassyLetterResponse.requestNo.toString());
 
           if (embassyLetterResponse.id == 1) {
             emit(
@@ -146,7 +144,7 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
                     : "An error occurred", status: FormzStatus.submissionFailure,
               ),
             );
-          };
+          }
         } else {
           emit(
             state.copyWith(

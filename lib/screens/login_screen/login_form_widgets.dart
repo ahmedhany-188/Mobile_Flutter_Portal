@@ -20,7 +20,7 @@ class LoginButton extends StatelessWidget {
                 //         RoundedRectangleBorder(
                 //   borderRadius: BorderRadius.circular(20.0),
                 // ))),
-          style: ElevatedButton.styleFrom(primary: Colors.white),
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.white),
                 onPressed: () => context.read<LoginCubit>().logInWithCredentials(),
                 // state.status.isValidated
                 //     ? () => context.read<LoginCubit>().logInWithCredentials()
