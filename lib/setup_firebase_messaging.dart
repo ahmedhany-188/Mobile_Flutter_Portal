@@ -291,8 +291,8 @@ class SetupFirebaseMessaging {
         android: initializationSettingsAndroid, iOS: initializationSettingsIOs);
     flutterLocalNotificationsPlugin.initialize(
       initSettings,
-      onDidReceiveNotificationResponse: (message) => _onSelectNotificationMessage(message.payload),
-      onDidReceiveBackgroundNotificationResponse: (message) => _onSelectNotificationMessage(message.payload),
+      onDidReceiveNotificationResponse: (message) =>
+          _onSelectNotificationMessage(message.payload),
     );
   }
 
