@@ -31,12 +31,12 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
       .now()
       .day;
 
+  int monthNumber = DateTime
+      .now()
+      .month;
+
   @override
   Widget build(BuildContext context) {
-    int monthNumber = DateTime
-        .now()
-        .month;
-
     if (dayNumber > 15) {
       monthNumber += 1;
       selectedPage += 1;
@@ -92,27 +92,18 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                               children: [
                                 TextButton.icon(
                                     onPressed: () {
-                                      if (state
-                                          .attendanceDataEnumStates ==
-                                          AttendanceDataEnumStates
-                                              .success
-                                          || state
-                                              .attendanceDataEnumStates ==
-                                              AttendanceDataEnumStates
-                                                  .fullSuccess) {
-                                        monthNumber--;
+                                      monthNumber--;
+                                      pageController.jumpToPage(
+                                          monthNumber - 1);
+                                      if (monthNumber < 1) {
+                                        monthNumber = 12;
                                         pageController.jumpToPage(
-                                            monthNumber - 1);
-                                        if (monthNumber < 1) {
-                                          monthNumber = 12;
-                                          pageController.jumpToPage(
-                                              11);
-                                        }
-                                        context.read<
-                                            AttendanceCubit>()
-                                            .monthValueChanged(
-                                            monthNumber);
+                                            11);
                                       }
+                                      context.read<
+                                          AttendanceCubit>()
+                                          .monthValueChanged(
+                                          monthNumber);
                                     },
                                     icon: const Icon(
                                       Icons.arrow_back_ios,
@@ -129,27 +120,18 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                                 ),
                                 TextButton.icon(
                                     onPressed: () {
-                                      if (state
-                                          .attendanceDataEnumStates ==
-                                          AttendanceDataEnumStates
-                                              .success
-                                          || state
-                                              .attendanceDataEnumStates ==
-                                              AttendanceDataEnumStates
-                                                  .fullSuccess) {
-                                        monthNumber++;
+                                      monthNumber++;
+                                      pageController.jumpToPage(
+                                          monthNumber - 1);
+                                      if (monthNumber > 12) {
+                                        monthNumber = 1;
                                         pageController.jumpToPage(
-                                            monthNumber - 1);
-                                        if (monthNumber > 12) {
-                                          monthNumber = 1;
-                                          pageController.jumpToPage(
-                                              0);
-                                        }
-                                        context.read<
-                                            AttendanceCubit>()
-                                            .monthValueChanged(
-                                            monthNumber);
+                                            0);
                                       }
+                                      context.read<
+                                          AttendanceCubit>()
+                                          .monthValueChanged(
+                                          monthNumber);
                                     },
                                     icon: const Icon(
                                       Icons.arrow_forward_ios,
@@ -159,62 +141,15 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                               ],
                             ),
                             Expanded(
-                                child: state
-                                    .attendanceDataEnumStates ==
-                                    AttendanceDataEnumStates.success
-                                    ||
-                                    state.attendanceDataEnumStates ==
-                                        AttendanceDataEnumStates
-                                            .fullSuccess ?
-                                PageView(
+                                child: PageView(
                                   onPageChanged: (index) {
                                     monthNumber = index + 1;
-                                    context.read<AttendanceCubit>()
-                                        .monthValueChanged(
-                                        monthNumber);
-                                    if (state
-                                        .getAttendanceList[monthNumber -
-                                        1]
-                                        .toString() == "[]") {
-                                      BlocProvider.of<
-                                          AttendanceCubit>(context)
-                                          .getAllAttendanceList(
-                                          user.user!.userHRCode
-                                      );
-                                      selectedPage = monthNumber - 1;
-                                      pageController =
-                                          PageController(
-                                              initialPage: selectedPage);
+                                    context.read<AttendanceCubit>().monthValueChanged(monthNumber);
+                                    if (state.getAttendanceList[monthNumber - 1].toString() == "[]") {
+                                      BlocProvider.of<AttendanceCubit>(context).getAllAttendanceList(user.user!.userHRCode);
                                     }
-                                  },
-                                  controller: pageController,
-                                  children: [
-
-                                    getShimmer(state, 0, user),
-                                    getShimmer(state, 1, user),
-                                    getShimmer(state, 2, user),
-                                    getShimmer(state, 3, user),
-                                    getShimmer(state, 4, user),
-                                    getShimmer(state, 5, user),
-                                    getShimmer(state, 6, user),
-                                    getShimmer(state, 7, user),
-                                    getShimmer(state, 8, user),
-                                    getShimmer(state, 9, user),
-                                    getShimmer(state, 10, user),
-                                    getShimmer(state, 11, user),
-
-                                  ],
-                                ) :
-                                PageView(
-                                  onPageChanged: (index) {
-                                    monthNumber = index + 1;
-                                    context.read<AttendanceCubit>()
-                                        .monthValueChanged(
-                                        monthNumber);
                                     selectedPage = monthNumber - 1;
-                                    pageController =
-                                        PageController(
-                                            initialPage: selectedPage);
+                                    pageController = PageController(initialPage: selectedPage);
                                   },
                                   controller: pageController,
                                   children: [
@@ -232,7 +167,6 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                                     getShimmer(state, 11, user),
                                   ],
                                 )
-
                             ),
                           ],
                         );
