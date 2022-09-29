@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
 import '../../widgets/dialogpopoup/dialog_popup_attendance.dart';
+import 'package:intl/intl.dart';
 
 class AttendanceTicketWidget extends StatelessWidget {
 
@@ -73,23 +74,20 @@ class AttendanceTicketWidget extends StatelessWidget {
                 "blue", "blue", hrUser);
           } else if (attendanceListData[index].timeIN != null &&
               attendanceListData[index].timeOUT != null) {
-            timeIn = attendanceListData[index].timeIN.toString().split(':')[0];
-            timeIn2 = attendanceListData[index].timeIN.toString().split(':')[1];
 
-            timeIn2 = timeIn2.replaceAll("AM", "");
+            DateTime date1= DateFormat("hh:mma").parse(attendanceListData[index].timeIN.toString());
+            DateTime date2= DateFormat("hh:mma").parse(attendanceListData[index].timeOUT.toString());
 
-            /// Time in 2 PM Error
-            timeIn2 = timeIn2.replaceAll("PM", "");
+            String dateDay=DateFormat("HH:mm").format(date1);
+            String dateNight=DateFormat("HH:mm").format(date2);
 
-            timeOut =
-                attendanceListData[index].timeOUT.toString().split(':')[0];
-            timeOut2 =
-                attendanceListData[index].timeOUT.toString().split(':')[1];
+            timeIn = dateDay.split(':')[0];
+            timeIn2 = dateDay.split(':')[1];
 
-            /// Time out AM Error
-            timeOut2 = timeOut2.replaceAll("AM", "");
+            timeOut = dateNight.split(':')[0];
+            timeOut2 = dateNight.split(':')[1];
 
-            timeOut2 = timeOut2.replaceAll("PM", "");
+
 
             if (attendanceListData[index]
                     .timeIN
@@ -106,19 +104,19 @@ class AttendanceTicketWidget extends StatelessWidget {
             }
 
             else if (
-            ((int.parse(timeOut) >= 5) || (int.parse(timeOut) == 4 && int.parse(timeOut2) == 59)) &&
+            ((int.parse(timeOut) >= 17) || (int.parse(timeOut) == 16 && int.parse(timeOut2) == 59)) &&
                 ((int.parse(timeIn) < 8) || (int.parse(timeIn) == 8 && int.parse(timeIn2) < 31))
             ) {
               return sizedDay(attendanceListData[index], context, "in", "out",
                   "green", "green", hrUser);
             } else if (
-            ((int.parse(timeOut) >= 5) || (int.parse(timeOut) == 4 && int.parse(timeOut2) == 59)) &&
+            ((int.parse(timeOut) >= 17) || (int.parse(timeOut) == 16 && int.parse(timeOut2) == 59)) &&
                 ((int.parse(timeIn) > 8) || (int.parse(timeIn) == 8 && int.parse(timeIn2) > 30))
             ) {
               return sizedDay(attendanceListData[index], context, "in", "out",
                   "red", "green", hrUser);
             } else if (
-            ((int.parse(timeOut) == 4 && int.parse(timeOut2) < 59) || (int.parse(timeOut) < 4)) &&
+            ((int.parse(timeOut) == 16 && int.parse(timeOut2) < 59) || (int.parse(timeOut) < 16)) &&
                 ((int.parse(timeIn) < 8) || (int.parse(timeIn) == 8 && int.parse(timeIn2) < 31))
             ) {
               return sizedDay(attendanceListData[index], context, "in", "out",
