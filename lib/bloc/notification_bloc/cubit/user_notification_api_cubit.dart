@@ -1,9 +1,12 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/data/models/response_take_action.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import '../../../constants/enums.dart';
+import '../../../constants/request_service_id.dart';
 import '../../../data/models/user_notification_api/user_notification_api.dart';
 import '../../../data/repositories/request_repository.dart';
 
@@ -109,23 +112,68 @@ class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState> {
       ));
     }
   }
+  Future<void> getNotificationsWithoutLoading() async {
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+      try {
+        // emit(state.copyWith(
+        //     userNotificationEnumStates: UserNotificationEnumStates.loading,
+        //     status: FormzStatus.pure));
+        // await Future.delayed(Duration(minutes: 1));
+        await requestRepository.getMyNotificationData().then((value) async {
+          emit(state.copyWith(
+              userNotificationList: value,
+              userNotificationEnumStates: UserNotificationEnumStates.success));
+        }).catchError((error) {
+          emit(state.copyWith(
+            userNotificationEnumStates: UserNotificationEnumStates.failed,
+          ));
+        });
+      } catch (e) {
+        emit(state.copyWith(
+          userNotificationEnumStates: UserNotificationEnumStates.failed,
+        ));
+      }
+    } else {
+      emit(state.copyWith(
+        userNotificationEnumStates: UserNotificationEnumStates.noConnection,
+      ));
+    }
+  }
 
   submitRequestAction(
       ActionValueStatus valueStatus, UserNotificationApi notification) async {
     emit(state.copyWith(
       status: FormzStatus.submissionInProgress,
     ));
-    final vacationResultResponse =
-        await requestRepository.postTakeActionRequest(
-            valueStatus: valueStatus,
-            requestNo: notification.requestNo.toString(),
-            actionComment: "",
-            serviceID: notification.serviceID ?? "",
-            serviceName: notification.serviceName ?? "",
-            requesterHRCode: notification.requestHRCode ?? "",
-            requesterEmail: notification.requesterEmail ?? "");
+    var serviceID = notification.serviceID ?? "";
+    ResponseTakeAction resultResponse;
+    if(serviceID.contains(RequestServiceID.equipmentServiceID)) {
+      resultResponse = await requestRepository
+          .postEquipmentTakeActionRequest(
+        valueStatus: valueStatus,
+        requestNo: notification.requestNo.toString(),
+        actionComment: "",
+        serviceID: RequestServiceID.equipmentServiceID,
+        requesterHRCode: notification.requestHRCode ?? "",
+        requesterEmail: notification.requesterEmail ?? "",
+        serviceName: notification.serviceName ?? "",
+      ).catchError((err) {
+        EasyLoading.showError('Something went wrong');
+        throw err;
+      });
+    }else{
+      resultResponse =
+      await requestRepository.postTakeActionRequest(
+          valueStatus: valueStatus,
+          requestNo: notification.requestNo.toString(),
+          actionComment: "",
+          serviceID: notification.serviceID ?? "",
+          serviceName: notification.serviceName ?? "",
+          requesterHRCode: notification.requestHRCode ?? "",
+          requesterEmail: notification.requesterEmail ?? "");
+    }
 
-    final result = vacationResultResponse.result ?? "false";
+    final result = resultResponse.result ?? "false";
     if (result.toLowerCase().contains("true")) {
       emit(
         state.copyWith(

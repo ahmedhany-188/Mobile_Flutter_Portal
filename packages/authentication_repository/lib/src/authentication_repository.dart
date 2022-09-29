@@ -95,7 +95,8 @@ class AuthenticationRepository {
               User user = User.fromJson(loginTokenDataJson[0]);
               String userData = jsonEncode(loginTokenDataJson[0]);
               //TODO : Add Signup firebase if not sign in before
-              await logInWithEmailAndPassword(email: user.email,password: "12345678");
+              await logInWithEmailAndPassword(
+                  email: user.email, password: "12345678");
               shared_User.setString(userCacheKey, userData);
 
               // if (Platform.isIOS){
@@ -109,11 +110,13 @@ class AuthenticationRepository {
               //   });
               //   // _firebaseMessaging.requestPermission()
               // }
-              await authenticationProvider.getEmployeeData(user.userHRCode!).then((value) async {
+              await authenticationProvider.getEmployeeData(user.userHRCode!)
+                  .then((value) async {
                 print(value);
                 if (value.statusCode == 200) {
                   final employeeDataJson = await jsonDecode(value.body);
-                  EmployeeData employeeData = EmployeeData.fromJson(employeeDataJson[0]);
+                  EmployeeData employeeData = EmployeeData.fromJson(
+                      employeeDataJson[0]);
 
 
                   // var managerResponse = await authenticationProvider.getEmployeeData(employeeData.managerCode!);
@@ -125,12 +128,16 @@ class AuthenticationRepository {
                   print(employeeData.toString());
 
                   //TODO : Add FirebaseMessaging for IOS
+
                   await _firebaseMessaging.getToken().then((token) async {
                     print("FCM --> $token");
-                    await FirebaseProvider(MainUserData(employeeData: employeeData,user: user)).updateUserWithData(token!);
+                    await FirebaseProvider(
+                        MainUserData(employeeData: employeeData, user: user))
+                        .updateUserWithData(token!);
                   });
                   await _firebaseMessaging.subscribeToTopic("all");
-                  _controller.add(MainUserData(employeeData: employeeData,user: user));
+                  _controller.add(
+                      MainUserData(employeeData: employeeData, user: user));
                 }
               });
             } on flutter_firebase_auth.FirebaseAuthException catch (e) {

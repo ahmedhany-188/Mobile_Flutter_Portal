@@ -17,6 +17,7 @@ import 'package:hassanallamportalflutter/setup_firebase_messaging.dart';
 
 
 import 'bloc/auth_app_status_bloc/app_bloc.dart';
+import 'bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'constants/constants.dart';
 import 'gen/assets.gen.dart';
 import 'main.dart';
@@ -80,7 +81,7 @@ class LifeCycleStateState extends State<LifeCycleState> with WidgetsBindingObser
         print("life cycle -->resumed");
         print(status== AppStatus.authenticated ? "life cycle --> authenticated":"life cycle -->unauthenticated");
       }
-
+      UserNotificationApiCubit.get(context).getNotificationsWithoutLoading();
       updateFirebaseWithStatus(AppLifecycleStatus.online);
       // unityWidgetController.resume();
     }else if (state == AppLifecycleState.inactive){
@@ -101,6 +102,11 @@ class LifeCycleStateState extends State<LifeCycleState> with WidgetsBindingObser
   updateFirebaseWithStatus(AppLifecycleStatus appLifecycleStatus){
     FirebaseProvider(context
         .read<AppBloc>().state.userData).updateUserOnline(appLifecycleStatus);
+    FirebaseMessaging.instance.onTokenRefresh.listen((String token) {
+      // print("New token: $token");
+      FirebaseProvider(context
+          .read<AppBloc>().state.userData).onFirebaseTokenRefreshed(token);
+    });
 
   }
 }
