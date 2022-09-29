@@ -15,7 +15,7 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin{
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
           try {
-            getFirstAttendanceList(userHrCode);
+            getAllAttendanceList(userHrCode);
           } catch (e) {
             emit(state.copyWith(
               attendanceDataEnumStates: AttendanceDataEnumStates.failed,
@@ -46,24 +46,21 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin{
           ));
           await AttendanceRepository().getAttendanceData(userHRCode, state.month)
               .then((value) async {
-
             MyAttendanceModel lastModel = value.last;
             if(lastModel.date!=null){
             int monthCount1 = int.parse(lastModel.date!.split("-")[1]) ?? 0;
-
             state.getAttendanceList.removeAt(monthCount1-1);
             state.getAttendanceList.insert(monthCount1-1, value);
+            emit(state.copyWith(
+              attendanceDataEnumStates: AttendanceDataEnumStates.fullSuccess,
+              getAttendanceList: state.getAttendanceList,
+            ));
             }
-
           }).catchError((error) {
             emit(state.copyWith(
               attendanceDataEnumStates: AttendanceDataEnumStates.failed,
             ));
           });
-          emit(state.copyWith(
-            attendanceDataEnumStates: AttendanceDataEnumStates.fullSuccess,
-            getAttendanceList: state.getAttendanceList,
-          ));
         } catch (e) {
           emit(state.copyWith(
             attendanceDataEnumStates: AttendanceDataEnumStates.failed,
@@ -77,12 +74,10 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin{
     }
   }
 
-  Future<void> getFirstAttendanceList(userHRCode
-      ) async {
+  Future<void> getFirstAttendanceList(userHRCode) async {
     if (state.getAttendanceList.isEmpty) {
 
       List<List<MyAttendanceModel>> getAttendanceListSuccess = [];
-
       List<MyAttendanceModel> emptyLit = [];
 
       getAttendanceListSuccess.add(emptyLit);
@@ -101,7 +96,6 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin{
           emit(state.copyWith(
             getAttendanceList: getAttendanceListSuccess,
           ));
-
           getAllAttendanceList(userHRCode);
 
     }
