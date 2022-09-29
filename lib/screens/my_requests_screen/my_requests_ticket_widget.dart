@@ -225,7 +225,7 @@ class MyRequestsItemWidget extends StatelessWidget {
         {
           return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             Text(statusName, style: const TextStyle(fontSize: 16,color: Colors.white),),
-            const Icon(Icons.camera, color: Colors.yellow,)
+            const Icon(Icons.pending_actions_outlined, color: Colors.yellow,)
           ],
           );
         }

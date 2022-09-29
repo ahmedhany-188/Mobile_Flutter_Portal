@@ -577,7 +577,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                         .equipmentFile !=
                                                     null) {
                                                   launchUrl(Uri.parse(
-                                                      'https://portal.hassanallam.com/Apps/Files/Equipments/${state.requestedData?.data![0].equipmentFile}'));
+                                                      'https://portal.hassanallam.com/Apps/Files/Equipments/${state.requestedData?.data![0].equipmentFile}'),mode: LaunchMode.externalApplication);
                                                 } else {
                                                   EasyLoading.showError(
                                                       'No File has been uploaded');
@@ -1213,7 +1213,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
       default:
         {
           return const Icon(
-            Icons.camera,
+            Icons.pending_actions_outlined,
             color: Colors.yellow,
           );
         }
