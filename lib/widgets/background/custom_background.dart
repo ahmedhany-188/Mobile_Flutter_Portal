@@ -16,7 +16,7 @@ class CustomBackground extends StatelessWidget {
           Column(
             children: [
               Expanded(
-                flex: 2,
+                // flex: 2,
                 child: Container(
                   decoration: const BoxDecoration(
                       gradient: LinearGradient(
@@ -29,18 +29,19 @@ class CustomBackground extends StatelessWidget {
                   )),
                 ),
               ),
-              Flexible(
-                child: Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                        fit: BoxFit.fill,
-                          image: Assets.images.mainBackground
-                              .image()
-                              .image)),
-                  // child:
-                  //     Assets.images.mainBackground.image(fit: BoxFit.fitWidth),
-                ),
-              ),
+              Assets.images.mainBackground.image()
+              // Flexible(
+              //   child: Container(
+              //     decoration: BoxDecoration(
+              //         image: DecorationImage(
+              //           fit: BoxFit.fill,
+              //             image: Assets.images.mainBackground
+              //                 .image()
+              //                 .image)),
+              //     // child:
+              //     //     Assets.images.mainBackground.image(fit: BoxFit.fitWidth),
+              //   ),
+              // ),
             ],
           ),
           Container(
@@ -75,7 +76,10 @@ class CustomTheme extends StatelessWidget {
         canvasColor: ConstantsColors.bottomSheetBackground,
         scaffoldBackgroundColor: Colors.transparent,
         appBarTheme: const AppBarTheme(
-            elevation: 0, color: Colors.transparent, centerTitle: true),
+          elevation: 0,
+          color: Colors.transparent,
+          centerTitle: true,
+        ),
         splashColor: Colors.transparent,
         elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(

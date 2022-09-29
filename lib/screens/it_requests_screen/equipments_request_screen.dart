@@ -541,7 +541,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                       RequestStatus.newRequest)
                                                   ? state.chosenFileName
                                                   : state.requestedData
-                                                      ?.data![0].equipmentFile,
+                                                      ?.data![0].equipmentFile ?? 'No file',
                                               // keyboardType:
                                               //     TextInputType.multiline,
                                               maxLines: 1,
