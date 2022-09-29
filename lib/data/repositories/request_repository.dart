@@ -575,10 +575,11 @@ class RequestRepository {
     final json = await jsonDecode(rawResponse.body);
     final ResponseTakeAction response = ResponseTakeAction.fromJson(json);
     final result = response.result ?? "false";
+    // print(requestNo);
     if (result.toLowerCase().contains("true")) {
       await FirebaseProvider(userData ?? MainUserData.empty)
           .addTakeActionFirebaseNotification(requesterEmail,
-          response.requestNo.toString(), serviceName,
+          requestNo, serviceName,
           valueStatus == ActionValueStatus.accept ? "Accept" : "Reject");
     }
 
@@ -602,9 +603,6 @@ class RequestRepository {
               reqNo: int.parse(requestNo))
           .then((value) {
             nextObject = value.data;
-
-
-
           });
     }
 
@@ -621,23 +619,28 @@ class RequestRepository {
         await requestDataProviders.postTakeEquipmentActionOnRequest(bodyString);
     final json = await jsonDecode(rawResponse.body);
     final ResponseTakeAction response = ResponseTakeAction.fromJson(json);
-    List<NextStepModel> nextStepList = List<NextStepModel>.from(
-        nextObject.map((model) => NextStepModel.fromJson(model)));
+
     final result = response.result ?? "false";
     if (result.toLowerCase().contains("true")) {
       if(valueStatus == ActionValueStatus.accept){
-        for(int i = 0; i < nextStepList.length;i++){
-          var nextStepUserHRCode = nextStepList[i].userHRCode ?? "";
-          var nextStepContact =await GetEmployeeRepository().getEmployeeData(nextStepUserHRCode);
-          await FirebaseProvider(userData ?? MainUserData.empty)
-              .addEquipmentTakeActionFirebaseNotification(nextStepContact.email ?? "",requesterEmail,
-              response.requestNo.toString(), serviceName,
-              "Submit");
+        if(nextObject.toString().isNotEmpty) {
+          List<NextStepModel> nextStepList = List<NextStepModel>.from(
+              nextObject.map((model) => NextStepModel.fromJson(model)));
+          for (int i = 0; i < nextStepList.length; i++) {
+            var nextStepUserHRCode = nextStepList[i].userHRCode ?? "";
+            var nextStepContact = await GetEmployeeRepository().getEmployeeData(
+                nextStepUserHRCode);
+            await FirebaseProvider(userData ?? MainUserData.empty)
+                .addEquipmentTakeActionFirebaseNotification(
+                nextStepContact.email ?? "", requesterEmail,
+                requestNo, serviceName,
+                "Submit");
+          }
         }
       }
       await FirebaseProvider(userData ?? MainUserData.empty)
           .addTakeActionFirebaseNotification(requesterEmail,
-          response.requestNo.toString(), serviceName,
+          requestNo, serviceName,
           valueStatus == ActionValueStatus.accept ? "Accept" : "Reject");
     }
 

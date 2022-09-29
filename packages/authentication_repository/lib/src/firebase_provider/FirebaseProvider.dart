@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:authentication_repository/src/extensions.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 
@@ -43,6 +42,15 @@ class FirebaseProvider {
         "online": status == AppLifecycleStatus.online ? true : ServerValue.timestamp,
       });
     }
+  }
+
+  void onFirebaseTokenRefreshed(String token) async{
+
+    final user = this.currentUser?.user;
+    // final employeeData = this.currentUser?.employeeData;
+    await _databaseReferenceUsers.child(user!.email.encodeEmail()).update({
+      "device_token": token,
+    });
   }
 
   updateUserWithData(String token)async{

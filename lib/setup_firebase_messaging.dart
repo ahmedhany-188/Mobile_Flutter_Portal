@@ -17,6 +17,7 @@ import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/videos_screen/videos_screen.dart';
 
 import 'bloc/auth_app_status_bloc/app_bloc.dart';
+import 'bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'constants/constants.dart';
 import 'main.dart';
 
@@ -261,6 +262,7 @@ class SetupFirebaseMessaging {
     if (kDebugMode) {
       print("show flutter notification");
     }
+    UserNotificationApiCubit.get(context).getNotificationsWithoutLoading();
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     setupFlutterNotifications();
     RemoteNotification? notification = message.notification;
