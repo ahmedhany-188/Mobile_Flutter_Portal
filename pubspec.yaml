@@ -97,6 +97,7 @@ dependencies:
   hydrated_bloc: ^8.1.0
   bloc: any
   connectivity_plus: any
+  meta: ^1.8.0
 
   # QR code
   qr_flutter: ^4.0.0

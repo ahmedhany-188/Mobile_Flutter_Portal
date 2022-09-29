@@ -136,6 +136,8 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       final requesterData = await GetEmployeeRepository()
           .getEmployeeData(requestData.data![0].requestHRCode ?? "");
 
+      getHistory(serviceId: RequestServiceID.equipmentServiceID, requestNumber: int.parse(requestNo.toString()));
+
       emit(
         state.copyWith(
             requestedData: requestData,

@@ -198,18 +198,18 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  static const SystemUiOverlayStyle overlayStyle = SystemUiOverlayStyle(
-    systemNavigationBarColor: ConstantsColors.bottomSheetBackgroundDark,
-    systemNavigationBarIconBrightness: Brightness.light,
-    systemNavigationBarDividerColor: ConstantsColors.bottomSheetBackgroundDark,
-  );
+  // static const SystemUiOverlayStyle overlayStyle = SystemUiOverlayStyle(
+  //   systemNavigationBarColor: ConstantsColors.bottomSheetBackgroundDark,
+  //   systemNavigationBarIconBrightness: Brightness.light,
+  //   systemNavigationBarDividerColor: ConstantsColors.bottomSheetBackgroundDark,
+  // );
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      SystemChrome.setSystemUIOverlayStyle(overlayStyle);
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   SystemChrome.setSystemUIOverlayStyle(overlayStyle);
+    // });
   }
 
   @override
