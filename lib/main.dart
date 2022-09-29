@@ -197,10 +197,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+  static const SystemUiOverlayStyle overlayStyle = SystemUiOverlayStyle(
+    systemNavigationBarColor: ConstantsColors.bottomSheetBackgroundDark,
+    systemNavigationBarIconBrightness: Brightness.light,
+    systemNavigationBarDividerColor: ConstantsColors.bottomSheetBackgroundDark,
+  );
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      SystemChrome.setSystemUIOverlayStyle(overlayStyle);
+    });
   }
 
   @override
@@ -465,7 +474,6 @@ class AppBlocObserver extends BlocObserver {
 
   @override
   void onClose(BlocBase bloc) {
-    // TODO: implement onClose
     if (kDebugMode) {
       print("Close --> $bloc");
     }
@@ -482,7 +490,6 @@ class AppBlocObserver extends BlocObserver {
 
   @override
   void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
-    // TODO: implement onError
     if (kDebugMode) {
       print("Error --> $bloc");
     }
@@ -491,7 +498,6 @@ class AppBlocObserver extends BlocObserver {
 
   @override
   void onEvent(Bloc bloc, Object? event) {
-    // TODO: implement onEvent
     if (kDebugMode) {
       print("Event --> $bloc");
     }
