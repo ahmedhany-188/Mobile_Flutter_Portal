@@ -36,11 +36,11 @@ convertFromHtml(
       },
       style: {
         '#': Style(
-          fontSize: const FontSize(15),
+          fontSize:  FontSize(15),
           color: Colors.white,
           maxLines: dataToConvert.length,
           textOverflow: TextOverflow.ellipsis,
-          margin: const EdgeInsets.all(10),
+          // margin:  EdgeInsets.all(10),
         ),
         'strong': Style(
           fontWeight: FontWeight.normal,
@@ -48,11 +48,11 @@ convertFromHtml(
           maxLines: dataToConvert.length,
         ),
         'span': Style(
-          fontSize: const FontSize(15),
+          fontSize:  FontSize(15),
           color: Colors.white,
           maxLines: dataToConvert.length,
           textOverflow: TextOverflow.ellipsis,
-          margin: const EdgeInsets.all(10),
+          // margin:  EdgeInsets.all(10),
         ),
         'a': Style(
           color: Colors.blue,
@@ -70,7 +70,7 @@ convertTitleFromHtml(
     data: dataToConvert.toString(),
     style: {
       '#': Style(
-        fontSize: const FontSize(18),
+        fontSize:  FontSize(18),
         color: Colors.white,
         fontWeight: FontWeight.bold,
         textOverflow: TextOverflow.ellipsis,

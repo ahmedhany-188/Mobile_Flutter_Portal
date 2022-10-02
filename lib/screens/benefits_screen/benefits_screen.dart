@@ -300,12 +300,13 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                           },
                           style: {
                             '#': Style(
-                                fontSize: const FontSize(18),
+                                fontSize: FontSize(18),
                                 maxLines: benefitsDataList[index]
                                         ['benefitsDescription']
                                     .length,
                                 // textOverflow: TextOverflow.ellipsis,
-                                margin: const EdgeInsets.all(10)),
+                                // margin: EdgeInsets.all(10)
+                            ),
                             'strong': Style(fontWeight: FontWeight.normal)
                           },
                         ),

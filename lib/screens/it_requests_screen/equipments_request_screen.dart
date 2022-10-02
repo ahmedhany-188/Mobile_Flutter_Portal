@@ -15,7 +15,6 @@ import '../../constants/colors.dart';
 import '../../constants/enums.dart';
 import '../../widgets/background/custom_background.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
-import '../../constants/request_service_id.dart';
 import '../../constants/url_links.dart';
 import '../../data/repositories/request_repository.dart';
 import '../../gen/assets.gen.dart';
@@ -85,987 +84,1133 @@ class EquipmentsRequestScreen extends StatelessWidget {
                   )),
         child: CustomBackground(
           child: CustomTheme(
-            child: GestureDetector(
-              onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
-              child: BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
-                builder: (context, state) {
-                  return Scaffold(
-                    appBar: AppBar(
-                      title: const Text('Equipment request'),
-                      actions: [
-                        if (EquipmentsCubit.get(context).state.requestStatus ==
-                            RequestStatus.newRequest)
-                          BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
-                            builder: (context, state) {
-                              return TweenAnimationBuilder<double>(
-                                duration: const Duration(milliseconds: 1000),
-                                tween: Tween(begin: 0.5, end: 0.0),
-                                builder: (context, animation, child) =>
-                                    Transform.translate(
-                                  offset: (state.requestStatus ==
-                                          RequestStatus.oldRequest)
-                                      ? const Offset(0, 0)
-                                      : Offset(-20 * shake(animation), 0),
-                                  child: TextButton.icon(
-                                    onPressed: () {
-                                      showAddRequestBottomSheet(context);
-                                    },
-                                    icon: const Icon(
-                                      Icons.add,
-                                      color: Colors.white,
-                                    ),
-                                    label: const Text(
-                                      'Item',
-                                      style: TextStyle(color: Colors.white),
+            child: BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+              builder: (context, state) {
+                return Scaffold(
+                  appBar: AppBar(
+                    title: Text(
+                        'Equipment ${(requestData[EquipmentsRequestScreen.requestNoKey] == "0") ? 'request' : "#${requestData[EquipmentsRequestScreen.requestNoKey]}"}'),
+                    actions: [
+                      if (EquipmentsCubit.get(context).state.requestStatus ==
+                          RequestStatus.oldRequest)
+                        BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+                          builder: (context, state) {
+                            return SizedBox(
+                                width: 60,
+                                child:
+                                    myRequestStatusString(state.statusAction));
+                          },
+                        ),
+                    ],
+                  ),
+                  resizeToAvoidBottomInset: false,
+                  body: BlocListener<EquipmentsCubit, EquipmentsCubitStates>(
+                    listener: (context, state) {
+                      if (state.status.isSubmissionInProgress) {
+                        EasyLoading.show(
+                          status: 'Loading...',
+                          maskType: EasyLoadingMaskType.black,
+                          dismissOnTap: false,
+                        );
+                      }
+                      if (state.status.isSubmissionSuccess) {
+                        // LoadingDialog.hide(context);
+                        EasyLoading.dismiss(animation: true);
+                        if (state.requestStatus == RequestStatus.newRequest) {
+                          Navigator.of(context)
+                              .pushReplacement(MaterialPageRoute(
+                                  builder: (_) => SuccessScreen(
+                                        text: state.successMessage ??
+                                            "Error Number",
+                                        routName:
+                                            EquipmentsRequestScreen.routeName,
+                                        requestName: 'Equipment Request',
+                                      )));
+                        } else if (state.requestStatus ==
+                            RequestStatus.oldRequest) {
+                          EasyLoading.showSuccess(state.successMessage ?? "")
+                              .then((value) {
+                            if (Navigator.of(context).canPop()) {
+                              Navigator.of(context, rootNavigator: true).pop();
+                            } else {
+                              SystemNavigator.pop();
+                            }
+                          });
+                          BlocProvider.of<UserNotificationApiCubit>(context)
+                              .getNotifications();
+                        }
+                      }
+                      if (state.status.isSubmissionFailure) {
+                        EasyLoading.showError(
+                            state.errorMessage ?? 'Request Failed');
+                        // LoadingDialog.hide(context);
+                        // ScaffoldMessenger.of(context)
+                        //   ..hideCurrentSnackBar()
+                        //   ..showSnackBar(
+                        //     SnackBar(
+                        //       content: Text(
+                        //           state.errorMessage ?? 'Request Failed'),
+                        //     ),
+                        //   );
+                      }
+                      if (state.status.isValid) {
+                        EasyLoading.dismiss(animation: true);
+                      }
+                    },
+                    child: SingleChildScrollView(
+                      physics: const BouncingScrollPhysics(),
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
+                        child: Form(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              // if (state.requestStatus ==
+                              //     RequestStatus.oldRequest)
+                              //   SizedBox(
+                              //     child: Text(state.statusAction ?? ''),
+                              //   ),
+                              BlocBuilder<EquipmentsCubit,
+                                      EquipmentsCubitStates>(
+                                  buildWhen: (previous, current) {
+                                return (previous.requestDate !=
+                                        current.requestDate) ||
+                                    previous.status != current.status;
+                              }, builder: (context, state) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    key: UniqueKey(),
+                                    initialValue: (state.requestStatus ==
+                                            RequestStatus.oldRequest)
+                                        ? ((requestData['date'] != null)
+                                            ? (DateFormat('EEEE dd-MM-yyyy')
+                                                .format(DateTime.parse(
+                                                    requestData['date'])))
+                                            : '')
+                                        : state.requestDate?.value,
+                                    enabled: false,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Request Date',
+                                      prefixIcon: Icon(Icons.date_range),
                                     ),
                                   ),
+                                );
+                              }),
+                              if (EquipmentsCubit.get(context)
+                                      .state
+                                      .requestStatus ==
+                                  RequestStatus.newRequest)
+                                BlocBuilder<EquipmentsCubit,
+                                    EquipmentsCubitStates>(
+                                  builder: (context, state) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(20)),
+                                            border: Border.all(
+                                                color: Colors.white)),
+                                        // padding: const EdgeInsets.all(8),
+                                        child: OutlinedButton.icon(
+                                          onPressed: () {
+                                            showAddRequestBottomSheet(context);
+                                          },
+                                          style: ElevatedButton.styleFrom(),
+                                          icon: const Icon(
+                                            Icons.add,
+                                            color: Colors.white,
+                                          ),
+                                          label: const Text(
+                                            'Add Item',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                    // TweenAnimationBuilder<double>(
+                                    //   duration: const Duration(milliseconds: 1000),
+                                    //   tween: Tween(begin: 0.5, end: 0.0),
+                                    //   builder: (context, animation, child) =>
+                                    //       Transform.translate(
+                                    //         offset: (state.requestStatus ==
+                                    //             RequestStatus.oldRequest)
+                                    //             ? const Offset(0, 0)
+                                    //             : Offset(-20 * shake(animation), 0),
+                                    //         child: TextButton.icon(
+                                    //           onPressed: () {
+                                    //             showAddRequestBottomSheet(context);
+                                    //           },
+                                    //           icon: const Icon(
+                                    //             Icons.add,
+                                    //             color: Colors.white,
+                                    //           ),
+                                    //           label: const Text(
+                                    //             'Item',
+                                    //             style: TextStyle(color: Colors.white),
+                                    //           ),
+                                    //         ),
+                                    //       ),
+                                    // );
+                                  },
                                 ),
-                              );
-                            },
-                          ),
-                        if (EquipmentsCubit.get(context).state.requestStatus ==
-                            RequestStatus.oldRequest)
-                          BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
-                            builder: (context, state) {
-                              return TextButton.icon(
-                                onPressed: () => showEquipmentRequestHistory(
-                                    context: context,
-                                    serviceId:
-                                        RequestServiceID.equipmentServiceID,
-                                    requestNumber: int.parse(requestData[
-                                        EquipmentsRequestScreen.requestNoKey])),
-                                icon: const Icon(
-                                  Icons.history,
-                                  color: Colors.white,
-                                ),
-                                label: const Text(
-                                  'History',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                // style: TextButton.styleFrom(
-                                //     tapTargetSize: MaterialTapTargetSize.padded,
-                                //     ),
-                              );
-                            },
-                          ),
-                      ],
-                    ),
-                    resizeToAvoidBottomInset: false,
-                    body: BlocListener<EquipmentsCubit, EquipmentsCubitStates>(
-                      listener: (context, state) {
-                        if (state.status.isSubmissionInProgress) {
-                          EasyLoading.show(
-                            status: 'Loading...',
-                            maskType: EasyLoadingMaskType.black,
-                            dismissOnTap: false,
-                          );
-                        }
-                        if (state.status.isSubmissionSuccess) {
-                          // LoadingDialog.hide(context);
-                          EasyLoading.dismiss(animation: true);
-                          if (state.requestStatus == RequestStatus.newRequest) {
-                            Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(
-                                    builder: (_) => SuccessScreen(
-                                          text: state.successMessage ??
-                                              "Error Number",
-                                          routName:
-                                              EquipmentsRequestScreen.routeName,
-                                          requestName: 'Equipment Request',
-                                        )));
-                          } else if (state.requestStatus ==
-                              RequestStatus.oldRequest) {
-                            EasyLoading.showSuccess(state.successMessage ?? "")
-                                .then((value) {
-                              if (Navigator.of(context).canPop()) {
-                                Navigator.of(context, rootNavigator: true)
-                                    .pop();
-                              } else {
-                                SystemNavigator.pop();
-                              }
-                            });
-                            BlocProvider.of<UserNotificationApiCubit>(context)
-                                .getNotifications();
-                          }
-                        }
-                        if (state.status.isSubmissionFailure) {
-                          EasyLoading.showError(
-                              state.errorMessage ?? 'Request Failed');
-                          // LoadingDialog.hide(context);
-                          // ScaffoldMessenger.of(context)
-                          //   ..hideCurrentSnackBar()
-                          //   ..showSnackBar(
-                          //     SnackBar(
-                          //       content: Text(
-                          //           state.errorMessage ?? 'Request Failed'),
-                          //     ),
-                          //   );
-                        }
-                        if (state.status.isValid) {
-                          EasyLoading.dismiss(animation: true);
-                        }
-                      },
-                      child: SingleChildScrollView(
-                        physics: const BouncingScrollPhysics(),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
-                          child: Form(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                if (state.requestStatus ==
-                                    RequestStatus.oldRequest)
-                                  SizedBox(
-                                    child: Text(state.statusAction ?? ''),
-                                  ),
+                              if (state.requestStatus ==
+                                      RequestStatus.oldRequest &&
+                                  state.takeActionStatus ==
+                                      TakeActionStatus.takeAction)
                                 BlocBuilder<EquipmentsCubit,
                                         EquipmentsCubitStates>(
                                     buildWhen: (previous, current) {
-                                  return (previous.requestDate !=
-                                          current.requestDate) ||
-                                      previous.status != current.status;
+                                  return (previous.requesterData !=
+                                      current.requesterData);
                                 }, builder: (context, state) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      key: UniqueKey(),
-                                      initialValue: (state.requestStatus ==
-                                              RequestStatus.oldRequest)
-                                          ? ((requestData['date'] != null)
-                                              ? (DateFormat('EEEE dd-MM-yyyy')
-                                                  .format(DateTime.parse(
-                                                      requestData['date'])))
-                                              : '')
-                                          : state.requestDate?.value,
-                                      enabled: false,
-                                      decoration: const InputDecoration(
-                                        labelText: 'Request Date',
-                                        prefixIcon: Icon(Icons.date_range),
-                                      ),
+                                    child: RequesterDataWidget(
+                                      requesterData: state.requesterData,
+                                      actionComment: ActionCommentWidget(
+                                          onChanged: (commentValue) => context
+                                              .read<EquipmentsCubit>()
+                                              .commentRequesterChanged(
+                                                  commentValue)),
                                     ),
                                   );
                                 }),
-                                if (state.requestStatus ==
-                                        RequestStatus.oldRequest &&
-                                    state.takeActionStatus ==
-                                        TakeActionStatus.takeAction)
-                                  BlocBuilder<EquipmentsCubit,
-                                          EquipmentsCubitStates>(
-                                      buildWhen: (previous, current) {
-                                    return (previous.requesterData !=
-                                        current.requesterData);
-                                  }, builder: (context, state) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: RequesterDataWidget(
-                                        requesterData: state.requesterData,
-                                        actionComment: ActionCommentWidget(
-                                            onChanged: (commentValue) => context
-                                                .read<EquipmentsCubit>()
-                                                .commentRequesterChanged(
-                                                    commentValue)),
-                                      ),
-                                    );
-                                  }),
-                                BlocBuilder<EquipmentsCubit,
-                                    EquipmentsCubitStates>(
-                                  builder: (context, state) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: DropdownSearch<BusinessUnitModel>(
-                                        key: businessUnitFormKey,
-                                        items: state.listBusinessUnit,
-                                        itemAsString: (businessUnit) =>
-                                            businessUnit.departmentName!,
-                                        onChanged: (item) =>
-                                            EquipmentsCubit.get(context)
-                                                .validateForm(
-                                                    businessUnit: (item!
-                                                            .toString()
-                                                            .isEmpty)
-                                                        ? FormzStatus.invalid
-                                                        : FormzStatus.pure),
-                                        selectedItem: (state.requestStatus ==
-                                                RequestStatus.oldRequest)
-                                            ? (BusinessUnitModel.fromJson({
-                                                'departmentName': state
-                                                    .requestedData!
-                                                    .data![0]
-                                                    .departmentName
-                                              }))
-                                            : null,
-                                        enabled: (state.requestStatus ==
-                                                RequestStatus.oldRequest)
-                                            ? false
-                                            : true,
-                                        dropdownButtonProps:
-                                            const DropdownButtonProps(
-                                                color: Colors.white),
-                                        dropdownDecoratorProps:
-                                            DropDownDecoratorProps(
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            labelText: 'Business Unit',
-                                            floatingLabelAlignment:
-                                                FloatingLabelAlignment.start,
-                                            errorText: (state.businessUnitStatus
-                                                    .isInvalid)
-                                                ? 'Required'
-                                                : null,
-                                          ),
-                                        ),
-                                        popupProps: PopupProps.modalBottomSheet(
-                                          showSearchBox: true,
-                                          constraints: BoxConstraints(
-                                              maxHeight: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.75),
-                                          interceptCallBacks: true,
-                                          searchDelay: Duration.zero,
-                                          title: AppBar(
-                                              title:
-                                                  const Text('Business Unit'),
-                                              centerTitle: true,
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              elevation: 0),
-                                          listViewProps: const ListViewProps(
-                                              padding: EdgeInsets.zero,
-                                              physics: BouncingScrollPhysics(),
-                                              shrinkWrap: true,
-                                              keyboardDismissBehavior:
-                                                  ScrollViewKeyboardDismissBehavior
-                                                      .onDrag),
-                                          searchFieldProps:
-                                              const TextFieldProps(
-                                            padding: EdgeInsets.all(20),
-                                            decoration: InputDecoration(
-                                              contentPadding:
-                                                  EdgeInsets.all(10),
-                                              filled: true,
-                                              hintText: "Search by name",
-                                              prefixIcon: Icon(Icons.search,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
+                              BlocBuilder<EquipmentsCubit,
+                                  EquipmentsCubitStates>(
+                                builder: (context, state) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: DropdownSearch<BusinessUnitModel>(
+                                      key: businessUnitFormKey,
+                                      items: state.listBusinessUnit,
+                                      itemAsString: (businessUnit) =>
+                                          businessUnit.departmentName!,
+                                      onChanged: (item) =>
+                                          EquipmentsCubit.get(context)
+                                              .validateForm(
+                                                  businessUnit:
+                                                      (item!.toString().isEmpty)
+                                                          ? FormzStatus.invalid
+                                                          : FormzStatus.pure),
+                                      selectedItem: (state.requestStatus ==
+                                              RequestStatus.oldRequest)
+                                          ? (BusinessUnitModel.fromJson({
+                                              'departmentName': state
+                                                  .requestedData!
+                                                  .data![0]
+                                                  .departmentName
+                                            }))
+                                          : null,
+                                      enabled: (state.requestStatus ==
+                                              RequestStatus.oldRequest)
+                                          ? false
+                                          : true,
+                                      dropdownButtonProps:
+                                          const DropdownButtonProps(
+                                              color: Colors.white),
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                        dropdownSearchDecoration:
+                                            InputDecoration(
+                                          labelText: 'Business Unit',
+                                          floatingLabelAlignment:
+                                              FloatingLabelAlignment.start,
+                                          errorText: (state
+                                                  .businessUnitStatus.isInvalid)
+                                              ? 'Required'
+                                              : null,
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
-                                BlocBuilder<EquipmentsCubit,
-                                    EquipmentsCubitStates>(
-                                  builder: (context, state) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: DropdownSearch<
-                                          EquipmentsLocationModel>(
-                                        key: locationFormKey,
-                                        items: state.listLocation,
-                                        itemAsString: (loc) => loc.projectName!,
-                                        onChanged: (item) =>
-                                            EquipmentsCubit.get(context)
-                                                .validateForm(
-                                                    location: (item!
-                                                            .toString()
-                                                            .isEmpty)
-                                                        ? FormzStatus.invalid
-                                                        : FormzStatus.pure),
-                                        selectedItem: (state.requestStatus ==
-                                                RequestStatus.oldRequest)
-                                            ? (EquipmentsLocationModel
-                                                .fromJson({
-                                                'projectName': state
-                                                    .requestedData!
-                                                    .data![0]
-                                                    .projectName
-                                              }))
-                                            : null,
-                                        enabled: (state.requestStatus ==
-                                                RequestStatus.oldRequest)
-                                            ? false
-                                            : true,
-                                        dropdownDecoratorProps:
-                                            DropDownDecoratorProps(
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            labelText: 'Location',
-                                            floatingLabelAlignment:
-                                                FloatingLabelAlignment.start,
-                                            errorText:
-                                                (state.locationStatus.isInvalid)
-                                                    ? 'Required'
-                                                    : null,
-                                          ),
-                                        ),
-                                        dropdownButtonProps:
-                                            const DropdownButtonProps(
-                                                color: Colors.white),
-                                        popupProps: PopupProps.modalBottomSheet(
-                                          showSearchBox: true,
-                                          constraints: BoxConstraints(
-                                              maxHeight: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.75),
-                                          searchDelay: Duration.zero,
-                                          interceptCallBacks: true,
-                                          title: AppBar(
-                                              title: const Text('Location'),
-                                              centerTitle: true,
-                                              backgroundColor:
-                                                  Colors.transparent,
-                                              titleSpacing: 0,
-                                              elevation: 0),
-                                          searchFieldProps:
-                                              const TextFieldProps(
-                                            padding: EdgeInsets.all(20),
-                                            decoration: InputDecoration(
-                                              contentPadding:
-                                                  EdgeInsets.all(10),
-                                              filled: true,
-                                              hintText: "Search for location",
-                                              prefixIcon: Icon(
-                                                Icons.search,
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                                BlocBuilder<EquipmentsCubit,
-                                    EquipmentsCubitStates>(
-                                  builder: (context, state) {
-                                    return Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: DropdownSearch<DepartmentsModel>(
-                                        key: departmentFormKey,
-                                        items: state.listDepartment,
-                                        onChanged: (item) =>
-                                            EquipmentsCubit.get(context)
-                                                .validateForm(
-                                                    department: (item!
-                                                            .toString()
-                                                            .isEmpty)
-                                                        ? FormzStatus.invalid
-                                                        : FormzStatus.pure),
-                                        itemAsString: (dept) =>
-                                            dept.departmentName!,
-                                        // selectedItem: (state.requestStatus ==
-                                        //     RequestStatus.oldRequest)
-                                        //     ? (DepartmentsModel.fromJson({
-                                        //   'department_Name': state
-                                        //       .requestedData!.data![0].departmentName
-                                        // }))
-                                        //     : null,
-                                        enabled: (state.requestStatus ==
-                                                RequestStatus.oldRequest)
-                                            ? false
-                                            : true,
-                                        dropdownDecoratorProps:
-                                            DropDownDecoratorProps(
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            labelText: 'Department',
-                                            floatingLabelAlignment:
-                                                FloatingLabelAlignment.start,
-                                            errorText: (state
-                                                    .departmentStatus.isInvalid)
-                                                ? 'Required'
-                                                : null,
-                                          ),
-                                        ),
-                                        dropdownButtonProps:
-                                            const DropdownButtonProps(
-                                                color: Colors.white),
-                                        popupProps: PopupProps.modalBottomSheet(
-                                          showSearchBox: true,
-                                          constraints: BoxConstraints(
-                                              maxHeight: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.75),
-                                          searchDelay: Duration.zero,
-                                          title: AppBar(
-                                            title: const Text('Department'),
+                                      popupProps: PopupProps.modalBottomSheet(
+                                        showSearchBox: true,
+                                        constraints: BoxConstraints(
+                                            maxHeight: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.75),
+                                        interceptCallBacks: true,
+                                        searchDelay: Duration.zero,
+                                        title: AppBar(
+                                            title: const Text('Business Unit'),
                                             centerTitle: true,
                                             backgroundColor: Colors.transparent,
-                                            elevation: 0,
-                                          ),
-                                          searchFieldProps:
-                                              const TextFieldProps(
-                                            padding: EdgeInsets.all(20),
-                                            decoration: InputDecoration(
-                                              contentPadding:
-                                                  EdgeInsets.all(10),
-                                              filled: true,
-                                              hintText: "Search for department",
-                                              prefixIcon: Icon(
-                                                Icons.search,
-                                                color: Colors.white,
-                                              ),
-                                            ),
+                                            elevation: 0),
+                                        listViewProps: const ListViewProps(
+                                            padding: EdgeInsets.zero,
+                                            physics: BouncingScrollPhysics(),
+                                            shrinkWrap: true,
+                                            keyboardDismissBehavior:
+                                                ScrollViewKeyboardDismissBehavior
+                                                    .onDrag),
+                                        searchFieldProps: const TextFieldProps(
+                                          padding: EdgeInsets.all(20),
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(10),
+                                            filled: true,
+                                            hintText: "Search by name",
+                                            prefixIcon: Icon(Icons.search,
+                                                color: Colors.white),
                                           ),
                                         ),
                                       ),
-                                    );
-                                  },
-                                ),
-                                BlocBuilder<EquipmentsCubit,
-                                        EquipmentsCubitStates>(
-                                    builder: (context, state) {
-                                  return SingleChildScrollView(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    child: Container(
-                                      width: double.infinity,
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Expanded(
-                                            flex: 2,
-                                            child: TextFormField(
-                                              key: UniqueKey(),
-                                              enabled: false,
-                                              initialValue: (state
-                                                          .requestStatus ==
-                                                      RequestStatus.newRequest)
-                                                  ? state.chosenFileName
-                                                  : state.requestedData
-                                                      ?.data![0].equipmentFile ?? 'No file',
-                                              // keyboardType:
-                                              //     TextInputType.multiline,
-                                              maxLines: 1,
-                                              decoration: const InputDecoration(
-                                                labelText: "Upload file",
-                                                prefixIcon: Icon(
-                                                  Icons.upload_file,
-                                                  color: Colors.white70,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          if (state.requestStatus ==
-                                              RequestStatus.newRequest)
-                                            ElevatedButton.icon(
-                                              onPressed: () {
-                                                EquipmentsCubit.get(context)
-                                                    .setChosenFileName();
-                                              },
-                                              label: const Text('Upload',
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
-                                              icon: const Icon(
-                                                  Icons.cloud_upload_sharp,
-                                                  color: Colors.white),
-                                            )
-                                          else
-                                            ElevatedButton.icon(
-                                              onPressed: () {
-                                                if (state
-                                                        .requestedData
-                                                        ?.data![0]
-                                                        .equipmentFile !=
-                                                    null) {
-                                                  launchUrl(Uri.parse(
-                                                      'https://portal.hassanallam.com/Apps/Files/Equipments/${state.requestedData?.data![0].equipmentFile}'));
-                                                } else {
-                                                  EasyLoading.showError(
-                                                      'No File has been uploaded');
-                                                }
-                                              },
-                                              label: const Text('View File',
-                                                  style: TextStyle(
-                                                      color: Colors.white)),
-                                              icon: const Icon(
-                                                  Icons.cloud_upload_sharp,
-                                                  color: Colors.white),
-                                            )
-                                        ],
-                                      ),
                                     ),
                                   );
-                                }),
-                                BlocBuilder<EquipmentsCubit,
-                                        EquipmentsCubitStates>(
-                                    buildWhen: (pre, curr) {
-                                  return pre.requestedData?.data![0].comments !=
-                                      curr.requestedData?.data![0].comments;
-                                }, builder: (context, state) {
+                                },
+                              ),
+                              BlocBuilder<EquipmentsCubit,
+                                  EquipmentsCubitStates>(
+                                builder: (context, state) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      key: state.requestStatus ==
-                                              RequestStatus.oldRequest
-                                          ? UniqueKey()
-                                          : null,
-                                      initialValue: (state.requestStatus ==
+                                    child:
+                                        DropdownSearch<EquipmentsLocationModel>(
+                                      key: locationFormKey,
+                                      items: state.listLocation,
+                                      itemAsString: (loc) => loc.projectName!,
+                                      onChanged: (item) =>
+                                          EquipmentsCubit.get(context)
+                                              .validateForm(
+                                                  location:
+                                                      (item!.toString().isEmpty)
+                                                          ? FormzStatus.invalid
+                                                          : FormzStatus.pure),
+                                      selectedItem: (state.requestStatus ==
                                               RequestStatus.oldRequest)
-                                          ? state
-                                              .requestedData?.data![0].comments
-                                          : "",
-                                      enabled: state.requestStatus ==
-                                              RequestStatus.newRequest
-                                          ? true
-                                          : false,
-                                      onChanged: (commentValue) => context
-                                          .read<EquipmentsCubit>()
-                                          .commentChanged(commentValue),
-                                      keyboardType: TextInputType.multiline,
-                                      maxLines: null,
-                                      decoration: const InputDecoration(
-                                        labelText: "Add your comment",
-                                        prefixIcon: Icon(
-                                          Icons.comment,
-                                          color: Colors.white70,
+                                          ? (EquipmentsLocationModel.fromJson({
+                                              'projectName': state
+                                                  .requestedData!
+                                                  .data![0]
+                                                  .projectName
+                                            }))
+                                          : null,
+                                      enabled: (state.requestStatus ==
+                                              RequestStatus.oldRequest)
+                                          ? false
+                                          : true,
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                        dropdownSearchDecoration:
+                                            InputDecoration(
+                                          labelText: 'Location',
+                                          floatingLabelAlignment:
+                                              FloatingLabelAlignment.start,
+                                          errorText:
+                                              (state.locationStatus.isInvalid)
+                                                  ? 'Required'
+                                                  : null,
                                         ),
-                                        enabled: true,
+                                      ),
+                                      dropdownButtonProps:
+                                          const DropdownButtonProps(
+                                              color: Colors.white),
+                                      popupProps: PopupProps.modalBottomSheet(
+                                        showSearchBox: true,
+                                        constraints: BoxConstraints(
+                                            maxHeight: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.75),
+                                        searchDelay: Duration.zero,
+                                        interceptCallBacks: true,
+                                        title: AppBar(
+                                            title: const Text('Location'),
+                                            centerTitle: true,
+                                            backgroundColor: Colors.transparent,
+                                            titleSpacing: 0,
+                                            elevation: 0),
+                                        searchFieldProps: const TextFieldProps(
+                                          padding: EdgeInsets.all(20),
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(10),
+                                            filled: true,
+                                            hintText: "Search for location",
+                                            prefixIcon: Icon(
+                                              Icons.search,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   );
-                                }),
-                                BlocBuilder<EquipmentsCubit,
-                                    EquipmentsCubitStates>(
-                                  buildWhen: (prev, current) {
-                                    if (current.requestStatus ==
-                                        RequestStatus.newRequest) {
-                                      return prev.chosenList.length !=
-                                          current.chosenList.length;
-                                    } else {
-                                      return current
-                                          .requestedData!.data!.isNotEmpty;
-                                    }
-                                  },
-                                  builder: (context, state) {
-                                    return ListView.builder(
-                                      physics: const BouncingScrollPhysics(),
-                                      clipBehavior: Clip.hardEdge,
-                                      shrinkWrap: true,
-                                      itemCount: (state.requestStatus ==
+                                },
+                              ),
+                              BlocBuilder<EquipmentsCubit,
+                                  EquipmentsCubitStates>(
+                                builder: (context, state) {
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: DropdownSearch<DepartmentsModel>(
+                                      key: departmentFormKey,
+                                      items: state.listDepartment,
+                                      onChanged: (item) =>
+                                          EquipmentsCubit.get(context)
+                                              .validateForm(
+                                                  department:
+                                                      (item!.toString().isEmpty)
+                                                          ? FormzStatus.invalid
+                                                          : FormzStatus.pure),
+                                      itemAsString: (dept) =>
+                                          dept.departmentName!,
+                                      // selectedItem: (state.requestStatus ==
+                                      //     RequestStatus.oldRequest)
+                                      //     ? (DepartmentsModel.fromJson({
+                                      //   'department_Name': state
+                                      //       .requestedData!.data![0].departmentName
+                                      // }))
+                                      //     : null,
+                                      enabled: (state.requestStatus ==
                                               RequestStatus.oldRequest)
-                                          ? state.requestedData!.data!.length
-                                          : state.chosenList.length,
-                                      // padding: const EdgeInsets.all(8),
-                                      itemBuilder: (listViewContext, index) {
-                                        return Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: TweenAnimationBuilder<double>(
-                                            duration: const Duration(
-                                                milliseconds: 1000),
-                                            tween: Tween(begin: 1.0, end: 0.0),
-                                            builder:
-                                                (context, animation, child) =>
-                                                    Transform.translate(
-                                              offset: (state.requestStatus ==
-                                                      RequestStatus.oldRequest)
-                                                  ? const Offset(0, 0)
-                                                  : Offset(
-                                                      -50 * shake(animation),
-                                                      0),
-                                              child: Dismissible(
-                                                direction:
-                                                    (state.requestStatus ==
-                                                            RequestStatus
-                                                                .oldRequest)
-                                                        ? DismissDirection.none
-                                                        : DismissDirection
-                                                            .endToStart,
-                                                key: UniqueKey(),
-                                                confirmDismiss:
-                                                    (dismissDirection) async {
-                                                  if (dismissDirection ==
-                                                      DismissDirection
-                                                          .startToEnd) {
-                                                    return false;
-                                                  } else {
-                                                    return await showDialog(
-                                                      context: context,
-                                                      builder: (_) {
-                                                        return AlertDialog(
-                                                          backgroundColor:
-                                                              Theme.of(context)
-                                                                  .colorScheme
-                                                                  .background,
-                                                          title: const Text(
-                                                              'Caution',
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .red)),
-                                                          content: const Text(
-                                                            'Are you sure you want to delete this item?',
-                                                          ),
-                                                          actions: [
-                                                            TextButton(
-                                                              onPressed: () {
-                                                                Navigator.of(
+                                          ? false
+                                          : true,
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                        dropdownSearchDecoration:
+                                            InputDecoration(
+                                          labelText: 'Department',
+                                          floatingLabelAlignment:
+                                              FloatingLabelAlignment.start,
+                                          errorText:
+                                              (state.departmentStatus.isInvalid)
+                                                  ? 'Required'
+                                                  : null,
+                                        ),
+                                      ),
+                                      dropdownButtonProps:
+                                          const DropdownButtonProps(
+                                              color: Colors.white),
+                                      popupProps: PopupProps.modalBottomSheet(
+                                        showSearchBox: true,
+                                        constraints: BoxConstraints(
+                                            maxHeight: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.75),
+                                        searchDelay: Duration.zero,
+                                        title: AppBar(
+                                          title: const Text('Department'),
+                                          centerTitle: true,
+                                          backgroundColor: Colors.transparent,
+                                          elevation: 0,
+                                        ),
+                                        searchFieldProps: const TextFieldProps(
+                                          padding: EdgeInsets.all(20),
+                                          decoration: InputDecoration(
+                                            contentPadding: EdgeInsets.all(10),
+                                            filled: true,
+                                            hintText: "Search for department",
+                                            prefixIcon: Icon(
+                                              Icons.search,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              BlocBuilder<EquipmentsCubit,
+                                      EquipmentsCubitStates>(
+                                  builder: (context, state) {
+                                return SingleChildScrollView(
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          flex: 2,
+                                          child: TextFormField(
+                                            key: UniqueKey(),
+                                            enabled: false,
+                                            initialValue: (state
+                                                        .requestStatus ==
+                                                    RequestStatus.newRequest)
+                                                ? state.chosenFileName
+                                                : state.requestedData?.data![0]
+                                                        .equipmentFile ??
+                                                    'No file',
+                                            // keyboardType:
+                                            //     TextInputType.multiline,
+                                            maxLines: 1,
+                                            decoration: const InputDecoration(
+                                              labelText: "Upload file",
+                                              prefixIcon: Icon(
+                                                Icons.upload_file,
+                                                color: Colors.white70,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        if (state.requestStatus ==
+                                            RequestStatus.newRequest)
+                                          ElevatedButton.icon(
+                                            onPressed: () {
+                                              EquipmentsCubit.get(context)
+                                                  .setChosenFileName();
+                                            },
+                                            label: const Text('Upload',
+                                                style: TextStyle(
+                                                    color: Colors.white)),
+                                            icon: const Icon(
+                                                Icons.cloud_upload_sharp,
+                                                color: Colors.white),
+                                          )
+                                        else
+                                          ElevatedButton.icon(
+                                            onPressed: () {
+                                              if (state.requestedData?.data![0]
+                                                      .equipmentFile !=
+                                                  null) {
+                                                launchUrl(
+                                                    Uri.parse(
+                                                        'https://portal.hassanallam.com/Apps/Files/Equipments/${state.requestedData?.data![0].equipmentFile}'),
+                                                    mode: LaunchMode
+                                                        .externalApplication);
+                                              } else {
+                                                EasyLoading.showError(
+                                                    'No File has been uploaded');
+                                              }
+                                            },
+                                            label: const Text('View File',
+                                                style: TextStyle(
+                                                    color: Colors.white)),
+                                            icon: const Icon(
+                                                Icons.cloud_upload_sharp,
+                                                color: Colors.white),
+                                          )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+                              BlocBuilder<EquipmentsCubit,
+                                      EquipmentsCubitStates>(
+                                  buildWhen: (pre, curr) {
+                                return pre.requestedData?.data![0].comments !=
+                                    curr.requestedData?.data![0].comments;
+                              }, builder: (context, state) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    key: state.requestStatus ==
+                                            RequestStatus.oldRequest
+                                        ? UniqueKey()
+                                        : null,
+                                    initialValue: (state.requestStatus ==
+                                            RequestStatus.oldRequest)
+                                        ? state.requestedData?.data![0].comments
+                                        : "",
+                                    enabled: state.requestStatus ==
+                                            RequestStatus.newRequest
+                                        ? true
+                                        : false,
+                                    onChanged: (commentValue) => context
+                                        .read<EquipmentsCubit>()
+                                        .commentChanged(commentValue),
+                                    keyboardType: TextInputType.multiline,
+                                    maxLines: null,
+                                    decoration: const InputDecoration(
+                                      labelText: "Add your comment",
+                                      prefixIcon: Icon(
+                                        Icons.comment,
+                                        color: Colors.white70,
+                                      ),
+                                      enabled: true,
+                                    ),
+                                  ),
+                                );
+                              }),
+                              BlocBuilder<EquipmentsCubit,
+                                  EquipmentsCubitStates>(
+                                buildWhen: (prev, current) {
+                                  if (current.requestStatus ==
+                                      RequestStatus.newRequest) {
+                                    return prev.chosenList.length !=
+                                        current.chosenList.length;
+                                  } else {
+                                    return current
+                                        .requestedData!.data!.isNotEmpty;
+                                  }
+                                },
+                                builder: (context, state) {
+                                  return ListView.builder(
+                                    physics: const BouncingScrollPhysics(),
+                                    clipBehavior: Clip.hardEdge,
+                                    shrinkWrap: true,
+                                    itemCount: (state.requestStatus ==
+                                            RequestStatus.oldRequest)
+                                        ? state.requestedData!.data!.length
+                                        : state.chosenList.length,
+                                    itemBuilder: (listViewContext, index) {
+                                      return Column(
+                                        children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child:
+                                                TweenAnimationBuilder<double>(
+                                              duration: const Duration(
+                                                  milliseconds: 1000),
+                                              tween:
+                                                  Tween(begin: 1.0, end: 0.0),
+                                              builder:
+                                                  (context, animation, child) =>
+                                                      Transform.translate(
+                                                offset: (state.requestStatus ==
+                                                        RequestStatus
+                                                            .oldRequest)
+                                                    ? const Offset(0, 0)
+                                                    : Offset(
+                                                        -50 * shake(animation),
+                                                        0),
+                                                child: Dismissible(
+                                                  direction: (state
+                                                              .requestStatus ==
+                                                          RequestStatus
+                                                              .oldRequest)
+                                                      ? DismissDirection.none
+                                                      : DismissDirection
+                                                          .endToStart,
+                                                  key: UniqueKey(),
+                                                  confirmDismiss:
+                                                      (dismissDirection) async {
+                                                    if (dismissDirection ==
+                                                        DismissDirection
+                                                            .startToEnd) {
+                                                      return false;
+                                                    } else {
+                                                      return await showDialog(
+                                                        context: context,
+                                                        builder: (_) {
+                                                          return AlertDialog(
+                                                            backgroundColor:
+                                                                Theme.of(
                                                                         context)
-                                                                    .pop(false);
-                                                              },
-                                                              child: const Text(
-                                                                'Cancel',
-                                                                style:
-                                                                    TextStyle(
-                                                                  fontSize: 16,
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            TextButton(
-                                                              onPressed: () {
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop(true);
-                                                              },
-                                                              child: const Text(
-                                                                'Delete',
+                                                                    .colorScheme
+                                                                    .background,
+                                                            title: const Text(
+                                                                'Caution',
                                                                 style: TextStyle(
+                                                                    color: Colors
+                                                                        .red)),
+                                                            content: const Text(
+                                                              'Are you sure you want to delete this item?',
+                                                            ),
+                                                            actions: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop(
+                                                                          false);
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                  'Cancel',
+                                                                  style:
+                                                                      TextStyle(
                                                                     fontSize:
                                                                         16,
-                                                                    color: Colors
-                                                                        .red),
+                                                                  ),
+                                                                ),
                                                               ),
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    );
-                                                  }
-                                                },
-                                                onDismissed:
-                                                    (dismissDirection) {
-                                                  if (dismissDirection ==
-                                                      DismissDirection
-                                                          .endToStart) {
-                                                    state.chosenList
-                                                        .removeAt(index);
-                                                  }
-                                                },
-                                                background: Container(
-                                                  clipBehavior: Clip.none,
-                                                  margin: const EdgeInsets.only(
-                                                    bottom: 8,
-                                                  ),
-                                                  padding: const EdgeInsets.all(
-                                                      10.0),
-                                                  width: MediaQuery.of(context)
-                                                      .size
-                                                      .width,
-                                                  decoration: BoxDecoration(
-                                                      color: Colors.transparent,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              25)),
-                                                  child: const Align(
-                                                    alignment:
-                                                        Alignment.centerRight,
-                                                    child: Icon(
-                                                      Icons.delete,
-                                                      size: 30,
-                                                      color: Colors.red,
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop(
+                                                                          true);
+                                                                },
+                                                                child:
+                                                                    const Text(
+                                                                  'Delete',
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          16,
+                                                                      color: Colors
+                                                                          .red),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          );
+                                                        },
+                                                      );
+                                                    }
+                                                  },
+                                                  onDismissed:
+                                                      (dismissDirection) {
+                                                    if (dismissDirection ==
+                                                        DismissDirection
+                                                            .endToStart) {
+                                                      state.chosenList
+                                                          .removeAt(index);
+                                                    }
+                                                  },
+                                                  background: Container(
+                                                    clipBehavior: Clip.none,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                      bottom: 8,
+                                                    ),
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
+                                                    decoration: BoxDecoration(
+                                                        color:
+                                                            Colors.transparent,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(25)),
+                                                    child: const Align(
+                                                      alignment:
+                                                          Alignment.centerRight,
+                                                      child: Icon(
+                                                        Icons.delete,
+                                                        size: 30,
+                                                        color: Colors.red,
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                                // secondaryBackground:Container(
-                                                //   clipBehavior: Clip.none,
-                                                //   margin: const EdgeInsets.only(
-                                                //     bottom: 8,
-                                                //   ),
-                                                //   padding: const EdgeInsets.all(10.0),
-                                                //   width: MediaQuery.of(context).size.width,
-                                                //   decoration: BoxDecoration(
-                                                //       color: Colors.transparent,
-                                                //       borderRadius: BorderRadius.circular(25)),
-                                                //   child: const Align(
-                                                //     alignment: Alignment.centerLeft,
-                                                //     child: Icon(
-                                                //       Icons.edit,
-                                                //       size: 30,
-                                                //       color: Colors.green,
-                                                //     ),
-                                                //   ),
-                                                // ),
-                                                child: ClipRRect(
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                          Radius.circular(20)),
-                                                  child: ExpansionTile(
-                                                    backgroundColor: Colors
-                                                        .blueGrey.shade300,
-                                                    collapsedBackgroundColor:
-                                                        Colors.white38,
-                                                    maintainState: true,
-                                                    childrenPadding:
-                                                        const EdgeInsets.all(
-                                                            10),
-                                                    leading: Container(
-                                                        width: 40,
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: (state
-                                                                    .requestStatus ==
+                                                  // secondaryBackground:Container(
+                                                  //   clipBehavior: Clip.none,
+                                                  //   margin: const EdgeInsets.only(
+                                                  //     bottom: 8,
+                                                  //   ),
+                                                  //   padding: const EdgeInsets.all(10.0),
+                                                  //   width: MediaQuery.of(context).size.width,
+                                                  //   decoration: BoxDecoration(
+                                                  //       color: Colors.transparent,
+                                                  //       borderRadius: BorderRadius.circular(25)),
+                                                  //   child: const Align(
+                                                  //     alignment: Alignment.centerLeft,
+                                                  //     child: Icon(
+                                                  //       Icons.edit,
+                                                  //       size: 30,
+                                                  //       color: Colors.green,
+                                                  //     ),
+                                                  //   ),
+                                                  // ),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(
+                                                                20)),
+                                                    child: ExpansionTile(
+                                                      backgroundColor: Colors
+                                                          .blueGrey.shade300,
+                                                      collapsedBackgroundColor:
+                                                          Colors.white38,
+                                                      maintainState: true,
+                                                      childrenPadding:
+                                                          const EdgeInsets.all(
+                                                              10),
+                                                      leading: Container(
+                                                          width: 40,
+                                                          alignment:
+                                                              Alignment.center,
+                                                          child: (state
+                                                                      .requestStatus ==
+                                                                  RequestStatus
+                                                                      .oldRequest)
+                                                              ? EquipmentsCubit
+                                                                      .get(
+                                                                          context)
+                                                                  .getIconByGroupName(state
+                                                                      .requestedData!
+                                                                      .data![0]
+                                                                      .groupName!)
+                                                              : state
+                                                                  .chosenList[
+                                                                      index]
+                                                                  .icon!),
+                                                      title: Text(
+                                                        (state.requestStatus ==
                                                                 RequestStatus
                                                                     .oldRequest)
-                                                            ? EquipmentsCubit
-                                                                    .get(
-                                                                        context)
-                                                                .getIconByGroupName(state
-                                                                    .requestedData!
-                                                                    .data![0]
-                                                                    .groupName!)
+                                                            ? state
+                                                                .requestedData!
+                                                                .data![index]
+                                                                .hardWareItemName!
+                                                                .trim()
                                                             : state
                                                                 .chosenList[
                                                                     index]
-                                                                .icon!),
-                                                    title: Text(
-                                                      (state.requestStatus ==
-                                                              RequestStatus
-                                                                  .oldRequest)
-                                                          ? state
-                                                              .requestedData!
-                                                              .data![index]
-                                                              .hardWareItemName!
-                                                              .trim()
-                                                          : state
-                                                              .chosenList[index]
-                                                              .selectedItem!
-                                                              .hardWareItemName!
-                                                              .trim(),
-                                                      softWrap: true,
-                                                      style: const TextStyle(
-                                                          fontSize: 18),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                    ),
-                                                    subtitle: Text(
-                                                      'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData?.data![index].qty : state.chosenList[index].quantity}',
-                                                      softWrap: true,
-                                                    ),
-                                                    children: [
-                                                      if (state
-                                                              .requestedData
-                                                              ?.data![index]
-                                                              .type !=
-                                                          0)
+                                                                .selectedItem!
+                                                                .hardWareItemName!
+                                                                .trim(),
+                                                        softWrap: true,
+                                                        style: const TextStyle(
+                                                            fontSize: 18),
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
+                                                      subtitle: Text(
+                                                        'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData?.data![index].qty : state.chosenList[index].quantity}',
+                                                        softWrap: true,
+                                                      ),
+                                                      children: [
+                                                        if (state
+                                                                .requestedData
+                                                                ?.data![index]
+                                                                .type !=
+                                                            0)
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                'Request for: ${(state.requestStatus == RequestStatus.oldRequest) ? EquipmentsCubit.get(context).getRequestForFromType(state.requestedData?.data![0].type)?.trim() : state.chosenList[index].requestFor!.trim()}',
+                                                                softWrap: true,
+                                                                style:
+                                                                    const TextStyle(
+                                                                        fontSize:
+                                                                            15),
+                                                              ),
+                                                            ],
+                                                          ),
                                                         Row(
                                                           children: [
-                                                            Text(
-                                                              'Request for: ${(state.requestStatus == RequestStatus.oldRequest) ? EquipmentsCubit.get(context).getRequestForFromType(state.requestedData?.data![0].type)?.trim() : state.chosenList[index].requestFor!.trim()}',
-                                                              softWrap: true,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      fontSize:
-                                                                          15),
+                                                            Flexible(
+                                                              child: Text(
+                                                                'Owner: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].ownerName!.trim().toTitleCase() : state.chosenList[index].selectedContact!.name!.trim().toTitleCase()}',
+                                                                softWrap: false,
+                                                                maxLines: 2,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style:
+                                                                    const TextStyle(
+                                                                        fontSize:
+                                                                            15),
+                                                              ),
                                                             ),
                                                           ],
                                                         ),
-                                                      Row(
-                                                        children: [
-                                                          Flexible(
-                                                            child: Text(
-                                                              'Owner: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].ownerName!.trim().toTitleCase() : state.chosenList[index].selectedContact!.name!.trim().toTitleCase()}',
-                                                              softWrap: false,
-                                                              maxLines: 2,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      fontSize:
-                                                                          15),
+                                                        Row(
+                                                          children: [
+                                                            Flexible(
+                                                              child: Text(
+                                                                'Estimate Price: ${(state.requestStatus == RequestStatus.oldRequest) ? ((state.requestedData!.data![index].estimatePrice == null) ? 'NO' : state.requestedData!.data![index].estimatePrice!.trim()) : (int.parse(state.chosenList[index].selectedItem!.estimatePrice!) * state.chosenList[index].quantity!).toString().trim()} LE',
+                                                                softWrap: false,
+                                                                maxLines: 2,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style:
+                                                                    const TextStyle(
+                                                                        fontSize:
+                                                                            15),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Flexible(
-                                                            child: Text(
-                                                              'Estimate Price: ${(state.requestStatus == RequestStatus.oldRequest) ? ((state.requestedData!.data![index].estimatePrice == null) ? 'NO' : state.requestedData!.data![index].estimatePrice!.trim()) : (int.parse(state.chosenList[index].selectedItem!.estimatePrice!) * state.chosenList[index].quantity!).toString().trim()} LE',
-                                                              softWrap: false,
-                                                              maxLines: 2,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      fontSize:
-                                                                          15),
+                                                          ],
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Flexible(
+                                                              child: Text(
+                                                                'Group name: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].groupName!.trim() : state.chosenList[index].selectedItem!.groupId!.toString().trim()}',
+                                                                softWrap: false,
+                                                                maxLines: 2,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                style:
+                                                                    const TextStyle(
+                                                                        fontSize:
+                                                                            15),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Flexible(
-                                                            child: Text(
-                                                              'Group name: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData!.data![index].groupName!.trim() : state.chosenList[index].selectedItem!.groupId!.toString().trim()}',
-                                                              softWrap: false,
-                                                              maxLines: 2,
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style:
-                                                                  const TextStyle(
-                                                                      fontSize:
-                                                                          15),
-                                                            ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ],
+                                                          ],
+                                                        ),
+                                                      ],
+                                                    ),
                                                   ),
                                                 ),
                                               ),
                                             ),
                                           ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                                },
+                              ),
+                              if (EquipmentsCubit.get(context)
+                                      .state
+                                      .requestStatus ==
+                                  RequestStatus.oldRequest)
+                                BlocBuilder<EquipmentsCubit,
+                                        EquipmentsCubitStates>(
+                                    builder: (context, state) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 10),
+                                    child: ListView.separated(
+                                      shrinkWrap: true,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemCount: state.historyWorkFlow.length,
+                                      itemBuilder: (_, index) {
+                                        return InkWell(
+                                          onTap: () => Navigator.of(context)
+                                              .pushNamed(
+                                                  DirectManagerProfileScreen
+                                                      .routeName,
+                                                  arguments: {
+                                                DirectManagerProfileScreen
+                                                        .employeeHrCode:
+                                                    state.historyWorkFlow[index]
+                                                        .empFromHRCode
+                                              }),
+                                          child: SizedBox(
+                                            // height: 60,
+                                            // width: double.infinity,
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Container(
+                                                      width: 40,
+                                                      height: 60,
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              right: 10),
+                                                      decoration: BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          image: DecorationImage(
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                              image: (state
+                                                                          .historyWorkFlow[
+                                                                              index]
+                                                                          .imgProfile !=
+                                                                      null)
+                                                                  ? CachedNetworkImageProvider(getUserProfilePicture(state
+                                                                      .historyWorkFlow[
+                                                                          index]
+                                                                      .imgProfile!))
+                                                                  : Assets
+                                                                      .images
+                                                                      .favicon
+                                                                      .image(
+                                                                          scale:
+                                                                              7)
+                                                                      .image)),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 6,
+                                                    child: SizedBox(
+                                                      // width: MediaQuery.of(context).size.width - 70,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            state
+                                                                .historyWorkFlow[
+                                                                    index]
+                                                                .empFrom!
+                                                                .trim(),
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        15),
+                                                          ),
+                                                          Text(
+                                                            state
+                                                                .historyWorkFlow[
+                                                                    index]
+                                                                .titleName!
+                                                                .trim(),
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        13),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: myRequestStatus(state
+                                                            .historyWorkFlow[
+                                                                index]
+                                                            .status ??
+                                                        0),
+                                                  ),
+                                                ]),
+                                          ),
                                         );
                                       },
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
+                                      separatorBuilder:
+                                          (BuildContext context, int index) {
+                                        return const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10.0),
+                                          child: Divider(
+                                            color: Colors.white,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                }),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 70),
+                              )
+                              // Padding(padding: EdgeInsets.all(40)),
+                            ],
                           ),
                         ),
                       ),
                     ),
-                    floatingActionButton:
-                        BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
-                      builder: (context, state) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (state.requestStatus ==
-                                    RequestStatus.oldRequest &&
-                                state.takeActionStatus ==
-                                    TakeActionStatus.takeAction)
-                              FloatingActionButton.extended(
-                                heroTag: null,
-                                onPressed: () {
-                                  context.read<EquipmentsCubit>().submitAction(
-                                      ActionValueStatus.accept,
-                                      requestData[EquipmentsRequestScreen
-                                          .requestNoKey]);
-                                },
-                                icon: const Icon(Icons.verified),
-                                label: const Text('Accept'),
+                  ),
+                  floatingActionButton:
+                      BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+                    builder: (context, state) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (state.requestStatus == RequestStatus.oldRequest &&
+                              state.takeActionStatus ==
+                                  TakeActionStatus.takeAction)
+                            FloatingActionButton.extended(
+                              heroTag: null,
+                              onPressed: () {
+                                context.read<EquipmentsCubit>().submitAction(
+                                    ActionValueStatus.accept,
+                                    requestData[
+                                        EquipmentsRequestScreen.requestNoKey]);
+                              },
+                              icon: const Icon(Icons.verified),
+                              label: const Text('Accept'),
+                            ),
+                          const SizedBox(height: 12),
+                          if (state.requestStatus == RequestStatus.oldRequest &&
+                              state.takeActionStatus ==
+                                  TakeActionStatus.takeAction)
+                            FloatingActionButton.extended(
+                              backgroundColor: Colors.white,
+                              heroTag: null,
+                              onPressed: () {
+                                context.read<EquipmentsCubit>().submitAction(
+                                    ActionValueStatus.reject,
+                                    requestData[
+                                        EquipmentsRequestScreen.requestNoKey]);
+                              },
+                              icon: const Icon(
+                                Icons.dangerous,
+                                color: ConstantsColors.bottomSheetBackground,
                               ),
-                            const SizedBox(height: 12),
-                            if (state.requestStatus ==
-                                    RequestStatus.oldRequest &&
-                                state.takeActionStatus ==
-                                    TakeActionStatus.takeAction)
-                              FloatingActionButton.extended(
-                                backgroundColor: Colors.white,
-                                heroTag: null,
-                                onPressed: () {
-                                  context.read<EquipmentsCubit>().submitAction(
-                                      ActionValueStatus.reject,
-                                      requestData[EquipmentsRequestScreen
-                                          .requestNoKey]);
-                                },
-                                icon: const Icon(
-                                  Icons.dangerous,
+                              label: const Text(
+                                'Reject',
+                                style: TextStyle(
                                   color: ConstantsColors.bottomSheetBackground,
                                 ),
-                                label: const Text(
-                                  'Reject',
-                                  style: TextStyle(
-                                    color:
-                                        ConstantsColors.bottomSheetBackground,
-                                  ),
-                                ),
                               ),
-                            const SizedBox(height: 12),
-                            if (state.requestStatus == RequestStatus.newRequest)
-                              FloatingActionButton.extended(
-                                label: const Text('Submit'),
-                                icon: const Icon(Icons.save),
-                                onPressed: () {
-                                  if (businessUnitFormKey
-                                              .currentState!.getSelectedItem ==
-                                          null ||
-                                      locationFormKey
-                                              .currentState!.getSelectedItem ==
-                                          null ||
-                                      departmentFormKey
-                                              .currentState!.getSelectedItem ==
-                                          null) {
-                                    // businessUnitFormKey.currentState!
-                                    //     .popupOnValidate();
-                                    EquipmentsCubit.get(context).validateForm(
-                                      businessUnit: (businessUnitFormKey
-                                                  .currentState!
-                                                  .getSelectedItem ==
-                                              null)
-                                          ? FormzStatus.invalid
-                                          : FormzStatus.pure,
-                                      location: (locationFormKey.currentState!
-                                                  .getSelectedItem ==
-                                              null)
-                                          ? FormzStatus.invalid
-                                          : FormzStatus.pure,
-                                      department: (departmentFormKey
-                                                  .currentState!
-                                                  .getSelectedItem ==
-                                              null)
-                                          ? FormzStatus.invalid
-                                          : FormzStatus.pure,
-                                    );
-                                  } else if (EquipmentsCubit.get(context)
-                                      .state
-                                      .chosenList
-                                      .isEmpty) {
-                                    EasyLoading.showInfo(
-                                      'Add at least one item to request',
-                                      dismissOnTap: true,
-                                      maskType: EasyLoadingMaskType.black,
-                                    );
-                                  } else {
-                                    EquipmentsCubit.get(context)
-                                        .postEquipmentsRequest(
-                                      departmentObject: departmentFormKey
-                                          .currentState!.getSelectedItem!,
-                                      businessUnitObject: businessUnitFormKey
-                                          .currentState!.getSelectedItem!,
-                                      locationObject: locationFormKey
-                                          .currentState!.getSelectedItem!,
-                                      userHrCode:
-                                          user.employeeData!.userHrCode!,
-                                      selectedItem: state.chosenList,
-                                      comment: state.comment,
-                                    );
-                                    // Navigator.of(context).pushReplacement(
-                                    //   MaterialPageRoute(
-                                    //     builder: (_) => const SuccessScreen(
-                                    //       requestName: 'Equipment',
-                                    //       routName:
-                                    //           EquipmentsRequestScreen.routeName,
-                                    //       text: "Success",
-                                    //     ),
-                                    //   ),
-                                    // );
-                                  }
-                                },
-                                materialTapTargetSize:
-                                    MaterialTapTargetSize.shrinkWrap,
-                                tooltip: 'Save Request',
-                              ),
-                          ],
-                        );
-                      },
-                    ),
-                  );
-                },
-              ),
+                            ),
+                          const SizedBox(height: 12),
+                          if (state.requestStatus == RequestStatus.newRequest)
+                            FloatingActionButton.extended(
+                              label: const Text('Submit'),
+                              icon: const Icon(Icons.save),
+                              onPressed: () {
+                                if (businessUnitFormKey
+                                            .currentState!.getSelectedItem ==
+                                        null ||
+                                    locationFormKey
+                                            .currentState!.getSelectedItem ==
+                                        null ||
+                                    departmentFormKey
+                                            .currentState!.getSelectedItem ==
+                                        null) {
+                                  // businessUnitFormKey.currentState!
+                                  //     .popupOnValidate();
+                                  EquipmentsCubit.get(context).validateForm(
+                                    businessUnit: (businessUnitFormKey
+                                                .currentState!
+                                                .getSelectedItem ==
+                                            null)
+                                        ? FormzStatus.invalid
+                                        : FormzStatus.pure,
+                                    location: (locationFormKey.currentState!
+                                                .getSelectedItem ==
+                                            null)
+                                        ? FormzStatus.invalid
+                                        : FormzStatus.pure,
+                                    department: (departmentFormKey.currentState!
+                                                .getSelectedItem ==
+                                            null)
+                                        ? FormzStatus.invalid
+                                        : FormzStatus.pure,
+                                  );
+                                } else if (EquipmentsCubit.get(context)
+                                    .state
+                                    .chosenList
+                                    .isEmpty) {
+                                  EasyLoading.showInfo(
+                                    'Add at least one item to request',
+                                    dismissOnTap: true,
+                                    maskType: EasyLoadingMaskType.black,
+                                  );
+                                } else {
+                                  EquipmentsCubit.get(context)
+                                      .postEquipmentsRequest(
+                                    departmentObject: departmentFormKey
+                                        .currentState!.getSelectedItem!,
+                                    businessUnitObject: businessUnitFormKey
+                                        .currentState!.getSelectedItem!,
+                                    locationObject: locationFormKey
+                                        .currentState!.getSelectedItem!,
+                                    userHrCode: user.employeeData!.userHrCode!,
+                                    selectedItem: state.chosenList,
+                                    comment: state.comment,
+                                  );
+                                  // Navigator.of(context).pushReplacement(
+                                  //   MaterialPageRoute(
+                                  //     builder: (_) => const SuccessScreen(
+                                  //       requestName: 'Equipment',
+                                  //       routName:
+                                  //           EquipmentsRequestScreen.routeName,
+                                  //       text: "Success",
+                                  //     ),
+                                  //   ),
+                                  // );
+                                }
+                              },
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              tooltip: 'Save Request',
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                );
+              },
             ),
           ),
         ),
@@ -1213,7 +1358,33 @@ class EquipmentsRequestScreen extends StatelessWidget {
       default:
         {
           return const Icon(
-            Icons.camera,
+            Icons.pending_actions_outlined,
+            color: Colors.yellow,
+          );
+        }
+    }
+  }
+
+  Widget myRequestStatusString(String? status) {
+    switch (status) {
+      case 'Approved':
+        {
+          return const Icon(
+            Icons.verified,
+            color: Colors.green,
+          );
+        }
+      case 'Rejected':
+        {
+          return const Icon(
+            Icons.cancel,
+            color: Colors.red,
+          );
+        }
+      default:
+        {
+          return const Icon(
+            Icons.pending_actions_outlined,
             color: Colors.yellow,
           );
         }
