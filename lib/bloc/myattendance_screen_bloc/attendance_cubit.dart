@@ -8,10 +8,14 @@ import 'package:hassanallamportalflutter/data/repositories/attendance_repository
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 part 'attendance_state.dart';
 
-class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin{
-  AttendanceCubit(this.userHrCode) : super( AttendanceState(month: DateTime.now().month)){
+class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin {
+  AttendanceCubit(this.userHrCode) : super(AttendanceState(month: DateTime
+      .now()
+      .month)) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
-      if (state.attendanceDataEnumStates == AttendanceDataEnumStates.failed || state.attendanceDataEnumStates == AttendanceDataEnumStates.noConnection) {
+      if (state.attendanceDataEnumStates == AttendanceDataEnumStates.failed ||
+          state.attendanceDataEnumStates ==
+              AttendanceDataEnumStates.noConnection) {
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
           try {
@@ -31,30 +35,32 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin{
     });
   }
 
-  static AttendanceCubit get(context) =>BlocProvider.of(context);
+  static AttendanceCubit get(context) => BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();
   final String userHrCode;
 
   Future<void> getAllAttendanceList(userHRCode) async {
-
-    if (state.getAttendanceList[state.month-1].isEmpty) {
-
+    if (state.getAttendanceList[state.month - 1].isEmpty) {
       if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
         try {
           emit(state.copyWith(
             attendanceDataEnumStates: AttendanceDataEnumStates.loading,
           ));
-          await AttendanceRepository().getAttendanceData(userHRCode, state.month)
+          await AttendanceRepository().getAttendanceData(
+              userHRCode, state.month)
               .then((value) async {
             MyAttendanceModel lastModel = value.last;
-            if(lastModel.date!=null){
-            int monthCount1 = int.parse(lastModel.date!.split("-")[1]) ?? 0;
-            state.getAttendanceList.removeAt(monthCount1-1);
-            state.getAttendanceList.insert(monthCount1-1, value);
-            emit(state.copyWith(
-              attendanceDataEnumStates: AttendanceDataEnumStates.fullSuccess,
-              getAttendanceList: state.getAttendanceList,
-            ));
+            if (lastModel.date != null) {
+              int monthCount1 = int.parse(lastModel.date!.split("-")[1]) ?? 0;
+              state.getAttendanceList.removeAt(monthCount1 - 1);
+              state.getAttendanceList.insert(monthCount1 - 1, value);
+              if (state.month == monthCount1) {
+                emit(state.copyWith(
+                  attendanceDataEnumStates: AttendanceDataEnumStates
+                      .fullSuccess,
+                  getAttendanceList: state.getAttendanceList,
+                ));
+              }
             }
           }).catchError((error) {
             emit(state.copyWith(
@@ -93,11 +99,10 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin{
       getAttendanceListSuccess.add(emptyLit);
       getAttendanceListSuccess.add(emptyLit);
 
-          emit(state.copyWith(
-            getAttendanceList: getAttendanceListSuccess,
-          ));
-          getAllAttendanceList(userHRCode);
-
+      emit(state.copyWith(
+        getAttendanceList: getAttendanceListSuccess,
+      ));
+      getAllAttendanceList(userHRCode);
     }
   }
 
@@ -118,7 +123,8 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin{
 
   @override
   Map<String, dynamic>? toJson(AttendanceState state) {
-    if (state.attendanceDataEnumStates == AttendanceDataEnumStates.success && state.getAttendanceList.isNotEmpty) {
+    if (state.attendanceDataEnumStates == AttendanceDataEnumStates.success &&
+        state.getAttendanceList.isNotEmpty) {
       return state.toMap();
     } else {
       return null;
