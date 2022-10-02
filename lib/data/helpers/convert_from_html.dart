@@ -40,7 +40,7 @@ convertFromHtml(
           color: Colors.white,
           maxLines: dataToConvert.length,
           textOverflow: TextOverflow.ellipsis,
-          margin:  EdgeInsets.all(10),
+          // margin:  EdgeInsets.all(10),
         ),
         'strong': Style(
           fontWeight: FontWeight.normal,
@@ -52,7 +52,7 @@ convertFromHtml(
           color: Colors.white,
           maxLines: dataToConvert.length,
           textOverflow: TextOverflow.ellipsis,
-          margin:  EdgeInsets.all(10),
+          // margin:  EdgeInsets.all(10),
         ),
         'a': Style(
           color: Colors.blue,

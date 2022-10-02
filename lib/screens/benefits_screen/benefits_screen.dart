@@ -305,7 +305,8 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
                                         ['benefitsDescription']
                                     .length,
                                 // textOverflow: TextOverflow.ellipsis,
-                                margin: EdgeInsets.all(10)),
+                                // margin: EdgeInsets.all(10)
+                            ),
                             'strong': Style(fontWeight: FontWeight.normal)
                           },
                         ),
