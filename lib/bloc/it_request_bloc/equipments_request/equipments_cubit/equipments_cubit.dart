@@ -180,7 +180,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         return const Icon(Icons.call);
       case 'Internet connection':
         return const Icon(Icons.network_wifi_outlined);
-      case 'Fingerprint':
+      case 'ATT':
         return const Icon(Icons.fingerprint);
     }
     return const Icon(Icons.access_alarm_outlined);
@@ -216,38 +216,43 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     emit(state.copyWith(
       status: FormzStatus.submissionInProgress,
     ));
-    final equipmentResultResponse = await _requestRepository
-        .postEquipmentTakeActionRequest(
-      valueStatus: valueStatus,
-      requestNo: requestNo,
-      actionComment: state.actionComment,
-      serviceID: RequestServiceID.equipmentServiceID,
-      requesterHRCode: state.requesterData.userHrCode ?? "",
-      requesterEmail: state.requesterData.email ?? "",
-      serviceName: GlobalConstants.requestCategoryEquipment,
-    )
-        .catchError((err) {
-      EasyLoading.showError('Something went wrong');
-      throw err;
-    });
+        if(valueStatus == ActionValueStatus.reject && state.actionComment.isNotEmpty){
+      final equipmentResultResponse = await _requestRepository
+          .postEquipmentTakeActionRequest(
+        valueStatus: valueStatus,
+        requestNo: requestNo,
+        actionComment: state.actionComment,
+        serviceID: RequestServiceID.equipmentServiceID,
+        requesterHRCode: state.requesterData.userHrCode ?? "",
+        requesterEmail: state.requesterData.email ?? "",
+        serviceName: GlobalConstants.requestCategoryEquipment,
+      )
+          .catchError((err) {
+        EasyLoading.showError('Something went wrong');
+        throw err;
+      });
 
-    final result = equipmentResultResponse.result ?? "false";
-    if (result.toLowerCase().contains("true")) {
-      emit(
-        state.copyWith(
-          // successMessage: "#$requestNo \n ${valueStatus == ActionValueStatus.accept ? "Request has been Accepted":"Request has been Rejected"}",
-          status: FormzStatus.submissionSuccess,
-        ),
-      );
-    } else {
-      emit(
-        state.copyWith(
-          // errorMessage:"An error occurred",
-          status: FormzStatus.submissionFailure,
-        ),
-      );
-      // }
+      final result = equipmentResultResponse.result ?? "false";
+      if (result.toLowerCase().contains("true")) {
+        emit(
+          state.copyWith(
+            // successMessage: "#$requestNo \n ${valueStatus == ActionValueStatus.accept ? "Request has been Accepted":"Request has been Rejected"}",
+            status: FormzStatus.submissionSuccess,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            // errorMessage:"An error occurred",
+            status: FormzStatus.submissionFailure,
+          ),
+        );
+        // }
+      }
     }
+        else{
+          EasyLoading.showError('Please add a rejection comment');
+        }
   }
 
   void postEquipmentsRequest({

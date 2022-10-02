@@ -88,43 +88,17 @@ class EquipmentsRequestScreen extends StatelessWidget {
               builder: (context, state) {
                 return Scaffold(
                   appBar: AppBar(
-                    title: Text('Equipment ${(requestData[EquipmentsRequestScreen.requestNoKey] == "0")?'request':"#${requestData[EquipmentsRequestScreen.requestNoKey]}"}'),
+                    title: Text(
+                        'Equipment ${(requestData[EquipmentsRequestScreen.requestNoKey] == "0") ? 'request' : "#${requestData[EquipmentsRequestScreen.requestNoKey]}"}'),
                     actions: [
-                      if (EquipmentsCubit.get(context).state.requestStatus ==
-                          RequestStatus.newRequest)
-                        BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
-                          builder: (context, state) {
-                            return TweenAnimationBuilder<double>(
-                              duration: const Duration(milliseconds: 1000),
-                              tween: Tween(begin: 0.5, end: 0.0),
-                              builder: (context, animation, child) =>
-                                  Transform.translate(
-                                offset: (state.requestStatus ==
-                                        RequestStatus.oldRequest)
-                                    ? const Offset(0, 0)
-                                    : Offset(-20 * shake(animation), 0),
-                                child: TextButton.icon(
-                                  onPressed: () {
-                                    showAddRequestBottomSheet(context);
-                                  },
-                                  icon: const Icon(
-                                    Icons.add,
-                                    color: Colors.white,
-                                  ),
-                                  label: const Text(
-                                    'Item',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
                       if (EquipmentsCubit.get(context).state.requestStatus ==
                           RequestStatus.oldRequest)
                         BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
                           builder: (context, state) {
-                            return Center(child: myRequestStatusString(state.statusAction));
+                            return SizedBox(
+                                width: 60,
+                                child:
+                                    myRequestStatusString(state.statusAction));
                           },
                         ),
                     ],
@@ -157,8 +131,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                           EasyLoading.showSuccess(state.successMessage ?? "")
                               .then((value) {
                             if (Navigator.of(context).canPop()) {
-                              Navigator.of(context, rootNavigator: true)
-                                  .pop();
+                              Navigator.of(context, rootNavigator: true).pop();
                             } else {
                               SystemNavigator.pop();
                             }
@@ -193,11 +166,11 @@ class EquipmentsRequestScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              if (state.requestStatus ==
-                                  RequestStatus.oldRequest)
-                                SizedBox(
-                                  child: Text(state.statusAction ?? ''),
-                                ),
+                              // if (state.requestStatus ==
+                              //     RequestStatus.oldRequest)
+                              //   SizedBox(
+                              //     child: Text(state.statusAction ?? ''),
+                              //   ),
                               BlocBuilder<EquipmentsCubit,
                                       EquipmentsCubitStates>(
                                   buildWhen: (previous, current) {
@@ -225,6 +198,67 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                   ),
                                 );
                               }),
+                              if (EquipmentsCubit.get(context)
+                                      .state
+                                      .requestStatus ==
+                                  RequestStatus.newRequest)
+                                BlocBuilder<EquipmentsCubit,
+                                    EquipmentsCubitStates>(
+                                  builder: (context, state) {
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(20)),
+                                            border: Border.all(
+                                                color: Colors.white)),
+                                        // padding: const EdgeInsets.all(8),
+                                        child: OutlinedButton.icon(
+                                          onPressed: () {
+                                            showAddRequestBottomSheet(context);
+                                          },
+                                          style: ElevatedButton.styleFrom(),
+                                          icon: const Icon(
+                                            Icons.add,
+                                            color: Colors.white,
+                                          ),
+                                          label: const Text(
+                                            'Add Item',
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                    // TweenAnimationBuilder<double>(
+                                    //   duration: const Duration(milliseconds: 1000),
+                                    //   tween: Tween(begin: 0.5, end: 0.0),
+                                    //   builder: (context, animation, child) =>
+                                    //       Transform.translate(
+                                    //         offset: (state.requestStatus ==
+                                    //             RequestStatus.oldRequest)
+                                    //             ? const Offset(0, 0)
+                                    //             : Offset(-20 * shake(animation), 0),
+                                    //         child: TextButton.icon(
+                                    //           onPressed: () {
+                                    //             showAddRequestBottomSheet(context);
+                                    //           },
+                                    //           icon: const Icon(
+                                    //             Icons.add,
+                                    //             color: Colors.white,
+                                    //           ),
+                                    //           label: const Text(
+                                    //             'Item',
+                                    //             style: TextStyle(color: Colors.white),
+                                    //           ),
+                                    //         ),
+                                    //       ),
+                                    // );
+                                  },
+                                ),
                               if (state.requestStatus ==
                                       RequestStatus.oldRequest &&
                                   state.takeActionStatus ==
@@ -260,11 +294,10 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                       onChanged: (item) =>
                                           EquipmentsCubit.get(context)
                                               .validateForm(
-                                                  businessUnit: (item!
-                                                          .toString()
-                                                          .isEmpty)
-                                                      ? FormzStatus.invalid
-                                                      : FormzStatus.pure),
+                                                  businessUnit:
+                                                      (item!.toString().isEmpty)
+                                                          ? FormzStatus.invalid
+                                                          : FormzStatus.pure),
                                       selectedItem: (state.requestStatus ==
                                               RequestStatus.oldRequest)
                                           ? (BusinessUnitModel.fromJson({
@@ -288,8 +321,8 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                           labelText: 'Business Unit',
                                           floatingLabelAlignment:
                                               FloatingLabelAlignment.start,
-                                          errorText: (state.businessUnitStatus
-                                                  .isInvalid)
+                                          errorText: (state
+                                                  .businessUnitStatus.isInvalid)
                                               ? 'Required'
                                               : null,
                                         ),
@@ -304,11 +337,9 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                         interceptCallBacks: true,
                                         searchDelay: Duration.zero,
                                         title: AppBar(
-                                            title:
-                                                const Text('Business Unit'),
+                                            title: const Text('Business Unit'),
                                             centerTitle: true,
-                                            backgroundColor:
-                                                Colors.transparent,
+                                            backgroundColor: Colors.transparent,
                                             elevation: 0),
                                         listViewProps: const ListViewProps(
                                             padding: EdgeInsets.zero,
@@ -317,12 +348,10 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                             keyboardDismissBehavior:
                                                 ScrollViewKeyboardDismissBehavior
                                                     .onDrag),
-                                        searchFieldProps:
-                                            const TextFieldProps(
+                                        searchFieldProps: const TextFieldProps(
                                           padding: EdgeInsets.all(20),
                                           decoration: InputDecoration(
-                                            contentPadding:
-                                                EdgeInsets.all(10),
+                                            contentPadding: EdgeInsets.all(10),
                                             filled: true,
                                             hintText: "Search by name",
                                             prefixIcon: Icon(Icons.search,
@@ -339,23 +368,21 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                 builder: (context, state) {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: DropdownSearch<
-                                        EquipmentsLocationModel>(
+                                    child:
+                                        DropdownSearch<EquipmentsLocationModel>(
                                       key: locationFormKey,
                                       items: state.listLocation,
                                       itemAsString: (loc) => loc.projectName!,
                                       onChanged: (item) =>
                                           EquipmentsCubit.get(context)
                                               .validateForm(
-                                                  location: (item!
-                                                          .toString()
-                                                          .isEmpty)
-                                                      ? FormzStatus.invalid
-                                                      : FormzStatus.pure),
+                                                  location:
+                                                      (item!.toString().isEmpty)
+                                                          ? FormzStatus.invalid
+                                                          : FormzStatus.pure),
                                       selectedItem: (state.requestStatus ==
                                               RequestStatus.oldRequest)
-                                          ? (EquipmentsLocationModel
-                                              .fromJson({
+                                          ? (EquipmentsLocationModel.fromJson({
                                               'projectName': state
                                                   .requestedData!
                                                   .data![0]
@@ -394,16 +421,13 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                         title: AppBar(
                                             title: const Text('Location'),
                                             centerTitle: true,
-                                            backgroundColor:
-                                                Colors.transparent,
+                                            backgroundColor: Colors.transparent,
                                             titleSpacing: 0,
                                             elevation: 0),
-                                        searchFieldProps:
-                                            const TextFieldProps(
+                                        searchFieldProps: const TextFieldProps(
                                           padding: EdgeInsets.all(20),
                                           decoration: InputDecoration(
-                                            contentPadding:
-                                                EdgeInsets.all(10),
+                                            contentPadding: EdgeInsets.all(10),
                                             filled: true,
                                             hintText: "Search for location",
                                             prefixIcon: Icon(
@@ -428,11 +452,10 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                       onChanged: (item) =>
                                           EquipmentsCubit.get(context)
                                               .validateForm(
-                                                  department: (item!
-                                                          .toString()
-                                                          .isEmpty)
-                                                      ? FormzStatus.invalid
-                                                      : FormzStatus.pure),
+                                                  department:
+                                                      (item!.toString().isEmpty)
+                                                          ? FormzStatus.invalid
+                                                          : FormzStatus.pure),
                                       itemAsString: (dept) =>
                                           dept.departmentName!,
                                       // selectedItem: (state.requestStatus ==
@@ -453,10 +476,10 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                           labelText: 'Department',
                                           floatingLabelAlignment:
                                               FloatingLabelAlignment.start,
-                                          errorText: (state
-                                                  .departmentStatus.isInvalid)
-                                              ? 'Required'
-                                              : null,
+                                          errorText:
+                                              (state.departmentStatus.isInvalid)
+                                                  ? 'Required'
+                                                  : null,
                                         ),
                                       ),
                                       dropdownButtonProps:
@@ -476,12 +499,10 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                           backgroundColor: Colors.transparent,
                                           elevation: 0,
                                         ),
-                                        searchFieldProps:
-                                            const TextFieldProps(
+                                        searchFieldProps: const TextFieldProps(
                                           padding: EdgeInsets.all(20),
                                           decoration: InputDecoration(
-                                            contentPadding:
-                                                EdgeInsets.all(10),
+                                            contentPadding: EdgeInsets.all(10),
                                             filled: true,
                                             hintText: "Search for department",
                                             prefixIcon: Icon(
@@ -499,8 +520,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                       EquipmentsCubitStates>(
                                   builder: (context, state) {
                                 return SingleChildScrollView(
-                                  physics:
-                                      const NeverScrollableScrollPhysics(),
+                                  physics: const NeverScrollableScrollPhysics(),
                                   child: Container(
                                     width: double.infinity,
                                     padding: const EdgeInsets.all(8.0),
@@ -519,8 +539,9 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                         .requestStatus ==
                                                     RequestStatus.newRequest)
                                                 ? state.chosenFileName
-                                                : state.requestedData
-                                                    ?.data![0].equipmentFile ?? 'No file',
+                                                : state.requestedData?.data![0]
+                                                        .equipmentFile ??
+                                                    'No file',
                                             // keyboardType:
                                             //     TextInputType.multiline,
                                             maxLines: 1,
@@ -550,13 +571,14 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                         else
                                           ElevatedButton.icon(
                                             onPressed: () {
-                                              if (state
-                                                      .requestedData
-                                                      ?.data![0]
+                                              if (state.requestedData?.data![0]
                                                       .equipmentFile !=
                                                   null) {
-                                                launchUrl(Uri.parse(
-                                                    'https://portal.hassanallam.com/Apps/Files/Equipments/${state.requestedData?.data![0].equipmentFile}'),mode: LaunchMode.externalApplication);
+                                                launchUrl(
+                                                    Uri.parse(
+                                                        'https://portal.hassanallam.com/Apps/Files/Equipments/${state.requestedData?.data![0].equipmentFile}'),
+                                                    mode: LaunchMode
+                                                        .externalApplication);
                                               } else {
                                                 EasyLoading.showError(
                                                     'No File has been uploaded');
@@ -589,8 +611,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                         : null,
                                     initialValue: (state.requestStatus ==
                                             RequestStatus.oldRequest)
-                                        ? state
-                                            .requestedData?.data![0].comments
+                                        ? state.requestedData?.data![0].comments
                                         : "",
                                     enabled: state.requestStatus ==
                                             RequestStatus.newRequest
@@ -633,33 +654,35 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                             RequestStatus.oldRequest)
                                         ? state.requestedData!.data!.length
                                         : state.chosenList.length,
-                                    // padding: const EdgeInsets.all(8),
                                     itemBuilder: (listViewContext, index) {
                                       return Column(
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: TweenAnimationBuilder<double>(
+                                            child:
+                                                TweenAnimationBuilder<double>(
                                               duration: const Duration(
                                                   milliseconds: 1000),
-                                              tween: Tween(begin: 1.0, end: 0.0),
+                                              tween:
+                                                  Tween(begin: 1.0, end: 0.0),
                                               builder:
                                                   (context, animation, child) =>
                                                       Transform.translate(
                                                 offset: (state.requestStatus ==
-                                                        RequestStatus.oldRequest)
+                                                        RequestStatus
+                                                            .oldRequest)
                                                     ? const Offset(0, 0)
                                                     : Offset(
                                                         -50 * shake(animation),
                                                         0),
                                                 child: Dismissible(
-                                                  direction:
-                                                      (state.requestStatus ==
-                                                              RequestStatus
-                                                                  .oldRequest)
-                                                          ? DismissDirection.none
-                                                          : DismissDirection
-                                                              .endToStart,
+                                                  direction: (state
+                                                              .requestStatus ==
+                                                          RequestStatus
+                                                              .oldRequest)
+                                                      ? DismissDirection.none
+                                                      : DismissDirection
+                                                          .endToStart,
                                                   key: UniqueKey(),
                                                   confirmDismiss:
                                                       (dismissDirection) async {
@@ -673,7 +696,8 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                         builder: (_) {
                                                           return AlertDialog(
                                                             backgroundColor:
-                                                                Theme.of(context)
+                                                                Theme.of(
+                                                                        context)
                                                                     .colorScheme
                                                                     .background,
                                                             title: const Text(
@@ -689,13 +713,16 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                                 onPressed: () {
                                                                   Navigator.of(
                                                                           context)
-                                                                      .pop(false);
+                                                                      .pop(
+                                                                          false);
                                                                 },
-                                                                child: const Text(
+                                                                child:
+                                                                    const Text(
                                                                   'Cancel',
                                                                   style:
                                                                       TextStyle(
-                                                                    fontSize: 16,
+                                                                    fontSize:
+                                                                        16,
                                                                   ),
                                                                 ),
                                                               ),
@@ -703,9 +730,11 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                                 onPressed: () {
                                                                   Navigator.of(
                                                                           context)
-                                                                      .pop(true);
+                                                                      .pop(
+                                                                          true);
                                                                 },
-                                                                child: const Text(
+                                                                child:
+                                                                    const Text(
                                                                   'Delete',
                                                                   style: TextStyle(
                                                                       fontSize:
@@ -731,19 +760,23 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                   },
                                                   background: Container(
                                                     clipBehavior: Clip.none,
-                                                    margin: const EdgeInsets.only(
+                                                    margin:
+                                                        const EdgeInsets.only(
                                                       bottom: 8,
                                                     ),
-                                                    padding: const EdgeInsets.all(
-                                                        10.0),
-                                                    width: MediaQuery.of(context)
-                                                        .size
-                                                        .width,
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            10.0),
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                            .size
+                                                            .width,
                                                     decoration: BoxDecoration(
-                                                        color: Colors.transparent,
+                                                        color:
+                                                            Colors.transparent,
                                                         borderRadius:
-                                                            BorderRadius.circular(
-                                                                25)),
+                                                            BorderRadius
+                                                                .circular(25)),
                                                     child: const Align(
                                                       alignment:
                                                           Alignment.centerRight,
@@ -776,7 +809,8 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                   child: ClipRRect(
                                                     borderRadius:
                                                         const BorderRadius.all(
-                                                            Radius.circular(20)),
+                                                            Radius.circular(
+                                                                20)),
                                                     child: ExpansionTile(
                                                       backgroundColor: Colors
                                                           .blueGrey.shade300,
@@ -815,15 +849,16 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                                                 .hardWareItemName!
                                                                 .trim()
                                                             : state
-                                                                .chosenList[index]
+                                                                .chosenList[
+                                                                    index]
                                                                 .selectedItem!
                                                                 .hardWareItemName!
                                                                 .trim(),
                                                         softWrap: true,
                                                         style: const TextStyle(
                                                             fontSize: 18),
-                                                        overflow:
-                                                            TextOverflow.ellipsis,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
                                                       ),
                                                       subtitle: Text(
                                                         'Quantity: ${(state.requestStatus == RequestStatus.oldRequest) ? state.requestedData?.data![index].qty : state.chosenList[index].quantity}',
@@ -914,108 +949,139 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                   );
                                 },
                               ),
-                              if (EquipmentsCubit.get(context).state.requestStatus ==
+                              if (EquipmentsCubit.get(context)
+                                      .state
+                                      .requestStatus ==
                                   RequestStatus.oldRequest)
-                                BlocBuilder<EquipmentsCubit, EquipmentsCubitStates>(
+                                BlocBuilder<EquipmentsCubit,
+                                        EquipmentsCubitStates>(
                                     builder: (context, state) {
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 10.0,horizontal: 10),
-                                        child: ListView.separated(
-                                          shrinkWrap: true,
-                                          physics: const BouncingScrollPhysics(),
-                                          itemCount: state.historyWorkFlow.length,
-                                          itemBuilder: (_, index) {
-                                            return InkWell(
-                                              onTap: () => Navigator.of(context).pushNamed(
-                                                  DirectManagerProfileScreen.routeName,
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10.0, horizontal: 10),
+                                    child: ListView.separated(
+                                      shrinkWrap: true,
+                                      physics: const BouncingScrollPhysics(),
+                                      itemCount: state.historyWorkFlow.length,
+                                      itemBuilder: (_, index) {
+                                        return InkWell(
+                                          onTap: () => Navigator.of(context)
+                                              .pushNamed(
+                                                  DirectManagerProfileScreen
+                                                      .routeName,
                                                   arguments: {
-                                                    DirectManagerProfileScreen.employeeHrCode:
-                                                    state.historyWorkFlow[index].empFromHRCode
-                                                  }),
-                                              child: SizedBox(
-                                                // height: 60,
-                                                // width: double.infinity,
-                                                child: Row(
-                                                    mainAxisAlignment: MainAxisAlignment.center,
-                                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                                    children: [
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: Container(
-                                                          width: 40,
-                                                          height: 60,
-                                                          margin: const EdgeInsets.only(right: 10),
-                                                          decoration: BoxDecoration(
-                                                              shape: BoxShape.circle,
-                                                              image: DecorationImage(
-                                                                  fit: BoxFit.contain,
-                                                                  image: (state
-                                                                      .historyWorkFlow[
-                                                                  index]
-                                                                      .imgProfile !=
+                                                DirectManagerProfileScreen
+                                                        .employeeHrCode:
+                                                    state.historyWorkFlow[index]
+                                                        .empFromHRCode
+                                              }),
+                                          child: SizedBox(
+                                            // height: 60,
+                                            // width: double.infinity,
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Container(
+                                                      width: 40,
+                                                      height: 60,
+                                                      margin:
+                                                          const EdgeInsets.only(
+                                                              right: 10),
+                                                      decoration: BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          image: DecorationImage(
+                                                              fit: BoxFit
+                                                                  .contain,
+                                                              image: (state
+                                                                          .historyWorkFlow[
+                                                                              index]
+                                                                          .imgProfile !=
                                                                       null)
-                                                                      ? CachedNetworkImageProvider(
-                                                                      getUserProfilePicture(
-                                                                          state
-                                                                              .historyWorkFlow[
+                                                                  ? CachedNetworkImageProvider(getUserProfilePicture(state
+                                                                      .historyWorkFlow[
                                                                           index]
-                                                                              .imgProfile!))
-                                                                      : Assets.images.favicon
-                                                                      .image(scale: 7)
+                                                                      .imgProfile!))
+                                                                  : Assets
+                                                                      .images
+                                                                      .favicon
+                                                                      .image(
+                                                                          scale:
+                                                                              7)
                                                                       .image)),
-                                                        ),
-                                                      ),
-                                                      Expanded(
-                                                        flex: 6,
-                                                        child: SizedBox(
-                                                          // width: MediaQuery.of(context).size.width - 70,
-                                                          child: Column(
-                                                            crossAxisAlignment:
-                                                            CrossAxisAlignment.start,
-                                                            mainAxisAlignment:
-                                                            MainAxisAlignment.center,
-                                                            children: [
-                                                              Text(
-                                                                state
-                                                                    .historyWorkFlow[index].empFrom!
-                                                                    .trim(),
-                                                                style:
-                                                                const TextStyle(fontSize: 15),
-                                                              ),
-                                                              Text(
-                                                                state.historyWorkFlow[index]
-                                                                    .titleName!
-                                                                    .trim(),
-                                                                style:
-                                                                const TextStyle(fontSize: 13),
-                                                              ),
-                                                            ],
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 6,
+                                                    child: SizedBox(
+                                                      // width: MediaQuery.of(context).size.width - 70,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            state
+                                                                .historyWorkFlow[
+                                                                    index]
+                                                                .empFrom!
+                                                                .trim(),
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        15),
                                                           ),
-                                                        ),
+                                                          Text(
+                                                            state
+                                                                .historyWorkFlow[
+                                                                    index]
+                                                                .titleName!
+                                                                .trim(),
+                                                            style:
+                                                                const TextStyle(
+                                                                    fontSize:
+                                                                        13),
+                                                          ),
+                                                        ],
                                                       ),
-                                                      Expanded(
-                                                        child: myRequestStatus(
-                                                            state.historyWorkFlow[index].status ??
-                                                                0),
-                                                      ),
-                                                    ]),
-                                              ),
-                                            );
-                                          },
-                                          separatorBuilder: (BuildContext context, int index) {
-                                            return const Padding(
-                                              padding: EdgeInsets.symmetric(horizontal: 10.0),
-                                              child: Divider(
-                                                color: Colors.white,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      );
-                                    }),
-                              Container(margin: const EdgeInsets.only(bottom: 70),)
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    child: myRequestStatus(state
+                                                            .historyWorkFlow[
+                                                                index]
+                                                            .status ??
+                                                        0),
+                                                  ),
+                                                ]),
+                                          ),
+                                        );
+                                      },
+                                      separatorBuilder:
+                                          (BuildContext context, int index) {
+                                        return const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10.0),
+                                          child: Divider(
+                                            color: Colors.white,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                }),
+                              Container(
+                                margin: const EdgeInsets.only(bottom: 70),
+                              )
                               // Padding(padding: EdgeInsets.all(40)),
-
                             ],
                           ),
                         ),
@@ -1028,8 +1094,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          if (state.requestStatus ==
-                                  RequestStatus.oldRequest &&
+                          if (state.requestStatus == RequestStatus.oldRequest &&
                               state.takeActionStatus ==
                                   TakeActionStatus.takeAction)
                             FloatingActionButton.extended(
@@ -1037,15 +1102,14 @@ class EquipmentsRequestScreen extends StatelessWidget {
                               onPressed: () {
                                 context.read<EquipmentsCubit>().submitAction(
                                     ActionValueStatus.accept,
-                                    requestData[EquipmentsRequestScreen
-                                        .requestNoKey]);
+                                    requestData[
+                                        EquipmentsRequestScreen.requestNoKey]);
                               },
                               icon: const Icon(Icons.verified),
                               label: const Text('Accept'),
                             ),
                           const SizedBox(height: 12),
-                          if (state.requestStatus ==
-                                  RequestStatus.oldRequest &&
+                          if (state.requestStatus == RequestStatus.oldRequest &&
                               state.takeActionStatus ==
                                   TakeActionStatus.takeAction)
                             FloatingActionButton.extended(
@@ -1054,8 +1118,8 @@ class EquipmentsRequestScreen extends StatelessWidget {
                               onPressed: () {
                                 context.read<EquipmentsCubit>().submitAction(
                                     ActionValueStatus.reject,
-                                    requestData[EquipmentsRequestScreen
-                                        .requestNoKey]);
+                                    requestData[
+                                        EquipmentsRequestScreen.requestNoKey]);
                               },
                               icon: const Icon(
                                 Icons.dangerous,
@@ -1064,8 +1128,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                               label: const Text(
                                 'Reject',
                                 style: TextStyle(
-                                  color:
-                                      ConstantsColors.bottomSheetBackground,
+                                  color: ConstantsColors.bottomSheetBackground,
                                 ),
                               ),
                             ),
@@ -1098,8 +1161,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                             null)
                                         ? FormzStatus.invalid
                                         : FormzStatus.pure,
-                                    department: (departmentFormKey
-                                                .currentState!
+                                    department: (departmentFormKey.currentState!
                                                 .getSelectedItem ==
                                             null)
                                         ? FormzStatus.invalid
@@ -1123,8 +1185,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                         .currentState!.getSelectedItem!,
                                     locationObject: locationFormKey
                                         .currentState!.getSelectedItem!,
-                                    userHrCode:
-                                        user.employeeData!.userHrCode!,
+                                    userHrCode: user.employeeData!.userHrCode!,
                                     selectedItem: state.chosenList,
                                     comment: state.comment,
                                   );
@@ -1303,6 +1364,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
         }
     }
   }
+
   Widget myRequestStatusString(String? status) {
     switch (status) {
       case 'Approved':

@@ -59,7 +59,6 @@ void main() async {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
-
   Paint.enableDithering = true;
   await FlutterDownloader.initialize(debug: true);
   await Firebase.initializeApp(
@@ -73,8 +72,7 @@ void main() async {
     storageDirectory: await getApplicationDocumentsDirectory(),
   );
   HydratedBlocOverrides.runZoned(
-        () =>
-        runApp(MyApp(appRouter: AppRouter(), connectivity: Connectivity())),
+    () => runApp(MyApp(appRouter: AppRouter(), connectivity: Connectivity())),
     storage: storage,
     // createStorage: () async {
     //   WidgetsFlutterBinding.ensureInitialized();
@@ -91,6 +89,7 @@ void main() async {
   await GeneralDio.init();
   await AlbumDio.initAlbums();
 }
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
     print("_firebaseMessagingBackgroundHandler");
@@ -104,6 +103,7 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
     print('Handling a background message ${message.messageId}');
   }
 }
+
 Future<void> setupFlutterNotifications() async {
   if (kDebugMode) {
     print("setupFlutterNotifications");
@@ -115,7 +115,7 @@ Future<void> setupFlutterNotifications() async {
     'high_importance_channel', // id
     'High Importance Notifications', // title
     description:
-    'This channel is used for important notifications.', // description
+        'This channel is used for important notifications.', // description
     importance: Importance.high,
   );
 
@@ -127,7 +127,7 @@ Future<void> setupFlutterNotifications() async {
   /// default FCM channel to enable heads up notifications.
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
   /// Update the iOS foreground notification presentation options to allow
@@ -139,6 +139,7 @@ Future<void> setupFlutterNotifications() async {
   );
   isFlutterLocalNotificationsInitialized = true;
 }
+
 late AndroidNotificationChannel channel;
 
 bool isFlutterLocalNotificationsInitialized = false;
@@ -165,9 +166,11 @@ class CustomAnimation extends EasyLoadingAnimation {
   CustomAnimation();
 
   @override
-  Widget buildWidget(Widget child,
-      AnimationController controller,
-      AlignmentGeometry alignment,) {
+  Widget buildWidget(
+    Widget child,
+    AnimationController controller,
+    AlignmentGeometry alignment,
+  ) {
     return Opacity(
       opacity: controller.value,
       child: RotationTransition(
@@ -179,9 +182,9 @@ class CustomAnimation extends EasyLoadingAnimation {
 }
 
 class NavigationService {
-  static GlobalKey<NavigatorState> navigatorKey =
-  GlobalKey<NavigatorState>();
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }
+
 class MyApp extends StatefulWidget {
   final AppRouter appRouter;
   final Connectivity connectivity;
@@ -197,7 +200,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   // static const SystemUiOverlayStyle overlayStyle = SystemUiOverlayStyle(
   //   systemNavigationBarColor: ConstantsColors.bottomSheetBackgroundDark,
   //   systemNavigationBarIconBrightness: Brightness.light,
@@ -216,7 +218,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     // final platform = Theme.of(context).platform;
     final AuthenticationRepository authenticationRepository =
-    AuthenticationRepository.getInstance();
+        AuthenticationRepository.getInstance();
     // _authenticationRepository.init();
 
     // LifeCycleStates(context);
@@ -236,39 +238,31 @@ class _MyAppState extends State<MyApp> {
             create: (counterCubitContext) => SettingsCubit(),
           ),
           BlocProvider<ContactsCubit>(
-            create: (contactsCubitContext) =>
-            ContactsCubit()
-              ..getContacts(),
+            create: (contactsCubitContext) => ContactsCubit()..getContacts(),
             lazy: false,
           ),
 
           BlocProvider<WeatherBloc>(
             create: (weatherBlocContext) =>
-            WeatherBloc()
-              ..add(WeatherRequest()),
+                WeatherBloc()..add(WeatherRequest()),
           ),
           BlocProvider<PayslipCubit>(
             create: (payslipContext) => PayslipCubit(),
           ),
-
 
           BlocProvider<EconomyNewsCubit>(
             create: (economyNewsCubitContext) => EconomyNewsCubit(),
           ),
           BlocProvider<GetDirectionCubit>(
             create: (getDirectionCubitContext) =>
-            GetDirectionCubit()
-              ..getDirection(),
+                GetDirectionCubit()..getDirection(),
           ),
           BlocProvider<BenefitsCubit>(
-            create: (benefitsCubitContext) =>
-            BenefitsCubit()
-              ..getBenefits(),
+            create: (benefitsCubitContext) => BenefitsCubit()..getBenefits(),
           ),
           BlocProvider<SubsidiariesCubit>(
             create: (subsidiariesCubitContext) =>
-            SubsidiariesCubit()
-              ..getSubsidiaries(),
+                SubsidiariesCubit()..getSubsidiaries(),
             lazy: false,
           ),
 
@@ -294,11 +288,9 @@ class _MyAppState extends State<MyApp> {
           // ),
 
           BlocProvider<AppBloc>(
-            create: (authenticationContext) =>
-                AppBloc(
-                  authenticationRepository: authenticationRepository,
-                ),
-
+            create: (authenticationContext) => AppBloc(
+              authenticationRepository: authenticationRepository,
+            ),
           ),
 
           BlocProvider<LoginCubit>(
@@ -306,14 +298,10 @@ class _MyAppState extends State<MyApp> {
                 LoginCubit(authenticationRepository),
           ),
           BlocProvider<PhotosCubit>(
-            create: (photosContext) =>
-            PhotosCubit()
-              ..getPhotos(),
+            create: (photosContext) => PhotosCubit()..getPhotos(),
           ),
           BlocProvider<VideosCubit>(
-            create: (videosContext) =>
-            VideosCubit()
-              ..getVideos(),
+            create: (videosContext) => VideosCubit()..getVideos(),
           ),
           // BlocProvider<UserNotificationBloc>(
           //   lazy: true,
@@ -326,99 +314,91 @@ class _MyAppState extends State<MyApp> {
           // ),
 
           BlocProvider<UserNotificationApiCubit>(
-            lazy: true,
-            create: (userNotificationContext) =>
-            UserNotificationApiCubit(
-              RequestRepository(
-                  BlocProvider
-                      .of<AppBloc>(userNotificationContext)
-                      .state
-                      .userData),
-            )
+              lazy: true,
+              create: (userNotificationContext) => UserNotificationApiCubit(
+                    RequestRepository(
+                        BlocProvider.of<AppBloc>(userNotificationContext)
+                            .state
+                            .userData),
+                  )
               // ..getNotifications(),
-          ),
+              ),
           BlocProvider<AppUpgraderCubit>(
             lazy: false,
-            create: (context) =>
-            AppUpgraderCubit(
+            create: (context) => AppUpgraderCubit(
               UpgraderRepository(),
-            )
-              ..getUpgradeFromServer(context),
+            )..getUpgradeFromServer(context),
           ),
 
           BlocProvider<AppBloc>(
-            create: (authenticationContext) =>
-                AppBloc(
-                  authenticationRepository: authenticationRepository,
-                ),
+            create: (authenticationContext) => AppBloc(
+              authenticationRepository: authenticationRepository,
+            ),
           ),
           BlocProvider<AppsCubit>(
-            create: (appsCubitContext) =>
-            AppsCubit(GeneralDio(
-                BlocProvider
-                    .of<AppBloc>(appsCubitContext)
-                    .state
-                    .userData))
+            create: (appsCubitContext) => AppsCubit(GeneralDio(
+                BlocProvider.of<AppBloc>(appsCubitContext).state.userData))
               ..getApps(),
           ),
           BlocProvider<MyRequestsCubit>(
-            create: (myRequestCubitContext) =>
-                MyRequestsCubit(
-                    RequestRepository(
-                        BlocProvider
-                            .of<AppBloc>(myRequestCubitContext)
-                            .state
-                            .userData))..getRequests(),
+            create: (myRequestCubitContext) => MyRequestsCubit(
+                RequestRepository(
+                    BlocProvider.of<AppBloc>(myRequestCubitContext)
+                        .state
+                        .userData))
+              ..getRequests(),
           ),
 
           BlocProvider<AttendanceCubit>(
-            create: (attendanceCubitContext) =>
-                AttendanceCubit(
-                BlocProvider
-                    .of<AppBloc>(attendanceCubitContext)
+            create: (attendanceCubitContext) => AttendanceCubit(
+                BlocProvider.of<AppBloc>(attendanceCubitContext)
                     .state
-                    .userData.employeeData!.userHrCode.toString()),
+                    .userData
+                    .employeeData!
+                    .userHrCode
+                    .toString()),
           ),
 
           BlocProvider<StaffDashboardCubit>(
-            create: (staffDashBoardCubitContext) =>
-                StaffDashboardCubit(
-                    BlocProvider
-                        .of<AppBloc>(staffDashBoardCubitContext)
-                        .state
-                        .userData.employeeData!.userHrCode.toString()),
+            create: (staffDashBoardCubitContext) => StaffDashboardCubit(
+                BlocProvider.of<AppBloc>(staffDashBoardCubitContext)
+                    .state
+                    .userData
+                    .employeeData!
+                    .userHrCode
+                    .toString()),
           ),
 
           BlocProvider<StaffDashboardProjectCubit>(
             create: (staffDashBoardProjectCubitContext) =>
                 StaffDashboardProjectCubit(
-                    BlocProvider
-                        .of<AppBloc>(staffDashBoardProjectCubitContext)
+                    BlocProvider.of<AppBloc>(staffDashBoardProjectCubitContext)
                         .state
-                        .userData.employeeData!.userHrCode.toString()),
+                        .userData
+                        .employeeData!
+                        .userHrCode
+                        .toString()),
           ),
 
           BlocProvider<StaffDashboardJobCubit>(
-            create: (staffDashBoardJobCubitContext) =>
-                StaffDashboardJobCubit(
-                    BlocProvider
-                        .of<AppBloc>(staffDashBoardJobCubitContext)
-                        .state
-                        .userData.employeeData!.userHrCode.toString()),
+            create: (staffDashBoardJobCubitContext) => StaffDashboardJobCubit(
+                BlocProvider.of<AppBloc>(staffDashBoardJobCubitContext)
+                    .state
+                    .userData
+                    .employeeData!
+                    .userHrCode
+                    .toString()),
           ),
 
           BlocProvider<StatisticsCubit>(
-            create: (statisticsCubitContext) =>
-            StatisticsCubit(GeneralDio(
-                BlocProvider
-                    .of<AppBloc>(statisticsCubitContext)
+            create: (statisticsCubitContext) => StatisticsCubit(GeneralDio(
+                BlocProvider.of<AppBloc>(statisticsCubitContext)
                     .state
                     .userData))
               ..getStatistics(),
           ),
           BlocProvider<NewsCubit>(
-            create: (newsContext) =>
-            NewsCubit()
+            create: (newsContext) => NewsCubit()
               ..getNewsOld()
               ..getLatestNews(),
             lazy: true,
@@ -447,6 +427,16 @@ class _MyAppState extends State<MyApp> {
               navigatorKey: NavigationService.navigatorKey,
               debugShowCheckedModeBanner: false,
               builder: EasyLoading.init(),
+              themeMode: ThemeMode.system,
+              darkTheme: ThemeData(
+                elevatedButtonTheme: ElevatedButtonThemeData(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: ConstantsColors.buttonColors)),
+                visualDensity: VisualDensity.adaptivePlatformDensity,
+                // colorScheme: ColorScheme.fromSeed(
+                //   seedColor: const Color.fromRGBO(23, 72, 115, 1),
+                // ),
+              ),
               theme: ThemeData(
                 colorScheme: ColorScheme.fromSeed(
                   seedColor: const Color.fromRGBO(23, 72, 115, 1),
