@@ -97,14 +97,14 @@ class DirectManagerProfileScreenClass
                   // print("0000-" + state.managerData.toJson().toString());
 
                   ///Set properties
-                  vCard.firstName = state.managerData.name!.toString();
-                  vCard.organization = state.managerData.companyName!;
+                  vCard.firstName = state.managerData.name.toString()??"";
+                  vCard.organization = state.managerData.companyName??"";
                   // vCard.photo.attachFromUrl('/path/to/image/file.png', 'PNG');
-                  vCard.jobTitle = state.managerData.titleName!;
-                  vCard.email = state.managerData.email!;
+                  vCard.jobTitle = state.managerData.titleName??"";
+                  vCard.email = state.managerData.email??"";
                   vCard.url = "https://hassanallam.com";
                   vCard.workPhone = state.managerData.deskPhone;
-                  vCard.cellPhone = state.managerData.mobile!;
+                  vCard.cellPhone = state.managerData.mobile??"";
 
                   // imageProfile = state.managerData.imgProfile ?? "";
                 }
@@ -334,14 +334,14 @@ class DirectManagerProfileScreenClass
 
   Container getQRData(ProfileManagerState state) {
     if (state is BlocGetManagerDataSuccessState) {
-      vCard.firstName = state.managerData.name!.toString();
-      vCard.organization = state.managerData.companyName!;
+      vCard.firstName = state.managerData.name.toString()??"";
+      vCard.organization = state.managerData.companyName??"";
       // vCard.photo.attachFromUrl('/path/to/image/file.png', 'PNG');
-      vCard.jobTitle = state.managerData.titleName!;
-      vCard.email = state.managerData.email!;
+      vCard.jobTitle = state.managerData.titleName??"";
+      vCard.email = state.managerData.email??"";
       vCard.url = "https://hassanallam.com";
       vCard.workPhone = state.managerData.deskPhone;
-      vCard.cellPhone = state.managerData.mobile!;
+      vCard.cellPhone = state.managerData.mobile??"";
     }
 
     return Container();

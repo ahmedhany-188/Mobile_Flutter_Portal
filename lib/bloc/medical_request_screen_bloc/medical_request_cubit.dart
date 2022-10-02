@@ -58,6 +58,7 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
       switch (selectedValueLab.value.toString()) {
         case "ELmokhtaber":
           selectedLab = "0";
+          selectedService = "0";
           break;
         case "ELBORG":
           selectedLab = "1";
