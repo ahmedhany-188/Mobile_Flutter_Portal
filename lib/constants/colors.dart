@@ -6,9 +6,11 @@ import 'package:flutter/material.dart';
 class ConstantsColors{
 
   // first tow letters ff refers to full opacity 100%
-  static const Color greenAttendance =Color(0xffcdedcd);
+  // static const Color greenAttendance =Color(0xffcdedcd);
+  static const Color greenAttendance =Color(0xff5DC98F);
 
-  static const Color redAttendance =Color(0xffffccd5);
+  // static const Color redAttendance =Color(0xffffccd5);
+  static const Color redAttendance =Color(0xffD67775);
 
   static const Color petrolTextAttendance= Color(0xff092a56);
 

@@ -103,11 +103,15 @@ class ShowAttendanceBottomSheet extends StatelessWidget {
 
   Padding checkViewForm(
       MyAttendanceModel attendanceModel, BuildContext context) {
-    if (attendanceModel.vacation != null ||
-        attendanceModel.permission != null ||
-        attendanceModel.businessMission != null) {
+    if (attendanceModel.vacation != null){
+      return requestForm("Show Vacation Form", iconRequest(attendanceListData), context);
+    }
+    if (attendanceModel.permission != null) {
+      return requestForm("Show Permission Form", iconRequest(attendanceListData), context);
+    }
+    if(attendanceModel.businessMission != null){
       // || attendanceModel.forget != null) {
-      return requestForm("View Form", iconRequest(attendanceListData), context);
+      return requestForm("Show Business Mission Form", iconRequest(attendanceListData), context);
     } else {
       return const Padding(
         padding: EdgeInsets.all(2.0),
@@ -132,14 +136,14 @@ class ShowAttendanceBottomSheet extends StatelessWidget {
   Padding requestForm(
       String requestType, Icon requestIcon, BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(top: 15),
+        padding: const EdgeInsets.only(left: 25,right: 25,top: 15,bottom: 15),
         child: SizedBox(
           height: 40.0,
           child: Container(
             decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.all(
-                  Radius.circular(8.0),
+                  Radius.circular(20.0),
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -159,17 +163,20 @@ class ShowAttendanceBottomSheet extends StatelessWidget {
                         decoration: const BoxDecoration(
                           color: Colors.blueGrey,
                           borderRadius: BorderRadius.all(
-                            Radius.circular(8.0),
+                            Radius.circular(18.0),
                           ),
                         ),
                         child: Align(
                             alignment: Alignment.center, child: requestIcon)),
-                    Center(
-                      child: Text(requestType,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6
-                              ?.copyWith(color: Colors.black)),
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Center(
+                        child: Text(requestType,
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6
+                                ?.copyWith(color: Colors.black)),
+                      ),
                     )
                   ],
                 ),
