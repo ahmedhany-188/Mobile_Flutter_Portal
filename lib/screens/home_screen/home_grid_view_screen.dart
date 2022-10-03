@@ -63,7 +63,7 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
 
 
     for(int i=0;i<userApps.length;i++){
-      if(userApps[i].sysName=="Staff Dashboard"){
+      if(userApps[i].sysID==24){
         userStaffDashboard=true;
       }
     }

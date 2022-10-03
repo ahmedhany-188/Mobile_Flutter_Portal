@@ -257,7 +257,7 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
             lineHeight: 25.0,
             animationDuration: 2500,
             percent: value / 100,
-            center: Text(value.toString()),
+            center: Text(value.toString()+" %"),
             // linearStrokeCap: LinearStrokeCap.roundAll,
             barRadius: const Radius.circular(10),
             progressColor: ConstantsColors.backgroundStartColor,

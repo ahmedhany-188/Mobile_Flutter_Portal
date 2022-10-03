@@ -74,7 +74,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                   // drawer: MainDrawer(),
 
                   body:
-                      BlocListener<MedicalRequestCubit, MedicalRequestInitial>(
+                  BlocListener<MedicalRequestCubit, MedicalRequestInitial>(
                     listener: (context, state) {
                       if (state.status.isSubmissionSuccess) {
                         EasyLoading.showSuccess(
@@ -113,28 +113,26 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 8),
                                 child: BlocBuilder<MedicalRequestCubit,
-                                        MedicalRequestInitial>(
+                                    MedicalRequestInitial>(
                                     builder: (context, state) {
-                                  return TextField(
-                                      style: const TextStyle(color: Colors.white),
-                                      cursorColor: Colors.white,
-                                      onChanged: (name) {
-                                        context
-                                            .read<MedicalRequestCubit>()
-                                            .patientName(name);
-                                      },
-                                      decoration: InputDecoration(
-                                        labelText: "Patient Name",
-                                        prefixIcon: const Icon(Icons.people,color: Colors.white70,),
-                                        errorText: state
+                                      return TextField(
+                                          style: const TextStyle(color: Colors.white),
+                                          cursorColor: Colors.white,
+                                          onChanged: (name) {
+                                            context
+                                                .read<MedicalRequestCubit>()
+                                                .patientName(name);
+                                          },
+                                          decoration: InputDecoration(
+                                            labelText: "Patient Name",
+                                            prefixIcon: const Icon(Icons.people,color: Colors.white70,),
+                                            errorText: state
                                                 .patientNameMedicalRequest.invalid
-                                            ? 'invalid Name'
-                                            : null,
-                                      ));
-                                }),
+                                                ? 'invalid Name'
+                                                : null,
+                                          ));
+                                    }),
                               ),
-
-                              // Container(height: 20),
 
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -146,15 +144,9 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                     controller: hrUserMedicalRequest,
                                     decoration: const InputDecoration(
                                       prefixIcon: Icon(Icons.lock),
-                                      // labelStyle: const TextStyle(
-                                      //     color: Colors.black, fontSize: 15),
                                       labelText: "HR Code",
-                                      // enabledBorder: myInputBorder(),
-                                      // focusedBorder: myfocusborder(),
                                     )),
                               ),
-
-                              // Container(height: 20),
 
                               Padding(
                                 padding: const EdgeInsets.symmetric(
@@ -170,13 +162,13 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                       cursorColor: Colors.white,
                                       decoration: InputDecoration(
                                         floatingLabelAlignment:
-                                            FloatingLabelAlignment.start,
+                                        FloatingLabelAlignment.start,
                                         labelText: 'Select Date',
                                         errorText: state.requestDate.invalid
                                             ? 'invalid Date'
                                             : null,
                                         prefixIcon:
-                                            const Icon(Icons.calendar_today,color: Colors.white70,),
+                                        const Icon(Icons.calendar_today,color: Colors.white70,),
                                       ),
                                       onTap: () async {
                                         context
@@ -188,13 +180,6 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                 ),
                               ),
 
-                              // Container(height: 20),
-
-                              // const Text("Lab Type",
-                              //     style: TextStyle(
-                              //       color: Colors.black, fontSize: 15,
-                              //       fontFamily: 'Nunito',)),
-
                               Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 8),
@@ -204,7 +189,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                     return DropdownButtonFormField(
                                       iconEnabledColor: Colors.white,
                                       dropdownColor:
-                                          ConstantsColors.bottomSheetBackground,
+                                      ConstantsColors.bottomSheetBackground,
                                       style: const TextStyle(color: Colors.white),
                                       decoration: InputDecoration(
                                         labelText: "Lab Type",
@@ -222,14 +207,14 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                       ),
                                       items: GlobalConstants.labsType
                                           .map((item) => DropdownMenuItem<String>(
-                                                value: item,
-                                                child: Text(
-                                                  item,
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                  ),
-                                                ),
-                                              ))
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ))
                                           .toList(),
                                       onChanged: (value) {
                                         setState(() {
@@ -238,6 +223,10 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                           if (selectedValueLab == "ELmokhtaber") {
                                             servicesListState = GlobalConstants
                                                 .serviceTypeElMokhtabr;
+                                            selectedValueService="Lap";
+                                            context.read<MedicalRequestCubit>()
+                                                .addSelectedService("Lap");
+
                                           } else {
                                             servicesListState =
                                                 GlobalConstants.serviceTypeElBorg;
@@ -259,39 +248,42 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                     MedicalRequestInitial>(
                                   builder: (context, state) {
                                     return DropdownButtonFormField(
+                                      key: UniqueKey(),
                                       iconEnabledColor: Colors.white,
+                                      focusColor: Colors.white,
+                                      iconDisabledColor: Colors.white,
                                       dropdownColor:
-                                          ConstantsColors.bottomSheetBackground,
+                                      ConstantsColors.bottomSheetBackground,
                                       style: const TextStyle(color: Colors.white),
                                       decoration: InputDecoration(
                                         labelText: 'Service Type',
                                         hintText: "Service Type",
                                         floatingLabelAlignment:
-                                            FloatingLabelAlignment.start,
+                                        FloatingLabelAlignment.start,
                                         prefixIcon:
-                                            const Icon(Icons.design_services,color: Colors.white70,),
+                                        const Icon(Icons.design_services,color: Colors.white70,),
                                         errorText:
-                                            state.selectedValueService.invalid
-                                                ? 'select service'
-                                                : null,
+                                        state.selectedValueService.invalid
+                                            ? 'select service'
+                                            : null,
                                       ),
                                       hint: Text(
                                         selectedValueService,
                                         style: const TextStyle(
                                           fontSize: 14,
-                                          color: Colors.black,
+                                          color: Colors.white,
                                         ),
                                       ),
                                       items: servicesListState
                                           .map((item) => DropdownMenuItem<String>(
-                                                value: item,
-                                                child: Text(
-                                                  item,
-                                                  style: const TextStyle(
-                                                    fontSize: 14,
-                                                  ),
-                                                ),
-                                              ))
+                                        value: item,
+                                        child: Text(
+                                          item,
+                                          style: const TextStyle(
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                      ))
                                           .toList(),
                                       onChanged: (value) {
                                         setState(() {
@@ -300,7 +292,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                         context
                                             .read<MedicalRequestCubit>()
                                             .addSelectedService(
-                                                selectedValueService);
+                                            selectedValueService);
                                       },
                                     );
                                   },
@@ -325,7 +317,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
 OutlineInputBorder myInputBorder() {
   // return type is OutlineInputBorder
   return const OutlineInputBorder(
-      // Outline border type for TextFeild
+    // Outline border type for TextFeild
       borderRadius: BorderRadius.all(Radius.circular(20)),
       borderSide: BorderSide(
         color: Colors.black,
