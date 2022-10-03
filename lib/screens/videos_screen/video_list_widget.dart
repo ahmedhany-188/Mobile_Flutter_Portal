@@ -63,7 +63,7 @@ class _VideoListWidgetState extends State<VideoListWidget> {
                 child: BetterPlayerListVideoPlayer(
                   BetterPlayerDataSource(
                     BetterPlayerDataSourceType.network,
-                    videosLinks(videoListData!.videoName!),
+                    videosLinks(videoListData?.videoName??""),
                     notificationConfiguration:
                         const BetterPlayerNotificationConfiguration(
                       showNotification: true,

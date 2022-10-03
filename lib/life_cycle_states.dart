@@ -1,26 +1,15 @@
-import 'dart:convert';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:hassanallamportalflutter/screens/admin_request_screen/business_card_screen.dart';
-import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
-import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
-import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
-import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
-import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
-import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
 import 'package:hassanallamportalflutter/setup_firebase_messaging.dart';
 
 
 import 'bloc/auth_app_status_bloc/app_bloc.dart';
 import 'bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
-import 'constants/constants.dart';
 import 'gen/assets.gen.dart';
-import 'main.dart';
 
 class LifeCycleState extends StatefulWidget  {
   final Widget child;

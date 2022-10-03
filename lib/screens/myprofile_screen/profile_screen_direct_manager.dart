@@ -209,7 +209,7 @@ class DirectManagerProfileScreenClass
                                       child: SizedBox(
                                         width: double.infinity,
                                         child: Text(
-                                          state.managerData.name!.toTitleCase(),
+                                          state.managerData.name?.toTitleCase()??"",
                                           style: const TextStyle(
                                             color: Colors.white,
                                             fontFamily: 'Nunito',
@@ -220,10 +220,10 @@ class DirectManagerProfileScreenClass
                                       ),
                                     ),
                                     getFirstSection(
-                                      state.managerData.titleName!,
+                                      state.managerData.titleName??"",
                                     ),
                                     getFirstSection(
-                                      'HRCode: ${state.managerData.userHrCode!}',
+                                      'HRCode: ${state.managerData.userHrCode??""}',
                                     ),
                                   ]),
                                 ),
@@ -257,11 +257,11 @@ class DirectManagerProfileScreenClass
                                           thickness: 2.5,
                                         ),
                                         getHead("Department:"),
-                                        getLine(state.managerData.projectName!),
+                                        getLine(state.managerData.projectName??""),
                                         getHead("Job Title:"),
-                                        getLine(state.managerData.titleName!),
+                                        getLine(state.managerData.titleName??""),
                                         getHead("Email:"),
-                                        getLine(state.managerData.email!),
+                                        getLine(state.managerData.email??""),
                                         SizedBox(
                                             width: double.infinity,
                                             child: InkWell(
@@ -277,7 +277,7 @@ class DirectManagerProfileScreenClass
                                                         context)
                                                     .getManagerData(state
                                                         .managerData
-                                                        .managerCode!);
+                                                        .managerCode??"");
                                               },
                                               child: Row(
                                                 children: [
@@ -352,7 +352,7 @@ class DirectManagerProfileScreenClass
       if (state.managerData.email == null) {
         return "";
       } else {
-        return state.managerData.email!;
+        return state.managerData.email??"";
       }
     } else {
       return "";
@@ -364,7 +364,7 @@ class DirectManagerProfileScreenClass
       if (state.managerData.mobile == null) {
         return "";
       } else {
-        return state.managerData.mobile!;
+        return state.managerData.mobile??"";
       }
     } else {
       return "";
@@ -376,7 +376,7 @@ class DirectManagerProfileScreenClass
       if (state.managerData.deskPhone == null) {
         return "";
       } else {
-        return state.managerData.deskPhone!;
+        return state.managerData.deskPhone??"";
       }
     } else {
       return "";
@@ -423,10 +423,10 @@ class DirectManagerProfileScreenClass
     String managerCode = "Not found";
     if (state is BlocGetManagerDataSuccessState) {
       if (state.managerData.managerName.toString() != "null") {
-        managerCode = state.managerData.managerName!.toString();
+        managerCode = state.managerData.managerName.toString();
         managerCode=managerCode.toTitleCase();
       } else {
-        managerCode = state.managerData.managerCode!.toString();
+        managerCode = state.managerData.managerCode.toString();
       }
     }
     return Text(managerCode,

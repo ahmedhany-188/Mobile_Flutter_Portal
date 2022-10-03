@@ -43,7 +43,7 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
       final requestData = await requestRepository.getEmailAccount(requestNo?? "", requesterHRCode??"");
       final requestDate = RequestDate.dirty(
           GlobalConstants.dateFormatViewed.format(
-              GlobalConstants.dateFormatServer.parse(requestData.requestDate!)));
+              GlobalConstants.dateFormatServer.parse(requestData.requestDate??"")));
       final requestType = requestData.requestType;
 
       final accountType = requestData.accountType;

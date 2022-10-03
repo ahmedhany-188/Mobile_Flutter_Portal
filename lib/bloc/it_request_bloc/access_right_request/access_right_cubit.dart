@@ -80,14 +80,14 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
 
       final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed
           .format(GlobalConstants.dateFormatServer
-              .parse(requestData.requestDate!)));
+              .parse(requestData.requestDate??"")));
 
       final fromDate = RequestDate.dirty(GlobalConstants.dateFormatViewed
           .format(
-              GlobalConstants.dateFormatServer.parse(requestData.fromDate!)));
+              GlobalConstants.dateFormatServer.parse(requestData.fromDate??"")));
 
       final toDate = RequestDate.dirty(GlobalConstants.dateFormatViewed
-          .format(GlobalConstants.dateFormatServer.parse(requestData.toDate!)));
+          .format(GlobalConstants.dateFormatServer.parse(requestData.toDate??"")));
 
       final permanent = requestData.permanent;
 
@@ -383,7 +383,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
 
     if (result != null) {
-      extension = result.files.first.extension!;
+      extension = result.files.first.extension??"";
       chosenFileName = result.files.first.name;
     }
     emit(state.copyWith(

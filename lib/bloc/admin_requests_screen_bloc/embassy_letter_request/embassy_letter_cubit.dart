@@ -46,11 +46,11 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
     }else{
       EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
       final requestData = await _requestRepository.getEmbassyLetter(requestNo ?? "", requesterHRCode?? "");
-      final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.requestDate!)));
+      final requestDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.requestDate??"")));
       final purpose = requestData.purpose;
       final country = requestData.embassy;
-      final requestFromDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateFrom!)));
-      final requestToDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateTo!)));
+      final requestFromDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateFrom??"")));
+      final requestToDate = RequestDate.dirty(GlobalConstants.dateFormatViewed.format(GlobalConstants.dateFormatServer.parse(requestData.dateTo??"")));
       final passportNumber = PassportNumber.dirty(requestData.passportNo.toString());
       final salary = requestData.addSalary;
       final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;

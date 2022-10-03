@@ -46,7 +46,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
       final requestDate = RequestDate.dirty(
           GlobalConstants.dateFormatViewed.format(
               GlobalConstants.dateFormatServer.parse(
-                  requestData.requestDate!)));
+                  requestData.requestDate??"")));
 
       final employeeName = RequestDate.dirty(
           requestData.employeeNameCard.toString());
@@ -126,7 +126,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
           state.employeeExt.toString(),
           state.employeeFaxNO.toString(),
           state.comment.toString(),0,
-          user.employeeData!.userHrCode.toString());
+          user.employeeData?.userHrCode.toString());
 
 
       try {

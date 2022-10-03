@@ -29,25 +29,25 @@ class StaffDashBoardTicketWidget extends StatelessWidget {
       physics: const BouncingScrollPhysics(),
       itemCount: staffDashboardList.length,
       itemBuilder: (context, index) {
-        attendManPowerSub = (staffDashboardList[index].laborAttend! +
+        attendManPowerSub = (staffDashboardList[index].laborAttend??0 +
                 staffDashboardList[index].staffAttend!)
             .round();
 
-        absentManPowerSub = ((staffDashboardList[index].laborCount! +
+        absentManPowerSub = ((staffDashboardList[index].laborCount??0 +
                     staffDashboardList[index].staffCount!) -
-                (staffDashboardList[index].laborAttend! +
+                (staffDashboardList[index].laborAttend??0 +
                     staffDashboardList[index].staffAttend!))
             .round();
 
-        totalManPowerSub = (staffDashboardList[index].laborCount! +
+        totalManPowerSub = (staffDashboardList[index].laborCount??0 +
                 staffDashboardList[index].staffCount!)
             .round();
 
         totalContractorsSub =
-            (staffDashboardList[index].subContractor!).round();
+            (staffDashboardList[index].subContractor??0).round();
 
-        labourCount = (staffDashboardList[index].laborCount!).round();
-        staffCount = (staffDashboardList[index].staffCount!).round();
+        labourCount = (staffDashboardList[index].laborCount??0).round();
+        staffCount = (staffDashboardList[index].staffCount??0).round();
 
         return InkWell(
           onTap: () {
@@ -94,7 +94,7 @@ class StaffDashBoardTicketWidget extends StatelessWidget {
                             margin: const EdgeInsets.only(left: 20,top: 20,bottom: 45),
                             alignment: Alignment.center,
                             child: CachedNetworkImage(
-                                imageUrl: subsidiariesIconLink(getSubsidiariesPhotoLink(staffDashboardList[index].id!)),
+                                imageUrl: subsidiariesIconLink(getSubsidiariesPhotoLink(staffDashboardList[index].id??0)),
                               placeholder: (_,__) => Assets.images.favicon.image(),
                               errorWidget: (_,__,___) => Assets.images.favicon.image(),
                             ),
@@ -124,7 +124,7 @@ class StaffDashBoardTicketWidget extends StatelessWidget {
                                         ],
                                       ),
                                       getLinearProgressAttend(context,
-                                          attendManPowerSub!, totalManPowerSub!),
+                                          attendManPowerSub??0, totalManPowerSub??0),
                                     ],
                                   ),
                                 ),
@@ -148,7 +148,7 @@ class StaffDashBoardTicketWidget extends StatelessWidget {
                                         ],
                                       ),
                                       getLinearProgressAbsent(context,
-                                          absentManPowerSub!, totalManPowerSub!),
+                                          absentManPowerSub??0, totalManPowerSub??0),
                                     ],
                                   ),
                                 ),

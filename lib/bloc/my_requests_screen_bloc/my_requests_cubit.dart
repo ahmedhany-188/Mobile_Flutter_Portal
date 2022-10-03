@@ -71,9 +71,9 @@ class MyRequestsCubit extends HydratedCubit<MyRequestsState> {
 
   checkAllFilters() {
     List<MyRequestsModelData> myRequestSearchResultsList = [];
-    if (!state.approved &&
-        !state.pending &&
-        !state.rejected &&
+    if (state.approved &&
+        state.pending &&
+        state.rejected &&
         state.writtenText.isEmpty) {
       onClearData();
     } else {

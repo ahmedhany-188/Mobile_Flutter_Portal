@@ -11,7 +11,7 @@ part 'staff_dashboard_job_state.dart';
 
 class StaffDashboardJobCubit extends Cubit<StaffDashboardJobState>
     with HydratedMixin {
-  StaffDashboardJobCubit(this.userHRCode)
+  StaffDashboardJobCubit()
       : super(StaffDashboardJobState(date: DateTime.now().month.toString())) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (state.jobStaffDashBoardEnumStates ==
@@ -38,7 +38,7 @@ class StaffDashboardJobCubit extends Cubit<StaffDashboardJobState>
   }
   static StaffDashboardJobCubit get(context) => BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();
-  String userHRCode;
+
 
   void showJobsFilter(BuildContext context) {
     showModalBottomSheet(

@@ -13,7 +13,7 @@ part 'staff_dashboard_project_state.dart';
 
 class StaffDashboardProjectCubit extends Cubit<StaffDashboardProjectState>
     with HydratedMixin {
-  StaffDashboardProjectCubit(this.userHRCode)
+  StaffDashboardProjectCubit()
       : super(
             StaffDashboardProjectState(date: DateTime.now().month.toString())) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
@@ -43,7 +43,6 @@ class StaffDashboardProjectCubit extends Cubit<StaffDashboardProjectState>
 
   static StaffDashboardProjectCubit get(context) => BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();
-  String userHRCode;
 
   chosenDirectorOptions(String chosenFilter) {
     emit(state.copyWith(chosenDirectorFilter: chosenFilter));

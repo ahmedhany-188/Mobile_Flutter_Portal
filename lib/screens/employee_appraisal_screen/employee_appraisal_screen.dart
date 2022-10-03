@@ -50,7 +50,7 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
           body: BlocProvider<EmployeeAppraisalBlocCubit>(
             create: (context) =>
             EmployeeAppraisalBlocCubit()
-              ..getEmployeeAppraisalList(user.user!.userHRCode!),
+              ..getEmployeeAppraisalList(user.user?.userHRCode??""),
             child: BlocConsumer<EmployeeAppraisalBlocCubit,
                 EmployeeAppraisalBlocState>(
               listener: (context, state) {
@@ -80,13 +80,13 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
                     int appraisalMonth = int.parse(dateData[1]);
 
                     appraisalDataList.add(ObjectAppraisalModel(
-                        "Company", dataEmployeeAppraisalModel!.companyScore!));
+                        "Company", dataEmployeeAppraisalModel?.companyScore??0.0));
                     appraisalDataList.add(ObjectAppraisalModel("Department",
-                        dataEmployeeAppraisalModel!.departmentScore!));
+                        dataEmployeeAppraisalModel?.departmentScore??0.0));
                     appraisalDataList.add(ObjectAppraisalModel("Individual",
-                        dataEmployeeAppraisalModel!.individualScore!));
+                        dataEmployeeAppraisalModel?.individualScore??0.0));
                     appraisalDataList.add(ObjectAppraisalModel("Competence",
-                        dataEmployeeAppraisalModel!.competencescore!));
+                        dataEmployeeAppraisalModel?.competencescore??0.0));
 
                     return Padding(
                       padding: const EdgeInsets.only(top: 10.0,bottom: 0.0),
@@ -99,7 +99,7 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
                                 child: imageProfile.isNotEmpty
                                     ? CachedNetworkImage(
                                   imageUrl: getUserProfilePicture(
-                                      user.employeeData!.imgProfile!),
+                                      user.employeeData?.imgProfile??""),
                                   imageBuilder:
                                       (context, imageProvider) =>
                                       Container(
@@ -127,7 +127,7 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
                             Padding(
                               padding: const EdgeInsets.all(5.0),
                               child: Center(
-                                child: Text(user.employeeData!.name.toString(),
+                                child: Text(user.employeeData?.name.toString()??"",
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 15.0),),
                               ),
@@ -138,8 +138,8 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
                               child: Center(
                                 child: Text("Appraisal ${DateFormat('MMMM').format(
                                     DateTime(0,
-                                        appraisalMonth))} ${dateData[0]} - #1-${dateData[0]}-${dataEmployeeAppraisalModel!
-                                    .appID!}-${dataEmployeeAppraisalModel!.id!}",
+                                        appraisalMonth))} ${dateData[0]} - #1-${dateData[0]}-${dataEmployeeAppraisalModel
+                                    ?.appID??""}-${dataEmployeeAppraisalModel?.id??""}",
                                   style: const TextStyle(color: Colors.white,
                                       fontSize: 12.0,
                                       fontWeight: FontWeight.bold),),
@@ -182,7 +182,7 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
                             ),
 
                             Text(getHrMessage(appraisalStatus)),
-                            getOverallContainer("Overall Score", dataEmployeeAppraisalModel!.overallscore!),
+                            getOverallContainer("Overall Score", dataEmployeeAppraisalModel?.overallscore??0.0),
 
                             EmployeeAppraisalTicketWidget(appraisalDataList),
 

@@ -19,7 +19,7 @@ class SubsidiariesDetailsScreen extends StatelessWidget {
     return CustomBackground(
       child: CustomTheme(
         child: Scaffold(
-          appBar: AppBar(title: Text(subsidiariesData.subName!)),
+          appBar: AppBar(title: Text(subsidiariesData.subName??"")),
           body: Padding(
             padding: const EdgeInsets.all(10.0),
             child: SizedBox(

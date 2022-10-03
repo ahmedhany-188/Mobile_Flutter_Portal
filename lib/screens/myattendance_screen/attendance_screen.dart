@@ -63,7 +63,7 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
 
               body: BlocProvider.value(value: AttendanceCubit.get(context)
                 ..getFirstAttendanceList(
-                    user.user!.userHRCode.toString()),
+                    user.user?.userHRCode.toString()),
 
                 child: BlocConsumer<AttendanceCubit, AttendanceState>(
                     listener: (context, state) {
@@ -146,7 +146,7 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
                                     monthNumber = index + 1;
                                     context.read<AttendanceCubit>().monthValueChanged(monthNumber);
                                     if (state.getAttendanceList[monthNumber - 1].toString() == "[]") {
-                                      BlocProvider.of<AttendanceCubit>(context).getAllAttendanceList(user.user!.userHRCode);
+                                      BlocProvider.of<AttendanceCubit>(context).getAllAttendanceList(user.user?.userHRCode);
                                     }
                                     selectedPage = monthNumber - 1;
                                     pageController = PageController(initialPage: selectedPage);
@@ -199,7 +199,7 @@ class AttendanceScreenStateClass extends State<AttendanceScreen> {
           ),
           SizedBox(
             child: AttendanceTicketWidget(
-                list, user.user!.userHRCode.toString()
+                list, user.user?.userHRCode.toString()??""
             ),
           ),
         ],)

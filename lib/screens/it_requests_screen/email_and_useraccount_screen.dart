@@ -116,7 +116,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                             heroTag: null,
                             onPressed: () {
                               // TODO validation from cubit ! ya ahmed hany :D
-                              if (user.employeeData!.userHrCode ==
+                              if (user.employeeData?.userHrCode ==
                                   state.hrCodeUser.value) {
                                 EasyLoading.showError("Invalid same hr code",);
                               }
@@ -595,7 +595,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                                   RequestStatus.newRequest ?
                                               context.read<
                                                   EmailUserAccountCubit>()
-                                                  .getEmailValue(value!)
+                                                  .getEmailValue(value??false)
                                                   : null;
                                             },
                                           )

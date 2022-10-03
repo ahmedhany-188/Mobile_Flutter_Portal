@@ -60,7 +60,7 @@ class RequestRepository {
       "date": requestDate,
       "comments": comments,
       "dateFromAmpm": dateFromAmpm,
-      "requestHrCode": userData?.user?.userHRCode!,
+      "requestHrCode": userData?.user?.userHRCode,
       "dateTo": dateTo,
       "serviceId": RequestServiceID.permissionServiceID,
       "type": type,
@@ -85,7 +85,7 @@ class RequestRepository {
 
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": RequestServiceID.accessRightServiceID,
-      "requestHrCode": userData?.employeeData!.userHrCode,
+      "requestHrCode": userData?.employeeData?.userHrCode,
       "date": accessRightModel.requestDate,
       "filePdf":
           (accessRightModel.filePDF != null) ? accessRightModel.filePDF : null,
@@ -210,8 +210,8 @@ class RequestRepository {
       {required BusinessCardFormModel businessCardFormModel}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": RequestServiceID.businessCardServiceID,
-      "requestHrCode": userData?.employeeData!.userHrCode,
-      "ownerHrCode": userData?.employeeData!.userHrCode,
+      "requestHrCode": userData?.employeeData?.userHrCode,
+      "ownerHrCode": userData?.employeeData?.userHrCode,
       "date": businessCardFormModel.requestDate,
       "comments": businessCardFormModel.employeeComments,
       "cardName": businessCardFormModel.employeeNameCard,
@@ -260,7 +260,7 @@ class RequestRepository {
       {required EmailUserFormModel emailUserFormModel}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "ServiceId": RequestServiceID.emailUserAccountServiceID,
-      "RequestHrCode": userData?.user!.userHRCode,
+      "RequestHrCode": userData?.user?.userHRCode,
       "Date": emailUserFormModel.requestDate,
       "OwnerHrCode": emailUserFormModel.ownerHrCode,
       "OwnerFullName": emailUserFormModel.fullName,
@@ -291,8 +291,8 @@ class RequestRepository {
       {required EmbassyLetterFormModel embassyLetterFormModel}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "ServiceId": RequestServiceID.embassyServiceID,
-      "RequestHrCode": userData?.employeeData!.userHrCode,
-      "OwnerHrCode": userData?.employeeData!.userHrCode,
+      "RequestHrCode": userData?.employeeData?.userHrCode,
+      "OwnerHrCode": userData?.employeeData?.userHrCode,
       "date": GlobalConstants.dateFormatServer.format(GlobalConstants
           .dateFormatViewed
           .parse(embassyLetterFormModel.requestDate!)),
@@ -332,7 +332,7 @@ class RequestRepository {
     var bodyString = jsonEncode(<String, dynamic>{
       "date": requestDate,
       "comments": comments,
-      "requestHrCode": userData?.user?.userHRCode!,
+      "requestHrCode": userData?.user?.userHRCode,
       "dateFrom": dateFrom,
       "dateTo": dateTo,
       "serviceId": RequestServiceID.vacationServiceID,
@@ -370,7 +370,7 @@ class RequestRepository {
       required LocationData locationData}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": RequestServiceID.businessMissionServiceID,
-      "requestHrCode": userData?.user?.userHRCode!,
+      "requestHrCode": userData?.user?.userHRCode,
       "date": requestDate,
       "comments": comments,
       "dateFrom": dateFrom,
@@ -463,8 +463,8 @@ class RequestRepository {
           Map<String, dynamic> detailedDataPost = {
             "requestNo": int.parse(value.data['requestNo']),
             "hardWareItemId":
-            selectedItem[i].selectedItem!.hardWareItemId.toString(),
-            "ownerHrCode": selectedItem[i].selectedContact!.userHrCode
+            selectedItem[i].selectedItem?.hardWareItemId.toString(),
+            "ownerHrCode": selectedItem[i].selectedContact?.userHrCode
                 .toString(),
             "type": type,
             "qty": selectedItem[i].quantity,

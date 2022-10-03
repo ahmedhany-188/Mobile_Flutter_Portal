@@ -64,8 +64,8 @@ class WeatherScreen extends StatelessWidget {
                         height: 5,
                       ),
                       Text(
-                        state.weather.main!.temp.toString(),
-                        style: Theme.of(context).textTheme.headline4!.copyWith(
+                        state.weather.main?.temp.toString()??"",
+                        style: Theme.of(context).textTheme.headline4?.copyWith(
                             fontWeight: FontWeight.bold, color: Colors.black),
                       ),
                     ],

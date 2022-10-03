@@ -85,7 +85,7 @@ class RequesterDataWidget extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(requesterData.name!.toTitleCase(),
+                          Text(requesterData.name?.toTitleCase()??"",
                               maxLines: 1,
                               style: const TextStyle(
                                   fontSize: 12,
