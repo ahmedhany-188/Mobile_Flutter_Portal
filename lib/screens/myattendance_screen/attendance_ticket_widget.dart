@@ -45,7 +45,7 @@ class AttendanceTicketWidget extends StatelessWidget {
               width: double.infinity,
               child: InkWell(
                 onTap: () {
-                  if (attendanceListData[index].vacation == null &&
+                  if ( //attendanceListData[index].vacation == null &&
                       attendanceListData[index].holiday == false) {
                     showModalBottomSheet<void>(
                         context: context,
@@ -187,11 +187,11 @@ Container attendanceContainer(String timeText, String action, String color) {
 
 Color containerColor(String color) {
   if (color == "green") {
-    return ConstantsColors.greenAttendance;
+    return ConstantsColors.whiteNormalAttendance;
   } else if (color == "red") {
     return ConstantsColors.redAttendance;
   } else if (color == "blue") {
-    return Colors.blueGrey;
+    return ConstantsColors.greenAttendance;
   } else {
     return ConstantsColors.whiteNormalAttendance;
   }
@@ -211,7 +211,7 @@ SizedBox sizedDay(
     width: double.infinity,
     child: InkWell(
         onTap: () {
-          if (attendanceModel.vacation == null &&
+          if ( // attendanceModel.vacation == null &&
               attendanceModel.holiday != true) {
             showModalBottomSheet<void>(
                 context: context,
