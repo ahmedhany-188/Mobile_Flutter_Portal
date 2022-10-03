@@ -513,7 +513,7 @@ class MainDrawer extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           buildListTile(
-                            'Notification',
+                            'My Notification',
                             Icons.notifications,
                             null,
 

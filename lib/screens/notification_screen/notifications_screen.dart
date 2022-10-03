@@ -33,7 +33,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         child: CustomTheme(
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            appBar: AppBar(title: const Text("Your Notification")),
+            appBar: AppBar(title: const Text("My Notification")),
             body: RefreshIndicator(
               onRefresh: () async {
                 await UserNotificationApiCubit.get(context).getNotifications();

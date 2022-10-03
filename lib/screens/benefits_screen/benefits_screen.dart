@@ -38,9 +38,10 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
   void initState() {
     super.initState();
 
-    // FlutterDownloader.registerCallback(downloadCallback);
+    FlutterDownloader.registerCallback(downloadCallback);
   }
 
+  @pragma('vm:entry-point')
   static void downloadCallback(
       String id, DownloadTaskStatus status, int progress) {
     final SendPort send =
