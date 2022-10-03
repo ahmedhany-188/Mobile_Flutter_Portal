@@ -17,7 +17,7 @@ import '../../bloc/benefits_screen_bloc/benefits_cubit.dart';
 
 class BenefitsScreen extends StatefulWidget {
   const BenefitsScreen({Key? key}) : super(key: key);
-  static const routeName = 'benefits-screen';
+  static const routeName = '/benefits-screen';
 
   @override
   State<BenefitsScreen> createState() => _BenefitsScreenState();
