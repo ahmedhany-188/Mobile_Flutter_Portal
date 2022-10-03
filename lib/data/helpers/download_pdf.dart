@@ -35,7 +35,8 @@ class DownloadPdfHelper{
         final directory = await getExternalStorageDirectory();
         externalStorageDirPath = directory?.path;
       }
-    } else if (Platform.isIOS) {
+    }
+    else if (Platform.isIOS) {
       final directory = await getApplicationDocumentsDirectory();
       externalStorageDirPath = directory.path;
       // externalStorageDirPath =
@@ -43,8 +44,8 @@ class DownloadPdfHelper{
     }
 
 
-    final dir =
-    await getApplicationDocumentsDirectory(); //From path_provider package
+    // final dir =
+    // await getApplicationDocumentsDirectory(); //From path_provider package
     var _localPath = externalStorageDirPath;
     final savedDir = Directory(_localPath!);
     await savedDir.create(recursive: true).then((value) async {
@@ -56,8 +57,7 @@ class DownloadPdfHelper{
           showNotification: true,
           openFileFromNotification: true,
           saveInPublicStorage: true,
-        ).then(
-                (value) async {
+        ).then((value) async {
               bool waitTask = true;
               while (waitTask) {
                 String query = "SELECT * FROM task WHERE task_id='" + value! +
@@ -138,6 +138,10 @@ class DownloadPdfHelper{
   Future<Directory?> _getDownloadDirectory() async {
     if (Platform.isAndroid) {
       return await getExternalStorageDirectory();
+    }else if (Platform.isIOS) {
+      return await getApplicationDocumentsDirectory();
+      // externalStorageDirPath =
+      //     (await getApplicationDocumentsDirectory()).absolute.path;
     }
 
     // in this example we are using only Android and iOS so I can assume
@@ -218,7 +222,11 @@ class DownloadPdfHelper{
     final isPermissionStatusGranted = await _requestPermissions();
 
     if (Platform.isIOS){
-      await requestDownload(fileUrl,fileName);
+      // final directory = await getApplicationDocumentsDirectory();
+      // externalStorageDirPath = directory.path;
+      final savePath = path.join(dir!.path, fileName);
+      await _startDownload(savePath);
+      // await requestDownload(fileUrl,fileName);
     }else{
       if (isPermissionStatusGranted) {
         final savePath = path.join(dir!.path, fileName);
