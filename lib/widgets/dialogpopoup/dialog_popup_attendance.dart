@@ -104,14 +104,14 @@ class ShowAttendanceBottomSheet extends StatelessWidget {
   Padding checkViewForm(
       MyAttendanceModel attendanceModel, BuildContext context) {
     if (attendanceModel.vacation != null){
-      return requestForm("Show Vacation Form", iconRequest(attendanceListData), context);
+      return requestForm("View Vacation", iconRequest(attendanceListData), context);
     }
     if (attendanceModel.permission != null) {
-      return requestForm("Show Permission Form", iconRequest(attendanceListData), context);
+      return requestForm("View Permission", iconRequest(attendanceListData), context);
     }
     if(attendanceModel.businessMission != null){
       // || attendanceModel.forget != null) {
-      return requestForm("Show Business Mission Form", iconRequest(attendanceListData), context);
+      return requestForm("View Business Mission", iconRequest(attendanceListData), context);
     } else {
       return const Padding(
         padding: EdgeInsets.all(2.0),
