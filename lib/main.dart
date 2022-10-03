@@ -60,7 +60,7 @@ void main() async {
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
 
   Paint.enableDithering = true;
-  await FlutterDownloader.initialize(debug: true);
+  await FlutterDownloader.initialize();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform, //This line is necessary
   );

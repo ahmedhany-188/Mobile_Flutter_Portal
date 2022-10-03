@@ -211,7 +211,7 @@ class DownloadPdfHelper{
     const iOS = DarwinInitializationSettings();
     const initSettings = InitializationSettings(android: android,iOS:  iOS);
 
-    await flutterLocalNotificationsPlugin.initialize(initSettings, onDidReceiveNotificationResponse: (_)=> _onSelectNotification);
+    await flutterLocalNotificationsPlugin.initialize(initSettings, onDidReceiveNotificationResponse: (message)=> _onSelectNotification(message.payload));
 
 
     final dir = await _getDownloadDirectory();
