@@ -33,7 +33,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
   @override
   Widget build(BuildContext context) {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
-    hrUserMedicalRequest.text = user.employeeData!.userHrCode!;
+    hrUserMedicalRequest.text = user.employeeData?.userHrCode??"";
 
     return CustomBackground(
       child: CustomTheme(
@@ -61,7 +61,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                     children: <Widget>[
                       FloatingActionButton.extended(
                         onPressed: () {
-                          String hrCode = user.user!.userHRCode.toString();
+                          String hrCode = user.user?.userHRCode.toString()??"";
                           context
                               .read<MedicalRequestCubit>()
                               .getSuccessMessage(hrCode);
@@ -223,9 +223,9 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                           if (selectedValueLab == "ELmokhtaber") {
                                             servicesListState = GlobalConstants
                                                 .serviceTypeElMokhtabr;
-                                            selectedValueService="Lap";
+                                            selectedValueService="Lab";
                                             context.read<MedicalRequestCubit>()
-                                                .addSelectedService("Lap");
+                                                .addSelectedService("Lab");
 
                                           } else {
                                             servicesListState =

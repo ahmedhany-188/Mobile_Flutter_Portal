@@ -687,7 +687,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                                 .read<
                                                                     AccessRightCubit>()
                                                                 .getPermanentValue(
-                                                                    value!);
+                                                                    value??false);
                                                           },
                                                         ),
                                                       ], /** Checkbox Widget **/ //<Widget>[]

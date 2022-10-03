@@ -217,7 +217,7 @@ class MainDrawer extends StatelessWidget {
                     radius: 30,
                     // borderRadius: BorderRadius.circular(50),
                     backgroundImage: CachedNetworkImageProvider(
-                      getUserProfilePicture(user!.imgProfile!),
+                      getUserProfilePicture(user?.imgProfile??""),
                     ),
                     backgroundColor: Colors.transparent,
                     onBackgroundImageError: (_, __) {
@@ -233,21 +233,21 @@ class MainDrawer extends StatelessWidget {
                     height: 10,
                   ),
                   Flexible(
-                      child: Text(user.name!.split(' ').take(5).join(' ').toTitleCase(),
+                      child: Text(user?.name?.split(' ').take(5).join(' ').toTitleCase()??"",
                           style: const TextStyle(
                               fontSize: 18,
                               fontFamily: 'RobotoCondensed',
                               fontWeight: FontWeight.normal,
                               color: Colors.white))),
                   Flexible(
-                      child: Text('${user.titleName}',
+                      child: Text('${user?.titleName??""}',
                           style: TextStyle(
                               fontSize: 14,
                               fontFamily: FontFamily.robotoCondensed,
                               fontWeight: FontWeight.normal,
                               color: Colors.grey.shade500))),
                   Flexible(
-                      child: Text('Grade: ${user.gradeName?.toTitleCase}',
+                      child: Text('Grade: ${user?.gradeName?.toTitleCase??""}',
                           style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'RobotoCondensed',
@@ -647,7 +647,7 @@ class MainDrawer extends StatelessWidget {
                                   itemCount: state.appsList.length,
                                   itemBuilder: (ctx, index) {
                                     return buildExternalLinks(
-                                        state.appsList[index].sysName!,
+                                        state.appsList[index].sysName??"",
                                         state.appsList[index].sysLink.toString());
                                   })
                               : const Text(

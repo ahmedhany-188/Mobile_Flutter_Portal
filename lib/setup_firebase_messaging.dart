@@ -298,225 +298,228 @@ class SetupFirebaseMessaging {
     );
   }
 
-  void _onSelectNotificationMessage(String? json) async {
-    final messageData = jsonDecode(json!);
-    if (kDebugMode) {
-      print("_handleMessage");
-    }
-    if (messageData.containsKey("requestType")) {
-      if (messageData['requestType']
-          .toString()
-          .contains(GlobalConstants.requestCategoryPermissionActivity)) {
-        Future.delayed(Duration.zero).then((_) {
-          Navigator.push(
-              NavigationService.navigatorKey.currentContext ?? context,
-              MaterialPageRoute(
-                  builder: (context) => PermissionScreen(
-                        requestData: {
-                          PermissionScreen.requestNoKey:
-                              messageData['requestNo'],
-                          PermissionScreen.requesterHRCode:
-                              messageData['type'].toString().toLowerCase() ==
-                                      "submit"
-                                  ? messageData['requesterHRCode']
-                                  : context
-                                      .read<AppBloc>()
-                                      .state
-                                      .userData
-                                      .employeeData
-                                      ?.userHrCode
-                        },
-                      )));
-        });
-      } else if (messageData['requestType']
-          .toString()
-          .contains(GlobalConstants.requestCategoryBusinessMissionActivity)) {
-        Future.delayed(Duration.zero).then((_) {
-          Navigator.push(
-              NavigationService.navigatorKey.currentContext ?? context,
-              MaterialPageRoute(
-                  builder: (context) => BusinessMissionScreen(
-                        requestData: {
-                          BusinessMissionScreen.requestNoKey:
-                              messageData['requestNo'],
-                          BusinessMissionScreen.requesterHRCode:
-                              messageData['type'].toString().toLowerCase() ==
-                                      "submit"
-                                  ? messageData['requesterHRCode']
-                                  : context
-                                      .read<AppBloc>()
-                                      .state
-                                      .userData
-                                      .employeeData
-                                      ?.userHrCode
-                        },
-                      )));
-        });
-      } else if (messageData['requestType']
-          .toString()
-          .contains(GlobalConstants.requestCategoryVacationActivity)) {
-        Future.delayed(Duration.zero).then((_) {
-          Navigator.push(
-              NavigationService.navigatorKey.currentContext ?? context,
-              MaterialPageRoute(
-                  builder: (context) => VacationScreen(
-                        requestData: {
-                          VacationScreen.requestNoKey: messageData['requestNo'],
-                          VacationScreen.requesterHRCode:
-                              messageData['type'].toString().toLowerCase() ==
-                                      "submit"
-                                  ? messageData['requesterHRCode']
-                                  : context
-                                      .read<AppBloc>()
-                                      .state
-                                      .userData
-                                      .employeeData
-                                      ?.userHrCode
-                        },
-                      )));
-        });
-      } else if (messageData['requestType']
-          .toString()
-          .contains(GlobalConstants.requestCategoryEmbassyActivity)) {
-        Future.delayed(Duration.zero).then((_) {
-          Navigator.push(
-              NavigationService.navigatorKey.currentContext ?? context,
-              MaterialPageRoute(
-                  builder: (context) => EmbassyLetterScreen(
-                        requestData: {
-                          EmbassyLetterScreen.requestNoKey:
-                              messageData['requestNo'],
-                          EmbassyLetterScreen.requesterHRCode:
-                              messageData['type'].toString().toLowerCase() ==
-                                      "submit"
-                                  ? messageData['requesterHRCode']
-                                  : context
-                                      .read<AppBloc>()
-                                      .state
-                                      .userData
-                                      .employeeData
-                                      ?.userHrCode
-                        },
-                      )));
-        });
-      } else if (messageData['requestType']
-          .toString()
-          .contains(GlobalConstants.requestCategoryBusniessCardActivity)) {
-        Future.delayed(Duration.zero).then((_) {
-          Navigator.push(
-              NavigationService.navigatorKey.currentContext ?? context,
-              MaterialPageRoute(
-                  builder: (context) => BusinessCardScreen(
-                        requestData: {
-                          BusinessCardScreen.requestNoKey:
-                              messageData['requestNo'],
-                          BusinessCardScreen.requesterHRCode:
-                              messageData['type'].toString().toLowerCase() ==
-                                      "submit"
-                                  ? messageData['requesterHRCode']
-                                  : context
-                                      .read<AppBloc>()
-                                      .state
-                                      .userData
-                                      .employeeData
-                                      ?.userHrCode
-                        },
-                      )));
-        });
-      } else if (messageData['requestType']
-          .toString()
-          .contains(GlobalConstants.requestCategoryUserAccount)) {
-        Future.delayed(Duration.zero).then((_) {
-          Navigator.push(
-              NavigationService.navigatorKey.currentContext ?? context,
-              MaterialPageRoute(
-                  builder: (context) => EmailAndUserAccountScreen(
-                        requestData: {
-                          EmailAndUserAccountScreen.requestNoKey:
-                              messageData['requestNo'],
-                          EmailAndUserAccountScreen.requesterHRCode:
-                              messageData['type'].toString().toLowerCase() ==
-                                      "submit"
-                                  ? messageData['requesterHRCode']
-                                  : context
-                                      .read<AppBloc>()
-                                      .state
-                                      .userData
-                                      .employeeData
-                                      ?.userHrCode
-                        },
-                      )));
-        });
-      } else if (messageData['requestType']
-          .toString()
-          .contains(GlobalConstants.requestCategoryAccessRight)) {
-        Future.delayed(Duration.zero).then((_) {
-          Navigator.push(
-              NavigationService.navigatorKey.currentContext ?? context,
-              MaterialPageRoute(
-                  builder: (context) => AccessRightScreen(
-                        requestData: {
-                          AccessRightScreen.requestNoKey:
-                              messageData['requestNo'],
-                          AccessRightScreen.requesterHRCode:
-                              messageData['type'].toString().toLowerCase() ==
-                                      "submit"
-                                  ? messageData['requesterHRCode']
-                                  : context
-                                      .read<AppBloc>()
-                                      .state
-                                      .userData
-                                      .employeeData
-                                      ?.userHrCode
-                        },
-                      )));
-        });
+  void _onSelectNotificationMessage(String? jsonX) async {
+    var json = jsonX ?? "";
+    if(json.isNotEmpty){
+      final messageData = jsonDecode(json);
+      if (kDebugMode) {
+        print("_handleMessage");
       }
+      if (messageData.containsKey("requestType")) {
+        if (messageData['requestType']
+            .toString()
+            .contains(GlobalConstants.requestCategoryPermissionActivity)) {
+          Future.delayed(Duration.zero).then((_) {
+            Navigator.push(
+                NavigationService.navigatorKey.currentContext ?? context,
+                MaterialPageRoute(
+                    builder: (context) => PermissionScreen(
+                      requestData: {
+                        PermissionScreen.requestNoKey:
+                        messageData['requestNo'],
+                        PermissionScreen.requesterHRCode:
+                        messageData['type'].toString().toLowerCase() ==
+                            "submit"
+                            ? messageData['requesterHRCode']
+                            : context
+                            .read<AppBloc>()
+                            .state
+                            .userData
+                            .employeeData
+                            ?.userHrCode
+                      },
+                    )));
+          });
+        } else if (messageData['requestType']
+            .toString()
+            .contains(GlobalConstants.requestCategoryBusinessMissionActivity)) {
+          Future.delayed(Duration.zero).then((_) {
+            Navigator.push(
+                NavigationService.navigatorKey.currentContext ?? context,
+                MaterialPageRoute(
+                    builder: (context) => BusinessMissionScreen(
+                      requestData: {
+                        BusinessMissionScreen.requestNoKey:
+                        messageData['requestNo'],
+                        BusinessMissionScreen.requesterHRCode:
+                        messageData['type'].toString().toLowerCase() ==
+                            "submit"
+                            ? messageData['requesterHRCode']
+                            : context
+                            .read<AppBloc>()
+                            .state
+                            .userData
+                            .employeeData
+                            ?.userHrCode
+                      },
+                    )));
+          });
+        } else if (messageData['requestType']
+            .toString()
+            .contains(GlobalConstants.requestCategoryVacationActivity)) {
+          Future.delayed(Duration.zero).then((_) {
+            Navigator.push(
+                NavigationService.navigatorKey.currentContext ?? context,
+                MaterialPageRoute(
+                    builder: (context) => VacationScreen(
+                      requestData: {
+                        VacationScreen.requestNoKey: messageData['requestNo'],
+                        VacationScreen.requesterHRCode:
+                        messageData['type'].toString().toLowerCase() ==
+                            "submit"
+                            ? messageData['requesterHRCode']
+                            : context
+                            .read<AppBloc>()
+                            .state
+                            .userData
+                            .employeeData
+                            ?.userHrCode
+                      },
+                    )));
+          });
+        } else if (messageData['requestType']
+            .toString()
+            .contains(GlobalConstants.requestCategoryEmbassyActivity)) {
+          Future.delayed(Duration.zero).then((_) {
+            Navigator.push(
+                NavigationService.navigatorKey.currentContext ?? context,
+                MaterialPageRoute(
+                    builder: (context) => EmbassyLetterScreen(
+                      requestData: {
+                        EmbassyLetterScreen.requestNoKey:
+                        messageData['requestNo'],
+                        EmbassyLetterScreen.requesterHRCode:
+                        messageData['type'].toString().toLowerCase() ==
+                            "submit"
+                            ? messageData['requesterHRCode']
+                            : context
+                            .read<AppBloc>()
+                            .state
+                            .userData
+                            .employeeData
+                            ?.userHrCode
+                      },
+                    )));
+          });
+        } else if (messageData['requestType']
+            .toString()
+            .contains(GlobalConstants.requestCategoryBusniessCardActivity)) {
+          Future.delayed(Duration.zero).then((_) {
+            Navigator.push(
+                NavigationService.navigatorKey.currentContext ?? context,
+                MaterialPageRoute(
+                    builder: (context) => BusinessCardScreen(
+                      requestData: {
+                        BusinessCardScreen.requestNoKey:
+                        messageData['requestNo'],
+                        BusinessCardScreen.requesterHRCode:
+                        messageData['type'].toString().toLowerCase() ==
+                            "submit"
+                            ? messageData['requesterHRCode']
+                            : context
+                            .read<AppBloc>()
+                            .state
+                            .userData
+                            .employeeData
+                            ?.userHrCode
+                      },
+                    )));
+          });
+        } else if (messageData['requestType']
+            .toString()
+            .contains(GlobalConstants.requestCategoryUserAccount)) {
+          Future.delayed(Duration.zero).then((_) {
+            Navigator.push(
+                NavigationService.navigatorKey.currentContext ?? context,
+                MaterialPageRoute(
+                    builder: (context) => EmailAndUserAccountScreen(
+                      requestData: {
+                        EmailAndUserAccountScreen.requestNoKey:
+                        messageData['requestNo'],
+                        EmailAndUserAccountScreen.requesterHRCode:
+                        messageData['type'].toString().toLowerCase() ==
+                            "submit"
+                            ? messageData['requesterHRCode']
+                            : context
+                            .read<AppBloc>()
+                            .state
+                            .userData
+                            .employeeData
+                            ?.userHrCode
+                      },
+                    )));
+          });
+        } else if (messageData['requestType']
+            .toString()
+            .contains(GlobalConstants.requestCategoryAccessRight)) {
+          Future.delayed(Duration.zero).then((_) {
+            Navigator.push(
+                NavigationService.navigatorKey.currentContext ?? context,
+                MaterialPageRoute(
+                    builder: (context) => AccessRightScreen(
+                      requestData: {
+                        AccessRightScreen.requestNoKey:
+                        messageData['requestNo'],
+                        AccessRightScreen.requesterHRCode:
+                        messageData['type'].toString().toLowerCase() ==
+                            "submit"
+                            ? messageData['requesterHRCode']
+                            : context
+                            .read<AppBloc>()
+                            .state
+                            .userData
+                            .employeeData
+                            ?.userHrCode
+                      },
+                    )));
+          });
+        }
 
-      ///equipment pushNotification redirect
-      else if (messageData['requestType']
-          .toString()
-          .contains(GlobalConstants.requestCategoryEquipment)) {
-        Future.delayed(Duration.zero).then((_) {
-          print(messageData.toString());
-          Navigator.push(
-              NavigationService.navigatorKey.currentContext ?? context,
-              MaterialPageRoute(
-                  builder: (context) => EquipmentsRequestScreen(
-                        requestData: {
-                          EquipmentsRequestScreen.requestNoKey:
-                              messageData['requestNo'],
-                          EquipmentsRequestScreen.requesterHrCode:
-                              messageData['type'].toString().toLowerCase() ==
-                                      "submit"
-                                  ? messageData['requesterHRCode']
-                                  : context
-                                      .read<AppBloc>()
-                                      .state
-                                      .userData
-                                      .employeeData
-                                      ?.userHrCode,
-                        },
-                      )));
-        });
-      }
-    } else if (messageData.containsKey("type")) {
-      if (messageData['type']
-          .toString()
-          .contains(GlobalConstants.allNotificationVideoType)) {
-        Future.delayed(Duration.zero).then((_) {
-          Navigator.push(
-              NavigationService.navigatorKey.currentContext ?? context,
-              MaterialPageRoute(builder: (context) => const VideosScreen()));
-        });
-      } else if (messageData['type']
-          .toString()
-          .contains(GlobalConstants.allNotificationNewsType)) {
-        Future.delayed(Duration.zero).then((_) {
-          Navigator.push(
-              NavigationService.navigatorKey.currentContext ?? context,
-              MaterialPageRoute(builder: (context) => const NewsScreen()));
-        });
+        ///equipment pushNotification redirect
+        else if (messageData['requestType']
+            .toString()
+            .contains(GlobalConstants.requestCategoryEquipment)) {
+          Future.delayed(Duration.zero).then((_) {
+            print(messageData.toString());
+            Navigator.push(
+                NavigationService.navigatorKey.currentContext ?? context,
+                MaterialPageRoute(
+                    builder: (context) => EquipmentsRequestScreen(
+                      requestData: {
+                        EquipmentsRequestScreen.requestNoKey:
+                        messageData['requestNo'],
+                        EquipmentsRequestScreen.requesterHrCode:
+                        messageData['type'].toString().toLowerCase() ==
+                            "submit"
+                            ? messageData['requesterHRCode']
+                            : context
+                            .read<AppBloc>()
+                            .state
+                            .userData
+                            .employeeData
+                            ?.userHrCode,
+                      },
+                    )));
+          });
+        }
+      } else if (messageData.containsKey("type")) {
+        if (messageData['type']
+            .toString()
+            .contains(GlobalConstants.allNotificationVideoType)) {
+          Future.delayed(Duration.zero).then((_) {
+            Navigator.push(
+                NavigationService.navigatorKey.currentContext ?? context,
+                MaterialPageRoute(builder: (context) => const VideosScreen()));
+          });
+        } else if (messageData['type']
+            .toString()
+            .contains(GlobalConstants.allNotificationNewsType)) {
+          Future.delayed(Duration.zero).then((_) {
+            Navigator.push(
+                NavigationService.navigatorKey.currentContext ?? context,
+                MaterialPageRoute(builder: (context) => const NewsScreen()));
+          });
+        }
       }
     }
   }

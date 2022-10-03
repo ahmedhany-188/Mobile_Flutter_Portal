@@ -8,7 +8,6 @@ import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/get_direction_screen_bloc/get_direction_cubit.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/get_location_model/location_data.dart';
-import 'package:hassanallamportalflutter/data/models/my_requests_model/my_business_mission_form_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date_to.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
@@ -305,7 +304,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                                     .read<
                                                     BusinessMissionCubit>()
                                                     .missionTypeChanged(
-                                                    permissionType!)
+                                                    permissionType??0)
                                                     : null,
                                               ),
                                               RadioListTile<int>(
@@ -320,7 +319,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                                     .read<
                                                     BusinessMissionCubit>()
                                                     .missionTypeChanged(
-                                                    missionType!)
+                                                    missionType??0)
                                                     : null,
                                               ),
                                               RadioListTile<int>(
@@ -335,7 +334,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                                     .read<
                                                     BusinessMissionCubit>()
                                                     .missionTypeChanged(
-                                                    missionType!)
+                                                    missionType??0)
                                                     : null,
                                               ),
                                               RadioListTile<int>(
@@ -350,7 +349,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                                     .read<
                                                     BusinessMissionCubit>()
                                                     .missionTypeChanged(
-                                                    missionType!)
+                                                    missionType??0)
                                                     : null,
                                               ),
                                             ],

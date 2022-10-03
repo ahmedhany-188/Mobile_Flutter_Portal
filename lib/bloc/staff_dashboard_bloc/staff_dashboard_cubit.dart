@@ -13,7 +13,7 @@ part 'staff_dashboard_state.dart';
 class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin {
 
 
-  StaffDashboardCubit(this.userHRCode)
+  StaffDashboardCubit()
       : super(StaffDashboardState(date: DateTime
       .now()
       .month
@@ -46,7 +46,6 @@ class StaffDashboardCubit extends Cubit<StaffDashboardState> with HydratedMixin 
 
   static StaffDashboardCubit get(context) => BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();
-  String userHRCode;
 
   Future<void> getFirstStaffBoardCompanies(userHRCode, date) async {
     if (state.companyStaffDashBoardList.isEmpty) {

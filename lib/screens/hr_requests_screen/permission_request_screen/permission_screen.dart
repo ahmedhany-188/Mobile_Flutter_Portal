@@ -327,7 +327,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                                     ? context
                                                     .read<PermissionCubit>()
                                                     .permissionTypeChanged(
-                                                    permissionType!)
+                                                    permissionType??0)
                                                     : null,
                                               ),
                                               RadioListTile<int>(
@@ -346,7 +346,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                                     ? context
                                                     .read<PermissionCubit>()
                                                     .permissionTypeChanged(
-                                                    permissionType!)
+                                                    permissionType??0)
                                                     : null,
                                               ),
                                             ],

@@ -465,7 +465,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
   int getAllAttendanceHolding(List<CompanyStaffDashBoard> dataList) {
     double sum = 0;
     for (int i = 0; i < dataList.length; i++) {
-      sum += (dataList[i].laborAttend! + dataList[i].staffAttend!);
+      sum += (dataList[i].laborAttend??0.0 + dataList[i].staffAttend!);
     }
     return sum.round();
   }
@@ -473,7 +473,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
   int getAllAttendanceStaff(List<CompanyStaffDashBoard> dataList) {
     double sum = 0;
     for (int i = 0; i < dataList.length; i++) {
-      sum += dataList[i].staffAttend!;
+      sum += dataList[i].staffAttend??0;
     }
     return sum.round();
   }
@@ -481,7 +481,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
   int getAllAttendanceLabor(List<CompanyStaffDashBoard> dataList) {
     double sum = 0;
     for (int i = 0; i < dataList.length; i++) {
-      sum += dataList[i].laborAttend!;
+      sum += dataList[i].laborAttend??0;
     }
     return sum.round();
   }
@@ -489,8 +489,8 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
   int getAllAbsentHolding(List<CompanyStaffDashBoard> dataList) {
     double absent = 0;
     for (int i = 0; i < dataList.length; i++) {
-      absent += (dataList[i].staffCount! - dataList[i].staffAttend!) +
-          (dataList[i].laborCount! - dataList[i].laborAttend!);
+      absent += (dataList[i].staffCount??0 - dataList[i].staffAttend!) +
+          (dataList[i].laborCount??0 - dataList[i].laborAttend!);
     }
     return absent.round();
   }
@@ -498,7 +498,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
   int getAllContrator(List<CompanyStaffDashBoard> dataList) {
     double sum = 0;
     for (int i = 0; i < dataList.length; i++) {
-      sum += dataList[i].subContractor!;
+      sum += dataList[i].subContractor??0;
     }
     return sum.round();
   }
@@ -506,7 +506,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
   int getAllManPower(List<CompanyStaffDashBoard> dataList) {
     double sum = 0;
     for (int i = 0; i < dataList.length; i++) {
-      sum += (dataList[i].laborCount! + dataList[i].staffCount!);
+      sum += (dataList[i].laborCount??0 + dataList[i].staffCount!);
     }
     return sum.round();
   }
@@ -514,7 +514,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
   int getTotalStaff(List<CompanyStaffDashBoard> dataList) {
     double sum = 0;
     for (int i = 0; i < dataList.length; i++) {
-      sum += dataList[i].staffCount!;
+      sum += dataList[i].staffCount??0;
     }
     return sum.round();
   }
@@ -522,7 +522,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
   int getTotalLabor(List<CompanyStaffDashBoard> dataList) {
     double sum = 0;
     for (int i = 0; i < dataList.length; i++) {
-      sum += dataList[i].laborCount!;
+      sum += dataList[i].laborCount??0;
     }
     return sum.round();
   }

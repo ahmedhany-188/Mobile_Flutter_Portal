@@ -353,41 +353,23 @@ class _MyAppState extends State<MyApp> {
             create: (attendanceCubitContext) => AttendanceCubit(
                 BlocProvider.of<AppBloc>(attendanceCubitContext)
                     .state
-                    .userData
-                    .employeeData!
-                    .userHrCode
-                    .toString()),
+                    .userData),
           ),
 
           BlocProvider<StaffDashboardCubit>(
-            create: (staffDashBoardCubitContext) => StaffDashboardCubit(
-                BlocProvider.of<AppBloc>(staffDashBoardCubitContext)
-                    .state
-                    .userData
-                    .employeeData!
-                    .userHrCode
-                    .toString()),
+            create: (staffDashBoardCubitContext) => StaffDashboardCubit(),
           ),
 
           BlocProvider<StaffDashboardProjectCubit>(
             create: (staffDashBoardProjectCubitContext) =>
                 StaffDashboardProjectCubit(
-                    BlocProvider.of<AppBloc>(staffDashBoardProjectCubitContext)
-                        .state
-                        .userData
-                        .employeeData!
-                        .userHrCode
-                        .toString()),
+
+                        ),
           ),
 
           BlocProvider<StaffDashboardJobCubit>(
             create: (staffDashBoardJobCubitContext) => StaffDashboardJobCubit(
-                BlocProvider.of<AppBloc>(staffDashBoardJobCubitContext)
-                    .state
-                    .userData
-                    .employeeData!
-                    .userHrCode
-                    .toString()),
+                    ),
           ),
 
           BlocProvider<StatisticsCubit>(
