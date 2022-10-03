@@ -38,7 +38,7 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
   void initState() {
     super.initState();
 
-    FlutterDownloader.registerCallback(downloadCallback);
+    // FlutterDownloader.registerCallback(downloadCallback);
   }
 
   static void downloadCallback(
