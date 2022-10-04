@@ -57,21 +57,21 @@ class _SubsidiariesScreenState extends State<SubsidiariesScreen> {
                     ? ConditionalBuilder(
                         condition: state.subsidiariesList.isNotEmpty,
                         builder: (context) {
-                          return Padding(
-                            padding: EdgeInsets.all(5.0.sp),
-                            child: GridView.builder(
-                              physics: const BouncingScrollPhysics(),
-                              itemCount: 12,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 1.sp,
-                                crossAxisSpacing: 9.sp,
-                                mainAxisSpacing: 9.sp,
-                              ),
-                              itemBuilder: (ctx, index) {
-                                var list = state.subsidiariesList[index];
-                                return InkWell(
+                          return GridView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: 12,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 1.sp,
+                              crossAxisSpacing: 9.sp,
+                              mainAxisSpacing: 9.sp,
+                            ),
+                            itemBuilder: (ctx, index) {
+                              var list = state.subsidiariesList[index];
+                              return Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 6.0.sp,vertical: 4.sp),
+                                child: InkWell(
                                   onTap: () {
                                     Navigator.of(context).pushNamed(SubsidiariesDetailsScreen.routeName,arguments: list);
 
@@ -116,9 +116,9 @@ class _SubsidiariesScreenState extends State<SubsidiariesScreen> {
                                         imageUrl: subsidiariesIconLink(
                                             list.subIcone.toString())),
                                   ),
-                                );
-                              },
-                            ),
+                                ),
+                              );
+                            },
                           );
                         },
                         fallback: (_) => Column(

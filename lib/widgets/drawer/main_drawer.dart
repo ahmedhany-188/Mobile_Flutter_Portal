@@ -240,14 +240,14 @@ class MainDrawer extends StatelessWidget {
                               fontWeight: FontWeight.normal,
                               color: Colors.white))),
                   Flexible(
-                      child: Text('${user?.titleName??""}',
+                      child: Text(user?.titleName??"",
                           style: TextStyle(
                               fontSize: 14,
                               fontFamily: FontFamily.robotoCondensed,
                               fontWeight: FontWeight.normal,
                               color: Colors.grey.shade500))),
                   Flexible(
-                      child: Text('Grade: ${user?.gradeName?.toTitleCase??""}',
+                      child: Text('Grade: ${user?.gradeName ?? "No Grade"}',
                           style: TextStyle(
                               fontSize: 14,
                               fontFamily: 'RobotoCondensed',

@@ -154,13 +154,13 @@ class AttendanceTicketWidget extends StatelessWidget {
 Container holidayContainer(MyAttendanceModel attendanceModel) {
   return Container(
     height: 65,
-    decoration: const BoxDecoration(
-      borderRadius: BorderRadius.all(Radius.circular(5)),
-      color: Colors.grey,
+    decoration:  BoxDecoration(
+      borderRadius: const BorderRadius.all(Radius.circular(5)),
+      color: attendanceModel.vacation == null?Colors.grey:containerColor("blue"),
     ),
     alignment: Alignment.center,
     width: double.infinity,
-    child: iconContainer(attendanceModel),
+    child: attendanceModel.vacation == null?iconContainer(attendanceModel):null,
   );
 }
 
