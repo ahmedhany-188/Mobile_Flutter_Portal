@@ -348,11 +348,11 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<UserNotificationApiCubit>(
               lazy: true,
               create: (userNotificationContext){
-                    if (kDebugMode) {
-                      print('token ${BlocProvider.of<AppBloc>(userNotificationContext)
-                        .state
-                        .userData.user?.token}');
-                    }
+                    // if (kDebugMode) {
+                    //   print('token ${BlocProvider.of<AppBloc>(userNotificationContext)
+                    //     .state
+                    //     .userData.user?.token}');
+                    // }
                 return UserNotificationApiCubit(
                       RequestRepository(
                           BlocProvider.of<AppBloc>(userNotificationContext)

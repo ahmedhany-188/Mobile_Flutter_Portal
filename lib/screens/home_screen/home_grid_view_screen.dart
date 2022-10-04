@@ -131,13 +131,8 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
             centerTitle: true,
             title: const Text('Hassan Allam Holding'),
             actions: [
-              BlocProvider<UserNotificationApiCubit>(
-                create: (userNotificationContext) => UserNotificationApiCubit(
-                    RequestRepository(
-                    BlocProvider.of<AppBloc>(userNotificationContext)
-                        .state
-                        .userData),
-                  )..getNotificationsWithoutLoading(),
+              BlocProvider<UserNotificationApiCubit>.value(
+                value: UserNotificationApiCubit(RequestRepository(user))..getNotificationsWithoutLoading(),
                 child: BlocBuilder<UserNotificationApiCubit,
                     UserNotificationApiState>(
                   builder: (context, state) {
