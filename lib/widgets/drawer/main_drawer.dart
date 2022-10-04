@@ -481,7 +481,7 @@ class MainDrawer extends StatelessWidget {
                     ),
                     buildListTile(
                       'My Requests',
-                      Icons.request_page,
+                      Icons.file_copy,
                       () {
                         Navigator.of(context)
                             .popAndPushNamed(MyRequestsScreen.routeName);
