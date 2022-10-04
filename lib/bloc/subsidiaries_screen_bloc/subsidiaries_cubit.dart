@@ -8,8 +8,9 @@ part 'subsidiaries_state.dart';
 
 class SubsidiariesCubit extends Cubit<SubsidiariesState> {
   final Connectivity connectivity = Connectivity();
+  GeneralDio _generalDio;
 
-  SubsidiariesCubit() : super(SubsidiariesInitial()){
+  SubsidiariesCubit(this._generalDio) : super(SubsidiariesInitial()){
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
@@ -34,7 +35,7 @@ class SubsidiariesCubit extends Cubit<SubsidiariesState> {
   void getSubsidiaries() {
     emit(SubsidiariesLoadingState());
 
-    GeneralDio.subsidiariesData().then((value) {
+    _generalDio.subsidiariesData().then((value) {
       if (value.data != null) {
         SubsidiariesModel subsidiariesResponse = SubsidiariesModel.fromJson(value.data);
         if (subsidiariesResponse.data != null) {

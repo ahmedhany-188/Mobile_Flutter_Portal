@@ -51,8 +51,8 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => BenefitsCubit()..getBenefits(),
+    return BlocProvider<BenefitsCubit>.value(
+      value: BenefitsCubit.get(context),
       child: BlocConsumer<BenefitsCubit, BenefitsState>(
         listener: (context, state) {
           if (state is BenefitsSuccessState) {

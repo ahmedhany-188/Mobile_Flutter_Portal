@@ -5,7 +5,7 @@ import '../../data/data_providers/general_dio/general_dio.dart';
 part 'benefits_state.dart';
 
 class BenefitsCubit extends Cubit<BenefitsState> {
-  BenefitsCubit() : super(BenefitsInitial()) {
+  BenefitsCubit(this._generalDio) : super(BenefitsInitial()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (state is BenefitsErrorState) {
         if (connectivityResult == ConnectivityResult.wifi ||
@@ -26,11 +26,12 @@ class BenefitsCubit extends Cubit<BenefitsState> {
   final Connectivity connectivity = Connectivity();
 
   List<dynamic> benefits = [];
+  GeneralDio _generalDio;
 
   void getBenefits() {
     emit(BenefitsLoadingState());
 
-    GeneralDio.getBenefitsData().then((value) {
+    _generalDio.getBenefitsData().then((value) {
       benefits = value.data;
       emit(BenefitsSuccessState(benefits));
     }).catchError((error) {

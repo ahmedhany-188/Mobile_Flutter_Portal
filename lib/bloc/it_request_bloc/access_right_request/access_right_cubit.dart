@@ -21,13 +21,14 @@ import '../../../widgets/dialogpopoup/custom_date_picker.dart';
 part 'access_right_state.dart';
 
 class AccessRightCubit extends Cubit<AccessRightInitial> {
-  AccessRightCubit(this.requestRepository) : super(const AccessRightInitial());
+  AccessRightCubit(this.requestRepository,this._generalDio) : super(const AccessRightInitial());
 
   final Connectivity connectivity = Connectivity();
 
   static AccessRightCubit get(context) => BlocProvider.of(context);
 
   final RequestRepository requestRepository;
+  GeneralDio _generalDio;
 
   void getRequestData(
       {required RequestStatus requestStatus,
@@ -193,7 +194,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
           ///TODO: check error
           var fileName = accessResponse.requestNo;
           if (state.fileResult.isSinglePick) {
-            GeneralDio.uploadAccessRightImage(
+            _generalDio.uploadAccessRightImage(
                     state.fileResult, fileName!, state.extension)
                 .then((value) {
               emit(state.copyWith(filePDF: value.data?[0]));
