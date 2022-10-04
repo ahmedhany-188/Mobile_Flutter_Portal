@@ -22,32 +22,32 @@ class StaffDashBoardTicketWidget extends StatelessWidget {
     int? totalManPowerSub = 0;
     int? absentManPowerSub = 0;
     int? totalContractorsSub = 0;
-    int labourCount = 0;
-    int staffCount = 0;
+    int? labourCount = 0;
+    int? staffCount = 0;
 
     return ListView.builder(
       physics: const BouncingScrollPhysics(),
       itemCount: staffDashboardList.length,
       itemBuilder: (context, index) {
-        attendManPowerSub = (staffDashboardList[index].laborAttend??0 +
+        attendManPowerSub = (staffDashboardList[index].laborAttend! +
                 staffDashboardList[index].staffAttend!)
             .round();
 
-        absentManPowerSub = ((staffDashboardList[index].laborCount??0 +
+        absentManPowerSub = ((staffDashboardList[index].laborCount! +
                     staffDashboardList[index].staffCount!) -
-                (staffDashboardList[index].laborAttend??0 +
+                (staffDashboardList[index].laborAttend! +
                     staffDashboardList[index].staffAttend!))
             .round();
 
-        totalManPowerSub = (staffDashboardList[index].laborCount??0 +
+        totalManPowerSub = (staffDashboardList[index].laborCount! +
                 staffDashboardList[index].staffCount!)
             .round();
 
         totalContractorsSub =
-            (staffDashboardList[index].subContractor??0).round();
+            (staffDashboardList[index].subContractor!).round();
 
-        labourCount = (staffDashboardList[index].laborCount??0).round();
-        staffCount = (staffDashboardList[index].staffCount??0).round();
+        labourCount = (staffDashboardList[index].laborCount!).round();
+        staffCount = (staffDashboardList[index].staffCount!).round();
 
         return InkWell(
           onTap: () {
@@ -123,8 +123,7 @@ class StaffDashBoardTicketWidget extends StatelessWidget {
                                                       .greenAttendance)),
                                         ],
                                       ),
-                                      getLinearProgressAttend(context,
-                                          attendManPowerSub??0, totalManPowerSub??0),
+                                      getLinearProgressAttend(context, attendManPowerSub??0, totalManPowerSub??0),
                                     ],
                                   ),
                                 ),
@@ -147,8 +146,7 @@ class StaffDashBoardTicketWidget extends StatelessWidget {
                                           ),
                                         ],
                                       ),
-                                      getLinearProgressAbsent(context,
-                                          absentManPowerSub??0, totalManPowerSub??0),
+                                      getLinearProgressAbsent(context, absentManPowerSub??0, totalManPowerSub??0),
                                     ],
                                   ),
                                 ),
@@ -235,6 +233,7 @@ class StaffDashBoardTicketWidget extends StatelessWidget {
 
   LinearPercentIndicator getLinearProgressAttend(
       context, int value, int total) {
+
     int percentage = ((value / total) * 100).round();
     return LinearPercentIndicator(
       animation: true,
