@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/bloc/hr_request_bloc/hr_request_export.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_permission_date.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:intl/intl.dart';
@@ -23,7 +24,7 @@ class PermissionCubit extends Cubit<PermissionInitial> {
   // LoginCubit(this._authenticationRepository) : super(const LoginState());
 
   final RequestRepository _requestRepository;
-
+  static PermissionCubit get(context) => BlocProvider.of(context);
 
   void getRequestData({required RequestStatus requestStatus,String ?requestNo,String ?date,String? requesterHRCode}) async {
     if (requestStatus == RequestStatus.newRequest) {

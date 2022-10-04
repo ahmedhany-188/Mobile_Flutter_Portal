@@ -39,11 +39,14 @@ class _GetDirectionScreenState extends State<GetDirectionScreen> {
           child: BlocConsumer<GetDirectionCubit, GetDirectionInitial>(
             listener: (context, state) {
               if (state.status == GetDirectionStatus.success) {
-                projectsDirectionData = state.mappedItems;
-                setState(() {});
+                // projectsDirectionData = state.mappedItems;
+                // setState(() {});
               }
             },
             builder: (context, state) {
+              if(state.status == GetDirectionStatus.success){
+                projectsDirectionData = state.mappedItems;
+              }
               return (state.status == GetDirectionStatus.success ||
                       state.status == GetDirectionStatus.loading)
                   ? Sizer(

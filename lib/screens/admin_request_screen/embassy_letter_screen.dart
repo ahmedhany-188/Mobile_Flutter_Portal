@@ -16,6 +16,7 @@ import 'package:hassanallamportalflutter/widgets/background/custom_background.da
 import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../constants/enums.dart';
 import '../../../widgets/success/success_request_widget.dart';
+import '../../widgets/requester_data_widget/requested_status.dart';
 import '../../widgets/requester_data_widget/requester_data_widget.dart';
 
 class EmbassyLetterScreen extends StatefulWidget{
@@ -75,6 +76,17 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                         ? "#${currentRequestData[BusinessMissionScreen
                         .requestNoKey]}"
                         : "Request"}"),
+                    actions: [
+                      if (EmbassyLetterCubit.get(context).state.requestStatus ==
+                          RequestStatus.oldRequest)
+                        BlocBuilder<EmbassyLetterCubit, EmbassyLetterInitial>(
+                          builder: (context, state) {
+                            return SizedBox(
+                                width: 60,
+                                child: myRequestStatusString(state.statusAction));
+                          },
+                        ),
+                    ],
                     backgroundColor: Colors.transparent,
                     elevation: 0,
                     // centerTitle: true,
@@ -171,29 +183,29 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                         child: SingleChildScrollView(
                           child: Column(
                             children: [
-                              if(state.requestStatus ==
-                                  RequestStatus.oldRequest)Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 8, vertical: 8),
-                                child: BlocBuilder<
-                                    EmbassyLetterCubit,
-                                    EmbassyLetterInitial>(
-
-                                    builder: (context, state) {
-                                      return Text(state.statusAction ?? "Pending",
-                                        // style: TextStyle(decoration: BoxDecoration(
-                                        //   // labelText: 'Request Date',
-                                        //   errorText: state.requestDate.invalid
-                                        //       ? 'invalid request date'
-                                        //       : null,
-                                        //   prefixIcon: const Icon(
-                                        //       Icons.date_range),
-                                        // ),),
-
-                                      );
-                                    }
-                                ),
-                              ),
+                              // if(state.requestStatus ==
+                              //     RequestStatus.oldRequest)Padding(
+                              //   padding: const EdgeInsets.symmetric(
+                              //       horizontal: 8, vertical: 8),
+                              //   child: BlocBuilder<
+                              //       EmbassyLetterCubit,
+                              //       EmbassyLetterInitial>(
+                              //
+                              //       builder: (context, state) {
+                              //         return Text(state.statusAction ?? "Pending",
+                              //           // style: TextStyle(decoration: BoxDecoration(
+                              //           //   // labelText: 'Request Date',
+                              //           //   errorText: state.requestDate.invalid
+                              //           //       ? 'invalid request date'
+                              //           //       : null,
+                              //           //   prefixIcon: const Icon(
+                              //           //       Icons.date_range),
+                              //           // ),),
+                              //
+                              //         );
+                              //       }
+                              //   ),
+                              // ),
 
                               if(state.requestStatus ==
                                   RequestStatus.oldRequest &&

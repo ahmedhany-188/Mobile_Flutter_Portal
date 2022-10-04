@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/data/models/upgrader_model/upgrader.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -82,6 +85,7 @@ class AboutScreen extends StatelessWidget {
                         ),
                         textAlign: TextAlign.center),
                   ),
+                  Center(child: Text("${ (Platform.isAndroid)? const Upgrader().android?.version! : const Upgrader().ios?.version!}",style: const TextStyle(color: Colors.white70),)),
                 ],
               ),
             ),

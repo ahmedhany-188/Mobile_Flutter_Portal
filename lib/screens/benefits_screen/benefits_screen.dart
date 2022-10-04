@@ -55,11 +55,12 @@ class _BenefitsScreenState extends State<BenefitsScreen> {
       value: BenefitsCubit.get(context),
       child: BlocConsumer<BenefitsCubit, BenefitsState>(
         listener: (context, state) {
+
+        },
+        builder: (context, state) {
           if (state is BenefitsSuccessState) {
             benefitsData = state.benefits;
           }
-        },
-        builder: (context, state) {
           return CustomBackground(
             child: GestureDetector(
               onTap: () => FocusManager.instance.primaryFocus!.unfocus(),
