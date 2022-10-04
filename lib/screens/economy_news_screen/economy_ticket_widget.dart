@@ -36,28 +36,31 @@ class EconomyNewsTicketWidget extends StatelessWidget {
                 ),
                 itemCount: EconomyNewsTicketWidgetData.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return GestureDetector(
-                      onTap: (){
-                        launchUrl(
-                        Uri.parse(EconomyNewsTicketWidgetData[index]["url"]),
-                        mode: LaunchMode.externalApplication,
-                      );
-                      },
-                      child:Container(
-                    decoration: BoxDecoration(
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5),
+                    child: GestureDetector(
+                        onTap: (){
+                          launchUrl(
+                          Uri.parse(EconomyNewsTicketWidgetData[index]["url"]),
+                          mode: LaunchMode.externalApplication,
+                        );
+                        },
+                        child:Container(
+                      decoration: BoxDecoration(
 
-                      image: getHeadineImage(index)
-                    ),
+                        image: getHeadineImage(index)
+                      ),
 
-                    child: Container(
-                      width: double.infinity,
-                      color: const Color.fromARGB(100, 22, 44, 33),
-                      padding: const EdgeInsets.all(10),
-                      child: Text(
-                        EconomyNewsTicketWidgetData[index]["title"],
-                        style: const TextStyle(fontSize: 16, color: Colors.white),),
+                      child: Container(
+                        width: double.infinity,
+                        color: const Color.fromARGB(100, 22, 44, 33),
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          EconomyNewsTicketWidgetData[index]["title"],
+                          style: const TextStyle(fontSize: 16, color: Colors.white),),
+                      ),
+                    )
                     ),
-                  )
                   );
                 }
             ),
