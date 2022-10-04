@@ -104,14 +104,14 @@ class ShowAttendanceBottomSheet extends StatelessWidget {
   Padding checkViewForm(
       MyAttendanceModel attendanceModel, BuildContext context) {
     if (attendanceModel.vacation != null){
-      return requestForm("View Vacation","View Form", iconRequest(attendanceListData), context);
+      return requestForm("View vacation request","View Form", iconRequest(attendanceListData), context);
     }
     if (attendanceModel.permission != null) {
-      return requestForm("View Permission","View Form", iconRequest(attendanceListData), context);
+      return requestForm("View permission request","View Form", iconRequest(attendanceListData), context);
     }
     if(attendanceModel.businessMission != null){
       // || attendanceModel.forget != null) {
-      return requestForm("View Business Mission","View Form", iconRequest(attendanceListData), context);
+      return requestForm("View business mission request","View Form", iconRequest(attendanceListData), context);
     } else {
       return const Padding(
         padding: EdgeInsets.all(2.0),
@@ -175,7 +175,7 @@ class ShowAttendanceBottomSheet extends StatelessWidget {
                             style: Theme.of(context)
                                 .textTheme
                                 .headline6
-                                ?.copyWith(color: Colors.black)),
+                                ?.copyWith(color: Colors.black,fontSize: 16)),
                       ),
                     )
                   ],
