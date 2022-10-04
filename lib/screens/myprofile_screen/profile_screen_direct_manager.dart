@@ -359,14 +359,22 @@ class DirectManagerProfileScreenClass
     }
   }
 
+  String getLineManager(EmployeeData ?employeeData) {
+    if (employeeData?.isTopManagement != true) {
+      return employeeData?.mobile ?? "";
+    } else if (employeeData?.mobile == null) {
+      return "";
+    } else {
+      return employeeData?.mobile ?? "";
+    }
+  }
+
   String getMobile(ProfileManagerState state) {
     if (state is BlocGetManagerDataSuccessState) {
-      if (state.managerData.mobile == null) {
-        return "";
-      }else if(state.managerData.isTopManagement == true){
-        return "";
-      }else {
+      if (state.managerData.isTopManagement != true) {
         return state.managerData.mobile??"";
+      }else {
+        return "";
       }
     } else {
       return "";

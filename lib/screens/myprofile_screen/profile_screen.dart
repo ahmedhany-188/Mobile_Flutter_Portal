@@ -357,12 +357,10 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
   }
 
   String getLineManager(EmployeeData ?employeeData) {
-    if (employeeData?.isTopManagement == true) {
+    if (employeeData?.isTopManagement != true) {
       return employeeData?.mobile ?? "";
-    } else if (employeeData?.mobile == null) {
+    }else {
       return "";
-    } else {
-      return employeeData?.mobile ?? "";
     }
   }
 
