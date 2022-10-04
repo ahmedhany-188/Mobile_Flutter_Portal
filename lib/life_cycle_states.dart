@@ -75,6 +75,7 @@ class LifeCycleStateState extends State<LifeCycleState> with WidgetsBindingObser
       }
       if(status== AppStatus.authenticated){
         GeneralDio(userData);
+        // AlbumDio(userData);
       }
       UserNotificationApiCubit.get(context).getNotificationsWithoutLoading();
       updateFirebaseWithStatus(AppLifecycleStatus.online);

@@ -1,10 +1,8 @@
-import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:hassanallamportalflutter/data/models/upgrader_model/upgrader.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../data/helpers/assist_function.dart';
@@ -85,7 +83,13 @@ class AboutScreen extends StatelessWidget {
                         ),
                         textAlign: TextAlign.center),
                   ),
-                  Center(child: Text("${ (Platform.isAndroid)? const Upgrader().android?.version! : const Upgrader().ios?.version!}",style: const TextStyle(color: Colors.white70),)),
+                  const SizedBox.square(dimension: 10),
+                  FutureBuilder<String>(
+                    future: getVersionCode(),
+                      builder: (context, snapshot){
+                     return Text("Version: ${snapshot.data}",style: const TextStyle(color: Colors.white70),);
+
+                  }),
                 ],
               ),
             ),
@@ -95,3 +99,10 @@ class AboutScreen extends StatelessWidget {
     );
   }
 }
+
+ Future<String> getVersionCode() async{
+   PackageInfo packageInfo = await PackageInfo.fromPlatform();
+   String version = packageInfo.version;
+  return version;
+ }
+

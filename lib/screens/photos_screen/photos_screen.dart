@@ -9,8 +9,10 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:full_screen_image_null_safe/full_screen_image_null_safe.dart';
 
+import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/photos_screen_bloc/photos_cubit.dart';
 import '../../constants/url_links.dart';
+import '../../data/data_providers/album_dio/album_dio.dart';
 
 class PhotosScreen extends StatefulWidget {
   static const routeName = 'photos-screen';
@@ -31,7 +33,9 @@ class _PhotosScreenState extends State<PhotosScreen> {
             title: const Text('Photos'),
           ),
           body: BlocProvider(
-            create: (context) => PhotosCubit()..getPhotos(),
+            create: (context) => PhotosCubit(AlbumDio(BlocProvider.of<AppBloc>(context)
+                .state
+                .userData))..getPhotos(),
             child: BlocConsumer<PhotosCubit, PhotosState>(
               listener: (context, state) {
                 if (state is PhotosErrorState) {
@@ -86,7 +90,9 @@ class _PhotosScreenState extends State<PhotosScreen> {
 
 Widget albumSwiper(String albumId) {
   return BlocProvider(
-    create: (context) => PhotosCubit()..getAlbum(albumId),
+    create: (context) => PhotosCubit(AlbumDio(BlocProvider.of<AppBloc>(context)
+        .state
+        .userData))..getAlbum(albumId),
     child: BlocConsumer<PhotosCubit, PhotosState>(
       listener: (context, state) {
         if (state is PhotosErrorState) {

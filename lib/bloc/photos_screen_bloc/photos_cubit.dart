@@ -11,7 +11,7 @@ part 'photos_state.dart';
 class PhotosCubit extends Cubit<PhotosState> {
   final Connectivity connectivity = Connectivity();
 
-  PhotosCubit() : super(PhotosInitial()) {
+  PhotosCubit(this._albumDio) : super(PhotosInitial()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
@@ -30,11 +30,12 @@ class PhotosCubit extends Cubit<PhotosState> {
 
   List<PhotosIdData> photosList = [];
   List<AlbumData> albumList = [];
+  AlbumDio _albumDio;
 
   void getPhotos() {
     emit(PhotosLoadingState());
 
-    AlbumDio.getPhotosAlbumsId().then((value) {
+    _albumDio.getPhotosAlbumsId().then((value) {
       PhotosModel photosResponse = PhotosModel.fromJson(value.data);
       if (photosResponse.data != null) {
         photosList = photosResponse.data!;
@@ -51,7 +52,7 @@ class PhotosCubit extends Cubit<PhotosState> {
   void getAlbum(String id) {
     emit(PhotosLoadingState());
 
-    AlbumDio.getPhotosAlbums(id: id).then((value) {
+    _albumDio.getPhotosAlbums(id: id).then((value) {
       AlbumModel albumResponse = AlbumModel.fromJson(value.data);
       if (albumResponse.data != null) {
         albumList = albumResponse.data!;

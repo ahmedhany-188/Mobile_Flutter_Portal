@@ -10,7 +10,7 @@ part 'videos_state.dart';
 class VideosCubit extends Cubit<VideosState> {
   final Connectivity connectivity = Connectivity();
 
-  VideosCubit() : super(VideosInitial()) {
+  VideosCubit(this._albumDio) : super(VideosInitial()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
@@ -28,11 +28,13 @@ class VideosCubit extends Cubit<VideosState> {
   static VideosCubit get(context) => BlocProvider.of(context);
 
   List<VideosIdData> videosList = [];
+  AlbumDio _albumDio;
+
 
   void getVideos() {
     emit(VideosLoadingState());
 
-    AlbumDio.getVideos().then((value) {
+    _albumDio.getVideos().then((value) {
       VideosIdModel videosResponse = VideosIdModel.fromJson(value.data);
       if (videosResponse.data!.isNotEmpty) {
         videosList = videosResponse.data!;

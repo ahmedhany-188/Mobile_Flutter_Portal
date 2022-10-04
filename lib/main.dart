@@ -96,7 +96,7 @@ void main() async {
 
   configLoading();
   // await GeneralDio.init();
-  await AlbumDio.initAlbums();
+  // await AlbumDio.initAlbums();
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
@@ -330,10 +330,14 @@ class _MyAppState extends State<MyApp> {
                 LoginCubit(authenticationRepository),
           ),
           BlocProvider<PhotosCubit>(
-            create: (photosContext) => PhotosCubit()..getPhotos(),
+            create: (photosContext) => PhotosCubit(AlbumDio(BlocProvider.of<AppBloc>(photosContext)
+                .state
+                .userData))..getPhotos(),
           ),
           BlocProvider<VideosCubit>(
-            create: (videosContext) => VideosCubit()..getVideos(),
+            create: (videosContext) => VideosCubit(AlbumDio(BlocProvider.of<AppBloc>(videosContext)
+                .state
+                .userData))..getVideos(),
           ),
           // BlocProvider<UserNotificationBloc>(
           //   lazy: true,
