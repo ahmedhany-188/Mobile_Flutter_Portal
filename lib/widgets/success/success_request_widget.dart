@@ -53,20 +53,27 @@ class SuccessScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.01),
-                Text(
-                  "$requestName Request Done Successfully",
-                  style: const TextStyle(
-                    color: Colors.white60,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 17,
+                Center(
+                  child: Text(
+
+                    "$requestName Request Done Successfully",
+                    style: const TextStyle(
+                      color: Colors.white60,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 17,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
-                Text(
-                  "Request Number is $text",
-                  style: const TextStyle(
-                    color: Colors.white60,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
+                Center(
+                  child: Text(
+                    "Request Number is $text",
+                    style: const TextStyle(
+                      color: Colors.white60,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 SizedBox(height: screenHeight * 0.05),

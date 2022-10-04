@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class AuthenticationApiProvider {
@@ -11,9 +12,11 @@ class AuthenticationApiProvider {
   Future<http.Response> loginApiAuthentication(String userName,String password) async {
     http.Response rawAttendanceData = await http.get(
       Uri.parse(
-          "http://api.hassanallam.com:3415/api/Account/LoginToken?Email=$userName&Password=$password&Remember=true"),
+          "https://api.hassanallam.com/api/Account/LoginToken?Email=$userName&Password=$password&Remember=true"),
     );
-    print(rawAttendanceData.body);
+    if (kDebugMode) {
+      print(rawAttendanceData.body);
+    }
     return rawAttendanceData;
   }
 
