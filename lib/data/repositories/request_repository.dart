@@ -486,8 +486,7 @@ class RequestRepository {
       "reRequestCode": 0
     };
 
-
-    var value = await GeneralDio.postMasterEquipmentsRequest(masterDataPost);
+    var value = await GeneralDio(userData!).postMasterEquipmentsRequest(masterDataPost);
     if(value.toString().isNotEmpty) {
       final json = await jsonDecode(value.toString());
       final RequestResponse response = RequestResponse.fromJson(json);
@@ -495,7 +494,7 @@ class RequestRepository {
       var requestNo = response.requestNo ?? "";
       if (requestNo.isNotEmpty) {
         if (fileResult.isSinglePick) {
-          await GeneralDio.uploadEquipmentImage(
+          await GeneralDio(userData!).uploadEquipmentImage(
               fileResult, requestNo, extension)
               .whenComplete(
                   () => EasyLoading.showSuccess('File uploaded successfully'))
@@ -539,7 +538,7 @@ class RequestRepository {
             "approved": true,
             "rejectedHrCode": ""
           };
-          await GeneralDio.postDetailEquipmentsRequest(detailedDataPost)
+          await GeneralDio(userData!).postDetailEquipmentsRequest(detailedDataPost)
               .catchError((e) {
             // return response;
             // EasyLoading.showError('Something went wrong');
@@ -683,7 +682,7 @@ class RequestRepository {
   }) async {
     dynamic nextObject;
     if(valueStatus == ActionValueStatus.accept){
-      await GeneralDio.getNextStepWorkFlow(
+      await GeneralDio(userData!).getNextStepWorkFlow(
               serviceId: serviceID,
               userHrCode: requesterHRCode,
               reqNo: int.parse(requestNo))

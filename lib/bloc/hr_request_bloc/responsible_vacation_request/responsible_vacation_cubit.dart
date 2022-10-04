@@ -1,17 +1,15 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hassanallamportalflutter/data/data_providers/general_dio/general_dio.dart';
 import 'package:hassanallamportalflutter/data/models/contacts_related_models/contacts_data_from_api.dart';
-import 'package:hassanallamportalflutter/screens/contacts_screen/search_for_contacts.dart';
 
 part 'responsible_vacation_state.dart';
 
 class ResponsibleVacationCubit extends Cubit<ResponsibleVacationInitial> {
-  ResponsibleVacationCubit() : super(const ResponsibleVacationInitial.loading());
+  ResponsibleVacationCubit(this._generalDio) : super(const ResponsibleVacationInitial.loading());
+  GeneralDio _generalDio;
   Future<void> fetchList() async {
-    GeneralDio.getContactListData().then((value) async {
+    _generalDio.getContactListData().then((value) async {
       final contacts = List<ContactsDataFromApi>.from(
           value.data.map((model) => ContactsDataFromApi.fromJson(model)));
       emit(ResponsibleVacationInitial.success(contacts));

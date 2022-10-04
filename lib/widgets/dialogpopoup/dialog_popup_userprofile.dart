@@ -30,10 +30,10 @@ class ShowUserProfileBottomSheetClass
           await EasyLoading.dismiss(animation: true);
           return true;
         },
-        child: contentBox(context));
+        child: contentBox(context,widget.user));
   }
 
-  contentBox(context) {
+  contentBox(context,MainUserData user) {
     return CustomTheme(
       child: Container(
         margin: const EdgeInsets.all(10),
@@ -59,7 +59,7 @@ class ShowUserProfileBottomSheetClass
                   await FilePicker.platform.pickFiles(type: FileType.image,).then((value) {
                     String? fileName = widget.user.employeeData?.userHrCode;
                     String? fileExtension = value?.files.first.extension;
-                    GeneralDio.uploadUserImage(
+                    GeneralDio(user).uploadUserImage(
                             value!, fileName!, fileExtension!)
                         .whenComplete(() {
                       DefaultCacheManager manager = DefaultCacheManager();

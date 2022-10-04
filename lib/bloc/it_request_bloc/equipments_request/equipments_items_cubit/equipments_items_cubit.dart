@@ -8,7 +8,7 @@ import '../../../../data/models/it_requests_form_models/equipments_models/equipm
 part 'equipments_items_state.dart';
 
 class EquipmentsItemsCubit extends Cubit<EquipmentsItemsInitial> {
-  EquipmentsItemsCubit() : super(const EquipmentsItemsInitial()) {
+  EquipmentsItemsCubit(this._generalDio) : super(const EquipmentsItemsInitial()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (state.equipmentsItemsEnumState == EquipmentsItemsEnumState.failed) {
         if (connectivityResult == ConnectivityResult.wifi ||
@@ -29,6 +29,7 @@ class EquipmentsItemsCubit extends Cubit<EquipmentsItemsInitial> {
     });
   }
   final Connectivity connectivity = Connectivity();
+  GeneralDio _generalDio;
 
   static EquipmentsItemsCubit get(context) => BlocProvider.of(context);
 
@@ -36,7 +37,7 @@ class EquipmentsItemsCubit extends Cubit<EquipmentsItemsInitial> {
     emit(state.copyWith(
       equipmentsItemsEnumState: EquipmentsItemsEnumState.initial,
     ));
-    GeneralDio.getEquipmentsItems(id).then((value) {
+    _generalDio.getEquipmentsItems(id).then((value) {
       List<EquipmentsItemModel> equipmentsItemsList;
       equipmentsItemsList = List<EquipmentsItemModel>.from(
           value.data.map((model) => EquipmentsItemModel.fromJson(model)));

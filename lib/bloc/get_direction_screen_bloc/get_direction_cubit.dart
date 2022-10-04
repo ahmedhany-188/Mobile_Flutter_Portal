@@ -8,7 +8,7 @@ import '../../data/data_providers/general_dio/general_dio.dart';
 part 'get_direction_state.dart';
 
 class GetDirectionCubit extends Cubit<GetDirectionInitial> {
-  GetDirectionCubit() : super(const GetDirectionInitial.loading()) {
+  GetDirectionCubit(this._generalDio) : super(const GetDirectionInitial.loading()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
@@ -26,6 +26,7 @@ class GetDirectionCubit extends Cubit<GetDirectionInitial> {
 
   static GetDirectionCubit get(context) => BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();
+  GeneralDio _generalDio;
 
   late List<LocationData> getDirectionList;
   void getSelectedDirections(){
@@ -34,7 +35,7 @@ class GetDirectionCubit extends Cubit<GetDirectionInitial> {
   void getDirection() {
     emit(const GetDirectionInitial.loading());
 
-    GeneralDio.getGetDirectionData().then((value) {
+    _generalDio.getGetDirectionData().then((value) {
 
       // var values = value.data.where((element) =>
       // element['latitude'].toString().contains('.') &&
