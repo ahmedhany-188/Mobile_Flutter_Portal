@@ -20,6 +20,7 @@ import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../constants/url_links.dart';
 import '../../data/repositories/request_repository.dart';
 import '../../gen/assets.gen.dart';
+import '../../widgets/requester_data_widget/requested_status.dart';
 import '../../widgets/requester_data_widget/requester_data_widget.dart';
 import '../../widgets/success/success_request_widget.dart';
 import '../../bloc/contacts_screen_bloc/contacts_cubit.dart';
@@ -1368,31 +1369,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
     }
   }
 
-  Widget myRequestStatusString(String? status) {
-    switch (status) {
-      case 'Approved':
-        {
-          return const Icon(
-            Icons.verified,
-            color: Colors.green,
-          );
-        }
-      case 'Rejected':
-        {
-          return const Icon(
-            Icons.cancel,
-            color: Colors.red,
-          );
-        }
-      default:
-        {
-          return const Icon(
-            Icons.pending_actions_outlined,
-            color: Colors.yellow,
-          );
-        }
-    }
-  }
+
 
   showAddRequestBottomSheet(BuildContext context) {
     showModalBottomSheet(
