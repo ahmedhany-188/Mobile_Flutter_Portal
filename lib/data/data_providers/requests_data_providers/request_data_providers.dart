@@ -118,7 +118,7 @@ class RequestDataProviders {
   Map<String, String> header,String hrCode, String requestNo) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com:9998/api/SelfService/GetUserAccount?HRCode=$hrCode&requestno=$requestNo"),
+          "https://api.hassanallam.com/api/SelfService/GetUserAccount?HRCode=$hrCode&requestno=$requestNo"),
       headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
@@ -130,7 +130,7 @@ class RequestDataProviders {
   Future<http.Response> getEmailAccountData(Map<String, String> header,String hrCode) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com:9998/api/Employee/GetEmployee?HRCode=$hrCode"),
+          "https://api.hassanallam.com/api/Employee/GetEmployee?HRCode=$hrCode"),
       headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
@@ -143,7 +143,7 @@ class RequestDataProviders {
   Map<String, String> header,String hrCode, String requestNo) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com:9998/api/SelfService/GetEmbassy?HRCode=$hrCode&requestno=$requestNo"),
+          "https://api.hassanallam.com/api/SelfService/GetEmbassy?HRCode=$hrCode&requestno=$requestNo"),
       headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
@@ -155,7 +155,7 @@ class RequestDataProviders {
   Future<http.Response> postVacationRequest(Map<String, String> header,String bodyString) async {
     http.Response vacationFeedbackRequest = await http
         .post(
-          Uri.parse("https://api.hassanallam.com:9998/api/SelfService/AddVacation"),
+          Uri.parse("https://api.hassanallam.com/api/SelfService/AddVacation"),
           headers: header,
           body: bodyString,
         )
@@ -170,7 +170,7 @@ class RequestDataProviders {
     http.Response businessMissionFeedbackRequest = await http
         .post(
           Uri.parse(
-              "https://api.hassanallam.com:9998/api/SelfService/AddBusinessMission"),
+              "https://api.hassanallam.com/api/SelfService/AddBusinessMission"),
           headers: header,
           body: bodyString,
         )
@@ -185,7 +185,7 @@ class RequestDataProviders {
   Map<String, String> header,String hrCode, String requestNo) async {
     http.Response rawData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com:9998/api/SelfService/GetBusinessMission?HRCode=$hrCode&requestno=$requestNo"),
+          "https://api.hassanallam.com/api/SelfService/GetBusinessMission?HRCode=$hrCode&requestno=$requestNo"),
       headers: header
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
@@ -198,7 +198,7 @@ class RequestDataProviders {
   Map<String, String> header,String hrCode, String requestNo) async {
     http.Response rawData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com:9998/api/SelfService/GetPermission?HRCode=$hrCode&requestno=$requestNo"),
+          "https://api.hassanallam.com/api/SelfService/GetPermission?HRCode=$hrCode&requestno=$requestNo"),
       headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
@@ -210,7 +210,7 @@ class RequestDataProviders {
   Future<http.Response> getMyRequestsData(Map<String, String> header,String hrCode) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com:9998/api/SelfService/GetMyRequests?HRCode=$hrCode"),
+          "https://api.hassanallam.com/api/SelfService/GetMyRequests?HRCode=$hrCode"),
       headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
@@ -222,7 +222,7 @@ class RequestDataProviders {
   Future<http.Response> getMyNotificationData(Map<String, String> header,String hrCode) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com:9998/api/SelfService/GetMyNotification?HRCode=$hrCode"),
+          "https://api.hassanallam.com/api/SelfService/GetMyNotification?HRCode=$hrCode"),
       headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
@@ -234,7 +234,7 @@ class RequestDataProviders {
   Future<http.Response> postTakeActionOnRequest(Map<String, String> header,String bodyString) async {
     http.Response vacationFeedbackRequest = await http
         .post(
-          Uri.parse("https://api.hassanallam.com:9998/api/SelfService/TakeAction"),
+          Uri.parse("https://api.hassanallam.com/api/SelfService/TakeAction"),
           headers: header,
           body: bodyString,
         )
@@ -250,7 +250,7 @@ class RequestDataProviders {
     http.Response equipmentFeedbackRequest = await http
         .post(
           Uri.parse(
-              "https://api.hassanallam.com:9998/api/SelfService/TakeActionEquipment"),
+              "https://api.hassanallam.com/api/SelfService/TakeActionEquipment"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },

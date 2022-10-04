@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../../bloc/auth_app_status_bloc/app_bloc.dart';
+import '../../data/repositories/request_repository.dart';
 import './notification_widget.dart';
 import '../../widgets/background/custom_background.dart';
 import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
@@ -22,8 +24,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   TextEditingController textController = TextEditingController();
   FocusNode textFoucus = FocusNode();
 
+
   @override
   Widget build(BuildContext context) {
+    final user = context.select((AppBloc bloc) => bloc.state.userData);
     return WillPopScope(
       onWillPop: () async {
         await EasyLoading.dismiss(animation: true);
@@ -41,11 +45,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 return Future(() => null);
               },
               child: BlocProvider<UserNotificationApiCubit>.value(
-                value: UserNotificationApiCubit.get(context)..getNotificationsWithoutLoading(),
+                value: UserNotificationApiCubit(RequestRepository(user))..getNotificationsWithoutLoading(),
                 child: BlocConsumer<UserNotificationApiCubit,
                     UserNotificationApiState>(
                   listener: (context, state) {
-                    print(state.status);
+                    if (kDebugMode) {
+                      print(state.status);
+                    }
                     if (state.status.isSubmissionInProgress) {
                       EasyLoading.show(
                         status: 'Loading...',

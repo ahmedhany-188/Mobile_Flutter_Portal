@@ -18,7 +18,7 @@ class GeneralDio {
     _inst.userData = userData;
     dio = Dio(
       BaseOptions(
-        baseUrl: 'https://api.hassanallam.com:9998/api/',
+        baseUrl: 'https://api.hassanallam.com/api/',
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           'Authorization': 'Bearer ${userData.user?.token}',

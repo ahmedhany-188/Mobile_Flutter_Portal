@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../bloc/apps_screen_bloc/apps_cubit.dart';
 import '../../bloc/login_cubit/login_cubit.dart';
 import '../../constants/url_links.dart';
+import '../../data/repositories/request_repository.dart';
 import '../../screens/about_value_screen/value_screen.dart';
 import '../../screens/get_direction_screen/get_direction_screen.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
@@ -199,6 +200,8 @@ class MainDrawer extends StatelessWidget {
     //     ?.unfocus(disposition: UnfocusDisposition.scope);
     final user =
         context.select((AppBloc bloc) => bloc.state.userData.employeeData);
+    final userData =
+    context.select((AppBloc bloc) => bloc.state.userData);
 
     return Drawer(
       elevation: 0,
@@ -522,8 +525,7 @@ class MainDrawer extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(right: 25.0),
                             child: BlocProvider.value(
-                              value: BlocProvider.of<UserNotificationApiCubit>(
-                                  context)
+                              value: UserNotificationApiCubit(RequestRepository(userData))
                                 ..getNotificationsWithoutLoading(),
                               child: BlocBuilder<UserNotificationApiCubit,
                                   UserNotificationApiState>(

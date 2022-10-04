@@ -24,4 +24,16 @@ class ConstantsColors{
   static const Color backgroundStartColor = Color(0xff021c2d);
 
   static const Color backgroundEndColor = Color(0xff0C3B59);
+
+  static const Color appraisalColor1 = Color(0xffeafff4);
+
+  static const Color appraisalColor2 = Color(0xff3ac47d);
+
+
+  static const Color appraisalColor3 = Color(0xffd5f7ff);
+
+  static const Color appraisalColor4 = Color(0xff30c7ec);
+
+
+
 }

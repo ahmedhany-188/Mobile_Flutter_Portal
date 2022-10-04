@@ -298,7 +298,8 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                                                 Icons.calendar_today,color: Colors.white70,),
                                           ),
                                           //value: state.embassy,
-                                          value : GlobalConstants.embassyLetterList[int.parse(state.embassy)],
+                                          value :state.requestStatus == RequestStatus.oldRequest? GlobalConstants.embassyLetterList[int.parse(state.embassy)-1]:
+                                          GlobalConstants.embassyLetterList[int.parse(state.embassy)],
                                           hint: Text(state.embassy,
                                             style: const TextStyle(
                                               fontSize: 14,
