@@ -524,7 +524,7 @@ class MainDrawer extends StatelessWidget {
                             child: BlocProvider.value(
                               value: BlocProvider.of<UserNotificationApiCubit>(
                                   context)
-                                ..getNotifications(),
+                                ..getNotificationsWithoutLoading(),
                               child: BlocBuilder<UserNotificationApiCubit,
                                   UserNotificationApiState>(
                                 builder: (context, state) {

@@ -30,6 +30,7 @@ import 'package:popover/popover.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../data/repositories/request_repository.dart';
 import '../../widgets/drawer/main_drawer.dart';
 import '../../bloc/news_screen_bloc/news_cubit.dart';
 import '../admin_request_screen/business_card_screen.dart';
@@ -130,9 +131,13 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
             centerTitle: true,
             title: const Text('Hassan Allam Holding'),
             actions: [
-              BlocProvider.value(
-                value: BlocProvider.of<UserNotificationApiCubit>(context)
-                  ..getNotifications(),
+              BlocProvider<UserNotificationApiCubit>(
+                create: (userNotificationContext) => UserNotificationApiCubit(
+                    RequestRepository(
+                    BlocProvider.of<AppBloc>(userNotificationContext)
+                        .state
+                        .userData),
+                  )..getNotificationsWithoutLoading(),
                 child: BlocBuilder<UserNotificationApiCubit,
                     UserNotificationApiState>(
                   builder: (context, state) {
