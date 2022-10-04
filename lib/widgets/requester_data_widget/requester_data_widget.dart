@@ -1,7 +1,9 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../constants/request_service_id.dart';
 import '../../constants/url_links.dart';
 import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
@@ -9,11 +11,12 @@ import '../../screens/myprofile_screen/profile_screen_direct_manager.dart';
 
 class RequesterDataWidget extends StatelessWidget {
   const RequesterDataWidget({
-    Key? key, required this.requesterData, required this.actionComment,
+    Key? key, required this.requesterData, required this.actionComment,this.requestServiceId
   }) : super(key: key);
 
   final EmployeeData requesterData;
   final Widget actionComment;
+  final String? requestServiceId;
 
   @override
   Widget build(BuildContext context) {
@@ -40,11 +43,16 @@ class RequesterDataWidget extends StatelessWidget {
             children: [
               InkWell(
                 onTap: (){
-                  Navigator.of(context).pushNamed(
-                      DirectManagerProfileScreen.routeName,
-                      arguments: {
-                        DirectManagerProfileScreen
-                            .employeeHrCode: requesterData.userHrCode});
+                  if(requestServiceId == RequestServiceID.equipmentServiceID){
+                    launchUrl(Uri.parse('https://portal.hassanallam.com/Apps/PublicProfile.aspx?FormID=${requesterData.userHrCode}'),mode: LaunchMode.externalApplication);
+                  }else{
+                    Navigator.of(context).pushNamed(
+                        DirectManagerProfileScreen.routeName,
+                        arguments: {
+                          DirectManagerProfileScreen.employeeHrCode:
+                              requesterData.userHrCode
+                        });
+                  }
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,

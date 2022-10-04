@@ -13,6 +13,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/enums.dart';
+import '../../constants/request_service_id.dart';
 import '../../widgets/background/custom_background.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../constants/url_links.dart';
@@ -272,6 +273,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: RequesterDataWidget(
+                                      requestServiceId: RequestServiceID.equipmentServiceID,
                                       requesterData: state.requesterData,
                                       actionComment: ActionCommentWidget(
                                           onChanged: (commentValue) => context
@@ -1737,10 +1739,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                       },
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: buildTextFormField(),
-                  ),
+
                   BlocBuilder<ContactsCubit, ContactCubitStates>(
                     builder: (context, state) {
                       return buildContactsDropDownMenu(
@@ -1758,6 +1757,10 @@ class EquipmentsRequestScreen extends StatelessWidget {
                     ],
                     listName: 'Request For',
                     context: context,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: buildTextFormField(),
                   ),
                   // ElevatedButton.icon(
                   //   onPressed: () => onSubmitRequest(context, icon),
@@ -1931,7 +1934,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
           fit: FlexFit.tight,
           child: IconButton(
             icon: const Icon(
-              Icons.remove_circle,
+              Icons.remove,
               color: Colors.white,
             ),
             onPressed: () {
@@ -1943,7 +1946,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
           ),
         ),
         Flexible(
-          flex: 2,
+          flex: 1,
           child: TextFormField(
             textAlign: TextAlign.center,
             enabled: false,
@@ -1964,7 +1967,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
           fit: FlexFit.tight,
           child: IconButton(
             icon: const Icon(
-              Icons.add_circle,
+              Icons.add,
               color: Colors.white,
             ),
             splashColor: Colors.transparent,
@@ -1975,6 +1978,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
             },
           ),
         ),
+        Flexible(child: Text('Price: ${controller.text} LE')),
       ],
     );
   }

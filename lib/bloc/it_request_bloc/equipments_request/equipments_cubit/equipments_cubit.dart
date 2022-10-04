@@ -213,10 +213,10 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   }
 
   submitAction(ActionValueStatus valueStatus, String requestNo) async {
+    if((valueStatus == ActionValueStatus.reject && state.actionComment.isNotEmpty) || (valueStatus == ActionValueStatus.accept)){
     emit(state.copyWith(
       status: FormzStatus.submissionInProgress,
     ));
-        if(valueStatus == ActionValueStatus.reject && state.actionComment.isNotEmpty){
       final equipmentResultResponse = await _requestRepository
           .postEquipmentTakeActionRequest(
         valueStatus: valueStatus,
@@ -250,9 +250,10 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         // }
       }
     }
-        else{
-          EasyLoading.showError('Please add a rejection comment');
-        }
+    else{
+      EasyLoading.showError('Add a rejection comment');
+    }
+
   }
 
   void postEquipmentsRequest({
