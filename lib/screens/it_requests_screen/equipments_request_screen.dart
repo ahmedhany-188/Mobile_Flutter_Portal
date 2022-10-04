@@ -1980,7 +1980,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
             },
           ),
         ),
-        Flexible(child: Text('Price: ${controller.text} LE')),
+        Flexible(child: Text('Price: ${(int.parse(controller.text) * int.parse(itemFormKey.currentState?.getSelectedItem?.estimatePrice ?? '0') ).toString()} LE')),
       ],
     );
   }

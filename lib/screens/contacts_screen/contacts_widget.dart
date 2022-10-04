@@ -9,7 +9,6 @@ import 'package:hassanallamportalflutter/screens/myprofile_screen/profile_screen
 import 'package:sizer/sizer.dart';
 
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
-import '../../widgets/error/error_widget.dart';
 
 class ContactsWidget extends StatelessWidget {
   final List<ContactsDataFromApi> listFromContactsScreen;
@@ -224,7 +223,7 @@ class ContactsWidget extends StatelessWidget {
           ),
           itemCount: listFromContactsScreen.length,
         ),
-        fallback: (context) => noDataFoundContainer(),
+        fallback: (context) => const Center(child:  Text('No data found',style: TextStyle(color: Colors.white),)),
       ),
     );
   }
