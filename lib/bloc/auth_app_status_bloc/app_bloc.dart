@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:hassanallamportalflutter/bloc/apps_screen_bloc/apps_cubit.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:meta/meta.dart';
+
+import '../../data/data_providers/general_dio/general_dio.dart';
 
 
 part 'app_event.dart';
@@ -32,6 +35,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     if(event.userData.isNotEmpty){
       FirebaseProvider(event.userData).updateUserOnline(AppLifecycleStatus.online);
       RequestRepository(event.userData);
+      GeneralDio(event.userData);
     }
 
     emit(

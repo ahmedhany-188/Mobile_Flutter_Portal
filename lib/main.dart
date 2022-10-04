@@ -95,7 +95,7 @@ void main() async {
   );
 
   configLoading();
-  await GeneralDio.init();
+  // await GeneralDio.init();
   await AlbumDio.initAlbums();
 }
 
@@ -258,7 +258,7 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<ContactsCubit>(
             create: (contactsCubitContext) => ContactsCubit(GeneralDio(
                 BlocProvider.of<AppBloc>(contactsCubitContext).state.userData))..getContacts(),
-            lazy: false,
+            lazy: true,
           ),
           BlocProvider<PayslipCubit>(
             create: (payslipContext) => PayslipCubit(
@@ -348,9 +348,11 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<UserNotificationApiCubit>(
               lazy: true,
               create: (userNotificationContext){
-                    print('token ${BlocProvider.of<AppBloc>(userNotificationContext)
+                    if (kDebugMode) {
+                      print('token ${BlocProvider.of<AppBloc>(userNotificationContext)
                         .state
                         .userData.user?.token}');
+                    }
                 return UserNotificationApiCubit(
                       RequestRepository(
                           BlocProvider.of<AppBloc>(userNotificationContext)

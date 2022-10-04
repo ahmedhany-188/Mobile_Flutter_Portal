@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/data/data_providers/general_dio/general_dio.dart';
 import 'package:hassanallamportalflutter/setup_firebase_messaging.dart';
 
 
@@ -64,11 +65,16 @@ class LifeCycleStateState extends State<LifeCycleState> with WidgetsBindingObser
 
     final status = context
         .read<AppBloc>().state.status;
+    final userData = context
+        .read<AppBloc>().state.userData;
     if(state == AppLifecycleState.resumed){
       precacheImage(image1.image, context);
       if (kDebugMode) {
         print("life cycle -->resumed");
         print(status== AppStatus.authenticated ? "life cycle --> authenticated":"life cycle -->unauthenticated");
+      }
+      if(status== AppStatus.authenticated){
+        GeneralDio(userData);
       }
       UserNotificationApiCubit.get(context).getNotificationsWithoutLoading();
       updateFirebaseWithStatus(AppLifecycleStatus.online);

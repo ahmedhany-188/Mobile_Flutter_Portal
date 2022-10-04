@@ -6,25 +6,40 @@ import 'package:file_picker/file_picker.dart';
 
 class GeneralDio {
   static Dio? dio;
-  MainUserData userData;
+  MainUserData? userData;
 
-  GeneralDio(this.userData);
+  // GeneralDio(this.userData);
 
-  static init() {
+  static final GeneralDio _inst = GeneralDio._internal();
+
+  GeneralDio._internal();
+
+  factory GeneralDio(MainUserData userData) {
+    _inst.userData = userData;
     dio = Dio(
       BaseOptions(
         baseUrl: 'https://api.hassanallam.com:9998/api/',
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ${userData.user?.token}',
+        },
         // receiveDataWhenStatusError: true,
       ),
     );
+
+    return _inst;
   }
+
+  // static init() {
+  //
+  // }
 
   Future<Response> getContactListData(
       {String url = 'portal/UserData/GetContactList'}) async {
     return await dio!.get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     );
   }
@@ -33,7 +48,7 @@ class GeneralDio {
     return await dio!.get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     );
   }
@@ -43,7 +58,7 @@ class GeneralDio {
     return await dio!.get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     );
   }
@@ -53,7 +68,7 @@ class GeneralDio {
     return await dio!.get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     );
   }
@@ -62,7 +77,7 @@ class GeneralDio {
     return await dio!.get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     );
   }
@@ -72,7 +87,7 @@ class GeneralDio {
     return await dio!.get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     );
   }
@@ -82,21 +97,21 @@ class GeneralDio {
     return await dio!.get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     );
   }
 
   Future<Response> appsData() async {
     String url =
-        'portal/UserData/GetApplications?HRCode=${userData.user!.userHRCode}';
-
-    if (userData.user!.userHRCode!.isNotEmpty) {
+        'portal/UserData/GetApplications?HRCode=${userData?.user?.userHRCode}';
+    var userHRCode = userData?.user?.userHRCode ?? "";
+    if (userHRCode.isNotEmpty) {
       return await dio!
           .get(
             url,
             options: Options(
-              headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+              headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
             ),
           )
           .timeout(const Duration(minutes: 5))
@@ -116,7 +131,7 @@ class GeneralDio {
         .get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     )
         .catchError((err) {
@@ -131,7 +146,7 @@ class GeneralDio {
         .get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     )
         .catchError((err) {
@@ -146,7 +161,7 @@ class GeneralDio {
         .get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     )
         .catchError((err) {
@@ -161,7 +176,7 @@ class GeneralDio {
         .get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     )
         .catchError((err) {
@@ -171,13 +186,13 @@ class GeneralDio {
 
   Future<Response> getStatistics() async {
     String url =
-        'SelfService/GetStatistics?HRCode=${userData.user!.userHRCode}';
+        'SelfService/GetStatistics?HRCode=${userData?.user?.userHRCode}';
 
     return await dio!
         .get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     )
         .catchError((err) {
@@ -196,7 +211,7 @@ class GeneralDio {
         .get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     )
         .catchError((err) {
@@ -213,7 +228,7 @@ class GeneralDio {
         .get(
       url,
       options: Options(
-        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
       ),
     )
         .catchError((err) {
@@ -228,7 +243,7 @@ class GeneralDio {
         .post(url,
             options: Options(headers: {
               HttpHeaders.contentTypeHeader: "application/json-patch+json",
-              'Authorization': 'Bearer ${userData.user?.token}',
+              'Authorization': 'Bearer ${userData?.user?.token}',
             }),
             data: dataToPost)
         .catchError((err) {
@@ -243,7 +258,7 @@ class GeneralDio {
         .post(url,
             options: Options(headers: {
               HttpHeaders.contentTypeHeader: "application/json-patch+json",
-              'Authorization': 'Bearer ${userData.user?.token}',
+              'Authorization': 'Bearer ${userData?.user?.token}',
             }),
             data: dataToPost)
         .catchError((err) {
@@ -278,7 +293,7 @@ class GeneralDio {
     return await dio!
         .post(url,
             options: Options(
-              headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+              headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
             ),
             data: formData)
         .catchError((onError) => throw onError);
@@ -297,7 +312,7 @@ class GeneralDio {
           url,
           data: formData,
           options: Options(
-            headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+            headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
           ),
         )
         .catchError((onError) => throw onError);
@@ -316,7 +331,7 @@ class GeneralDio {
           url,
           data: formData,
           options: Options(
-            headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+            headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
           ),
         )
         .catchError((onError) => throw onError);
