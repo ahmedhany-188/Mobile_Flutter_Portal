@@ -60,6 +60,7 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
 
     List<AppsData> userApps = context.select((AppsCubit bloc) => bloc.appsList);
     bool userStaffDashboard=false;
+    bool dashBoardIcon=false;
 
 
     for(int i=0;i<userApps.length;i++){
@@ -272,10 +273,10 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Image.asset(
-                                    userStaffDashboard?Assets.images.homepage.staffDashboardIcon.path:Assets.images.homepage.attendanceIcon.path,
+                                    dashBoardIcon?Assets.images.homepage.staffDashboardIcon.path:Assets.images.homepage.attendanceIcon.path,
                                     scale: 3),
                                  Text(
-                                  userStaffDashboard?'Staff Dashboard':"Attendance",
+                                   dashBoardIcon?'Staff Dashboard':"Attendance",
                                   softWrap: true,
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 14),
@@ -461,6 +462,12 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
               ])),
     );
   }
+}
+
+bool getDashboardIcon(){
+
+
+  return false;
 }
 
 Widget benefitsMenuItems(BuildContext context) {

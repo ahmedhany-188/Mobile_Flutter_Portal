@@ -104,14 +104,14 @@ class ShowAttendanceBottomSheet extends StatelessWidget {
   Padding checkViewForm(
       MyAttendanceModel attendanceModel, BuildContext context) {
     if (attendanceModel.vacation != null){
-      return requestForm("View Vacation", iconRequest(attendanceListData), context);
+      return requestForm("View Vacation","View Form", iconRequest(attendanceListData), context);
     }
     if (attendanceModel.permission != null) {
-      return requestForm("View Permission", iconRequest(attendanceListData), context);
+      return requestForm("View Permission","View Form", iconRequest(attendanceListData), context);
     }
     if(attendanceModel.businessMission != null){
       // || attendanceModel.forget != null) {
-      return requestForm("View Business Mission", iconRequest(attendanceListData), context);
+      return requestForm("View Business Mission","View Form", iconRequest(attendanceListData), context);
     } else {
       return const Padding(
         padding: EdgeInsets.all(2.0),
@@ -134,7 +134,7 @@ class ShowAttendanceBottomSheet extends StatelessWidget {
   }
 
   Padding requestForm(
-      String requestType, Icon requestIcon, BuildContext context) {
+      String requestType,String requestName, Icon requestIcon, BuildContext context) {
     return Padding(
         padding: const EdgeInsets.only(left: 25,right: 25,top: 15,bottom: 15),
         child: SizedBox(
@@ -184,7 +184,7 @@ class ShowAttendanceBottomSheet extends StatelessWidget {
                   child: Material(
                     type: MaterialType.transparency,
                     child: InkWell(onTap: () {
-                      switch (requestType) {
+                      switch (requestName) {
                         case "View Form":
                           if (attendanceListData.vacation != null) {
                             Navigator.of(context).pushNamed(
