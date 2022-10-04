@@ -1,3 +1,4 @@
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,271 +53,380 @@ class NotificationWidget extends StatelessWidget {
                   UserNotificationEnumStates.failed &&
               listFromnotificationScreen.isNotEmpty)),
       builder: (_) {
-        return listFromnotificationScreen.isNotEmpty? Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ListView.separated(
-            physics: const BouncingScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: listFromnotificationScreen.length,
-            itemBuilder: (ctx, index) {
-              UserNotificationApi notification =
-                  listFromnotificationScreen[index];
-              var imageProfile = notification.imgProfile ?? "";
-              return Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: InkWell(
-                  onTap: () {
-                    _pushForRequestDetail(context, notification);
-                  },
-                  child: Container(
-                    // height: MediaQuery.of(context).size.height * 0.25,
-                    padding: const EdgeInsets.only(
-                        left: 10.0, right: 10.0, top: 10.0, bottom: 0.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
-                      color: Colors.grey.shade400.withOpacity(0.4),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Flexible(
-                          child: Row(
-                            mainAxisAlignment:
-                                MainAxisAlignment.center,
-                            crossAxisAlignment:
-                                CrossAxisAlignment.center,
+        return listFromnotificationScreen.isNotEmpty
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ListView.separated(
+                  physics: const BouncingScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: listFromnotificationScreen.length,
+                  itemBuilder: (ctx, index) {
+                    UserNotificationApi notification =
+                        listFromnotificationScreen[index];
+                    var imageProfile = notification.imgProfile ?? "";
+                    return Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: InkWell(
+                        onTap: () {
+                          _pushForRequestDetail(context, notification);
+                        },
+                        child: Container(
+                          // height: MediaQuery.of(context).size.height * 0.25,
+                          padding: const EdgeInsets.only(
+                              left: 10.0, right: 10.0, top: 10.0, bottom: 0.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(15.0),
+                            color: Colors.grey.shade400.withOpacity(0.4),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Flexible(
-                                fit: FlexFit.tight,
-                                child: Center(
-                                  child: imageProfile.isNotEmpty
-                                      ? CachedNetworkImage(
-                                          imageUrl: getUserProfilePicture(
-                                              imageProfile),
-                                          imageBuilder:
-                                              (context, imageProvider) =>
-                                                  Container(
-                                            width: 50,
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              image: DecorationImage(
-                                                  image: imageProvider,
-                                                  fit: BoxFit.cover),
-                                            ),
-                                          ),
-                                          placeholder: (context, url) =>
-                                              Assets.images.favicon
-                                                  .image(height: 40),
-                                          errorWidget:
-                                              (context, url, error) =>
-                                                  Assets.images.favicon
-                                                      .image(height: 50),
-                                        )
-                                      : Assets.images.favicon
-                                          .image(height: 40),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 4,
-                                child: Column(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Text(
-                                      '${notification.reqName?.toTitleCase()}'
-                                          .trim(),
-                                      style: const TextStyle(
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
-                                        fontFamily:
-                                            FontFamily.robotoFlex,
+                                    Flexible(
+                                      fit: FlexFit.tight,
+                                      child: Center(
+                                        child: imageProfile.isNotEmpty
+                                            ? CachedNetworkImage(
+                                                imageUrl: getUserProfilePicture(
+                                                    imageProfile),
+                                                imageBuilder:
+                                                    (context, imageProvider) =>
+                                                        Container(
+                                                  width: 50,
+                                                  height: 50,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    image: DecorationImage(
+                                                        image: imageProvider,
+                                                        fit: BoxFit.cover),
+                                                  ),
+                                                ),
+                                                placeholder: (context, url) =>
+                                                    Assets.images.favicon
+                                                        .image(height: 40),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Assets.images.favicon
+                                                            .image(height: 50),
+                                              )
+                                            : Assets.images.favicon
+                                                .image(height: 40),
                                       ),
-                                      maxLines: 1,
-                                      // overflow: TextOverflow.ellipsis,
                                     ),
-                                    Text(
-                                      '${notification.projectName}'
-                                          .trim(),
+                                    Expanded(
+                                      flex: 4,
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            '${notification.reqName?.toTitleCase()}'
+                                                .trim(),
+                                            style: const TextStyle(
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white,
+                                              fontFamily: FontFamily.robotoFlex,
+                                            ),
+                                            maxLines: 1,
+                                            // overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Text(
+                                            '${notification.projectName}'
+                                                .trim(),
 
-                                      style: const TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
-                                        fontFamily:
-                                            FontFamily.robotoFlex,
+                                            style: const TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white,
+                                              fontFamily: FontFamily.robotoFlex,
+                                            ),
+                                            maxLines: 1,
+                                            // overflow: TextOverflow.ellipsis,
+                                          ),
+                                          Text(
+                                            '${notification.requestHRCode}'
+                                                .trim(),
+                                            style: const TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white,
+                                              fontFamily: FontFamily.robotoFlex,
+                                            ),
+                                            maxLines: 1,
+                                            // overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ],
                                       ),
-                                      maxLines: 1,
-                                      // overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Text(
-                                      '${notification.requestHRCode}'
-                                          .trim(),
-                                      style: const TextStyle(
-                                        fontSize: 12.0,
-                                        fontWeight: FontWeight.w600,
-                                        color: Colors.white,
-                                        fontFamily:
-                                            FontFamily.robotoFlex,
-                                      ),
-                                      maxLines: 1,
-                                      // overflow: TextOverflow.ellipsis,
                                     ),
                                   ],
                                 ),
                               ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(top: 5, bottom: 5),
-                          child: Container(
-                            width: double.infinity,
-                            height: 0.5,
-                            color: Colors.white,
-                          ),
-                        ),
-                        Flexible(
-                          child: Container(
-                            clipBehavior: Clip.none,
-                            alignment: Alignment.center,
-                            child: Column(
-                              children: [
-                                Text(
-                                  ' ${notification.status} ${notification.serviceName} #${notification.requestNo}',
-                                  style: const TextStyle(
-                                    fontSize: 13.0,
-                                    color: Colors.white,
-                                    fontFamily: FontFamily.robotoFlex,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(top: 5, bottom: 5),
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 0.5,
+                                  color: Colors.white,
                                 ),
-                                // MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
-                                Text(
-                                  'comment: ${notification.reqComment}',
-                                  style: const TextStyle(
-                                    fontSize: 13.0,
-                                    color: Colors.white,
-                                    fontFamily: FontFamily.robotoFlex,
-                                  ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        if (notification.requestHRCode !=
-                            userMainData.employeeData?.userHrCode)
-                          Flexible(
-                            flex: 1,
-                            // padding: const EdgeInsets.all(5.0),
-                            child: Container(
-                              clipBehavior: Clip.none,
-                              alignment: Alignment.center,
-                              child: Column(
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
+                              ),
+                              Flexible(
+                                child: Container(
+                                  clipBehavior: Clip.none,
+                                  alignment: Alignment.center,
+                                  child: Column(
                                     children: [
-                                      Expanded(
-                                        child: OutlinedButton(
-                                          onPressed: () {
-                                            BlocProvider.of<
-                                                        UserNotificationApiCubit>(
-                                                    context)
-                                                .submitRequestAction(
-                                                    ActionValueStatus
-                                                        .accept,
-                                                    notification);
-                                          },
-                                          style:
-                                              OutlinedButton.styleFrom(
-                                                  backgroundColor:
-                                                      ConstantsColors
-                                                          .buttonColors),
-                                          child: const Text('Accept',
-                                              style: TextStyle(
-                                                  color: Colors.white)),
-                                          // color: Colors.white,
+                                      Text(
+                                        ' ${notification.status} ${notification.serviceName} #${notification.requestNo}',
+                                        style: const TextStyle(
+                                          fontSize: 13.0,
+                                          color: Colors.white,
+                                          fontFamily: FontFamily.robotoFlex,
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        width: 12,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
                                       ),
                                       // MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
-                                      Expanded(
-                                        child: OutlinedButton(
-                                          onPressed: () {
-                                            BlocProvider.of<
-                                                        UserNotificationApiCubit>(
-                                                    context)
-                                                .submitRequestAction(
-                                                    ActionValueStatus
-                                                        .reject,
-                                                    notification);
-                                          },
-                                          style:
-                                              OutlinedButton.styleFrom(
-                                                  backgroundColor:
-                                                      Colors.white),
-                                          child: const Text(
-                                            'Reject',
-                                            style: TextStyle(
-                                                color: ConstantsColors
-                                                    .buttonColors),
-                                          ),
-
-                                          // color: Colors.white,
+                                      Text(
+                                        'comment: ${notification.reqComment}',
+                                        style: const TextStyle(
+                                          fontSize: 13.0,
+                                          color: Colors.white,
+                                          fontFamily: FontFamily.robotoFlex,
                                         ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.center,
                                       ),
                                     ],
                                   ),
-                                  Text(
-                                    GlobalConstants
-                                        .dateFormatViewedDaysAndHours
-                                        .format(GlobalConstants
-                                            .dateFormatServer
-                                            .parse(
-                                                notification.reqDate ??
-                                                    "")),
-                                    style: const TextStyle(
-                                      fontSize: 10.0,
-                                      color: Colors.white,
-                                      fontFamily: FontFamily.robotoFlex,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
+                                ),
                               ),
-                            ),
+                              if (notification.requestHRCode !=
+                                  userMainData.employeeData?.userHrCode)
+                                Flexible(
+                                  flex: 1,
+                                  // padding: const EdgeInsets.all(5.0),
+                                  child: Container(
+                                    clipBehavior: Clip.none,
+                                    alignment: Alignment.center,
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Expanded(
+                                              child: OutlinedButton(
+                                                onPressed: () {
+                                                  BlocProvider.of<
+                                                              UserNotificationApiCubit>(
+                                                          context)
+                                                      .submitRequestAction(
+                                                          ActionValueStatus
+                                                              .accept,
+                                                          notification);
+                                                },
+                                                style: OutlinedButton.styleFrom(
+                                                    backgroundColor:
+                                                        ConstantsColors
+                                                            .buttonColors),
+                                                child: const Text('Accept',
+                                                    style: TextStyle(
+                                                        color: Colors.white)),
+                                                // color: Colors.white,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                              width: 12,
+                                            ),
+                                            // MyRequestStatus(listFromRequestScreen[index].statusName.toString(), context),
+                                            Expanded(
+                                              child: OutlinedButton(
+                                                onPressed: () {
+                                                  if (notification.serviceID ==
+                                                      RequestServiceID
+                                                          .equipmentServiceID) {
+                                                    TextEditingController
+                                                        actionCommentController =
+                                                        TextEditingController();
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                          backgroundColor:
+                                                              ConstantsColors
+                                                                  .bottomSheetBackground,
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          20)),
+                                                          title: Row(
+                                                            children: const [
+                                                              Icon(
+                                                                Icons.warning,
+                                                                color: Colors
+                                                                    .amber,
+                                                              ),
+                                                              Padding(padding: EdgeInsets.all(8)),
+                                                              Text(
+                                                                  "Please add a comment"),
+                                                            ],
+                                                          ),
+                                                          content: SizedBox(
+                                                            width:
+                                                                MediaQuery.of(
+                                                                        context)
+                                                                    .size
+                                                                    .width,
+                                                            child:
+                                                                TextFormField(
+                                                              controller:
+                                                                  actionCommentController,
+                                                              enabled: true,
+                                                              keyboardType:
+                                                                  TextInputType
+                                                                      .multiline,
+                                                              maxLines: 3,
+                                                              decoration:
+                                                                  InputDecoration(
+                                                                border:
+                                                                    OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .circular(
+                                                                              20.0),
+                                                                ),
+                                                                filled: true,
+                                                                hintStyle: TextStyle(
+                                                                    color: Colors
+                                                                            .grey[
+                                                                        800]),
+                                                                labelText:
+                                                                    "Action comment",
+                                                                prefixIcon:
+                                                                    const Icon(
+                                                                  Icons.comment,
+                                                                  color: Colors
+                                                                      .white70,
+                                                                ),
+                                                                enabled: true,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          actions: [
+                                                            TextButton(
+                                                              onPressed: () {
+                                                                if (actionCommentController
+                                                                    .text
+                                                                    .isEmpty) {
+                                                                  EasyLoading
+                                                                      .showError(
+                                                                          'Add a comment');
+                                                                } else {
+                                                                  BlocProvider.of<
+                                                                              UserNotificationApiCubit>(
+                                                                          context)
+                                                                      .submitRequestAction(
+                                                                    ActionValueStatus
+                                                                        .reject,
+                                                                    notification,
+                                                                    actionComment:
+                                                                        actionCommentController
+                                                                            .text,
+                                                                  );
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                }
+                                                              },
+                                                              child: const Text(
+                                                                'Continue Reject',
+                                                                style: TextStyle(
+                                                                    color: ConstantsColors
+                                                                        .greenAttendance),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        );
+                                                      },
+                                                    );
+                                                  } else {
+                                                    BlocProvider.of<
+                                                                UserNotificationApiCubit>(
+                                                            context)
+                                                        .submitRequestAction(
+                                                            ActionValueStatus
+                                                                .reject,
+                                                            notification);
+                                                  }
+                                                },
+                                                style: OutlinedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Colors.white),
+                                                child: const Text(
+                                                  'Reject',
+                                                  style: TextStyle(
+                                                      color: ConstantsColors
+                                                          .buttonColors),
+                                                ),
+
+                                                // color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          GlobalConstants
+                                              .dateFormatViewedDaysAndHours
+                                              .format(GlobalConstants
+                                                  .dateFormatServer
+                                                  .parse(notification.reqDate ??
+                                                      "")),
+                                          style: const TextStyle(
+                                            fontSize: 10.0,
+                                            color: Colors.white,
+                                            fontFamily: FontFamily.robotoFlex,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
-                      ],
+                        ),
+                      ),
+                    );
+                  },
+                  separatorBuilder: (context, index) => Padding(
+                    padding: const EdgeInsetsDirectional.only(
+                        start: 20.0, end: 20.0),
+                    child: Container(
+                      width: double.infinity,
+                      height: 0.5,
+                      color: Colors.grey[300],
                     ),
                   ),
                 ),
+              )
+            : const Center(
+                child: Text('No Data Found'),
               );
-            },
-            separatorBuilder: (context, index) => Padding(
-              padding: const EdgeInsetsDirectional.only(start: 20.0, end: 20.0),
-              child: Container(
-                width: double.infinity,
-                height: 0.5,
-                color: Colors.grey[300],
-              ),
-            ),
-          ),
-        ):const Center(child: Text('No Data Found'),);
       },
       fallback: (_) => Shimmer.fromColors(
         baseColor: Colors.white,

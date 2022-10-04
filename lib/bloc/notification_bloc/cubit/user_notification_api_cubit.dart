@@ -141,7 +141,8 @@ class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState> {
   }
 
   submitRequestAction(
-      ActionValueStatus valueStatus, UserNotificationApi notification) async {
+      ActionValueStatus valueStatus, UserNotificationApi notification,
+      {String? actionComment}) async {
     emit(state.copyWith(
       status: FormzStatus.submissionInProgress,
     ));
@@ -152,7 +153,7 @@ class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState> {
           .postEquipmentTakeActionRequest(
         valueStatus: valueStatus,
         requestNo: notification.requestNo.toString(),
-        actionComment: "",
+        actionComment: actionComment ?? "",
         serviceID: RequestServiceID.equipmentServiceID,
         requesterHRCode: notification.requestHRCode ?? "",
         requesterEmail: notification.requesterEmail ?? "",
