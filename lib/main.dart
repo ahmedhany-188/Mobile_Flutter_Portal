@@ -237,14 +237,19 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<SettingsCubit>(
             create: (counterCubitContext) => SettingsCubit(),
           ),
-          BlocProvider<ContactsCubit>(
-            create: (contactsCubitContext) => ContactsCubit()..getContacts(),
-            lazy: false,
-          ),
-
           BlocProvider<WeatherBloc>(
             create: (weatherBlocContext) =>
                 WeatherBloc()..add(WeatherRequest()),
+          ),
+          BlocProvider<AppBloc>(
+            create: (authenticationContext) => AppBloc(
+              authenticationRepository: authenticationRepository,
+            ),
+          ),
+          BlocProvider<ContactsCubit>(
+            create: (contactsCubitContext) => ContactsCubit(GeneralDio(
+                BlocProvider.of<AppBloc>(contactsCubitContext).state.userData))..getContacts(),
+            lazy: false,
           ),
           BlocProvider<PayslipCubit>(
             create: (payslipContext) => PayslipCubit(),
@@ -255,15 +260,17 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider<GetDirectionCubit>(
             create: (getDirectionCubitContext) =>
-                GetDirectionCubit()..getDirection(),
+                GetDirectionCubit(GeneralDio(
+                    BlocProvider.of<AppBloc>(getDirectionCubitContext).state.userData))..getDirection(),
           ),
           BlocProvider<BenefitsCubit>(
-            create: (benefitsCubitContext) => BenefitsCubit()..getBenefits(),
+            create: (benefitsCubitContext) => BenefitsCubit(GeneralDio(
+                BlocProvider.of<AppBloc>(benefitsCubitContext).state.userData))..getBenefits(),
           ),
           BlocProvider<SubsidiariesCubit>(
             create: (subsidiariesCubitContext) =>
-                SubsidiariesCubit()..getSubsidiaries(),
-            lazy: false,
+                SubsidiariesCubit(GeneralDio(
+                    BlocProvider.of<AppBloc>(subsidiariesCubitContext).state.userData))..getSubsidiaries(),
           ),
 
           // BlocProvider<MedicalRequestCubit>(
@@ -287,11 +294,7 @@ class _MyAppState extends State<MyApp> {
           //       AccessRightCubit(),
           // ),
 
-          BlocProvider<AppBloc>(
-            create: (authenticationContext) => AppBloc(
-              authenticationRepository: authenticationRepository,
-            ),
-          ),
+
 
           BlocProvider<LoginCubit>(
             create: (authenticationContext) =>
@@ -315,12 +318,17 @@ class _MyAppState extends State<MyApp> {
 
           BlocProvider<UserNotificationApiCubit>(
               lazy: true,
-              create: (userNotificationContext) => UserNotificationApiCubit(
-                    RequestRepository(
-                        BlocProvider.of<AppBloc>(userNotificationContext)
-                            .state
-                            .userData),
-                  )
+              create: (userNotificationContext){
+                    print('token ${BlocProvider.of<AppBloc>(userNotificationContext)
+                        .state
+                        .userData.user?.token}');
+                return UserNotificationApiCubit(
+                      RequestRepository(
+                          BlocProvider.of<AppBloc>(userNotificationContext)
+                              .state
+                              .userData),
+                    );
+                  }
               // ..getNotifications(),
               ),
           BlocProvider<AppUpgraderCubit>(
@@ -380,17 +388,20 @@ class _MyAppState extends State<MyApp> {
               ..getStatistics(),
           ),
           BlocProvider<NewsCubit>(
-            create: (newsContext) => NewsCubit()
+            create: (newsContext) => NewsCubit(GeneralDio(
+                BlocProvider.of<AppBloc>(newsContext).state.userData))
               ..getNewsOld()
               ..getLatestNews(),
             lazy: true,
           ),
           BlocProvider<ResponsibleVacationCubit>(
-            create: (responsibleContext) => ResponsibleVacationCubit(),
+            create: (responsibleContext) => ResponsibleVacationCubit(GeneralDio(
+                BlocProvider.of<AppBloc>(responsibleContext).state.userData)),
             lazy: true,
           ),
           BlocProvider<SubsidiariesCubit>(
-            create: (subsidiariesContext) => SubsidiariesCubit(),
+            create: (subsidiariesContext) => SubsidiariesCubit(GeneralDio(
+                BlocProvider.of<AppBloc>(subsidiariesContext).state.userData)),
             lazy: true,
           ),
 

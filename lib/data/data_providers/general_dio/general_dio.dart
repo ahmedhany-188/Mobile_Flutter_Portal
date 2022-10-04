@@ -13,56 +13,77 @@ class GeneralDio {
   static init() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'https://api.hassanallam.com/api/',
+        baseUrl: 'https://api.hassanallam.com:9998/api/',
         // receiveDataWhenStatusError: true,
       ),
     );
   }
 
-  static Future<Response> getContactListData(
+  Future<Response> getContactListData(
       {String url = 'portal/UserData/GetContactList'}) async {
     return await dio!.get(
       url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
     );
   }
 
-  static Future<Response> getBenefitsData(
-      {String url = 'Portal/GetBenefits'}) async {
+  Future<Response> getBenefitsData({String url = 'Portal/GetBenefits'}) async {
     return await dio!.get(
       url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
     );
   }
 
-  static Future<Response> getGetDirectionData(
+  Future<Response> getGetDirectionData(
       {String url = 'Lookup/GetLocation'}) async {
     return await dio!.get(
       url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
     );
   }
 
-  static Future<Response> subsidiariesData(
+  Future<Response> subsidiariesData(
       {String url = 'portal/Subsidiaries/GetAll'}) async {
     return await dio!.get(
       url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
     );
   }
 
-  static Future<Response> newsData({String url = 'portal/News/GetAll'}) async {
+  Future<Response> newsData({String url = 'portal/News/GetAll'}) async {
     return await dio!.get(
       url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
     );
   }
-  static Future<Response> newsDataOld({int type = 2}) async {
+
+  Future<Response> newsDataOld({int type = 2}) async {
     String url = 'Portal/GetNews?Type=$type';
     return await dio!.get(
       url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
     );
   }
 
-  static Future<Response> latestNewsData(
+  Future<Response> latestNewsData(
       {String url = 'portal/News/GetLatest'}) async {
     return await dio!.get(
       url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
     );
   }
 
@@ -74,6 +95,9 @@ class GeneralDio {
       return await dio!
           .get(
             url,
+            options: Options(
+              headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+            ),
           )
           .timeout(const Duration(minutes: 5))
           .catchError((err) {
@@ -85,34 +109,62 @@ class GeneralDio {
     }
   }
 
-  static Future<Response> businessUnit() async {
+  Future<Response> businessUnit() async {
     String url = 'Lookup/GetBusinessUnit';
 
-    return await dio!.get(url).catchError((err) {
+    return await dio!
+        .get(
+      url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
+    )
+        .catchError((err) {
       throw err;
     });
   }
 
-  static Future<Response> equipmentsLocation() async {
+  Future<Response> equipmentsLocation() async {
     String url = 'Lookup/GetLocation';
 
-    return await dio!.get(url).catchError((err) {
+    return await dio!
+        .get(
+      url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
+    )
+        .catchError((err) {
       throw err;
     });
   }
 
-  static Future<Response> equipmentsDepartment() async {
+  Future<Response> equipmentsDepartment() async {
     String url = 'Portal/GetDepartments';
 
-    return await dio!.get(url).catchError((err) {
+    return await dio!
+        .get(
+      url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
+    )
+        .catchError((err) {
       throw err;
     });
   }
 
-  static Future<Response> getEquipmentsItems(String id) async {
+  Future<Response> getEquipmentsItems(String id) async {
     String url = 'Lookup/GetItemsByCategory?Cond=$id';
 
-    return await dio!.get(url).catchError((err) {
+    return await dio!
+        .get(
+      url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
+    )
+        .catchError((err) {
       throw err;
     });
   }
@@ -121,41 +173,62 @@ class GeneralDio {
     String url =
         'SelfService/GetStatistics?HRCode=${userData.user!.userHRCode}';
 
-    return await dio!.get(url).catchError((err) {
+    return await dio!
+        .get(
+      url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
+    )
+        .catchError((err) {
       throw err;
     });
   }
 
-  static Future<Response> getNextStepWorkFlow(
+  Future<Response> getNextStepWorkFlow(
       {required String serviceId,
       required String userHrCode,
       required int reqNo}) async {
     String url =
         'SelfService/GetNextStepWorkFlow?ServiceID=$serviceId&RequestNo=$reqNo&HRCode=$userHrCode';
 
-    return await dio!.get(url).catchError((err) {
+    return await dio!
+        .get(
+      url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
+    )
+        .catchError((err) {
       throw err;
     });
   }
 
-  static Future<Response> getHistoryWorkFlow(
+  Future<Response> getHistoryWorkFlow(
       {required String serviceId, required int reqNo}) async {
     String url =
         'SelfService/GetWorkflowhistory?requestno=$reqNo&ServiceID=$serviceId';
 
-    return await dio!.get(url).catchError((err) {
+    return await dio!
+        .get(
+      url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+      ),
+    )
+        .catchError((err) {
       throw err;
     });
   }
 
-  static Future<Response> postMasterEquipmentsRequest(
-      dynamic dataToPost) async {
+  Future<Response> postMasterEquipmentsRequest(dynamic dataToPost) async {
     String url = 'SelfService/AddITEquipment_M';
 
     return await dio!
         .post(url,
             options: Options(headers: {
               HttpHeaders.contentTypeHeader: "application/json-patch+json",
+              'Authorization': 'Bearer ${userData.user?.token}',
             }),
             data: dataToPost)
         .catchError((err) {
@@ -163,14 +236,14 @@ class GeneralDio {
     });
   }
 
-  static Future<Response> postDetailEquipmentsRequest(
-      dynamic dataToPost) async {
+  Future<Response> postDetailEquipmentsRequest(dynamic dataToPost) async {
     String url = 'SelfService/AddITEquipment_D';
 
     return await dio!
         .post(url,
             options: Options(headers: {
               HttpHeaders.contentTypeHeader: "application/json-patch+json",
+              'Authorization': 'Bearer ${userData.user?.token}',
             }),
             data: dataToPost)
         .catchError((err) {
@@ -178,7 +251,7 @@ class GeneralDio {
     });
   }
 
-  // static Future<Response> postEquipmentsRequestFile(dynamic dataToPost) async {
+  // Future<Response> postEquipmentsRequestFile(dynamic dataToPost) async {
   //   String url = 'SelfService/UploadEquipmentFile';
   //
   //   return await dio!
@@ -194,7 +267,7 @@ class GeneralDio {
   //   });
   // }
 
-  static Future<Response> uploadEquipmentImage(
+  Future<Response> uploadEquipmentImage(
       FilePickerResult file, String fileName, String fileExtension) async {
     String url = 'SelfService/UploadEquipmentFile';
 
@@ -203,11 +276,15 @@ class GeneralDio {
           filename: "$fileName.$fileExtension"),
     });
     return await dio!
-        .post(url, data: formData)
+        .post(url,
+            options: Options(
+              headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+            ),
+            data: formData)
         .catchError((onError) => throw onError);
   }
 
-  static Future<Response> uploadAccessRightImage(
+  Future<Response> uploadAccessRightImage(
       FilePickerResult file, String fileName, String fileExtension) async {
     String url = 'SelfService/UploadAccessRightFile';
 
@@ -216,11 +293,17 @@ class GeneralDio {
           filename: "$fileName.$fileExtension"),
     });
     return await dio!
-        .post(url, data: formData)
+        .post(
+          url,
+          data: formData,
+          options: Options(
+            headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+          ),
+        )
         .catchError((onError) => throw onError);
   }
 
-  static Future<Response> uploadUserImage(
+  Future<Response> uploadUserImage(
       FilePickerResult file, String fileName, String fileExtension) async {
     String url = 'Images/UploadImage';
 
@@ -229,7 +312,13 @@ class GeneralDio {
           filename: "$fileName.$fileExtension"),
     });
     return await dio!
-        .post(url, data: formData)
+        .post(
+          url,
+          data: formData,
+          options: Options(
+            headers: {'Authorization': 'Bearer ${userData.user?.token}'},
+          ),
+        )
         .catchError((onError) => throw onError);
   }
 }

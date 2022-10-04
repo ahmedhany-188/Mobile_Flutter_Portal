@@ -34,8 +34,8 @@ class _GetDirectionScreenState extends State<GetDirectionScreen> {
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),
-        body: BlocProvider(
-          create: (context) => GetDirectionCubit()..getDirection(),
+        body: BlocProvider<GetDirectionCubit>.value(
+          value: GetDirectionCubit.get(context),
           child: BlocConsumer<GetDirectionCubit, GetDirectionInitial>(
             listener: (context, state) {
               if (state.status == GetDirectionStatus.success) {

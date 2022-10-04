@@ -12,7 +12,7 @@ part 'news_state.dart';
 class NewsCubit extends Cubit<NewsState> {
   final Connectivity connectivity = Connectivity();
 
-  NewsCubit() : super(NewsInitial()) {
+  NewsCubit(this._generalDio) : super(NewsInitial()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
@@ -29,6 +29,8 @@ class NewsCubit extends Cubit<NewsState> {
   }
 
   static NewsCubit get(context) => BlocProvider.of<NewsCubit>(context);
+
+  GeneralDio _generalDio;
 
   List<NewsDataModel> newsList = [];
   List<NewsData> latestNewsList = [];
@@ -71,7 +73,7 @@ class NewsCubit extends Cubit<NewsState> {
 
   void getNewsOld() {
     emit(NewsLoadingState());
-    GeneralDio.newsDataOld().then((value) {
+    _generalDio.newsDataOld().then((value) {
       if (value.data != null) {
         List<NewsDataModel> newsDataList = List<NewsDataModel>.from(
             value.data.map((model) => NewsDataModel.fromJson(model)));
@@ -79,7 +81,7 @@ class NewsCubit extends Cubit<NewsState> {
         emit(NewsSuccessState(newsDataList, announcment));
       }
     });
-    GeneralDio.newsDataOld(type: 1).then((value) {
+    _generalDio.newsDataOld(type: 1).then((value) {
       List<NewsDataModel> newsDataListAnnouncment = List<NewsDataModel>.from(
           value.data.map((model) => NewsDataModel.fromJson(model)));
       for (int i = 0; i < newsDataListAnnouncment.length; i++) {
@@ -105,7 +107,7 @@ class NewsCubit extends Cubit<NewsState> {
   void getLatestNews() {
     emit(NewsLoadingState());
 
-    GeneralDio.latestNewsData().then((value) {
+    _generalDio.latestNewsData().then((value) {
       ResponseNews newsResponse = ResponseNews.fromJson(value.data);
       if (newsResponse.data != null) {
         latestNewsList = newsResponse.data!;

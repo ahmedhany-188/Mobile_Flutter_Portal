@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../constants/enums.dart';
 import '../../../widgets/success/success_request_widget.dart';
+import '../../data/data_providers/general_dio/general_dio.dart';
 import '../../widgets/requester_data_widget/requester_data_widget.dart';
 
 class AccessRightScreen extends StatefulWidget {
@@ -49,11 +50,13 @@ class _AccessRightScreen extends State<AccessRightScreen> {
               BlocProvider<AccessRightCubit>(
                   create: (accessRightContext) =>
                       currentRequestData[AccessRightScreen.requestNoKey] == "0"
-                          ? (AccessRightCubit(RequestRepository(user))
+                          ? (AccessRightCubit(RequestRepository(user),GeneralDio(
+                          BlocProvider.of<AppBloc>(accessRightContext).state.userData))
                             ..getRequestData(
                                 requestStatus: RequestStatus.newRequest,
                                 requestNo: ""))
-                          : (AccessRightCubit(RequestRepository(user))
+                          : (AccessRightCubit(RequestRepository(user),GeneralDio(
+                          BlocProvider.of<AppBloc>(accessRightContext).state.userData))
                             ..getRequestData(
                                 requestStatus: RequestStatus.oldRequest,
                                 requestNo: currentRequestData[

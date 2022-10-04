@@ -9,7 +9,7 @@ import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 part 'contacts_states.dart';
 
 class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin {
-  ContactsCubit() : super(const ContactCubitStates()) {
+  ContactsCubit(this._generalDio) : super(const ContactCubitStates()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
       if (state.contactStates == ContactsEnumStates.failed) {
         if (connectivityResult == ConnectivityResult.wifi ||
@@ -30,6 +30,7 @@ class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin {
     });
   }
   final Connectivity connectivity = Connectivity();
+  GeneralDio _generalDio;
 
   static ContactsCubit get(context) => BlocProvider.of(context);
 
@@ -39,7 +40,7 @@ class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin {
     // emit(state.copyWith(
     //   contactStates: ContactsEnumStates.initial,
     // ));
-    GeneralDio.getContactListData().then((value) {
+    _generalDio.getContactListData().then((value) {
       if (value.data != null) {
         List<ContactsDataFromApi> contacts = List<ContactsDataFromApi>.from(
             value.data.map((model) => ContactsDataFromApi.fromJson(model)));

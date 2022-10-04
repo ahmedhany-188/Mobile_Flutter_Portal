@@ -331,7 +331,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     emit(state.copyWith(
       businessUnitEnumStates: EquipmentsEnumState.initial,
     ));
-    GeneralDio.businessUnit().then((value) {
+    GeneralDio(_requestRepository.userData!).businessUnit().then((value) {
       List<BusinessUnitModel> businessUnit;
       businessUnit = List<BusinessUnitModel>.from(
           value.data.map((model) => BusinessUnitModel.fromJson(model)));
@@ -348,7 +348,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     emit(state.copyWith(
       locationEnumStates: EquipmentsEnumState.initial,
     ));
-    GeneralDio.equipmentsLocation().then((value) {
+    GeneralDio(_requestRepository.userData!).equipmentsLocation().then((value) {
       List<EquipmentsLocationModel> location;
       location = List<EquipmentsLocationModel>.from(
           value.data.map((model) => EquipmentsLocationModel.fromJson(model)));
@@ -364,7 +364,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     emit(state.copyWith(
       departmentEnumStates: EquipmentsEnumState.initial,
     ));
-    GeneralDio.equipmentsDepartment().then((value) {
+    GeneralDio(_requestRepository.userData!).equipmentsDepartment().then((value) {
       List<DepartmentsModel> departments;
       departments = List<DepartmentsModel>.from(
           value.data.map((model) => DepartmentsModel.fromJson(model)));
@@ -378,7 +378,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   }
 
   void getHistory({required String serviceId, required int requestNumber}) {
-    GeneralDio.getHistoryWorkFlow(serviceId: serviceId, reqNo: requestNumber)
+    GeneralDio(_requestRepository.userData!).getHistoryWorkFlow(serviceId: serviceId, reqNo: requestNumber)
         .then((value) {
       List<HistoryWorkFlowModel> history;
       history = List<HistoryWorkFlowModel>.from(

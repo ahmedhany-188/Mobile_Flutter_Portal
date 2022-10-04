@@ -14,6 +14,7 @@ import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/enums.dart';
 import '../../constants/request_service_id.dart';
+import '../../data/data_providers/general_dio/general_dio.dart';
 import '../../widgets/background/custom_background.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../constants/url_links.dart';
@@ -1727,7 +1728,8 @@ class EquipmentsRequestScreen extends StatelessWidget {
                 children: [
                   BlocProvider(
                     create: (context) =>
-                        EquipmentsItemsCubit()..getEquipmentsItems(id: id),
+                        EquipmentsItemsCubit(GeneralDio(
+                            BlocProvider.of<AppBloc>(context).state.userData))..getEquipmentsItems(id: id),
                     child: BlocBuilder<EquipmentsItemsCubit,
                         EquipmentsItemsInitial>(
                       builder: (context, state) {
