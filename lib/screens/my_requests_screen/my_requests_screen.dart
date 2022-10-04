@@ -201,77 +201,91 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                                           //     },
                                           //   ),
                                           // ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              const Text('Vacations'),
-                                              Text(
-                                                  '${state.statisticsList[0].balance} days'),
-                                            ],
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                const Text('Vacations'),
+                                                Text(
+                                                    '${state.statisticsList[0].balance} days'),
+                                              ],
+                                            ),
                                           ),
                                           SfSlider(
+
                                             value: double.parse(state
                                                     .statisticsList[0]
-                                                    .consumed!) /
+                                                    .consumed ?? "0") /
                                                 double.parse(state
                                                     .statisticsList[0]
-                                                    .balance!),
+                                                    .balance?? "1"),
+                                            onChanged: (_) {},
+
+                                            thumbIcon: Center(
+                                              child: Text(
+                                                  '${state.statisticsList[0].consumed}',style: TextStyle(fontSize: 12)),
+                                            ),
+                                            activeColor: Colors.blue[200],
+                                            inactiveColor: Colors.white70,
+
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                const Text(
+                                                  'Permissions',
+                                                ),
+                                                Text(
+                                                    '${state.statisticsList[2].balance} hours'),
+                                              ],
+                                            ),
+                                          ),
+                                          SfSlider(
+
+                                            value: double.parse(state
+                                                    .statisticsList[2]
+                                                    .consumed ?? "0") /
+                                                double.parse(state
+                                                    .statisticsList[2]
+                                                    .balance?? "1"),
                                             onChanged: (_) {},
                                             thumbIcon: Center(
                                               child: Text(
-                                                  '${state.statisticsList[0].consumed}'),
+                                                  '${state.statisticsList[2].consumed}',style: TextStyle(fontSize: 12)),
                                             ),
-                                            activeColor: Colors.red,
+                                            activeColor: Colors.blue[200],
                                             inactiveColor: Colors.white70,
+
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              const Text(
-                                                'Permissions',
-                                              ),
-                                              Text(
-                                                  '${state.statisticsList[2].balance} hours'),
-                                            ],
-                                          ),
-                                          SfSlider(
-                                            value: double.parse(state
-                                                    .statisticsList[2]
-                                                    .consumed!) /
-                                                double.parse(state
-                                                    .statisticsList[2]
-                                                    .balance!),
-                                            onChanged: (_) {},
-                                            thumbIcon: Center(
-                                              child: Text(
-                                                  '${state.statisticsList[2].consumed}'),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceBetween,
+                                              children: const [
+                                                Text(
+                                                  'Business Mission',
+                                                ),
+                                                Text('No Limit'),
+                                              ],
                                             ),
-                                            activeColor: Colors.yellow,
-                                            inactiveColor: Colors.white70,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: const [
-                                              Text(
-                                                'Business Mission',
-                                              ),
-                                              Text('No Limit'),
-                                            ],
                                           ),
                                           SfSlider(
                                             value: double.parse(state
                                                     .statisticsList[1]
-                                                    .consumed!) /
+                                                    .consumed?? "0") /
                                                 31,
                                             onChanged: (_) {},
                                             thumbIcon: Center(
                                               child: Text(
-                                                  '${state.statisticsList[1].consumed}'),
+                                                  '${state.statisticsList[1].consumed}',style: TextStyle(fontSize: 12)),
                                             ),
-                                            activeColor: Colors.green,
+                                            activeColor: Colors.blue[200],
                                             inactiveColor: Colors.white70,
                                           ),
                                         ],
