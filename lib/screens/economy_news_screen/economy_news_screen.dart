@@ -71,12 +71,9 @@ class _economynews_screenState extends State<EconomyNewsScreen> {
               }
             },
             builder: (context, state) {
-              return Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: SizedBox(
-                    height: deviceSize.height,
-                    child: EconomyNewsTicketWidget(EconomyNewsListData),
-                  )
+              return SizedBox(
+                height: deviceSize.height,
+                child: EconomyNewsTicketWidget(EconomyNewsListData),
               );
             },
           ),
