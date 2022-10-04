@@ -49,11 +49,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                       attendanceListData[index].holiday == false) {
                     showModalBottomSheet<void>(
                         context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
-                        ),
+                        isScrollControlled: true,
                         builder: (BuildContext context) {
                           return ShowAttendanceBottomSheet(
                               attendanceListData: attendanceListData[index],

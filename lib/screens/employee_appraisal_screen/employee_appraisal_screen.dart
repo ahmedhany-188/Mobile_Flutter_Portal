@@ -261,7 +261,8 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
             center: Text(value.toString()+" %"),
             // linearStrokeCap: LinearStrokeCap.roundAll,
             barRadius: const Radius.circular(10),
-            progressColor: ConstantsColors.backgroundStartColor,
+            progressColor: ConstantsColors.appraisalColor2,
+            backgroundColor: ConstantsColors.appraisalColor1,
           ),
         ),
         Padding(

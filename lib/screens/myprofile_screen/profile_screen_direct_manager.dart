@@ -104,7 +104,7 @@ class DirectManagerProfileScreenClass
                   vCard.email = state.managerData.email??"";
                   vCard.url = "https://hassanallam.com";
                   vCard.workPhone = state.managerData.deskPhone;
-                  vCard.cellPhone = state.managerData.mobile??"";
+                  vCard.cellPhone = getMobile(state)??"";
 
                   // imageProfile = state.managerData.imgProfile ?? "";
                 }
@@ -341,7 +341,7 @@ class DirectManagerProfileScreenClass
       vCard.email = state.managerData.email??"";
       vCard.url = "https://hassanallam.com";
       vCard.workPhone = state.managerData.deskPhone;
-      vCard.cellPhone = state.managerData.mobile??"";
+      vCard.cellPhone = getMobile(state)??"";
     }
 
     return Container();
@@ -359,12 +359,22 @@ class DirectManagerProfileScreenClass
     }
   }
 
+  String getLineManager(EmployeeData ?employeeData) {
+    if (employeeData?.isTopManagement != true) {
+      return employeeData?.mobile ?? "";
+    } else if (employeeData?.mobile == null) {
+      return "";
+    } else {
+      return employeeData?.mobile ?? "";
+    }
+  }
+
   String getMobile(ProfileManagerState state) {
     if (state is BlocGetManagerDataSuccessState) {
-      if (state.managerData.mobile == null) {
-        return "";
-      } else {
+      if (state.managerData.isTopManagement != true) {
         return state.managerData.mobile??"";
+      }else {
+        return "";
       }
     } else {
       return "";
@@ -438,6 +448,8 @@ class DirectManagerProfileScreenClass
         ),
         textAlign: TextAlign.left);
   }
+
+
 
   Padding getLine(String line) {
     return Padding(
