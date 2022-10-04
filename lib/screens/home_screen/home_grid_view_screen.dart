@@ -192,7 +192,7 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                               .width / 1.2,
                           padding: const EdgeInsets.all(10),
                           margin: const EdgeInsets.only(top: 25),
-                          height: 100,
+                          // height: 100,
                           child: ListView(
                             physics: const NeverScrollableScrollPhysics(),
                             reverse: false,
