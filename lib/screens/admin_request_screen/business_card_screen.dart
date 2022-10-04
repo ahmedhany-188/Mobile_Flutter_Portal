@@ -14,6 +14,7 @@ import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_r
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import '../../../widgets/success/success_request_widget.dart';
 import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
+import '../../widgets/requester_data_widget/requested_status.dart';
 import '../../widgets/requester_data_widget/requester_data_widget.dart';
 
 class BusinessCardScreen extends StatefulWidget {
@@ -77,6 +78,17 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                             ? "#${currentRequestData[BusinessMissionScreen
                             .requestNoKey]}"
                             : "Request"}"),
+                        actions: [
+                          if (BusinessCardCubit.get(context).state.requestStatus ==
+                              RequestStatus.oldRequest)
+                            BlocBuilder<BusinessCardCubit, BusinessCardInitial>(
+                              builder: (context, state) {
+                                return SizedBox(
+                                    width: 60,
+                                    child: myRequestStatusString(state.statusAction));
+                              },
+                            ),
+                        ],
                         centerTitle: true,
                       ),
 
@@ -188,22 +200,22 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
 
                                 children: [
 
-                                  if(state.requestStatus ==
-                                      RequestStatus.oldRequest)Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 8),
-
-                                    child: BlocBuilder<
-                                        BusinessCardCubit,
-                                        BusinessCardInitial>(
-
-                                        builder: (context, state) {
-                                          return Text(
-                                            state.statusAction ?? "Pending",
-                                          );
-                                        }
-                                    ),
-                                  ),
+                                  // if(state.requestStatus ==
+                                  //     RequestStatus.oldRequest)Padding(
+                                  //   padding: const EdgeInsets.symmetric(
+                                  //       horizontal: 8, vertical: 8),
+                                  //
+                                  //   child: BlocBuilder<
+                                  //       BusinessCardCubit,
+                                  //       BusinessCardInitial>(
+                                  //
+                                  //       builder: (context, state) {
+                                  //         return Text(
+                                  //           state.statusAction ?? "Pending",
+                                  //         );
+                                  //       }
+                                  //   ),
+                                  // ),
 
 
                                   if(state.requestStatus ==

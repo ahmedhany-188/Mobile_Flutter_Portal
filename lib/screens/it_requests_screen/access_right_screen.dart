@@ -16,6 +16,7 @@ import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../constants/enums.dart';
 import '../../../widgets/success/success_request_widget.dart';
 import '../../data/data_providers/general_dio/general_dio.dart';
+import '../../widgets/requester_data_widget/requested_status.dart';
 import '../../widgets/requester_data_widget/requester_data_widget.dart';
 
 class AccessRightScreen extends StatefulWidget {
@@ -76,6 +77,17 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                       elevation: 0,
                       title: Text("Access Right "
                           "${state.requestStatus == RequestStatus.oldRequest ? "#${currentRequestData[AccessRightScreen.requestNoKey]}" : "Request"}"),
+                      actions: [
+                        if (AccessRightCubit.get(context).state.requestStatus ==
+                            RequestStatus.oldRequest)
+                          BlocBuilder<AccessRightCubit, AccessRightInitial>(
+                            builder: (context, state) {
+                              return SizedBox(
+                                  width: 60,
+                                  child: myRequestStatusString(state.statusAction));
+                            },
+                          ),
+                      ],
                       centerTitle: true,
                     ),
                     // resizeToAvoidBottomInset: false,
@@ -184,32 +196,32 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                         }
                       },
                       child: Padding(
-                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 50),
                         child: Form(
                           child: SingleChildScrollView(
                             child: Column(
                               children: [
-                                if (state.requestStatus ==
-                                    RequestStatus.oldRequest)
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 8, vertical: 8),
-                                    child: BlocBuilder<AccessRightCubit,
-                                            AccessRightInitial>(
-                                        builder: (context, state) {
-                                      return Text(
-                                        state.statusAction ?? "Pending",
-                                        // style: TextStyle(decoration: BoxDecoration(
-                                        //   // labelText: 'Request Date',
-                                        //   errorText: state.requestDate.invalid
-                                        //       ? 'invalid request date'
-                                        //       : null,
-                                        //   prefixIcon: const Icon(
-                                        //       Icons.date_range),
-                                        // ),),
-                                      );
-                                    }),
-                                  ),
+                                // if (state.requestStatus ==
+                                //     RequestStatus.oldRequest)
+                                //   Padding(
+                                //     padding: const EdgeInsets.symmetric(
+                                //         horizontal: 8, vertical: 8),
+                                //     child: BlocBuilder<AccessRightCubit,
+                                //             AccessRightInitial>(
+                                //         builder: (context, state) {
+                                //       return Text(
+                                //         state.statusAction ?? "Pending",
+                                //         // style: TextStyle(decoration: BoxDecoration(
+                                //         //   // labelText: 'Request Date',
+                                //         //   errorText: state.requestDate.invalid
+                                //         //       ? 'invalid request date'
+                                //         //       : null,
+                                //         //   prefixIcon: const Icon(
+                                //         //       Icons.date_range),
+                                //         // ),),
+                                //       );
+                                //     }),
+                                //   ),
                                 if (state.requestStatus ==
                                         RequestStatus.oldRequest &&
                                     state.takeActionStatus ==

@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,6 +13,7 @@ import 'package:hassanallamportalflutter/data/repositories/request_repository.da
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import '../../../widgets/success/success_request_widget.dart';
 import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
+import '../../widgets/requester_data_widget/requested_status.dart';
 import '../../widgets/requester_data_widget/requester_data_widget.dart';
 
 class EmailAndUserAccountScreen  extends StatefulWidget{
@@ -70,6 +72,17 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                           ? "#${currentRequestData[EmailAndUserAccountScreen
                           .requestNoKey]}"
                           : "Request"}"),
+                      actions: [
+                        if (EmailUserAccountCubit.get(context).state.requestStatus ==
+                            RequestStatus.oldRequest)
+                          BlocBuilder<EmailUserAccountCubit, EmailUserAccountInitial>(
+                            builder: (context, state) {
+                              return SizedBox(
+                                  width: 60,
+                                  child: myRequestStatusString(state.statusAction));
+                            },
+                          ),
+                      ],
                       centerTitle: true,
                       backgroundColor: Colors.transparent,
                       elevation: 0,
@@ -173,10 +186,14 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                         }
                         if(state.mobileKey){
                           mobileKeyClear=true;
-                          print("here33");
+                          if (kDebugMode) {
+                            print("here33");
+                          }
                         }else{
                           mobileKeyClear=false;
-                          print("here44");
+                          if (kDebugMode) {
+                            print("here44");
+                          }
                         }
                         if (state.status.isSubmissionFailure) {
                           EasyLoading.showError(state.errorMessage.toString(),);
@@ -193,22 +210,22 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                             child: Column(
 
                               children: [
-                                if(state.requestStatus ==
-                                    RequestStatus.oldRequest)Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 8),
-
-                                  child: BlocBuilder<
-                                      EmailUserAccountCubit,
-                                      EmailUserAccountInitial>(
-
-                                      builder: (context, state) {
-                                        return Text(
-                                          state.statusAction ?? "Pending",
-                                        );
-                                      }
-                                  ),
-                                ),
+                                // if(state.requestStatus ==
+                                //     RequestStatus.oldRequest)Padding(
+                                //   padding: const EdgeInsets.symmetric(
+                                //       horizontal: 8, vertical: 8),
+                                //
+                                //   child: BlocBuilder<
+                                //       EmailUserAccountCubit,
+                                //       EmailUserAccountInitial>(
+                                //
+                                //       builder: (context, state) {
+                                //         return Text(
+                                //           state.statusAction ?? "Pending",
+                                //         );
+                                //       }
+                                //   ),
+                                // ),
 
                                 if(state.requestStatus ==
                                     RequestStatus.oldRequest &&

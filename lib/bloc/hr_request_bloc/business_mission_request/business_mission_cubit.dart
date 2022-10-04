@@ -25,7 +25,7 @@ part 'business_mission_state.dart';
 class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
   BusinessMissionCubit(this._requestRepository) : super(const BusinessMissionInitial());
   final RequestRepository _requestRepository;
-
+  static BusinessMissionCubit get(context) => BlocProvider.of(context);
 
   void getRequestData({required RequestStatus requestStatus, String? requestNo,String? date,String? requesterHRCode,context}) async{
     if (requestStatus == RequestStatus.newRequest){

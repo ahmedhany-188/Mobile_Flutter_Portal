@@ -14,6 +14,7 @@ import 'package:hassanallamportalflutter/widgets/background/custom_background.da
 import '../../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../../constants/enums.dart';
 import '../../../data/repositories/request_repository.dart';
+import '../../../widgets/requester_data_widget/requested_status.dart';
 import '../../../widgets/requester_data_widget/requester_data_widget.dart';
 import '../../../widgets/success/success_request_widget.dart';
 import 'package:authentication_repository/authentication_repository.dart';
@@ -84,11 +85,23 @@ class _VacationScreenState extends State<VacationScreen> {
                   return Scaffold(
                     backgroundColor: Colors.transparent,
                     appBar: AppBar(title: Text(
-                        "Vacation Request ${state.requestStatus ==
+                        "Vacation ${state.requestStatus ==
                             RequestStatus.oldRequest
                             ? "#${currentRequestData[VacationScreen
                             .requestNoKey]}"
                             : ""}"),
+                      actions: [
+                        if (VacationCubit.get(context).state.requestStatus ==
+                            RequestStatus.oldRequest)
+                          BlocBuilder<VacationCubit, VacationInitial>(
+                            builder: (context, state) {
+                              return SizedBox(
+                                  width: 60,
+                                  child:
+                                  myRequestStatusString(state.statusAction));
+                            },
+                          ),
+                      ],
                       backgroundColor: Colors.transparent,
                       elevation: 0,
                     ),
@@ -205,31 +218,30 @@ class _VacationScreenState extends State<VacationScreen> {
                           child: SingleChildScrollView(
                             child: Column(
                               children: <Widget>[
-                                if(state.requestStatus ==
-                                    RequestStatus.oldRequest)Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 8, vertical: 8),
-                                  child: BlocBuilder<
-                                      VacationCubit,
-                                      VacationInitial>(
-
-                                      builder: (context, state) {
-                                        return Text(
-                                          state.statusAction ?? "Pending",
-                                          // style: TextStyle(decoration: BoxDecoration(
-                                          //   // labelText: 'Request Date',
-                                          //   errorText: state.requestDate.invalid
-                                          //       ? 'invalid request date'
-                                          //       : null,
-                                          //   prefixIcon: const Icon(
-                                          //       Icons.date_range),
-                                          // ),),
-
-                                        );
-                                      }
-                                  ),
-                                ),
-
+                                // if(state.requestStatus ==
+                                //     RequestStatus.oldRequest)Padding(
+                                //   padding: const EdgeInsets.symmetric(
+                                //       horizontal: 8, vertical: 8),
+                                //   child: BlocBuilder<
+                                //       VacationCubit,
+                                //       VacationInitial>(
+                                //
+                                //       builder: (context, state) {
+                                //         return Text(
+                                //           state.statusAction ?? "Pending",
+                                //           // style: TextStyle(decoration: BoxDecoration(
+                                //           //   // labelText: 'Request Date',
+                                //           //   errorText: state.requestDate.invalid
+                                //           //       ? 'invalid request date'
+                                //           //       : null,
+                                //           //   prefixIcon: const Icon(
+                                //           //       Icons.date_range),
+                                //           // ),),
+                                //
+                                //         );
+                                //       }
+                                //   ),
+                                // ),
                                 if(state.requestStatus ==
                                     RequestStatus.oldRequest &&
                                     state.takeActionStatus ==
