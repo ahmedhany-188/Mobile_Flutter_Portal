@@ -9,6 +9,7 @@ import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart
 import 'package:hassanallamportalflutter/bloc/medical_request_screen_bloc/medical_request_cubit.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
+import 'package:hassanallamportalflutter/data/repositories/medical_request_repository.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -38,7 +39,7 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
     return CustomBackground(
       child: CustomTheme(
         child: BlocProvider<MedicalRequestCubit>(
-          create: (medicalRequestContext) => MedicalRequestCubit(),
+          create: (medicalRequestContext) => MedicalRequestCubit(MedicalRepository(user)),
           child: Builder(builder: (context) {
             return WillPopScope(
               onWillPop: () async {

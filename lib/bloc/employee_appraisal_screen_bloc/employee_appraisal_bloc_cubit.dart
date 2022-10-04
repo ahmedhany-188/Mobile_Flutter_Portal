@@ -1,6 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/data/data_providers/employee_appraisal_data_provider/employee_appraisal_data_provider.dart';
 import 'package:hassanallamportalflutter/data/models/appraisal_models/employee_appraisal_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/employee_appraisal_repository.dart';
 import 'package:meta/meta.dart';
@@ -8,8 +7,9 @@ import 'package:meta/meta.dart';
 part 'employee_appraisal_bloc_state.dart';
 
 class EmployeeAppraisalBlocCubit extends Cubit<EmployeeAppraisalBlocState> {
-  EmployeeAppraisalBlocCubit() : super(EmployeeAppraisalBlocInitial());
+  EmployeeAppraisalBlocCubit(this.employeeAppraisalRepository) : super(EmployeeAppraisalBlocInitial());
 
+  final EmployeeAppraisalRepository employeeAppraisalRepository;
 
   static EmployeeAppraisalBlocCubit get(context) => BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();
@@ -21,7 +21,7 @@ class EmployeeAppraisalBlocCubit extends Cubit<EmployeeAppraisalBlocState> {
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
         // EmployeeAppraisaleDataProvider().getEmployeeApraisalList(hrCode).then((value) {
-        EmployeeAppraisalRepository().getAppraisalData(hrCode).then((value) {
+        employeeAppraisalRepository.getAppraisalData(hrCode).then((value) {
           emit(BlocGetEmployeeAppraisalBlocInitialSuccessState(value));
         }).catchError((error) {
           emit(BlocGetEmployeeAppraisalBlocInitialErrorState(error.toString()));

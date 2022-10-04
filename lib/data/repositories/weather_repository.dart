@@ -7,7 +7,9 @@ class WeatherRepository {
 
   final WeatherDataProvider weatherDataProvider = WeatherDataProvider();
 
+
   Future<WeatherData> getWeather() async {
+
     final http.Response rawWeather =
     await weatherDataProvider.getRawWeatherData();
     final json = await jsonDecode(rawWeather.body);

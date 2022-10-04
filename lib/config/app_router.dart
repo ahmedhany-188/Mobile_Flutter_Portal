@@ -131,7 +131,7 @@ class AppRouter {
 
       case MedicalRequestScreen.routeName:
         return MaterialPageRoute(
-          builder: (_) => const MedicalRequestScreen(),
+          builder: (_) =>  const MedicalRequestScreen(),
         );
 
       case UserProfileScreen.routeName:

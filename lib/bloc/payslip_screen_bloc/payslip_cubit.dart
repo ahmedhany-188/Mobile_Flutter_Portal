@@ -16,9 +16,11 @@ part 'payslip_state.dart';
 
 class PayslipCubit extends Cubit<PayslipState> {
 
-  final _payslipRepository = PayslipRepository();
   final Connectivity connectivity = Connectivity();
-  PayslipCubit() : super(PayslipInitialState());
+  PayslipCubit(this._payslipRepository) : super(PayslipInitialState());
+
+
+  final PayslipRepository _payslipRepository;
 
   void getPdfLink(User user,String password) async {
     // EasyLoading.init();

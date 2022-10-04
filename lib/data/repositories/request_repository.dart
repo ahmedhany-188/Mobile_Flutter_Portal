@@ -108,8 +108,13 @@ class RequestRepository {
       "printing":accessRightModel.printing,
     });
 
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
+
     final http.Response rawAccess =
-        await requestDataProviders.postAccessAccountAccessRequest(bodyString);
+        await requestDataProviders.postAccessAccountAccessRequest(header,bodyString);
     final json = await jsonDecode(rawAccess.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     if (response.id == 1) {
@@ -122,8 +127,13 @@ class RequestRepository {
 
   Future<DurationResponse> getDurationVacation(
       int type, String dateFrom, String dateTo) async {
+
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawPermission =
-        await requestDataProviders.getDurationVacation(type, dateFrom, dateTo);
+        await requestDataProviders.getDurationVacation(header,type, dateFrom, dateTo);
     final json = await jsonDecode(rawPermission.body);
     final DurationResponse response = DurationResponse.fromJson(json);
     return response;
@@ -131,9 +141,13 @@ class RequestRepository {
 
   Future<BusinessCardFormModel> getBusinessCard(
       String requestNo, String requesterHRCode) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawPermission =
         await requestDataProviders.getBusinessCardRequestData(
-            requesterHRCode.isNotEmpty
+            header,requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -146,9 +160,13 @@ class RequestRepository {
 
   Future<AccessRightModel> getAccessRight(
       String requestNo, String requesterHRCode) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawPermission =
         await requestDataProviders.getAccessRightRequestData(
-            requesterHRCode.isNotEmpty
+            header,requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -160,9 +178,13 @@ class RequestRepository {
 
   Future<EmailUserFormModel> getEmailAccount(
       String requestNo, String requesterHRCode) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawPermission =
         await requestDataProviders.getEmailAccountRequestData(
-            requesterHRCode.isNotEmpty
+            header,requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -173,8 +195,12 @@ class RequestRepository {
   }
 
   Future<dynamic> getEmailData(String hrCode) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawPermission =
-        await requestDataProviders.getEmailAccountData(hrCode);
+        await requestDataProviders.getEmailAccountData(header,hrCode);
     final json = await jsonDecode(rawPermission.body);
     final EmployeeData response;
     try {
@@ -190,8 +216,12 @@ class RequestRepository {
       "hrCode": hrCode,
       "mobile": mobile,
     });
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawPermission =
-        await requestDataProviders.getNewMobileNumberData(bodyString);
+        await requestDataProviders.getNewMobileNumberData(header,bodyString);
     final json = await jsonDecode(rawPermission.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
@@ -199,9 +229,13 @@ class RequestRepository {
 
   Future<EmbassyLetterFormModel> getEmbassyLetter(
       String requestNo, String requesterHRCode) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawPermission =
         await requestDataProviders.getEmbassyLetterRequestData(
-            requesterHRCode.isNotEmpty
+            header,requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -224,9 +258,12 @@ class RequestRepository {
       "extNo": businessCardFormModel.employeeExt,
       "mobileNo": businessCardFormModel.employeeMobil
     });
-
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawBusinessCard =
-        await requestDataProviders.postBusinessCardRequest(bodyString);
+        await requestDataProviders.postBusinessCardRequest(header,bodyString);
     final json = await jsonDecode(rawBusinessCard.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     if (response.id == 1) {
@@ -238,8 +275,12 @@ class RequestRepository {
   }
 
   Future<List<MyRequestsModelData>> getMyRequestsData() async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     http.Response rawMyRequests = await requestDataProviders
-        .getMyRequestsData(userData?.user?.userHRCode ?? "");
+        .getMyRequestsData(header,userData?.user?.userHRCode ?? "");
     final json = await jsonDecode(rawMyRequests.body);
 
     List<MyRequestsModelData> myRequestsData = List<MyRequestsModelData>.from(
@@ -248,8 +289,12 @@ class RequestRepository {
   }
 
   Future<List<UserNotificationApi>> getMyNotificationData() async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     http.Response rawMyRequests = await requestDataProviders
-        .getMyNotificationData(userData?.user?.userHRCode ?? "");
+        .getMyNotificationData(header,userData?.user?.userHRCode ?? "");
     final json = await jsonDecode(rawMyRequests.body);
 
     if (kDebugMode) {
@@ -279,9 +324,12 @@ class RequestRepository {
       "AnswerEmail": "string",
       "EmailAccount": emailUserFormModel.accountType,
     });
-
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawEmailUserAccount =
-        await requestDataProviders.postEmailUserAccount(bodyString);
+        await requestDataProviders.postEmailUserAccount(header,bodyString);
     final json = await jsonDecode(rawEmailUserAccount.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     if (response.id == 1) {
@@ -313,9 +361,13 @@ class RequestRepository {
       "passportNo": embassyLetterFormModel.passportNo.toString(),
       "addSalary": embassyLetterFormModel.addSalary.toString(),
     });
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
 
     final http.Response rawEmbassyLetter =
-        await requestDataProviders.postEmbassyLetterRequest(bodyString);
+        await requestDataProviders.postEmbassyLetterRequest(header,bodyString);
     final json = await jsonDecode(rawEmbassyLetter.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     if (response.id == 1) {
@@ -349,8 +401,12 @@ class RequestRepository {
       // data.put("replacedWith",selectedReplaceFrom);
       // data.put("replacedWithTo",selectedReplaceTo);
     });
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawPermission =
-    await requestDataProviders.postVacationRequest(bodyString);
+    await requestDataProviders.postVacationRequest(header,bodyString);
     final json = await jsonDecode(rawPermission.body);
 
     final RequestResponse response = RequestResponse.fromJson(json);
@@ -387,8 +443,12 @@ class RequestRepository {
       "missionLocation": type,
       "projectId": locationData.projectId == 0 ? null : locationData.projectId.toString()
     });
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawRequest =
-        await requestDataProviders.postBusinessMissionRequest(bodyString);
+        await requestDataProviders.postBusinessMissionRequest(header,bodyString);
     final json = await jsonDecode(rawRequest.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     if (response.id == 1) {
@@ -425,6 +485,7 @@ class RequestRepository {
       "closedDate": DateTime.now().toString(),
       "reRequestCode": 0
     };
+
 
     var value = await GeneralDio.postMasterEquipmentsRequest(masterDataPost);
     if(value.toString().isNotEmpty) {
@@ -506,9 +567,13 @@ class RequestRepository {
 
   Future<VacationRequestData> getVacationRequestData(
       String requestNo, String requesterHRCode) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawRequestData =
         await requestDataProviders.getVacationRequestData(
-            requesterHRCode.isNotEmpty
+            header,requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -520,8 +585,12 @@ class RequestRepository {
 
   Future<EquipmentsRequestedModel> getEquipmentData(
       String requestNo, String requesterHRCode) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawRequestData = await requestDataProviders
-        .getEquipmentRequestData(requesterHRCode, requestNo);
+        .getEquipmentRequestData(header,requesterHRCode, requestNo);
 
     final json = await jsonDecode(rawRequestData.body);
     final EquipmentsRequestedModel response =
@@ -532,9 +601,13 @@ class RequestRepository {
 
   Future<BusinessMissionRequestData> getBusinessMissionRequestData(
       String requestNo, String requesterHRCode) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawRequestData =
         await requestDataProviders.getBusinessMissionRequestData(
-            requesterHRCode.isNotEmpty
+            header,requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -547,9 +620,13 @@ class RequestRepository {
 
   Future<PermissionRequestData> getPermissionRequestData(
       String requestNo, String requesterHRCode) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawRequestData =
         await requestDataProviders.getPermissionRequestData(
-            requesterHRCode.isNotEmpty
+            header,requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -575,8 +652,12 @@ class RequestRepository {
       "mangerHrCode": userData?.user?.userHRCode ?? "0",
       "comment": actionComment
     });
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawResponse =
-    await requestDataProviders.postTakeActionOnRequest(bodyString);
+    await requestDataProviders.postTakeActionOnRequest(header,bodyString);
     final json = await jsonDecode(rawResponse.body);
     final ResponseTakeAction response = ResponseTakeAction.fromJson(json);
     final result = response.result ?? "false";
@@ -620,6 +701,7 @@ class RequestRepository {
       "comment": actionComment,
       "nextStep": nextObject ?? [],
     });
+
     final http.Response rawResponse =
         await requestDataProviders.postTakeEquipmentActionOnRequest(bodyString);
     final json = await jsonDecode(rawResponse.body);

@@ -3,10 +3,13 @@ import 'package:http/http.dart' as http;
 
 
 class EconomyNewRepository {
+
+
   final EconomyNewsDataProvider economyNewsDataProvider = EconomyNewsDataProvider();
 
 
   Future<http.Response> getEconomyNewData() async {
+
     final http.Response rawWeather = await economyNewsDataProvider.getEconomyNews();
     // final attendanceData = rawWeather.body.toString();
     // final WeatherData weather = WeatherData.fromJson(json);

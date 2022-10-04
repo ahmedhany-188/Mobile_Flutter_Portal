@@ -13,6 +13,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import '../../constants/url_links.dart';
 
+
 class EmployeeAppraisalScreen extends StatefulWidget {
   static const routeName = "/employee-appraisal-list";
   const EmployeeAppraisalScreen({Key? key}) : super(key: key);
@@ -49,7 +50,7 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
 
           body: BlocProvider<EmployeeAppraisalBlocCubit>(
             create: (context) =>
-            EmployeeAppraisalBlocCubit()
+            EmployeeAppraisalBlocCubit.get(context)
               ..getEmployeeAppraisalList(user.user?.userHRCode??""),
             child: BlocConsumer<EmployeeAppraisalBlocCubit,
                 EmployeeAppraisalBlocState>(

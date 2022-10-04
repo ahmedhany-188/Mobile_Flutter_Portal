@@ -7,18 +7,17 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
-import 'package:hassanallamportalflutter/data/data_providers/medical_request_data_provider/medical_request_data_provider.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_medical_benefit.dart';
 import 'package:hassanallamportalflutter/data/repositories/medical_request_repository.dart';
-import 'package:intl/intl.dart';
 
 import '../../widgets/dialogpopoup/custom_date_picker.dart';
 part 'medical_request_state.dart';
 
 class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
-  MedicalRequestCubit() : super(const MedicalRequestInitial());
+  MedicalRequestCubit(this.medicalRepository) : super(const MedicalRequestInitial());
 
+   MedicalRepository medicalRepository;
   final Connectivity connectivity = Connectivity();
 
   static MedicalRequestCubit get(context) => BlocProvider.of(context);
@@ -32,9 +31,6 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
         state.selectedValueService.value);
 
     final requestDate = RequestDate.dirty(state.requestDate.value);
-
-
-
 
 
     emit(state.copyWith(
@@ -84,7 +80,7 @@ class MedicalRequestCubit extends Cubit<MedicalRequestInitial> {
         var connectivityResult = await connectivity.checkConnectivity();
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
-          MedicalRepository().getMedicalData(requestMedicalBenefit)
+          medicalRepository.getMedicalData(requestMedicalBenefit)
           // MedicalRequestDataProvider(requestMedicalBenefit)
           //     .getMedicalRequestMessage()
               .then((value) {

@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
-import 'package:meta/meta.dart';
 
 import '../../../constants/url_links.dart';
 
@@ -21,67 +20,59 @@ class RequestDataProviders {
   }
 
   Future<http.Response> postAccessAccountAccessRequest(
-      String bodyString) async {
+      Map<String, String> header,String bodyString) async {
     return http
         .post(
           Uri.parse(addITAccessRightLink()),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
+          headers: header,
           body: bodyString,
         )
         .timeout(const Duration(seconds: 10));
   }
 
-  Future<http.Response> postEmailUserAccount(String bodyString) async {
+  Future<http.Response> postEmailUserAccount(Map<String, String> header,String bodyString) async {
     return http
         .post(
           Uri.parse(addITUserAccountLink()),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
+          headers:header,
           body: bodyString,
         )
         .timeout(const Duration(seconds: 10));
   }
 
-  Future<http.Response> postBusinessCardRequest(String bodyString) async {
+  Future<http.Response> postBusinessCardRequest(Map<String, String> header,String bodyString) async {
     return http.post(Uri.parse(addBusinessCardLink()),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
+        headers: header,
         body: bodyString).timeout(const Duration(seconds: 10));
   }
 
-  Future<http.Response> postEmbassyLetterRequest(String bodyString) async {
+  Future<http.Response> postEmbassyLetterRequest(Map<String, String> header,String bodyString) async {
     return http.post(Uri.parse(addEmbassyLetterLink()),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
+        headers: header,
         body: bodyString).timeout(const Duration(seconds: 10));
   }
 
-  Future<http.Response> getNewMobileNumberData(String bodyString) async {
+  Future<http.Response> getNewMobileNumberData(Map<String, String> header,String bodyString) async {
     return http.post(Uri.parse(addUserMobileLink()),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
+        headers: header,
         body: bodyString).timeout(const Duration(seconds: 10));
   }
 
   Future<http.Response> getDurationVacation(
-      int type, String dateFrom, String dateTo) async {
+  Map<String, String> header,int type, String dateFrom, String dateTo) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(getVacationDurationLink(type, dateFrom, dateTo)),
+      headers: header,
     ).timeout(const Duration(seconds: 10));
     print(rawDurationData.body);
     return rawDurationData;
   }
 
   Future<http.Response> getVacationRequestData(
-      String hrCode, String requestNo) async {
+  Map<String, String> header,String hrCode, String requestNo) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(getVacationRequestLink(hrCode, requestNo)),
+      headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
       print(rawDurationData.body);
@@ -90,17 +81,19 @@ class RequestDataProviders {
   }
 
   Future<http.Response> getEquipmentRequestData(
-      String hrCode, String requestNo) async {
+  Map<String, String> header,String hrCode, String requestNo) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(getEquipmentLink(hrCode, requestNo)),
+      headers: header,
     ).timeout(const Duration(seconds: 10));
     return rawDurationData;
   }
 
   Future<http.Response> getBusinessCardRequestData(
-      String hrCode, String requestNo) async {
+  Map<String, String> header,String hrCode, String requestNo) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(getBusinessCardLink(hrCode, requestNo)),
+      headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
       print(rawDurationData.body);
@@ -109,9 +102,11 @@ class RequestDataProviders {
   }
 
   Future<http.Response> getAccessRightRequestData(
-      String hrCode, String requestNo) async {
+  Map<String, String> header,String hrCode, String requestNo) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(getAccessRightLink(hrCode, requestNo)),
+      headers: header,
+
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
       print(rawDurationData.body);
@@ -120,10 +115,11 @@ class RequestDataProviders {
   }
 
   Future<http.Response> getEmailAccountRequestData(
-      String hrCode, String requestNo) async {
+  Map<String, String> header,String hrCode, String requestNo) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com/api/SelfService/GetUserAccount?HRCode=$hrCode&requestno=$requestNo"),
+          "https://api.hassanallam.com:9998/api/SelfService/GetUserAccount?HRCode=$hrCode&requestno=$requestNo"),
+      headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
       print(rawDurationData.body);
@@ -131,10 +127,11 @@ class RequestDataProviders {
     return rawDurationData;
   }
 
-  Future<http.Response> getEmailAccountData(String hrCode) async {
+  Future<http.Response> getEmailAccountData(Map<String, String> header,String hrCode) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com/api/Employee/GetEmployee?HRCode=$hrCode"),
+          "https://api.hassanallam.com:9998/api/Employee/GetEmployee?HRCode=$hrCode"),
+      headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
       print(rawDurationData.body);
@@ -143,10 +140,11 @@ class RequestDataProviders {
   }
 
   Future<http.Response> getEmbassyLetterRequestData(
-      String hrCode, String requestNo) async {
+  Map<String, String> header,String hrCode, String requestNo) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com/api/SelfService/GetEmbassy?HRCode=$hrCode&requestno=$requestNo"),
+          "https://api.hassanallam.com:9998/api/SelfService/GetEmbassy?HRCode=$hrCode&requestno=$requestNo"),
+      headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
       print(rawDurationData.body);
@@ -154,13 +152,11 @@ class RequestDataProviders {
     return rawDurationData;
   }
 
-  Future<http.Response> postVacationRequest(String bodyString) async {
+  Future<http.Response> postVacationRequest(Map<String, String> header,String bodyString) async {
     http.Response vacationFeedbackRequest = await http
         .post(
-          Uri.parse("https://api.hassanallam.com/api/SelfService/AddVacation"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
+          Uri.parse("https://api.hassanallam.com:9998/api/SelfService/AddVacation"),
+          headers: header,
           body: bodyString,
         )
         .timeout(const Duration(seconds: 10));
@@ -170,14 +166,12 @@ class RequestDataProviders {
     return vacationFeedbackRequest;
   }
 
-  Future<http.Response> postBusinessMissionRequest(String bodyString) async {
+  Future<http.Response> postBusinessMissionRequest(Map<String, String> header,String bodyString) async {
     http.Response businessMissionFeedbackRequest = await http
         .post(
           Uri.parse(
-              "https://api.hassanallam.com/api/SelfService/AddBusinessMission"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
+              "https://api.hassanallam.com:9998/api/SelfService/AddBusinessMission"),
+          headers: header,
           body: bodyString,
         )
         .timeout(const Duration(seconds: 10));
@@ -188,10 +182,11 @@ class RequestDataProviders {
   }
 
   Future<http.Response> getBusinessMissionRequestData(
-      String hrCode, String requestNo) async {
+  Map<String, String> header,String hrCode, String requestNo) async {
     http.Response rawData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com/api/SelfService/GetBusinessMission?HRCode=$hrCode&requestno=$requestNo"),
+          "https://api.hassanallam.com:9998/api/SelfService/GetBusinessMission?HRCode=$hrCode&requestno=$requestNo"),
+      headers: header
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
       print(rawData.body);
@@ -200,10 +195,11 @@ class RequestDataProviders {
   }
 
   Future<http.Response> getPermissionRequestData(
-      String hrCode, String requestNo) async {
+  Map<String, String> header,String hrCode, String requestNo) async {
     http.Response rawData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com/api/SelfService/GetPermission?HRCode=$hrCode&requestno=$requestNo"),
+          "https://api.hassanallam.com:9998/api/SelfService/GetPermission?HRCode=$hrCode&requestno=$requestNo"),
+      headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
       print(rawData.body);
@@ -211,10 +207,11 @@ class RequestDataProviders {
     return rawData;
   }
 
-  Future<http.Response> getMyRequestsData(String hrCode) async {
+  Future<http.Response> getMyRequestsData(Map<String, String> header,String hrCode) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com/api/SelfService/GetMyRequests?HRCode=$hrCode"),
+          "https://api.hassanallam.com:9998/api/SelfService/GetMyRequests?HRCode=$hrCode"),
+      headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
       print(rawDurationData.body);
@@ -222,10 +219,11 @@ class RequestDataProviders {
     return rawDurationData;
   }
 
-  Future<http.Response> getMyNotificationData(String hrCode) async {
+  Future<http.Response> getMyNotificationData(Map<String, String> header,String hrCode) async {
     http.Response rawDurationData = await http.get(
       Uri.parse(
-          "https://api.hassanallam.com/api/SelfService/GetMyNotification?HRCode=$hrCode"),
+          "https://api.hassanallam.com:9998/api/SelfService/GetMyNotification?HRCode=$hrCode"),
+      headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
       print(rawDurationData.body);
@@ -233,13 +231,11 @@ class RequestDataProviders {
     return rawDurationData;
   }
 
-  Future<http.Response> postTakeActionOnRequest(String bodyString) async {
+  Future<http.Response> postTakeActionOnRequest(Map<String, String> header,String bodyString) async {
     http.Response vacationFeedbackRequest = await http
         .post(
-          Uri.parse("https://api.hassanallam.com/api/SelfService/TakeAction"),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
+          Uri.parse("https://api.hassanallam.com:9998/api/SelfService/TakeAction"),
+          headers: header,
           body: bodyString,
         )
         .timeout(const Duration(seconds: 10));
@@ -254,7 +250,7 @@ class RequestDataProviders {
     http.Response equipmentFeedbackRequest = await http
         .post(
           Uri.parse(
-              "https://api.hassanallam.com/api/SelfService/TakeActionEquipment"),
+              "https://api.hassanallam.com:9998/api/SelfService/TakeActionEquipment"),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
           },

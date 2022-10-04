@@ -9,6 +9,9 @@ class UpgraderRepository{
   Future<Upgrader> getUpgradingData() async{
     final http.Response rawUpgradingData = await UpgraderProvider()
         .getUpgraderData();
+
+
+
     final json = await jsonDecode(rawUpgradingData.body);
     final Upgrader response = Upgrader.fromJson(json);
     return response;

@@ -6,12 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/data/models/myattendance_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/attendance_repository.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-import 'package:authentication_repository/authentication_repository.dart';
 
 part 'attendance_state.dart';
 
 class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin {
-  AttendanceCubit(this.userData) : super(AttendanceState(month: DateTime
+  AttendanceCubit(this.attendanceRepository) : super(AttendanceState(month: DateTime
       .now()
       .month)) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
@@ -21,7 +20,7 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin {
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
           try {
-            getAllAttendanceList(userData.employeeData?.userHrCode??"");
+            getAllAttendanceList(attendanceRepository.userData?.employeeData?.userHrCode??"");
           } catch (e) {
             emit(state.copyWith(
               attendanceDataEnumStates: AttendanceDataEnumStates.failed,
@@ -37,9 +36,10 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin {
     });
   }
 
+  AttendanceRepository attendanceRepository;
   static AttendanceCubit get(context) => BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();
-  MainUserData userData;
+  // MainUserData userData;
 
   Future<void> getAllAttendanceList(userHRCode) async {
     if (state.getAttendanceList[state.month - 1].isEmpty) {
@@ -48,7 +48,7 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin {
           emit(state.copyWith(
             attendanceDataEnumStates: AttendanceDataEnumStates.loading,
           ));
-          await AttendanceRepository().getAttendanceData(
+          await attendanceRepository.getAttendanceData(
               userHRCode, state.month)
               .then((value) async {
             MyAttendanceModel lastModel = value.last;
