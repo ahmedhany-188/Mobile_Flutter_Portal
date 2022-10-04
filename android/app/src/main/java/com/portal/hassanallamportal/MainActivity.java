@@ -1,4 +1,4 @@
-package com.hassanallam.hassanallamportalflutter;
+package com.portal.hassanallamportal;
 
 import io.flutter.embedding.android.FlutterActivity;
 
