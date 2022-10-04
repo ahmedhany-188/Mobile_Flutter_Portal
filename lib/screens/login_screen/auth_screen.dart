@@ -50,6 +50,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
       onTap: () {
         AuthForm.emailAddressFocusNode.unfocus();
         AuthForm.passwordFocusNode.unfocus();
+        FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
         backgroundColor: const Color(0xFF031A27),
