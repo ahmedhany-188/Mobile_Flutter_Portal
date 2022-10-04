@@ -1,21 +1,22 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 import '../../../constants/url_links.dart';
 
 class RequestDataProviders {
-  Future<http.Response> postPermissionRequest(String bodyString) async {
+  Future<http.Response> postPermissionRequest(Map<String, String> header,String bodyString) async {
     http.Response permissionFeedbackRequest = await http
         .post(
           Uri.parse(addPermissionLink()),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
+          headers: header,
           body: bodyString,
         )
         .timeout(const Duration(seconds: 10));
-    print(permissionFeedbackRequest.body);
+    if (kDebugMode) {
+      print(permissionFeedbackRequest.body);
+    }
     return permissionFeedbackRequest;
   }
 

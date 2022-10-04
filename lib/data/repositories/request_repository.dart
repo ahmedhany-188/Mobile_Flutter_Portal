@@ -33,8 +33,9 @@ import '../models/requests_form_models/request_permission_data_model.dart';
 import '../models/response_take_action.dart';
 
 class RequestRepository {
-  final RequestDataProviders requestDataProviders = RequestDataProviders();
+
   MainUserData? userData;
+  final RequestDataProviders requestDataProviders = RequestDataProviders();
 
   // RequestRepository(this.userData?);
 
@@ -68,8 +69,12 @@ class RequestRepository {
       "dateToAmpm": dateToAmpm,
       "permissionDate": permissionDate,
     });
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawPermission =
-        await requestDataProviders.postPermissionRequest(bodyString);
+        await requestDataProviders.postPermissionRequest(header,bodyString);
     final json = await jsonDecode(rawPermission.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     if (response.id == 1) {

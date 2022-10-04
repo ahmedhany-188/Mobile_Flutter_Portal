@@ -20,7 +20,7 @@ resetPayslipLink() {
   return 'https://portal.hassanallam.com/PaySlip_Login.aspx';
 }
 getPayslipLink(String email,String password){
-  return "http://api.hassanallam.com:3415/api/Portal/Payslip?Email=$email&Password=$password";
+  return "https://api.hassanallam.com/api/Portal/Payslip?Email=$email&Password=$password";
 }
 
 addPermissionLink(){
