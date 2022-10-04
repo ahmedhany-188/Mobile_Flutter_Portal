@@ -58,7 +58,8 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget {
                         ),
                       ),
                       circularStrokeCap: CircularStrokeCap.round,
-                      progressColor: ConstantsColors.backgroundEndColor,
+                      progressColor: ConstantsColors.appraisalColor4,
+                      backgroundColor: ConstantsColors.appraisalColor3,
                     ),
                   );
                 }

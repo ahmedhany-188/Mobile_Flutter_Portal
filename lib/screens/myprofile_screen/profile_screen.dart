@@ -32,14 +32,14 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
     VCard vCard = VCard();
 
     ///Set properties
-    vCard.firstName = user.employeeData?.name??"";
-    vCard.organization = user.employeeData?.companyName??"";
+    vCard.firstName = user.employeeData?.name ?? "";
+    vCard.organization = user.employeeData?.companyName ?? "";
     // vCard.photo.attachFromUrl('/path/to/image/file.png', 'PNG');
-    vCard.jobTitle = user.employeeData?.titleName??"";
-    vCard.email = user.employeeData?.email??"";
+    vCard.jobTitle = user.employeeData?.titleName ?? "";
+    vCard.email = user.employeeData?.email ?? "";
     vCard.url = "https://hassanallam.com";
-    vCard.workPhone = user.employeeData?.deskPhone??"";
-    vCard.cellPhone = user.employeeData?.mobile??"";
+    vCard.workPhone = user.employeeData?.deskPhone ?? "";
+    vCard.cellPhone = user.employeeData?.mobile ?? "";
 
     return CustomBackground(
       child: CustomTheme(
@@ -106,27 +106,28 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                               child: Center(
                                 child: imageProfile.isNotEmpty
                                     ? CachedNetworkImage(
-                                        imageUrl: getUserProfilePicture(
-                                            user.employeeData?.imgProfile??""),
-                                        imageBuilder:
-                                            (context, imageProvider) =>
-                                                Container(
-                                          width: 120,
-                                          height: 120,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            image: DecorationImage(
-                                                image: imageProvider,
-                                                fit: BoxFit.cover),
-                                          ),
+                                  imageUrl: getUserProfilePicture(
+                                      user.employeeData?.imgProfile ?? ""),
+                                  imageBuilder:
+                                      (context, imageProvider) =>
+                                      Container(
+                                        width: 120,
+                                        height: 120,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover),
                                         ),
-                                        placeholder: (context, url) => Assets
-                                            .images.logo
-                                            .image(height: 80),
-                                        errorWidget: (context, url, error) =>
-                                            Assets.images.logo
-                                                .image(height: 80),
-                                      )
+                                      ),
+                                  placeholder: (context, url) =>
+                                      Assets
+                                          .images.logo
+                                          .image(height: 80),
+                                  errorWidget: (context, url, error) =>
+                                      Assets.images.logo
+                                          .image(height: 80),
+                                )
                                     : Assets.images.logo.image(height: 80),
                               ),
                             ),
@@ -160,7 +161,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(width: 2, color: Colors.black),
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(20)),
+                        const BorderRadius.all(Radius.circular(20)),
                         color: Colors.black26,
                       ),
                       child: Column(children: [
@@ -169,7 +170,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                           child: SizedBox(
                             width: double.infinity,
                             child: Text(
-                              user.employeeData?.name?.toTitleCase()??"",
+                              user.employeeData?.name?.toTitleCase() ?? "",
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Nunito',
@@ -180,11 +181,11 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                           ),
                         ),
                         getFirstSection(
-                            user.employeeData?.titleName?.toString()??""),
+                            user.employeeData?.titleName?.toString() ?? ""),
                         getFirstSection(
-                            'HRCode: ${user.employeeData?.userHrCode??""}'),
+                            'HRCode: ${user.employeeData?.userHrCode ?? ""}'),
                         getFirstSection(
-                            'Grade: ${user.employeeData?.gradeName??""}'),
+                            'Grade: ${user.employeeData?.gradeName ?? ""}'),
                       ]),
                     ),
                   ),
@@ -195,7 +196,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(width: 2, color: Colors.black),
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(20)),
+                        const BorderRadius.all(Radius.circular(20)),
                         color: Colors.black26,
                       ),
                       child: Column(
@@ -216,11 +217,11 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                             thickness: 2.5,
                           ),
                           getHead("Department:"),
-                          getLine(user.employeeData?.projectName??""),
+                          getLine(user.employeeData?.projectName ?? ""),
                           getHead("Job Title:"),
-                          getLine(user.employeeData?.titleName??""),
+                          getLine(user.employeeData?.titleName ?? ""),
                           getHead("Email:"),
-                          getLine(user.employeeData?.email??""),
+                          getLine(user.employeeData?.email ?? ""),
                           SizedBox(
                               width: double.infinity,
                               child: InkWell(
@@ -229,8 +230,8 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                       DirectManagerProfileScreen.routeName,
                                       arguments: {
                                         DirectManagerProfileScreen
-                                                .employeeHrCode:
-                                            user.employeeData?.managerCode??""
+                                            .employeeHrCode:
+                                        user.employeeData?.managerCode ?? ""
                                       });
                                 },
                                 child: Row(
@@ -248,13 +249,15 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                           child: SizedBox(
                                             width: double.infinity,
                                             child: Text(
-                                              getDirectManagerTile(user.employeeData?.managerName??""),
+                                              getDirectManagerTile(
+                                                  user.employeeData
+                                                      ?.managerName ?? ""),
                                               style: const TextStyle(
                                                 color: Colors.white70,
                                                 fontSize: 14,
                                                 fontFamily: 'Nunito',
                                                 decoration:
-                                                    TextDecoration.underline,
+                                                TextDecoration.underline,
                                               ),
                                               textAlign: TextAlign.left,
                                             ),
@@ -274,9 +277,9 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                 ),
                               )),
                           getHead("Mobile Number:"),
-                          getLine(user.employeeData?.mobile??""),
+                          getLine(getLineManager(user.employeeData)),
                           getHead("Ext:"),
-                          getLine(user.employeeData?.deskPhone??""),
+                          getLine(user.employeeData?.deskPhone ?? ""),
                         ],
                       ),
                     ),
@@ -326,13 +329,14 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
     );
   }
 
-  String getDirectManagerTile(directManager){
+  String getDirectManagerTile(directManager) {
     if (int.tryParse(directManager) != null) {
       return directManager.toTitleCase();
     } else {
       return directManager;
     }
   }
+
 
   Padding getLine(String line) {
     return Padding(
@@ -351,4 +355,18 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
       ),
     );
   }
+
+  String getLineManager(EmployeeData ?employeeData) {
+    if (employeeData?.isTopManagement == true) {
+      return employeeData?.mobile ?? "";
+    } else if (employeeData?.mobile == null) {
+      return "";
+    } else {
+      return employeeData?.mobile ?? "";
+    }
+  }
+
 }
+
+
+
