@@ -49,7 +49,7 @@ class _ContactsScreenState extends State<ContactsScreen>
                     'Filters',
                   ),
                   centerTitle: true,
-                  leadingWidth: 110,
+                  leadingWidth: 130,
                   leading: MaterialButton(
                     onPressed: () {
                       ContactsFiltersCubit.get(context).onClearDialog();
