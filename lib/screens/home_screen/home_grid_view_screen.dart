@@ -54,20 +54,38 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // bool autoPlay = true;
-
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
     List<AppsData> userApps = context.select((AppsCubit bloc) => bloc.appsList);
-    bool userStaffDashboard=false;
+    bool userStaffDashboard = false;
+    bool dashBoardIcon = false;
 
 
-    for(int i=0;i<userApps.length;i++){
-      if(userApps[i].sysID==24){
-        userStaffDashboard=true;
+    for (int i = 0; i < userApps.length; i++) {
+      if (userApps[i].sysID == 24) {
+        userStaffDashboard = true;
       }
     }
 
+
+    if (user.employeeData?.isCEO != null &&
+        user.employeeData?.isTopManagement != null) {
+      // 10
+      if (user.employeeData?.isTopManagement == true) {
+        dashBoardIcon = true;
+      } // 11
+      else if (user.employeeData?.isCEO == true) {
+        dashBoardIcon = true;
+      }
+      else if (userStaffDashboard) {
+        dashBoardIcon = true;
+      }
+      else {
+        dashBoardIcon = false;
+      }
+    } else {
+      dashBoardIcon = false;
+    }
 
 
     double shake(double animation) =>
@@ -82,31 +100,32 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
             elevation: 0,
             leading: Builder(builder: (context) {
               return
-                  //   ShakeWidget(
-                  //   shakeConstant: ShakeHorizontalConstant2(),
-                  //   autoPlay: true,
-                  //   child: InkWell(
-                  //     splashColor: Colors.transparent,
-                  //     highlightColor: Colors.transparent,
-                  //     onTap: () => Scaffold.of(context).openDrawer(),
-                  //     child: Image.asset(Assets.images.logo.path, scale: 30),
-                  //   ),
-                  // );
-                  TweenAnimationBuilder<double>(
-                duration: const Duration(milliseconds: 1500),
-                tween: Tween(begin: 0.3, end: 0.0),
-                builder: (context, animation, child) => Transform.translate(
-                  offset: Offset(50 * shake(animation), 0),
-                  filterQuality: FilterQuality.high,
-                  child: child,
-                ),
-                child: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  onTap: () => Scaffold.of(context).openDrawer(),
-                  child: Image.asset(Assets.images.logo.path, scale: 30),
-                ),
-              );
+                //   ShakeWidget(
+                //   shakeConstant: ShakeHorizontalConstant2(),
+                //   autoPlay: true,
+                //   child: InkWell(
+                //     splashColor: Colors.transparent,
+                //     highlightColor: Colors.transparent,
+                //     onTap: () => Scaffold.of(context).openDrawer(),
+                //     child: Image.asset(Assets.images.logo.path, scale: 30),
+                //   ),
+                // );
+                TweenAnimationBuilder<double>(
+                  duration: const Duration(milliseconds: 1500),
+                  tween: Tween(begin: 0.3, end: 0.0),
+                  builder: (context, animation, child) =>
+                      Transform.translate(
+                        offset: Offset(50 * shake(animation), 0),
+                        filterQuality: FilterQuality.high,
+                        child: child,
+                      ),
+                  child: InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () => Scaffold.of(context).openDrawer(),
+                    child: Image.asset(Assets.images.logo.path, scale: 30),
+                  ),
+                );
             }),
             centerTitle: true,
             title: const Text('Hassan Allam Holding'),
@@ -120,8 +139,9 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                     return InkWell(
                       splashColor: Colors.transparent,
                       highlightColor: Colors.transparent,
-                      onTap: () => Navigator.of(context)
-                          .pushNamed(NotificationsScreen.routeName),
+                      onTap: () =>
+                          Navigator.of(context)
+                              .pushNamed(NotificationsScreen.routeName),
                       child: Badge(
                         showBadge: state.userNotificationList.isNotEmpty
                             ? true
@@ -143,8 +163,9 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                           icon: const Icon(Icons.notifications),
                           splashColor: Colors.transparent,
                           highlightColor: Colors.transparent,
-                          onPressed: () => Navigator.of(context)
-                              .pushNamed(NotificationsScreen.routeName),
+                          onPressed: () =>
+                              Navigator.of(context)
+                                  .pushNamed(NotificationsScreen.routeName),
                         ),
                       ),
                     );
@@ -155,8 +176,8 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
           ),
           drawer: const MainDrawer(),
           body: Stack(
-              // mainAxisAlignment: MainAxisAlignment.start,
-              // crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.start,
+            // crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Align(
                   alignment: Alignment.topCenter,
@@ -165,7 +186,10 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                     child: BlocBuilder<NewsCubit, NewsState>(
                       builder: (context, state) {
                         return Container(
-                          width: MediaQuery.of(context).size.width / 1.2,
+                          width: MediaQuery
+                              .of(context)
+                              .size
+                              .width / 1.2,
                           padding: const EdgeInsets.all(10),
                           margin: const EdgeInsets.only(top: 25),
                           height: 100,
@@ -179,24 +203,27 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                                 pause: const Duration(milliseconds: 1000),
                                 repeatForever: true,
                                 displayFullTextOnTap: false,
-                                animatedTexts: NewsCubit.get(context)
-                                        .announcment
-                                        .isEmpty
+                                animatedTexts: NewsCubit
+                                    .get(context)
+                                    .announcment
+                                    .isEmpty
                                     ? [
-                                        TyperAnimatedText(
-                                          'Checking for Announcement... ',
-                                          speed:
-                                              const Duration(milliseconds: 100),
-                                          textAlign: TextAlign.center,
-                                          curve: Curves.ease,
-                                          textStyle: const TextStyle(
-                                              color: Colors.white,
-                                              overflow: TextOverflow.clip,
-                                              fontFamily: 'RobotoFlex',
-                                              fontSize: 14),
-                                        )
-                                      ]
-                                    : NewsCubit.get(context).announcment,
+                                  TyperAnimatedText(
+                                    'Checking for Announcement... ',
+                                    speed:
+                                    const Duration(milliseconds: 100),
+                                    textAlign: TextAlign.center,
+                                    curve: Curves.ease,
+                                    textStyle: const TextStyle(
+                                        color: Colors.white,
+                                        overflow: TextOverflow.clip,
+                                        fontFamily: 'RobotoFlex',
+                                        fontSize: 14),
+                                  )
+                                ]
+                                    : NewsCubit
+                                    .get(context)
+                                    .announcment,
                               ),
                             ],
                           ),
@@ -214,7 +241,7 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                     padding: const EdgeInsets.all(20.0),
                     child: GridView(
                       gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                      const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                       ),
                       padding: EdgeInsets.zero,
@@ -225,43 +252,56 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                         InkWell(
                             onTap: () =>
                             {
-                              if(user.employeeData?.isCEO != null && user.employeeData?.isTopManagement != null){
-                                 // 10
+                              if(user.employeeData?.isCEO != null &&
+                                  user.employeeData?.isTopManagement != null){
+                                // 10
                                 if(user.employeeData?.isTopManagement == true){
                                   Navigator.of(context)
-                                      .pushNamed(StaffDashBoardScreen.routeName),
+                                      .pushNamed(
+                                      StaffDashBoardScreen.routeName),
                                 } // 11
-                                else if(user.employeeData?.isCEO == true){
-                                  Navigator.of(context).pushNamed(StaffDashBoardDetailScreen.routeName,
-                                      arguments: {
-                                        StaffDashBoardDetailScreen
-                                            .staffDashboardList: <CompanyStaffDashBoard>[],
-                                        StaffDashBoardDetailScreen.date: GlobalConstants.dateFormatServerDashBoard.format(DateTime.now())
-                                      }),
-                                  }
-                                  else if(userStaffDashboard){
-                                    Navigator.of(context)
-                                        .pushNamed(
-                                        StaffDashBoardProjectScreen.routeName,
+                                else
+                                  if(user.employeeData?.isCEO == true){
+                                    Navigator.of(context).pushNamed(
+                                        StaffDashBoardDetailScreen.routeName,
                                         arguments: {
-                                          StaffDashBoardProjectScreen
-                                              .companyID: "0",
-                                          StaffDashBoardProjectScreen
-                                              .project: "0",
-                                          StaffDashBoardProjectScreen
-                                              .director: user.employeeData
-                                              ?.userHrCode,
-                                          StaffDashBoardProjectScreen
-                                              .date: GlobalConstants.dateFormatServerDashBoard.format(DateTime.now()),
+                                          StaffDashBoardDetailScreen
+                                              .staffDashboardList: <
+                                              CompanyStaffDashBoard>[],
+                                          StaffDashBoardDetailScreen
+                                              .date: GlobalConstants
+                                              .dateFormatServerDashBoard.format(
+                                              DateTime.now())
                                         }),
                                   }
                                   else
-                                    {
-                                      Navigator.of(context).pushNamed(AttendanceScreen.routeName),
+                                    if(userStaffDashboard){
+                                      Navigator.of(context)
+                                          .pushNamed(
+                                          StaffDashBoardProjectScreen.routeName,
+                                          arguments: {
+                                            StaffDashBoardProjectScreen
+                                                .companyID: "0",
+                                            StaffDashBoardProjectScreen
+                                                .project: "0",
+                                            StaffDashBoardProjectScreen
+                                                .director: user.employeeData
+                                                ?.userHrCode,
+                                            StaffDashBoardProjectScreen
+                                                .date: GlobalConstants
+                                                .dateFormatServerDashBoard
+                                                .format(DateTime.now()),
+                                          }),
                                     }
+                                    else
+                                      {
+                                        Navigator.of(context).pushNamed(
+                                            AttendanceScreen.routeName),
+                                      }
                               } else
                                 {
-                                  Navigator.of(context).pushNamed(AttendanceScreen.routeName),
+                                  Navigator.of(context).pushNamed(
+                                      AttendanceScreen.routeName),
                                 }
                             },
 
@@ -272,10 +312,14 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Image.asset(
-                                    userStaffDashboard?Assets.images.homepage.staffDashboardIcon.path:Assets.images.homepage.attendanceIcon.path,
+                                    dashBoardIcon ? Assets.images.homepage
+                                        .staffDashboardIcon.path : Assets.images
+                                        .homepage.attendanceIcon.path,
                                     scale: 3),
-                                 Text(
-                                  userStaffDashboard?'Staff Dashboard':"Attendance",
+                                Text(
+                                  dashBoardIcon
+                                      ? 'Staff Dashboard'
+                                      : "Attendance",
                                   softWrap: true,
                                   style: const TextStyle(
                                       color: Colors.white, fontSize: 14),
@@ -283,8 +327,9 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                               ],
                             )),
                         InkWell(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(ContactsScreen.routeName),
+                            onTap: () =>
+                                Navigator.of(context)
+                                    .pushNamed(ContactsScreen.routeName),
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             child: Column(
@@ -375,8 +420,9 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                           ),
                         ),
                         InkWell(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(NewsScreen.routeName),
+                            onTap: () =>
+                                Navigator.of(context)
+                                    .pushNamed(NewsScreen.routeName),
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             child: Column(
@@ -413,8 +459,9 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                           ),
                         ),
                         InkWell(
-                            onTap: () => Navigator.of(context)
-                                .pushNamed(EconomyNewsScreen.routeName),
+                            onTap: () =>
+                                Navigator.of(context)
+                                    .pushNamed(EconomyNewsScreen.routeName),
                             splashColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             child: Column(
@@ -450,18 +497,20 @@ class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
                             fontSize: 14,
                           ),
                         )
-                        // Container(
-                        //   color: Colors.red,
-                        //   height: 20,
-                        //   width: MediaQuery.of(context).size.width,
-                        // ),
-                        ),
+                      // Container(
+                      //   color: Colors.red,
+                      //   height: 20,
+                      //   width: MediaQuery.of(context).size.width,
+                      // ),
+                    ),
                   ),
                 ),
               ])),
     );
   }
 }
+
+
 
 Widget benefitsMenuItems(BuildContext context) {
   return Scrollbar(
