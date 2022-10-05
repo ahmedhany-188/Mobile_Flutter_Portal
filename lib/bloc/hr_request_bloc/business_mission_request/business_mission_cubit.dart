@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/get_direction_screen_bloc/get_direction_cubit.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/get_location_model/location_data.dart';
@@ -67,8 +68,8 @@ class BusinessMissionCubit extends Cubit<BusinessMissionInitial> {
       final hoursFrom  = TimeFrom.dirty("${requestData.hourFrom} ${requestData.dateFromAmpm}");
       final hoursTo  = TimeTo.dirty("${requestData.hourTo} ${requestData.dateToAmpm}");
       var status = "Pending";
-
-      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"");
+      var token =  _requestRepository.userData?.user?.token;
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"",token ?? "");
       if(requestData.status == 0){
         status = "Pending";
       }else if (requestData.status == 1){

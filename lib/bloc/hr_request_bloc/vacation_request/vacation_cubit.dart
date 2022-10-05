@@ -116,9 +116,9 @@ class VacationCubit extends Cubit<VacationInitial> {
       } else if (requestData.status == 2) {
         status = "Rejected";
       }
-
+      var token = _requestRepository.userData?.user?.token;
       final requesterData = await GetEmployeeRepository().getEmployeeData(
-          requestData.requestHrCode ?? "");
+          requestData.requestHrCode ?? "",token ?? "");
 
       // print(requestData.noOfDays.toString());
       emit(

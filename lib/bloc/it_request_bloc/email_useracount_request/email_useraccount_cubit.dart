@@ -54,8 +54,8 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
       final location = requestData.location.toString();
 
       final comments = requestData.comments ?? "No Comment";
-
-      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"");
+      var token = requestRepository.userData?.user?.token;
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"",token ?? "");
       var status = "Pending";
       if (requestData.status== 0) {
         status = "Pending";

@@ -132,9 +132,9 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       } else if (requestData.data![0].status == 2) {
         status = "Rejected";
       }
-
+      var token = _requestRepository.userData?.user?.token;
       final requesterData = await GetEmployeeRepository()
-          .getEmployeeData(requestData.data![0].requestHRCode ?? "");
+          .getEmployeeData(requestData.data![0].requestHRCode ?? "",token ?? "");
 
       getHistory(serviceId: RequestServiceID.equipmentServiceID, requestNumber: int.parse(requestNo.toString()));
 

@@ -95,9 +95,9 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
       final comments = requestData.comments ?? "No Comment";
 
       final filePdf = requestData.filePDF ?? '';
-
+      var token = requestRepository.userData?.user?.token;
       final requesterData = await GetEmployeeRepository()
-          .getEmployeeData(requestData.requestHrCode ?? "");
+          .getEmployeeData(requestData.requestHrCode ?? "",token ?? "");
 
       var status = "Pending";
       if (requestData.status == 0) {

@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/data/repositories/employee_repository.dart';
 import 'package:meta/meta.dart';
@@ -14,18 +15,20 @@ class ProfileManagerCubit extends Cubit<ProfileManagerState> {
 
   static ProfileManagerCubit get(context) => BlocProvider.of(context);
 
-  void getManagerData(String managerHRCode) async {
+  void getManagerData(String managerHRCode,String token) async {
     emit(BlocGetManagerDataLoadingState());
 
     try {
       var connectivityResult = await connectivity.checkConnectivity();
       if (connectivityResult == ConnectivityResult.wifi ||
           connectivityResult == ConnectivityResult.mobile) {
-        GetEmployeeRepository().getEmployeeData(managerHRCode)
+        GetEmployeeRepository().getEmployeeData(managerHRCode,token)
             .then((value){
           emit(BlocGetManagerDataSuccessState(value));
         }).catchError((error){
-          print("Err0r: "+error.toString());
+          if (kDebugMode) {
+            print("Err0r: "+error.toString());
+          }
           emit(BlocGetManagerDataErrorState(error.toString()));
         });
       }

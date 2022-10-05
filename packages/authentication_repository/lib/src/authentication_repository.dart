@@ -110,7 +110,7 @@ class AuthenticationRepository {
               //   });
               //   // _firebaseMessaging.requestPermission()
               // }
-              await authenticationProvider.getEmployeeData(user.userHRCode!)
+              await authenticationProvider.getEmployeeData(user.userHRCode ?? "",user.token ?? "")
                   .then((value) async {
                 print(value);
                 if (value.statusCode == 200) {

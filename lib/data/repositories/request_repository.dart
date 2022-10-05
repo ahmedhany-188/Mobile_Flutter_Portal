@@ -715,7 +715,7 @@ class RequestRepository {
           for (int i = 0; i < nextStepList.length; i++) {
             var nextStepUserHRCode = nextStepList[i].userHRCode ?? "";
             var nextStepContact = await GetEmployeeRepository().getEmployeeData(
-                nextStepUserHRCode);
+                nextStepUserHRCode,userData?.user?.token ?? "");
             await FirebaseProvider(userData ?? MainUserData.empty)
                 .addEquipmentTakeActionFirebaseNotification(
                 nextStepContact.email ?? "", requesterEmail,
