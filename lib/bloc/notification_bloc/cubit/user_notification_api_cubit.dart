@@ -25,7 +25,7 @@ class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState> {
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
           try {
-            getNotifications(requestRepository.userData ?? MainUserData.empty);
+            await getNotifications(requestRepository.userData ?? MainUserData.empty);
           } catch (e) {
             emit(state.copyWith(
               userNotificationEnumStates: UserNotificationEnumStates.failed,
