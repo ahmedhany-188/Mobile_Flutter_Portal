@@ -349,25 +349,7 @@ class _MyAppState extends State<MyApp> {
           //   ),
           // ),
 
-          BlocProvider<UserNotificationApiCubit>(
-              lazy: true,
-              create: (userNotificationContext){
-                    // if (kDebugMode) {
-                    //   print('token ${BlocProvider.of<AppBloc>(userNotificationContext)
-                    //     .state
-                    //     .userData.user?.token}');
-                    // }
-                return UserNotificationApiCubit(
-                      RequestRepository(
-                          BlocProvider.of<AppBloc>(userNotificationContext)
-                              .state
-                              .userData),
-                    )..getNotificationsWithoutLoading(BlocProvider.of<AppBloc>(userNotificationContext)
-                    .state
-                    .userData);
-                  }
 
-              ),
           BlocProvider<AppUpgraderCubit>(
             lazy: false,
             create: (context) => AppUpgraderCubit(
@@ -392,6 +374,25 @@ class _MyAppState extends State<MyApp> {
                         .state
                         .userData))
               ..getRequests(),
+          ),
+          BlocProvider<UserNotificationApiCubit>(
+              lazy: true,
+              create: (userNotificationContext){
+                // if (kDebugMode) {
+                //   print('token ${BlocProvider.of<AppBloc>(userNotificationContext)
+                //     .state
+                //     .userData.user?.token}');
+                // }
+                return UserNotificationApiCubit(
+                  RequestRepository(
+                      BlocProvider.of<AppBloc>(userNotificationContext)
+                          .state
+                          .userData),
+                )..getNotificationsWithoutLoading(BlocProvider.of<AppBloc>(userNotificationContext)
+                    .state
+                    .userData);
+              }
+
           ),
 
           BlocProvider<AttendanceCubit>(

@@ -88,7 +88,9 @@ class HomeGridViewScreen extends StatelessWidget {
     double shake(double animation) =>
         2 * (0.5 - (0.5 - Curves.ease.transform(animation)).abs());
 
-    return CustomBackground(
+    return BlocProvider.value(
+      value: UserNotificationApiCubit.get(context),
+      child: CustomBackground(
       child: Scaffold(
           backgroundColor: Colors.transparent,
           resizeToAvoidBottomInset: false,
@@ -127,46 +129,43 @@ class HomeGridViewScreen extends StatelessWidget {
             centerTitle: true,
             title: const Text('Hassan Allam Holding'),
             actions: [
-              BlocProvider<UserNotificationApiCubit>.value(
-                value: BlocProvider.of<UserNotificationApiCubit>(context)..getNotificationsWithoutLoading(user),
-                child: BlocBuilder<UserNotificationApiCubit,
-                    UserNotificationApiState>(
-                  builder: (context, state) {
-                    return InkWell(
-                      splashColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () =>
-                          Navigator.of(context)
-                              .pushNamed(NotificationsScreen.routeName),
-                      child: Badge(
-                        showBadge: state.userNotificationList.isNotEmpty
-                            ? true
-                            : false,
-                        toAnimate: true,
-                        animationDuration: const Duration(milliseconds: 1000),
-                        animationType: BadgeAnimationType.scale,
-                        badgeColor: Colors.red,
-                        badgeContent: Text(
-                          "${state.userNotificationList.length}",
-                          style: const TextStyle(
-                              color: Colors.white, fontSize: 10),
-                        ),
-                        position: const BadgePosition(
-                          start: 5,
-                          top: 5,
-                        ),
-                        child: IconButton(
-                          icon: const Icon(Icons.notifications),
-                          splashColor: Colors.transparent,
-                          highlightColor: Colors.transparent,
-                          onPressed: () =>
-                              Navigator.of(context)
-                                  .pushNamed(NotificationsScreen.routeName),
-                        ),
+              BlocBuilder<UserNotificationApiCubit,
+                  UserNotificationApiState>(
+                builder: (context, state) {
+                  return InkWell(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    onTap: () =>
+                        Navigator.of(context)
+                            .pushNamed(NotificationsScreen.routeName),
+                    child: Badge(
+                      showBadge: state.userNotificationList.isNotEmpty
+                          ? true
+                          : false,
+                      toAnimate: true,
+                      animationDuration: const Duration(milliseconds: 1000),
+                      animationType: BadgeAnimationType.scale,
+                      badgeColor: Colors.red,
+                      badgeContent: Text(
+                        "${state.userNotificationList.length}",
+                        style: const TextStyle(
+                            color: Colors.white, fontSize: 10),
                       ),
-                    );
-                  },
-                ),
+                      position: const BadgePosition(
+                        start: 5,
+                        top: 5,
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.notifications),
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
+                        onPressed: () =>
+                            Navigator.of(context)
+                                .pushNamed(NotificationsScreen.routeName),
+                      ),
+                    ),
+                  );
+                },
               ),
             ],
           ),
@@ -502,7 +501,8 @@ class HomeGridViewScreen extends StatelessWidget {
                   ),
                 ),
               ])),
-    );
+    ),
+);
   }
 }
 
