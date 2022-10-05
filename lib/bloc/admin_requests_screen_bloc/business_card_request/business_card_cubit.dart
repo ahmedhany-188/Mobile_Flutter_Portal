@@ -55,8 +55,8 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
           requestData.employeeMobil.toString());
       final faxNo = requestData.faxNo.toString();
       final employeeExt = requestData.employeeExt.toString();
-
-      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"");
+      var token = requestRepository.userData?.user?.token;
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"",token ?? "");
 
       var status = "Pending";
       if (requestData.status == 0) {

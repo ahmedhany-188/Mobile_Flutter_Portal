@@ -16,10 +16,15 @@ class AuthenticationProvider{
     return rawAttendanceData;
   }
 
-  Future<http.Response> getEmployeeData(String hrCode) async {
+  Future<http.Response> getEmployeeData(String hrCode,String token) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer $token',
+    };
     http.Response rawAttendanceData = await http.get(
       Uri.parse(
           "https://api.hassanallam.com/api/Employee/GetEmployee?HRCode=$hrCode"),
+      headers: header
     );
 
     if (kDebugMode) {

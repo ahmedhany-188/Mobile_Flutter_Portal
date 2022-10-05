@@ -82,8 +82,8 @@ class PermissionCubit extends Cubit<PermissionInitial> {
       } else if (requestData.status == 2) {
         status = "Rejected";
       }
-
-      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"");
+      var token = _requestRepository.userData?.user?.token;
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"",token ??"");
 
       emit(
         state.copyWith(

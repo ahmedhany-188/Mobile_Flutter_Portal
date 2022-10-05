@@ -7,6 +7,7 @@ import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:vcard_maintained/vcard_maintained.dart';
+import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../constants/url_links.dart';
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
@@ -39,6 +40,7 @@ class DirectManagerProfileScreenClass
 
     final currentRequestData = widget.requestData;
 
+    final user = context.select((AppBloc bloc) => bloc.state.userData);
     // var imageProfile = "";
 
     return CustomBackground(
@@ -87,7 +89,7 @@ class DirectManagerProfileScreenClass
                       "0"
                   ? (ProfileManagerCubit()
                     ..getManagerData(currentRequestData[
-                        DirectManagerProfileScreen.employeeHrCode]))
+                        DirectManagerProfileScreen.employeeHrCode],user.user?.token ?? ""))
                   : (ProfileManagerCubit()
                     ..getUserOffline(currentRequestData[
                         DirectManagerProfileScreen.selectedContactDataAsMap])),
@@ -277,7 +279,7 @@ class DirectManagerProfileScreenClass
                                                         context)
                                                     .getManagerData(state
                                                         .managerData
-                                                        .managerCode??"");
+                                                        .managerCode??"",user.user?.token ?? "");
                                               },
                                               child: Row(
                                                 children: [

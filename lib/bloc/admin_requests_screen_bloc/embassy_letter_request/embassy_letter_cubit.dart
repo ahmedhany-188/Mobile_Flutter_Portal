@@ -54,8 +54,8 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
       final passportNumber = PassportNumber.dirty(requestData.passportNo.toString());
       final salary = requestData.addSalary;
       final comments = requestData.comments!.isEmpty ? "No Comment" : requestData.comments;
-
-      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"");
+      var token = _requestRepository.userData?.user?.token;
+      final requesterData = await GetEmployeeRepository().getEmployeeData(requestData.requestHrCode??"",token ?? "");
 
 
       // print(passportNumber.value.toString());
