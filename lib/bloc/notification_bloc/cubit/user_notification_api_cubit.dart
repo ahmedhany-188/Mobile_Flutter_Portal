@@ -131,7 +131,7 @@ class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState> {
               userNotificationList: value,
               userNotificationEnumStates: UserNotificationEnumStates.success));
         }).catchError((error) {
-          print("4 error");
+          print("4 error ${error.toString()}");
           emit(state.copyWith(
             userNotificationEnumStates: UserNotificationEnumStates.failed,
           ));
