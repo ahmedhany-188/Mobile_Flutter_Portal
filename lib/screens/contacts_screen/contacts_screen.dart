@@ -334,7 +334,7 @@ class _ContactsScreenState extends State<ContactsScreen>
                             child:
                                 BlocBuilder<ContactsCubit, ContactCubitStates>(
                               builder: (context, state) {
-                                return (state.contactStates == ContactsEnumStates.initial)? const Center(child: CircularProgressIndicator(),) :SizedBox(
+                                return (state.contactStates == ContactsEnumStates.initial)? const Center(child: CircularProgressIndicator(color: Colors.white),) :SizedBox(
                                   height: deviceSize.height * 0.70,
                                   child: (ContactsFiltersCubit.get(context)
                                           .state

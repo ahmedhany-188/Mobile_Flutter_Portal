@@ -39,19 +39,15 @@ import '../notification_screen/notifications_screen.dart';
 import '../../screens/contacts_screen/contacts_screen.dart';
 import '../videos_screen/videos_screen.dart';
 
-class HomeGridViewScreen extends StatefulWidget {
+// class HomeGridViewScreen extends StatefulWidget {
+//   const HomeGridViewScreen({Key? key}) : super(key: key);
+//
+//   @override
+//   State<HomeGridViewScreen> createState() => _HomeGridViewScreenState();
+// }
+
+class HomeGridViewScreen extends StatelessWidget {
   const HomeGridViewScreen({Key? key}) : super(key: key);
-
-  @override
-  State<HomeGridViewScreen> createState() => _HomeGridViewScreenState();
-}
-
-class _HomeGridViewScreenState extends State<HomeGridViewScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
