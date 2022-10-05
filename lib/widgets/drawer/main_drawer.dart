@@ -148,23 +148,23 @@ class MainDrawer extends StatelessWidget {
   }
 
   Divider buildDivider() {
-    return const Divider(
+    return  Divider(
       thickness: 0.5,
       indent: 20,
       endIndent: 20,
-      color: Colors.white,
+      color: Colors.blue.shade200,
     );
   }
 
   Widget buildGrouping(String groupName) {
     return Container(
         margin: const EdgeInsets.only(left: 15.0),
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.only(left: 10.0,right: 10.0,bottom: 10.0,top: 0.0),
         child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
               groupName,
-              style: const TextStyle(color: Colors.black, fontSize: 14),
+              style:  TextStyle(color: Colors.blue.shade200, fontSize: 14,fontFamily: FontFamily.robotoCondensed,fontWeight: FontWeight.bold),
             )));
   }
 
