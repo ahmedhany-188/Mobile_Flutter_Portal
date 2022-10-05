@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/data/models/response_take_action.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
 import '../../../constants/enums.dart';
 import '../../../constants/request_service_id.dart';
 import '../../../data/models/user_notification_api/user_notification_api.dart';
@@ -210,21 +209,21 @@ class UserNotificationApiCubit extends Cubit<UserNotificationApiState> {
     return super.close();
   }
 
-  @override
-  UserNotificationApiState? fromJson(Map<String, dynamic> json) {
-    // TODO: implement fromJson
-    return UserNotificationApiState.fromMap(json);
-  }
-
-  @override
-  Map<String, dynamic>? toJson(UserNotificationApiState state) {
-    // TODO: implement toJson
-    if (state.userNotificationEnumStates ==
-        UserNotificationEnumStates.success) {
-      return state.toMap();
-    } else {
-      return null;
-    }
-  }
+  // @override
+  // UserNotificationApiState? fromJson(Map<String, dynamic> json) {
+  //   // TODO: implement fromJson
+  //   return UserNotificationApiState.fromMap(json);
+  // }
+  //
+  // @override
+  // Map<String, dynamic>? toJson(UserNotificationApiState state) {
+  //   // TODO: implement toJson
+  //   if (state.userNotificationEnumStates ==
+  //       UserNotificationEnumStates.success) {
+  //     return state.toMap();
+  //   } else {
+  //     return null;
+  //   }
+  // }
 
 }
