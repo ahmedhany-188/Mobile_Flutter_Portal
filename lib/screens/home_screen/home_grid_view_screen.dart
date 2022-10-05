@@ -89,7 +89,7 @@ class HomeGridViewScreen extends StatelessWidget {
         2 * (0.5 - (0.5 - Curves.ease.transform(animation)).abs());
 
     return BlocProvider.value(
-      value: UserNotificationApiCubit.get(context),
+      value: UserNotificationApiCubit.get(context)..getNotificationsWithoutLoading(user),
       child: CustomBackground(
       child: Scaffold(
           backgroundColor: Colors.transparent,
