@@ -24,10 +24,10 @@ class UserNotificationApiCubit extends Cubit<UserNotificationApiState> {
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
           try {
-            print("1");
+            // print("1");
             await getNotifications(requestRepository.userData ?? MainUserData.empty);
           } catch (e) {
-            print("1 error");
+            // print("1 error");
             emit(state.copyWith(
               userNotificationEnumStates: UserNotificationEnumStates.failed,
             ));
@@ -101,13 +101,13 @@ class UserNotificationApiCubit extends Cubit<UserNotificationApiState> {
               userNotificationList: value,
               userNotificationEnumStates: UserNotificationEnumStates.success));
         }).catchError((error) {
-          print("2 error");
+          // print("2 error");
           emit(state.copyWith(
             userNotificationEnumStates: UserNotificationEnumStates.failed,
           ));
         });
       } catch (e) {
-        print("3 error");
+        // print("3 error");
         emit(state.copyWith(
           userNotificationEnumStates: UserNotificationEnumStates.failed,
         ));
@@ -130,13 +130,13 @@ class UserNotificationApiCubit extends Cubit<UserNotificationApiState> {
               userNotificationList: value,
               userNotificationEnumStates: UserNotificationEnumStates.success));
         }).catchError((error) {
-          print("4 error ${error.toString()}");
+          // print("4 error ${error.toString()}");
           emit(state.copyWith(
             userNotificationEnumStates: UserNotificationEnumStates.failed,
           ));
         });
       } catch (e) {
-        print("5 error");
+        // print("5 error");
         emit(state.copyWith(
           userNotificationEnumStates: UserNotificationEnumStates.failed,
         ));
