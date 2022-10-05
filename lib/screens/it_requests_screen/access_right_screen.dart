@@ -183,7 +183,7 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                               }
                             });
                             BlocProvider.of<UserNotificationApiCubit>(context)
-                                .getNotifications();
+                                .getNotifications(user);
                           }
                         }
                         if (state.status.isSubmissionFailure) {

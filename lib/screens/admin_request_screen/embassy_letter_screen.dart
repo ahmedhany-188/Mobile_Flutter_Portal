@@ -163,7 +163,7 @@ class _EmbassyLetterScreen extends State<EmbassyLetterScreen> {
                               SystemNavigator.pop();
                             }
                           });
-                          BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();}
+                          BlocProvider.of<UserNotificationApiCubit>(context).getNotifications(userMainData);}
                       }
                       else if (state.status.isSubmissionInProgress) {
                         EasyLoading.show(status: 'loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);

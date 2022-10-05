@@ -140,7 +140,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                             }
                           });
                           BlocProvider.of<UserNotificationApiCubit>(context)
-                              .getNotifications();
+                              .getNotifications(user);
                         }
                       }
                       if (state.status.isSubmissionFailure) {

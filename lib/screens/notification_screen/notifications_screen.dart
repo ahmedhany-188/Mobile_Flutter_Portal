@@ -40,12 +40,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             appBar: AppBar(title: const Text("My Notification")),
             body: RefreshIndicator(
               onRefresh: () async {
-                await UserNotificationApiCubit.get(context).getNotifications();
+                await UserNotificationApiCubit.get(context).getNotifications(user);
                 // await Future.delayed(const Duration(milliseconds: 1000));
                 return Future(() => null);
               },
               child: BlocProvider<UserNotificationApiCubit>.value(
-                value: BlocProvider.of<UserNotificationApiCubit>(context)..getNotificationsWithoutLoading(),
+                value: BlocProvider.of<UserNotificationApiCubit>(context)..getNotificationsWithoutLoading(user),
                 child: BlocConsumer<UserNotificationApiCubit,
                     UserNotificationApiState>(
                   listener: (context, state) {
@@ -63,7 +63,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       EasyLoading.showSuccess(state.successMessage ?? "").then(
                               (value) =>
                               UserNotificationApiCubit.get(context)
-                                  .getNotifications());
+                                  .getNotifications(user));
                     }
                     if (state.status.isSubmissionFailure) {
                       EasyLoading.showError(

@@ -155,7 +155,7 @@ class _PermissionScreenState extends State<PermissionScreen> {
                                 SystemNavigator.pop();
                               }
                             });
-                            BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();
+                            BlocProvider.of<UserNotificationApiCubit>(context).getNotifications(userMainData);
                           }
                         }
                         if (state.status.isSubmissionFailure) {

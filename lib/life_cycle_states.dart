@@ -77,7 +77,7 @@ class LifeCycleStateState extends State<LifeCycleState> with WidgetsBindingObser
         GeneralDio(userData);
         // AlbumDio(userData);
       }
-      UserNotificationApiCubit.get(context).getNotificationsWithoutLoading();
+      UserNotificationApiCubit.get(context).getNotificationsWithoutLoading(userData);
       updateFirebaseWithStatus(AppLifecycleStatus.online);
       // unityWidgetController.resume();
     }else if (state == AppLifecycleState.inactive){

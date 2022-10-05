@@ -192,7 +192,7 @@ class _VacationScreenState extends State<VacationScreen> {
                               }
                             });
                             BlocProvider.of<UserNotificationApiCubit>(context)
-                                .getNotifications();
+                                .getNotifications(userMainData);
                           }
                         }
                         if (state.status.isSubmissionFailure) {

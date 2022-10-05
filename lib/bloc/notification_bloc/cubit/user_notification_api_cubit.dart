@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -24,7 +25,7 @@ class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState> {
         if (connectivityResult == ConnectivityResult.wifi ||
             connectivityResult == ConnectivityResult.mobile) {
           try {
-            getNotifications();
+            getNotifications(requestRepository.userData ?? MainUserData.empty);
           } catch (e) {
             emit(state.copyWith(
               userNotificationEnumStates: UserNotificationEnumStates.failed,
@@ -87,14 +88,14 @@ class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState> {
     ));
   }
 
-  Future<void> getNotifications() async {
+  Future<void> getNotifications(MainUserData userData) async {
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       try {
         emit(state.copyWith(
             userNotificationEnumStates: UserNotificationEnumStates.loading,
             status: FormzStatus.pure));
         // await Future.delayed(Duration(minutes: 1));
-        await requestRepository.getMyNotificationData().then((value) async {
+        await RequestRepository(userData).getMyNotificationData().then((value) async {
           emit(state.copyWith(
               userNotificationList: value,
               userNotificationEnumStates: UserNotificationEnumStates.success));
@@ -114,14 +115,14 @@ class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState> {
       ));
     }
   }
-  Future<void> getNotificationsWithoutLoading() async {
+  Future<void> getNotificationsWithoutLoading(MainUserData userData) async {
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       try {
         // emit(state.copyWith(
         //     userNotificationEnumStates: UserNotificationEnumStates.loading,
         //     status: FormzStatus.pure));
         // await Future.delayed(Duration(minutes: 1));
-        await requestRepository.getMyNotificationData().then((value) async {
+        await RequestRepository(userData).getMyNotificationData().then((value) async {
           emit(state.copyWith(
               userNotificationList: value,
               userNotificationEnumStates: UserNotificationEnumStates.success));

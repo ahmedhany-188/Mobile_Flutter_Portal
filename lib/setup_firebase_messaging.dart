@@ -262,7 +262,9 @@ class SetupFirebaseMessaging {
     if (kDebugMode) {
       print("show flutter notification");
     }
-    UserNotificationApiCubit.get(context).getNotificationsWithoutLoading();
+    final userData = context
+        .read<AppBloc>().state.userData;
+    UserNotificationApiCubit.get(context).getNotificationsWithoutLoading(userData);
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     setupFlutterNotifications();
     RemoteNotification? notification = message.notification;

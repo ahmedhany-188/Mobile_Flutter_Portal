@@ -174,7 +174,7 @@ class _BusinessCardScreen extends State<BusinessCardScreen> {
                                   SystemNavigator.pop();
                                 }
                               });
-                              BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();}
+                              BlocProvider.of<UserNotificationApiCubit>(context).getNotifications(user);}
                           }
                           else if (state.status.isSubmissionInProgress) {
                             EasyLoading.show(status: 'loading...',

@@ -173,7 +173,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                               }
                             });
                             BlocProvider.of<UserNotificationApiCubit>(context)
-                                .getNotifications();
+                                .getNotifications(userMainData);
                           }
                         }
                         if (state.status.isSubmissionFailure) {

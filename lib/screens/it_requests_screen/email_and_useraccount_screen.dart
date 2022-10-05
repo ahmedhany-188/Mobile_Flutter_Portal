@@ -182,7 +182,7 @@ class _EmailAndUserAccountScreen extends State<EmailAndUserAccountScreen> {
                                 SystemNavigator.pop();
                               }
                             });
-                            BlocProvider.of<UserNotificationApiCubit>(context).getNotifications();}
+                            BlocProvider.of<UserNotificationApiCubit>(context).getNotifications(user);}
                         }
                         if(state.mobileKey){
                           mobileKeyClear=true;
