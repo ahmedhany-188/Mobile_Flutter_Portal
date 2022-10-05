@@ -45,7 +45,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 return Future(() => null);
               },
               child: BlocProvider<UserNotificationApiCubit>.value(
-                value: UserNotificationApiCubit(RequestRepository(user))..getNotificationsWithoutLoading(),
+                value: BlocProvider.of<UserNotificationApiCubit>(context)..getNotificationsWithoutLoading(),
                 child: BlocConsumer<UserNotificationApiCubit,
                     UserNotificationApiState>(
                   listener: (context, state) {

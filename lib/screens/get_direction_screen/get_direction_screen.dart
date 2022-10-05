@@ -30,7 +30,7 @@ class _GetDirectionScreenState extends State<GetDirectionScreen> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('Get Direction'),
+          title: const Text('Find Our Locations'),
           backgroundColor: Colors.transparent,
           elevation: 0,
         ),

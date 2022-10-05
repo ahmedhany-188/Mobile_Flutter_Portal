@@ -43,6 +43,8 @@ class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState> {
   final Connectivity connectivity = Connectivity();
   final RequestRepository requestRepository;
 
+  // updateRepository(this.requestRepository);
+
   writenTextSearch(String searchString) {
     emit(state.copyWith(searchString: searchString));
     checkAllFilters();

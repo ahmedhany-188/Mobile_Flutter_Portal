@@ -573,13 +573,26 @@ class MainDrawer extends StatelessWidget {
                             context, EmployeeAppraisalScreen.routeName);
                       },
                     ),
+                    buildListTile(
+                      'Sign Out',
+                          Icons.logout,
+                          () async {
+                        // HydratedBloc.storage.clear();
+                        // await BlocProvider.of<UserNotificationApiCubit>(context).clearState();
+                        // if (!mounted) return;
+                        // await BlocProvider.of<MyRequestsCubit>(context).clearState();
+                        // if (!mounted) return;
+                        context.read<AppBloc>().add(AppLogoutRequested());
+                        context.read<LoginCubit>().clearCubit();
+                      },
+                    ),
 
                     buildDivider(),
 
                     /// first Group
-                    buildGrouping('OTHERS'),
+                    buildGrouping('COMPANY'),
                     buildNoIconTile(
-                      'Get Direction',
+                      'Find Our Locations',
                       () {
                         Navigator.of(context)
                             .popAndPushNamed(GetDirectionScreen.routeName);
@@ -604,18 +617,7 @@ class MainDrawer extends StatelessWidget {
                         Navigator.of(context).popAndPushNamed(AboutScreen.routeName);
                       },
                     ),
-                    buildNoIconTile(
-                      'Sign Out',
-                      () async {
-                        // HydratedBloc.storage.clear();
-                        // await BlocProvider.of<UserNotificationApiCubit>(context).clearState();
-                        // if (!mounted) return;
-                        // await BlocProvider.of<MyRequestsCubit>(context).clearState();
-                        // if (!mounted) return;
-                        context.read<AppBloc>().add(AppLogoutRequested());
-                        context.read<LoginCubit>().clearCubit();
-                      },
-                    ),
+
                     buildDivider(),
                     buildGrouping('MAIN MENU'),
                     buildExternalLinks('HR Management', getHrManagment()),

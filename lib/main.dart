@@ -362,9 +362,9 @@ class _MyAppState extends State<MyApp> {
                           BlocProvider.of<AppBloc>(userNotificationContext)
                               .state
                               .userData),
-                    );
+                    )..getNotificationsWithoutLoading();
                   }
-              // ..getNotifications(),
+
               ),
           BlocProvider<AppUpgraderCubit>(
             lazy: false,
