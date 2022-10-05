@@ -13,7 +13,7 @@ import '../../../data/repositories/request_repository.dart';
 
 part 'user_notification_api_state.dart';
 
-class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState> {
+class UserNotificationApiCubit extends Cubit<UserNotificationApiState> {
   UserNotificationApiCubit(this.requestRepository)
       : super(const UserNotificationApiState()) {
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
@@ -227,11 +227,4 @@ class UserNotificationApiCubit extends HydratedCubit<UserNotificationApiState> {
     }
   }
 
-  Future<void> clearState() async {
-    emit(state.copyWith(
-      userNotificationEnumStates: UserNotificationEnumStates.success,
-      userNotificationList: [],
-    ));
-    await clear();
-  }
 }
