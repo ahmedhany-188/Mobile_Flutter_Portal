@@ -144,7 +144,38 @@ class ContactsFiltersCubit extends Cubit<ContactsFiltersInitial> {
                     return true;
                   })
                 : true);
-      }).toList();
+      }).toList()
+        ..sort(
+          (a, b) => a.name
+              .toString()
+              .toLowerCase()
+              .trim()
+              .indexOf(splitQuery.first).compareTo(b.name
+              .toString()
+              .toLowerCase()
+              .trim()
+              .indexOf(splitQuery.first)));
+          // {
+          //   int indexOfSearchQueryA = a.name
+          //       .toString()
+          //       .toLowerCase()
+          //       .trim()
+          //       .indexOf(state.searchString.trim());
+          //   int indexOfSearchQueryB = b.name
+          //       .toString()
+          //       .toLowerCase()
+          //       .trim()
+          //       .indexOf(state.searchString.trim());
+          //   if (indexOfSearchQueryA > indexOfSearchQueryB) {
+          //     return 1;
+          //   } else if (indexOfSearchQueryA == indexOfSearchQueryB &&
+          //       a.name.toString().toLowerCase().trim().hashCode <=
+          //           b.name.toString().toLowerCase().trim().hashCode) {
+          //     return -1;
+          //   }
+          //   return -1;
+          // },
+        // );
       emit(state.copyWith(
           listContacts: contactSearchResultsList, isFiltered: true));
     }
