@@ -701,8 +701,12 @@ class RequestRepository {
       "nextStep": nextObject ?? [],
     });
 
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
     final http.Response rawResponse =
-        await requestDataProviders.postTakeEquipmentActionOnRequest(bodyString);
+        await requestDataProviders.postTakeEquipmentActionOnRequest(bodyString,header);
     final json = await jsonDecode(rawResponse.body);
     final ResponseTakeAction response = ResponseTakeAction.fromJson(json);
 
