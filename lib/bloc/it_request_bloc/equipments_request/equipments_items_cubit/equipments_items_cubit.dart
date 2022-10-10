@@ -33,6 +33,10 @@ class EquipmentsItemsCubit extends Cubit<EquipmentsItemsInitial> {
 
   static EquipmentsItemsCubit get(context) => BlocProvider.of(context);
 
+  setElementPrice({String? elementPrice, String? count}){
+    emit(state.copyWith(elementPrice: elementPrice,count: count));
+  }
+
   getEquipmentsItems({String id = '0'}) {
     emit(state.copyWith(
       equipmentsItemsEnumState: EquipmentsItemsEnumState.initial,

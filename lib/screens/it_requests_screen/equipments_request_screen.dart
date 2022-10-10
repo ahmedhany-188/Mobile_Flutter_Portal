@@ -275,7 +275,8 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                   return Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: RequesterDataWidget(
-                                      requestServiceId: RequestServiceID.equipmentServiceID,
+                                      requestServiceId:
+                                          RequestServiceID.equipmentServiceID,
                                       requesterData: state.requesterData,
                                       actionComment: ActionCommentWidget(
                                           onChanged: (commentValue) => context
@@ -1369,8 +1370,6 @@ class EquipmentsRequestScreen extends StatelessWidget {
     }
   }
 
-
-
   showAddRequestBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -1699,15 +1698,15 @@ class EquipmentsRequestScreen extends StatelessWidget {
             ),
             body: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Column(
+              child: BlocProvider(
+                create: (context) => EquipmentsItemsCubit(GeneralDio(
+                    BlocProvider.of<AppBloc>(context).state.userData))
+                  ..getEquipmentsItems(id: id),
+  child: Column(
                 // mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  BlocProvider(
-                    create: (context) =>
-                        EquipmentsItemsCubit(GeneralDio(
-                            BlocProvider.of<AppBloc>(context).state.userData))..getEquipmentsItems(id: id),
-                    child: BlocBuilder<EquipmentsItemsCubit,
+                   BlocBuilder<EquipmentsItemsCubit,
                         EquipmentsItemsInitial>(
                       builder: (context, state) {
                         return buildDynamicDropDownMenu(
@@ -1717,7 +1716,6 @@ class EquipmentsRequestScreen extends StatelessWidget {
                         );
                       },
                     ),
-                  ),
 
                   BlocBuilder<ContactsCubit, ContactCubitStates>(
                     builder: (context, state) {
@@ -1758,6 +1756,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                   // ),
                 ],
               ),
+),
             ),
           ),
         );
@@ -1833,6 +1832,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
             }
             return null;
           },
+          onChanged: (value) => EquipmentsItemsCubit.get(context).setElementPrice(elementPrice: value?.estimatePrice ?? '0'),
           itemAsString: (equip) => equip.hardWareItemName!,
           dropdownButtonProps: const DropdownButtonProps(color: Colors.white),
           dropdownDecoratorProps: DropDownDecoratorProps(
@@ -1905,60 +1905,62 @@ class EquipmentsRequestScreen extends StatelessWidget {
   }
 
   buildTextFormField() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Flexible(
-          fit: FlexFit.tight,
-          child: IconButton(
-            icon: const Icon(
-              Icons.remove,
-              color: Colors.white,
+    return BlocBuilder<EquipmentsItemsCubit, EquipmentsItemsInitial>(
+      builder: (context, state) {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Flexible(
+              fit: FlexFit.tight,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.remove,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  int currentValue = int.parse(controller.text);
+                  currentValue--;
+                  controller.text = (currentValue > 1 ? currentValue : 1)
+                      .toString(); // decrementing value
+                  EquipmentsItemsCubit.get(context).setElementPrice(count: controller.text);
+                },
+              ),
             ),
-            onPressed: () {
-              int currentValue = int.parse(controller.text);
-              currentValue--;
-              controller.text = (currentValue > 1 ? currentValue : 1)
-                  .toString(); // decrementing value
-            },
-          ),
-        ),
-        Flexible(
-          flex: 1,
-          child: TextFormField(
-            textAlign: TextAlign.center,
-            enabled: false,
-            // decoration: InputDecoration(
-            //   contentPadding: const EdgeInsets.all(8.0),
-            //   border: OutlineInputBorder(
-            //     borderRadius: BorderRadius.circular(5.0),
-            //   ),
-            // ),
-            controller: controller,
-            // keyboardType: TextInputType.number,
-            inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(RegExp(r'^[1-9][0-9]*'))
-            ],
-          ),
-        ),
-        Flexible(
-          fit: FlexFit.tight,
-          child: IconButton(
-            icon: const Icon(
-              Icons.add,
-              color: Colors.white,
+            Flexible(
+              flex: 1,
+              child: TextFormField(
+                textAlign: TextAlign.center,
+                enabled: false,
+                controller: controller,
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.allow(RegExp(r'^[1-9][0-9]*'))
+                ],
+              ),
             ),
-            splashColor: Colors.transparent,
-            onPressed: () {
-              int currentValue = int.parse(controller.text);
-              if (currentValue < 100) currentValue++;
-              controller.text = (currentValue).toString(); // incrementing value
-            },
-          ),
-        ),
-        Flexible(child: Text('Price: ${(int.parse(controller.text) * int.parse(itemFormKey.currentState?.getSelectedItem?.estimatePrice ?? '0') ).toString()} LE')),
-      ],
+            Flexible(
+              fit: FlexFit.tight,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
+                splashColor: Colors.transparent,
+                onPressed: () {
+                  int currentValue = int.parse(controller.text);
+                  if (currentValue < 100) currentValue++;
+                  controller.text =
+                      (currentValue).toString(); // incrementing value
+                  EquipmentsItemsCubit.get(context).setElementPrice(count: controller.text);
+                },
+              ),
+            ),
+            Flexible(
+                child: Text(
+                    'Price: ${(int.parse(controller.text) * int.parse(state.elementPrice)).toString()} LE')),
+          ],
+        );
+      },
     );
   }
 
