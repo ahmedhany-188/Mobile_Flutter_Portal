@@ -29,9 +29,13 @@ class EquipmentsItemsCubit extends Cubit<EquipmentsItemsInitial> {
     });
   }
   final Connectivity connectivity = Connectivity();
-  GeneralDio _generalDio;
+  final GeneralDio _generalDio;
 
   static EquipmentsItemsCubit get(context) => BlocProvider.of(context);
+
+  setElementPrice({String? elementPrice, String? count}){
+    emit(state.copyWith(elementPrice: elementPrice,count: count));
+  }
 
   getEquipmentsItems({String id = '0'}) {
     emit(state.copyWith(
