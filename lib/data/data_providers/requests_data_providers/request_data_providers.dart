@@ -16,7 +16,12 @@ class RequestDataProviders {
     if (kDebugMode) {
       print(permissionFeedbackRequest.body);
     }
-    return permissionFeedbackRequest;
+    if(permissionFeedbackRequest.statusCode == 200){
+      return permissionFeedbackRequest;
+    }else{
+      throw RequestFailureApi(permissionFeedbackRequest.statusCode.toString());
+    }
+
   }
 
   Future<http.Response> postAccessAccountAccessRequest(
@@ -261,4 +266,28 @@ class RequestDataProviders {
     });
     return equipmentFeedbackRequest;
   }
+}
+
+class RequestFailureApi implements Exception {
+  /// {@macro log_in_with_email_and_password_failure}
+  const RequestFailureApi([
+    this.message = 'An Error has happened please try again',
+  ]);
+
+  /// Create an authentication message
+  /// from a firebase authentication exception code.
+  factory RequestFailureApi.fromCode(int code) {
+    switch (code) {
+      case 419:
+        return const RequestFailureApi(
+          "Token has expired",
+        );
+
+      default:
+        return const RequestFailureApi();
+    }
+  }
+
+  /// The associated error message.
+  final String message;
 }
