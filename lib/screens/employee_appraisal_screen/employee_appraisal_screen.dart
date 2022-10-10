@@ -80,8 +80,10 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
 
                     int appraisalMonth = int.parse(dateData[1]);
 
-                    appraisalDataList.add(ObjectAppraisalModel(
-                        "Company", dataEmployeeAppraisalModel?.companyScore??0.0));
+                    appraisalDataList.clear();
+
+                    appraisalDataList.add(ObjectAppraisalModel("Company",
+                        dataEmployeeAppraisalModel?.companyScore??0.0));
                     appraisalDataList.add(ObjectAppraisalModel("Department",
                         dataEmployeeAppraisalModel?.departmentScore??0.0));
                     appraisalDataList.add(ObjectAppraisalModel("Individual",
@@ -245,6 +247,9 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
   }
 
   Column getOverallContainer(String name, double value) {
+
+    double progressValue = value>100.0?100:value;
+
     return Column(
       children: [
         Padding(
@@ -257,7 +262,7 @@ class EmployeeAppraisalScreenState extends State<EmployeeAppraisalScreen> {
             animation: true,
             lineHeight: 25.0,
             animationDuration: 2500,
-            percent: value / 100,
+            percent: progressValue / 100,
             center: Text(value.toString()+" %",style: const TextStyle(color: Colors.black),),
             // linearStrokeCap: LinearStrokeCap.roundAll,
             barRadius: const Radius.circular(10),

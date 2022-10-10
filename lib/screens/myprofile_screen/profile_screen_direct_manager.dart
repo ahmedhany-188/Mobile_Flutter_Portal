@@ -166,10 +166,13 @@ class DirectManagerProfileScreenClass
                                   padding: const EdgeInsets.all(10.0),
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                        width: 2, color: Colors.black),
+                                        width: 2,
+                                    //    color: Colors.black
+                                        color: Colors.white.withOpacity(0.7)),
                                     borderRadius: const BorderRadius.all(
                                         Radius.circular(20)),
-                                    color: Colors.black26,
+                                    // color: Colors.black26
+                                    color: Colors.grey.shade400.withOpacity(0.2),
                                   ),
                                   child: Column(children: [
                                     Padding(

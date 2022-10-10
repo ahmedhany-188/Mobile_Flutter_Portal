@@ -34,6 +34,10 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget {
                 ),
                 itemCount: employeeAppraisaleList.length,
                 itemBuilder: (BuildContext context, int index) {
+
+                  double progressValue = employeeAppraisaleList[index].value>100.0?100:employeeAppraisaleList[index].value;
+
+
                   return Container(
                     decoration: const BoxDecoration(
                       color: Colors.transparent,
@@ -42,7 +46,7 @@ class EmployeeAppraisalTicketWidget extends StatelessWidget {
                       radius: 70.0,
                       lineWidth: 13.0,
                       animation: true,
-                      percent: employeeAppraisaleList[index].value / 100,
+                      percent: progressValue / 100,
                       center: Text(
                         "${employeeAppraisaleList[index].value}%",
                         style: const TextStyle(
