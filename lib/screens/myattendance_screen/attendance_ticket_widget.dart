@@ -39,14 +39,17 @@ class AttendanceTicketWidget extends StatelessWidget {
           List<String> date =
               attendanceListData[index].date.toString().split('-');
 
-          if (attendanceListData[index].holiday == true ||
+           if (attendanceListData[index].businessMission != null ||
+          attendanceListData[index].permission != null) {
+          return sizedDay(attendanceListData[index], context, "in", "out",
+          "blue", "blue", hrUser);
+          }else if (  // attendanceListData[index].holiday == true ||
+           checkValidation(attendanceListData[index]) ||
               attendanceListData[index].vacation != null) {
             return SizedBox(
               width: double.infinity,
               child: InkWell(
                 onTap: () {
-                  if ( //attendanceListData[index].vacation == null &&
-                      attendanceListData[index].holiday == false) {
                     showModalBottomSheet<void>(
                         context: context,
                         isScrollControlled: true,
@@ -55,7 +58,6 @@ class AttendanceTicketWidget extends StatelessWidget {
                               attendanceListData: attendanceListData[index],
                               hrUser: hrUser);
                         });
-                  }
                 },
                 child: Column(children: [
                   Text("${date[1]}/${date[2].substring(0, 2)}",
@@ -64,10 +66,6 @@ class AttendanceTicketWidget extends StatelessWidget {
                 ]),
               ),
             );
-          } else if (attendanceListData[index].businessMission != null ||
-              attendanceListData[index].permission != null) {
-            return sizedDay(attendanceListData[index], context, "in", "out",
-                "blue", "blue", hrUser);
           } else if (attendanceListData[index].timeIN != null &&
               attendanceListData[index].timeOUT != null) {
 
@@ -156,7 +154,9 @@ Container holidayContainer(MyAttendanceModel attendanceModel) {
     ),
     alignment: Alignment.center,
     width: double.infinity,
-    child: attendanceModel.vacation == null?iconContainer(attendanceModel):null,
+    // child: attendanceModel.vacation == null?iconContainer(attendanceModel):null,
+    child: attendanceModel.vacation == null?const Text("-----"):const Text(""),
+
   );
 }
 
@@ -207,8 +207,7 @@ SizedBox sizedDay(
     width: double.infinity,
     child: InkWell(
         onTap: () {
-          if ( // attendanceModel.vacation == null &&
-              attendanceModel.holiday != true) {
+
             showModalBottomSheet<void>(
                 context: context,
                 isScrollControlled: true,
@@ -216,7 +215,7 @@ SizedBox sizedDay(
                   return ShowAttendanceBottomSheet(
                       attendanceListData: attendanceModel, hrUser: hrUser);
                 });
-          }
+
         },
         child: Column(children: [
           Text("${date[1]}/${date[2].substring(0, 2)}",
@@ -241,6 +240,19 @@ SizedBox sizedDay(
               dayActionNight),
         ])),
   );
+}
+
+bool checkValidation(MyAttendanceModel attendanceModel){
+
+  if(attendanceModel.timeOUT==null && attendanceModel.timeIN==null &&
+      attendanceModel.deduction==null && attendanceModel.holiday==true){
+    return true;
+  }else{
+    return false;
+  }
+
+
+
 }
 
 IconButton iconContainer(MyAttendanceModel attendanceModel) {

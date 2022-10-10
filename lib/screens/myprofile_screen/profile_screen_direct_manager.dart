@@ -131,27 +131,7 @@ class DirectManagerProfileScreenClass
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(5.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.center,
-                                  children: [
-                                    Flexible(
-                                      flex: 2,
-                                      child: IconButton(
-                                        icon: const Icon(Icons.phone),
-                                        color: Colors.white,
-                                        onPressed: () {
-                                          url_launcher.launchUrl(Uri.parse(
-                                              'tel:+${getMobile(state)}'));
-                                        },
-                                      ),
-                                    ),
-                                    Flexible(
-                                      flex: 3,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Center(
-                                          // child: state is BlocGetManagerDataSuccessState && state.managerData.imgProfile !=null && state.managerData.imgProfile.toString()!="" && state.managerData.imgProfile.toString()!="null"?
+                                child: Center(
                                           child: CachedNetworkImage(
                                             imageUrl: getUserProfilePicture(
                                                 state.managerData
@@ -178,21 +158,7 @@ class DirectManagerProfileScreenClass
                                                         .image(height: 80),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                    Flexible(
-                                      flex: 2,
-                                      child: IconButton(
-                                        icon: const Icon(Icons.mail),
-                                        color: Colors.white,
-                                        onPressed: () {
-                                          url_launcher.launchUrl(Uri.parse(
-                                              'mailto:${getEmail(state)}'));
-                                        },
-                                      ),
-                                    ),
-                                  ],
-                                ),
+
                               ),
                               Padding(
                                 padding: const EdgeInsets.all(5.0),
@@ -258,12 +224,33 @@ class DirectManagerProfileScreenClass
                                         const Divider(
                                           thickness: 2.5,
                                         ),
-                                        getHead("Department:"),
+                                        getHead("Department:",false),
                                         getLine(state.managerData.projectName??""),
-                                        getHead("Job Title:"),
+                                        getHead("Job Title:",false),
                                         getLine(state.managerData.titleName??""),
-                                        getHead("Email:"),
-                                        getLine(state.managerData.email??""),
+                                        InkWell(
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  getHead("Email:",true),
+                                                   IconButton(
+                                                    icon: const Icon(Icons.mail),
+                                                    color: Colors.white,
+                                                    onPressed: () {
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                              getLine(state.managerData.email??""),
+                                            ],
+                                          ),
+                                          onTap: (){
+                                            url_launcher.launchUrl(Uri.parse(
+                                                'mailto:${getEmail(state)}'));
+                                          },
+                                        ),
                                         SizedBox(
                                             width: double.infinity,
                                             child: InkWell(
@@ -287,7 +274,7 @@ class DirectManagerProfileScreenClass
                                                     flex: 6,
                                                     child: Column(children: [
                                                       getHead(
-                                                          "Direct Manager:"),
+                                                          "Direct Manager:",false),
                                                       Padding(
                                                         padding:
                                                             const EdgeInsets
@@ -319,9 +306,32 @@ class DirectManagerProfileScreenClass
                                                 ],
                                               ),
                                             )),
-                                        getHead("Mobile Number:"),
-                                        getLine(getMobile(state)),
-                                        getHead("Ext:"),
+                                        InkWell(
+                                          child: Column(
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  getHead("Mobile Number:",true),
+                                                  IconButton(
+                                                    icon: const Icon(Icons.phone),
+                                                    color: Colors.white,
+                                                    onPressed: () {
+
+
+                                                    },
+                                                  ),
+                                                ],
+                                              ),
+                                              getLine(getMobile(state)),
+                                            ],
+                                          ),
+                                          onTap: (){
+                                            url_launcher.launchUrl(Uri.parse(
+                                                'tel:+${getMobile(state)}'));
+                                          },
+                                        ),
+                                        getHead("Ext:",false),
                                         getLine(getExt(state)),
                                         getQRData(state),
                                       ]))),
@@ -361,24 +371,16 @@ class DirectManagerProfileScreenClass
     }
   }
 
-  String getLineManager(EmployeeData ?employeeData) {
-    if (employeeData?.isTopManagement != true) {
-      return employeeData?.mobile ?? "";
-    } else if (employeeData?.mobile == null) {
-      return "";
-    } else {
-      return employeeData?.mobile ?? "";
-    }
-  }
 
   String getMobile(ProfileManagerState state) {
     if (state is BlocGetManagerDataSuccessState) {
-      if (state.managerData.isTopManagement != true) {
-        return state.managerData.mobile??"";
-      }else {
+      if (state.managerData.mainFunction=="Top Management") {
         return "";
+      } else {
+        return state.managerData.mobile??"";
       }
-    } else {
+  }
+  else {
       return "";
     }
   }
@@ -413,11 +415,11 @@ class DirectManagerProfileScreenClass
     );
   }
 
-  Padding getHead(String head) {
+  Padding getHead(String head,bool icon) {
     return Padding(
       padding: const EdgeInsets.all(3.0),
       child: SizedBox(
-        width: double.infinity,
+        width: icon?null:double.infinity,
         child: Text(
           head,
           style: const TextStyle(

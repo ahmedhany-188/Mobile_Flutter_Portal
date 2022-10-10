@@ -277,7 +277,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                 ),
                               )),
                           getHead("Mobile Number:"),
-                          getLine(getLineManager(user.employeeData)),
+                          getLine(user.employeeData?.mobile ?? ""),
                           getHead("Ext:"),
                           getLine(user.employeeData?.deskPhone ?? ""),
                         ],
@@ -357,10 +357,10 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
   }
 
   String getLineManager(EmployeeData ?employeeData) {
-    if (employeeData?.isTopManagement != true) {
-      return employeeData?.mobile ?? "";
-    }else {
+    if (employeeData?.mainFunction == "Top Management") {
       return "";
+    }else {
+      return employeeData?.mobile ?? "";
     }
   }
 
