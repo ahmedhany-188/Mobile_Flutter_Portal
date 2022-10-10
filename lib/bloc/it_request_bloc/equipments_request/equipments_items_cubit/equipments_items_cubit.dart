@@ -29,7 +29,7 @@ class EquipmentsItemsCubit extends Cubit<EquipmentsItemsInitial> {
     });
   }
   final Connectivity connectivity = Connectivity();
-  GeneralDio _generalDio;
+  final GeneralDio _generalDio;
 
   static EquipmentsItemsCubit get(context) => BlocProvider.of(context);
 
