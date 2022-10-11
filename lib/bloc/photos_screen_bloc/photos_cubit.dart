@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/data/models/photos_model/album_model.dart';
 
+import '../../data/data_providers/requests_data_providers/request_data_providers.dart';
 import '../../data/models/photos_model/photos_model.dart';
 
 part 'photos_state.dart';
@@ -30,16 +31,20 @@ class PhotosCubit extends Cubit<PhotosState> {
 
   List<PhotosIdData> photosList = [];
   List<AlbumData> albumList = [];
-  AlbumDio _albumDio;
+  final AlbumDio _albumDio;
 
   void getPhotos() {
     emit(PhotosLoadingState());
 
     _albumDio.getPhotosAlbumsId().then((value) {
-      PhotosModel photosResponse = PhotosModel.fromJson(value.data);
-      if (photosResponse.data != null) {
-        photosList = photosResponse.data!;
-        emit(PhotosSuccessState(photosList));
+      if(value.data != null && value.statusCode == 200){
+        PhotosModel photosResponse = PhotosModel.fromJson(value.data);
+        if (photosResponse.data != null) {
+          photosList = photosResponse.data!;
+          emit(PhotosSuccessState(photosList));
+        }
+      }else{
+        throw RequestFailureApi(value.statusCode.toString());
       }
     }).catchError((error) {
       if (kDebugMode) {
@@ -53,13 +58,15 @@ class PhotosCubit extends Cubit<PhotosState> {
     emit(PhotosLoadingState());
 
     _albumDio.getPhotosAlbums(id: id).then((value) {
-      AlbumModel albumResponse = AlbumModel.fromJson(value.data);
-      if (albumResponse.data != null) {
-        albumList = albumResponse.data!;
-        emit(AlbumSuccessState(albumList));
+      if(value.data != null && value.statusCode == 200){
+        AlbumModel albumResponse = AlbumModel.fromJson(value.data);
+        if (albumResponse.data != null) {
+          albumList = albumResponse.data!;
+          emit(AlbumSuccessState(albumList));
+        }
+      }else{
+        throw RequestFailureApi(value.statusCode.toString());
       }
-
-
     }).catchError((error) {
       if (kDebugMode) {
         print(error.toString());

@@ -1,6 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/data_providers/general_dio/general_dio.dart';
+import '../../data/data_providers/requests_data_providers/request_data_providers.dart';
 
 part 'benefits_state.dart';
 
@@ -26,16 +28,22 @@ class BenefitsCubit extends Cubit<BenefitsState> {
   final Connectivity connectivity = Connectivity();
 
   List<dynamic> benefits = [];
-  GeneralDio _generalDio;
+  final GeneralDio _generalDio;
 
   void getBenefits() {
     emit(BenefitsLoadingState());
 
     _generalDio.getBenefitsData().then((value) {
-      benefits = value.data;
-      emit(BenefitsSuccessState(benefits));
+      if (value.data != null && value.statusCode == 200) {
+        benefits = value.data;
+        emit(BenefitsSuccessState(benefits));
+      } else {
+        throw RequestFailureApi(value.statusCode.toString());
+      }
     }).catchError((error) {
-      print(error.toString());
+      if (kDebugMode) {
+        print(error.toString());
+      }
       emit(BenefitsErrorState(error.toString()));
     });
   }

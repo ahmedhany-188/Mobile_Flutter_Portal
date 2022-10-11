@@ -15,6 +15,7 @@ import 'package:hassanallamportalflutter/data/models/requests_form_models/reques
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 
 import '../../../constants/request_service_id.dart';
+import '../../../data/data_providers/requests_data_providers/request_data_providers.dart';
 import '../../../data/repositories/employee_repository.dart';
 import '../../../widgets/dialogpopoup/custom_date_picker.dart';
 
@@ -197,7 +198,12 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
             _generalDio.uploadAccessRightImage(
                     state.fileResult, fileName!, state.extension)
                 .then((value) {
-              emit(state.copyWith(filePDF: value.data?[0]));
+                  if(value.data != null && value.statusCode == 200){
+                    emit(state.copyWith(filePDF: value.data?[0]));
+                  }else{
+                    throw RequestFailureApi(value.statusCode.toString());
+                  }
+
             }).catchError((err) {
               throw err;
             });
