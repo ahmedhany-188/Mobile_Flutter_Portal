@@ -47,7 +47,7 @@ class GetDirectionCubit extends Cubit<GetDirectionInitial> {
             value.data.map((model) => LocationData.fromJson(model)));
         emit(GetDirectionInitial.success(valueData, getDirectionList));
       } else {
-        throw RequestFailureApi(value.statusCode.toString());
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
     }).catchError((error) {
       if (kDebugMode) {

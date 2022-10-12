@@ -31,7 +31,7 @@ class NewsCubit extends Cubit<NewsState> {
 
   static NewsCubit get(context) => BlocProvider.of<NewsCubit>(context);
 
-  GeneralDio _generalDio;
+  final GeneralDio _generalDio;
 
   List<NewsDataModel> newsList = [];
   List<NewsData> latestNewsList = [];
@@ -81,7 +81,7 @@ class NewsCubit extends Cubit<NewsState> {
         newsList = newsDataList.reversed.toList();
         emit(NewsSuccessState(newsDataList, announcment));
       } else {
-        throw RequestFailureApi(value.statusCode.toString());
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
     });
     _generalDio.newsDataOld(type: 1).then((value) {
@@ -106,7 +106,7 @@ class NewsCubit extends Cubit<NewsState> {
           }
         }
       } else {
-        throw RequestFailureApi(value.statusCode.toString());
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
     });
   }
@@ -120,7 +120,7 @@ class NewsCubit extends Cubit<NewsState> {
         latestNewsList = newsResponse.data!;
         emit(LatestNewsSuccessState(latestNewsList));
       }else{
-        throw RequestFailureApi(value.statusCode.toString());
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
     }).catchError((error) {
       if (kDebugMode) {

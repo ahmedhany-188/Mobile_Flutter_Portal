@@ -49,7 +49,7 @@ class StatisticsCubit extends Cubit<StatisticsInitial> {
             statisticsStates: StatisticsEnumStates.success));
       } else {
         emit(state.copyWith(statisticsStates: StatisticsEnumStates.failed));
-        throw RequestFailureApi(value.statusCode.toString());
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
     }).catchError((e) {
       emit(state.copyWith(statisticsStates: StatisticsEnumStates.failed));

@@ -3,6 +3,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../constants/url_links.dart';
+import '../../../main.dart';
 
 class RequestDataProviders {
   Future<http.Response> postPermissionRequest(Map<String, String> header,String bodyString) async {
@@ -19,7 +20,7 @@ class RequestDataProviders {
     if(permissionFeedbackRequest.statusCode == 200){
       return permissionFeedbackRequest;
     }else{
-      throw RequestFailureApi(permissionFeedbackRequest.statusCode.toString());
+      throw RequestFailureApi.fromCode(permissionFeedbackRequest.statusCode);
     }
 
   }
@@ -267,8 +268,10 @@ class RequestDataProviders {
     return equipmentFeedbackRequest;
   }
 }
-
 class RequestFailureApi implements Exception {
+  /// The associated error message.
+  final String message;
+
   /// {@macro log_in_with_email_and_password_failure}
   const RequestFailureApi([
     this.message = 'An Error has happened please try again',
@@ -279,6 +282,7 @@ class RequestFailureApi implements Exception {
   factory RequestFailureApi.fromCode(int code) {
     switch (code) {
       case 419:
+        timedOut();
         return const RequestFailureApi(
           "Token has expired",
         );
@@ -288,6 +292,6 @@ class RequestFailureApi implements Exception {
     }
   }
 
-  /// The associated error message.
-  final String message;
+
+
 }

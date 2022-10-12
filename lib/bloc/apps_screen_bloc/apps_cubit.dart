@@ -45,7 +45,7 @@ class AppsCubit extends Cubit<AppsState> {
           emit(AppsErrorState('noAppsFound'));
         }
       }else{
-        throw RequestFailureApi(value.statusCode.toString());
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
     }).catchError((e) {
       emit(AppsErrorState('rrrrrrrrrrrrr'));

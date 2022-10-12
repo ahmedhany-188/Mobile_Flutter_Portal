@@ -161,7 +161,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                       decoration: BoxDecoration(
                         border: Border.all(width: 2,
                             // color: Colors.black
-                            color: Colors.white.withOpacity(0.7)),
+                            color: Colors.white.withOpacity(0.1)),
                         borderRadius:
                         const BorderRadius.all(Radius.circular(20)),
                         //color: Colors.black26
@@ -173,7 +173,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                           child: SizedBox(
                             width: double.infinity,
                             child: Text(
-                              user.employeeData?.name?.toTitleCase() ?? "",
+                              'Name: ${user.employeeData?.name?.toTitleCase() ?? ""}',
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Nunito',
@@ -184,7 +184,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                           ),
                         ),
                         getFirstSection(
-                            user.employeeData?.titleName?.toString() ?? ""),
+                            'Title: ${user.employeeData?.titleName?.toString() ?? ""}'),
                         getFirstSection(
                             'HRCode: ${user.employeeData?.userHrCode ?? ""}'),
                         getFirstSection(
@@ -197,10 +197,15 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       decoration: BoxDecoration(
-                        border: Border.all(width: 2, color: Colors.black),
+                        border: Border.all(width: 2,
+                            // color: Colors.black
+                            color: Colors.white.withOpacity(0.1)
+                        ),
                         borderRadius:
                         const BorderRadius.all(Radius.circular(20)),
-                        color: Colors.black26,
+                        // color: Colors.black26,
+                        color: Colors.grey.shade400.withOpacity(0.2),
+
                       ),
                       child: Column(
                         children: [
@@ -217,7 +222,8 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                             ),
                           ),
                           const Divider(
-                            thickness: 2.5,
+                            thickness: 2,
+                            color: Colors.white38,
                           ),
                           getHead("Department:"),
                           getLine(user.employeeData?.projectName ?? ""),
@@ -256,7 +262,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                                   user.employeeData
                                                       ?.managerName ?? ""),
                                               style: const TextStyle(
-                                                color: Colors.white70,
+                                                color: Colors.white,
                                                 fontSize: 14,
                                                 fontFamily: 'Nunito',
                                                 decoration:
@@ -322,7 +328,8 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
         child: Text(
           head,
           style: const TextStyle(
-            color: Colors.white,
+            // color: Colors.white,
+            color: ConstantsColors.appraisalColor3,
             fontSize: 17,
             fontFamily: 'Nunito',
           ),
@@ -349,7 +356,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
         child: Text(
           line,
           style: const TextStyle(
-            color: Colors.white70,
+            color: Colors.white,
             fontSize: 15,
             fontFamily: 'Nunito',
           ),
