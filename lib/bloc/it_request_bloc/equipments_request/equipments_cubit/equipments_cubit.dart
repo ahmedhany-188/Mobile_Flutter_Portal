@@ -353,7 +353,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
             businessUnitEnumStates: EquipmentsEnumState.success,
             listBusinessUnit: businessUnit));
       } else {
-        throw RequestFailureApi(value.statusCode.toString());
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
     }).catchError((err) {
       emit(state.copyWith(businessUnitEnumStates: EquipmentsEnumState.failed));
@@ -373,7 +373,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
             locationEnumStates: EquipmentsEnumState.success,
             listLocation: location));
       } else {
-        throw RequestFailureApi(value.statusCode.toString());
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
     }).catchError((err) {
       emit(state.copyWith(locationEnumStates: EquipmentsEnumState.failed));
@@ -387,13 +387,17 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     GeneralDio(_requestRepository.userData!)
         .equipmentsDepartment()
         .then((value) {
-      List<DepartmentsModel> departments;
-      departments = List<DepartmentsModel>.from(
-          value.data.map((model) => DepartmentsModel.fromJson(model)));
+      if(value.data != null && value.statusCode == 200){
+        List<DepartmentsModel> departments;
+        departments = List<DepartmentsModel>.from(
+            value.data.map((model) => DepartmentsModel.fromJson(model)));
 
-      emit(state.copyWith(
-          departmentEnumStates: EquipmentsEnumState.success,
-          listDepartment: departments));
+        emit(state.copyWith(
+            departmentEnumStates: EquipmentsEnumState.success,
+            listDepartment: departments));
+      }else{
+        throw RequestFailureApi.fromCode(value.statusCode!);
+      }
     }).catchError((err) {
       emit(state.copyWith(departmentEnumStates: EquipmentsEnumState.failed));
     });
@@ -412,7 +416,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
             historyWorkFlow: history
               ..sort((a, b) => a.createdate!.compareTo(b.createdate!))));
       } else {
-        throw RequestFailureApi(value.statusCode.toString());
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
     });
   }

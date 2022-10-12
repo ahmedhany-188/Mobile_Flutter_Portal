@@ -57,6 +57,7 @@ import 'constants/colors.dart';
 import 'data/data_providers/album_dio/album_dio.dart';
 import 'data/repositories/request_repository.dart';
 import 'firebase_options.dart';
+import 'screens/splash_screen/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -194,6 +195,50 @@ class NavigationService {
   static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 }
 
+Future<void> timedOut() async {
+  await showDialog(
+    context: NavigationService.navigatorKey.currentState!.overlay!.context,
+    barrierDismissible: false,
+    builder: (context) => AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      title: const Text(
+        'Alert',
+        style: TextStyle(
+          color: Colors.red,
+        ),
+      ),
+      content: const Text(
+        'Sorry but you have been logged out due to inactivity...',
+        style: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (BuildContext context) => const SplashScreen(),
+              ),
+              (route) => false,
+            );
+            context.read<AppBloc>().add(AppLogoutRequested());
+            context.read<LoginCubit>().clearCubit();
+          },
+          child: const Text(
+            'Confirm',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 class MyApp extends StatefulWidget {
   final AppRouter appRouter;
   final Connectivity connectivity;
@@ -257,43 +302,45 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider<ContactsCubit>(
             create: (contactsCubitContext) => ContactsCubit(GeneralDio(
-                BlocProvider.of<AppBloc>(contactsCubitContext).state.userData))..getContacts(),
+                BlocProvider.of<AppBloc>(contactsCubitContext).state.userData))
+              ..getContacts(),
             lazy: true,
           ),
           BlocProvider<PayslipCubit>(
-            create: (payslipContext) => PayslipCubit(
-                PayslipRepository(
-                    BlocProvider.of<AppBloc>(payslipContext)
-                        .state
-                        .userData)
-            ),
+            create: (payslipContext) => PayslipCubit(PayslipRepository(
+                BlocProvider.of<AppBloc>(payslipContext).state.userData)),
           ),
 
           BlocProvider<EconomyNewsCubit>(
             create: (economyNewsCubitContext) => EconomyNewsCubit(),
           ),
           BlocProvider<GetDirectionCubit>(
-            create: (getDirectionCubitContext) =>
-                GetDirectionCubit(GeneralDio(
-                    BlocProvider.of<AppBloc>(getDirectionCubitContext).state.userData))..getDirection(),
+            create: (getDirectionCubitContext) => GetDirectionCubit(GeneralDio(
+                BlocProvider.of<AppBloc>(getDirectionCubitContext)
+                    .state
+                    .userData))
+              ..getDirection(),
           ),
           BlocProvider<BenefitsCubit>(
             create: (benefitsCubitContext) => BenefitsCubit(GeneralDio(
-                BlocProvider.of<AppBloc>(benefitsCubitContext).state.userData))..getBenefits(),
+                BlocProvider.of<AppBloc>(benefitsCubitContext).state.userData))
+              ..getBenefits(),
           ),
           BlocProvider<SubsidiariesCubit>(
-            create: (subsidiariesCubitContext) =>
-                SubsidiariesCubit(GeneralDio(
-                    BlocProvider.of<AppBloc>(subsidiariesCubitContext).state.userData))..getSubsidiaries(),
+            create: (subsidiariesCubitContext) => SubsidiariesCubit(GeneralDio(
+                BlocProvider.of<AppBloc>(subsidiariesCubitContext)
+                    .state
+                    .userData))
+              ..getSubsidiaries(),
           ),
 
           BlocProvider<MedicalRequestCubit>(
-              create: (medicalRequestCubitContext) => MedicalRequestCubit(
-                MedicalRepository(
-                    BlocProvider.of<AppBloc>(medicalRequestCubitContext)
-                        .state
-                        .userData),
-              ),
+            create: (medicalRequestCubitContext) => MedicalRequestCubit(
+              MedicalRepository(
+                  BlocProvider.of<AppBloc>(medicalRequestCubitContext)
+                      .state
+                      .userData),
+            ),
           ),
 
           BlocProvider<AttendanceCubit>(
@@ -304,7 +351,6 @@ class _MyAppState extends State<MyApp> {
                       .userData),
             ),
           ),
-
 
           // BlocProvider<EmailUserAccountCubit>(
           //   create: (emailUserAccountRequestContext) =>
@@ -323,21 +369,19 @@ class _MyAppState extends State<MyApp> {
           //       AccessRightCubit(),
           // ),
 
-
-
           BlocProvider<LoginCubit>(
             create: (authenticationContext) =>
                 LoginCubit(authenticationRepository),
           ),
           BlocProvider<PhotosCubit>(
-            create: (photosContext) => PhotosCubit(AlbumDio(BlocProvider.of<AppBloc>(photosContext)
-                .state
-                .userData))..getPhotos(),
+            create: (photosContext) => PhotosCubit(AlbumDio(
+                BlocProvider.of<AppBloc>(photosContext).state.userData))
+              ..getPhotos(),
           ),
           BlocProvider<VideosCubit>(
-            create: (videosContext) => VideosCubit(AlbumDio(BlocProvider.of<AppBloc>(videosContext)
-                .state
-                .userData))..getVideos(),
+            create: (videosContext) => VideosCubit(AlbumDio(
+                BlocProvider.of<AppBloc>(videosContext).state.userData))
+              ..getVideos(),
           ),
           // BlocProvider<UserNotificationBloc>(
           //   lazy: true,
@@ -348,7 +392,6 @@ class _MyAppState extends State<MyApp> {
           //             .userData),
           //   ),
           // ),
-
 
           BlocProvider<AppUpgraderCubit>(
             lazy: false,
@@ -377,7 +420,7 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider<UserNotificationApiCubit>(
               lazy: true,
-              create: (userNotificationContext){
+              create: (userNotificationContext) {
                 // if (kDebugMode) {
                 //   print('token ${BlocProvider.of<AppBloc>(userNotificationContext)
                 //     .state
@@ -388,20 +431,19 @@ class _MyAppState extends State<MyApp> {
                       BlocProvider.of<AppBloc>(userNotificationContext)
                           .state
                           .userData),
-                )..getNotificationsWithoutLoading(BlocProvider.of<AppBloc>(userNotificationContext)
-                    .state
-                    .userData);
-              }
-
-          ),
+                )..getNotificationsWithoutLoading(
+                    BlocProvider.of<AppBloc>(userNotificationContext)
+                        .state
+                        .userData);
+              }),
 
           BlocProvider<AttendanceCubit>(
             create: (attendanceCubitContext) => AttendanceCubit(
-            AttendanceRepository(
-                BlocProvider.of<AppBloc>(attendanceCubitContext)
-                    .state
-                    .userData),
-          ),
+              AttendanceRepository(
+                  BlocProvider.of<AppBloc>(attendanceCubitContext)
+                      .state
+                      .userData),
+            ),
           ),
 
           BlocProvider<EmployeeAppraisalBlocCubit>(
@@ -416,29 +458,26 @@ class _MyAppState extends State<MyApp> {
           BlocProvider<StaffDashboardCubit>(
             create: (staffDashBoardCubitContext) => StaffDashboardCubit(
               StaffDashBoardRepository(
-                    BlocProvider.of<AppBloc>(staffDashBoardCubitContext)
-                        .state
-                        .userData),
+                  BlocProvider.of<AppBloc>(staffDashBoardCubitContext)
+                      .state
+                      .userData),
             ),
           ),
 
           BlocProvider<StaffDashboardProjectCubit>(
             create: (staffDashBoardProjectCubitContext) =>
-                StaffDashboardProjectCubit(
-                    StaffDashBoardProjectRepository(
-                        BlocProvider.of<AppBloc>(staffDashBoardProjectCubitContext)
-                            .state
-                            .userData)
-                        ),
+                StaffDashboardProjectCubit(StaffDashBoardProjectRepository(
+                    BlocProvider.of<AppBloc>(staffDashBoardProjectCubitContext)
+                        .state
+                        .userData)),
           ),
 
           BlocProvider<StaffDashboardJobCubit>(
             create: (staffDashBoardJobCubitContext) => StaffDashboardJobCubit(
                 StaffDashBoardJobRepository(
-                      BlocProvider.of<AppBloc>(staffDashBoardJobCubitContext)
-                          .state
-                          .userData)
-              ),
+                    BlocProvider.of<AppBloc>(staffDashBoardJobCubitContext)
+                        .state
+                        .userData)),
           ),
 
           BlocProvider<StatisticsCubit>(

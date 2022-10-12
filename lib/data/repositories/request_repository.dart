@@ -503,7 +503,7 @@ class RequestRepository {
                   () => EasyLoading.showSuccess('File uploaded successfully'))
               .catchError((err) {
             EasyLoading.showError('File failed');
-            throw RequestFailureApi(value.statusCode.toString());
+            throw RequestFailureApi.fromCode(value.statusCode!);
           });
         }
         if (response.id == 1) {
@@ -697,7 +697,7 @@ class RequestRepository {
         if (value.data != null && value.statusCode == 200) {
           nextObject = value.data;
         } else {
-          throw RequestFailureApi(value.statusCode.toString());
+          throw RequestFailureApi.fromCode(value.statusCode!);
         }
       });
     }

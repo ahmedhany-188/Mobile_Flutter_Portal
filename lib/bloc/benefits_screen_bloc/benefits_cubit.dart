@@ -38,7 +38,7 @@ class BenefitsCubit extends Cubit<BenefitsState> {
         benefits = value.data;
         emit(BenefitsSuccessState(benefits));
       } else {
-        throw RequestFailureApi(value.statusCode.toString());
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
     }).catchError((error) {
       if (kDebugMode) {

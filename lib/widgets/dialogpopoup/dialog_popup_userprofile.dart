@@ -64,7 +64,7 @@ class ShowUserProfileBottomSheetClass
                     GeneralDio(user).uploadUserImage(
                             value!, fileName!, fileExtension!).then((value) {
                               if(value.data != null && value.statusCode == 200){}else{
-                                throw RequestFailureApi(value.statusCode.toString());
+                                throw RequestFailureApi.fromCode(value.statusCode!);
                               }
                     })
                         .whenComplete(() {
