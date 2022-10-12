@@ -27,6 +27,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
     var imageProfile = user.employeeData?.imgProfile ?? "";
+    print('================== $imageProfile');
 
     ///Create a new vCard
     VCard vCard = VCard();
@@ -91,12 +92,12 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Flexible(
+                          const Flexible(
                             flex: 2,
                             child: IconButton(
-                              icon: const Icon(Icons.edit),
+                              icon:  Icon(Icons.edit,color: Colors.transparent,),
                               color: Colors.transparent,
-                              onPressed: () {},
+                              onPressed: null,
                             ),
                           ),
                           Flexible(
@@ -107,7 +108,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                 child: imageProfile.isNotEmpty
                                     ? CachedNetworkImage(
                                   imageUrl: getUserProfilePicture(
-                                      user.employeeData?.imgProfile ?? ""),
+                                      imageProfile),
                                   imageBuilder:
                                       (context, imageProvider) =>
                                       Container(
