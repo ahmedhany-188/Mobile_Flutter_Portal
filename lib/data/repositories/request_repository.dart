@@ -33,7 +33,6 @@ import '../models/requests_form_models/request_permission_data_model.dart';
 import '../models/response_take_action.dart';
 
 class RequestRepository {
-
   MainUserData? userData;
   final RequestDataProviders requestDataProviders = RequestDataProviders();
 
@@ -47,7 +46,7 @@ class RequestRepository {
     _inst.userData = userData;
     return _inst;
   }
-  
+
   Future<RequestResponse> postPermissionRequest(
       {required String requestDate,
       required String comments,
@@ -74,20 +73,19 @@ class RequestRepository {
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
     final http.Response rawPermission =
-        await requestDataProviders.postPermissionRequest(header,bodyString);
+        await requestDataProviders.postPermissionRequest(header, bodyString);
     final json = await jsonDecode(rawPermission.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     if (response.id == 1) {
       await FirebaseProvider(userData ?? MainUserData.empty)
-          .addSubmitFirebaseNotification(
-          response.requestNo.toString(), GlobalConstants.requestCategoryPermissionActivity, "Submit");
+          .addSubmitFirebaseNotification(response.requestNo.toString(),
+              GlobalConstants.requestCategoryPermissionActivity, "Submit");
     }
     return response;
   }
 
   Future<RequestResponse> postAccessRightRequest(
       {required AccessRightModel accessRightModel}) async {
-
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": RequestServiceID.accessRightServiceID,
       "requestHrCode": userData?.employeeData?.userHrCode,
@@ -105,7 +103,7 @@ class RequestRepository {
       "vpnAccount": accessRightModel.vpnAccount,
       "ipPhone": accessRightModel.ipPhone,
       "localAdmin": accessRightModel.localAdmin,
-      "printing":accessRightModel.printing,
+      "printing": accessRightModel.printing,
     });
 
     var header = <String, String>{
@@ -113,27 +111,26 @@ class RequestRepository {
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
 
-    final http.Response rawAccess =
-        await requestDataProviders.postAccessAccountAccessRequest(header,bodyString);
+    final http.Response rawAccess = await requestDataProviders
+        .postAccessAccountAccessRequest(header, bodyString);
     final json = await jsonDecode(rawAccess.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     if (response.id == 1) {
       await FirebaseProvider(userData ?? MainUserData.empty)
-          .addSubmitFirebaseNotification(
-          response.requestNo.toString(), GlobalConstants.requestCategoryAccessRight, "Submit");
+          .addSubmitFirebaseNotification(response.requestNo.toString(),
+              GlobalConstants.requestCategoryAccessRight, "Submit");
     }
     return response;
   }
 
   Future<DurationResponse> getDurationVacation(
       int type, String dateFrom, String dateTo) async {
-
     var header = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
-    final http.Response rawPermission =
-        await requestDataProviders.getDurationVacation(header,type, dateFrom, dateTo);
+    final http.Response rawPermission = await requestDataProviders
+        .getDurationVacation(header, type, dateFrom, dateTo);
     final json = await jsonDecode(rawPermission.body);
     final DurationResponse response = DurationResponse.fromJson(json);
     return response;
@@ -147,7 +144,8 @@ class RequestRepository {
     };
     final http.Response rawPermission =
         await requestDataProviders.getBusinessCardRequestData(
-            header,requesterHRCode.isNotEmpty
+            header,
+            requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -166,7 +164,8 @@ class RequestRepository {
     };
     final http.Response rawPermission =
         await requestDataProviders.getAccessRightRequestData(
-            header,requesterHRCode.isNotEmpty
+            header,
+            requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -184,7 +183,8 @@ class RequestRepository {
     };
     final http.Response rawPermission =
         await requestDataProviders.getEmailAccountRequestData(
-            header,requesterHRCode.isNotEmpty
+            header,
+            requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -200,7 +200,7 @@ class RequestRepository {
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
     final http.Response rawPermission =
-        await requestDataProviders.getEmailAccountData(header,hrCode);
+        await requestDataProviders.getEmailAccountData(header, hrCode);
     final json = await jsonDecode(rawPermission.body);
     final EmployeeData response;
     try {
@@ -221,7 +221,7 @@ class RequestRepository {
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
     final http.Response rawPermission =
-        await requestDataProviders.getNewMobileNumberData(header,bodyString);
+        await requestDataProviders.getNewMobileNumberData(header, bodyString);
     final json = await jsonDecode(rawPermission.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     return response;
@@ -235,7 +235,8 @@ class RequestRepository {
     };
     final http.Response rawPermission =
         await requestDataProviders.getEmbassyLetterRequestData(
-            header,requesterHRCode.isNotEmpty
+            header,
+            requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -263,13 +264,13 @@ class RequestRepository {
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
     final http.Response rawBusinessCard =
-        await requestDataProviders.postBusinessCardRequest(header,bodyString);
+        await requestDataProviders.postBusinessCardRequest(header, bodyString);
     final json = await jsonDecode(rawBusinessCard.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     if (response.id == 1) {
       await FirebaseProvider(userData ?? MainUserData.empty)
-          .addSubmitFirebaseNotification(
-          response.requestNo.toString(), GlobalConstants.requestCategoryBusniessCardActivity, "Submit");
+          .addSubmitFirebaseNotification(response.requestNo.toString(),
+              GlobalConstants.requestCategoryBusniessCardActivity, "Submit");
     }
     return response;
   }
@@ -279,8 +280,8 @@ class RequestRepository {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
-    http.Response rawMyRequests = await requestDataProviders
-        .getMyRequestsData(header,userData?.user?.userHRCode ?? "");
+    http.Response rawMyRequests = await requestDataProviders.getMyRequestsData(
+        header, userData?.user?.userHRCode ?? "");
     final json = await jsonDecode(rawMyRequests.body);
 
     List<MyRequestsModelData> myRequestsData = List<MyRequestsModelData>.from(
@@ -294,7 +295,7 @@ class RequestRepository {
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
     http.Response rawMyRequests = await requestDataProviders
-        .getMyNotificationData(header,userData?.user?.userHRCode ?? "");
+        .getMyNotificationData(header, userData?.user?.userHRCode ?? "");
     final json = await jsonDecode(rawMyRequests.body);
 
     if (kDebugMode) {
@@ -329,13 +330,13 @@ class RequestRepository {
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
     final http.Response rawEmailUserAccount =
-        await requestDataProviders.postEmailUserAccount(header,bodyString);
+        await requestDataProviders.postEmailUserAccount(header, bodyString);
     final json = await jsonDecode(rawEmailUserAccount.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     if (response.id == 1) {
       await FirebaseProvider(userData ?? MainUserData.empty)
-          .addSubmitFirebaseNotification(
-          response.requestNo.toString(), GlobalConstants.requestCategoryUserAccount, "Submit");
+          .addSubmitFirebaseNotification(response.requestNo.toString(),
+              GlobalConstants.requestCategoryUserAccount, "Submit");
     }
     return response;
   }
@@ -367,13 +368,13 @@ class RequestRepository {
     };
 
     final http.Response rawEmbassyLetter =
-        await requestDataProviders.postEmbassyLetterRequest(header,bodyString);
+        await requestDataProviders.postEmbassyLetterRequest(header, bodyString);
     final json = await jsonDecode(rawEmbassyLetter.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     if (response.id == 1) {
       await FirebaseProvider(userData ?? MainUserData.empty)
-          .addSubmitFirebaseNotification(
-          response.requestNo.toString(), GlobalConstants.requestCategoryEmbassyActivity, "Submit");
+          .addSubmitFirebaseNotification(response.requestNo.toString(),
+              GlobalConstants.requestCategoryEmbassyActivity, "Submit");
     }
     return response;
   }
@@ -406,14 +407,14 @@ class RequestRepository {
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
     final http.Response rawPermission =
-    await requestDataProviders.postVacationRequest(header,bodyString);
+        await requestDataProviders.postVacationRequest(header, bodyString);
     final json = await jsonDecode(rawPermission.body);
 
     final RequestResponse response = RequestResponse.fromJson(json);
     if (response.id == 1) {
       await FirebaseProvider(userData ?? MainUserData.empty)
-          .addSubmitFirebaseNotification(
-          response.requestNo.toString(), GlobalConstants.requestCategoryVacationActivity, "Submit");
+          .addSubmitFirebaseNotification(response.requestNo.toString(),
+              GlobalConstants.requestCategoryVacationActivity, "Submit");
     }
     return response;
   }
@@ -441,31 +442,32 @@ class RequestRepository {
       "hourFrom": hourFrom,
       "hourTo": hourTo,
       "missionLocation": type,
-      "projectId": locationData.projectId == 0 ? null : locationData.projectId.toString()
+      "projectId":
+          locationData.projectId == 0 ? null : locationData.projectId.toString()
     });
     var header = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
-    final http.Response rawRequest =
-        await requestDataProviders.postBusinessMissionRequest(header,bodyString);
+    final http.Response rawRequest = await requestDataProviders
+        .postBusinessMissionRequest(header, bodyString);
     final json = await jsonDecode(rawRequest.body);
     final RequestResponse response = RequestResponse.fromJson(json);
     if (response.id == 1) {
       await FirebaseProvider(userData ?? MainUserData.empty)
-          .addSubmitFirebaseNotification(
-          response.requestNo.toString(), GlobalConstants.requestCategoryBusinessMissionActivity, "Submit");
+          .addSubmitFirebaseNotification(response.requestNo.toString(),
+              GlobalConstants.requestCategoryBusinessMissionActivity, "Submit");
     }
     return response;
   }
 
   Future<RequestResponse> postEquipmentRequest({
-  required DepartmentsModel departmentObject,
-  required BusinessUnitModel businessUnitObject,
-  required EquipmentsLocationModel locationObject,
-  required String userHrCode,
-  required List<SelectedEquipmentsModel> selectedItem,
-  String? comment,
+    required DepartmentsModel departmentObject,
+    required BusinessUnitModel businessUnitObject,
+    required EquipmentsLocationModel locationObject,
+    required String userHrCode,
+    required List<SelectedEquipmentsModel> selectedItem,
+    String? comment,
     required FilePickerResult fileResult,
     required String extension,
   }) async {
@@ -486,28 +488,28 @@ class RequestRepository {
       "reRequestCode": 0
     };
 
-    var value = await GeneralDio(userData!).postMasterEquipmentsRequest(masterDataPost);
-    if(value.toString().isNotEmpty) {
+    var value =
+        await GeneralDio(userData!).postMasterEquipmentsRequest(masterDataPost);
+    if (value.toString().isNotEmpty) {
       final json = await jsonDecode(value.toString());
       final RequestResponse response = RequestResponse.fromJson(json);
 
       var requestNo = response.requestNo ?? "";
       if (requestNo.isNotEmpty) {
         if (fileResult.isSinglePick) {
-          await GeneralDio(userData!).uploadEquipmentImage(
-              fileResult, requestNo, extension)
+          await GeneralDio(userData!)
+              .uploadEquipmentImage(fileResult, requestNo, extension)
               .whenComplete(
                   () => EasyLoading.showSuccess('File uploaded successfully'))
               .catchError((err) {
             EasyLoading.showError('File failed');
-            throw err;
+            throw RequestFailureApi(value.statusCode.toString());
           });
         }
         if (response.id == 1) {
           await FirebaseProvider(userData ?? MainUserData.empty)
-              .addSubmitFirebaseNotification(
-              response.requestNo.toString(),
-              GlobalConstants.requestCategoryEquipment, "Submit");
+              .addSubmitFirebaseNotification(response.requestNo.toString(),
+                  GlobalConstants.requestCategoryEquipment, "Submit");
         }
         for (int i = 0; i < selectedItem.length; i++) {
           int type = 1;
@@ -528,9 +530,9 @@ class RequestRepository {
           Map<String, dynamic> detailedDataPost = {
             "requestNo": int.parse(value.data['requestNo']),
             "hardWareItemId":
-            selectedItem[i].selectedItem?.hardWareItemId.toString(),
-            "ownerHrCode": selectedItem[i].selectedContact?.userHrCode
-                .toString(),
+                selectedItem[i].selectedItem?.hardWareItemId.toString(),
+            "ownerHrCode":
+                selectedItem[i].selectedContact?.userHrCode.toString(),
             "type": type,
             "qty": selectedItem[i].quantity,
             "chk": true,
@@ -538,7 +540,8 @@ class RequestRepository {
             "approved": true,
             "rejectedHrCode": ""
           };
-          await GeneralDio(userData!).postDetailEquipmentsRequest(detailedDataPost)
+          await GeneralDio(userData!)
+              .postDetailEquipmentsRequest(detailedDataPost)
               .catchError((e) {
             // return response;
             // EasyLoading.showError('Something went wrong');
@@ -546,11 +549,10 @@ class RequestRepository {
           });
         }
         return response;
-      }
-      else {
+      } else {
         return RequestResponse.empty;
       }
-    }else {
+    } else {
       return RequestResponse.empty;
     }
     // await GeneralDio.postMasterEquipmentsRequest(masterDataPost).then((value) async {
@@ -561,7 +563,6 @@ class RequestRepository {
     //   // EasyLoading.showError('Something went wrong');
     //   throw e;
     // });
-
   }
 
   Future<VacationRequestData> getVacationRequestData(
@@ -572,7 +573,8 @@ class RequestRepository {
     };
     final http.Response rawRequestData =
         await requestDataProviders.getVacationRequestData(
-            header,requesterHRCode.isNotEmpty
+            header,
+            requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -589,7 +591,7 @@ class RequestRepository {
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
     final http.Response rawRequestData = await requestDataProviders
-        .getEquipmentRequestData(header,requesterHRCode, requestNo);
+        .getEquipmentRequestData(header, requesterHRCode, requestNo);
 
     final json = await jsonDecode(rawRequestData.body);
     final EquipmentsRequestedModel response =
@@ -606,7 +608,8 @@ class RequestRepository {
     };
     final http.Response rawRequestData =
         await requestDataProviders.getBusinessMissionRequestData(
-            header,requesterHRCode.isNotEmpty
+            header,
+            requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -625,7 +628,8 @@ class RequestRepository {
     };
     final http.Response rawRequestData =
         await requestDataProviders.getPermissionRequestData(
-            header,requesterHRCode.isNotEmpty
+            header,
+            requesterHRCode.isNotEmpty
                 ? requesterHRCode
                 : userData?.user?.userHRCode ?? "",
             requestNo);
@@ -637,12 +641,12 @@ class RequestRepository {
 
   Future<ResponseTakeAction> postTakeActionRequest(
       {required ActionValueStatus valueStatus,
-        required String serviceID,
-        required String serviceName,
-        required String requestNo,
-        required String requesterHRCode,
-        required String requesterEmail,
-        required String actionComment}) async {
+      required String serviceID,
+      required String serviceName,
+      required String requestNo,
+      required String requesterHRCode,
+      required String requesterEmail,
+      required String actionComment}) async {
     var bodyString = jsonEncode(<String, dynamic>{
       "serviceId": serviceID,
       "reqno": int.parse(requestNo),
@@ -656,16 +660,18 @@ class RequestRepository {
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
     final http.Response rawResponse =
-    await requestDataProviders.postTakeActionOnRequest(header,bodyString);
+        await requestDataProviders.postTakeActionOnRequest(header, bodyString);
     final json = await jsonDecode(rawResponse.body);
     final ResponseTakeAction response = ResponseTakeAction.fromJson(json);
     final result = response.result ?? "false";
     // print(requestNo);
     if (result.toLowerCase().contains("true")) {
       await FirebaseProvider(userData ?? MainUserData.empty)
-          .addTakeActionFirebaseNotification(requesterEmail,
-          requestNo, serviceName,
-          valueStatus == ActionValueStatus.accept ? "Accept" : "Reject");
+          .addTakeActionFirebaseNotification(
+              requesterEmail,
+              requestNo,
+              serviceName,
+              valueStatus == ActionValueStatus.accept ? "Accept" : "Reject");
     }
 
     return response;
@@ -681,14 +687,19 @@ class RequestRepository {
     required String serviceName,
   }) async {
     dynamic nextObject;
-    if(valueStatus == ActionValueStatus.accept){
-      await GeneralDio(userData!).getNextStepWorkFlow(
+    if (valueStatus == ActionValueStatus.accept) {
+      await GeneralDio(userData!)
+          .getNextStepWorkFlow(
               serviceId: serviceID,
               userHrCode: requesterHRCode,
               reqNo: int.parse(requestNo))
           .then((value) {
-            nextObject = value.data;
-          });
+        if (value.data != null && value.statusCode == 200) {
+          nextObject = value.data;
+        } else {
+          throw RequestFailureApi(value.statusCode.toString());
+        }
+      });
     }
 
     var bodyString = jsonEncode(<String, dynamic>{
@@ -705,36 +716,38 @@ class RequestRepository {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
-    final http.Response rawResponse =
-        await requestDataProviders.postTakeEquipmentActionOnRequest(bodyString,header);
+    final http.Response rawResponse = await requestDataProviders
+        .postTakeEquipmentActionOnRequest(bodyString, header);
     final json = await jsonDecode(rawResponse.body);
     final ResponseTakeAction response = ResponseTakeAction.fromJson(json);
 
     final result = response.result ?? "false";
     if (result.toLowerCase().contains("true")) {
-      if(valueStatus == ActionValueStatus.accept){
-        if(nextObject.toString().isNotEmpty) {
+      if (valueStatus == ActionValueStatus.accept) {
+        if (nextObject.toString().isNotEmpty) {
           List<NextStepModel> nextStepList = List<NextStepModel>.from(
               nextObject.map((model) => NextStepModel.fromJson(model)));
           for (int i = 0; i < nextStepList.length; i++) {
             var nextStepUserHRCode = nextStepList[i].userHRCode ?? "";
             var nextStepContact = await GetEmployeeRepository().getEmployeeData(
-                nextStepUserHRCode,userData?.user?.token ?? "");
+                nextStepUserHRCode, userData?.user?.token ?? "");
             await FirebaseProvider(userData ?? MainUserData.empty)
                 .addEquipmentTakeActionFirebaseNotification(
-                nextStepContact.email ?? "", requesterEmail,
-                requestNo, serviceName,
-                "Submit");
+                    nextStepContact.email ?? "",
+                    requesterEmail,
+                    requestNo,
+                    serviceName,
+                    "Submit");
           }
         }
       }
       await FirebaseProvider(userData ?? MainUserData.empty)
-          .addTakeActionFirebaseNotification(requesterEmail,
-          requestNo, serviceName,
-          valueStatus == ActionValueStatus.accept ? "Accept" : "Reject");
+          .addTakeActionFirebaseNotification(
+              requesterEmail,
+              requestNo,
+              serviceName,
+              valueStatus == ActionValueStatus.accept ? "Accept" : "Reject");
     }
-
-
 
     return response;
   }

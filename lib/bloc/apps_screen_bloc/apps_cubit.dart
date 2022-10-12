@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/data/models/apps_model/apps_model.dart';
 
 import '../../data/data_providers/general_dio/general_dio.dart';
+import '../../data/data_providers/requests_data_providers/request_data_providers.dart';
 
 part 'apps_state.dart';
 
@@ -35,10 +36,7 @@ class AppsCubit extends Cubit<AppsState> {
   void getApps() {
     emit(AppsLoadingState());
     _generalDio.appsData().then((value) {
-      if (value.statusCode == 400) {
-        emit(AppsErrorState('400'));
-      }
-      if (value.data != null) {
+      if (value.data != null && value.statusCode ==200) {
         AppsModel appsResponse = AppsModel.fromJson(value.data);
         if (appsResponse.data != null) {
           appsList = appsResponse.data!;
@@ -46,6 +44,8 @@ class AppsCubit extends Cubit<AppsState> {
         } else {
           emit(AppsErrorState('noAppsFound'));
         }
+      }else{
+        throw RequestFailureApi(value.statusCode.toString());
       }
     }).catchError((e) {
       emit(AppsErrorState('rrrrrrrrrrrrr'));

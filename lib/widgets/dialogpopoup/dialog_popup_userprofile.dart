@@ -9,6 +9,8 @@ import 'package:hassanallamportalflutter/data/data_providers/general_dio/general
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 
+import '../../data/data_providers/requests_data_providers/request_data_providers.dart';
+
 class ShowUserProfileBottomSheet extends StatefulWidget {
   final MainUserData user;
   const ShowUserProfileBottomSheet(this.user, {Key? key}) : super(key: key);
@@ -60,7 +62,11 @@ class ShowUserProfileBottomSheetClass
                     String? fileName = widget.user.employeeData?.userHrCode;
                     String? fileExtension = value?.files.first.extension;
                     GeneralDio(user).uploadUserImage(
-                            value!, fileName!, fileExtension!)
+                            value!, fileName!, fileExtension!).then((value) {
+                              if(value.data != null && value.statusCode == 200){}else{
+                                throw RequestFailureApi(value.statusCode.toString());
+                              }
+                    })
                         .whenComplete(() {
                       DefaultCacheManager manager = DefaultCacheManager();
                       manager.removeFile(

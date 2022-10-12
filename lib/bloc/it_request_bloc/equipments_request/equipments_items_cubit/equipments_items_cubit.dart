@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 
 import '../../../../data/data_providers/general_dio/general_dio.dart';
+import '../../../../data/data_providers/requests_data_providers/request_data_providers.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/equipments_items_model.dart';
 
 part 'equipments_items_state.dart';
@@ -42,12 +43,16 @@ class EquipmentsItemsCubit extends Cubit<EquipmentsItemsInitial> {
       equipmentsItemsEnumState: EquipmentsItemsEnumState.initial,
     ));
     _generalDio.getEquipmentsItems(id).then((value) {
-      List<EquipmentsItemModel> equipmentsItemsList;
-      equipmentsItemsList = List<EquipmentsItemModel>.from(
-          value.data.map((model) => EquipmentsItemModel.fromJson(model)));
-      emit(state.copyWith(
-          equipmentsItemsEnumState: EquipmentsItemsEnumState.success,
-          listEquipmentsItem: equipmentsItemsList));
+      if(value.data != null && value.statusCode == 200){
+        List<EquipmentsItemModel> equipmentsItemsList;
+        equipmentsItemsList = List<EquipmentsItemModel>.from(
+            value.data.map((model) => EquipmentsItemModel.fromJson(model)));
+        emit(state.copyWith(
+            equipmentsItemsEnumState: EquipmentsItemsEnumState.success,
+            listEquipmentsItem: equipmentsItemsList));
+      }else{
+        throw RequestFailureApi(value.statusCode.toString());
+      }
     }).catchError((err) {
       emit(state.copyWith(
           equipmentsItemsEnumState: EquipmentsItemsEnumState.failed));

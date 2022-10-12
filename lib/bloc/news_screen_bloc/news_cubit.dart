@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../data/data_providers/general_dio/general_dio.dart';
+import '../../data/data_providers/requests_data_providers/request_data_providers.dart';
 import '../../data/models/news_model/news_data_model.dart';
 import '../../data/models/news_model/response_news.dart';
 
@@ -74,32 +75,38 @@ class NewsCubit extends Cubit<NewsState> {
   void getNewsOld() {
     emit(NewsLoadingState());
     _generalDio.newsDataOld().then((value) {
-      if (value.data != null) {
+      if (value.data != null && value.statusCode == 200) {
         List<NewsDataModel> newsDataList = List<NewsDataModel>.from(
             value.data.map((model) => NewsDataModel.fromJson(model)));
         newsList = newsDataList.reversed.toList();
         emit(NewsSuccessState(newsDataList, announcment));
+      } else {
+        throw RequestFailureApi(value.statusCode.toString());
       }
     });
     _generalDio.newsDataOld(type: 1).then((value) {
-      List<NewsDataModel> newsDataListAnnouncment = List<NewsDataModel>.from(
-          value.data.map((model) => NewsDataModel.fromJson(model)));
-      for (int i = 0; i < newsDataListAnnouncment.length; i++) {
-        if (newsDataListAnnouncment[i].newsType == 1) {
-          announcment.add(
-            TyperAnimatedText(
-              newsDataListAnnouncment[i].newsDescription ?? '',
-              speed: const Duration(milliseconds: 50),
-              textAlign: TextAlign.center,
-              curve: Curves.linear,
-              textStyle: const TextStyle(
-                  color: Colors.white,
-                  overflow: TextOverflow.visible,
-                  fontFamily: 'RobotoFlex',
-                  fontSize: 14),
-            ),
-          );
+      if (value.data != null && value.statusCode == 200) {
+        List<NewsDataModel> newsDataListAnnouncment = List<NewsDataModel>.from(
+            value.data.map((model) => NewsDataModel.fromJson(model)));
+        for (int i = 0; i < newsDataListAnnouncment.length; i++) {
+          if (newsDataListAnnouncment[i].newsType == 1) {
+            announcment.add(
+              TyperAnimatedText(
+                newsDataListAnnouncment[i].newsDescription ?? '',
+                speed: const Duration(milliseconds: 50),
+                textAlign: TextAlign.center,
+                curve: Curves.linear,
+                textStyle: const TextStyle(
+                    color: Colors.white,
+                    overflow: TextOverflow.visible,
+                    fontFamily: 'RobotoFlex',
+                    fontSize: 14),
+              ),
+            );
+          }
         }
+      } else {
+        throw RequestFailureApi(value.statusCode.toString());
       }
     });
   }
@@ -109,9 +116,11 @@ class NewsCubit extends Cubit<NewsState> {
 
     _generalDio.latestNewsData().then((value) {
       ResponseNews newsResponse = ResponseNews.fromJson(value.data);
-      if (newsResponse.data != null) {
+      if (newsResponse.data != null && value.statusCode == 200) {
         latestNewsList = newsResponse.data!;
         emit(LatestNewsSuccessState(latestNewsList));
+      }else{
+        throw RequestFailureApi(value.statusCode.toString());
       }
     }).catchError((error) {
       if (kDebugMode) {

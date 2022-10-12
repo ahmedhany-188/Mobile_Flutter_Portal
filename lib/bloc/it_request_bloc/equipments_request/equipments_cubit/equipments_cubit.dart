@@ -12,6 +12,7 @@ import 'package:heroicons/heroicons.dart';
 import '../../../../constants/constants.dart';
 import '../../../../constants/enums.dart';
 import '../../../../data/data_providers/general_dio/general_dio.dart';
+import '../../../../data/data_providers/requests_data_providers/request_data_providers.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/departments_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/business_unit_model.dart';
 import '../../../../data/models/it_requests_form_models/equipments_models/equipments_location_model.dart';
@@ -133,10 +134,12 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         status = "Rejected";
       }
       var token = _requestRepository.userData?.user?.token;
-      final requesterData = await GetEmployeeRepository()
-          .getEmployeeData(requestData.data![0].requestHRCode ?? "",token ?? "");
+      final requesterData = await GetEmployeeRepository().getEmployeeData(
+          requestData.data![0].requestHRCode ?? "", token ?? "");
 
-      getHistory(serviceId: RequestServiceID.equipmentServiceID, requestNumber: int.parse(requestNo.toString()));
+      getHistory(
+          serviceId: RequestServiceID.equipmentServiceID,
+          requestNumber: int.parse(requestNo.toString()));
 
       emit(
         state.copyWith(
@@ -213,10 +216,12 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   }
 
   submitAction(ActionValueStatus valueStatus, String requestNo) async {
-    if((valueStatus == ActionValueStatus.reject && state.actionComment.isNotEmpty) || (valueStatus == ActionValueStatus.accept)){
-    emit(state.copyWith(
-      status: FormzStatus.submissionInProgress,
-    ));
+    if ((valueStatus == ActionValueStatus.reject &&
+            state.actionComment.isNotEmpty) ||
+        (valueStatus == ActionValueStatus.accept)) {
+      emit(state.copyWith(
+        status: FormzStatus.submissionInProgress,
+      ));
       final equipmentResultResponse = await _requestRepository
           .postEquipmentTakeActionRequest(
         valueStatus: valueStatus,
@@ -249,11 +254,9 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
         );
         // }
       }
-    }
-    else{
+    } else {
       EasyLoading.showError('Add a rejection comment');
     }
-
   }
 
   void postEquipmentsRequest({
@@ -267,24 +270,33 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     // RequestResponse equipmentResponse = await _requestRepository.postEquipmentRequest(departmentObject: departmentObject,
     //     businessUnitObject: businessUnitObject, locationObject: locationObject, userHrCode: userHrCode, selectedItem: selectedItem, fileResult: state.fileResult, extension: state.extension);
-    RequestResponse equipmentResponse = await _requestRepository.postEquipmentRequest(comment: comment,departmentObject: departmentObject, businessUnitObject: businessUnitObject, locationObject: locationObject, userHrCode: userHrCode, selectedItem: selectedItem, fileResult: state.fileResult, extension: state.extension);
-    if (equipmentResponse.id == 1){
+    RequestResponse equipmentResponse =
+        await _requestRepository.postEquipmentRequest(
+            comment: comment,
+            departmentObject: departmentObject,
+            businessUnitObject: businessUnitObject,
+            locationObject: locationObject,
+            userHrCode: userHrCode,
+            selectedItem: selectedItem,
+            fileResult: state.fileResult,
+            extension: state.extension);
+    if (equipmentResponse.id == 1) {
       emit(
         state.copyWith(
           successMessage: equipmentResponse.requestNo,
           status: FormzStatus.submissionSuccess,
         ),
       );
-    }else{
+    } else {
       emit(
         state.copyWith(
-          errorMessage: equipmentResponse.id == 0 ? equipmentResponse.result : "An error occurred",
+          errorMessage: equipmentResponse.id == 0
+              ? equipmentResponse.result
+              : "An error occurred",
           status: FormzStatus.submissionFailure,
         ),
       );
     }
-
-
   }
 
   void setChosenList({
@@ -332,13 +344,17 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       businessUnitEnumStates: EquipmentsEnumState.initial,
     ));
     GeneralDio(_requestRepository.userData!).businessUnit().then((value) {
-      List<BusinessUnitModel> businessUnit;
-      businessUnit = List<BusinessUnitModel>.from(
-          value.data.map((model) => BusinessUnitModel.fromJson(model)));
+      if (value.data != null && value.statusCode == 200) {
+        List<BusinessUnitModel> businessUnit;
+        businessUnit = List<BusinessUnitModel>.from(
+            value.data.map((model) => BusinessUnitModel.fromJson(model)));
 
-      emit(state.copyWith(
-          businessUnitEnumStates: EquipmentsEnumState.success,
-          listBusinessUnit: businessUnit));
+        emit(state.copyWith(
+            businessUnitEnumStates: EquipmentsEnumState.success,
+            listBusinessUnit: businessUnit));
+      } else {
+        throw RequestFailureApi(value.statusCode.toString());
+      }
     }).catchError((err) {
       emit(state.copyWith(businessUnitEnumStates: EquipmentsEnumState.failed));
     });
@@ -349,12 +365,16 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       locationEnumStates: EquipmentsEnumState.initial,
     ));
     GeneralDio(_requestRepository.userData!).equipmentsLocation().then((value) {
-      List<EquipmentsLocationModel> location;
-      location = List<EquipmentsLocationModel>.from(
-          value.data.map((model) => EquipmentsLocationModel.fromJson(model)));
-      emit(state.copyWith(
-          locationEnumStates: EquipmentsEnumState.success,
-          listLocation: location));
+      if (value.data != null && value.statusCode == 200) {
+        List<EquipmentsLocationModel> location;
+        location = List<EquipmentsLocationModel>.from(
+            value.data.map((model) => EquipmentsLocationModel.fromJson(model)));
+        emit(state.copyWith(
+            locationEnumStates: EquipmentsEnumState.success,
+            listLocation: location));
+      } else {
+        throw RequestFailureApi(value.statusCode.toString());
+      }
     }).catchError((err) {
       emit(state.copyWith(locationEnumStates: EquipmentsEnumState.failed));
     });
@@ -364,7 +384,9 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
     emit(state.copyWith(
       departmentEnumStates: EquipmentsEnumState.initial,
     ));
-    GeneralDio(_requestRepository.userData!).equipmentsDepartment().then((value) {
+    GeneralDio(_requestRepository.userData!)
+        .equipmentsDepartment()
+        .then((value) {
       List<DepartmentsModel> departments;
       departments = List<DepartmentsModel>.from(
           value.data.map((model) => DepartmentsModel.fromJson(model)));
@@ -378,15 +400,20 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   }
 
   void getHistory({required String serviceId, required int requestNumber}) {
-    GeneralDio(_requestRepository.userData!).getHistoryWorkFlow(serviceId: serviceId, reqNo: requestNumber)
+    GeneralDio(_requestRepository.userData!)
+        .getHistoryWorkFlow(serviceId: serviceId, reqNo: requestNumber)
         .then((value) {
-      List<HistoryWorkFlowModel> history;
-      history = List<HistoryWorkFlowModel>.from(
-          value.data.map((model) => HistoryWorkFlowModel.fromJson(model)));
+      if (value.data != null && value.statusCode == 200) {
+        List<HistoryWorkFlowModel> history;
+        history = List<HistoryWorkFlowModel>.from(
+            value.data.map((model) => HistoryWorkFlowModel.fromJson(model)));
 
-      emit(state.copyWith(
-          historyWorkFlow: history
-            ..sort((a, b) => a.createdate!.compareTo(b.createdate!))));
+        emit(state.copyWith(
+            historyWorkFlow: history
+              ..sort((a, b) => a.createdate!.compareTo(b.createdate!))));
+      } else {
+        throw RequestFailureApi(value.statusCode.toString());
+      }
     });
   }
 }

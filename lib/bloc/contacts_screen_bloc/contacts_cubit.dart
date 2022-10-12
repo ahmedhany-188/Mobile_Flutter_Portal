@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/data/data_providers/requests_data_providers/request_data_providers.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
 import '../../data/data_providers/general_dio/general_dio.dart';
@@ -30,7 +31,7 @@ class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin {
     });
   }
   final Connectivity connectivity = Connectivity();
-  GeneralDio _generalDio;
+  final GeneralDio _generalDio;
 
   static ContactsCubit get(context) => BlocProvider.of(context);
 
@@ -41,7 +42,7 @@ class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin {
     //   contactStates: ContactsEnumStates.initial,
     // ));
     _generalDio.getContactListData().then((value) {
-      if (value.data != null) {
+      if (value.data != null && value.statusCode == 200) {
         List<ContactsDataFromApi> contacts = List<ContactsDataFromApi>.from(
             value.data.map((model) => ContactsDataFromApi.fromJson(model)));
 
@@ -81,8 +82,11 @@ class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin {
             departmentFilter: departmentFilters,
             titleFilter: titleFilters));
       }
+      else{
+        throw RequestFailureApi(value.statusCode.toString());
+      }
     }).catchError((error) {
-      // emit(state.copyWith(contactStates: ContactsEnumStates.failed));
+      emit(state.copyWith(contactStates: ContactsEnumStates.failed));
     });
   }
 
