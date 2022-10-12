@@ -27,63 +27,100 @@ class RequestDataProviders {
 
   Future<http.Response> postAccessAccountAccessRequest(
       Map<String, String> header,String bodyString) async {
-    return http
+    http.Response response =  await http
         .post(
           Uri.parse(addITAccessRightLink()),
           headers: header,
           body: bodyString,
         )
         .timeout(const Duration(seconds: 10));
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
   }
 
   Future<http.Response> postEmailUserAccount(Map<String, String> header,String bodyString) async {
-    return http
+   http.Response response = await http
         .post(
           Uri.parse(addITUserAccountLink()),
           headers:header,
           body: bodyString,
         )
         .timeout(const Duration(seconds: 10));
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
   }
 
   Future<http.Response> postBusinessCardRequest(Map<String, String> header,String bodyString) async {
-    return http.post(Uri.parse(addBusinessCardLink()),
+    http.Response response = await http.post(Uri.parse(addBusinessCardLink()),
         headers: header,
         body: bodyString).timeout(const Duration(seconds: 10));
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
   }
 
   Future<http.Response> postEmbassyLetterRequest(Map<String, String> header,String bodyString) async {
-    return http.post(Uri.parse(addEmbassyLetterLink()),
+    http.Response response = await http.post(Uri.parse(addEmbassyLetterLink()),
         headers: header,
         body: bodyString).timeout(const Duration(seconds: 10));
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
   }
 
   Future<http.Response> getNewMobileNumberData(Map<String, String> header,String bodyString) async {
-    return http.post(Uri.parse(addUserMobileLink()),
+    http.Response response = await http.post(Uri.parse(addUserMobileLink()),
         headers: header,
         body: bodyString).timeout(const Duration(seconds: 10));
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
   }
 
   Future<http.Response> getDurationVacation(
   Map<String, String> header,int type, String dateFrom, String dateTo) async {
-    http.Response rawDurationData = await http.get(
+    http.Response response = await http.get(
       Uri.parse(getVacationDurationLink(type, dateFrom, dateTo)),
       headers: header,
     ).timeout(const Duration(seconds: 10));
-    print(rawDurationData.body);
-    return rawDurationData;
+    if (kDebugMode) {
+      print(response.body);
+    }
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
+    // return rawDurationData;
   }
 
   Future<http.Response> getVacationRequestData(
   Map<String, String> header,String hrCode, String requestNo) async {
-    http.Response rawDurationData = await http.get(
+    http.Response response = await http.get(
       Uri.parse(getVacationRequestLink(hrCode, requestNo)),
       headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
-      print(rawDurationData.body);
+      print(response.body);
     }
-    return rawDurationData;
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
+    // return rawDurationData;
   }
 
   Future<http.Response> getEquipmentRequestData(
@@ -92,7 +129,12 @@ class RequestDataProviders {
       Uri.parse(getEquipmentLink(hrCode, requestNo)),
       headers: header,
     ).timeout(const Duration(seconds: 10));
-    return rawDurationData;
+    if(rawDurationData.statusCode == 200){
+      return rawDurationData;
+    }else{
+      throw RequestFailureApi.fromCode(rawDurationData.statusCode);
+    }
+    // return rawDurationData;
   }
 
   Future<http.Response> getBusinessCardRequestData(
@@ -104,7 +146,12 @@ class RequestDataProviders {
     if (kDebugMode) {
       print(rawDurationData.body);
     }
-    return rawDurationData;
+    if(rawDurationData.statusCode == 200){
+      return rawDurationData;
+    }else{
+      throw RequestFailureApi.fromCode(rawDurationData.statusCode);
+    }
+    // return rawDurationData;
   }
 
   Future<http.Response> getAccessRightRequestData(
@@ -117,7 +164,12 @@ class RequestDataProviders {
     if (kDebugMode) {
       print(rawDurationData.body);
     }
-    return rawDurationData;
+    if(rawDurationData.statusCode == 200){
+      return rawDurationData;
+    }else{
+      throw RequestFailureApi.fromCode(rawDurationData.statusCode);
+    }
+    // return rawDurationData;
   }
 
   Future<http.Response> getEmailAccountRequestData(
@@ -130,7 +182,12 @@ class RequestDataProviders {
     if (kDebugMode) {
       print(rawDurationData.body);
     }
-    return rawDurationData;
+    if(rawDurationData.statusCode == 200){
+      return rawDurationData;
+    }else{
+      throw RequestFailureApi.fromCode(rawDurationData.statusCode);
+    }
+    // return rawDurationData;
   }
 
   Future<http.Response> getEmailAccountData(Map<String, String> header,String hrCode) async {
@@ -142,7 +199,12 @@ class RequestDataProviders {
     if (kDebugMode) {
       print(rawDurationData.body);
     }
-    return rawDurationData;
+    if(rawDurationData.statusCode == 200){
+      return rawDurationData;
+    }else{
+      throw RequestFailureApi.fromCode(rawDurationData.statusCode);
+    }
+    // return rawDurationData;
   }
 
   Future<http.Response> getEmbassyLetterRequestData(
@@ -155,11 +217,16 @@ class RequestDataProviders {
     if (kDebugMode) {
       print(rawDurationData.body);
     }
-    return rawDurationData;
+    if(rawDurationData.statusCode == 200){
+      return rawDurationData;
+    }else{
+      throw RequestFailureApi.fromCode(rawDurationData.statusCode);
+    }
+    // return rawDurationData;
   }
 
   Future<http.Response> postVacationRequest(Map<String, String> header,String bodyString) async {
-    http.Response vacationFeedbackRequest = await http
+    http.Response response = await http
         .post(
           Uri.parse("https://api.hassanallam.com/api/SelfService/AddVacation"),
           headers: header,
@@ -167,13 +234,18 @@ class RequestDataProviders {
         )
         .timeout(const Duration(seconds: 10));
     if (kDebugMode) {
-      print(vacationFeedbackRequest.body);
+      print(response.body);
     }
-    return vacationFeedbackRequest;
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
+    // return vacationFeedbackRequest;
   }
 
   Future<http.Response> postBusinessMissionRequest(Map<String, String> header,String bodyString) async {
-    http.Response businessMissionFeedbackRequest = await http
+    http.Response response = await http
         .post(
           Uri.parse(
               "https://api.hassanallam.com/api/SelfService/AddBusinessMission"),
@@ -182,63 +254,88 @@ class RequestDataProviders {
         )
         .timeout(const Duration(seconds: 10));
     if (kDebugMode) {
-      print(businessMissionFeedbackRequest.body);
+      print(response.body);
     }
-    return businessMissionFeedbackRequest;
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
+    // return businessMissionFeedbackRequest;
   }
 
   Future<http.Response> getBusinessMissionRequestData(
   Map<String, String> header,String hrCode, String requestNo) async {
-    http.Response rawData = await http.get(
+    http.Response response = await http.get(
       Uri.parse(
           "https://api.hassanallam.com/api/SelfService/GetBusinessMission?HRCode=$hrCode&requestno=$requestNo"),
       headers: header
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
-      print(rawData.body);
+      print(response.body);
     }
-    return rawData;
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
+    // return rawData;
   }
 
   Future<http.Response> getPermissionRequestData(
   Map<String, String> header,String hrCode, String requestNo) async {
-    http.Response rawData = await http.get(
+    http.Response response = await http.get(
       Uri.parse(
           "https://api.hassanallam.com/api/SelfService/GetPermission?HRCode=$hrCode&requestno=$requestNo"),
       headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
-      print(rawData.body);
+      print(response.body);
     }
-    return rawData;
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
+    // return rawData;
   }
 
   Future<http.Response> getMyRequestsData(Map<String, String> header,String hrCode) async {
-    http.Response rawDurationData = await http.get(
+    http.Response response = await http.get(
       Uri.parse(
           "https://api.hassanallam.com/api/SelfService/GetMyRequests?HRCode=$hrCode"),
       headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
-      print(rawDurationData.body);
+      print(response.body);
     }
-    return rawDurationData;
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
+    // return rawDurationData;
   }
 
   Future<http.Response> getMyNotificationData(Map<String, String> header,String hrCode) async {
-    http.Response rawDurationData = await http.get(
+    http.Response response = await http.get(
       Uri.parse(
           "https://api.hassanallam.com/api/SelfService/GetMyNotification?HRCode=$hrCode"),
       headers: header,
     ).timeout(const Duration(seconds: 10));
     if (kDebugMode) {
-      print(rawDurationData.body);
+      print(response.body);
     }
-    return rawDurationData;
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
+    // return rawDurationData;
   }
 
   Future<http.Response> postTakeActionOnRequest(Map<String, String> header,String bodyString) async {
-    http.Response vacationFeedbackRequest = await http
+    http.Response response = await http
         .post(
           Uri.parse("https://api.hassanallam.com/api/SelfService/TakeAction"),
           headers: header,
@@ -246,14 +343,19 @@ class RequestDataProviders {
         )
         .timeout(const Duration(seconds: 10));
     if (kDebugMode) {
-      print(vacationFeedbackRequest.body);
+      print(response.body);
     }
-    return vacationFeedbackRequest;
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
+    // return vacationFeedbackRequest;
   }
 
   Future<http.Response> postTakeEquipmentActionOnRequest(
       String bodyString,Map<String, String> header) async {
-    http.Response equipmentFeedbackRequest = await http
+    http.Response response = await http
         .post(
           Uri.parse(
               "https://api.hassanallam.com/api/SelfService/TakeActionEquipment"),
@@ -265,7 +367,12 @@ class RequestDataProviders {
       EasyLoading.showError('Something went wrong');
       throw err;
     });
-    return equipmentFeedbackRequest;
+    if(response.statusCode == 200){
+      return response;
+    }else{
+      throw RequestFailureApi.fromCode(response.statusCode);
+    }
+    // return equipmentFeedbackRequest;
   }
 }
 class RequestFailureApi implements Exception {
