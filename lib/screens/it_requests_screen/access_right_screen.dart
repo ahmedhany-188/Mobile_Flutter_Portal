@@ -16,6 +16,7 @@ import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../constants/enums.dart';
 import '../../../widgets/success/success_request_widget.dart';
 import '../../data/data_providers/general_dio/general_dio.dart';
+import '../../data/helpers/download_pdf.dart';
 import '../../widgets/requester_data_widget/requested_status.dart';
 import '../../widgets/requester_data_widget/requester_data_widget.dart';
 
@@ -539,13 +540,40 @@ class _AccessRightScreen extends State<AccessRightScreen> {
                                                               )
                                                             : ElevatedButton
                                                                 .icon(
-                                                                onPressed: () {
+                                                                onPressed: () async{
                                                                   if (state
                                                                           .filePDF !=
                                                                       '') {
-                                                                    launchUrl(Uri
-                                                                        .parse(
-                                                                            'https://portal.hassanallam.com/Apps/Files/${state.filePDF}'));
+                                                                    // launchUrl(Uri
+                                                                    //     .parse(
+                                                                    //         'https://portal.hassanallam.com/Apps/Files/${state.filePDF}'));
+                                                                    await DownloadPdfHelper(
+                                                                        fileUrl: 'https://portal.hassanallam.com/Apps/Files/${state.filePDF}',
+                                                                        fileName: state.filePDF,
+                                                                  success: () {
+                                                                  // EasyLoading.show(
+                                                                  //     status: 'Success',
+                                                                  //     maskType: EasyLoadingMaskType.black,
+                                                                  //     dismissOnTap: true,
+                                                                  //     indicator: const Icon(
+                                                                  //       Icons.done,
+                                                                  //       size: 50,
+                                                                  //       color: Colors.white,
+                                                                  //     ));
+                                                                  // EasyLoading.dismiss();
+                                                                  },
+                                                                  failed: () {
+                                                                  EasyLoading.show(
+                                                                  status: 'Failed',
+                                                                  maskType: EasyLoadingMaskType.black,
+                                                                  dismissOnTap: true,
+                                                                  indicator: const Icon(
+                                                                  Icons.clear,
+                                                                  size: 50,
+                                                                  color: Colors.white,
+                                                                  ));
+                                                                  // EasyLoading.dismiss();
+                                                                  }).download();
                                                                   } else {
                                                                     EasyLoading
                                                                         .showError(

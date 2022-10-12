@@ -8,13 +8,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/enums.dart';
 import '../../constants/request_service_id.dart';
 import '../../data/data_providers/general_dio/general_dio.dart';
+import '../../data/helpers/download_pdf.dart';
 import '../../widgets/background/custom_background.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../constants/url_links.dart';
@@ -575,15 +575,42 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                           )
                                         else
                                           ElevatedButton.icon(
-                                            onPressed: () {
+                                            onPressed: () async{
                                               if (state.requestedData?.data![0]
                                                       .equipmentFile !=
                                                   null) {
-                                                launchUrl(
-                                                    Uri.parse(
-                                                        'https://portal.hassanallam.com/Apps/Files/Equipments/${state.requestedData?.data![0].equipmentFile}'),
-                                                    mode: LaunchMode
-                                                        .externalApplication);
+                                                // launchUrl(
+                                                //     Uri.parse(
+                                                //         'https://portal.hassanallam.com/Apps/Files/Equipments/${state.requestedData?.data![0].equipmentFile}'),
+                                                //     mode: LaunchMode
+                                                //         .externalApplication);
+                                                await DownloadPdfHelper(
+                                                    fileUrl: 'https://portal.hassanallam.com/Apps/Files/Equipments/${state.requestedData?.data![0].equipmentFile}',
+                                                    fileName: state.requestedData?.data![0].equipmentFile ?? "downloaded file",
+                                              success: () {
+                                              // EasyLoading.show(
+                                              //     status: 'Success',
+                                              //     maskType: EasyLoadingMaskType.black,
+                                              //     dismissOnTap: true,
+                                              //     indicator: const Icon(
+                                              //       Icons.done,
+                                              //       size: 50,
+                                              //       color: Colors.white,
+                                              //     ));
+                                              // EasyLoading.dismiss();
+                                              },
+                                              failed: () {
+                                              EasyLoading.show(
+                                              status: 'Failed',
+                                              maskType: EasyLoadingMaskType.black,
+                                              dismissOnTap: true,
+                                              indicator: const Icon(
+                                              Icons.clear,
+                                              size: 50,
+                                              color: Colors.white,
+                                              ));
+                                              // EasyLoading.dismiss();
+                                              }).download();
                                               } else {
                                                 EasyLoading.showError(
                                                     'No File has been uploaded');
