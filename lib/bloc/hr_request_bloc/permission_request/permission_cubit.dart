@@ -118,7 +118,9 @@ class PermissionCubit extends Cubit<PermissionInitial> {
     String formattedDate = formatter.format(
         date ?? DateTime.now());
     final permissionDate = PermissionDate.dirty(formattedDate);
-    print(permissionDate.value);
+    if (kDebugMode) {
+      print(permissionDate.value);
+    }
     emit(
       state.copyWith(
         permissionDate: permissionDate,

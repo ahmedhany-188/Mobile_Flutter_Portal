@@ -645,6 +645,8 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                   ),
                                 ),
 
+                                const SizedBox(height: 60,),
+
 
                               ],
                             ),
@@ -682,6 +684,8 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                       return DraggableScrollableSheet(
                           expand: false,
                           maxChildSize: 0.8,
+                          initialChildSize: 0.8,
+                          // minChildSize: 0.8,
                           snap: true,
                           builder:
                               (BuildContext context,
