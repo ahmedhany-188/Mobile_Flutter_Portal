@@ -260,7 +260,7 @@ class DirectManagerProfileScreenClass
                                                       bottom: 3),
                                                   child: SizedBox(
                                                     width: double.infinity,
-                                                    child: getLine(
+                                                    child: getLineTwo(
                                                         state.managerData
                                                             .email ?? ""),
                                                   ),
@@ -364,7 +364,7 @@ class DirectManagerProfileScreenClass
                                                       bottom: 3),
                                                   child: SizedBox(
                                                     width: double.infinity,
-                                                    child: getLine(
+                                                    child: getLineTwo(
                                                         getMobile(state)),),
                                                 ),
                                               ]),
@@ -406,7 +406,7 @@ class DirectManagerProfileScreenClass
                                                   const EdgeInsets.only(left: 15, right: 3, top: 3, bottom: 3),
                                                   child: SizedBox(
                                                     width: double.infinity,
-                                                    child: getLine(getExt(state)),),
+                                                    child: getLineTwo(getExt(state)),),
                                                 ),
                                               ]),
                                             ),
@@ -533,7 +533,6 @@ class DirectManagerProfileScreenClass
         managerCode = state.managerData.managerCode.toString();
       }
     }
-
     return Text(managerCode,
         style: const TextStyle(
           color: Colors.white,
@@ -544,6 +543,18 @@ class DirectManagerProfileScreenClass
         textAlign: TextAlign.left);
   }
 
+  Text getLineTwo(String line) {
+    return Text(
+          line,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontFamily: 'Nunito',
+
+          ),
+          textAlign: TextAlign.left,
+    );
+  }
 
   Padding getLine(String line) {
     return Padding(
@@ -554,7 +565,7 @@ class DirectManagerProfileScreenClass
           line,
           style: const TextStyle(
             color: Colors.white,
-            fontSize: 15,
+            fontSize: 14,
             fontFamily: 'Nunito',
           ),
           textAlign: TextAlign.left,
@@ -562,4 +573,7 @@ class DirectManagerProfileScreenClass
       ),
     );
   }
+
+
+
 }
