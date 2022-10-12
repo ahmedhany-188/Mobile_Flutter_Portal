@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
+import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 import 'package:flutter/foundation.dart';
 
@@ -35,13 +36,13 @@ class DialogProfileCallBottomSheet extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.all(8.0),
             child: Text("Ways of connections",
-              style: TextStyle(color: Colors.white, fontStyle: FontStyle.italic,
-                  fontWeight: FontWeight.w800, fontSize: 20.0),),
+              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800,
+                  fontSize: 20.0,fontFamily: FontFamily.robotoCondensed),),
           ),
           Row(children: [
             type == "phoneNumber" ? Flexible(
               child: sizeBoxRequest(
-                  "Phone",
+                  "Direct call",
                   const Icon(
                       Icons.phone,
                       size: 40.0,
@@ -51,7 +52,7 @@ class DialogProfileCallBottomSheet extends StatelessWidget {
             ) : Text(""),
             Flexible(
               child: sizeBoxRequest(
-                  "Zoom",
+                  "Zoom call",
                   const Icon(
                     Icons.videocam_rounded,
                     size: 40.0,
@@ -96,7 +97,7 @@ class DialogProfileCallBottomSheet extends StatelessWidget {
                 Center(
                   child: Text(
                     requestType,
-                    style: const TextStyle(color: Colors.black, fontSize: 18),
+                    style: const TextStyle(color: Colors.black, fontSize: 16,fontFamily: FontFamily.robotoCondensed),
                     softWrap: false,
                   ),
                 )
@@ -107,7 +108,7 @@ class DialogProfileCallBottomSheet extends StatelessWidget {
                 type: MaterialType.transparency,
                 child: InkWell(onTap: () async {
                   switch (requestType) {
-                    case "Zoom":
+                    case "Zoom call":
                       try {
                         Uri url;
                         bool found=await url_launcher.canLaunchUrl(Uri.parse('zoomus://'));
@@ -131,7 +132,7 @@ class DialogProfileCallBottomSheet extends StatelessWidget {
                         print("No data found");
                       }
                       break;
-                    case "Phone":
+                    case "Direct call":
                       url_launcher.launchUrl(Uri.parse('tel:+${value}'));
                       break;
                   }
