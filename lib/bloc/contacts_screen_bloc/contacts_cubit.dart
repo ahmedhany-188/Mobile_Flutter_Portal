@@ -83,7 +83,7 @@ class ContactsCubit extends Cubit<ContactCubitStates> with HydratedMixin {
             titleFilter: titleFilters));
       }
       else{
-        throw RequestFailureApi(value.statusCode.toString());
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
     }).catchError((error) {
       emit(state.copyWith(contactStates: ContactsEnumStates.failed));

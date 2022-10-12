@@ -9,7 +9,7 @@ part 'subsidiaries_state.dart';
 
 class SubsidiariesCubit extends Cubit<SubsidiariesState> {
   final Connectivity connectivity = Connectivity();
-  GeneralDio _generalDio;
+  final GeneralDio _generalDio;
 
   SubsidiariesCubit(this._generalDio) : super(SubsidiariesInitial()){
     connectivity.onConnectivityChanged.listen((connectivityResult) async {
@@ -44,7 +44,7 @@ class SubsidiariesCubit extends Cubit<SubsidiariesState> {
           emit(SubsidiariesSuccessState(subsidiariesList));
         }
       }else{
-        throw RequestFailureApi(value.statusCode.toString());
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
 
 

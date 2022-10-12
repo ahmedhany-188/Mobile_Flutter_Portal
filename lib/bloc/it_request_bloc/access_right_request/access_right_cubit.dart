@@ -201,7 +201,7 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
                   if(value.data != null && value.statusCode == 200){
                     emit(state.copyWith(filePDF: value.data?[0]));
                   }else{
-                    throw RequestFailureApi(value.statusCode.toString());
+                    throw RequestFailureApi.fromCode(value.statusCode!);
                   }
 
             }).catchError((err) {

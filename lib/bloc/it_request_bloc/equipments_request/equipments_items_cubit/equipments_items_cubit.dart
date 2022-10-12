@@ -51,7 +51,7 @@ class EquipmentsItemsCubit extends Cubit<EquipmentsItemsInitial> {
             equipmentsItemsEnumState: EquipmentsItemsEnumState.success,
             listEquipmentsItem: equipmentsItemsList));
       }else{
-        throw RequestFailureApi(value.statusCode.toString());
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
     }).catchError((err) {
       emit(state.copyWith(

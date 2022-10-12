@@ -32,10 +32,10 @@ class ShowUserProfileBottomSheetClass
           await EasyLoading.dismiss(animation: true);
           return true;
         },
-        child: contentBox(context,widget.user));
+        child: contentBox(context, widget.user));
   }
 
-  contentBox(context,MainUserData user) {
+  contentBox(context, MainUserData user) {
     return CustomTheme(
       child: Container(
         margin: const EdgeInsets.all(10),
@@ -58,20 +58,26 @@ class ShowUserProfileBottomSheetClass
               padding: const EdgeInsets.all(10.0),
               child: InkWell(
                 onTap: () async {
-                  await FilePicker.platform.pickFiles(type: FileType.image,).then((value) {
-                    String? fileName = widget.user.employeeData?.userHrCode;
+                  await FilePicker.platform
+                      .pickFiles(
+                    type: FileType.image,
+                  )
+                      .then((value) {
+                    String? fileName = user.employeeData?.userHrCode;
                     String? fileExtension = value?.files.first.extension;
-                    GeneralDio(user).uploadUserImage(
-                            value!, fileName!, fileExtension!).then((value) {
-                              if(value.data != null && value.statusCode == 200){}else{
-                                throw RequestFailureApi(value.statusCode.toString());
-                              }
-                    })
-                        .whenComplete(() {
-                      DefaultCacheManager manager = DefaultCacheManager();
-                      manager.removeFile(
-                          "https://portal.hassanallam.com/Apps/images/Profile/${widget.user.employeeData!.imgProfile}");
-                      EasyLoading.showSuccess('Image Uploaded Successfully');
+                    GeneralDio(user)
+                        .uploadUserImage(value!, fileName!, fileExtension!)
+                        .then((value) {
+                      if (value.data != null && value.statusCode == 200) {
+                        DefaultCacheManager manager = DefaultCacheManager();
+                        manager
+                            .removeFile(
+                                "https://portal.hassanallam.com/Apps/images/Profile/${user.employeeData?.imgProfile}")
+                            .then((value) => EasyLoading.showSuccess(
+                                'Image Uploaded Successfully'));
+                      } else {
+                        throw RequestFailureApi.fromCode(value.statusCode!);
+                      }
                     }).catchError((err) {
                       EasyLoading.showError('Something went wrong');
                       throw err;
@@ -182,13 +188,12 @@ class ShowUserProfileBottomSheetClass
                                         connectivityResult ==
                                             ConnectivityResult.mobile) {
                                       RequestRepository requestRepository =
-                                          RequestRepository(widget.user);
+                                          RequestRepository(user);
                                       final requestData =
                                           await requestRepository
                                               .setNewUserMobileNumber(
                                                   mobileNo,
-                                                  widget.user.employeeData!
-                                                      .userHrCode
+                                                  user.employeeData!.userHrCode
                                                       .toString());
                                       if (requestData.id == 0 ||
                                           requestData.id == 1) {

@@ -8,6 +8,7 @@ import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/screens/myprofile_screen/profile_screen_direct_manager.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../constants/url_links.dart';
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 
 class ContactsWidget extends StatelessWidget {
@@ -95,7 +96,7 @@ class ContactsWidget extends StatelessWidget {
                         child: imageProfile.isNotEmpty
                             ? CachedNetworkImage(
                                 imageUrl:
-                                    'https://portal.hassanallam.com/Apps/images/Profile/$imageProfile',
+                                getUserProfilePicture(imageProfile),
                                 imageBuilder: (context, imageProvider) =>
                                     Container(
                                   width: 80.sp,
