@@ -53,7 +53,7 @@ class AttendanceCubit extends Cubit<AttendanceState> with HydratedMixin {
               .then((value) async {
             MyAttendanceModel lastModel = value.last;
             if (lastModel.date != null) {
-              int monthCount1 = int.parse(lastModel.date!.split("-")[1]) ?? 0;
+              int monthCount1 = int.parse(lastModel.date!.split("-")[1]);
               state.getAttendanceList.removeAt(monthCount1 - 1);
               state.getAttendanceList.insert(monthCount1 - 1, value);
               if (state.month == monthCount1) {

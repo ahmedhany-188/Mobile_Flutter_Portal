@@ -53,6 +53,7 @@ class ContactsWidget extends StatelessWidget {
         builder: (context) => ListView.separated(
           physics: const BouncingScrollPhysics(),
           controller: _scrollController,
+          shrinkWrap: true,
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           itemBuilder: (context, index) {
             var imageProfile = listFromContactsScreen[index].imgProfile ?? "";
