@@ -125,7 +125,7 @@ class AuthenticationRepository {
 
                   String employeeDataString = jsonEncode(employeeData.toJson());
                   shared_User.setString(employeeCacheKey, employeeDataString);
-                  print(employeeData.toString());
+                  // print(employeeData.toString());
 
                   //TODO : Add FirebaseMessaging for IOS
 

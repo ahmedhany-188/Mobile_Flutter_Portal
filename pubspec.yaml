@@ -99,6 +99,7 @@ dependencies:
   bloc: any
   connectivity_plus: any
   meta: ^1.8.0
+  shared_preferences: ^2.0.15
 
   # QR code
   qr_flutter: ^4.0.0

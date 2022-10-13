@@ -15,5 +15,14 @@ class GetEmployeeRepository {
     return employeeData;
 
   }
+  Future<EmployeeData> getEmployeeDataWithSaving(String hrCode,String token) async {
+    final http.Response rawAttendance = await authenticationProvider
+        .getEmployeeData(hrCode,token);
+    final json = await jsonDecode(rawAttendance.body);
+    EmployeeData employeeData = EmployeeData.fromJson(json[0]);
+    /// TODO: need to convert code from profile screen to here till now this is unused
+    return employeeData;
+
+  }
 
 }

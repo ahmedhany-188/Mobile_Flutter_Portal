@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
@@ -8,10 +11,12 @@ import 'package:hassanallamportalflutter/screens/myprofile_screen/profile_screen
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_userprofile.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vcard_maintained/vcard_maintained.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/url_links.dart';
+import '../../data/repositories/employee_repository.dart';
 
 class UserProfileScreen extends StatefulWidget {
   static const routeName = "/my-profile-screen";
@@ -27,7 +32,35 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
     var imageProfile = user.employeeData?.imgProfile ?? "";
-    print('================== $imageProfile');
+    if (kDebugMode) {
+      print('==================1 $imageProfile');
+    }
+    GetEmployeeRepository().getEmployeeData(user.user?.userHRCode ?? "",user.user?.token ?? "").then((value) async {
+    final shared_User = await SharedPreferences.getInstance();
+    print(value);
+    if (value.userHrCode != null) {
+    // final employeeDataJson = value;
+    EmployeeData employeeData = value;
+
+    String employeeDataString = jsonEncode(employeeData.toJson());
+    shared_User.setString('__employeeData__', employeeDataString);
+    }});
+
+    // getEmployeeData(user.user?.userHRCode ?? "",user.user?.token ?? "")
+    //     .then((value) async {
+    //   print(value);
+    //   if (value.statusCode == 200) {
+    //     final employeeDataJson = await jsonDecode(value.body);
+    //     EmployeeData employeeData = EmployeeData.fromJson(
+    //         employeeDataJson[0]);
+    //
+    //     String employeeDataString = jsonEncode(employeeData.toJson());
+    //     shared_User.setString(employeeCacheKey, employeeDataString);
+    //   }
+
+    if (kDebugMode) {
+      print('==================2 $imageProfile');
+    }
 
     ///Create a new vCard
     VCard vCard = VCard();
