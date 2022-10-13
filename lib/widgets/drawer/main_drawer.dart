@@ -525,7 +525,7 @@ class MainDrawer extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.only(right: 25.0),
                             child: BlocProvider.value(
-                              value: UserNotificationApiCubit(RequestRepository(userData))
+                              value: UserNotificationApiCubit.get(context)
                                 ..getNotificationsWithoutLoading(userData),
                               child: BlocBuilder<UserNotificationApiCubit,
                                   UserNotificationApiState>(
