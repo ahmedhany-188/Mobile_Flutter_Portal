@@ -209,38 +209,38 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                         ),
                       ),
 
-                      Expanded(
-                          child: Column(children: [
-                        Expanded(
-                          child: Badge(
-                            toAnimate: false,
-                            badgeColor: Colors.transparent,
-                            // position: BadgePosition.center(),
-                            elevation: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              width: MediaQuery.of(context).size.width,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  fit: BoxFit.fill,
-                                  image: Assets.images.staffdashboard.dashboard1
-                                      .image()
-                                      .image,
-                                ),
+                      Flexible(
+                        child: Badge(
+                          toAnimate: false,
+                          badgeColor: Colors.transparent,
+                          // position: BadgePosition.center(),
+                          elevation: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                fit: BoxFit.fill,
+                                image: Assets.images.staffdashboard.dashboard1
+                                    .image()
+                                    .image,
                               ),
-                              child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  SizedBox(
-                                    width: 120,
-                                    child: Assets.images.staffdashboard.dashboard2
-                                        .image(),
-                                  ),
-                                  Column(
+                            ),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 120,
+                                  child: Assets.images.staffdashboard.dashboard2
+                                      .image(),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Column(
                                     mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                     children: [
-                                      Text('Total Manpower'),
+                                      const Text('Total Manpower'),
                                       Text(
                                         state.companyStaffDashBoardEnumStates ==
                                             CompanyStaffDashBoardEnumStates
@@ -254,86 +254,90 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                                       ),
                                     ],
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 3,
-                          child: Container(
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Column(
-                                  children: [
-                                    Assets.images.staffdashboard.empicon
-                                        .image(scale: 1.7),
-                                    whiteText("Total Staff"),
-                                    Text(
-                                      state.companyStaffDashBoardEnumStates ==
-                                          CompanyStaffDashBoardEnumStates
-                                              .success
-                                          ? getTotalStaff(state
-                                          .companyStaffDashBoardList)
-                                          .toString()
-                                          : "----",
-                                      style: TextStyle(
-                                          color: Colors.grey.shade500),
-                                    ),
-                                    state.companyStaffDashBoardEnumStates ==
-                                        CompanyStaffDashBoardEnumStates
-                                            .success
-                                        ? getAttendancePercentage(
-                                        getAllAttendanceStaff(state
-                                            .companyStaffDashBoardList) +
-                                            0.0,
-                                        getTotalStaff(state
-                                            .companyStaffDashBoardList) +
-                                            0.0,
-                                        ConstantsColors.buttonColors)
-                                        : getAttendancePercentage(0.0, 1.0,
-                                        ConstantsColors.buttonColors),
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Assets.images.staffdashboard.laboricon
-                                        .image(scale: 1.7),
-                                    whiteText("Total Labor"),
-                                    Text(
-                                      state.companyStaffDashBoardEnumStates ==
-                                          CompanyStaffDashBoardEnumStates
-                                              .success
-                                          ? getTotalLabor(state
-                                          .companyStaffDashBoardList)
-                                          .toString()
-                                          : "----",
-                                      style: TextStyle(
-                                          color: Colors.grey.shade500),
-                                    ),
-                                    state.companyStaffDashBoardEnumStates ==
-                                        CompanyStaffDashBoardEnumStates
-                                            .success
-                                        ? getAttendancePercentage(
-                                        getAllAttendanceLabor(state
-                                            .companyStaffDashBoardList) +
-                                            0.0,
-                                        getTotalLabor(state
-                                            .companyStaffDashBoardList) +
-                                            0.0,
-                                        Colors.amber)
-                                        : getAttendancePercentage(
-                                        0.0, 1.0, Colors.amber),
-                                  ],
                                 ),
                               ],
                             ),
                           ),
                         ),
-                        Container(
+                      ),
+                      Flexible(
+                        flex: 3,
+                        child: Container(
+                          color: Colors.white,
+                          child: Row(
+                            mainAxisAlignment:
+                            MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Assets.images.staffdashboard.empicon
+                                      .image(scale: 1.7),
+                                  whiteText("Total Staff"),
+                                  Text(
+                                    state.companyStaffDashBoardEnumStates ==
+                                        CompanyStaffDashBoardEnumStates
+                                            .success
+                                        ? getTotalStaff(state
+                                        .companyStaffDashBoardList)
+                                        .toString()
+                                        : "----",
+                                    style: TextStyle(
+                                        color: Colors.grey.shade500),
+                                  ),
+                                  state.companyStaffDashBoardEnumStates ==
+                                      CompanyStaffDashBoardEnumStates
+                                          .success
+                                      ? getAttendancePercentage(
+                                      getAllAttendanceStaff(state
+                                          .companyStaffDashBoardList) +
+                                          0.0,
+                                      getTotalStaff(state
+                                          .companyStaffDashBoardList) +
+                                          0.0,
+                                      ConstantsColors.buttonColors)
+                                      : getAttendancePercentage(0.0, 1.0,
+                                      ConstantsColors.buttonColors),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Assets.images.staffdashboard.laboricon
+                                      .image(scale: 1.7),
+                                  whiteText("Total Labor"),
+                                  Text(
+                                    state.companyStaffDashBoardEnumStates ==
+                                        CompanyStaffDashBoardEnumStates
+                                            .success
+                                        ? getTotalLabor(state
+                                        .companyStaffDashBoardList)
+                                        .toString()
+                                        : "----",
+                                    style: TextStyle(
+                                        color: Colors.grey.shade500),
+                                  ),
+                                  state.companyStaffDashBoardEnumStates ==
+                                      CompanyStaffDashBoardEnumStates
+                                          .success
+                                      ? getAttendancePercentage(
+                                      getAllAttendanceLabor(state
+                                          .companyStaffDashBoardList) +
+                                          0.0,
+                                      getTotalLabor(state
+                                          .companyStaffDashBoardList) +
+                                          0.0,
+                                      Colors.amber)
+                                      : getAttendancePercentage(
+                                      0.0, 1.0, Colors.amber),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        child: Container(
                           color: Colors.white,
                           child: Align(
                             alignment: Alignment.bottomCenter,
@@ -360,6 +364,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                                 }
                               },
                               child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
                                   const Text(
                                     'SUBSIDIARIES',
@@ -379,7 +384,179 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                             ),
                           ),
                         ),
-                      ],)),
+                      ),
+
+                      // Column(children: [
+                      //   Badge(
+                      // toAnimate: false,
+                      // badgeColor: Colors.transparent,
+                      // // position: BadgePosition.center(),
+                      // elevation: 0,
+                      // child: Container(
+                      //   padding: const EdgeInsets.all(10),
+                      //   width: MediaQuery.of(context).size.width,
+                      //   decoration: BoxDecoration(
+                      //     image: DecorationImage(
+                      //       fit: BoxFit.fill,
+                      //       image: Assets.images.staffdashboard.dashboard1
+                      //           .image()
+                      //           .image,
+                      //     ),
+                      //   ),
+                      //   child: Stack(
+                      //     alignment: Alignment.center,
+                      //     children: [
+                      //       SizedBox(
+                      //         width: 120,
+                      //         child: Assets.images.staffdashboard.dashboard2
+                      //             .image(),
+                      //       ),
+                      //       Padding(
+                      //         padding: const EdgeInsets.all(10.0),
+                      //         child: Column(
+                      //           mainAxisAlignment:
+                      //           MainAxisAlignment.spaceEvenly,
+                      //           children: [
+                      //             Text('Total Manpower'),
+                      //             Text(
+                      //               state.companyStaffDashBoardEnumStates ==
+                      //                   CompanyStaffDashBoardEnumStates
+                      //                       .success
+                      //                   ? getAllManPower(state
+                      //                   .companyStaffDashBoardList)
+                      //                   .toString()
+                      //                   : "----",
+                      //               style: const TextStyle(
+                      //                   color: Colors.white, fontSize: 18),
+                      //             ),
+                      //           ],
+                      //         ),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      //   ),
+                      //   Expanded(
+                      // flex: 1,
+                      // child: Container(
+                      //   color: Colors.white,
+                      //   child: Row(
+                      //     mainAxisAlignment:
+                      //     MainAxisAlignment.spaceEvenly,
+                      //     children: [
+                      //       Column(
+                      //         children: [
+                      //           Assets.images.staffdashboard.empicon
+                      //               .image(scale: 1.7),
+                      //           whiteText("Total Staff"),
+                      //           Text(
+                      //             state.companyStaffDashBoardEnumStates ==
+                      //                 CompanyStaffDashBoardEnumStates
+                      //                     .success
+                      //                 ? getTotalStaff(state
+                      //                 .companyStaffDashBoardList)
+                      //                 .toString()
+                      //                 : "----",
+                      //             style: TextStyle(
+                      //                 color: Colors.grey.shade500),
+                      //           ),
+                      //           state.companyStaffDashBoardEnumStates ==
+                      //               CompanyStaffDashBoardEnumStates
+                      //                   .success
+                      //               ? getAttendancePercentage(
+                      //               getAllAttendanceStaff(state
+                      //                   .companyStaffDashBoardList) +
+                      //                   0.0,
+                      //               getTotalStaff(state
+                      //                   .companyStaffDashBoardList) +
+                      //                   0.0,
+                      //               ConstantsColors.buttonColors)
+                      //               : getAttendancePercentage(0.0, 1.0,
+                      //               ConstantsColors.buttonColors),
+                      //         ],
+                      //       ),
+                      //       Column(
+                      //         children: [
+                      //           Assets.images.staffdashboard.laboricon
+                      //               .image(scale: 1.7),
+                      //           whiteText("Total Labor"),
+                      //           Text(
+                      //             state.companyStaffDashBoardEnumStates ==
+                      //                 CompanyStaffDashBoardEnumStates
+                      //                     .success
+                      //                 ? getTotalLabor(state
+                      //                 .companyStaffDashBoardList)
+                      //                 .toString()
+                      //                 : "----",
+                      //             style: TextStyle(
+                      //                 color: Colors.grey.shade500),
+                      //           ),
+                      //           state.companyStaffDashBoardEnumStates ==
+                      //               CompanyStaffDashBoardEnumStates
+                      //                   .success
+                      //               ? getAttendancePercentage(
+                      //               getAllAttendanceLabor(state
+                      //                   .companyStaffDashBoardList) +
+                      //                   0.0,
+                      //               getTotalLabor(state
+                      //                   .companyStaffDashBoardList) +
+                      //                   0.0,
+                      //               Colors.amber)
+                      //               : getAttendancePercentage(
+                      //               0.0, 1.0, Colors.amber),
+                      //         ],
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      //   ),
+                      //   Container(
+                      // color: Colors.white,
+                      // child: Align(
+                      //   alignment: Alignment.bottomCenter,
+                      //   child: TextButton(
+                      //     onPressed: () {
+                      //       if (state.companyStaffDashBoardEnumStates ==
+                      //           CompanyStaffDashBoardEnumStates
+                      //               .success) {
+                      //         PageTransitionAnimation(
+                      //           context: context,
+                      //           transitionDuration: 500,
+                      //           delayedDuration: 0,
+                      //           pageDirection:
+                      //           StaffDashBoardDetailScreen(
+                      //               requestData: {
+                      //                 StaffDashBoardDetailScreen
+                      //                     .staffDashboardList:
+                      //                 state
+                      //                     .companyStaffDashBoardList,
+                      //                 StaffDashBoardDetailScreen.date:
+                      //                 state.date
+                      //               }),
+                      //         ).navigateFromBottomWithoutReplace();
+                      //       }
+                      //     },
+                      //     child: Column(
+                      //       children: [
+                      //         const Text(
+                      //           'SUBSIDIARIES',
+                      //           style: TextStyle(
+                      //             fontSize: 18,
+                      //             color: ConstantsColors
+                      //                 .bottomSheetBackgroundDark,
+                      //           ),
+                      //         ),
+                      //         Assets.images.staffdashboard.arrowdown
+                      //             .image(scale: 1.5),
+                      //       ],
+                      //     ),
+                      //     // color: Colors.blue,
+                      //     // textColor: ConstantsColors.backgroundStartColor,
+                      //     // elevation: 5,
+                      //   ),
+                      // ),
+                      //   ),
+                      // ],),
 
 
                     ],
