@@ -37,10 +37,10 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
     vCard.organization = user.employeeData?.companyName ?? "";
     // vCard.photo.attachFromUrl('/path/to/image/file.png', 'PNG');
     vCard.jobTitle = user.employeeData?.titleName ?? "";
-    vCard.email = user.employeeData?.email ?? "";
+    vCard.email = user.employeeData?.email ?? "No email found";
     vCard.url = "https://hassanallam.com";
-    vCard.workPhone = user.employeeData?.deskPhone ?? "";
-    vCard.cellPhone = user.employeeData?.mobile ?? "";
+    vCard.workPhone = user.employeeData?.deskPhone ?? "No ext found";
+    vCard.cellPhone = user.employeeData?.mobile ?? "No mobile found";
 
     return CustomBackground(
       child: CustomTheme(
@@ -189,7 +189,7 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                         getFirstSection(
                             'HRCode: ${user.employeeData?.userHrCode ?? ""}'),
                         getFirstSection(
-                            'Grade: ${user.employeeData?.gradeName ?? ""}'),
+                            'Grade: ${user.employeeData?.gradeName ?? "No Grade"}'),
                       ]),
                     ),
                   ),
@@ -229,9 +229,9 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                           getHead("Department:"),
                           getLine(user.employeeData?.projectName ?? ""),
                           getHead("Job Title:"),
-                          getLine(user.employeeData?.titleName ?? ""),
+                          getLine(user.employeeData?.titleName ?? "No title found"),
                           getHead("Email:"),
-                          getLine(user.employeeData?.email ?? ""),
+                          getLine(user.employeeData?.email ?? "No email found"),
                           SizedBox(
                               width: double.infinity,
                               child: InkWell(
@@ -287,9 +287,9 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                                 ),
                               )),
                           getHead("Mobile Number:"),
-                          getLine(user.employeeData?.mobile ?? ""),
+                          getLine(user.employeeData?.mobile ?? "No mobile found"),
                           getHead("Ext:"),
-                          getLine(user.employeeData?.deskPhone ?? ""),
+                          getLine(user.employeeData?.deskPhone ?? "No ext found"),
                         ],
                       ),
                     ),
@@ -369,9 +369,9 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
 
   String getLineManager(EmployeeData ?employeeData) {
     if (employeeData?.mainFunction == "Top Management") {
-      return "";
+      return "No mobile found";
     }else {
-      return employeeData?.mobile ?? "";
+      return employeeData?.mobile ?? "No mobile found";
     }
   }
 

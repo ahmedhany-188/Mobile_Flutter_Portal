@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/profile_manager_screen_bloc/profile_manager_cubit.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
@@ -10,6 +11,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:vcard_maintained/vcard_maintained.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../constants/url_links.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../../widgets/dialogpopoup/dialog_popup_profile_call.dart';
 import '../../data/models/contacts_related_models/contacts_data_from_api.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
@@ -106,7 +108,7 @@ class DirectManagerProfileScreenClass
                       vCard.organization = state.managerData.companyName ?? "";
                       // vCard.photo.attachFromUrl('/path/to/image/file.png', 'PNG');
                       vCard.jobTitle = state.managerData.titleName ?? "";
-                      vCard.email = state.managerData.email ?? "";
+                      vCard.email = state.managerData.email ?? "No email found";
                       vCard.url = "https://hassanallam.com";
                       vCard.workPhone = state.managerData.deskPhone;
                       vCard.cellPhone = getMobile(state);
@@ -245,6 +247,10 @@ class DirectManagerProfileScreenClass
                                           url_launcher.launchUrl(Uri.parse(
                                               'mailto:${getEmail(state)}'));
                                         },
+                                        onLongPress: () async {
+                                          await Clipboard.setData(ClipboardData(text: getEmail(state)));
+                                          showToast("Mail copied");
+                                        },
                                         child: Row(
                                           children: [
                                             Flexible(
@@ -262,7 +268,7 @@ class DirectManagerProfileScreenClass
                                                     width: double.infinity,
                                                     child: getLineTwo(
                                                         state.managerData
-                                                            .email ?? ""),
+                                                            .email ?? "No email found"),
                                                   ),
                                                 ),
                                               ]),
@@ -348,6 +354,10 @@ class DirectManagerProfileScreenClass
                                                     );
                                               });
                                         },
+                                        onLongPress: () async {
+                                          await Clipboard.setData(ClipboardData(text: getMobile(state)));
+                                          showToast("Mobile copied");
+                                        },
                                         child: Row(
                                           children: [
                                             Flexible(
@@ -394,6 +404,10 @@ class DirectManagerProfileScreenClass
                                                   value:getExt(state),
                                                 );
                                               });
+                                        },
+                                        onLongPress: () async {
+                                          await Clipboard.setData(ClipboardData(text: getExt(state)));
+                                          showToast("Ext copied");
                                         },
                                         child: Row(
                                           children: [
@@ -450,38 +464,46 @@ class DirectManagerProfileScreenClass
   String getEmail(ProfileManagerState state) {
     if (state is BlocGetManagerDataSuccessState) {
       if (state.managerData.email == null) {
-        return "";
+        return "No mail found";
       } else {
-        return state.managerData.email ?? "";
+        return state.managerData.email ?? "No mail found";
       }
     } else {
-      return "";
+      return "No mail found";
     }
   }
 
 
   String getMobile(ProfileManagerState state) {
+    String mobile="";
     if (state is BlocGetManagerDataSuccessState) {
       if (state.managerData.mainFunction == "Top Management") {
-        return "";
+        return "No mobile found";
       } else {
-        return state.managerData.mobile ?? "";
+        mobile= state.managerData.mobile ?? "No mobile found";
+        if(mobile.isEmpty){
+          return "No mobile found";
+        }else{
+          return mobile;
+        }
       }
     }
     else {
-      return "";
+      return "No mobile found";
     }
   }
 
   String getExt(ProfileManagerState state) {
+    String ext="";
     if (state is BlocGetManagerDataSuccessState) {
-      if (state.managerData.deskPhone == null) {
-        return "";
+      ext=state.managerData.deskPhone ?? "No ext found";
+      if (ext.isEmpty) {
+        return "No ext found";
       } else {
-        return state.managerData.deskPhone ?? "";
+        return ext;
       }
     } else {
-      return "";
+      return "No ext found";
     }
   }
 
@@ -571,6 +593,18 @@ class DirectManagerProfileScreenClass
           textAlign: TextAlign.left,
         ),
       ),
+    );
+  }
+
+  showToast(String msg){
+    Fluttertoast.showToast(
+        msg: msg,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 14.0
     );
   }
 

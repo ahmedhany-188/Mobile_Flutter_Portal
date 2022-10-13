@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
@@ -20,7 +21,7 @@ class DialogProfileCallBottomSheet extends StatelessWidget {
       height: MediaQuery
           .of(context)
           .size
-          .height * 0.35,
+          .height * 0.30,
       child: contentBox(context),
     );
   }
@@ -34,15 +35,14 @@ class DialogProfileCallBottomSheet extends StatelessWidget {
       child: Column(
         children: [
           const Padding(
-            padding: EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(10.0),
             child: Text("Ways of connections",
               style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800,
                   fontSize: 20.0,fontFamily: FontFamily.robotoCondensed),),
           ),
           Row(children: [
             type == "phoneNumber" ? Flexible(
-              child: sizeBoxRequest(
-                  "Direct call",
+              child: sizeCallBoxRequest(
                   const Icon(
                       Icons.phone,
                       size: 40.0,
@@ -51,13 +51,8 @@ class DialogProfileCallBottomSheet extends StatelessWidget {
                   context, value),
             ) : Text(""),
             Flexible(
-              child: sizeBoxRequest(
-                  "Zoom call",
-                  const Icon(
-                    Icons.videocam_rounded,
-                    size: 40.0,
-                    color: Colors.lightBlue,
-                  ),
+              child: sizeZoomBoxRequest(
+                  "Zoom",
                   context, value),
             ),
           ]),
@@ -66,12 +61,11 @@ class DialogProfileCallBottomSheet extends StatelessWidget {
     );
   }
 
-  Padding sizeBoxRequest(String requestType, Icon requestIcon,
-      BuildContext context, value) {
+  Padding sizeCallBoxRequest(Icon requestIcon, BuildContext context, value) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(
-        height: 100,
+        height: 80,
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.all(
@@ -87,54 +81,92 @@ class DialogProfileCallBottomSheet extends StatelessWidget {
         ),
         child: Stack(
           children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.center,
-                  child: requestIcon,
-                ),
-                Center(
-                  child: Text(
-                    requestType,
-                    style: const TextStyle(color: Colors.black, fontSize: 16,fontFamily: FontFamily.robotoCondensed),
-                    softWrap: false,
-                  ),
-                )
-              ],
+            Align(
+              alignment: Alignment.center,
+              child: requestIcon,
             ),
             SizedBox.expand(
               child: Material(
                 type: MaterialType.transparency,
                 child: InkWell(onTap: () async {
-                  switch (requestType) {
-                    case "Zoom call":
-                      try {
-                        Uri url;
-                        bool found=await url_launcher.canLaunchUrl(Uri.parse('zoomus://'));
-                        if (defaultTargetPlatform == TargetPlatform.macOS ||
+                  url_launcher.launchUrl(Uri.parse('tel:${value}'));
+                }
+                ),
+              ),),
+          ],
+        ),
+      ),
+    );
+  }
+
+
+  Padding sizeZoomBoxRequest(String requestType, BuildContext context, value) {
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Container(
+        height: 80,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(20.0),
+          ),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.grey,
+                offset: Offset(1.0, 2.0),
+                blurRadius: 8.0,
+                spreadRadius: 2.0)
+          ],
+        ),
+        child: Stack(
+          children: <Widget>[
+                Center(
+                  child: Text(
+                    requestType,
+                    style: const TextStyle(color: Colors.lightBlue, fontSize: 28,fontWeight: FontWeight.w800),
+                    softWrap: false,
+                  ),
+                ),
+            SizedBox.expand(
+              child: Material(
+                type: MaterialType.transparency,
+                child: InkWell(onTap: () async {
+                  try {
+                    Uri url;
+                    bool found = await url_launcher.canLaunchUrl(
+                        Uri.parse('zoomus://'));
+                    if (defaultTargetPlatform == TargetPlatform.macOS ||
                         defaultTargetPlatform == TargetPlatform.iOS) {
-                          if(found){
-                            url_launcher.launchUrl(Uri.parse('zoomus://'));
-                          }else{
-                            url = Uri.parse("https://apps.apple.com/app/id546505307");
-                            url_launcher.launchUrl(url,mode: url_launcher.LaunchMode.externalApplication);
-                          }
+                      if (found) {
+                        if(type == "phoneNumber"){
+                          await Clipboard.setData(ClipboardData(text:value));
                         }else{
-                          if(found){
-                            url_launcher.launchUrl(Uri.parse('zoomus://'));
-                          }else{
-                            url = Uri.parse("https://play.google.com/store/apps/details?id=us.zoom.videomeetings");
-                            url_launcher.launchUrl(url,mode: url_launcher.LaunchMode.externalApplication);
-                          }
+                          await Clipboard.setData(ClipboardData(text: "99"+value));
                         }
-                      } catch (ex) {
-                        print("No data found");
+                        url_launcher.launchUrl(Uri.parse('zoomus://'));
+                      } else {
+                        url = Uri.parse(
+                            "https://apps.apple.com/app/id546505307");
+                        url_launcher.launchUrl(url, mode: url_launcher
+                            .LaunchMode.externalApplication);
                       }
-                      break;
-                    case "Direct call":
-                      url_launcher.launchUrl(Uri.parse('tel:+${value}'));
-                      break;
+                    } else {
+                      if (found) {
+                        if(type == "phoneNumber"){
+                          await Clipboard.setData(ClipboardData(text:value));
+                        }else{
+                          await Clipboard.setData(ClipboardData(text: "99"+value));
+                        }
+                        url_launcher.launchUrl(Uri.parse('zoomus://'));
+                      } else {
+                        url = Uri.parse(
+                            "https://play.google.com/store/apps/details?id=us.zoom.videomeetings");
+                        url_launcher.launchUrl(url, mode: url_launcher
+                            .LaunchMode.externalApplication);
+                      }
+                    }
+                  } catch (ex) {
+                    print("No data found");
                   }
                 }),
               ),
