@@ -3,6 +3,7 @@ import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,6 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../bloc/apps_screen_bloc/apps_cubit.dart';
 import '../../bloc/login_cubit/login_cubit.dart';
 import '../../constants/url_links.dart';
-import '../../data/repositories/request_repository.dart';
 import '../../screens/about_value_screen/value_screen.dart';
 import '../../screens/get_direction_screen/get_direction_screen.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
@@ -573,6 +573,10 @@ class MainDrawer extends StatelessWidget {
                             context, EmployeeAppraisalScreen.routeName);
                       },
                     ),
+                    buildListTile("Items Catalog", Icons.image_aspect_ratio,  () {
+                      Navigator.popAndPushNamed(
+                          context, ItemsCatalogGetAllScreen.routeName);
+                    },),
                     buildListTile(
                       'Sign Out',
                           Icons.logout,
@@ -617,6 +621,7 @@ class MainDrawer extends StatelessWidget {
                         Navigator.of(context).popAndPushNamed(AboutScreen.routeName);
                       },
                     ),
+
 
                     buildDivider(),
                     buildGrouping('MAIN MENU'),
