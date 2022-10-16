@@ -209,7 +209,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                                               children: [
                                                 const Text('Vacations'),
                                                 Text(
-                                                    '${state.statisticsList[0].balance} days'),
+                                                    '${state.statisticsList[0].balance ?? "0"} days'),
                                               ],
                                             ),
                                           ),
@@ -225,7 +225,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
 
                                             thumbIcon: Center(
                                               child: Text(
-                                                  '${state.statisticsList[0].consumed}',style: TextStyle(fontSize: 12)),
+                                                  '${state.statisticsList[0].consumed}',style: const TextStyle(fontSize: 12)),
                                             ),
                                             activeColor: Colors.blue[200],
                                             inactiveColor: Colors.white70,
@@ -256,7 +256,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                                             onChanged: (_) {},
                                             thumbIcon: Center(
                                               child: Text(
-                                                  '${state.statisticsList[2].consumed}',style: TextStyle(fontSize: 12)),
+                                                  '${state.statisticsList[2].consumed}',style: const TextStyle(fontSize: 12)),
                                             ),
                                             activeColor: Colors.blue[200],
                                             inactiveColor: Colors.white70,
@@ -283,7 +283,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                                             onChanged: (_) {},
                                             thumbIcon: Center(
                                               child: Text(
-                                                  '${state.statisticsList[1].consumed}',style: TextStyle(fontSize: 12)),
+                                                  '${state.statisticsList[1].consumed}',style: const TextStyle(fontSize: 12)),
                                             ),
                                             activeColor: Colors.blue[200],
                                             inactiveColor: Colors.white70,
