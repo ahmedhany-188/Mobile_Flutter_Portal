@@ -9,11 +9,9 @@ import 'package:http/http.dart' as http;
 
 class EmployeeAppraisalRepository {
 
-
   final EmployeeAppraisaleDataProvider employeeAppraisalDataProvider = EmployeeAppraisaleDataProvider();
 
   MainUserData? userData;
-
 
   static final EmployeeAppraisalRepository _inst = EmployeeAppraisalRepository._internal();
 

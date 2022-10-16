@@ -6,10 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_getall/item_catalog_getall_cubit.dart';
 import 'package:hassanallamportalflutter/data/repositories/medical_request_repository.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hassanallamportalflutter/bloc/apps_screen_bloc/apps_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/economy_news_screen_bloc/economy_news_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/employee_appraisal_screen_bloc/employee_appraisal_bloc_cubit.dart';
@@ -29,10 +29,10 @@ import 'package:hassanallamportalflutter/data/repositories/payslip_repository.da
 import 'package:hassanallamportalflutter/data/repositories/staff_dashboard_job_repository.dart';
 import 'package:hassanallamportalflutter/data/repositories/staff_dashboard_project_repository.dart';
 import 'package:hassanallamportalflutter/data/repositories/staff_dashboard_repository.dart';
+import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import 'package:hassanallamportalflutter/data/repositories/upgrader_repository.dart';
 import 'package:hassanallamportalflutter/life_cycle_states.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
-// import 'package:move_to_background/move_to_background.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -343,14 +343,7 @@ class _MyAppState extends State<MyApp> {
             ),
           ),
 
-          BlocProvider<AttendanceCubit>(
-            create: (attendanceCubitContext) => AttendanceCubit(
-              AttendanceRepository(
-                  BlocProvider.of<AppBloc>(attendanceCubitContext)
-                      .state
-                      .userData),
-            ),
-          ),
+
 
           // BlocProvider<EmailUserAccountCubit>(
           //   create: (emailUserAccountRequestContext) =>
@@ -441,6 +434,24 @@ class _MyAppState extends State<MyApp> {
             create: (attendanceCubitContext) => AttendanceCubit(
               AttendanceRepository(
                   BlocProvider.of<AppBloc>(attendanceCubitContext)
+                      .state
+                      .userData),
+            ),
+          ),
+
+          // BlocProvider<AttendanceCubit>(
+          //   create: (attendanceCubitContext) => AttendanceCubit(
+          //     AttendanceRepository(
+          //         BlocProvider.of<AppBloc>(attendanceCubitContext)
+          //             .state
+          //             .userData),
+          //   ),
+          // ),
+
+          BlocProvider<ItemsCatalogCubit>(
+            create: (itemsCatalogCubitContext) => ItemsCatalogCubit(
+              ItemsCatalogGetAllRepository(
+                  BlocProvider.of<AppBloc>(itemsCatalogCubitContext)
                       .state
                       .userData),
             ),
