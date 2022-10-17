@@ -36,8 +36,38 @@ class ItemsCatalogCubit extends Cubit<ItemCatalogGetAllState> with HydratedMixin
 
 
 
-  Future<void> getAllItemsCatalog() async{
+  Future<void> getAllItemsCatalog(userHRCode) async{
 
+    if(state.getAllItemsCatalogList.isEmpty){
+      if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+        try {
+          emit(state.copyWith(
+            itemCatalogGetAllDataEnumStates: ItemCatalogGetAllDataEnumStates.loading,
+          ));
+          await itemsCatalogRepository.getItemsCatalog(userHRCode)
+              .then((value) async {
+
+                emit(state.copyWith(
+                  itemCatalogGetAllDataEnumStates: ItemCatalogGetAllDataEnumStates.success,
+                  getAllItemsCatalogList: state.getAllItemsCatalogList,
+                ));
+
+          }).catchError((error) {
+            emit(state.copyWith(
+              itemCatalogGetAllDataEnumStates: ItemCatalogGetAllDataEnumStates.failed,
+            ));
+          });
+        } catch (e) {
+          emit(state.copyWith(
+            itemCatalogGetAllDataEnumStates: ItemCatalogGetAllDataEnumStates.failed,
+          ));
+        }
+      } else {
+        emit(state.copyWith(
+          itemCatalogGetAllDataEnumStates: ItemCatalogGetAllDataEnumStates.noConnection,
+        ));
+      }
+    }
 
   }
 

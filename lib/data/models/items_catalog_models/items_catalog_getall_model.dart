@@ -1,125 +1,121 @@
-class ItemsCatalogModel {
-  int? catId;
-  int? parentID;
-  String? catName;
-  String? catCode;
-  String? catDesc;
-  String? catPhoto;
-  String? catStartDate;
-  String? catEndDate;
-  String? tags;
-  bool? isActive;
-  bool? allowItems;
-  String? inUser;
-  String? inDate;
-  String? upUser;
-  String? upDate;
-  List<CategoryAttach>? categoryAttach;
+class ItemsCatalogCategory {
+  int? code;
+  Null? message;
+  bool? error;
+  List<Data>? data;
 
-  ItemsCatalogModel(
-      {this.catId,
-        this.parentID,
-        this.catName,
-        this.catCode,
-        this.catDesc,
-        this.catPhoto,
-        this.catStartDate,
-        this.catEndDate,
-        this.tags,
-        this.isActive,
-        this.allowItems,
-        this.inUser,
-        this.inDate,
-        this.upUser,
-        this.upDate,
-        this.categoryAttach});
+  ItemsCatalogCategory({this.code, this.message, this.error, this.data});
 
-  ItemsCatalogModel.fromJson(Map<String, dynamic> json) {
-    catId = json['cat_id'];
-    parentID = json['parent_ID'];
-    catName = json['cat_Name'];
-    catCode = json['cat_Code'];
-    catDesc = json['cat_Desc'];
-    catPhoto = json['cat_Photo'];
-    catStartDate = json['cat_StartDate'];
-    catEndDate = json['cat_EndDate'];
-    tags = json['tags'];
-    isActive = json['isActive'];
-    allowItems = json['allow_Items'];
-    inUser = json['in_User'];
-    inDate = json['in_Date'];
-    upUser = json['up_User'];
-    upDate = json['up_Date'];
-    if (json['category_Attach'] != null) {
-      categoryAttach = <CategoryAttach>[];
-      json['category_Attach'].forEach((v) {
-        categoryAttach!.add(new CategoryAttach.fromJson(v));
+  ItemsCatalogCategory.fromJson(Map<String, dynamic> json) {
+    code = json['code'];
+    message = json['message'];
+    error = json['error'];
+    if (json['data'] != null) {
+      data = <Data>[];
+      json['data'].forEach((v) {
+        data!.add(new Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['cat_id'] = this.catId;
-    data['parent_ID'] = this.parentID;
-    data['cat_Name'] = this.catName;
-    data['cat_Code'] = this.catCode;
-    data['cat_Desc'] = this.catDesc;
-    data['cat_Photo'] = this.catPhoto;
-    data['cat_StartDate'] = this.catStartDate;
-    data['cat_EndDate'] = this.catEndDate;
-    data['tags'] = this.tags;
-    data['isActive'] = this.isActive;
-    data['allow_Items'] = this.allowItems;
-    data['in_User'] = this.inUser;
-    data['in_Date'] = this.inDate;
-    data['up_User'] = this.upUser;
-    data['up_Date'] = this.upDate;
-    if (this.categoryAttach != null) {
-      data['category_Attach'] =
-          this.categoryAttach!.map((v) => v.toJson()).toList();
+    data['code'] = this.code;
+    data['message'] = this.message;
+    data['error'] = this.error;
+    if (this.data != null) {
+      data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
     return data;
   }
 }
 
-class CategoryAttach {
+class Data {
   int? id;
-  int? catId;
-  String? attachFile;
-  String? inUser;
-  String? inDate;
-  String? upUser;
-  String? upDate;
+  String? text;
+  bool? expanded;
+  List<Items>? items;
+  bool? active;
+  bool? allowItems;
 
-  CategoryAttach(
+  Data(
       {this.id,
-        this.catId,
-        this.attachFile,
-        this.inUser,
-        this.inDate,
-        this.upUser,
-        this.upDate});
+        this.text,
+        this.expanded,
+        this.items,
+        this.active,
+        this.allowItems});
 
-  CategoryAttach.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    catId = json['cat_id'];
-    attachFile = json['attach_file'];
-    inUser = json['in_User'];
-    inDate = json['in_Date'];
-    upUser = json['up_User'];
-    upDate = json['up_Date'];
+    text = json['text'];
+    expanded = json['expanded'];
+    if (json['items'] != null) {
+      items = <Items>[];
+      json['items'].forEach((v) {
+        items!.add(new Items.fromJson(v));
+      });
+    }
+    active = json['active'];
+    allowItems = json['allow_Items'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['cat_id'] = this.catId;
-    data['attach_file'] = this.attachFile;
-    data['in_User'] = this.inUser;
-    data['in_Date'] = this.inDate;
-    data['up_User'] = this.upUser;
-    data['up_Date'] = this.upDate;
+    data['text'] = this.text;
+    data['expanded'] = this.expanded;
+    if (this.items != null) {
+      data['items'] = this.items!.map((v) => v.toJson()).toList();
+    }
+    data['active'] = this.active;
+    data['allow_Items'] = this.allowItems;
+    return data;
+  }
+}
+
+class Items {
+  int? id;
+  String? text;
+  bool? expanded;
+  List<Null>? items;
+  bool? active;
+  bool? allowItems;
+
+  Items(
+      {this.id,
+        this.text,
+        this.expanded,
+        this.items,
+        this.active,
+        this.allowItems});
+
+  Items.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    text = json['text'];
+    expanded = json['expanded'];
+    if (json['items'] != null) {
+      items = <Null>[];
+      json['items'].forEach((v) {
+        //TODO:   read data
+        // items!.add(new Null.fromJson(v));
+      });
+    }
+    active = json['active'];
+    allowItems = json['allow_Items'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['text'] = this.text;
+    data['expanded'] = this.expanded;
+    if (this.items != null) {
+      //TODO:   read data
+      // data['items'] = this.items!.map((v) => v.toJson()).toList();
+    }
+    data['active'] = this.active;
+    data['allow_Items'] = this.allowItems;
     return data;
   }
 }

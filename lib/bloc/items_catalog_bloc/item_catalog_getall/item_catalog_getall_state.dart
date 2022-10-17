@@ -2,21 +2,21 @@
 import 'package:equatable/equatable.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_getall_model.dart';
 
-enum ItemCatalogGetAllDataEnumStates {loading, success, failed,noConnection,fullSuccess}
+enum ItemCatalogGetAllDataEnumStates {loading, success, failed,noConnection}
 
 class ItemCatalogGetAllState extends Equatable{
 
   final ItemCatalogGetAllDataEnumStates itemCatalogGetAllDataEnumStates;
-  final  List<ItemsCatalogModel> getAllItemsCatalogList;
+  final  List<ItemsCatalogCategory> getAllItemsCatalogList;
 
   ItemCatalogGetAllState({
     this.itemCatalogGetAllDataEnumStates = ItemCatalogGetAllDataEnumStates.loading,
-    this.getAllItemsCatalogList = const <ItemsCatalogModel>[],
+    this.getAllItemsCatalogList = const <ItemsCatalogCategory>[],
   });
 
   ItemCatalogGetAllState copyWith({
     ItemCatalogGetAllDataEnumStates? itemCatalogGetAllDataEnumStates,
-    List<ItemsCatalogModel>? getAllItemsCatalogList,
+    List<ItemsCatalogCategory>? getAllItemsCatalogList,
   }) {
     return ItemCatalogGetAllState(
       itemCatalogGetAllDataEnumStates: itemCatalogGetAllDataEnumStates ?? this.itemCatalogGetAllDataEnumStates,
@@ -33,15 +33,15 @@ class ItemCatalogGetAllState extends Equatable{
     if (json.isEmpty) {
       return ItemCatalogGetAllState(
         itemCatalogGetAllDataEnumStates: ItemCatalogGetAllDataEnumStates.loading,
-        getAllItemsCatalogList: <ItemsCatalogModel>[],
+        getAllItemsCatalogList: <ItemsCatalogCategory>[],
       );
     }
     int val = json['itemCatalogGetAllDataEnumStates'];
     return ItemCatalogGetAllState(
         itemCatalogGetAllDataEnumStates: ItemCatalogGetAllDataEnumStates.values[val],
-        getAllItemsCatalogList: List<ItemsCatalogModel>.from(
+        getAllItemsCatalogList: List<ItemsCatalogCategory>.from(
             json['getAllItemsCatalogList']?.map((p) =>
-                ItemsCatalogModel.fromJson(p))),
+                ItemsCatalogCategory.fromJson(p))),
     );
   }
 
