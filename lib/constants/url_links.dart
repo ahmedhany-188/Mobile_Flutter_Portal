@@ -107,4 +107,7 @@ getItManagment(){
 getAppraisal(){
   return 'https://portal.hassanallam.com/Apps/Appraisal/default.aspx';
 }
+getCatalogPhotos(String itemName){
+  return 'https://edms.hassanallam.com/VD/Catalog/Items/$itemName';
+}
 

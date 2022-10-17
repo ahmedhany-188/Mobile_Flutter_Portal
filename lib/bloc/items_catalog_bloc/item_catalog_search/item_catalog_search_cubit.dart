@@ -36,12 +36,11 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchInitial> {
 
   static ItemCatalogSearchCubit get(context) => BlocProvider.of(context);
 
-  void getSearchList(String searchText,{int? catalogId}){
-    _generalDio.getItemCatalogSearch(searchText,categoryId: catalogId).then((value) {
+  void getSearchList({int? catalogId}) async{
+    await _generalDio.getItemCatalogSearch(state.searchString,categoryId: catalogId).then((value) {
       if (value.data != null && value.statusCode == 200){
-        print(value.data);
-        List<ItemCatalogSearchModel> searchResult = List<ItemCatalogSearchModel>.from(
-            value.data.map((model) => ItemCatalogSearchModel.fromJson(model)));
+        List<ItemCatalogSearchData> searchResult = List<ItemCatalogSearchData>.from(
+            value.data['data'].map((model) => ItemCatalogSearchData.fromJson(model)));
         emit(state.copyWith(
             itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
             searchResult: searchResult,
@@ -52,6 +51,11 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchInitial> {
     }).catchError((error) {
       emit(state.copyWith(itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed));
     });
+  }
+
+  void setSearchString(String searchString){
+    emit(state.copyWith(searchString: searchString));
+    getSearchList();
   }
 
 }

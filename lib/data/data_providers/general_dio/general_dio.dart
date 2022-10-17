@@ -93,7 +93,11 @@ class GeneralDio {
   }
 
   Future<Response> getItemCatalogSearch(String searchText,{int? categoryId}) async{
-    String url = 'InformationTechnology-ItemCatalog/ItmCat_Items/Search?cateory_ID=$categoryId&text=$searchText';
+    String url ='InformationTechnology-ItemCatalog/ItmCat_Items/Search?text=$searchText';
+    if(categoryId == null){
+      url = 'InformationTechnology-ItemCatalog/ItmCat_Items/Search?text=$searchText';
+    }else{
+    url = 'InformationTechnology-ItemCatalog/ItmCat_Items/Search?cateory_ID=$categoryId&text=$searchText';}
     return await dio!.get(
       url,
       options: Options(
