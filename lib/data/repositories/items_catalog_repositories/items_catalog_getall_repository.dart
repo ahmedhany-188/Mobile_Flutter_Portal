@@ -20,7 +20,7 @@ class ItemsCatalogGetAllRepository {
     return _inst;
   }
 
-  Future<ItemsCatalogModel> getItemsCatalog(String hrCode) async {
+  Future<ItemsCatalogCategory> getItemsCatalog(String hrCode) async {
     var header = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer ${userData?.user?.token}',
@@ -30,7 +30,7 @@ class ItemsCatalogGetAllRepository {
     // final WeatherData weather = WeatherData.fromJson(json);
     // return attendanceData;
     final json = await jsonDecode(rawItemsCatalog.body);
-    ItemsCatalogModel itemsCatalogModel=ItemsCatalogModel.fromJson(json);
+    ItemsCatalogCategory itemsCatalogModel=ItemsCatalogCategory.fromJson(json);
     return itemsCatalogModel;
   }
 
