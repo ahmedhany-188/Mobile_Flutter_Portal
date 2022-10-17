@@ -50,6 +50,7 @@ import './bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import './bloc/payslip_screen_bloc/payslip_cubit.dart';
 import './bloc/subsidiaries_screen_bloc/subsidiaries_cubit.dart';
 import 'bloc/auth_app_status_bloc/app_bloc.dart';
+import 'bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
 import 'bloc/login_cubit/login_cubit.dart';
 import 'bloc/my_requests_screen_bloc/my_requests_cubit.dart';
 import 'bloc/videos_screen_bloc/videos_cubit.dart';
@@ -342,8 +343,12 @@ class _MyAppState extends State<MyApp> {
                       .userData),
             ),
           ),
-
-
+          BlocProvider<ItemCatalogSearchCubit>(
+            create: (itemCatalogSearchContext) => ItemCatalogSearchCubit(
+                GeneralDio(BlocProvider.of<AppBloc>(itemCatalogSearchContext)
+                    .state
+                    .userData)),
+          ),
 
           // BlocProvider<EmailUserAccountCubit>(
           //   create: (emailUserAccountRequestContext) =>

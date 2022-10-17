@@ -50,7 +50,6 @@ class ItemsCatalogGetAllScreenStateClass
                             icon: const Icon(Icons.clear),
                             color: Colors.red,
                             onPressed: () {
-
                               textController.clear();
                               textFoucus.unfocus();
                             },

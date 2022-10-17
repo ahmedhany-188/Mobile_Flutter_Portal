@@ -1,0 +1,158 @@
+import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/gen/assets.gen.dart';
+
+import '../../constants/colors.dart';
+
+class ItemDetailScreen extends StatelessWidget {
+  const ItemDetailScreen({Key? key}) : super(key: key);
+
+  static const routeName = 'item-detail-screen';
+
+  @override
+  Widget build(BuildContext context) {
+    TextEditingController textController = TextEditingController();
+    FocusNode textFoucus = FocusNode();
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(130.0),
+        child: AppBar(
+          title: const Text('Item Catalog'),
+          elevation: 0,
+          backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(0.0),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 40.0, right: 40, bottom: 20),
+              child: TextFormField(
+                focusNode: textFoucus,
+                // key: uniqueKey,
+                controller: textController,
+                style: const TextStyle(
+                  color: Colors.white,
+                ),
+                onChanged: (text) {},
+                decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.all(10),
+                    filled: true,
+                    focusColor: Colors.white,
+                    fillColor: Colors.grey.shade400.withOpacity(0.4),
+                    // labelText: "Search contact",
+                    hintText: 'Item Name',
+                    suffixIcon: (textController.text.isNotEmpty ||
+                            textController.text != "")
+                        ? IconButton(
+                            icon: const Icon(Icons.clear),
+                            color: Colors.red,
+                            onPressed: () {
+                              textController.clear();
+                              textFoucus.unfocus();
+                            },
+                          )
+                        : null,
+                    hintStyle: const TextStyle(color: Colors.white),
+                    prefixIcon: const Icon(Icons.search, color: Colors.white),
+                    border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        borderSide: BorderSide.none)),
+              ),
+            ),
+          ),
+          centerTitle: true,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(25),
+                  bottomRight: Radius.circular(25))),
+        ),
+      ),
+      body: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              height: MediaQuery.of(context).size.height * 0.4,
+              width: MediaQuery.of(context).size.width * 0.9,
+              decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(15)),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                      child: Padding(
+                    padding: const EdgeInsets.only(left: 15.0,right: 15,top: 15,bottom: 10),
+                    child: Container(
+                        color: Colors.red,
+                        child: Center(
+                            child: Assets.images.loginImageLogo.image())),
+                  )),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 20.0, bottom: 10),
+                    child: Text(
+                      "Testing Item Name",
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: ConstantsColors.bottomSheetBackground),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    "Description",
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold,color: ConstantsColors.bottomSheetBackground),
+                  ),
+                  Text(
+                    "Testing Description Details",
+                    style: TextStyle(fontSize: 15,color: ConstantsColors.bottomSheetBackground),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    "Code",
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold,color: ConstantsColors.bottomSheetBackground),
+                  ),
+                  Text(
+                    "Testing Description Details",
+                    style: TextStyle(fontSize: 15,color: ConstantsColors.bottomSheetBackground),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    "Category",
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold,color: ConstantsColors.bottomSheetBackground),
+                  ),
+                  Text(
+                    "Testing Description Details",
+                    style: TextStyle(fontSize: 15,color: ConstantsColors.bottomSheetBackground),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

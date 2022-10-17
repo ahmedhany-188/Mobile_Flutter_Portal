@@ -92,6 +92,16 @@ class GeneralDio {
     );
   }
 
+  Future<Response> getItemCatalogSearch(String searchText,{int? categoryId}) async{
+    String url = 'InformationTechnology-ItemCatalog/ItmCat_Items/Search?cateory_ID=$categoryId&text=$searchText';
+    return await dio!.get(
+      url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
+      ),
+    );
+  }
+
   Future<Response> latestNewsData(
       {String url = 'portal/News/GetLatest'}) async {
     return await dio!.get(

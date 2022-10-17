@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_detail_screen.dart';
 
 import '../../gen/assets.gen.dart';
 
@@ -27,7 +28,9 @@ Widget itemCatalogSearchWidget() {
             return Padding(
               padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20),
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.of(context).pushNamed(ItemDetailScreen.routeName);
+                },
                 borderRadius: BorderRadius.circular(20),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(20),
