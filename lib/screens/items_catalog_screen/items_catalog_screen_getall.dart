@@ -25,8 +25,8 @@ class ItemsCatalogGetAllScreenStateClass
   @override
   Widget build(BuildContext context) {
     return BlocProvider<ItemCatalogSearchCubit>(
-      create: (context) => ItemCatalogSearchCubit(GeneralDio(
-          BlocProvider.of<AppBloc>(context).state.userData)),
+      create: (context) => ItemCatalogSearchCubit(
+          GeneralDio(BlocProvider.of<AppBloc>(context).state.userData)),
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(130.0),
@@ -37,8 +37,8 @@ class ItemsCatalogGetAllScreenStateClass
             bottom: PreferredSize(
               preferredSize: const Size.fromHeight(0.0),
               child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 40.0, right: 40, bottom: 20),
+                padding:
+                    const EdgeInsets.only(left: 40.0, right: 40, bottom: 20),
                 child: BlocBuilder<ItemCatalogSearchCubit,
                     ItemCatalogSearchInitial>(
                   builder: (ctx, state) {
@@ -51,6 +51,9 @@ class ItemsCatalogGetAllScreenStateClass
                       ),
                       onChanged: (text) {
                         ItemCatalogSearchCubit.get(ctx).setSearchString(text);
+                        if (text.isEmpty) {
+                          ItemCatalogSearchCubit.get(ctx).clearData();
+                        }
                       },
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.all(10),
@@ -60,22 +63,23 @@ class ItemsCatalogGetAllScreenStateClass
                           // labelText: "Search contact",
                           hintText: 'Item Name',
                           suffixIcon: (textController.text.isNotEmpty ||
-                              textController.text != "")
+                                  textController.text != "")
                               ? IconButton(
-                            icon: const Icon(Icons.clear),
-                            color: Colors.red,
-                            onPressed: () {
-                              textController.clear();
-                              textFoucus.unfocus();
-                            },
-                          )
+                                  icon: const Icon(Icons.clear),
+                                  color: Colors.red,
+                                  onPressed: () {
+                                    ItemCatalogSearchCubit.get(ctx).clearData();
+                                    textController.clear();
+                                    textFoucus.unfocus();
+                                  },
+                                )
                               : null,
                           hintStyle: const TextStyle(color: Colors.white),
                           prefixIcon:
-                          const Icon(Icons.search, color: Colors.white),
+                              const Icon(Icons.search, color: Colors.white),
                           border: const OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(20.0)),
+                                  BorderRadius.all(Radius.circular(20.0)),
                               borderSide: BorderSide.none)),
                     );
                   },
@@ -89,13 +93,7 @@ class ItemsCatalogGetAllScreenStateClass
                     bottomRight: Radius.circular(25))),
           ),
         ),
-        body: BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchInitial>(
-          buildWhen: (pre, curr) => pre.searchResult != curr.searchResult,
-          builder: (context, state) {
-            return itemCatalogSearchWidget(
-                state.searchResult);
-          },
-        ),
+        body: itemCatalogSearchWidget(),
       ),
     );
   }
