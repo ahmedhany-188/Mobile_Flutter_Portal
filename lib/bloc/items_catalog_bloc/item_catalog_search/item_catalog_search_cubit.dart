@@ -184,13 +184,17 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   @override
   ItemCatalogSearchState? fromJson(Map<String, dynamic> json) {
     // TODO: implement fromJson
-    throw UnimplementedError();
+    return ItemCatalogSearchState.fromMap(json);
   }
 
   @override
   Map<String, dynamic>? toJson(ItemCatalogSearchState state) {
-    // TODO: implement toJson
-    throw UnimplementedError();
+    if (state.itemCatalogAllDataEnumStates == ItemCatalogSearchEnumStates.success &&
+        state.itemsGetAllTree.isNotEmpty) {
+      return state.toMap();
+    } else {
+      return null;
+    }
   }
 
 }
