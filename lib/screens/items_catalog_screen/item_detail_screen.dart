@@ -174,7 +174,7 @@ class ItemDetailScreen extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                             color: ConstantsColors.bottomSheetBackground),
                       ),
-                      Text(
+                      if(state.itemAllDatalist.isNotEmpty)Text(
                         state.itemAllDatalist[0].category?.catName ?? "Not defined",
                         style: const TextStyle(
                             fontSize: 15,
