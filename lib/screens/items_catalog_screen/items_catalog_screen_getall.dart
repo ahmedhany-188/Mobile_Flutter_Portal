@@ -34,75 +34,78 @@ class ItemsCatalogGetAllScreenStateClass
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(130.0),
-          child: AppBar(
-            title: const Text('Item Catalog'),
-            elevation: 0,
-            backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(0.0),
-              child: Padding(
-                padding:
-                    const EdgeInsets.only(left: 40.0, right: 40, bottom: 20),
-                child: BlocBuilder<ItemCatalogSearchCubit,
-                    ItemCatalogSearchState>(
-                  builder: (ctx, state) {
+          child: Hero(
+            tag: 'hero',
+            child: AppBar(
+              title: const Text('Item Catalog'),
+              elevation: 0,
+              backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(0.0),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.only(left: 40.0, right: 40, bottom: 20),
+                  child: BlocBuilder<ItemCatalogSearchCubit,
+                      ItemCatalogSearchState>(
+                    builder: (ctx, state) {
 
-                    if(state.itemsGetAllTree==[] || state.itemsGetAllTree.isEmpty) {
-                      ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(
-                          user.employeeData?.userHrCode ?? "");
-                    }
+                      if(state.itemsGetAllTree==[] || state.itemsGetAllTree.isEmpty) {
+                        ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(
+                            user.employeeData?.userHrCode ?? "");
+                      }
 
-                    return TextFormField(
-                      focusNode: textFoucus,
-                      // key: uniqueKey,
-                      controller: textController,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                      onChanged: (text) {
-                        ItemCatalogSearchCubit.get(ctx).setSearchString(text);
-                        if (text.isEmpty) {
-                          ItemCatalogSearchCubit.get(ctx).clearData();
-                          ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(user.employeeData?.userHrCode??"");
-                        }
-                      },
-                      decoration: InputDecoration(
-                          contentPadding: const EdgeInsets.all(10),
-                          filled: true,
-                          focusColor: Colors.white,
-                          fillColor: Colors.grey.shade400.withOpacity(0.4),
-                          // labelText: "Search contact",
-                          hintText: 'Item Name',
-                          suffixIcon: (textController.text.isNotEmpty ||
-                                  textController.text != "")
-                              ? IconButton(
-                                  icon: const Icon(Icons.clear),
-                                  color: Colors.red,
-                                  onPressed: () {
-                                    ItemCatalogSearchCubit.get(ctx).clearData();
-                                    ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(user.employeeData?.userHrCode??"");
-                                    textController.clear();
-                                    textFoucus.unfocus();
-                                  },
-                                )
-                              : null,
-                          hintStyle: const TextStyle(color: Colors.white),
-                          prefixIcon:
-                              const Icon(Icons.search, color: Colors.white),
-                          border: const OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                              borderSide: BorderSide.none)),
-                    );
-                  },
+                      return TextFormField(
+                        focusNode: textFoucus,
+                        // key: uniqueKey,
+                        controller: textController,
+                        style: const TextStyle(
+                          color: Colors.white,
+                        ),
+                        onChanged: (text) {
+                          ItemCatalogSearchCubit.get(ctx).setSearchString(text);
+                          if (text.isEmpty) {
+                            ItemCatalogSearchCubit.get(ctx).clearData();
+                            ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(user.employeeData?.userHrCode??"");
+                          }
+                        },
+                        decoration: InputDecoration(
+                            contentPadding: const EdgeInsets.all(10),
+                            filled: true,
+                            focusColor: Colors.white,
+                            fillColor: Colors.grey.shade400.withOpacity(0.4),
+                            // labelText: "Search contact",
+                            hintText: 'Item Name',
+                            suffixIcon: (textController.text.isNotEmpty ||
+                                    textController.text != "")
+                                ? IconButton(
+                                    icon: const Icon(Icons.clear),
+                                    color: Colors.red,
+                                    onPressed: () {
+                                      ItemCatalogSearchCubit.get(ctx).clearData();
+                                      ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(user.employeeData?.userHrCode??"");
+                                      textController.clear();
+                                      textFoucus.unfocus();
+                                    },
+                                  )
+                                : null,
+                            hintStyle: const TextStyle(color: Colors.white),
+                            prefixIcon:
+                                const Icon(Icons.search, color: Colors.white),
+                            border: const OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20.0)),
+                                borderSide: BorderSide.none)),
+                      );
+                    },
+                  ),
                 ),
               ),
+              centerTitle: true,
+              shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(25),
+                      bottomRight: Radius.circular(25))),
             ),
-            centerTitle: true,
-            shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(25),
-                    bottomRight: Radius.circular(25))),
           ),
         ),
         body: itemCatalogSearchWidget(user.employeeData?.userHrCode ?? ""),
