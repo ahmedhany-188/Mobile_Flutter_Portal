@@ -38,7 +38,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
 
   final Connectivity connectivity = Connectivity();
   final GeneralDio _generalDio;
-
+  final ItemsCatalogGetAllRepository itemsCatalogRepository;
   static ItemCatalogSearchCubit get(context) => BlocProvider.of(context);
 
   void getSearchList({int? catalogId}) async {
@@ -179,6 +179,18 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
       emit(state.copyWith(
           itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.failed));
     });
+  }
+
+  @override
+  ItemCatalogSearchState? fromJson(Map<String, dynamic> json) {
+    // TODO: implement fromJson
+    throw UnimplementedError();
+  }
+
+  @override
+  Map<String, dynamic>? toJson(ItemCatalogSearchState state) {
+    // TODO: implement toJson
+    throw UnimplementedError();
   }
 
 }

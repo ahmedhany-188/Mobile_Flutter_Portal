@@ -19,7 +19,7 @@ class ItemDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     TextEditingController textController = TextEditingController();
     FocusNode textFoucus = FocusNode();
-    return BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchInitial>(
+    return BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
       builder: (context, state) {
         ItemCatalogSearchCubit.get(context).getAllCatalogList(itemCode: itemFromPreviousScreen.itemCode??"");
         return Scaffold(
