@@ -8,6 +8,7 @@ import 'package:hassanallamportalflutter/data/repositories/items_catalog_reposit
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import '../../../data/data_providers/general_dio/general_dio.dart';
 import '../../../data/data_providers/requests_data_providers/request_data_providers.dart';
+import '../../../data/models/items_catalog_models/item_catalog_all_data.dart';
 import '../../../data/models/items_catalog_models/item_catalog_search_model.dart';
 part 'item_catalog_search_state.dart';
 
@@ -37,7 +38,6 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
 
   final Connectivity connectivity = Connectivity();
   final GeneralDio _generalDio;
-  ItemsCatalogGetAllRepository itemsCatalogRepository;
 
   static ItemCatalogSearchCubit get(context) => BlocProvider.of(context);
 
@@ -152,23 +152,33 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     emit(state.copyWith(searchString: '', searchResult: []));
   }
 
-  @override
-  ItemCatalogSearchState? fromJson(Map<String, dynamic> json) {
-    return ItemCatalogSearchState.fromMap(json);
-  }
-
-  @override
-  Map<String, dynamic>? toJson(ItemCatalogSearchState state) {
-    if (state.itemsGetAllTree != null && state.itemsGetAllTree.isNotEmpty) {
-      if (state.itemCatalogSearchEnumStates ==
-          ItemCatalogSearchEnumStates.success) {
-        return state.toMap();
+  void getAllCatalogList({required String itemCode}) async {
+    emit(state.copyWith(
+      itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.initial,
+    ));
+    await _generalDio
+        .getItemCatalogAllData(itemCode)
+        .then((value) {
+      if (value.data['data'] != null && value.statusCode == 200) {
+        List<ItemCategorygetAllData> itemAllDatalist =
+        List<ItemCategorygetAllData>.from(value.data['data']
+            .map((model) => ItemCategorygetAllData.fromJson(model)));
+        emit(state.copyWith(
+          itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.success,
+          itemAllDatalist: itemAllDatalist,
+        ));
+      } else if (value.data['data'] == null) {
+        emit(state.copyWith(
+          itemAllDatalist: [],
+          itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.failed,
+        ));
       } else {
-        return null;
+        throw RequestFailureApi.fromCode(value.statusCode!);
       }
-    } else {
-      return null;
-    }
+    }).catchError((error) {
+      emit(state.copyWith(
+          itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.failed));
+    });
   }
 
 }

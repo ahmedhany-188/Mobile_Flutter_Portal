@@ -105,6 +105,15 @@ class GeneralDio {
       ),
     );
   }
+  Future<Response> getItemCatalogAllData(String itemCode,) async{
+    String url ='https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Items/GetbyItemCodeOrSystemItemCode?itemCode=$itemCode';
+    return await dio!.get(
+      url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
+      ),
+    );
+  }
 
   Future<Response> latestNewsData(
       {String url = 'portal/News/GetLatest'}) async {
