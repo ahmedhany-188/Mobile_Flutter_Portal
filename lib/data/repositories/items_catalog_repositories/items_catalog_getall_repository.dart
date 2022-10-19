@@ -29,8 +29,14 @@ class ItemsCatalogGetAllRepository {
     // final attendanceData = rawWeather.body.toString();
     // final WeatherData weather = WeatherData.fromJson(json);
     // return attendanceData;
+    print("----------11"+rawItemsCatalog.toString());
+
     final json = await jsonDecode(rawItemsCatalog.body);
+    print("----------22"+json.toString());
+
     ItemsCatalogCategory itemsCatalogModel=ItemsCatalogCategory.fromJson(json);
+    print("----------33"+itemsCatalogModel.toString());
+
     return itemsCatalogModel;
   }
 
