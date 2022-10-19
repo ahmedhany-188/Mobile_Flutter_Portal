@@ -30,6 +30,7 @@ Widget itemCatalogSearchWidget() {
             child: (state.searchResult.isNotEmpty && state.searchString.isNotEmpty)
                 ? ListView.builder(
               shrinkWrap: true,
+              keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
               physics: const BouncingScrollPhysics(),
               itemCount: state.searchResult.length,
               itemBuilder: (context, index) {
@@ -37,7 +38,7 @@ Widget itemCatalogSearchWidget() {
                   padding: const EdgeInsets.only(
                       left: 15.0, right: 15.0, bottom: 20),
                   child: InkWell(
-                    onTap: () {
+                    onTap: () async{
                       Navigator.of(context).pushNamed(
                           ItemDetailScreen.routeName,
                           arguments: state.searchResult[index]);
