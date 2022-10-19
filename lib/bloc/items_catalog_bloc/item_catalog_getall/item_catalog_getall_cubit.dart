@@ -1,5 +1,3 @@
-
-
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_getall/item_catalog_getall_state.dart';
@@ -36,7 +34,7 @@ class ItemsCatalogCubit extends Cubit<ItemCatalogGetAllState> with HydratedMixin
 
 
 
-  Future<void> getAllItemsCatalog(userHRCode) async{
+   getAllItemsCatalog(userHRCode) async{
 
     if(state.getAllItemsCatalogList.isEmpty){
       if (await connectivity.checkConnectivity() != ConnectivityResult.none) {

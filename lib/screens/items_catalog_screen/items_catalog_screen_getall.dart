@@ -1,10 +1,12 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
+import 'package:hassanallamportalflutter/data/data_providers/general_dio/general_dio.dart';
+import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
-import '../../data/data_providers/general_dio/general_dio.dart';
 import 'item_catalog_search_widget.dart';
 
 class ItemsCatalogGetAllScreen extends StatefulWidget {
@@ -24,9 +26,11 @@ class ItemsCatalogGetAllScreenStateClass
 
   @override
   Widget build(BuildContext context) {
+
+    MainUserData user=BlocProvider.of<AppBloc>(context).state.userData;
+
     return BlocProvider<ItemCatalogSearchCubit>(
-      create: (context) => ItemCatalogSearchCubit(
-          GeneralDio(BlocProvider.of<AppBloc>(context).state.userData)),
+      create: (context) => ItemCatalogSearchCubit(GeneralDio(BlocProvider.of<AppBloc>(context).state.userData),ItemsCatalogGetAllRepository(user)),
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(130.0),
@@ -40,8 +44,14 @@ class ItemsCatalogGetAllScreenStateClass
                 padding:
                     const EdgeInsets.only(left: 40.0, right: 40, bottom: 20),
                 child: BlocBuilder<ItemCatalogSearchCubit,
-                    ItemCatalogSearchInitial>(
+                    ItemCatalogSearchState>(
                   builder: (ctx, state) {
+
+                    if(state.itemsGetAllTree==null || state.itemsGetAllTree.isEmpty) {
+                      ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(
+                          user.employeeData?.userHrCode ?? "");
+                    }
+
                     return TextFormField(
                       focusNode: textFoucus,
                       // key: uniqueKey,
@@ -53,6 +63,7 @@ class ItemsCatalogGetAllScreenStateClass
                         ItemCatalogSearchCubit.get(ctx).setSearchString(text);
                         if (text.isEmpty) {
                           ItemCatalogSearchCubit.get(ctx).clearData();
+                          ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(user.employeeData?.userHrCode??"");
                         }
                       },
                       decoration: InputDecoration(
@@ -69,6 +80,7 @@ class ItemsCatalogGetAllScreenStateClass
                                   color: Colors.red,
                                   onPressed: () {
                                     ItemCatalogSearchCubit.get(ctx).clearData();
+                                    ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(user.employeeData?.userHrCode??"");
                                     textController.clear();
                                     textFoucus.unfocus();
                                   },

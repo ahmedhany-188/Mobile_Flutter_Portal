@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_getall/item_catalog_getall_cubit.dart';
 import 'package:hassanallamportalflutter/data/repositories/medical_request_repository.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -345,9 +344,8 @@ class _MyAppState extends State<MyApp> {
           ),
           BlocProvider<ItemCatalogSearchCubit>(
             create: (itemCatalogSearchContext) => ItemCatalogSearchCubit(
-                GeneralDio(BlocProvider.of<AppBloc>(itemCatalogSearchContext)
-                    .state
-                    .userData)),
+                GeneralDio(BlocProvider.of<AppBloc>(itemCatalogSearchContext).state.userData),
+                ItemsCatalogGetAllRepository(BlocProvider.of<AppBloc>(itemCatalogSearchContext).state.userData)),
           ),
 
           // BlocProvider<EmailUserAccountCubit>(
@@ -453,14 +451,7 @@ class _MyAppState extends State<MyApp> {
           //   ),
           // ),
 
-          BlocProvider<ItemsCatalogCubit>(
-            create: (itemsCatalogCubitContext) => ItemsCatalogCubit(
-              ItemsCatalogGetAllRepository(
-                  BlocProvider.of<AppBloc>(itemsCatalogCubitContext)
-                      .state
-                      .userData),
-            ),
-          ),
+
 
           BlocProvider<EmployeeAppraisalBlocCubit>(
             create: (employeeAppraisalContext) => EmployeeAppraisalBlocCubit(
