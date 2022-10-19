@@ -105,7 +105,7 @@ class ItemsCatalogGetAllScreenStateClass
                     bottomRight: Radius.circular(25))),
           ),
         ),
-        body: itemCatalogSearchWidget(),
+        body: itemCatalogSearchWidget(user.employeeData?.userHrCode ?? ""),
       ),
     );
   }

@@ -39,6 +39,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   final Connectivity connectivity = Connectivity();
   final GeneralDio _generalDio;
   final ItemsCatalogGetAllRepository itemsCatalogRepository;
+
   static ItemCatalogSearchCubit get(context) => BlocProvider.of(context);
 
   void getSearchList({int? catalogId}) async {
@@ -87,21 +88,25 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
           try {
             emit(state.copyWith(
-              itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.loadingTreeData,
+              itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+                  .loadingTreeData,
             ));
-            await itemsCatalogRepository.getItemsCatalog(userHRCode)
+            await itemsCatalogRepository.getItemsCatalogTreeRepository(
+                userHRCode)
                 .then((value) async {
               List<ItemsCatalogTreeModel>? getAllItemsCatalogTreeList = [];
               if (value.data != null) {
                 getAllItemsCatalogTreeList = value.data;
                 emit(state.copyWith(
-                  itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+                  itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+                      .success,
                   itemsGetAllTree: getAllItemsCatalogTreeList,
-                    getAllItemsCatalogList:value,
+                  getAllItemsCatalogList: value,
                 ));
               } else {
                 emit(state.copyWith(
-                  itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+                  itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+                      .failed,
                 ));
               }
             }).catchError((error) {
@@ -124,28 +129,67 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     }
   }
 
-  void getSubTree(List<Items>? item,String? name) {
+  void getSubTree(List<Items>? item, String? name) {
     List<ItemsCatalogTreeModel> newTreeList = <ItemsCatalogTreeModel>[];
     if (item != null) {
       for (int i = 0; i < item.length; i++) {
         newTreeList.add(
             ItemsCatalogTreeModel.fromJson(item[i].toJson()));
       }
-      String dir="";
-      if(name!=null){
-         dir=state.treeDirection+" > "+name;
+      String dir = "";
+      if (name != null) {
+        dir = state.treeDirection + " > " + name;
       }
       emit(state.copyWith(
-        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
-        itemsGetAllTree: newTreeList,
-        treeDirection: dir
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+          itemsGetAllTree: newTreeList,
+          treeDirection: dir
       ));
+    }
+  }
 
+  void getCategoryDataWithId(userHRCode, id) async {
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+      try {
+        emit(state.copyWith(
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+              .loadingTreeData,
+        ));
+        await itemsCatalogRepository.getItemsCatalogListData(userHRCode, id)
+            .then((value) async {
+          List<ItemCategorygetAllData>? itemCatalogSearchData = [];
+          if (value.data != null) {
+            itemCatalogSearchData = value.data;
+            print(itemCatalogSearchData?[2].itemDesc);
+            emit(state.copyWith(
+              itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+              itemsGetItemsCategory: itemCatalogSearchData,
+                itemsGetAllTree:[]
+            ));
+          } else {
+            emit(state.copyWith(
+              itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+            ));
+          }
+        }).catchError((error) {
+          emit(state.copyWith(
+            itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+          ));
+        });
+      } catch (e) {
+        emit(state.copyWith(
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+        ));
+      }
+    } else {
+      emit(state.copyWith(
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+            .noConnection,
+      ));
     }
   }
 
   void setInitialization() {
-
   }
 
   void clearData() {
@@ -189,7 +233,8 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
 
   @override
   Map<String, dynamic>? toJson(ItemCatalogSearchState state) {
-    if (state.itemCatalogAllDataEnumStates == ItemCatalogSearchEnumStates.success &&
+    if (state.itemCatalogAllDataEnumStates ==
+        ItemCatalogSearchEnumStates.success &&
         state.itemsGetAllTree.isNotEmpty) {
       return state.toMap();
     } else {

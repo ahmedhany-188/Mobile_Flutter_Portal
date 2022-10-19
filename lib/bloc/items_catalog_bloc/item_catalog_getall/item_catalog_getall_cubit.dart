@@ -32,8 +32,6 @@ class ItemsCatalogCubit extends Cubit<ItemCatalogGetAllState> with HydratedMixin
   Connectivity connectivity = Connectivity();
   ItemsCatalogGetAllRepository itemsCatalogRepository;
 
-
-
    getAllItemsCatalog(userHRCode) async{
 
     if(state.getAllItemsCatalogList.isEmpty){
@@ -42,7 +40,7 @@ class ItemsCatalogCubit extends Cubit<ItemCatalogGetAllState> with HydratedMixin
           emit(state.copyWith(
             itemCatalogGetAllDataEnumStates: ItemCatalogGetAllDataEnumStates.loading,
           ));
-          await itemsCatalogRepository.getItemsCatalog(userHRCode)
+          await itemsCatalogRepository.getItemsCatalogTreeRepository(userHRCode)
               .then((value) async {
 
                 emit(state.copyWith(
