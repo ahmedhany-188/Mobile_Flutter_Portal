@@ -47,7 +47,7 @@ class ItemsCatalogGetAllScreenStateClass
                     ItemCatalogSearchState>(
                   builder: (ctx, state) {
 
-                    if(state.itemsGetAllTree==null || state.itemsGetAllTree.isEmpty) {
+                    if(state.itemsGetAllTree==[] || state.itemsGetAllTree.isEmpty) {
                       ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(
                           user.employeeData?.userHrCode ?? "");
                     }
