@@ -5,14 +5,17 @@ enum ItemCatalogSearchEnumStates { initial, success, filtered, failed,loadingTre
 class ItemCatalogSearchState extends Equatable {
 
   final ItemCatalogSearchEnumStates itemCatalogSearchEnumStates;
-  final List<ItemCatalogSearchData> searchResult;
   final ItemCatalogSearchEnumStates itemCatalogAllDataEnumStates;
+  final List<ItemCatalogSearchData> searchResult;
+  final String searchString;
+
   final List<ItemCategorygetAllData> itemAllDatalist;
-  final List<ItemsCatalogTreeModel> itemsGetAllTree;
+
   final List<ItemCategorygetAllData> itemsGetItemsCategory;
 
-  final String searchString;
   final ItemsCatalogCategory getAllItemsCatalogList;
+  final List<ItemsCatalogTreeModel> itemsGetAllTree;
+
   final String treeDirection;
 
 
@@ -26,7 +29,7 @@ class ItemCatalogSearchState extends Equatable {
     this.itemsGetItemsCategory=const<ItemCategorygetAllData>[],
 
     this.searchString = "",
-    this.treeDirection="Home",
+    this.treeDirection="",
     required this.getAllItemsCatalogList,
 
   });
@@ -36,7 +39,8 @@ class ItemCatalogSearchState extends Equatable {
     List<ItemCatalogSearchData>? searchResult,
     ItemCatalogSearchEnumStates? itemCatalogAllDataEnumStates,
     List<ItemCategorygetAllData>? itemAllDatalist,
-    String? searchString,treeDirection,
+    String?  treeDirection,
+    String? searchString,
     List<ItemsCatalogTreeModel>? itemsGetAllTree,
     List<ItemCategorygetAllData>? itemsGetItemsCategory,
     ItemsCatalogCategory? getAllItemsCatalogList,

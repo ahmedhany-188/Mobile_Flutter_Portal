@@ -136,10 +136,12 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         newTreeList.add(
             ItemsCatalogTreeModel.fromJson(item[i].toJson()));
       }
+
       String dir = "";
       if (name != null) {
         dir = state.treeDirection + " > " + name;
       }
+
       emit(state.copyWith(
           itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
           itemsGetAllTree: newTreeList,
@@ -190,6 +192,11 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   }
 
   void setInitialization() {
+    emit(state.copyWith(
+      treeDirection: "",
+      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+      itemsGetAllTree: state.getAllItemsCatalogList.data,
+    ));
   }
 
   void clearData() {

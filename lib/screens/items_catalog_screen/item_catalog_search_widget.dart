@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_all_data.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_tree_model.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_detail_screen.dart';
@@ -40,6 +41,18 @@ Widget itemCatalogSearchWidget(hrcode) {
                     color: Colors.grey.shade300,
                     child: Row(
                       children: [
+                        Image.network(
+                          getCatalogPhotos(
+                              itemCategorygetAllData[index].itemPhoto ??
+                                  ""),
+                          width: 100,
+                          height: 100,
+                          errorBuilder: (context, error, stackTrace) =>
+                              Assets.images.favicon.image(
+                                width: 100,
+                                height: 100,
+                              ),
+                        ),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment
@@ -181,12 +194,31 @@ Widget itemCatalogSearchWidget(hrcode) {
                 bottom: 15,
                 top: 10,
               ),
-              child: Text(
-                state.treeDirection,
-                style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold),
+
+
+                child: Row(
+                  children: [
+
+                    InkWell(
+                      child: Text(
+                        "Home",
+                        style: TextStyle(
+                            color: ConstantsColors.backgroundEndColor,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      onTap: (){
+                        ItemCatalogSearchCubit.get(context).setInitialization();
+                      },
+                    ),
+                    Text(
+                      state.treeDirection,
+                      style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
               ),
             ),
             Expanded(child: checkList(state
@@ -226,6 +258,7 @@ Widget itemCatalogSearchWidget(hrcode) {
                         color: Colors.grey.shade300,
                         child: Row(
                           children: [
+
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment
