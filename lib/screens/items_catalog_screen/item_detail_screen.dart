@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,11 +7,13 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 
+import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../constants/colors.dart';
 import '../../constants/url_links.dart';
 import '../../data/models/items_catalog_models/item_catalog_search_model.dart';
+import 'item_catalog_search_widget.dart';
 
-class ItemDetailScreen extends StatelessWidget {
+class ItemDetailScreen extends StatefulWidget {
   const ItemDetailScreen({required this.itemFromPreviousScreen, Key? key})
       : super(key: key);
 
@@ -18,12 +21,24 @@ class ItemDetailScreen extends StatelessWidget {
   final ItemCatalogSearchData itemFromPreviousScreen;
 
   @override
+  State<ItemDetailScreen> createState() => _ItemDetailScreenState();
+}
+
+class _ItemDetailScreenState extends State<ItemDetailScreen> {
+  @override
+  void initState() {
+    ItemCatalogSearchCubit.get(context).getAllCatalogList(itemCode: widget.itemFromPreviousScreen.itemCode ??"");
+    super.initState();
+  }
+  @override
   Widget build(BuildContext context) {
+    MainUserData user=BlocProvider.of<AppBloc>(context).state.userData;
     TextEditingController textController = TextEditingController();
     FocusNode textFoucus = FocusNode();
     return BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
       builder: (context, state) {
-        ItemCatalogSearchCubit.get(context).getAllCatalogList(itemCode: itemFromPreviousScreen.itemCode ??"");
+        print('+++++ ${state.itemAllDatalist[0].category?.catName}');
+        // ItemCatalogSearchCubit.get(context).getAllCatalogList(itemCode: itemFromPreviousScreen.itemCode ??"");
         return Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: PreferredSize(
@@ -48,7 +63,6 @@ class ItemDetailScreen extends StatelessWidget {
                       ),
                       onChanged: (text) {
                         ItemCatalogSearchCubit.get(context).setSearchString(text);
-
                       },
                       decoration: InputDecoration(
                           contentPadding: const EdgeInsets.all(10),
@@ -86,7 +100,7 @@ class ItemDetailScreen extends StatelessWidget {
               ),
             ),
           ),
-          body: Column(
+          body: (textController.text.isEmpty)? Column(
             children: [
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
@@ -106,7 +120,7 @@ class ItemDetailScreen extends StatelessWidget {
                         width: MediaQuery.of(context).size.width,
                         child: CachedNetworkImage(
                             imageUrl: getCatalogPhotos(
-                                itemFromPreviousScreen.itemPhoto ?? ""),
+                                widget.itemFromPreviousScreen.itemPhoto ?? ""),
                             fit: BoxFit.fill,placeholder:(context, url) => Assets.images.loginImageLogo.image(),
                             errorWidget: (context, url, error) => Center(
                                 child: Assets.images.loginImageLogo.image())),
@@ -115,7 +129,7 @@ class ItemDetailScreen extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 20.0, bottom: 10),
                       child: Text(
-                        itemFromPreviousScreen.itemName ?? "",
+                        widget.itemFromPreviousScreen.itemName ?? "",
                         style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -140,7 +154,7 @@ class ItemDetailScreen extends StatelessWidget {
                             color: ConstantsColors.bottomSheetBackground),
                       ),
                       Text(
-                        itemFromPreviousScreen.itemDesc ?? "",
+                        widget.itemFromPreviousScreen.itemDesc ?? "",
                         style: const TextStyle(
                             fontSize: 15,
                             color: ConstantsColors.bottomSheetBackground),
@@ -155,7 +169,7 @@ class ItemDetailScreen extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: InkWell(
                     onTap: () async {
-                      await Clipboard.setData(ClipboardData(text: itemFromPreviousScreen.itemCode ?? ""));
+                      await Clipboard.setData(ClipboardData(text: widget.itemFromPreviousScreen.itemCode ?? ""));
                       EasyLoading.showInfo('Code Copied');
                     },
                     child: Column(
@@ -172,7 +186,7 @@ class ItemDetailScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              itemFromPreviousScreen.itemCode ?? "",
+                              widget.itemFromPreviousScreen.itemCode ?? "",
                               style: const TextStyle(
                                   fontSize: 15,
                                   color: ConstantsColors.bottomSheetBackground),
@@ -210,11 +224,12 @@ class ItemDetailScreen extends StatelessWidget {
                 ),
               ),
             ],
-          ),
+          ) : itemCatalogSearchWidget(user.employeeData?.userHrCode ?? ""),
         );
       },
     );
   }
+
 }
 
 // Widget buildItemDetail(ItemCatalogSearchData itemFromPreviousScreen){

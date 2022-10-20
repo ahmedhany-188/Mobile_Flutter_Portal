@@ -4,6 +4,11 @@ enum ItemCatalogSearchEnumStates { initial, success, filtered, failed,loadingTre
 
 class ItemCatalogSearchState extends Equatable {
 
+  final ItemCatalogSearchEnumStates itemCatalogSearchEnumStates;
+  final ItemCatalogSearchEnumStates itemCatalogAllDataEnumStates;
+  final List<ItemCatalogSearchData> searchResult;
+  final String searchString;
+  final bool detail;
    ItemCatalogSearchEnumStates itemCatalogSearchEnumStates;
    ItemCatalogSearchEnumStates itemCatalogAllDataEnumStates;
    List<ItemCatalogSearchData> searchResult;
@@ -21,7 +26,7 @@ class ItemCatalogSearchState extends Equatable {
 
 
 
-  ItemCatalogSearchState({
+  const ItemCatalogSearchState({
     this.itemCatalogSearchEnumStates = ItemCatalogSearchEnumStates.initial,
     this.searchResult = const <ItemCatalogSearchData>[],
     this.itemCatalogAllDataEnumStates = ItemCatalogSearchEnumStates.initial,
@@ -29,6 +34,7 @@ class ItemCatalogSearchState extends Equatable {
     this.itemsGetAllTree=const<ItemsCatalogTreeModel>[],
     this.itemCategoryAttachData=const<ItemCategoryAttachData>[],
     this.itemsGetItemsCategory=const<ItemCategorygetAllData>[],
+    this.detail = false,
 
     this.searchString = "",
     this.treeDirection="",
@@ -41,6 +47,7 @@ class ItemCatalogSearchState extends Equatable {
     List<ItemCatalogSearchData>? searchResult,
     ItemCatalogSearchEnumStates? itemCatalogAllDataEnumStates,
     List<ItemCategorygetAllData>? itemAllDatalist,
+    bool? detail,
     String?  treeDirection,
     String? searchString,
     List<ItemCategoryAttachData>? itemCategoryAttachData,
@@ -62,6 +69,7 @@ class ItemCatalogSearchState extends Equatable {
       itemsGetAllTree : itemsGetAllTree ?? this.itemsGetAllTree,
       itemsGetItemsCategory : itemsGetItemsCategory ?? this.itemsGetItemsCategory,
       getAllItemsCatalogList: getAllItemsCatalogList ?? this.getAllItemsCatalogList,
+      detail: detail ?? this.detail,
     );
   }
 
@@ -76,6 +84,8 @@ class ItemCatalogSearchState extends Equatable {
         treeDirection,
         getAllItemsCatalogList,
         itemsGetAllTree,
+        itemsGetItemsCategory,
+        detail,
         itemCategoryAttachData,
         itemsGetItemsCategory
       ];
