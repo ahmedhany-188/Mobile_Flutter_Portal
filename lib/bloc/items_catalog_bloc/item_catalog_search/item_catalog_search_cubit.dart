@@ -77,7 +77,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   }
 
   void setSearchString(String searchString) {
-    emit(state.copyWith(searchString: searchString));
+    emit(state.copyWith(searchString: searchString,detail: false));
     getSearchList();
   }
 
@@ -209,7 +209,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   }
 
   void clearData() {
-    emit(state.copyWith(searchString: '', searchResult: []));
+    emit(state.copyWith(searchString: '', searchResult: [],detail: false));
   }
 
   void setDetail({required String itemCode}) async{
