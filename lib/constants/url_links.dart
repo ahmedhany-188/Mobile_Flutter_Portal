@@ -111,3 +111,7 @@ getCatalogPhotos(String itemName){
   return 'https://edms.hassanallam.com/VD/Catalog/Items/$itemName';
 }
 
+getCatalogPhotosCat(String itemName){
+  return 'https://edms.hassanallam.com/VD/Catalog/Categories/$itemName';
+}
+

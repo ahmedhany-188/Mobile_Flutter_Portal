@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_all_data.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_search_model.dart';
@@ -12,6 +13,7 @@ import '../../gen/assets.gen.dart';
 import 'package:flutter/gestures.dart';
 
 Widget itemCatalogSearchWidget(hrcode) {
+
 
   getShimmer() {
     return Padding(
@@ -64,8 +66,6 @@ Widget itemCatalogSearchWidget(hrcode) {
   bool checkList(List<ItemsCatalogTreeModel>? data) {
     if(data != null){
       if (data.isNotEmpty) {
-        print("date");
-       print( data.toString());
         return true;
       } else {
         return false;
@@ -97,9 +97,8 @@ Widget itemCatalogSearchWidget(hrcode) {
   }
 
 
-  Padding checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData) {
+  Padding checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData, String treeDirection) {
     if (itemCategoryGetAllData.isNotEmpty) {
-      print("uuuuuuuuuu"+itemCategoryGetAllData.toString());
       return Padding(
         padding: const EdgeInsets.all(5.0),
         child: ListView.builder(
@@ -165,6 +164,10 @@ Widget itemCatalogSearchWidget(hrcode) {
         ),
       );
     } else {
+
+      if(treeDirection.isNotEmpty){
+        EasyLoading.showInfo('No data found');
+      }
       return  getShimmer();
     }
   }
@@ -264,7 +267,7 @@ Widget itemCatalogSearchWidget(hrcode) {
                       ),
                     );
                   },
-                ) : getShimmer(),),
+                ) :  getShimmer(),),
             ]
         );
       } else {
@@ -323,7 +326,6 @@ Widget itemCatalogSearchWidget(hrcode) {
                           ItemCatalogSearchCubit.get(context).setTreeDirection(
                               state.itemsGetAllTree[index].text);
                         } else {
-                          print("ohhh herrre");
                           ItemCatalogSearchCubit.get(context)
                               .getCategoryDataWithId(
                               hrcode, state.itemsGetAllTree[index].id);
@@ -346,7 +348,18 @@ Widget itemCatalogSearchWidget(hrcode) {
                         color: Colors.grey.shade300,
                         child: Row(
                           children: [
-
+                            Image.network(
+                              getCatalogPhotosCat(
+                                  state.itemsGetAllTree[index].image ??
+                                      ""),
+                              width: 100,
+                              height: 100,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Assets.images.favicon.image(
+                                    width: 100,
+                                    height: 100,
+                                  ),
+                            ),
                             Expanded(
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 10.0),
@@ -377,7 +390,7 @@ Widget itemCatalogSearchWidget(hrcode) {
               },
             ) :
 
-            checkItemsList(state.itemsGetItemsCategory)
+            checkItemsList(state.itemsGetItemsCategory,state.treeDirection)
 
             )
           ],
