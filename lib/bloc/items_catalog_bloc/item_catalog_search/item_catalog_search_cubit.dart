@@ -129,25 +129,27 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     }
   }
 
-  void getSubTree(List<Items>? item, String? name) {
+  void getSubTree(List<Items>? item) {
     List<ItemsCatalogTreeModel> newTreeList = <ItemsCatalogTreeModel>[];
     if (item != null) {
       for (int i = 0; i < item.length; i++) {
-        newTreeList.add(
-            ItemsCatalogTreeModel.fromJson(item[i].toJson()));
+        newTreeList.add(ItemsCatalogTreeModel.fromJson(item[i].toJson()));
       }
-
-      String dir = "";
-      if (name != null) {
-        dir = state.treeDirection + " > " + name;
-      }
-
       emit(state.copyWith(
           itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
           itemsGetAllTree: newTreeList,
-          treeDirection: dir
       ));
     }
+  }
+
+  void setTreeDirection(String? name){
+    String dir = "";
+    if (name != null) {
+      dir = state.treeDirection + " > " + name;
+    }
+    emit(state.copyWith(
+        treeDirection: dir
+    ));
   }
 
   void getCategoryDataWithId(userHRCode, id) async {
@@ -162,7 +164,6 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
           List<ItemCategorygetAllData>? itemCatalogSearchData = [];
           if (value.data != null) {
             itemCatalogSearchData = value.data;
-            print(itemCatalogSearchData?[2].itemDesc);
             emit(state.copyWith(
               itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
               itemsGetItemsCategory: itemCatalogSearchData,
@@ -171,22 +172,30 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
           } else {
             emit(state.copyWith(
               itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+                itemsGetAllTree:[],
+                itemsGetItemsCategory:[]
             ));
           }
         }).catchError((error) {
           emit(state.copyWith(
             itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+              itemsGetAllTree:[],
+              itemsGetItemsCategory:[]
           ));
         });
       } catch (e) {
         emit(state.copyWith(
           itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+            itemsGetAllTree:[],
+            itemsGetItemsCategory:[]
         ));
       }
     } else {
       emit(state.copyWith(
         itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
             .noConnection,
+          itemsGetAllTree:[],
+          itemsGetItemsCategory:[]
       ));
     }
   }

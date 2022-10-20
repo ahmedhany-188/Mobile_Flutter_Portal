@@ -177,7 +177,7 @@ class ItemDetailScreen extends StatelessWidget {
                                   fontSize: 15,
                                   color: ConstantsColors.bottomSheetBackground),
                             ),
-                            const Icon(Icons.copy, size: 14),
+                            const Icon(Icons.copy, size: 20),
                           ],
                         ),
                       ],

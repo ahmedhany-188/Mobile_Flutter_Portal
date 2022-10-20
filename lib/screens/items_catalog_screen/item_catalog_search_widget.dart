@@ -2,36 +2,120 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_all_data.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_search_model.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_tree_model.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_detail_screen.dart';
 import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
 import '../../constants/url_links.dart';
 import '../../gen/assets.gen.dart';
+import 'package:flutter/gestures.dart';
 
 Widget itemCatalogSearchWidget(hrcode) {
-  bool checkList(List<ItemsCatalogTreeModel>? data) {
-    if (data == null || data.isEmpty) {
-      return false;
-    } else {
-      return true;
-    }
+
+  getShimmer() {
+    return Padding(
+      padding: const EdgeInsets.all(5),
+      child: SizedBox(
+          child: Shimmer.fromColors(
+                baseColor: Colors.grey.shade300,
+                highlightColor: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: 10,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                            left: 15.0, right: 15.0, bottom: 20),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              color: Colors.grey.shade100,
+                              padding: EdgeInsets.zero,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Column(
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: const Icon(Icons.arrow_forward_ios, size: 18),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                      );
+                    },
+                  ),
+                )
+            ),
+      ),
+    );
   }
 
-  Padding checkItemsList(List<ItemCategorygetAllData> itemCategorygetAllData) {
-    if (itemCategorygetAllData.isNotEmpty) {
+
+
+
+  bool checkList(List<ItemsCatalogTreeModel>? data) {
+    if(data != null){
+      if (data.isNotEmpty) {
+        print("date");
+       print( data.toString());
+        return true;
+      } else {
+        return false;
+      }
+    }else{
+      return false;
+    }
+
+  }
+
+  ItemCatalogSearchData getSearchObject(
+      ItemCategorygetAllData itemCategorygetAllData) {
+    return ItemCatalogSearchData(itemCode: itemCategorygetAllData.itemCode,
+      itemPhoto: itemCategorygetAllData.itemPhoto,
+      itemName: itemCategorygetAllData.itemName,
+      itemDesc: itemCategorygetAllData.itemDesc,);
+  }
+
+  Padding buildDivider() {
+    return const Padding(
+      padding:  EdgeInsets.only(bottom: 15.0),
+      child: Divider(
+        thickness: 1,
+        indent: 15,
+        endIndent: 15,
+        color: ConstantsColors.bottomSheetBackgroundDark,
+      ),
+    );
+  }
+
+
+  Padding checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData) {
+    if (itemCategoryGetAllData.isNotEmpty) {
+      print("uuuuuuuuuu"+itemCategoryGetAllData.toString());
       return Padding(
         padding: const EdgeInsets.all(5.0),
         child: ListView.builder(
           shrinkWrap: true,
           physics: const BouncingScrollPhysics(),
-          itemCount: itemCategorygetAllData.length ?? 0,
+          itemCount: itemCategoryGetAllData.length,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(
                   left: 15.0, right: 15.0, bottom: 20),
               child: InkWell(
                 onTap: () {
-
+                  Navigator.of(context).pushNamed(
+                      ItemDetailScreen.routeName,
+                      arguments: getSearchObject(
+                          itemCategoryGetAllData[index]));
                 },
                 borderRadius: BorderRadius.circular(20),
                 child: ClipRRect(
@@ -43,7 +127,7 @@ Widget itemCatalogSearchWidget(hrcode) {
                       children: [
                         Image.network(
                           getCatalogPhotos(
-                              itemCategorygetAllData[index].itemPhoto ??
+                              itemCategoryGetAllData[index].itemPhoto ??
                                   ""),
                           width: 100,
                           height: 100,
@@ -58,7 +142,7 @@ Widget itemCatalogSearchWidget(hrcode) {
                             crossAxisAlignment: CrossAxisAlignment
                                 .start,
                             children: [
-                              Text(itemCategorygetAllData[index].itemName ??
+                              Text(itemCategoryGetAllData[index].itemName ??
                                   "NOt defined",
                                   style: const TextStyle(
                                     fontSize: 18,
@@ -81,9 +165,7 @@ Widget itemCatalogSearchWidget(hrcode) {
         ),
       );
     } else {
-      return Padding(padding: EdgeInsets.all(5),
-          child: const Center(child: Text("No data found"))
-      );
+      return  getShimmer();
     }
   }
 
@@ -107,6 +189,7 @@ Widget itemCatalogSearchWidget(hrcode) {
                       fontWeight: FontWeight.bold),
                 ),
               ),
+
               Expanded(
                 child: (state.searchResult.isNotEmpty &&
                     state.searchString.isNotEmpty)
@@ -181,7 +264,7 @@ Widget itemCatalogSearchWidget(hrcode) {
                       ),
                     );
                   },
-                ) : const Center(child: Text("No data found")),),
+                ) : getShimmer(),),
             ]
         );
       } else {
@@ -189,45 +272,44 @@ Widget itemCatalogSearchWidget(hrcode) {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(
+              padding: const EdgeInsets.only(
                 left: 20.0,
-                bottom: 15,
+                bottom: 5,
                 top: 10,
               ),
 
-
-                child: Row(
-                  children: [
-
-                    InkWell(
-                      child: Text(
-                        "Home",
-                        style: TextStyle(
+              child: RichText(
+                text: TextSpan(
+                  style: const TextStyle(color: Colors.grey, fontSize: 20.0),
+                  children: <TextSpan>[
+                    TextSpan(
+                        text: "Home",
+                        style: const TextStyle(
                             color: ConstantsColors.backgroundEndColor,
-                            fontSize: 18,
+                            fontSize: 20,
                             fontWeight: FontWeight.bold),
-                      ),
-                      onTap: (){
-                        ItemCatalogSearchCubit.get(context).setInitialization();
-                      },
-                    ),
-                    Text(
-                      state.treeDirection,
-                      style: TextStyle(
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = () {
+                            ItemCatalogSearchCubit.get(context)
+                                .setInitialization();
+                          }),
+                    TextSpan(text: state.treeDirection,
+                      style: const TextStyle(
                           color: Colors.grey,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold),
-                    ),
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold),),
                   ],
+                ),
               ),
             ),
+            buildDivider(),
             Expanded(child: checkList(state
                 .itemsGetAllTree) //(state.getAllItemsCatalogList.data.isNotEmpty)
                 ?
             ListView.builder(
               shrinkWrap: true,
               physics: const BouncingScrollPhysics(),
-              itemCount: state.itemsGetAllTree.length ?? 0,
+              itemCount: state.itemsGetAllTree.length,
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(
@@ -237,17 +319,23 @@ Widget itemCatalogSearchWidget(hrcode) {
                       if (state.itemsGetAllTree[index].items != null) {
                         if (state.itemsGetAllTree[index].items!.isNotEmpty) {
                           ItemCatalogSearchCubit.get(context).getSubTree(
-                              state.itemsGetAllTree[index].items,
+                              state.itemsGetAllTree[index].items);
+                          ItemCatalogSearchCubit.get(context).setTreeDirection(
                               state.itemsGetAllTree[index].text);
                         } else {
+                          print("ohhh herrre");
                           ItemCatalogSearchCubit.get(context)
                               .getCategoryDataWithId(
                               hrcode, state.itemsGetAllTree[index].id);
+                          ItemCatalogSearchCubit.get(context).setTreeDirection(
+                              state.itemsGetAllTree[index].text);
                         }
                       } else {
                         ItemCatalogSearchCubit.get(context)
                             .getCategoryDataWithId(
                             hrcode, state.itemsGetAllTree[index].id);
+                        ItemCatalogSearchCubit.get(context).setTreeDirection(
+                            state.itemsGetAllTree[index].text);
                       }
                     },
                     borderRadius: BorderRadius.circular(20),
@@ -260,16 +348,19 @@ Widget itemCatalogSearchWidget(hrcode) {
                           children: [
 
                             Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment
-                                    .start,
-                                children: [
-                                  Text(state.itemsGetAllTree[index].text ??
-                                      "NOt defined",
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                      )),
-                                ],
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 10.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .start,
+                                  children: [
+                                    Text(state.itemsGetAllTree[index].text ??
+                                        "NOt defined",
+                                        style: const TextStyle(
+                                            fontSize: 18
+                                        )),
+                                  ],
+                                ),
                               ),
                             ),
                             Container(
