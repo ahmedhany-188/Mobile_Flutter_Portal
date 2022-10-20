@@ -9,24 +9,20 @@ class ItemCatalogSearchState extends Equatable {
   final List<ItemCatalogSearchData> searchResult;
   final String searchString;
   final bool detail;
-   ItemCatalogSearchEnumStates itemCatalogSearchEnumStates;
-   ItemCatalogSearchEnumStates itemCatalogAllDataEnumStates;
-   List<ItemCatalogSearchData> searchResult;
-   String searchString;
 
-   List<ItemCategorygetAllData> itemAllDatalist;
+  final List<ItemCategorygetAllData> itemAllDatalist;
 
    List<ItemCategorygetAllData> itemsGetItemsCategory;
 
-   ItemsCatalogCategory getAllItemsCatalogList;
+  final ItemsCatalogCategory getAllItemsCatalogList;
    List<ItemsCatalogTreeModel> itemsGetAllTree;
-   List<ItemCategoryAttachData> itemCategoryAttachData;
+  final List<ItemCategoryAttachData> itemCategoryAttachData;
 
-   String treeDirection;
+  final  String treeDirection;
 
 
 
-  const ItemCatalogSearchState({
+   ItemCatalogSearchState({
     this.itemCatalogSearchEnumStates = ItemCatalogSearchEnumStates.initial,
     this.searchResult = const <ItemCatalogSearchData>[],
     this.itemCatalogAllDataEnumStates = ItemCatalogSearchEnumStates.initial,
