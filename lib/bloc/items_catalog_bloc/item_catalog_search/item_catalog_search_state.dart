@@ -12,21 +12,23 @@ class ItemCatalogSearchState extends Equatable {
 
   final List<ItemCategorygetAllData> itemAllDatalist;
 
-  final List<ItemCategorygetAllData> itemsGetItemsCategory;
+   List<ItemCategorygetAllData> itemsGetItemsCategory;
 
   final ItemsCatalogCategory getAllItemsCatalogList;
-  final List<ItemsCatalogTreeModel> itemsGetAllTree;
+   List<ItemsCatalogTreeModel> itemsGetAllTree;
+  final List<ItemCategoryAttachData> itemCategoryAttachData;
 
-  final String treeDirection;
+  final  String treeDirection;
 
 
 
-  const ItemCatalogSearchState({
+   ItemCatalogSearchState({
     this.itemCatalogSearchEnumStates = ItemCatalogSearchEnumStates.initial,
     this.searchResult = const <ItemCatalogSearchData>[],
     this.itemCatalogAllDataEnumStates = ItemCatalogSearchEnumStates.initial,
     this.itemAllDatalist = const <ItemCategorygetAllData>[],
     this.itemsGetAllTree=const<ItemsCatalogTreeModel>[],
+    this.itemCategoryAttachData=const<ItemCategoryAttachData>[],
     this.itemsGetItemsCategory=const<ItemCategorygetAllData>[],
     this.detail = false,
 
@@ -44,6 +46,7 @@ class ItemCatalogSearchState extends Equatable {
     bool? detail,
     String?  treeDirection,
     String? searchString,
+    List<ItemCategoryAttachData>? itemCategoryAttachData,
     List<ItemsCatalogTreeModel>? itemsGetAllTree,
     List<ItemCategorygetAllData>? itemsGetItemsCategory,
     ItemsCatalogCategory? getAllItemsCatalogList,
@@ -58,6 +61,7 @@ class ItemCatalogSearchState extends Equatable {
       itemAllDatalist: itemAllDatalist ?? this.itemAllDatalist,
       searchString: searchString ?? this.searchString,
       treeDirection:treeDirection??this.treeDirection,
+      itemCategoryAttachData:itemCategoryAttachData??this.itemCategoryAttachData,
       itemsGetAllTree : itemsGetAllTree ?? this.itemsGetAllTree,
       itemsGetItemsCategory : itemsGetItemsCategory ?? this.itemsGetItemsCategory,
       getAllItemsCatalogList: getAllItemsCatalogList ?? this.getAllItemsCatalogList,
@@ -78,6 +82,8 @@ class ItemCatalogSearchState extends Equatable {
         itemsGetAllTree,
         itemsGetItemsCategory,
         detail,
+        itemCategoryAttachData,
+        itemsGetItemsCategory
       ];
 
 

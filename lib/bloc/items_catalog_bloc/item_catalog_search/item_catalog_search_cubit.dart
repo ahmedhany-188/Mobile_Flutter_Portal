@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_attachs_model.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_getall_model.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_tree_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
@@ -50,7 +51,6 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     await _generalDio
         .getItemCatalogSearch(state.searchString, categoryId: catalogId)
         .then((value) {
-      // print("==${value.data['data'] != null}");
       if (value.data['data'] != null && value.statusCode == 200) {
         List<ItemCatalogSearchData> searchResult =
         List<ItemCatalogSearchData>.from(value.data['data']
@@ -91,18 +91,22 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
               itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
                   .loadingTreeData,
             ));
+
             await itemsCatalogRepository.getItemsCatalogTreeRepository(
                 userHRCode)
                 .then((value) async {
               List<ItemsCatalogTreeModel>? getAllItemsCatalogTreeList = [];
               if (value.data != null) {
                 getAllItemsCatalogTreeList = value.data;
+                state.itemsGetAllTree=getAllItemsCatalogTreeList!;
+
                 emit(state.copyWith(
-                  itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
-                      .success,
-                  itemsGetAllTree: getAllItemsCatalogTreeList,
+                  // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+                  // itemsGetAllTree: getAllItemsCatalogTreeList,
                   getAllItemsCatalogList: value,
+
                 ));
+
               } else {
                 emit(state.copyWith(
                   itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
@@ -114,6 +118,26 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
                 itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
               ));
             });
+
+            await itemsCatalogRepository.getItemsCatalogAttachTreeRepository(userHRCode)
+                .then((value) async {
+              List<ItemCategoryAttachData> getAllItemsCatalogAttachTreeList = [];
+              if (value.data != null) {
+                getAllItemsCatalogAttachTreeList = value?.data??[];
+                getCategoryImages(getAllItemsCatalogAttachTreeList);
+              } else {
+                emit(state.copyWith(
+                  itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+                      .failed,
+                ));
+              }
+            }).catchError((error) {
+              emit(state.copyWith(
+                itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+              ));
+            });
+
+
           } catch (e) {
             emit(state.copyWith(
               itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
@@ -139,6 +163,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
           itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
           itemsGetAllTree: newTreeList,
       ));
+      getCategoryImages(state.itemCategoryAttachData);
     }
   }
 
@@ -262,6 +287,27 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     } else {
       return null;
     }
+  }
+
+  getCategoryImages(List<ItemCategoryAttachData> getAllItemsCatalogAttachTreeList) {
+    List<ItemsCatalogTreeModel> itemsGetAllTreeTest = state.itemsGetAllTree;
+
+    for (int i = 0; i < itemsGetAllTreeTest.length; i++) {
+      for (int j = 0; j < getAllItemsCatalogAttachTreeList.length; j++) {
+        if (itemsGetAllTreeTest[i].id == getAllItemsCatalogAttachTreeList[j].catId) {
+          itemsGetAllTreeTest[i].image = getAllItemsCatalogAttachTreeList[j].catPhoto;
+        }
+      }
+    }
+
+
+    emit(state.copyWith(
+      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+          .success,
+      itemsGetAllTree: itemsGetAllTreeTest,
+      itemCategoryAttachData: getAllItemsCatalogAttachTreeList,
+    ));
+
   }
 
 }

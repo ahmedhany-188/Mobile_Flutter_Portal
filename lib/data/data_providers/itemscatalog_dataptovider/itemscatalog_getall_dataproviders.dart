@@ -11,6 +11,15 @@ class ItemsCatalogGetAllDataProvider {
     return rawItemsCatalogData;
   }
 
+  Future<http.Response> getItemsCatalogAttachList(Map<String, String> header) async {
+    http.Response rawItemsCatalogData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Category/GetAll"),
+      headers: header,
+    );
+    return rawItemsCatalogData;
+  }
+
   Future<http.Response> getItemsCatalogListDataProvider(Map<String, String> header, int id) async {
     http.Response rawItemsCatalogData = await http.get(
       Uri.parse(

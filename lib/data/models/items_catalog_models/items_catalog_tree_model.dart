@@ -6,6 +6,7 @@ class ItemsCatalogTreeModel {
   List<Items>? items;
   bool? active;
   bool? allowItems;
+  String? image;
 
   ItemsCatalogTreeModel(
       {this.id,
@@ -13,7 +14,7 @@ class ItemsCatalogTreeModel {
         this.expanded,
         this.items,
         this.active,
-        this.allowItems});
+        this.allowItems,this.image});
 
   ItemsCatalogTreeModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -27,6 +28,8 @@ class ItemsCatalogTreeModel {
     }
     active = json['active'];
     allowItems = json['allow_Items'];
+    image = json['image'];
+
   }
 
   Map<String, dynamic> toJson() {
@@ -39,6 +42,7 @@ class ItemsCatalogTreeModel {
     }
     data['active'] = this.active;
     data['allow_Items'] = this.allowItems;
+    data['image'] = this.image;
     return data;
   }
 }
@@ -50,6 +54,7 @@ class Items {
   List<Items>? items;
   bool? active;
   bool? allowItems;
+  String? image;
 
   Items(
       {this.id,
@@ -57,7 +62,8 @@ class Items {
         this.expanded,
         this.items,
         this.active,
-        this.allowItems});
+        this.allowItems,
+        this.image});
 
   Items.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -71,6 +77,7 @@ class Items {
     }
     active = json['active'];
     allowItems = json['allow_Items'];
+    image=json['image'];
   }
 
   Map<String, dynamic> toJson() {
@@ -83,6 +90,7 @@ class Items {
     }
     data['active'] = this.active;
     data['allow_Items'] = this.allowItems;
+    data['image']=this.image;
     return data;
   }
 }
