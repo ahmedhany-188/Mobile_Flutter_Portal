@@ -205,6 +205,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
       treeDirection: "",
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
       itemsGetAllTree: state.getAllItemsCatalogList.data,
+        detail: false
     ));
   }
 

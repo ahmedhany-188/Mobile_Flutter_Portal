@@ -271,130 +271,163 @@ Widget itemCatalogSearchWidget(hrcode) {
         );
       }
       if(state.detail == true){
-        return Column(
-          children: [
-            Container(
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              height: MediaQuery.of(context).size.height * 0.4,
-              width: MediaQuery.of(context).size.width * 0.9,
-              decoration: BoxDecoration(
-                  color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(15)),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 15.0, right: 15, top: 15, bottom: 10),
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          child: CachedNetworkImage(
-                              imageUrl: getCatalogPhotos(
-                                  state.itemAllDatalist[0].itemPhoto ?? ""),
-                              fit: BoxFit.fill,placeholder:(context, url) => Assets.images.loginImageLogo.image(),
-                              errorWidget: (context, url, error) => Center(
-                                  child: Assets.images.loginImageLogo.image())),
-                        ),
-                      )),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 20.0, bottom: 10),
-                    child: Text(
-                      state.itemAllDatalist[0].itemName ?? "",
-                      style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: ConstantsColors.bottomSheetBackground),
+        return SingleChildScrollView(
+          physics:const BouncingScrollPhysics(),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 20.0,
+                  bottom: 0,
+                  top: 10,
+                ),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: RichText(
+                    text: TextSpan(
+                      style: const TextStyle(color: Colors.grey, fontSize: 20.0),
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: "Home",
+                            style: const TextStyle(
+                                color: ConstantsColors.backgroundEndColor,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                ItemCatalogSearchCubit.get(context)
+                                    .setInitialization();
+                              }),
+                      ],
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 10),
-              child: Align(
-                alignment: Alignment.centerLeft,
+              buildDivider(),
+              Container(
+                margin: const EdgeInsets.only(bottom: 10),
+                height: MediaQuery.of(context).size.height * 0.4,
+                width: MediaQuery.of(context).size.width * 0.9,
+                decoration: BoxDecoration(
+                    color: Colors.grey.shade300,
+                    borderRadius: BorderRadius.circular(15)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Description",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: ConstantsColors.bottomSheetBackground),
-                    ),
-                    Text(
-                      state.itemAllDatalist[0].itemDesc ?? "",
-                      style: const TextStyle(
-                          fontSize: 15,
-                          color: ConstantsColors.bottomSheetBackground),
+                    Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 15.0, right: 15, top: 15, bottom: 10),
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width,
+                            child: CachedNetworkImage(
+                                imageUrl: getCatalogPhotos(
+                                    state.itemAllDatalist[0].itemPhoto ?? ""),
+                                fit: BoxFit.fill,placeholder:(context, url) => Assets.images.loginImageLogo.image(),
+                                errorWidget: (context, url, error) => Center(
+                                    child: Assets.images.loginImageLogo.image())),
+                          ),
+                        )),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20.0, bottom: 10),
+                      child: Text(
+                        state.itemAllDatalist[0].itemName ?? "",
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: ConstantsColors.bottomSheetBackground),
+                      ),
                     ),
                   ],
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 10),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: InkWell(
-                  onTap: () async {
-                    await Clipboard.setData(ClipboardData(text: state.itemAllDatalist[0].itemCode ?? ""));
-                    EasyLoading.showInfo('Code Copied');
-                  },
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 10),
+                child: Align(
+                  alignment: Alignment.centerLeft,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
-                        "Code",
+                        "Description",
                         style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
                             color: ConstantsColors.bottomSheetBackground),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            state.itemAllDatalist[0].itemCode ?? "",
-                            style: const TextStyle(
-                                fontSize: 15,
-                                color: ConstantsColors.bottomSheetBackground),
-                          ),
-                          const Icon(Icons.copy, size: 20),
-                        ],
+                      Text(
+                        state.itemAllDatalist[0].itemDesc ?? "",
+                        style: const TextStyle(
+                            fontSize: 15,
+                            color: ConstantsColors.bottomSheetBackground),
                       ),
                     ],
                   ),
                 ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 10),
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Category",
-                      style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: ConstantsColors.bottomSheetBackground),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 10),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: InkWell(
+                    onTap: () async {
+                      await Clipboard.setData(ClipboardData(text: state.itemAllDatalist[0].itemCode ?? ""));
+                      EasyLoading.showInfo('Code Copied');
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Code",
+                          style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: ConstantsColors.bottomSheetBackground),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              state.itemAllDatalist[0].itemCode ?? "",
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  color: ConstantsColors.bottomSheetBackground),
+                            ),
+                            const Icon(Icons.copy, size: 20),
+                          ],
+                        ),
+                      ],
                     ),
-                    if(state.itemAllDatalist.isNotEmpty)Text(
-                      state.itemAllDatalist[0].category?.catName ?? "Not defined",
-                      style: const TextStyle(
-                          fontSize: 15,
-                          color: ConstantsColors.bottomSheetBackground),
-                    ),
-                  ],
+                  ),
                 ),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 40.0,vertical: 10),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Category",
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: ConstantsColors.bottomSheetBackground),
+                      ),
+                      if(state.itemAllDatalist.isNotEmpty)Text(
+                        state.itemAllDatalist[0].category?.catName ?? "Not defined",
+                        style: const TextStyle(
+                            fontSize: 15,
+                            color: ConstantsColors.bottomSheetBackground),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+            ],
+          ),
         );
       }else {
         return Column(
