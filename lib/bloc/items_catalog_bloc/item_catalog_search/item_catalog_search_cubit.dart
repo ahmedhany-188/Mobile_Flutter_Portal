@@ -212,7 +212,12 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     emit(state.copyWith(searchString: '', searchResult: []));
   }
 
-  void getAllCatalogList({required String itemCode}) async {
+  void setDetail({required String itemCode}) async{
+    await getAllCatalogList(itemCode: itemCode);
+    emit(state.copyWith(detail: true,));
+  }
+
+  Future<void> getAllCatalogList({required String itemCode}) async {
     emit(state.copyWith(
       itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.initial,
     ));

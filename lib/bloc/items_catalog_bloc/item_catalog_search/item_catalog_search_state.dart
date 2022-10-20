@@ -8,6 +8,7 @@ class ItemCatalogSearchState extends Equatable {
   final ItemCatalogSearchEnumStates itemCatalogAllDataEnumStates;
   final List<ItemCatalogSearchData> searchResult;
   final String searchString;
+  final bool detail;
 
   final List<ItemCategorygetAllData> itemAllDatalist;
 
@@ -20,13 +21,14 @@ class ItemCatalogSearchState extends Equatable {
 
 
 
-  ItemCatalogSearchState({
+  const ItemCatalogSearchState({
     this.itemCatalogSearchEnumStates = ItemCatalogSearchEnumStates.initial,
     this.searchResult = const <ItemCatalogSearchData>[],
     this.itemCatalogAllDataEnumStates = ItemCatalogSearchEnumStates.initial,
     this.itemAllDatalist = const <ItemCategorygetAllData>[],
     this.itemsGetAllTree=const<ItemsCatalogTreeModel>[],
     this.itemsGetItemsCategory=const<ItemCategorygetAllData>[],
+    this.detail = false,
 
     this.searchString = "",
     this.treeDirection="",
@@ -39,6 +41,7 @@ class ItemCatalogSearchState extends Equatable {
     List<ItemCatalogSearchData>? searchResult,
     ItemCatalogSearchEnumStates? itemCatalogAllDataEnumStates,
     List<ItemCategorygetAllData>? itemAllDatalist,
+    bool? detail,
     String?  treeDirection,
     String? searchString,
     List<ItemsCatalogTreeModel>? itemsGetAllTree,
@@ -58,6 +61,7 @@ class ItemCatalogSearchState extends Equatable {
       itemsGetAllTree : itemsGetAllTree ?? this.itemsGetAllTree,
       itemsGetItemsCategory : itemsGetItemsCategory ?? this.itemsGetItemsCategory,
       getAllItemsCatalogList: getAllItemsCatalogList ?? this.getAllItemsCatalogList,
+      detail: detail ?? this.detail,
     );
   }
 
@@ -72,7 +76,8 @@ class ItemCatalogSearchState extends Equatable {
         treeDirection,
         getAllItemsCatalogList,
         itemsGetAllTree,
-        itemsGetItemsCategory
+        itemsGetItemsCategory,
+        detail,
       ];
 
 
