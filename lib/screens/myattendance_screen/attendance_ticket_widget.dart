@@ -15,6 +15,8 @@ class AttendanceTicketWidget extends StatelessWidget {
   String timeOut = "";
   String timeOut2 = "";
 
+  String? dayDeduction;
+
   AttendanceTicketWidget(this.attendanceListData, this.hrUser, {Key? key})
       : super(key: key);
 
@@ -38,6 +40,8 @@ class AttendanceTicketWidget extends StatelessWidget {
         itemBuilder: (BuildContext context, int index) {
           List<String> date =
               attendanceListData[index].date.toString().split('-');
+
+
 
            if (attendanceListData[index].businessMission != null ||
           attendanceListData[index].permission != null) {
@@ -82,6 +86,7 @@ class AttendanceTicketWidget extends StatelessWidget {
             timeOut2 = dateNight.split(':')[1];
 
 
+            dayDeduction=attendanceListData[index].deduction??"";
 
             if (attendanceListData[index]
                     .timeIN
@@ -92,7 +97,7 @@ class AttendanceTicketWidget extends StatelessWidget {
                     .timeOUT
                     .toString()
                     .split(':')[1]
-                    .contains("AM")) {
+                    .contains("AM") && (dayDeduction!="")) {
               return sizedDay(attendanceListData[index], context, "in", "out",
                   "red", "red", hrUser);
             }
@@ -105,20 +110,24 @@ class AttendanceTicketWidget extends StatelessWidget {
                   "green", "green", hrUser);
             } else if (
             ((int.parse(timeOut) >= 17) || (int.parse(timeOut) == 16 && int.parse(timeOut2) == 59)) &&
-                ((int.parse(timeIn) > 8) || (int.parse(timeIn) == 8 && int.parse(timeIn2) > 30))
+                ((int.parse(timeIn) > 8) || (int.parse(timeIn) == 8 && int.parse(timeIn2) > 30) && (dayDeduction!=""))
             ) {
               return sizedDay(attendanceListData[index], context, "in", "out",
                   "red", "green", hrUser);
             } else if (
             ((int.parse(timeOut) == 16 && int.parse(timeOut2) < 59) || (int.parse(timeOut) < 16)) &&
-                ((int.parse(timeIn) < 8) || (int.parse(timeIn) == 8 && int.parse(timeIn2) < 31))
+                ((int.parse(timeIn) < 8) || (int.parse(timeIn) == 8 && int.parse(timeIn2) < 31) && (dayDeduction!=""))
             ) {
               return sizedDay(attendanceListData[index], context, "in", "out",
                   "green", "red", hrUser);
             }
-            else {
+
+            else if((dayDeduction!="")){
               return sizedDay(attendanceListData[index], context, "in", "out",
                   "red", "red", hrUser);
+            }else{
+              return sizedDay(attendanceListData[index], context, "in", "out",
+                  "green", "green", hrUser);
             }
 
 
