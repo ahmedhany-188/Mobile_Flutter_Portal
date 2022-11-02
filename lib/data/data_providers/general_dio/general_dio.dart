@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class GeneralDio {
   static Dio? dio;
@@ -344,6 +345,7 @@ class GeneralDio {
   Future<Response> uploadUserImage(
       FilePickerResult file, String fileName, String fileExtension) async {
     String url = 'Images/UploadImage';
+    EasyLoading.show(status: "Loading",maskType: EasyLoadingMaskType.black);
 
     FormData formData = FormData.fromMap({
       "file": await MultipartFile.fromFile(file.paths.single!,
@@ -357,6 +359,9 @@ class GeneralDio {
             headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
           ),
         )
-        .catchError((onError) => throw onError);
+        .catchError((onError) {
+      EasyLoading.showError('Something went wrong');
+      throw onError;
+    });
   }
 }

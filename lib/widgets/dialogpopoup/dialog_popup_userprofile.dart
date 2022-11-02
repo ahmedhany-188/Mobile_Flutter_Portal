@@ -62,20 +62,23 @@ class ShowUserProfileBottomSheetClass
                       .pickFiles(
                     type: FileType.image,
                   )
-                      .then((value) {
+                      .then((value) async{
                     String? fileName = user.employeeData?.userHrCode;
                     String? fileExtension = value?.files.first.extension;
-                    GeneralDio(user)
+                    await GeneralDio(user)
                         .uploadUserImage(value!, fileName!, fileExtension!)
-                        .then((value) {
+                        .then((value) async{
                       if (value.data != null && value.statusCode == 200) {
                         DefaultCacheManager manager = DefaultCacheManager();
-                        manager
+                        await manager.emptyCache();
+                        await manager
                             .removeFile(
                                 "https://portal.hassanallam.com/Apps/images/Profile/${user.employeeData?.imgProfile}")
                             .then((value) => EasyLoading.showSuccess(
                                 'Image Uploaded Successfully'));
+
                       } else {
+                        EasyLoading.showError('Something went wrong');
                         throw RequestFailureApi.fromCode(value.statusCode!);
                       }
                     }).catchError((err) {

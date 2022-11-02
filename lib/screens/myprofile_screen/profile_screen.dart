@@ -36,15 +36,22 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
       print('==================1 $imageProfile');
     }
     GetEmployeeRepository().getEmployeeData(user.user?.userHRCode ?? "",user.user?.token ?? "").then((value) async {
-    final shared_User = await SharedPreferences.getInstance();
-    print(value);
-    if (value.userHrCode != null) {
+    final sharedUser = await SharedPreferences.getInstance();
+     if (value.userHrCode != null) {
     // final employeeDataJson = value;
     EmployeeData employeeData = value;
 
     String employeeDataString = jsonEncode(employeeData.toJson());
-    shared_User.setString('__employeeData__', employeeDataString);
+    await sharedUser.setString('__employeeData__', employeeDataString);
+    imageProfile = user.employeeData?.imgProfile ?? "";
+    // if(mounted){
+    //   await ;
+    // }
+    // context.select((AppBloc bloc) => bloc.state.userData);
+
+
     }});
+    // .then((value) => BlocProvider.of<AppBloc>(context)..add(AppUserChanged(user)));
 
     // getEmployeeData(user.user?.userHRCode ?? "",user.user?.token ?? "")
     //     .then((value) async {
@@ -171,8 +178,8 @@ class UserProfileScreenClass extends State<UserProfileScreen> {
                             child: IconButton(
                               icon: const Icon(Icons.edit),
                               color: Colors.white,
-                              onPressed: () {
-                                showModalBottomSheet<void>(
+                              onPressed: () async{
+                                await showModalBottomSheet<void>(
                                     context: context,
                                     isScrollControlled: true,
                                     backgroundColor: ConstantsColors
