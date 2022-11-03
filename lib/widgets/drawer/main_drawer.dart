@@ -3,6 +3,7 @@ import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
+import 'package:hassanallamportalflutter/screens/currency_picker_screen/currency_picker_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
@@ -577,6 +578,12 @@ class MainDrawer extends StatelessWidget {
                       Navigator.popAndPushNamed(
                           context, ItemsCatalogGetAllScreen.routeName);
                     },),
+
+                    buildListTile("Currency Calc", Icons.currency_exchange,  () {
+                      Navigator.popAndPushNamed(
+                          context, CurrencyPickerScreen.routeName);
+                    },),
+
                     buildListTile(
                       'Sign Out',
                           Icons.logout,

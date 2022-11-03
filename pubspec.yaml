@@ -80,6 +80,10 @@ dependencies:
   animated_text_kit: ^4.2.2
   fluttertoast: ^8.0.9
 
+  #currency
+  currency_picker: ^2.0.12
+  money_converter: ^2.0.2
+
   #Web libiraries
   flutter_html: any
   http: any

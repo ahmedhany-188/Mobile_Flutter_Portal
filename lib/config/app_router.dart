@@ -8,6 +8,7 @@ import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_le
 import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contact_detail_screen.dart';
 import 'package:hassanallamportalflutter/screens/contacts_screen/contacts_screen.dart';
+import 'package:hassanallamportalflutter/screens/currency_picker_screen/currency_picker_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
 import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
 import 'package:hassanallamportalflutter/screens/get_direction_screen/get_direction_screen.dart';
@@ -153,6 +154,11 @@ class AppRouter {
       case PayslipScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => const PayslipScreen(),
+        );
+
+      case CurrencyPickerScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const CurrencyPickerScreen(),
         );
 
       case SubsidiariesScreen.routeName:
