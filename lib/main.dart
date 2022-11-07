@@ -200,7 +200,7 @@ Future<void> timedOut() async {
     context: NavigationService.navigatorKey.currentState!.overlay!.context,
     barrierDismissible: false,
     builder: (context) => AlertDialog(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
       title: const Text(
         'Alert',
         style: TextStyle(
