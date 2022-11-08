@@ -29,8 +29,7 @@ import 'package:hassanallamportalflutter/widgets/background/custom_background.da
 import 'package:popover/popover.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-
-import '../../data/repositories/request_repository.dart';
+import 'package:shake/shake.dart';
 import '../../widgets/drawer/main_drawer.dart';
 import '../../bloc/news_screen_bloc/news_cubit.dart';
 import '../admin_request_screen/business_card_screen.dart';
@@ -38,6 +37,7 @@ import '../news_screen/news_screen.dart';
 import '../notification_screen/notifications_screen.dart';
 import '../../screens/contacts_screen/contacts_screen.dart';
 import '../videos_screen/videos_screen.dart';
+import '../../widgets/dialogpopoup/dialog_popup_sos.dart';
 
 // class HomeGridViewScreen extends StatefulWidget {
 //   const HomeGridViewScreen({Key? key}) : super(key: key);
@@ -57,6 +57,30 @@ class HomeGridViewScreen extends StatelessWidget {
     bool userStaffDashboard = false;
     bool dashBoardIcon = false;
 
+    bool sosBottomSheet=false;
+
+
+    ShakeDetector detector = ShakeDetector.waitForStart(
+      onPhoneShake: () {
+        // Navigator.of(context)
+        //     .pushNamed(SOSAlertScreen.routeName);
+        if(sosBottomSheet==false){
+          showModalBottomSheet<void>(
+              context: context,
+              isScrollControlled: true,
+              builder: (BuildContext context) {
+                return  const DialogSOSMainBottomSheet();
+              });
+        }
+        // Do stuff on phone shake
+      },
+      minimumShakeCount: 3,
+      shakeSlopTimeMS: 500,
+      shakeCountResetTime: 2500,
+      shakeThresholdGravity: 2,
+
+    );
+    detector.startListening();
 
     for (int i = 0; i < userApps.length; i++) {
       if (userApps[i].sysID == 24) {
