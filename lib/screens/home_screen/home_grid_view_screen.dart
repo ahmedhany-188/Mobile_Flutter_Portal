@@ -30,7 +30,6 @@ import 'package:popover/popover.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../data/repositories/request_repository.dart';
 import '../../widgets/drawer/main_drawer.dart';
 import '../../bloc/news_screen_bloc/news_cubit.dart';
 import '../admin_request_screen/business_card_screen.dart';
@@ -38,6 +37,7 @@ import '../news_screen/news_screen.dart';
 import '../notification_screen/notifications_screen.dart';
 import '../../screens/contacts_screen/contacts_screen.dart';
 import '../videos_screen/videos_screen.dart';
+import 'portal_assistant_screen.dart';
 
 // class HomeGridViewScreen extends StatefulWidget {
 //   const HomeGridViewScreen({Key? key}) : super(key: key);
@@ -170,6 +170,24 @@ class HomeGridViewScreen extends StatelessWidget {
             ],
           ),
           drawer: const MainDrawer(),
+          floatingActionButton: Container(
+            margin: const EdgeInsets.only(bottom: 20.0),
+            decoration: BoxDecoration(shape: BoxShape.circle,image: DecorationImage(image: Assets.images.bot6.image().image)),
+            height: 80,
+            width: 80,
+            child: ElevatedButton(
+              onPressed: () {
+              Navigator.pushNamed(context, PortalAssistantScreen.routeName);
+              },
+              style: ElevatedButton.styleFrom(
+                  shape: const CircleBorder(), 
+                  fixedSize: const Size(80, 80),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+              ),
+              child: Container(),
+            ),
+          ),
           body: Stack(
             // mainAxisAlignment: MainAxisAlignment.start,
             // crossAxisAlignment: CrossAxisAlignment.center,

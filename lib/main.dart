@@ -49,6 +49,7 @@ import './bloc/myattendance_screen_bloc/attendance_cubit.dart';
 import './bloc/payslip_screen_bloc/payslip_cubit.dart';
 import './bloc/subsidiaries_screen_bloc/subsidiaries_cubit.dart';
 import 'bloc/auth_app_status_bloc/app_bloc.dart';
+import 'bloc/helper_bot_screen_bloc/portal_assistant_cubit.dart';
 import 'bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
 import 'bloc/login_cubit/login_cubit.dart';
 import 'bloc/my_requests_screen_bloc/my_requests_cubit.dart';
@@ -199,6 +200,7 @@ Future<void> timedOut() async {
   await showDialog(
     context: NavigationService.navigatorKey.currentState!.overlay!.context,
     barrierDismissible: false,
+    useRootNavigator: false,
     builder: (context) => AlertDialog(
       backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
       title: const Text(
@@ -306,6 +308,10 @@ class _MyAppState extends State<MyApp> {
               ..getContacts(),
             lazy: true,
           ),
+          BlocProvider<PortalAssistantCubit>(
+          create: (portalAssistantCubitContext) => PortalAssistantCubit(GeneralDio(
+          BlocProvider.of<AppBloc>(portalAssistantCubitContext).state.userData))
+          ..getQuestions(),lazy: true),
           BlocProvider<PayslipCubit>(
             create: (payslipContext) => PayslipCubit(PayslipRepository(
                 BlocProvider.of<AppBloc>(payslipContext).state.userData)),

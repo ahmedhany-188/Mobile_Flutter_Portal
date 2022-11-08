@@ -44,6 +44,9 @@ class $AssetsImagesGen {
   AssetGenImage get backgroundattendance =>
       const AssetGenImage('assets/images/backgroundattendance.jpg');
 
+  /// File path: assets/images/bot6.jpg
+  AssetGenImage get bot6 => const AssetGenImage('assets/images/bot6.jpg');
+
   /// File path: assets/images/buildings.png
   AssetGenImage get buildings =>
       const AssetGenImage('assets/images/buildings.png');
