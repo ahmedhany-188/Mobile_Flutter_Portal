@@ -44,6 +44,7 @@ import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiarie
 import '../data/models/contacts_related_models/contacts_data_from_api.dart';
 import '../data/models/subsidiares_model/subsidiares_model.dart';
 import '../screens/apps_screen/apps_screen.dart';
+import '../screens/home_screen/portal_assistant_screen.dart';
 import '../screens/my_requests_screen/add_request_screen.dart';
 import '../screens/notification_screen/notifications_screen.dart';
 import '../screens/polls_screen/polls_screen.dart';
@@ -277,6 +278,9 @@ class AppRouter {
       case SubsidiariesDetailsScreen.routeName:
         return MaterialPageRoute(
             builder: (_) =>  SubsidiariesDetailsScreen(subsidiariesData: settings.arguments as SubsidiariesData,));
+      case PortalAssistantScreen.routeName:
+        return MaterialPageRoute(
+            builder: (_) =>  PortalAssistantScreen());
 
 
       default:
