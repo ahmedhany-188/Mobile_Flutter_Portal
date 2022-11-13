@@ -137,7 +137,7 @@ class DirectManagerProfileScreenClass
                         Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: Center(
-                            child: CachedNetworkImage(
+                            child: (state.managerData.imgProfile != "") ? CachedNetworkImage(
                               imageUrl: getUserProfilePicture(
                                   state.managerData
                                       .imgProfile ??
@@ -161,6 +161,9 @@ class DirectManagerProfileScreenClass
                                   (context, url, error) =>
                                   Assets.images.logo
                                       .image(height: 80),
+                            ):Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Assets.images.logo.image(height: 80),
                             ),
                           ),
 
