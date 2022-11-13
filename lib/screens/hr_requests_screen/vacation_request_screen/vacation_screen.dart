@@ -781,7 +781,7 @@ class ItemView extends StatelessWidget {
             itemCount: (items.isNotEmpty)
                 ? items.length
                 : items.length,
-            separatorBuilder: (context, int) {
+            separatorBuilder: (_, __) {
               return const SizedBox(height: 2,);
             },
             itemBuilder: (context, index) {

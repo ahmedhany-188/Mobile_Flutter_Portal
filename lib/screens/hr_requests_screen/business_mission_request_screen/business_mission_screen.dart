@@ -308,7 +308,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                               RadioListTile<int>(
                                                 activeColor: Colors.white,
                                                 value: 1,
-                                                title: Text("Meeting"),
+                                                title: const Text("Meeting"),
                                                 groupValue: state.missionType,
                                                 onChanged: (permissionType) =>
                                                 state.requestStatus ==
@@ -323,7 +323,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                               RadioListTile<int>(
                                                 activeColor: Colors.white,
                                                 value: 2,
-                                                title: Text("Site Visit"),
+                                                title: const Text("Site Visit"),
                                                 groupValue: state.missionType,
                                                 onChanged: (missionType) =>
                                                 state.requestStatus ==
@@ -338,7 +338,7 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                               RadioListTile<int>(
                                                 activeColor: Colors.white,
                                                 value: 3,
-                                                title: Text("Training"),
+                                                title: const Text("Training"),
                                                 groupValue: state.missionType,
                                                 onChanged: (missionType) =>
                                                 state.requestStatus ==
@@ -696,12 +696,16 @@ class _BusinessMissionScreenState extends State<BusinessMissionScreen> {
                                     child: Text('Something went wrong!',
                                       style: TextStyle(color: Colors.white),));
                               case GetDirectionStatus.success:
-                              print("Successsssssss");
+                              if (kDebugMode) {
+                                print("Successsssssss");
+                              }
                                 return ItemView(items: state.items,
                                   scrollController: scrollController,
                                   bloc: bloc,);
                               case GetDirectionStatus.successSearching:
-                                print("Successsssssss Searching");
+                                if (kDebugMode) {
+                                  print("Successsssssss Searching");
+                                }
                                 if (kDebugMode) {
                                   print(state.tempItems.length);
                                 }
@@ -799,7 +803,7 @@ class ItemView extends StatelessWidget {
               itemCount: (items.isNotEmpty)
                   ? items.length
                   : items.length,
-              separatorBuilder: (context, int) {
+              separatorBuilder: (_, __) {
                 return const SizedBox(height: 2,);
               },
               itemBuilder: (context, index) {
