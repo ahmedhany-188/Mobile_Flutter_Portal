@@ -57,13 +57,11 @@ class HomeGridViewScreen extends StatelessWidget {
     bool userStaffDashboard = false;
     bool dashBoardIcon = false;
 
-
     for (int i = 0; i < userApps.length; i++) {
       if (userApps[i].sysID == 24) {
         userStaffDashboard = true;
       }
     }
-
 
     if (user.employeeData?.isCEO != null &&
         user.employeeData?.isTopManagement != null) {
@@ -73,51 +71,48 @@ class HomeGridViewScreen extends StatelessWidget {
       } // 11
       else if (user.employeeData?.isCEO == true) {
         dashBoardIcon = true;
-      }
-      else if (userStaffDashboard) {
+      } else if (userStaffDashboard) {
         dashBoardIcon = true;
-      }
-      else {
+      } else {
         dashBoardIcon = false;
       }
     } else {
       dashBoardIcon = false;
     }
 
-
     double shake(double animation) =>
         2 * (0.5 - (0.5 - Curves.ease.transform(animation)).abs());
 
     return BlocProvider.value(
-      value: UserNotificationApiCubit.get(context)..getNotificationsWithoutLoading(user),
+      value: UserNotificationApiCubit.get(context)
+        ..getNotificationsWithoutLoading(user),
       child: CustomBackground(
-      child: Scaffold(
-          backgroundColor: Colors.transparent,
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
+        child: Scaffold(
             backgroundColor: Colors.transparent,
-            elevation: 0,
-            leading: Builder(builder: (context) {
-              return
-                //   ShakeWidget(
-                //   shakeConstant: ShakeHorizontalConstant2(),
-                //   autoPlay: true,
-                //   child: InkWell(
-                //     splashColor: Colors.transparent,
-                //     highlightColor: Colors.transparent,
-                //     onTap: () => Scaffold.of(context).openDrawer(),
-                //     child: Image.asset(Assets.images.logo.path, scale: 30),
-                //   ),
-                // );
-                TweenAnimationBuilder<double>(
+            resizeToAvoidBottomInset: false,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              leading: Builder(builder: (context) {
+                return
+                    //   ShakeWidget(
+                    //   shakeConstant: ShakeHorizontalConstant2(),
+                    //   autoPlay: true,
+                    //   child: InkWell(
+                    //     splashColor: Colors.transparent,
+                    //     highlightColor: Colors.transparent,
+                    //     onTap: () => Scaffold.of(context).openDrawer(),
+                    //     child: Image.asset(Assets.images.logo.path, scale: 30),
+                    //   ),
+                    // );
+                    TweenAnimationBuilder<double>(
                   duration: const Duration(milliseconds: 1500),
                   tween: Tween(begin: 0.3, end: 0.0),
-                  builder: (context, animation, child) =>
-                      Transform.translate(
-                        offset: Offset(50 * shake(animation), 0),
-                        filterQuality: FilterQuality.high,
-                        child: child,
-                      ),
+                  builder: (context, animation, child) => Transform.translate(
+                    offset: Offset(50 * shake(animation), 0),
+                    filterQuality: FilterQuality.high,
+                    child: child,
+                  ),
                   child: InkWell(
                     splashColor: Colors.transparent,
                     highlightColor: Colors.transparent,
@@ -125,406 +120,424 @@ class HomeGridViewScreen extends StatelessWidget {
                     child: Image.asset(Assets.images.logo.path, scale: 30),
                   ),
                 );
-            }),
-            centerTitle: true,
-            title: const Text('Hassan Allam Holding'),
-            actions: [
-              BlocBuilder<UserNotificationApiCubit,
-                  UserNotificationApiState>(
-                builder: (context, state) {
-                  return InkWell(
-                    splashColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
-                    onTap: () =>
-                        Navigator.of(context)
-                            .pushNamed(NotificationsScreen.routeName),
-                    child: Badge(
-                      showBadge: state.userNotificationList.isNotEmpty
-                          ? true
-                          : false,
-                      toAnimate: true,
-                      animationDuration: const Duration(milliseconds: 1000),
-                      animationType: BadgeAnimationType.scale,
-                      badgeColor: Colors.red,
-                      badgeContent: Text(
-                        "${state.userNotificationList.length}",
-                        style: const TextStyle(
-                            color: Colors.white, fontSize: 10),
+              }),
+              centerTitle: true,
+              title: const Text('Hassan Allam Holding'),
+              actions: [
+                BlocBuilder<UserNotificationApiCubit, UserNotificationApiState>(
+                  builder: (context, state) {
+                    return InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      onTap: () => Navigator.of(context)
+                          .pushNamed(NotificationsScreen.routeName),
+                      child: Badge(
+                        showBadge: state.userNotificationList.isNotEmpty
+                            ? true
+                            : false,
+                        toAnimate: true,
+                        animationDuration: const Duration(milliseconds: 1000),
+                        animationType: BadgeAnimationType.scale,
+                        badgeColor: Colors.red,
+                        badgeContent: Text(
+                          "${state.userNotificationList.length}",
+                          style: const TextStyle(
+                              color: Colors.white, fontSize: 10),
+                        ),
+                        position: const BadgePosition(
+                          start: 5,
+                          top: 5,
+                        ),
+                        child: IconButton(
+                          icon: const Icon(Icons.notifications),
+                          splashColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onPressed: () => Navigator.of(context)
+                              .pushNamed(NotificationsScreen.routeName),
+                        ),
                       ),
-                      position: const BadgePosition(
-                        start: 5,
-                        top: 5,
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.notifications),
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        onPressed: () =>
-                            Navigator.of(context)
-                                .pushNamed(NotificationsScreen.routeName),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
-          drawer: const MainDrawer(),
-          floatingActionButton: Container(
-            margin: const EdgeInsets.only(bottom: 20.0),
-            decoration: BoxDecoration(shape: BoxShape.circle,image: DecorationImage(image: Assets.images.bot6.image().image)),
-            height: 80,
-            width: 80,
-            child: ElevatedButton(
-              onPressed: () {
-              Navigator.pushNamed(context, PortalAssistantScreen.routeName);
-              },
-              style: ElevatedButton.styleFrom(
-                  shape: const CircleBorder(), 
-                  fixedSize: const Size(80, 80),
-                backgroundColor: Colors.transparent,
-                elevation: 0,
-              ),
-              child: Container(),
+                    );
+                  },
+                ),
+              ],
             ),
-          ),
-          body: Stack(
-            // mainAxisAlignment: MainAxisAlignment.start,
-            // crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: BlocProvider<NewsCubit>.value(
-                    value: NewsCubit.get(context),
-                    child: BlocBuilder<NewsCubit, NewsState>(
-                      builder: (context, state) {
-                        return Container(
-                          width: MediaQuery
-                              .of(context)
-                              .size
-                              .width / 1.2,
-                          padding: const EdgeInsets.all(10),
-                          margin: const EdgeInsets.only(top: 25),
-                          // height: 100,
-                          child: ListView(
-                            physics: const NeverScrollableScrollPhysics(),
-                            reverse: false,
-                            shrinkWrap: true,
-                            children: [
-                              AnimatedTextKit(
-                                isRepeatingAnimation: true,
-                                pause: const Duration(milliseconds: 1000),
-                                repeatForever: true,
-                                displayFullTextOnTap: false,
-                                animatedTexts: NewsCubit
-                                    .get(context)
-                                    .announcment
-                                    .isEmpty
-                                    ? [
-                                  TyperAnimatedText(
-                                    'Checking for Announcement... ',
-                                    speed:
-                                    const Duration(milliseconds: 100),
-                                    textAlign: TextAlign.center,
-                                    curve: Curves.ease,
-                                    textStyle: const TextStyle(
-                                        color: Colors.white,
-                                        overflow: TextOverflow.clip,
-                                        fontFamily: 'RobotoFlex',
-                                        fontSize: 14),
-                                  )
-                                ]
-                                    : NewsCubit
-                                    .get(context)
-                                    .announcment,
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+            drawer: const MainDrawer(),
+            floatingActionButton: Padding(
+              padding: const EdgeInsets.only(bottom: 20.0),
+              child: FloatingActionButton(
+                onPressed: () => Navigator.pushNamed(
+                    context, PortalAssistantScreen.routeName),
+                child: Container(
+                  decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      image: DecorationImage(
+                          image: Assets.images.bot6.image().image),
+                      borderRadius: BorderRadius.circular(10)),
+                ),
+              ),
+            ),
+            // Container(
+            //   margin: const EdgeInsets.only(bottom: 20.0),
+            //   decoration: BoxDecoration(shape: BoxShape.circle,image: DecorationImage(image: Assets.images.bot6.image().image)),
+            //   height: 80,
+            //   width: 80,
+            //   child: ElevatedButton(
+            //     onPressed: () {
+            //     Navigator.pushNamed(context, PortalAssistantScreen.routeName);
+            //     },
+            //     style: ElevatedButton.styleFrom(
+            //         shape: const CircleBorder(),
+            //         fixedSize: const Size(80, 80),
+            //       backgroundColor: Colors.transparent,
+            //       elevation: 0,
+            //     ),
+            //     child: Container(),
+            //   ),
+            // ),
+            body: Stack(
+                // mainAxisAlignment: MainAxisAlignment.start,
+                // crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: BlocProvider<NewsCubit>.value(
+                      value: NewsCubit.get(context),
+                      child: BlocBuilder<NewsCubit, NewsState>(
+                        builder: (context, state) {
+                          return Container(
+                            width: MediaQuery.of(context).size.width / 1.2,
+                            padding: const EdgeInsets.all(10),
+                            margin: const EdgeInsets.only(top: 25),
+                            // height: 100,
+                            child: ListView(
+                              physics: const NeverScrollableScrollPhysics(),
+                              reverse: false,
+                              shrinkWrap: true,
+                              children: [
+                                AnimatedTextKit(
+                                  isRepeatingAnimation: true,
+                                  pause: const Duration(milliseconds: 1000),
+                                  repeatForever: true,
+                                  displayFullTextOnTap: false,
+                                  animatedTexts:
+                                      NewsCubit.get(context).announcment.isEmpty
+                                          ? [
+                                              TyperAnimatedText(
+                                                'Checking for Announcement... ',
+                                                speed: const Duration(
+                                                    milliseconds: 100),
+                                                textAlign: TextAlign.center,
+                                                curve: Curves.ease,
+                                                textStyle: const TextStyle(
+                                                    color: Colors.white,
+                                                    overflow: TextOverflow.clip,
+                                                    fontFamily: 'RobotoFlex',
+                                                    fontSize: 14),
+                                              )
+                                            ]
+                                          : NewsCubit.get(context).announcment,
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: GridView(
-                      gridDelegate:
-                      const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                      ),
-                      padding: EdgeInsets.zero,
-                      addRepaintBoundaries: false,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        InkWell(
-                            onTap: () =>
-                            {
-                              if(user.employeeData?.isCEO != null &&
-                                  user.employeeData?.isTopManagement != null){
-                                // 10
-                                if(user.employeeData?.isTopManagement == true){
-                                  Navigator.of(context)
-                                      .pushNamed(
-                                      StaffDashBoardScreen.routeName),
-                                } // 11
-                                else
-                                  if(user.employeeData?.isCEO == true){
-                                    Navigator.of(context).pushNamed(
-                                        StaffDashBoardDetailScreen.routeName,
-                                        arguments: {
-                                          StaffDashBoardDetailScreen
-                                              .staffDashboardList: <
-                                              CompanyStaffDashBoard>[],
-                                          StaffDashBoardDetailScreen
-                                              .date: GlobalConstants
-                                              .dateFormatServerDashBoard.format(
-                                              DateTime.now())
-                                        }),
-                                  }
-                                  else
-                                    if(userStaffDashboard){
-                                      Navigator.of(context)
-                                          .pushNamed(
-                                          StaffDashBoardProjectScreen.routeName,
-                                          arguments: {
-                                            StaffDashBoardProjectScreen
-                                                .companyID: "0",
-                                            StaffDashBoardProjectScreen
-                                                .project: "0",
-                                            StaffDashBoardProjectScreen
-                                                .director: user.employeeData
-                                                ?.userHrCode,
-                                            StaffDashBoardProjectScreen
-                                                .date: GlobalConstants
-                                                .dateFormatServerDashBoard
-                                                .format(DateTime.now()),
-                                          }),
-                                    }
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: GridView(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                        ),
+                        padding: EdgeInsets.zero,
+                        addRepaintBoundaries: false,
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        children: [
+                          InkWell(
+                              onTap: () => {
+                                    if (user.employeeData?.isCEO != null &&
+                                        user.employeeData?.isTopManagement !=
+                                            null)
+                                      {
+                                        // 10
+                                        if (user.employeeData
+                                                ?.isTopManagement ==
+                                            true)
+                                          {
+                                            Navigator.of(context).pushNamed(
+                                                StaffDashBoardScreen.routeName),
+                                          } // 11
+                                        else if (user.employeeData?.isCEO ==
+                                            true)
+                                          {
+                                            Navigator.of(context).pushNamed(
+                                                StaffDashBoardDetailScreen
+                                                    .routeName,
+                                                arguments: {
+                                                  StaffDashBoardDetailScreen
+                                                          .staffDashboardList:
+                                                      <CompanyStaffDashBoard>[],
+                                                  StaffDashBoardDetailScreen
+                                                          .date:
+                                                      GlobalConstants
+                                                          .dateFormatServerDashBoard
+                                                          .format(
+                                                              DateTime.now())
+                                                }),
+                                          }
+                                        else if (userStaffDashboard)
+                                          {
+                                            Navigator.of(context).pushNamed(
+                                                StaffDashBoardProjectScreen
+                                                    .routeName,
+                                                arguments: {
+                                                  StaffDashBoardProjectScreen
+                                                      .companyID: "0",
+                                                  StaffDashBoardProjectScreen
+                                                      .project: "0",
+                                                  StaffDashBoardProjectScreen
+                                                          .director:
+                                                      user.employeeData
+                                                          ?.userHrCode,
+                                                  StaffDashBoardProjectScreen
+                                                          .date:
+                                                      GlobalConstants
+                                                          .dateFormatServerDashBoard
+                                                          .format(
+                                                              DateTime.now()),
+                                                }),
+                                          }
+                                        else
+                                          {
+                                            Navigator.of(context).pushNamed(
+                                                AttendanceScreen.routeName),
+                                          }
+                                      }
                                     else
                                       {
                                         Navigator.of(context).pushNamed(
                                             AttendanceScreen.routeName),
                                       }
-                              } else
-                                {
-                                  Navigator.of(context).pushNamed(
-                                      AttendanceScreen.routeName),
-                                }
-                            },
-
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            child: Column(
+                                  },
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                      dashBoardIcon
+                                          ? Assets.images.homepage
+                                              .staffDashboardIcon.path
+                                          : Assets.images.homepage
+                                              .attendanceIcon.path,
+                                      scale: 3),
+                                  Text(
+                                    dashBoardIcon
+                                        ? 'Staff Dashboard'
+                                        : "Attendance",
+                                    softWrap: true,
+                                    style: const TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  )
+                                ],
+                              )),
+                          InkWell(
+                              onTap: () => Navigator.of(context)
+                                  .pushNamed(ContactsScreen.routeName),
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                      Assets
+                                          .images.homepage.contactListIcon.path,
+                                      scale: 3),
+                                  const Text(
+                                    'Contact List',
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  )
+                                ],
+                              )),
+                          MenuPopupWidget(
+                            benefitsMenuItems(context),
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Image.asset(
-                                    dashBoardIcon ? Assets.images.homepage
-                                        .staffDashboardIcon.path : Assets.images
-                                        .homepage.attendanceIcon.path,
-                                    scale: 3),
-                                Text(
-                                  dashBoardIcon
-                                      ? 'Staff Dashboard'
-                                      : "Attendance",
-                                  softWrap: true,
-                                  style: const TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            )),
-                        InkWell(
-                            onTap: () =>
-                                Navigator.of(context)
-                                    .pushNamed(ContactsScreen.routeName),
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets.images.homepage.contactListIcon.path,
+                                    Assets.images.homepage.benefitsIcon.path,
                                     scale: 3),
                                 const Text(
-                                  'Contact List',
+                                  'Benefits',
                                   softWrap: true,
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 14),
                                 )
                               ],
-                            )),
-                        MenuPopupWidget(
-                          benefitsMenuItems(context),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.asset(
-                                  Assets.images.homepage.benefitsIcon.path,
-                                  scale: 3),
-                              const Text(
-                                'Benefits',
-                                softWrap: true,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                        MenuPopupWidget(
-                          hrRequestMenuItems(context),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.asset(
-                                  Assets.images.homepage.hrRequestsIcon.path,
-                                  scale: 3),
-                              const Text(
-                                'HR Request',
-                                softWrap: true,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              )
-                            ],
-                          ),
-                        ),
-                        MenuPopupWidget(
-                          itRequestMenuItems(context),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.asset(
-                                  Assets.images.homepage.itRequestIcon.path,
-                                  scale: 3),
-                              const Text(
-                                'IT Request',
-                                softWrap: true,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              )
-                            ],
-                          ),
-                        ),
-                        MenuPopupWidget(
-                          mediaCenterMenuItems(context),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.asset(
-                                  Assets.images.homepage.mediaCenterIcon.path,
-                                  scale: 3),
-                              const Text(
-                                'Media Center',
-                                softWrap: true,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              )
-                            ],
-                          ),
-                        ),
-                        InkWell(
-                            onTap: () =>
-                                Navigator.of(context)
-                                    .pushNamed(NewsScreen.routeName),
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            child: Column(
+                          MenuPopupWidget(
+                            hrRequestMenuItems(context),
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Image.asset(
-                                    Assets.images.homepage.newsIcon.path,
+                                    Assets.images.homepage.hrRequestsIcon.path,
                                     scale: 3),
                                 const Text(
-                                  'News',
+                                  'HR Request',
                                   softWrap: true,
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 14),
                                 )
                               ],
-                            )),
-                        MenuPopupWidget(
-                          newsLetterMenuItems(context),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Image.asset(
-                                  Assets.images.homepage.haNewsLetterIcon.path,
-                                  scale: 3),
-                              const Text(
-                                'HA NewsLetter',
-                                softWrap: true,
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 14),
-                              )
-                            ],
+                            ),
                           ),
-                        ),
-                        InkWell(
-                            onTap: () =>
-                                Navigator.of(context)
-                                    .pushNamed(EconomyNewsScreen.routeName),
-                            splashColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            child: Column(
+                          MenuPopupWidget(
+                            itRequestMenuItems(context),
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                                 Image.asset(
-                                    Assets.images.homepage.economyNewsIcon.path,
+                                    Assets.images.homepage.itRequestIcon.path,
                                     scale: 3),
                                 const Text(
-                                  'Economy News',
+                                  'IT Request',
                                   softWrap: true,
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 14),
                                 )
                               ],
-                            )),
-                      ],
+                            ),
+                          ),
+                          MenuPopupWidget(
+                            mediaCenterMenuItems(context),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets.images.homepage.mediaCenterIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'Media Center',
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            ),
+                          ),
+                          InkWell(
+                              onTap: () => Navigator.of(context)
+                                  .pushNamed(NewsScreen.routeName),
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                      Assets.images.homepage.newsIcon.path,
+                                      scale: 3),
+                                  const Text(
+                                    'News',
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  )
+                                ],
+                              )),
+                          MenuPopupWidget(
+                            newsLetterMenuItems(context),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Image.asset(
+                                    Assets
+                                        .images.homepage.haNewsLetterIcon.path,
+                                    scale: 3),
+                                const Text(
+                                  'HA NewsLetter',
+                                  softWrap: true,
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 14),
+                                )
+                              ],
+                            ),
+                          ),
+                          InkWell(
+                              onTap: () => Navigator.of(context)
+                                  .pushNamed(EconomyNewsScreen.routeName),
+                              splashColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Image.asset(
+                                      Assets
+                                          .images.homepage.economyNewsIcon.path,
+                                      scale: 3),
+                                  const Text(
+                                    'Economy News',
+                                    softWrap: true,
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 14),
+                                  )
+                                ],
+                              )),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: Shimmer.fromColors(
-                        baseColor: Colors.white,
-                        highlightColor: Colors.grey.shade700,
-                        period: const Duration(milliseconds: 3000),
-                        child: const Text(
-                          '\u00a9 2022 IT Department All Rights Reserved',
-                          style: TextStyle(
-                            fontSize: 14,
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Shimmer.fromColors(
+                          baseColor: Colors.white,
+                          highlightColor: Colors.grey.shade700,
+                          period: const Duration(milliseconds: 3000),
+                          child: const Text(
+                            '\u00a9 2022 IT Department All Rights Reserved',
+                            style: TextStyle(
+                              fontSize: 14,
+                            ),
+                          )
+                          // Container(
+                          //   color: Colors.red,
+                          //   height: 20,
+                          //   width: MediaQuery.of(context).size.width,
+                          // ),
                           ),
-                        )
-                      // Container(
-                      //   color: Colors.red,
-                      //   height: 20,
-                      //   width: MediaQuery.of(context).size.width,
-                      // ),
                     ),
                   ),
-                ),
-              ])),
-    ),
-);
+                ])),
+      ),
+    );
   }
 }
-
-
 
 Widget benefitsMenuItems(BuildContext context) {
   return Scrollbar(
@@ -825,10 +838,11 @@ Widget newsLetterMenuItems(BuildContext context) {
 }
 
 class MenuPopupWidget extends StatelessWidget {
-  const MenuPopupWidget(this.widgetFunction,
-      this.childWidget, {
-        Key? key,
-      }) : super(key: key);
+  const MenuPopupWidget(
+    this.widgetFunction,
+    this.childWidget, {
+    Key? key,
+  }) : super(key: key);
 
   final Widget widgetFunction;
   final Widget childWidget;
@@ -847,7 +861,7 @@ class MenuPopupWidget extends StatelessWidget {
           direction: PopoverDirection.top,
           width: 150,
           backgroundColor:
-          ConstantsColors.bottomSheetBackgroundDark.withOpacity(0.9),
+              ConstantsColors.bottomSheetBackgroundDark.withOpacity(0.9),
           arrowHeight: 15,
           arrowWidth: 30,
         );
