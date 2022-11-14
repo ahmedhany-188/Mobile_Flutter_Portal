@@ -10,6 +10,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import '../../../data/data_providers/general_dio/general_dio.dart';
 import '../../../data/data_providers/requests_data_providers/request_data_providers.dart';
 import '../../../data/models/items_catalog_models/item_catalog_all_data.dart';
+import '../../../data/models/items_catalog_models/item_catalog_favorite.dart';
 import '../../../data/models/items_catalog_models/item_catalog_search_model.dart';
 part 'item_catalog_search_state.dart';
 
@@ -76,6 +77,33 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     EasyLoading.dismiss();
   }
 
+  void getFavoriteItems({required String userHrCode}) async{
+    emit(state.copyWith(
+      // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
+    ));
+    await _generalDio.getItemCatalogFavorite(userHrCode).then((value) {
+      if (value.data['data'] != null && value.statusCode == 200) {
+        List<ItemCatalogFavoriteData> favoriteResult =
+        List<ItemCatalogFavoriteData>.from(value.data['data']
+            .map((model) => ItemCatalogFavoriteData.fromJson(model)));
+        emit(state.copyWith(
+          // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+          favoriteResult: favoriteResult,
+        ));
+      }
+      else if (value.data['data'] == null) {
+        EasyLoading.dismiss();
+        emit(state.copyWith(
+          favoriteResult: [],
+          // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+        ));
+      } else {
+        throw RequestFailureApi.fromCode(value.statusCode!);
+      }
+    });
+
+  }
+
   void setSearchString(String searchString) {
     emit(state.copyWith(searchString: searchString,detail: false));
     getSearchList();
@@ -123,7 +151,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
                 .then((value) async {
               List<ItemCategoryAttachData> getAllItemsCatalogAttachTreeList = [];
               if (value.data != null) {
-                getAllItemsCatalogAttachTreeList = value?.data??[];
+                getAllItemsCatalogAttachTreeList = value.data??[];
                 getCategoryImages(getAllItemsCatalogAttachTreeList);
               } else {
                 emit(state.copyWith(

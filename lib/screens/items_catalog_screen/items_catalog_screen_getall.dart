@@ -7,6 +7,7 @@ import 'package:hassanallamportalflutter/data/repositories/items_catalog_reposit
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
+import 'favorite_screen.dart';
 import 'item_catalog_search_widget.dart';
 
 class ItemsCatalogGetAllScreen extends StatefulWidget {
@@ -31,9 +32,10 @@ class ItemsCatalogGetAllScreenStateClass
     return BlocProvider<ItemCatalogSearchCubit>(
       create: (context) => ItemCatalogSearchCubit(
           GeneralDio(BlocProvider.of<AppBloc>(context).state.userData),
-          ItemsCatalogGetAllRepository(user)),
+          ItemsCatalogGetAllRepository(user))
+        ..getFavoriteItems(userHrCode: user.employeeData?.userHrCode ?? ""),
       child: GestureDetector(
-        onTap:() => FocusManager.instance.primaryFocus?.unfocus(),
+        onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: PreferredSize(
@@ -47,8 +49,8 @@ class ItemsCatalogGetAllScreenStateClass
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(0.0),
                   child: Padding(
-                    padding:
-                        const EdgeInsets.only(left: 40.0, right: 40, bottom: 20),
+                    padding: const EdgeInsets.only(
+                        left: 40.0, right: 40, bottom: 20),
                     child: BlocBuilder<ItemCatalogSearchCubit,
                         ItemCatalogSearchState>(
                       builder: (ctx, state) {
@@ -66,11 +68,13 @@ class ItemsCatalogGetAllScreenStateClass
                             color: Colors.white,
                           ),
                           onChanged: (text) {
-                            ItemCatalogSearchCubit.get(ctx).setSearchString(text);
+                            ItemCatalogSearchCubit.get(ctx)
+                                .setSearchString(text);
                             if (text.isEmpty) {
                               ItemCatalogSearchCubit.get(ctx).clearData();
-                              ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(
-                                  user.employeeData?.userHrCode ?? "");
+                              ItemCatalogSearchCubit.get(ctx)
+                                  .getAllItemsCatalog(
+                                      user.employeeData?.userHrCode ?? "");
                             }
                           },
                           decoration: InputDecoration(
@@ -114,6 +118,18 @@ class ItemsCatalogGetAllScreenStateClass
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(25),
                         bottomRight: Radius.circular(25))),
+                actions: [
+                  BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                    builder: (context, state) {
+                      return IconButton(
+                          onPressed: () async {
+                            Navigator.of(context)
+                                .pushNamed(FavoriteScreen.routeName);
+                          },
+                          icon: const Icon(Icons.favorite));
+                    },
+                  )
+                ],
               ),
             ),
           ),
