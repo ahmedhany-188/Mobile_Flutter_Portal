@@ -95,73 +95,70 @@ Widget itemCatalogSearchWidget(hrcode) {
   }
 
 
-  Padding checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData, String treeDirection) {
+  Widget checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData, String treeDirection) {
     if (itemCategoryGetAllData.isNotEmpty) {
-      return Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: ListView.builder(
-          shrinkWrap: true,
-          physics: const BouncingScrollPhysics(),
-          itemCount: itemCategoryGetAllData.length,
-          itemBuilder: (context, index) {
-            return Padding(
-              padding: const EdgeInsets.only(
-                  left: 15.0, right: 15.0, bottom: 20),
-              child: InkWell(
-                onTap: () {
-                  ItemCatalogSearchCubit.get(context).setDetail(itemCode: getSearchObject(
-                      itemCategoryGetAllData[index]).itemCode ?? "");
-                  // Navigator.of(context).pushNamed(
-                  //     ItemDetailScreen.routeName,
-                  //     arguments: getSearchObject(
-                  //         itemCategoryGetAllData[index]));
-                },
+      return ListView.builder(
+        shrinkWrap: true,
+        physics: const BouncingScrollPhysics(),
+        itemCount: itemCategoryGetAllData.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(
+                left: 15.0, right: 15.0, bottom: 20),
+            child: InkWell(
+              onTap: () {
+                ItemCatalogSearchCubit.get(context).setDetail(itemCode: getSearchObject(
+                    itemCategoryGetAllData[index]).itemCode ?? "");
+                // Navigator.of(context).pushNamed(
+                //     ItemDetailScreen.routeName,
+                //     arguments: getSearchObject(
+                //         itemCategoryGetAllData[index]));
+              },
+              borderRadius: BorderRadius.circular(20),
+              child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: Container(
-                    padding: EdgeInsets.zero,
-                    color: Colors.grey.shade300,
-                    child: Row(
-                      children: [
-                        Image.network(
-                          getCatalogPhotos(
-                              itemCategoryGetAllData[index].itemPhoto ??
-                                  ""),
-                          width: 100,
-                          height: 100,
-                          errorBuilder: (context, error, stackTrace) =>
-                              Assets.images.favicon.image(
-                                width: 100,
-                                height: 100,
-                              ),
+                child: Container(
+                  padding: EdgeInsets.zero,
+                  color: Colors.grey.shade300,
+                  child: Row(
+                    children: [
+                      Image.network(
+                        getCatalogPhotos(
+                            itemCategoryGetAllData[index].itemPhoto ??
+                                ""),
+                        width: 100,
+                        height: 100,
+                        errorBuilder: (context, error, stackTrace) =>
+                            Assets.images.favicon.image(
+                              width: 100,
+                              height: 100,
+                            ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment
+                              .start,
+                          children: [
+                            Text(itemCategoryGetAllData[index].itemName ??
+                                "NOt defined",
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                )),
+                          ],
                         ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment
-                                .start,
-                            children: [
-                              Text(itemCategoryGetAllData[index].itemName ??
-                                  "NOt defined",
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                  )),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.all(20.0),
-                          child: const Icon(Icons.arrow_forward_ios,
-                              size: 18),
-                        ),
-                      ],
-                    ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.all(20.0),
+                        child: const Icon(Icons.arrow_forward_ios,
+                            size: 18),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            );
-          },
-        ),
+            ),
+          );
+        },
       );
     } else {
 
