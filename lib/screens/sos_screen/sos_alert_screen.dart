@@ -6,7 +6,7 @@ import 'package:hassanallamportalflutter/widgets/background/custom_background.da
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-
+import 'package:fluttertoast/fluttertoast.dart';
 
 class SOSAlertScreen extends StatefulWidget {
 
@@ -21,6 +21,7 @@ class SOSAlertScreen extends StatefulWidget {
 
   class SOSAlertScreenClass extends State<SOSAlertScreen> {
 
+    bool hold=false;
 
     @override
     Widget build(BuildContext context) {
@@ -37,58 +38,84 @@ class SOSAlertScreen extends StatefulWidget {
               elevation: 0,
             ),
             backgroundColor: Colors.transparent,
-            body:
-
-            Center(
+            body: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Ink(
-                      decoration: ShapeDecoration(
+                      decoration: const ShapeDecoration(
                         color: ConstantsColors.backgroundStartColor,
                         shape: CircleBorder(),
                       ),
                       child: IconButton(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.location_on,
                           color: ConstantsColors.whiteNormalAttendance,
                         ),
                         iconSize: 150.0,
                         splashColor: ConstantsColors.redAttendance,
-                        padding: EdgeInsets.all(40.0),
+                        padding: const EdgeInsets.all(40.0),
                         onPressed: () async {
 
-
-                          bool serviceEnabled;
-                          LocationPermission permission;
-                          serviceEnabled = await Geolocator.isLocationServiceEnabled();
-                          if (!serviceEnabled) {
-                            // return Future.error('Location services are disabled.');
-                            Geolocator.requestPermission();
-                          }
-                          permission = await Geolocator.checkPermission();
-                          if (permission == LocationPermission.denied) {
-                            permission = await Geolocator.requestPermission();
+                          if(!hold){
+                            hold=true;
+                            bool serviceEnabled;
+                            LocationPermission permission;
+                            serviceEnabled = await Geolocator.isLocationServiceEnabled();
+                            if (!serviceEnabled) {
+                              // return Future.error('Location services are disabled.');
+                              Geolocator.requestPermission();
+                            }
+                            permission = await Geolocator.checkPermission();
                             if (permission == LocationPermission.denied) {
-                              return Future.error('Location permissions are denied');
+                              permission = await Geolocator.requestPermission();
+                              if (permission == LocationPermission.denied) {
+                                hold=false;
+                                return Future.error('Location permissions are denied');
+                              }
+                            }
+                            if (permission == LocationPermission.deniedForever) {
+                              hold=false;
+                              return Future.error(
+                                  'Location permissions are permanently denied, we cannot request permissions.');
+                            }
+
+                            EasyLoading.show(
+                              status: 'loading...',
+                              maskType: EasyLoadingMaskType.black,
+                              dismissOnTap: false,
+                            );
+
+                            try {
+                              Position position=await Geolocator.getCurrentPosition();
+                              if (position != null) {
+
+                                hold=false;
+                                await EasyLoading.dismiss(animation: true);
+                                getsms(position.latitude, position.longitude,
+                                    user.employeeData?.name ?? "",
+                                    user.employeeData?.userHrCode ?? "");
+                              }
+                            }catch(ex) {
+                              Fluttertoast.showToast(
+                                  msg: "unfortunately, failed to get location",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.BOTTOM,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: Colors.grey,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0
+                              );
+
+                              await EasyLoading.dismiss(animation: true);
+                              hold=false;
                             }
                           }
-                          if (permission == LocationPermission.deniedForever) {
-                            return Future.error(
-                                'Location permissions are permanently denied, we cannot request permissions.');
-                          }
-                          EasyLoading.show(
-                            status: 'loading...',
-                            maskType: EasyLoadingMaskType.black,
-                            dismissOnTap: false,
-                          );
-                          Position position=await Geolocator.getCurrentPosition();
-                            getsms(position.latitude,position.longitude,user.employeeData?.name??"",user.employeeData?.userHrCode??"");
                         },
                       )),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.all(25.0),),
-                  Text(
+                  const Text(
                     "Send Emergency Alert.",
                     style: TextStyle(
                         color: ConstantsColors.whiteNormalAttendance,

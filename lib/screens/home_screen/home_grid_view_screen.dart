@@ -26,10 +26,10 @@ import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_da
 import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_projects_screen.dart';
 import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_screen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
+import 'package:hassanallamportalflutter/widgets/dialogpopoup/dialog_popup_sos.dart';
 import 'package:popover/popover.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:shake/shake.dart';
 
 import '../../widgets/drawer/main_drawer.dart';
 import '../../bloc/news_screen_bloc/news_cubit.dart';
@@ -39,7 +39,7 @@ import '../notification_screen/notifications_screen.dart';
 import '../../screens/contacts_screen/contacts_screen.dart';
 import '../videos_screen/videos_screen.dart';
 import 'portal_assistant_screen.dart';
-import '../../widgets/dialogpopoup/dialog_popup_sos.dart';
+import 'package:shake/shake.dart';
 
 // class HomeGridViewScreen extends StatefulWidget {
 //   const HomeGridViewScreen({Key? key}) : super(key: key);
@@ -54,6 +54,15 @@ class HomeGridViewScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
+
+    ShakeDetector detector=ShakeDetector.waitForStart(
+        onPhoneShake: () {
+          // Do stuff on phone shake
+        });
+
+    bool bottomSheetFound=false;
+
+
 
     List<AppsData> userApps = context.select((AppsCubit bloc) => bloc.appsList);
     bool userStaffDashboard = false;
@@ -85,7 +94,31 @@ class HomeGridViewScreen extends StatelessWidget {
     } else {
       dashBoardIcon = false;
     }
+     detector = ShakeDetector.waitForStart(
+      onPhoneShake: () {
+        if (!bottomSheetFound) {
+          bottomSheetFound=true;
+          Future<void> future = showModalBottomSheet<void>(
+              shape: const RoundedRectangleBorder( // <-- SEE HERE
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(25.0),
+                ),),
+              context: context,
+              isScrollControlled: true,
+              builder: (BuildContext context) {
+                return DialogSOSMainBottomSheet();
+              });
+          detector.stopListening();
+          future.then((void value) => closeModal(detector,bottomSheetFound));
+        }
+      },
+      minimumShakeCount: 3,
+      shakeSlopTimeMS: 500,
+      shakeCountResetTime: 3000,
+      shakeThresholdGravity: 2.7,
+    );
 
+    detector.startListening();
 
     double shake(double animation) =>
         2 * (0.5 - (0.5 - Curves.ease.transform(animation)).abs());
@@ -524,6 +557,12 @@ class HomeGridViewScreen extends StatelessWidget {
     ),
 );
   }
+
+  void closeModal(detector,bottomSheetFound) {
+    print("heerrro");
+    detector.startListening();
+    // bottomSheetFound=false;
+  }
 }
 
 
@@ -856,4 +895,6 @@ class MenuPopupWidget extends StatelessWidget {
       },
     );
   }
+
+
 }
