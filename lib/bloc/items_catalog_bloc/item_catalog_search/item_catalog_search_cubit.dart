@@ -79,7 +79,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
 
   void getFavoriteItems({required String userHrCode}) async{
     emit(state.copyWith(
-      // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
+      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
     ));
     await _generalDio.getItemCatalogFavorite(userHrCode).then((value) {
       if (value.data['data'] != null && value.statusCode == 200) {
@@ -87,7 +87,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         List<ItemCatalogFavoriteData>.from(value.data['data']
             .map((model) => ItemCatalogFavoriteData.fromJson(model)));
         emit(state.copyWith(
-          // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
           favoriteResult: favoriteResult,
         ));
       }
@@ -95,7 +95,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         EasyLoading.dismiss();
         emit(state.copyWith(
           favoriteResult: [],
-          // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
         ));
       } else {
         throw RequestFailureApi.fromCode(value.statusCode!);
@@ -179,6 +179,49 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         }
       }
     }
+  }
+
+  Future<void> setFavorite({required String hrCode, required int itemCode}) async{
+    EasyLoading.show(status: 'Loading...');
+    emit(state.copyWith(
+      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
+    ));
+    Map<String, dynamic> favoriteDataPost =
+      {
+        "id": 0,
+        "hrCode": hrCode,
+        "item_Code": itemCode,
+        "in_User": hrCode,
+        "in_Date": DateTime.now().toString(),
+        "up_User": "",
+        "up_Date": DateTime.now().toString(),
+    };
+    await _generalDio.postItemCatalogFavorite(favoriteDataPost).
+    then((value) {
+      print(value);
+      getFavoriteItems(userHrCode: hrCode);
+      EasyLoading.showSuccess('Item Added to Favorite');
+    })
+        .catchError((e) {
+      EasyLoading.showError('Something went wrong');
+      throw e;
+    });
+  }
+  Future<void> deleteFavorite({required String hrCode,required int itemId}) async{
+    EasyLoading.show(status: 'Loading...');
+    emit(state.copyWith(
+      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
+    ));
+    await _generalDio.removeItemCatalogFavorite(itemId).
+    then((value) {
+      print(value);
+      getFavoriteItems(userHrCode: hrCode);
+      EasyLoading.showSuccess('Item Deleted From Favorite');
+    })
+        .catchError((e) {
+      EasyLoading.showError('Something went wrong');
+      throw e;
+    });
   }
 
   void getSubTree(List<Items>? item) {

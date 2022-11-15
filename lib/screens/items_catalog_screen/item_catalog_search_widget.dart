@@ -352,7 +352,18 @@ Widget itemCatalogSearchWidget(hrcode) {
                             ),
                             padding: EdgeInsets.zero,
                             iconSize: 30,
-                            onPressed: () {},
+                            onPressed: () async{
+                              if(state.favoriteResult.any((element) =>
+                              element.itemCode ==
+                                  state.itemAllDatalist[0].itemCode)){
+                                ItemCatalogSearchCubit.get(context).deleteFavorite(hrCode: hrcode,itemId: state.itemAllDatalist[0].itemID??0);
+                              }else{
+                                await ItemCatalogSearchCubit.get(context)
+                                    .setFavorite(hrCode: hrcode,
+                                    itemCode: state.itemAllDatalist[0].itemID ?? 0);
+                              }
+
+                            },
                           ),
                         ],
                       ),
