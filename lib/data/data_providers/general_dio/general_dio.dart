@@ -93,12 +93,17 @@ class GeneralDio {
     );
   }
 
-  Future<Response> getItemCatalogSearch(String searchText,{int? categoryId}) async{
-    String url ='InformationTechnology-ItemCatalog/ItmCat_Items/Search?text=$searchText';
-    if(categoryId == null){
-      url = 'InformationTechnology-ItemCatalog/ItmCat_Items/Search?text=$searchText';
-    }else{
-    url = 'InformationTechnology-ItemCatalog/ItmCat_Items/Search?cateory_ID=$categoryId&text=$searchText';}
+  Future<Response> getItemCatalogSearch(String searchText,
+      {int? categoryId}) async {
+    String url =
+        'InformationTechnology-ItemCatalog/ItmCat_Items/Search?text=$searchText';
+    if (categoryId == null) {
+      url =
+          'InformationTechnology-ItemCatalog/ItmCat_Items/Search?text=$searchText';
+    } else {
+      url =
+          'InformationTechnology-ItemCatalog/ItmCat_Items/Search?cateory_ID=$categoryId&text=$searchText';
+    }
     return await dio!.get(
       url,
       options: Options(
@@ -106,8 +111,23 @@ class GeneralDio {
       ),
     );
   }
-  Future<Response> getItemCatalogAllData(String itemCode,) async{
-    String url ='https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Items/GetbyItemCodeOrSystemItemCode?itemCode=$itemCode';
+
+  Future<Response> getItemCatalogFavorite(String hrCode) async {
+    String url =
+        'InformationTechnology-ItemCatalog/ItmCat_Users_Favorites/GetAll?hrCode=$hrCode';
+    return await dio!.get(
+      url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
+      ),
+    );
+  }
+
+  Future<Response> getItemCatalogAllData(
+    String itemCode,
+  ) async {
+    String url =
+        'https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Items/GetbyItemCodeOrSystemItemCode?itemCode=$itemCode';
     return await dio!.get(
       url,
       options: Options(
@@ -290,6 +310,36 @@ class GeneralDio {
     });
   }
 
+  Future<Response> postItemCatalogFavorite(dynamic dataToPost) async {
+    String url =
+        'InformationTechnology-ItemCatalog/ItmCat_Users_Favorites/Post';
+    return await dio!
+        .post(url,
+            options: Options(headers: {
+              HttpHeaders.contentTypeHeader: "application/json-patch+json",
+              'Authorization': 'Bearer ${userData?.user?.token}',
+            }),
+            data: dataToPost)
+        .catchError((err) {
+      throw err;
+    });
+  }
+
+  Future<Response> removeItemCatalogFavorite(int itemId) async {
+    String url =
+        'InformationTechnology-ItemCatalog/ItmCat_Users_Favorites/RemoveItem?hrCode=${userData?.user?.userHRCode}&itemID=$itemId';
+    return await dio!
+        .delete(
+      url,
+      options: Options(headers: {
+        'Authorization': 'Bearer ${userData?.user?.token}',
+      }),
+    )
+        .catchError((err) {
+      throw err;
+    });
+  }
+
   // Future<Response> postEquipmentsRequestFile(dynamic dataToPost) async {
   //   String url = 'SelfService/UploadEquipmentFile';
   //
@@ -345,7 +395,7 @@ class GeneralDio {
   Future<Response> uploadUserImage(
       FilePickerResult file, String fileName, String fileExtension) async {
     String url = 'Images/UploadImage';
-    EasyLoading.show(status: "Loading",maskType: EasyLoadingMaskType.black);
+    EasyLoading.show(status: "Loading", maskType: EasyLoadingMaskType.black);
 
     FormData formData = FormData.fromMap({
       "file": await MultipartFile.fromFile(file.paths.single!,
@@ -353,12 +403,12 @@ class GeneralDio {
     });
     return await dio!
         .post(
-          url,
-          data: formData,
-          options: Options(
-            headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
-          ),
-        )
+      url,
+      data: formData,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
+      ),
+    )
         .catchError((onError) {
       EasyLoading.showError('Something went wrong');
       throw onError;

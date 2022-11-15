@@ -39,6 +39,7 @@ class PortalAssistantCubit extends Cubit<PortalAssistantInitial> with HydratedMi
     id: '0',
     firstName: 'Portal',
     lastName: 'Assistant',
+    profileImage: 'https://portal.hassanallam.com/images/imgs/3340.jpg'
   );
   ChatUser currentChatUser = ChatUser(
     id: '1',
@@ -54,12 +55,14 @@ class PortalAssistantCubit extends Cubit<PortalAssistantInitial> with HydratedMi
           user: allamAssistant,
           createdAt: DateTime.now(),
           medias: [
-            ChatMedia(url: '', fileName: 'IT FAQ', type: MediaType.file),
-            ChatMedia(url: '', fileName: 'HR FAQ', type: MediaType.file),
+            ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3340.jpg', fileName: 'IT FAQ', type: MediaType.image),
+            ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3340.jpg', fileName: 'HR FAQ', type: MediaType.image),
+            ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3340.jpg', fileName: 'HR FAQ', type: MediaType.image),
+            ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3340.jpg', fileName: 'HR FAQ', type: MediaType.image),
           ],
         ),
         ChatMessage(
-          text: 'HELLO!',
+          text: 'Hello!\nHere is a scoop to choose from..',
           user: allamAssistant,
           createdAt: DateTime.now(),
         ),
@@ -98,12 +101,14 @@ class PortalAssistantCubit extends Cubit<PortalAssistantInitial> with HydratedMi
         user: allamAssistant,
         createdAt: DateTime.now(),
         medias: [
-          ChatMedia(url: '', fileName: 'IT FAQ', type: MediaType.file),
-          ChatMedia(url: '', fileName: 'HR FAQ', type: MediaType.file),
+          ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3340.jpg', fileName: 'IT FAQ', type: MediaType.image),
+          ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3340.jpg', fileName: 'HR FAQ', type: MediaType.image),
+          ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3340.jpg', fileName: 'HR FAQ', type: MediaType.image),
+          ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3340.jpg', fileName: 'HR FAQ', type: MediaType.image),
         ],
       ),
       ChatMessage(
-        text: 'Hello!',
+        text: 'Hello!\nHere is a scoop to choose from..',
         user: allamAssistant,
         createdAt: DateTime.now(),
       ),

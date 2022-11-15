@@ -65,7 +65,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                   /// removed bloc provider
                   BlocBuilder<StatisticsCubit, StatisticsInitial>(
                     builder: (context, state) {
-                      return IconButton(
+                      return (state.statisticsList.isNotEmpty)? IconButton(
                           onPressed: () {
                             showModalBottomSheet(
                                 context: context,
@@ -225,7 +225,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
 
                                             thumbIcon: Center(
                                               child: Text(
-                                                  '${state.statisticsList[0].consumed}',style: const TextStyle(fontSize: 12)),
+                                                  '${state.statisticsList[0].consumed ?? 0}',style: const TextStyle(fontSize: 12)),
                                             ),
                                             activeColor: Colors.blue[200],
                                             inactiveColor: Colors.white70,
@@ -241,7 +241,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                                                   'Permissions',
                                                 ),
                                                 Text(
-                                                    '${state.statisticsList[2].balance} hours'),
+                                                    '${state.statisticsList[2].balance ?? 0} hours'),
                                               ],
                                             ),
                                           ),
@@ -256,7 +256,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                                             onChanged: (_) {},
                                             thumbIcon: Center(
                                               child: Text(
-                                                  '${state.statisticsList[2].consumed}',style: const TextStyle(fontSize: 12)),
+                                                  '${state.statisticsList[2].consumed ?? 0}',style: const TextStyle(fontSize: 12)),
                                             ),
                                             activeColor: Colors.blue[200],
                                             inactiveColor: Colors.white70,
@@ -283,7 +283,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                                             onChanged: (_) {},
                                             thumbIcon: Center(
                                               child: Text(
-                                                  '${state.statisticsList[1].consumed}',style: const TextStyle(fontSize: 12)),
+                                                  '${state.statisticsList[1].consumed ?? 0}',style: const TextStyle(fontSize: 12)),
                                             ),
                                             activeColor: Colors.blue[200],
                                             inactiveColor: Colors.white70,
@@ -292,7 +292,7 @@ class MyRequestsScreenClass extends State<MyRequestsScreen> {
                                       ));
                                 });
                           },
-                          icon: const Icon(Icons.stacked_bar_chart));
+                          icon: const Icon(Icons.stacked_bar_chart)):Container();
                     },
                   )
                 ],

@@ -674,7 +674,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                         current.chosenList.length;
                                   } else {
                                     return current
-                                        .requestedData!.data!.isNotEmpty;
+                                        .requestedData?.data?.isEmpty ?? false;
                                   }
                                 },
                                 builder: (context, state) {
@@ -684,7 +684,7 @@ class EquipmentsRequestScreen extends StatelessWidget {
                                     shrinkWrap: true,
                                     itemCount: (state.requestStatus ==
                                             RequestStatus.oldRequest)
-                                        ? state.requestedData!.data!.length
+                                        ? state.requestedData?.data?.length
                                         : state.chosenList.length,
                                     itemBuilder: (listViewContext, index) {
                                       return Column(

@@ -7,6 +7,7 @@ class ItemCatalogSearchState extends Equatable {
   final ItemCatalogSearchEnumStates itemCatalogSearchEnumStates;
   final ItemCatalogSearchEnumStates itemCatalogAllDataEnumStates;
   final List<ItemCatalogSearchData> searchResult;
+  final List<ItemCatalogFavoriteData> favoriteResult;
   final String searchString;
   final bool detail;
 
@@ -25,6 +26,7 @@ class ItemCatalogSearchState extends Equatable {
    ItemCatalogSearchState({
     this.itemCatalogSearchEnumStates = ItemCatalogSearchEnumStates.initial,
     this.searchResult = const <ItemCatalogSearchData>[],
+    this.favoriteResult = const <ItemCatalogFavoriteData>[],
     this.itemCatalogAllDataEnumStates = ItemCatalogSearchEnumStates.initial,
     this.itemAllDatalist = const <ItemCategorygetAllData>[],
     this.itemsGetAllTree=const<ItemsCatalogTreeModel>[],
@@ -41,6 +43,7 @@ class ItemCatalogSearchState extends Equatable {
   ItemCatalogSearchState copyWith({
     ItemCatalogSearchEnumStates? itemCatalogSearchEnumStates,
     List<ItemCatalogSearchData>? searchResult,
+    List<ItemCatalogFavoriteData>? favoriteResult,
     ItemCatalogSearchEnumStates? itemCatalogAllDataEnumStates,
     List<ItemCategorygetAllData>? itemAllDatalist,
     bool? detail,
@@ -56,6 +59,7 @@ class ItemCatalogSearchState extends Equatable {
       itemCatalogSearchEnumStates: itemCatalogSearchEnumStates ??
           this.itemCatalogSearchEnumStates,
       searchResult: searchResult ?? this.searchResult,
+      favoriteResult: favoriteResult ?? this.favoriteResult,
       itemCatalogAllDataEnumStates: itemCatalogAllDataEnumStates ??
           this.itemCatalogAllDataEnumStates,
       itemAllDatalist: itemAllDatalist ?? this.itemAllDatalist,
@@ -74,6 +78,7 @@ class ItemCatalogSearchState extends Equatable {
       [
         itemCatalogSearchEnumStates,
         searchResult,
+        favoriteResult,
         itemCatalogAllDataEnumStates,
         itemAllDatalist,
         searchString,
@@ -86,30 +91,44 @@ class ItemCatalogSearchState extends Equatable {
         itemsGetItemsCategory
       ];
 
-
-  static ItemCatalogSearchState? fromMap(Map<String, dynamic> json) {
-    if (json.isEmpty) {
-      return ItemCatalogSearchState(
-        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.loadingTreeData,
-        getAllItemsCatalogList: ItemsCatalogCategory(),
-      );
-    }
-    ItemsCatalogCategory list = json['getAllItemsCatalogList'];
-    int val = json['itemCatalogGetAllDataEnumStates'];
-    return ItemCatalogSearchState(
-      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.values[val],
-      getAllItemsCatalogList: list,
-    );
-  }
-
   Map<String, dynamic> toMap() {
     return {
-      'itemCatalogGetAllDataEnumStates':itemCatalogSearchEnumStates.index,
+      // 'itemCatalogSearchEnumStates': itemCatalogSearchEnumStates,
+      // 'itemCatalogAllDataEnumStates': itemCatalogAllDataEnumStates,
+      'searchResult': searchResult,
+      'favoriteResult': favoriteResult,
+      'searchString': searchString,
+      'detail': detail,
+      'itemAllDatalist': itemAllDatalist,
+      'itemsGetItemsCategory': itemsGetItemsCategory,
       'getAllItemsCatalogList': getAllItemsCatalogList,
+      'itemsGetAllTree': itemsGetAllTree,
+      'itemCategoryAttachData': itemCategoryAttachData,
+      'treeDirection': treeDirection,
     };
   }
 
-
+  factory ItemCatalogSearchState.fromMap(Map<String, dynamic> map) {
+    return ItemCatalogSearchState(
+      // itemCatalogSearchEnumStates:
+      //     map['itemCatalogSearchEnumStates'] as ItemCatalogSearchEnumStates,
+      // itemCatalogAllDataEnumStates:
+      //     map['itemCatalogAllDataEnumStates'] as ItemCatalogSearchEnumStates,
+      searchResult: map['searchResult'] as List<ItemCatalogSearchData>,
+      favoriteResult: map['favoriteResult'] as List<ItemCatalogFavoriteData>,
+      searchString: map['searchString'] as String,
+      detail: map['detail'] as bool,
+      itemAllDatalist: map['itemAllDatalist'] as List<ItemCategorygetAllData>,
+      itemsGetItemsCategory:
+          map['itemsGetItemsCategory'] as List<ItemCategorygetAllData>,
+      getAllItemsCatalogList:
+          map['getAllItemsCatalogList'] as ItemsCatalogCategory,
+      itemsGetAllTree: map['itemsGetAllTree'] as List<ItemsCatalogTreeModel>,
+      itemCategoryAttachData:
+          map['itemCategoryAttachData'] as List<ItemCategoryAttachData>,
+      treeDirection: map['treeDirection'] as String,
+    );
+  }
 }
 
 

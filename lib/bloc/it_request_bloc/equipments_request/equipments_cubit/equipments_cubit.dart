@@ -105,59 +105,67 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
       );
       final requestData = await _requestRepository.getEquipmentData(
           requestNo ?? '', requesterHRCode ?? '');
+      if(requestData.code != 200){
+        EasyLoading.showError(
+          'No Data found',
+          maskType: EasyLoadingMaskType.black,
+          dismissOnTap: false,
+        );
+      }else{
+        // ContactsDataFromApi responsiblePerson;
+        // if(requestData.ownerName != null){
+        //   responsiblePerson =  ContactsDataFromApi(
+        //       email: requestData.ownerName!.contains("null")
+        //           ? "No Data"
+        //           : requestData.ownerName,
+        //       name: requestData.ownerName!.contains("null") ||
+        //           requestData.ownerName!.isEmpty ? "No Data" : requestData
+        //           .ownerName);
+        // }else{
+        //   responsiblePerson = const ContactsDataFromApi(
+        //       email:  "No Data",
+        //       name:  "No Data");
+        // }
 
-      // ContactsDataFromApi responsiblePerson;
-      // if(requestData.ownerName != null){
-      //   responsiblePerson =  ContactsDataFromApi(
-      //       email: requestData.ownerName!.contains("null")
-      //           ? "No Data"
-      //           : requestData.ownerName,
-      //       name: requestData.ownerName!.contains("null") ||
-      //           requestData.ownerName!.isEmpty ? "No Data" : requestData
-      //           .ownerName);
-      // }else{
-      //   responsiblePerson = const ContactsDataFromApi(
-      //       email:  "No Data",
-      //       name:  "No Data");
-      // }
+        // final requestDate = RequestDate.dirty(
+        //     GlobalConstants.dateFormatViewed.format(
+        //         GlobalConstants.dateFormatServer.parse(requestData.date!)));
 
-      // final requestDate = RequestDate.dirty(
-      //     GlobalConstants.dateFormatViewed.format(
-      //         GlobalConstants.dateFormatServer.parse(requestData.date!)));
+        var status = "Pending";
+        if (requestData.data?[0].status == 0) {
+          status = "Pending";
+        } else if (requestData.data?[0].status == 1) {
+          status = "Approved";
+        } else if (requestData.data?[0].status == 2) {
+          status = "Rejected";
+        }
+        var token = _requestRepository.userData?.user?.token;
+        final requesterData = await GetEmployeeRepository().getEmployeeData(
+            requestData.data?[0].requestHRCode ?? "", token ?? "");
 
-      var status = "Pending";
-      if (requestData.data![0].status == 0) {
-        status = "Pending";
-      } else if (requestData.data![0].status == 1) {
-        status = "Approved";
-      } else if (requestData.data![0].status == 2) {
-        status = "Rejected";
+        getHistory(
+            serviceId: RequestServiceID.equipmentServiceID,
+            requestNumber: int.parse(requestNo.toString()));
+
+        emit(
+          state.copyWith(
+              requestedData: requestData,
+              requesterData: requesterData,
+              // requestDate: requestDate,
+              // vacationType: int.parse(requestData.vacationType ?? "1"),
+              // responsiblePerson: responsiblePerson,
+              // comment: comments,
+              status: FormzStatus.valid,
+              requestStatus: RequestStatus.oldRequest,
+              statusAction: status,
+              takeActionStatus: (_requestRepository.userData?.user?.userHRCode ==
+                  requestData.data?[0].requestHRCode)
+                  ? TakeActionStatus.view
+                  : TakeActionStatus.takeAction),
+        );
+        EasyLoading.dismiss();
       }
-      var token = _requestRepository.userData?.user?.token;
-      final requesterData = await GetEmployeeRepository().getEmployeeData(
-          requestData.data![0].requestHRCode ?? "", token ?? "");
 
-      getHistory(
-          serviceId: RequestServiceID.equipmentServiceID,
-          requestNumber: int.parse(requestNo.toString()));
-
-      emit(
-        state.copyWith(
-            requestedData: requestData,
-            requesterData: requesterData,
-            // requestDate: requestDate,
-            // vacationType: int.parse(requestData.vacationType ?? "1"),
-            // responsiblePerson: responsiblePerson,
-            // comment: comments,
-            status: FormzStatus.valid,
-            requestStatus: RequestStatus.oldRequest,
-            statusAction: status,
-            takeActionStatus: (_requestRepository.userData?.user?.userHRCode ==
-                    requestData.data?[0].requestHRCode)
-                ? TakeActionStatus.view
-                : TakeActionStatus.takeAction),
-      );
-      EasyLoading.dismiss();
     }
   }
 
