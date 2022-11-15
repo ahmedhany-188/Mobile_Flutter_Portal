@@ -78,16 +78,20 @@ class FavoriteScreen extends StatelessWidget {
                                 color: Colors.grey.shade300,
                                 child: Row(
                                   children: [
-                                    Image.network(
-                                      getCatalogPhotos(
-                                          state.favoriteResult[index].itemPhoto ??
-                                              ""),
-                                      width: 100,
-                                      height: 100,
-                                      errorBuilder: (context, error, stackTrace) =>
-                                          Assets.images.favicon.image(
+                                    Padding(
+                                      padding: const EdgeInsets.only(right:8.0),
+                                      child: Image.network(
+                                        getCatalogPhotos(
+                                            state.favoriteResult[index].itemPhoto ??
+                                                ""),
                                         width: 100,
                                         height: 100,
+                                        fit: BoxFit.fill,
+                                        errorBuilder: (context, error, stackTrace) =>
+                                            Assets.images.favicon.image(
+                                          width: 100,
+                                          height: 100,
+                                        ),
                                       ),
                                     ),
                                     Expanded(
