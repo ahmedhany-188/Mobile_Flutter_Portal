@@ -44,6 +44,7 @@ import '../data/models/contacts_related_models/contacts_data_from_api.dart';
 import '../data/models/subsidiares_model/subsidiares_model.dart';
 import '../screens/apps_screen/apps_screen.dart';
 import '../screens/home_screen/portal_assistant_screen.dart';
+import '../screens/items_catalog_screen/cart_screen.dart';
 import '../screens/items_catalog_screen/favorite_screen.dart';
 import '../screens/my_requests_screen/add_request_screen.dart';
 import '../screens/notification_screen/notifications_screen.dart';
@@ -279,6 +280,9 @@ class AppRouter {
       case FavoriteScreen.routeName:
         return MaterialPageRoute(
             builder: (_) =>  FavoriteScreen());
+      case CartScreen.routeName:
+        return MaterialPageRoute(
+            builder: (_) =>  CartScreen());
 
 
       default:

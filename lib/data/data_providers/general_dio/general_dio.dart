@@ -122,6 +122,16 @@ class GeneralDio {
       ),
     );
   }
+  Future<Response> getItemCatalogCart(String hrCode) async {
+    String url =
+        'InformationTechnology-ItemCatalog/ItmCat_Users_Cart/GetCart?HRCode=$hrCode';
+    return await dio!.get(
+      url,
+      options: Options(
+        headers: {'Authorization': 'Bearer ${userData?.user?.token}'},
+      ),
+    );
+  }
 
   Future<Response> getItemCatalogAllData(
     String itemCode,
@@ -325,9 +335,55 @@ class GeneralDio {
     });
   }
 
+  Future<Response> postItemCatalogCart(dynamic dataToPost) async {
+    String url =
+        'InformationTechnology-ItemCatalog/ItmCat_Users_Cart/AddToCart';
+    return await dio!
+        .post(url,
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: "application/json-patch+json",
+          'Authorization': 'Bearer ${userData?.user?.token}',
+        }),
+        data: dataToPost)
+        .catchError((err) {
+      throw err;
+    });
+  }
+
+
   Future<Response> removeItemCatalogFavorite(int itemId) async {
     String url =
         'InformationTechnology-ItemCatalog/ItmCat_Users_Favorites/RemoveItem?hrCode=${userData?.user?.userHRCode}&itemID=$itemId';
+    return await dio!
+        .delete(
+      url,
+      options: Options(headers: {
+        'Authorization': 'Bearer ${userData?.user?.token}',
+      }),
+    )
+        .catchError((err) {
+      throw err;
+    });
+  }
+
+  Future<Response> removeItemCatalogCart(int itemId) async {
+    String url =
+        'InformationTechnology-ItemCatalog/ItmCat_Users_Cart/DeleteItemCart?HRCode=${userData?.user?.userHRCode}&ItemCode=$itemId';
+    return await dio!
+        .delete(
+      url,
+      options: Options(headers: {
+        'Authorization': 'Bearer ${userData?.user?.token}',
+      }),
+    )
+        .catchError((err) {
+      throw err;
+    });
+  }
+
+  Future<Response> removeAllFavorite() async {
+    String url =
+        'InformationTechnology-ItemCatalog/ItmCat_Users_Favorites/RemoveAll?hrCode=${userData?.user?.userHRCode}';
     return await dio!
         .delete(
       url,

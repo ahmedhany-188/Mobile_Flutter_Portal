@@ -7,11 +7,12 @@ import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cu
 import '../../constants/colors.dart';
 import '../../constants/url_links.dart';
 import '../../gen/assets.gen.dart';
+import 'favorite_screen.dart';
 import 'item_catalog_search_widget.dart';
 
-class FavoriteScreen extends StatelessWidget {
-  const FavoriteScreen({Key? key}) : super(key: key);
-  static const routeName = 'item-catalog-favorite-screen';
+class CartScreen extends StatelessWidget {
+  const CartScreen({Key? key}) : super(key: key);
+  static const routeName = 'item-catalog-cart-screen';
 
   @override
   Widget build(BuildContext context) {
@@ -23,17 +24,24 @@ class FavoriteScreen extends StatelessWidget {
         child: Hero(
           tag: 'hero',
           child: AppBar(
-            title: const Text('Favorite'),
+            title: const Text('Cart'),
             elevation: 0,
             backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
-            bottom: PreferredSize(
-              preferredSize: const Size.fromHeight(10.0),
-              child: TextButton(onPressed: ()async{
-                await ItemCatalogSearchCubit.get(context).deleteAllFavorite(hrCode: user.employeeData?.userHrCode ??"");
-              },
-                  child: const Text('Clear List',style: TextStyle(color: ConstantsColors.redAttendance),)),
-            ),
             centerTitle: true,
+            actions: [
+              BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                builder: (context, state) {
+                  return IconButton(
+                      onPressed: () async {
+                        ItemCatalogSearchCubit.get(context).clearData();
+
+                        await Navigator.of(context)
+                            .pushNamed(FavoriteScreen.routeName);
+                      },
+                      icon: const Icon(Icons.favorite));
+                },
+              ),
+            ],
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(25),
@@ -43,23 +51,23 @@ class FavoriteScreen extends StatelessWidget {
       ),
       body: BlocProvider<ItemCatalogSearchCubit>.value(
         value: ItemCatalogSearchCubit.get(context)
-          ..getFavoriteItems(userHrCode: user.employeeData?.userHrCode ?? ""),
+          ..getCartItems(userHrCode: user.employeeData?.userHrCode ?? ""),
         child: BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
           builder: (context, state) {
             if (state.detail == false) {
               return Column(
                 children: [
-              const Padding(
-              padding: EdgeInsets.only(
-                left: 20.0,
-                bottom: 5,
-                top: 10,
-              ),),
+                  const Padding(
+                    padding: EdgeInsets.only(
+                      left: 20.0,
+                      bottom: 5,
+                      top: 10,
+                    ),),
                   Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
                       physics: const BouncingScrollPhysics(),
-                      itemCount: state.favoriteResult.length,
+                      itemCount: state.cartResult.length,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.only(
@@ -68,7 +76,7 @@ class FavoriteScreen extends StatelessWidget {
                             onTap: () {
                               ItemCatalogSearchCubit.get(context).setDetail(
                                   itemCode:
-                                      state.favoriteResult[index].itemCode ?? "");
+                                  state.cartResult[index].itmCatItems?.itemCode ?? "");
                             },
                             borderRadius: BorderRadius.circular(20),
                             child: ClipRRect(
@@ -79,19 +87,19 @@ class FavoriteScreen extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(right:8.0),
+                                      padding: const EdgeInsets.only(right: 8.0),
                                       child: Image.network(
                                         getCatalogPhotos(
-                                            state.favoriteResult[index].itemPhoto ??
+                                            state.cartResult[index].itmCatItems?.itemPhoto ??
                                                 ""),
                                         width: 100,
                                         height: 100,
-                                        fit: BoxFit.fill,
+                                        fit:BoxFit.fill,
                                         errorBuilder: (context, error, stackTrace) =>
                                             Assets.images.favicon.image(
-                                          width: 100,
-                                          height: 100,
-                                        ),
+                                              width: 100,
+                                              height: 100,
+                                            ),
                                       ),
                                     ),
                                     Expanded(
@@ -99,10 +107,15 @@ class FavoriteScreen extends StatelessWidget {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              state.favoriteResult[index].itemName ??
+                                              state.cartResult[index].itmCatItems?.itemName ??
                                                   "Not Defined",
                                               style: const TextStyle(
                                                 fontSize: 18,
+                                              )),
+                                          Text(
+                                              "Quantity: ${state.cartResult[index].itemQty ?? 0}",
+                                              style: const TextStyle(
+                                                fontSize: 15,
                                               )),
                                         ],
                                       ),

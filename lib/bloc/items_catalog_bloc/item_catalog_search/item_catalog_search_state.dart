@@ -8,6 +8,7 @@ class ItemCatalogSearchState extends Equatable {
   final ItemCatalogSearchEnumStates itemCatalogAllDataEnumStates;
   final List<ItemCatalogSearchData> searchResult;
   final List<ItemCatalogFavoriteData> favoriteResult;
+  final List<CartModelData> cartResult;
   final String searchString;
   final bool detail;
 
@@ -27,6 +28,7 @@ class ItemCatalogSearchState extends Equatable {
     this.itemCatalogSearchEnumStates = ItemCatalogSearchEnumStates.initial,
     this.searchResult = const <ItemCatalogSearchData>[],
     this.favoriteResult = const <ItemCatalogFavoriteData>[],
+    this.cartResult = const <CartModelData>[],
     this.itemCatalogAllDataEnumStates = ItemCatalogSearchEnumStates.initial,
     this.itemAllDatalist = const <ItemCategorygetAllData>[],
     this.itemsGetAllTree=const<ItemsCatalogTreeModel>[],
@@ -44,6 +46,7 @@ class ItemCatalogSearchState extends Equatable {
     ItemCatalogSearchEnumStates? itemCatalogSearchEnumStates,
     List<ItemCatalogSearchData>? searchResult,
     List<ItemCatalogFavoriteData>? favoriteResult,
+    List<CartModelData>? cartResult,
     ItemCatalogSearchEnumStates? itemCatalogAllDataEnumStates,
     List<ItemCategorygetAllData>? itemAllDatalist,
     bool? detail,
@@ -60,6 +63,7 @@ class ItemCatalogSearchState extends Equatable {
           this.itemCatalogSearchEnumStates,
       searchResult: searchResult ?? this.searchResult,
       favoriteResult: favoriteResult ?? this.favoriteResult,
+      cartResult: cartResult ?? this.cartResult,
       itemCatalogAllDataEnumStates: itemCatalogAllDataEnumStates ??
           this.itemCatalogAllDataEnumStates,
       itemAllDatalist: itemAllDatalist ?? this.itemAllDatalist,
@@ -79,6 +83,7 @@ class ItemCatalogSearchState extends Equatable {
         itemCatalogSearchEnumStates,
         searchResult,
         favoriteResult,
+        cartResult,
         itemCatalogAllDataEnumStates,
         itemAllDatalist,
         searchString,
@@ -93,10 +98,11 @@ class ItemCatalogSearchState extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
-      // 'itemCatalogSearchEnumStates': itemCatalogSearchEnumStates,
-      // 'itemCatalogAllDataEnumStates': itemCatalogAllDataEnumStates,
+      // 'itemCatalogSearchEnumStates': this.itemCatalogSearchEnumStates,
+      // 'itemCatalogAllDataEnumStates': this.itemCatalogAllDataEnumStates,
       'searchResult': searchResult,
       'favoriteResult': favoriteResult,
+      'cartResult': cartResult,
       'searchString': searchString,
       'detail': detail,
       'itemAllDatalist': itemAllDatalist,
@@ -116,6 +122,7 @@ class ItemCatalogSearchState extends Equatable {
       //     map['itemCatalogAllDataEnumStates'] as ItemCatalogSearchEnumStates,
       searchResult: map['searchResult'] as List<ItemCatalogSearchData>,
       favoriteResult: map['favoriteResult'] as List<ItemCatalogFavoriteData>,
+      cartResult: map['cartResult'] as List<CartModelData>,
       searchString: map['searchString'] as String,
       detail: map['detail'] as bool,
       itemAllDatalist: map['itemAllDatalist'] as List<ItemCategorygetAllData>,
