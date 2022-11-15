@@ -110,6 +110,10 @@ dependencies:
   qr_flutter: ^4.0.0
   vcard_maintained: any
 
+  #SOS libraries
+  shake: ^2.1.0
+  geolocator: 9.0.2
+
   #functionality helper
   formz: ^0.4.1
   device_info: ^2.0.3

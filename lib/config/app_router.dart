@@ -31,6 +31,7 @@ import 'package:hassanallamportalflutter/screens/news_screen/news_letter_screen.
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
+import 'package:hassanallamportalflutter/screens/sos_screen/sos_alert_screen.dart';
 import 'package:hassanallamportalflutter/screens/splash_screen/splash_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 import 'package:hassanallamportalflutter/screens/staff_dashboard_screen/staff_dashboard_detail_screen.dart';
@@ -197,6 +198,11 @@ class AppRouter {
       case BusinessCardScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => BusinessCardScreen(requestData: settings.arguments),
+        );
+
+      case SOSAlertScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const SOSAlertScreen(),
         );
 
       case EmbassyLetterScreen.routeName:
