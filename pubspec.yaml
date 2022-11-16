@@ -64,7 +64,7 @@ dependencies:
   dropdown_search: ^5.0.2
   syncfusion_flutter_sliders: ^20.2.50
   syncfusion_flutter_gauges: ^20.2.50
-  to_csv: ^1.1.1
+  syncfusion_flutter_xlsio: ^20.2.50-beta
 
 
 

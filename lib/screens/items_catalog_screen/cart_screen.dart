@@ -6,13 +6,14 @@ import 'dart:io';
 import 'package:open_file/open_file.dart' as open_file;
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-import 'package:to_csv/to_csv.dart' as exportCSV;
+
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/url_links.dart';
 import '../../gen/assets.gen.dart';
+import 'export_excel.dart';
 import 'favorite_screen.dart';
 import 'item_catalog_search_widget.dart';
 
@@ -87,9 +88,7 @@ class CartScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: (){
-          exportCSV.myCSV(['a7a'], [['55']]);
-        },
+        onPressed: importData,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         icon: const Icon(Icons.panorama_vertical_select),
         label: const Text('Export to Excel'),
