@@ -6,7 +6,7 @@ import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Row,Column;
 
 import '../../data/models/items_catalog_models/item_catalog_cart_model.dart';
 
-Future<void> importData() async {
+Future<void> importData(List<CartModelData> reports) async {
   //Create a Excel document.
   //Creating a workbook.
   final Workbook workbook = Workbook();
@@ -15,7 +15,7 @@ Future<void> importData() async {
   final Worksheet sheet = workbook.worksheets[0];
 
   //List of data to import data.
-  final Future<List<ExcelDataRow>> dataRows = _buildCustomersDataRowsIH();
+  final Future<List<ExcelDataRow>> dataRows = _buildCustomersDataRowsIH(reports);
 
   List<ExcelDataRow> dataRows_1 = await Future.value(dataRows);
 
@@ -41,9 +41,10 @@ Future<void> importData() async {
   await OpenFile.open('$path/ImportData.xlsx');
 }
 
-Future<List<ExcelDataRow>> _buildCustomersDataRowsIH() async {
+Future<List<ExcelDataRow>> _buildCustomersDataRowsIH(List<CartModelData> list) async {
   List<ExcelDataRow> excelDataRows = <ExcelDataRow>[];
-  final Future<List<CartModelData>> reports = _getCustomersImageHyperlink();
+  // final Future<List<CartModelData>> reports = _getCustomersImageHyperlink();
+  final List<CartModelData> reports = list;
 
   List<CartModelData> reports_1 = await Future.value(reports);
 
@@ -63,56 +64,56 @@ Future<List<ExcelDataRow>> _buildCustomersDataRowsIH() async {
   return excelDataRows;
 }
 
-Future<List<CartModelData>> _getCustomersImageHyperlink() async {
-  final List<CartModelData> reports = <CartModelData>[];
-
-  // final Hyperlink link = Hyperlink.add('https://www.syncfusion.com',
-  //     'Hyperlink', 'Syncfusion', HyperlinkType.url);
-
-  // Picture pic = Picture(await _readImageData('Woman1.jpg'));
-  // pic.width = 200;
-  // pic.height = 200;
-  // pic.hyperlink = link;
-  CartModelData customer = CartModelData();
-  // customer.hyperlink = link;
-  // customer.image = pic;
-  reports.add(customer);
-
-  // pic = Picture(await _readImageData('Man4.png'));
-  // pic.width = 200;
-  // pic.height = 200;
-  // pic.hyperlink = link;
-  customer = CartModelData();
-  // customer.hyperlink = link;
-  // customer.image = pic;
-  reports.add(customer);
-
-  // pic = Picture(await _readImageData('Woman12.jpg'));
-  // pic.width = 200;
-  // pic.height = 200;
-  // pic.hyperlink = link;
-  // customer = CartModelData('Antonio Moreno Taquería', 75000, 64000, -15);
-  // customer.hyperlink = link;
-  // customer.image = pic;
-  // reports.add(customer);
-  //
-  // pic = Picture(await _readImageData('Man16.jpg'));
-  // pic.width = 200;
-  // pic.height = 200;
-  // pic.hyperlink = link;
-  // customer = CartModelData('Thomas Hardy', 56500, 33600, -40);
-  // customer.hyperlink = link;
-  // customer.image = pic;
-  // reports.add(customer);
-  //
-  // pic = Picture(await _readImageData('Man6.png'));
-  // pic.width = 200;
-  // pic.height = 200;
-  // pic.hyperlink = link;
-  customer = CartModelData();
-  // customer.hyperlink = link;
-  // customer.image = pic;
-  reports.add(customer);
-
-  return reports;
-}
+// Future<List<CartModelData>> _getCustomersImageHyperlink() async {
+//   final List<CartModelData> reports = <CartModelData>[];
+//
+//   // final Hyperlink link = Hyperlink.add('https://www.syncfusion.com',
+//   //     'Hyperlink', 'Syncfusion', HyperlinkType.url);
+//
+//   // Picture pic = Picture(await _readImageData('Woman1.jpg'));
+//   // pic.width = 200;
+//   // pic.height = 200;
+//   // pic.hyperlink = link;
+//   CartModelData customer = CartModelData();
+//   // customer.hyperlink = link;
+//   // customer.image = pic;
+//   reports.add(customer);
+//
+//   // pic = Picture(await _readImageData('Man4.png'));
+//   // pic.width = 200;
+//   // pic.height = 200;
+//   // pic.hyperlink = link;
+//   customer = CartModelData();
+//   // customer.hyperlink = link;
+//   // customer.image = pic;
+//   reports.add(customer);
+//
+//   // pic = Picture(await _readImageData('Woman12.jpg'));
+//   // pic.width = 200;
+//   // pic.height = 200;
+//   // pic.hyperlink = link;
+//   // customer = CartModelData('Antonio Moreno Taquería', 75000, 64000, -15);
+//   // customer.hyperlink = link;
+//   // customer.image = pic;
+//   // reports.add(customer);
+//   //
+//   // pic = Picture(await _readImageData('Man16.jpg'));
+//   // pic.width = 200;
+//   // pic.height = 200;
+//   // pic.hyperlink = link;
+//   // customer = CartModelData('Thomas Hardy', 56500, 33600, -40);
+//   // customer.hyperlink = link;
+//   // customer.image = pic;
+//   // reports.add(customer);
+//   //
+//   // pic = Picture(await _readImageData('Man6.png'));
+//   // pic.width = 200;
+//   // pic.height = 200;
+//   // pic.hyperlink = link;
+//   customer = CartModelData();
+//   // customer.hyperlink = link;
+//   // customer.image = pic;
+//   reports.add(customer);
+//
+//   return reports;
+// }
