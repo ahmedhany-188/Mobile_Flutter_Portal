@@ -49,15 +49,27 @@ Future<List<ExcelDataRow>> _buildCustomersDataRowsIH(List<CartModelData> list) a
   List<CartModelData> reports_1 = await Future.value(reports);
 
   excelDataRows = reports_1.map<ExcelDataRow>((CartModelData dataRow) {
+    // TODO: call API to get item details :)
     return ExcelDataRow(cells: <ExcelDataCell>[
-      ExcelDataCell(columnHeader: 'Sales Person', value: 'dataRow.salesPerson'),
-      ExcelDataCell(
-          columnHeader: 'Sales Jan to June', value: 'dataRow.salesJanJune'),
-      ExcelDataCell(
-          columnHeader: 'Sales July to Dec', value: 'dataRow.salesJulyDec'),
-      ExcelDataCell(columnHeader: 'Change', value: 'dataRow.change'),
-      ExcelDataCell(columnHeader: 'Hyperlink', value: 'dataRow.hyperlink'),
-      ExcelDataCell(columnHeader: 'Images Hyperlinks', value: 'dataRow.image')
+      ExcelDataCell(columnHeader: 'Item of Requisition', value: dataRow.itemCode),
+      ExcelDataCell(columnHeader: 'Acct Assignment Cat.', value: ""),
+      ExcelDataCell(columnHeader: 'Item Category', value: 'dataRow.itmCatItems?.category'),
+      ExcelDataCell(columnHeader: 'Short Text', value: dataRow.itmCatItems?.itemName),
+      ExcelDataCell(columnHeader: 'Quantity', value: dataRow.itemQty),
+      ExcelDataCell(columnHeader: 'Base Unit of Measure', value: dataRow.itmCatItems?.itmCatUOM),
+      ExcelDataCell(columnHeader: 'Deliv. date category', value: ""),
+      ExcelDataCell(columnHeader: 'Deliv. date(From/to)', value: ""),
+      ExcelDataCell(columnHeader: 'Material Group', value: dataRow.itemCode),
+      ExcelDataCell(columnHeader: 'Material Type', value: dataRow.itemCode),
+      ExcelDataCell(columnHeader: 'Description', value: dataRow.itmCatItems?.itemDesc),
+      ExcelDataCell(columnHeader: 'Plant', value: ""),
+      ExcelDataCell(columnHeader: 'Storage location', value: ""),
+      ExcelDataCell(columnHeader: 'Purchasing Group', value: ""),
+      ExcelDataCell(columnHeader: 'Short Text 1', value: ""),
+      ExcelDataCell(columnHeader: 'Gross value', value: ""),
+      ExcelDataCell(columnHeader: 'Order', value: ""),
+      ExcelDataCell(columnHeader: 'Activity', value: ""),
+      ExcelDataCell(columnHeader: 'Long Text', value: ""),
     ]);
   }).toList();
 
