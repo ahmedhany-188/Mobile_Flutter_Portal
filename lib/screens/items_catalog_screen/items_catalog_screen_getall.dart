@@ -8,6 +8,7 @@ import 'package:hassanallamportalflutter/screens/items_catalog_screen/new_reques
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
+import 'cart_screen.dart';
 import 'favorite_screen.dart';
 import 'item_catalog_search_widget.dart';
 
@@ -129,6 +130,17 @@ class ItemsCatalogGetAllScreenStateClass
                           },
                           icon: const Icon(Icons.favorite));
                     },
+                  ),
+                  BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                    builder: (context, state) {
+                      return IconButton(
+                          onPressed: () async {
+                            Navigator.of(context)
+                                .pushNamed(CartScreen.routeName);
+                          },
+                          icon: const Icon(Icons.shopping_cart));
+                    },
+                  ),
                   ),
 
                        IconButton(

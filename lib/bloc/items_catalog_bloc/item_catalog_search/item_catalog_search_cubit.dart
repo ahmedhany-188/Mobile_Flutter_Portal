@@ -10,6 +10,7 @@ import 'package:hydrated_bloc/hydrated_bloc.dart';
 import '../../../data/data_providers/general_dio/general_dio.dart';
 import '../../../data/data_providers/requests_data_providers/request_data_providers.dart';
 import '../../../data/models/items_catalog_models/item_catalog_all_data.dart';
+import '../../../data/models/items_catalog_models/item_catalog_cart_model.dart';
 import '../../../data/models/items_catalog_models/item_catalog_favorite.dart';
 import '../../../data/models/items_catalog_models/item_catalog_search_model.dart';
 part 'item_catalog_search_state.dart';
@@ -95,6 +96,33 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         EasyLoading.dismiss();
         emit(state.copyWith(
           favoriteResult: [],
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+        ));
+      } else {
+        throw RequestFailureApi.fromCode(value.statusCode!);
+      }
+    });
+
+  }
+
+  void getCartItems({required String userHrCode}) async{
+    emit(state.copyWith(
+      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
+    ));
+    await _generalDio.getItemCatalogCart(userHrCode).then((value) {
+      if (value.data['data'] != null && value.statusCode == 200) {
+        List<CartModelData> cartResult =
+        List<CartModelData>.from(value.data['data']
+            .map((model) => CartModelData.fromJson(model)));
+        emit(state.copyWith(
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+          cartResult: cartResult,
+        ));
+      }
+      else if (value.data['data'] == null) {
+        EasyLoading.dismiss();
+        emit(state.copyWith(
+          cartResult: [],
           itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
         ));
       } else {
@@ -198,9 +226,8 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     };
     await _generalDio.postItemCatalogFavorite(favoriteDataPost).
     then((value) {
-      print(value);
       getFavoriteItems(userHrCode: hrCode);
-      EasyLoading.showSuccess('Item Added to Favorite');
+      EasyLoading.dismiss();
     })
         .catchError((e) {
       EasyLoading.showError('Something went wrong');
@@ -214,9 +241,159 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     ));
     await _generalDio.removeItemCatalogFavorite(itemId).
     then((value) {
-      print(value);
       getFavoriteItems(userHrCode: hrCode);
-      EasyLoading.showSuccess('Item Deleted From Favorite');
+      EasyLoading.dismiss();
+    })
+        .catchError((e) {
+      EasyLoading.showError('Something went wrong');
+      throw e;
+    });
+  }
+  Future<void> deleteAllFavorite({required String hrCode}) async{
+    EasyLoading.show(status: 'Loading...');
+    emit(state.copyWith(
+      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
+    ));
+    await _generalDio.removeAllFavorite().
+    then((value) {
+      getFavoriteItems(userHrCode: hrCode);
+      EasyLoading.dismiss();
+    })
+        .catchError((e) {
+      EasyLoading.showError('Something went wrong');
+      throw e;
+    });
+  }
+
+  Future<void> addToCart({required String hrCode, required int itemCode,required int qty}) async{
+    EasyLoading.show(status: 'Loading...');
+    emit(state.copyWith(
+      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
+    ));
+    Map<String, dynamic> cartDataPost =
+    {
+      "id": 0,
+      "orderID": 0,
+      "hrCode": hrCode,
+      "item_Code": itemCode,
+      // "itmCat_Items": {
+      //   "item_ID": 0,
+      //   "requestNo": 0,
+      //   "systemItemCode": "",
+      //   "itemCode": "",
+      //   "item_Name": "",
+      //   "item_Desc": "",
+      //   "item_Qty": 0,
+      //   "item_Price": 0,
+      //   "item_AppearPrice": true,
+      //   "in_User": "",
+      //   "in_Date": DateTime.now().toString(),
+      //   "up_User": "",
+      //   "up_Date":  DateTime.now().toString(),
+      //   // "items_Attaches": [
+      //   //   {
+      //   //     "id": 0,
+      //   //     "item_ID": 0,
+      //   //     "attach_File": "string",
+      //   //     "in_User": "string",
+      //   //     "in_Date":  DateTime.now().toString(),
+      //   //     "up_User": "string",
+      //   //     "up_Date":  DateTime.now().toString()
+      //   //   }
+      //   // ],
+      //   "cat_ID": 0,
+      //   // "category": {
+      //   //   "cat_id": 0,
+      //   //   "parent_ID": 0,
+      //   //   "cat_Name": "string",
+      //   //   "cat_Code": "string",
+      //   //   "cat_Desc": "string",
+      //   //   "cat_Photo": "string",
+      //   //   "cat_StartDate":  DateTime.now().toString(),
+      //   //   "cat_EndDate":  DateTime.now().toString(),
+      //   //   "tags": "string",
+      //   //   "isActive": true,
+      //   //   "allow_Items": true,
+      //   //   "in_User": "string",
+      //   //   "in_Date":  DateTime.now().toString(),
+      //   //   "up_User": "string",
+      //   //   "up_Date":  DateTime.now().toString(),
+      //   //   "category_Attach": [
+      //   //     {
+      //   //       "id": 0,
+      //   //       "cat_id": 0,
+      //   //       "attach_file": "string",
+      //   //       "in_User": "string",
+      //   //       "in_Date":  DateTime.now().toString(),
+      //   //       "up_User": "string",
+      //   //       "up_Date":  DateTime.now().toString()
+      //   //     }
+      //   //   ]
+      //   // },
+      //   "item_UOM": 0,
+      //   // "itmCat_UOM": {
+      //   //   "id": 0,
+      //   //   "unit_Name": "string",
+      //   //   "in_User": "string",
+      //   //   "in_Date":  DateTime.now().toString(),
+      //   //   "up_User": "string",
+      //   //   "up_Date":  DateTime.now().toString()
+      //   // },
+      //   "item_MatGroup": 0,
+      //   // "matrialGroup": {
+      //   //   "id": 0,
+      //   //   "material_Name": "string",
+      //   //   "group_Desc": "string",
+      //   //   "in_User": "string",
+      //   //   "in_Date":  DateTime.now().toString(),
+      //   //   "up_User": "string",
+      //   //   "up_Date":  DateTime.now().toString()
+      //   // },
+      //   "item_MatType": 0,
+      //   // "materialType": {
+      //   //   "id": 0,
+      //   //   "materialTyp_Name": "string",
+      //   //   "type_Desc": "string",
+      //   //   "in_User": "string",
+      //   //   "in_Date":  DateTime.now().toString(),
+      //   //   "up_User": "string",
+      //   //   "up_Date":  DateTime.now().toString()
+      //   // },
+      //   "item_Photo": "",
+      //   "tags": "",
+      //   "enableBrand": true,
+      //   "enableColor": true,
+      //   "expirationDateFlag": true,
+      //   "arabicDesc": ""
+      // },
+      "item_Qty": qty,
+      "isClosed": true,
+      "in_User": hrCode,
+      "in_Date":  DateTime.now().toString(),
+      "up_User": "",
+      "up_Date":  DateTime.now().toString()
+    };
+    await _generalDio.postItemCatalogCart(cartDataPost).
+    then((value) {
+      // TODO: add to cart respnse here {value}
+      print(value);
+      getCartItems(userHrCode: hrCode);
+      EasyLoading.dismiss();
+    })
+        .catchError((e) {
+      EasyLoading.showError('Something went wrong');
+      throw e;
+    });
+  }
+  Future<void> deleteFromCart({required String hrCode,required int itemId}) async{
+    EasyLoading.show(status: 'Loading...');
+    emit(state.copyWith(
+      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
+    ));
+    await _generalDio.removeItemCatalogCart(itemId).
+    then((value) {
+      getCartItems(userHrCode: hrCode);
+      EasyLoading.dismiss();
     })
         .catchError((e) {
       EasyLoading.showError('Something went wrong');
