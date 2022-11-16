@@ -184,7 +184,7 @@ class AppRouter {
         );
       case NewRequestCatalogScreen.routeName:
         return MaterialPageRoute(
-        builder: (_) => const NewRequestCatalogScreen(),
+        builder: (_) =>  NewRequestCatalogScreen(requestData: settings.arguments),
         );
       case PhotosScreen.routeName:
         return MaterialPageRoute(
