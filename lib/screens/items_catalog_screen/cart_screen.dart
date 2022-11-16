@@ -88,7 +88,7 @@ class CartScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: importData,
+        onPressed: () => importData(ItemCatalogSearchCubit.get(context).state.cartResult),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         icon: const Icon(Icons.panorama_vertical_select),
         label: const Text('Export to Excel'),
