@@ -2,6 +2,12 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'dart:io';
+import 'package:open_file/open_file.dart' as open_file;
+import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+import 'package:to_csv/to_csv.dart' as exportCSV;
+
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
 import '../../constants/colors.dart';
@@ -14,8 +20,39 @@ class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
   static const routeName = 'item-catalog-cart-screen';
 
+  Future<void> saveAndLaunchFile(List<int> bytes, String fileName) async {
+    //Get the storage folder location using path_provider package.
+    String? path;
+    if (Platform.isAndroid ||
+        Platform.isIOS ||
+        Platform.isLinux ||
+        Platform.isWindows) {
+      final Directory directory =
+      await path_provider.getApplicationSupportDirectory();
+      path = directory.path;
+    } else {
+      path = await PathProviderPlatform.instance.getApplicationSupportPath();
+    }
+    final File file =
+    File(Platform.isWindows ? '$path\\$fileName' : '$path/$fileName');
+    await file.writeAsBytes(bytes, flush: true);
+    if (Platform.isAndroid || Platform.isIOS) {
+      //Launch the file (used open_file package)
+      await open_file.OpenFile.open('$path/$fileName');
+    } else if (Platform.isWindows) {
+      await Process.run('start', <String>['$path\\$fileName'], runInShell: true);
+    } else if (Platform.isMacOS) {
+      await Process.run('open', <String>['$path/$fileName'], runInShell: true);
+    } else if (Platform.isLinux) {
+      await Process.run('xdg-open', <String>['$path/$fileName'],
+          runInShell: true);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+
+
     MainUserData user = BlocProvider.of<AppBloc>(context).state.userData;
 
     return Scaffold(
@@ -49,6 +86,14 @@ class CartScreen extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: (){
+          exportCSV.myCSV(['a7a'], [['55']]);
+        },
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+        icon: const Icon(Icons.panorama_vertical_select),
+        label: const Text('Export to Excel'),
+      ),
       body: BlocProvider<ItemCatalogSearchCubit>.value(
         value: ItemCatalogSearchCubit.get(context)
           ..getCartItems(userHrCode: user.employeeData?.userHrCode ?? ""),
@@ -62,7 +107,8 @@ class CartScreen extends StatelessWidget {
                       left: 20.0,
                       bottom: 5,
                       top: 10,
-                    ),),
+                    ),
+                  ),
                   Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
@@ -75,8 +121,9 @@ class CartScreen extends StatelessWidget {
                           child: InkWell(
                             onTap: () {
                               ItemCatalogSearchCubit.get(context).setDetail(
-                                  itemCode:
-                                  state.cartResult[index].itmCatItems?.itemCode ?? "");
+                                  itemCode: state.cartResult[index].itmCatItems
+                                          ?.itemCode ??
+                                      "");
                             },
                             borderRadius: BorderRadius.circular(20),
                             child: ClipRRect(
@@ -87,27 +134,31 @@ class CartScreen extends StatelessWidget {
                                 child: Row(
                                   children: [
                                     Padding(
-                                      padding: const EdgeInsets.only(right: 8.0),
+                                      padding:
+                                          const EdgeInsets.only(right: 8.0),
                                       child: Image.network(
-                                        getCatalogPhotos(
-                                            state.cartResult[index].itmCatItems?.itemPhoto ??
-                                                ""),
+                                        getCatalogPhotos(state.cartResult[index]
+                                                .itmCatItems?.itemPhoto ??
+                                            ""),
                                         width: 100,
                                         height: 100,
-                                        fit:BoxFit.fill,
-                                        errorBuilder: (context, error, stackTrace) =>
-                                            Assets.images.favicon.image(
-                                              width: 100,
-                                              height: 100,
-                                            ),
+                                        fit: BoxFit.fill,
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
+                                                Assets.images.favicon.image(
+                                          width: 100,
+                                          height: 100,
+                                        ),
                                       ),
                                     ),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              state.cartResult[index].itmCatItems?.itemName ??
+                                              state.cartResult[index]
+                                                      .itmCatItems?.itemName ??
                                                   "Not Defined",
                                               style: const TextStyle(
                                                 fontSize: 18,
