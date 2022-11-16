@@ -141,7 +141,7 @@ class ItemsCatalogGetAllScreenStateClass
                           icon: const Icon(Icons.shopping_cart));
                     },
                   ),
-                  ),
+
 
                        IconButton(
                           onPressed: () async {

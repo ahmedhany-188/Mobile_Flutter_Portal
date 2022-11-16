@@ -518,6 +518,12 @@ class _MyAppState extends State<MyApp> {
             lazy: true,
           ),
 
+          // BlocProvider<NewRequestCatalogCubit>(
+          //   create: (newRequestCatalogContext) => NewRequestCatalogCubit(GeneralDio(
+          //       BlocProvider.of<AppBloc>(newRequestCatalogContext).state.userData)),
+          //   lazy: true,
+          // ),
+
           // BlocProvider<PermissionCubit>(
           //   create: (permissionContext) => PermissionCubit()..getRequestData(RequestStatus.newRequest),
           // ),

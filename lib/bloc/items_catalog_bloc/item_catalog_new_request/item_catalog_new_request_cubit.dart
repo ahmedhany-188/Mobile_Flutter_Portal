@@ -47,6 +47,10 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
 
   }
 
+  void newFunctionForTest(){
+    print("");
+  }
+
 
 
 }

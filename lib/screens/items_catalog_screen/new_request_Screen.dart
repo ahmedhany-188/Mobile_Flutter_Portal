@@ -1,10 +1,12 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_new_request/item_catalog_new_request_cubit.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_new_request/item_catalog_new_request_state.dart';
+import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
 
 
 class NewRequestCatalogScreen extends StatefulWidget {
@@ -20,18 +22,16 @@ class NewRequestCatalogScreen extends StatefulWidget {
 class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
   @override
   Widget build(BuildContext context) {
-    // final user = context.select((AppBloc bloc) => bloc.state.userData);
+    final user = context.select((AppBloc bloc) => bloc.state.userData);
 
-    // final currentRequestData = widget.requestData;
+    final currentRequestData = widget.requestData;
 
     return
-      // BlocProvider<NewRequestCatalogCubit>(
-      // create: (embassyContext)=>
-      // currentRequestData == "0"? (NewRequestCatalogCubit
-      //   (RequestRepository(user))..getRequestData(requestStatus: RequestStatus.newRequest)),
-      //
-      // child:
-      BlocBuilder<NewRequestCatalogCubit,NewRequestCatalogInitial>(
+      BlocProvider<NewRequestCatalogCubit>(
+      create: (embassyContext)=>
+      (NewRequestCatalogCubit(RequestRepository(user))..newFunctionForTest()),
+
+      child: BlocBuilder<NewRequestCatalogCubit,NewRequestCatalogInitial>(
         builder: (context,state) {
           return WillPopScope(
               onWillPop: () async {
@@ -70,9 +70,12 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                           bottomRight: Radius.circular(25))),
                 ),
                 floatingActionButton: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
+
                     FloatingActionButton.extended(
                       heroTag: null,
+
                       onPressed: () {
                         // context.read<EmbassyLetterCubit>()
                         //     .submitEmbassyLetter();
@@ -186,7 +189,7 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
           );
         },
 
-      // ),
+      ),
 
     );
 
