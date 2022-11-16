@@ -46,6 +46,7 @@ import '../data/models/subsidiares_model/subsidiares_model.dart';
 import '../screens/apps_screen/apps_screen.dart';
 import '../screens/home_screen/portal_assistant_screen.dart';
 import '../screens/items_catalog_screen/favorite_screen.dart';
+import '../screens/items_catalog_screen/new_request_Screen.dart';
 import '../screens/my_requests_screen/add_request_screen.dart';
 import '../screens/notification_screen/notifications_screen.dart';
 import '../screens/polls_screen/polls_screen.dart';
@@ -179,6 +180,10 @@ class AppRouter {
       case NewsScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => const NewsScreen(),
+        );
+      case NewRequestCatalogScreen.routeName:
+        return MaterialPageRoute(
+        builder: (_) => const NewRequestCatalogScreen(),
         );
       case PhotosScreen.routeName:
         return MaterialPageRoute(

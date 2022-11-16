@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/data_providers/general_dio/general_dio.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/new_request_Screen.dart';
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
@@ -128,7 +129,14 @@ class ItemsCatalogGetAllScreenStateClass
                           },
                           icon: const Icon(Icons.favorite));
                     },
-                  )
+                  ),
+
+                       IconButton(
+                          onPressed: () async {
+                            Navigator.of(context)
+                                .pushNamed(NewRequestCatalogScreen.routeName);
+                          },
+                          icon: const Icon(Icons.add))
                 ],
               ),
             ),
