@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_new_request/item_catalog_new_request_state.dart';
 import 'package:hassanallamportalflutter/data/repositories/request_repository.dart';
@@ -28,6 +29,8 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
     });
   }
 
+  static NewRequestCatalogCubit get(context) => BlocProvider.of(context);
+
   final Connectivity connectivity = Connectivity();
   final RequestRepository _requestRepository;
 
@@ -46,6 +49,14 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
       }
 
   }
+
+  // void validateForm({
+  //   FormzStatus? categoryRequestStatus,
+  // }) {
+  //   emit(state.copyWith(
+  //     categoryRequestStatus: categoryRequestStatus,
+  //   ));
+  // }
 
   void newFunctionForTest(){
     print("");
