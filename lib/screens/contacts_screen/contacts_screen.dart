@@ -240,9 +240,12 @@ class _ContactsScreenState extends State<ContactsScreen>
                           if (filtersCubitState.isFiltered) {
                             ContactsCubit.get(context).updateContacts(
                                 filtersCubitState.listContacts);
-                            if(filtersCubitState.listContacts.length > 1){
-                              ContactsWidget.scrollToTop();
-                            }
+                            WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+                              if(filtersCubitState.listContacts.length > 1){
+                                ContactsWidget.scrollToTop();
+                              }
+                            });
+
                           }
                         },
                         builder: (ctx, state) {
