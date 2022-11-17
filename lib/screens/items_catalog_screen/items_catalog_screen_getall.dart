@@ -34,7 +34,7 @@ class ItemsCatalogGetAllScreenStateClass
       create: (context) => ItemCatalogSearchCubit(
           GeneralDio(BlocProvider.of<AppBloc>(context).state.userData),
           ItemsCatalogGetAllRepository(user))
-        ..getFavoriteItems(userHrCode: user.employeeData?.userHrCode ?? ""),
+        ..getFavoriteItems(userHrCode: user.employeeData?.userHrCode ?? "")..getCartItems(userHrCode: user.employeeData?.userHrCode ?? ""),
       child: GestureDetector(
         onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
         child: Scaffold(

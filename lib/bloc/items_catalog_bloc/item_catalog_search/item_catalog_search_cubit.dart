@@ -400,6 +400,34 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
       throw e;
     });
   }
+  Future<void> deleteAllCart({required String hrCode}) async{
+    EasyLoading.show(status: 'Loading...');
+    emit(state.copyWith(
+      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
+    ));
+    await _generalDio.removeAllCart().
+    then((value) {
+      if(value.statusCode ==200){
+        getCartItems(userHrCode: hrCode);
+        emit(state.copyWith(
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+        ));
+        EasyLoading.dismiss();
+      }else{
+        emit(state.copyWith(
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+        ));
+        EasyLoading.showError('Something went wrong');
+      }
+
+    }).catchError((e) {
+      emit(state.copyWith(
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+      ));
+      EasyLoading.showError('Something went wrong');
+      throw e;
+    });
+  }
 
   void getSubTree(List<Items>? item) {
     List<ItemsCatalogTreeModel> newTreeList = <ItemsCatalogTreeModel>[];

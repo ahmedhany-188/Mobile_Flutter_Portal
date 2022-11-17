@@ -43,7 +43,8 @@ class FavoriteScreen extends StatelessWidget {
       ),
       body: BlocProvider<ItemCatalogSearchCubit>.value(
         value: ItemCatalogSearchCubit.get(context)
-          ..getFavoriteItems(userHrCode: user.employeeData?.userHrCode ?? ""),
+          ..getFavoriteItems(userHrCode: user.employeeData?.userHrCode ?? "")
+        ..getCartItems(userHrCode: user.employeeData?.userHrCode ?? ""),
         child: BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
           builder: (context, state) {
             if (state.detail == false) {

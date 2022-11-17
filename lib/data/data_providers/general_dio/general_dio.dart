@@ -396,6 +396,21 @@ class GeneralDio {
     });
   }
 
+  Future<Response> removeAllCart() async {
+    String url =
+        'https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Users_Cart/DeleteCart?HRCode=${userData?.user?.userHRCode}';
+    return await dio!
+        .delete(
+      url,
+      options: Options(headers: {
+        'Authorization': 'Bearer ${userData?.user?.token}',
+      }),
+    )
+        .catchError((err) {
+      throw err;
+    });
+  }
+
   // Future<Response> postEquipmentsRequestFile(dynamic dataToPost) async {
   //   String url = 'SelfService/UploadEquipmentFile';
   //

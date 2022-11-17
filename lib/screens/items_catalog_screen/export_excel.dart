@@ -1,44 +1,52 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Row,Column;
 
 import '../../data/models/items_catalog_models/item_catalog_cart_model.dart';
 
-Future<void> importData(List<CartModelData> reports) async {
+Future<void> importData(List<CartModelData> reports,VoidCallback onSuccess) async {
   //Create a Excel document.
   //Creating a workbook.
-  final Workbook workbook = Workbook();
+  if(reports.isNotEmpty){
+    final Workbook workbook = Workbook();
 
-  //Accessing via index
-  final Worksheet sheet = workbook.worksheets[0];
+    //Accessing via index
+    final Worksheet sheet = workbook.worksheets[0];
 
-  //List of data to import data.
-  final Future<List<ExcelDataRow>> dataRows = _buildCustomersDataRowsIH(reports);
+    //List of data to import data.
+    final Future<List<ExcelDataRow>> dataRows = _buildCustomersDataRowsIH(reports);
 
-  List<ExcelDataRow> dataRows_1 = await Future.value(dataRows);
+    List<ExcelDataRow> dataRows_1 = await Future.value(dataRows);
 
-  //Import the list to Sheet.
-  sheet.importData(dataRows_1, 1, 1);
+    //Import the list to Sheet.
+    sheet.importData(dataRows_1, 1, 1);
 
-  //Auto-Fit columns.
-  sheet.getRangeByName('A1:E1').autoFitColumns();
+    //Auto-Fit columns.
+    sheet.getRangeByName('A1:E1').autoFitColumns();
 
-  //Save and launch the excel.
-  final List<int> bytes = workbook.saveAsStream();
+    //Save and launch the excel.
+    final List<int> bytes = workbook.saveAsStream();
 
-  //Dispose the document.
-  workbook.dispose();
+    //Dispose the document.
+    workbook.dispose();
 
-  //Get the storage folder location using path_provider package.
-  final Directory directory = await getApplicationSupportDirectory();
-  final String path = directory.path;
-  final File file = File('$path/ImportData.xlsx');
-  await file.writeAsBytes(bytes, flush: true);
+    //Get the storage folder location using path_provider package.
+    final Directory directory = await getApplicationSupportDirectory();
+    final String path = directory.path;
+    final File file = File('$path/ImportData.xlsx');
+    await file.writeAsBytes(bytes, flush: true);
 
-  //Launch the file (used open_file package)
-  await OpenFile.open('$path/ImportData.xlsx');
+    //Launch the file (used open_file package)
+    await OpenFile.open('$path/ImportData.xlsx');
+    onSuccess.call();
+  }
+  else{
+    EasyLoading.showInfo('Add Items to Cart');
+  }
 }
 
 Future<List<ExcelDataRow>> _buildCustomersDataRowsIH(List<CartModelData> list) async {
@@ -52,24 +60,24 @@ Future<List<ExcelDataRow>> _buildCustomersDataRowsIH(List<CartModelData> list) a
     // TODO: call API to get item details :)
     return ExcelDataRow(cells: <ExcelDataCell>[
       ExcelDataCell(columnHeader: 'Item of Requisition', value: dataRow.itemCode),
-      ExcelDataCell(columnHeader: 'Acct Assignment Cat.', value: ""),
-      ExcelDataCell(columnHeader: 'Item Category', value: 'dataRow.itmCatItems?.category'),
+      const ExcelDataCell(columnHeader: 'Acct Assignment Cat.', value: ""),
+      const ExcelDataCell(columnHeader: 'Item Category', value: 'dataRow.itmCatItems?.category'),
       ExcelDataCell(columnHeader: 'Short Text', value: dataRow.itmCatItems?.itemName),
       ExcelDataCell(columnHeader: 'Quantity', value: dataRow.itemQty),
       ExcelDataCell(columnHeader: 'Base Unit of Measure', value: dataRow.itmCatItems?.itmCatUOM),
-      ExcelDataCell(columnHeader: 'Deliv. date category', value: ""),
-      ExcelDataCell(columnHeader: 'Deliv. date(From/to)', value: ""),
+      const ExcelDataCell(columnHeader: 'Deliv. date category', value: ""),
+      const ExcelDataCell(columnHeader: 'Deliv. date(From/to)', value: ""),
       ExcelDataCell(columnHeader: 'Material Group', value: dataRow.itemCode),
       ExcelDataCell(columnHeader: 'Material Type', value: dataRow.itemCode),
       ExcelDataCell(columnHeader: 'Description', value: dataRow.itmCatItems?.itemDesc),
-      ExcelDataCell(columnHeader: 'Plant', value: ""),
-      ExcelDataCell(columnHeader: 'Storage location', value: ""),
-      ExcelDataCell(columnHeader: 'Purchasing Group', value: ""),
-      ExcelDataCell(columnHeader: 'Short Text 1', value: ""),
-      ExcelDataCell(columnHeader: 'Gross value', value: ""),
-      ExcelDataCell(columnHeader: 'Order', value: ""),
-      ExcelDataCell(columnHeader: 'Activity', value: ""),
-      ExcelDataCell(columnHeader: 'Long Text', value: ""),
+      const ExcelDataCell(columnHeader: 'Plant', value: ""),
+      const ExcelDataCell(columnHeader: 'Storage location', value: ""),
+      const ExcelDataCell(columnHeader: 'Purchasing Group', value: ""),
+      const ExcelDataCell(columnHeader: 'Short Text 1', value: ""),
+      const ExcelDataCell(columnHeader: 'Gross value', value: ""),
+      const ExcelDataCell(columnHeader: 'Order', value: ""),
+      const ExcelDataCell(columnHeader: 'Activity', value: ""),
+      const ExcelDataCell(columnHeader: 'Long Text', value: ""),
     ]);
   }).toList();
 
