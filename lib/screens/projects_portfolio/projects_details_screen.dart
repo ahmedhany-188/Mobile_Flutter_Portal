@@ -58,8 +58,8 @@ class ProjectDetailsScreen extends StatelessWidget {
                     tag: 'googleMapTag',
                     child: CachedNetworkImage(
                       imageUrl: DirectionHelper.generateLocationPreviewImage(
-                          latitude: locationData.latitude ?? 0,
-                          longitude: locationData.longitude ?? 0),
+                          latitude: locationData.latitude ?? 30.1073842,
+                          longitude: locationData.longitude ?? 31.384012),
                       fit: BoxFit.fill,
                     ),
                   ),
