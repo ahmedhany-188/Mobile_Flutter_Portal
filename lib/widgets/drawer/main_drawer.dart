@@ -25,6 +25,7 @@ import '../../screens/about_value_screen/about_screen.dart';
 import '../../screens/my_requests_screen/my_requests_screen.dart';
 import '../../screens/myattendance_screen/attendance_screen.dart';
 import '../../screens/employee_appraisal_screen/employee_appraisal_screen.dart';
+import '../../screens/projects_portfolio/projects_portfolio_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({Key? key}) : super(key: key);
@@ -608,6 +609,13 @@ class MainDrawer extends StatelessWidget {
                       () {
                         Navigator.of(context)
                             .popAndPushNamed(GetDirectionScreen.routeName);
+                      },
+                    ),
+                    buildNoIconTile(
+                      'Projects Portfolio',
+                          () {
+                        Navigator.of(context)
+                            .popAndPushNamed(ProjectsPortfolioScreen.routeName);
                       },
                     ),
 

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/data/models/get_location_model/location_data.dart';
 import 'package:hassanallamportalflutter/data/models/news_model/news_data_model.dart';
 
 import 'package:hassanallamportalflutter/screens/about_value_screen/about_screen.dart';
@@ -50,6 +51,8 @@ import '../screens/items_catalog_screen/favorite_screen.dart';
 import '../screens/my_requests_screen/add_request_screen.dart';
 import '../screens/notification_screen/notifications_screen.dart';
 import '../screens/polls_screen/polls_screen.dart';
+import '../screens/projects_portfolio/projects_details_screen.dart';
+import '../screens/projects_portfolio/projects_portfolio_screen.dart';
 import '../screens/videos_screen/videos_screen.dart';
 
 class AppRouter {
@@ -290,6 +293,13 @@ class AppRouter {
         return MaterialPageRoute(
             builder: (_) =>  CartScreen());
 
+      case ProjectsPortfolioScreen.routeName:
+        return MaterialPageRoute(
+            builder: (_) =>  ProjectsPortfolioScreen());
+
+        case ProjectDetailsScreen.routeName:
+        return MaterialPageRoute(
+            builder: (_) =>  ProjectDetailsScreen(locationData: settings.arguments as LocationData,));
 
       default:
         return null;
