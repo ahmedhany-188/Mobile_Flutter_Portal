@@ -157,7 +157,10 @@ class DialogProfileCallBottomSheet extends StatelessWidget {
                         }else{
                           await Clipboard.setData(ClipboardData(text: "99"+value));
                         }
-                        url_launcher.launchUrl(Uri.parse('zoomus://'));
+                        url_launcher.launchUrl(Uri.parse('zoomus://'));//us.zoom.videomeetings/com.zipow.videobox.JoinByURLActivity
+                        // url_launcher.launchUrl(Uri.parse('zoomus://callto:+123456789'));
+                        // url_launcher.launchUrl(Uri.parse('zoomus://tel:+123456789'));
+
                       } else {
                         url = Uri.parse(
                             "https://play.google.com/store/apps/details?id=us.zoom.videomeetings");

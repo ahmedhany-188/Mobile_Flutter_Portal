@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
@@ -134,22 +135,17 @@ class SOSAlertScreen extends StatefulWidget {
 
       // String message = "Hi my name is : ----- .\nHrCode: -----.\nLocation is: https://www.google.com/maps/search/?api=1&query=${lat}%2C${long}";
       // List<String> recipents = ["+201141789961"];
-      String uri = 'sms:+20 1141789961?body=Hi my name is:'+name+',HrCode: '+hrCode+',\nmy location is: https://www.google.com/maps/search/?api=1%26query='+lat.toString()+'%20'+long.toString();
-      print("\n--"+uri.toString());
+      String uri = 'sms:+20 1141789961?body=Hi my name is:'+name+',\nHrCode: '+hrCode+',\nmy location is: https://www.google.com/maps/search/?api=1%26query='+lat.toString()+'%20'+long.toString();
 
-      if (true) {
+      if (defaultTargetPlatform == TargetPlatform.macOS ||
+          defaultTargetPlatform == TargetPlatform.iOS) {
         await launchUrl(Uri.parse(Uri.encodeFull(uri)));
         await EasyLoading.dismiss(animation: true);
-      } else {
-        // iOS
-        const uri = 'sms:20 1141789961';
-        if (await launchUrl(Uri.parse(uri))) {
-          await EasyLoading.dismiss(animation: true);
-          await launchUrl(Uri.parse(uri));
-        } else {
-          throw 'Could not launch $uri';
-        }
+      }else{
+        await launchUrl(Uri.parse(Uri.encodeFull(uri)));
+        await EasyLoading.dismiss(animation: true);
       }
+
       await EasyLoading.dismiss(animation: true);
     }
     // void _sendSMS(String message, List<String> recipents) async {

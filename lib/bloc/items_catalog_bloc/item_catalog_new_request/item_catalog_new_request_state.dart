@@ -1,5 +1,7 @@
+
 import 'package:equatable/equatable.dart';
 import 'package:formz/formz.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_image_model.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_new_request_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
 
@@ -7,44 +9,77 @@ abstract class NewRequestCatalogState extends Equatable{
   const NewRequestCatalogState();
 
   const NewRequestCatalogState.copyWith({
-  required FormzStatus status, });
+    required itemName,required itemDescription, required itemAttach,required selectedCategory,
+  required FormzStatus status,});
 }
 
-enum NewRequestCatalogEnumState { initial, success, failed, loading }
+enum NewRequestCatalogEnumState { initial, success, failed, loading,noConnection,valid }
 
 class NewRequestCatalogInitial extends NewRequestCatalogState {
   const NewRequestCatalogInitial({
+
     this.newRequestCatalogEnumState = NewRequestCatalogEnumState.initial,
+    this.status = FormzStatus.pure,
+
     this.listCatalogRequests = const<NewRequestCatalogModel>[],
     this.catalogNewRequests,
+
     this.newRequestDate = const RequestDate.pure(),
-    this.status = FormzStatus.pure,
+    this.itemName = const RequestDate.pure(),
+    this.itemDescription = const RequestDate.pure(),
+    this.itemAttach = const [],
+    this.selectedCategory = const RequestDate.pure(),
+    this.errorMessage = "",
+
   });
 
   final NewRequestCatalogEnumState newRequestCatalogEnumState;
-  final List<NewRequestCatalogModel> listCatalogRequests;
-  final NewRequestCatalogModel? catalogNewRequests;
-  final RequestDate newRequestDate;
   final FormzStatus status;
 
+  final List<NewRequestCatalogModel> listCatalogRequests;
+  final NewRequestCatalogModel ?catalogNewRequests;
+
+  final RequestDate newRequestDate;
+  final RequestDate itemName;
+  final RequestDate itemDescription;
+  final List<ItemImageCatalogModel> itemAttach;
+  final RequestDate selectedCategory;
+  final String errorMessage;
+
+  @override
+  List<Object> get props => [newRequestCatalogEnumState,status,
+    listCatalogRequests,newRequestDate,itemName,
+    itemDescription,itemAttach,selectedCategory,errorMessage];
 
 
   NewRequestCatalogInitial copyWith({
     NewRequestCatalogEnumState? newRequestCatalogEnumState,
+    FormzStatus ?status,
+
     List<NewRequestCatalogModel>? listCatalogRequests,
     NewRequestCatalogModel? newCatalogRequests,
-    FormzStatus ?status,
     RequestDate? newRequestDate,
+    RequestDate? itemName,
+    RequestDate? itemDescription,
+    List<ItemImageCatalogModel>? itemAttach,
+    RequestDate? selectedCategory,
+    String? errorMessage,
   }) {
     return NewRequestCatalogInitial(
       newRequestCatalogEnumState: newRequestCatalogEnumState ?? this.newRequestCatalogEnumState,
+      status:status??this.status,
+
       listCatalogRequests: listCatalogRequests ?? this.listCatalogRequests,
-        catalogNewRequests:catalogNewRequests??this.catalogNewRequests,
-        newRequestDate:newRequestDate??this.newRequestDate,
-        status:status??this.status,
+      catalogNewRequests:catalogNewRequests?? catalogNewRequests,
+
+      newRequestDate:newRequestDate??this.newRequestDate,
+      itemName:itemName??this.itemName,
+      itemDescription:itemDescription??this.itemDescription,
+      itemAttach:itemAttach??this.itemAttach,
+      selectedCategory:selectedCategory??this.selectedCategory,
+        errorMessage:errorMessage??this.errorMessage,
     );
   }
 
-  @override
-  List<Object> get props => [newRequestCatalogEnumState,listCatalogRequests,newRequestDate,status];
+
 }

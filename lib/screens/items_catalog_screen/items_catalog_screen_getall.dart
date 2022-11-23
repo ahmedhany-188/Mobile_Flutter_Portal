@@ -29,11 +29,18 @@ class ItemsCatalogGetAllScreenStateClass
 
   @override
   Widget build(BuildContext context) {
-    MainUserData user = BlocProvider.of<AppBloc>(context).state.userData;
+    MainUserData user = BlocProvider
+        .of<AppBloc>(context)
+        .state
+        .userData;
 
     return BlocProvider<ItemCatalogSearchCubit>(
-      create: (context) => ItemCatalogSearchCubit(
-          GeneralDio(BlocProvider.of<AppBloc>(context).state.userData),
+      create: (context) =>
+      ItemCatalogSearchCubit(
+          GeneralDio(BlocProvider
+              .of<AppBloc>(context)
+              .state
+              .userData),
           ItemsCatalogGetAllRepository(user))
         ..getFavoriteItems(userHrCode: user.employeeData?.userHrCode ?? ""),
       child: GestureDetector(
@@ -76,7 +83,7 @@ class ItemsCatalogGetAllScreenStateClass
                               ItemCatalogSearchCubit.get(ctx).clearData();
                               ItemCatalogSearchCubit.get(ctx)
                                   .getAllItemsCatalog(
-                                      user.employeeData?.userHrCode ?? "");
+                                  user.employeeData?.userHrCode ?? "");
                             }
                           },
                           decoration: InputDecoration(
@@ -87,28 +94,28 @@ class ItemsCatalogGetAllScreenStateClass
                               // labelText: "Search contact",
                               hintText: 'Item Name',
                               suffixIcon: (textController.text.isNotEmpty ||
-                                      textController.text != "")
+                                  textController.text != "")
                                   ? IconButton(
-                                      icon: const Icon(Icons.clear),
-                                      color: Colors.red,
-                                      onPressed: () {
-                                        ItemCatalogSearchCubit.get(ctx)
-                                            .clearData();
-                                        ItemCatalogSearchCubit.get(ctx)
-                                            .getAllItemsCatalog(
-                                                user.employeeData?.userHrCode ??
-                                                    "");
-                                        textController.clear();
-                                        textFoucus.unfocus();
-                                      },
-                                    )
+                                icon: const Icon(Icons.clear),
+                                color: Colors.red,
+                                onPressed: () {
+                                  ItemCatalogSearchCubit.get(ctx)
+                                      .clearData();
+                                  ItemCatalogSearchCubit.get(ctx)
+                                      .getAllItemsCatalog(
+                                      user.employeeData?.userHrCode ??
+                                          "");
+                                  textController.clear();
+                                  textFoucus.unfocus();
+                                },
+                              )
                                   : null,
                               hintStyle: const TextStyle(color: Colors.white),
                               prefixIcon:
-                                  const Icon(Icons.search, color: Colors.white),
+                              const Icon(Icons.search, color: Colors.white),
                               border: const OutlineInputBorder(
                                   borderRadius:
-                                      BorderRadius.all(Radius.circular(20.0)),
+                                  BorderRadius.all(Radius.circular(20.0)),
                                   borderSide: BorderSide.none)),
                         );
                       },
@@ -143,12 +150,17 @@ class ItemsCatalogGetAllScreenStateClass
                   ),
 
 
-                       IconButton(
+                  BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                    builder: (context, state) {
+                      return IconButton(
                           onPressed: () async {
                             Navigator.of(context)
-                                .pushNamed(NewRequestCatalogScreen.routeName);
+                                .pushNamed(NewRequestCatalogScreen.routeName,
+                                arguments: {NewRequestCatalogScreen.itemsGetAllTree:state.itemsGetAllTree});
                           },
-                          icon: const Icon(Icons.add))
+                          icon: const Icon(Icons.add));
+                    },
+                  ),
                 ],
               ),
             ),

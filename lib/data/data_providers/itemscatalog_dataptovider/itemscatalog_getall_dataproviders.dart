@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:hassanallamportalflutter/data/data_providers/requests_data_providers/request_data_providers.dart';
 import 'package:http/http.dart' as http;
 
 class ItemsCatalogGetAllDataProvider {
@@ -28,5 +30,39 @@ class ItemsCatalogGetAllDataProvider {
     return rawItemsCatalogData;
   }
 
+
+  Future<http.Response> postNewRequestCatalogDataProvider(Map<String, String> header, String bodyString) async {
+    http.Response rawItemsCatalogData = await http.post(
+      Uri.parse("https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Item_Request/Post"),
+      headers: header,
+      body: bodyString,
+    ).timeout(const Duration(seconds: 10));
+
+    if (kDebugMode) {
+      print(rawItemsCatalogData.body);
+    }
+    if(rawItemsCatalogData.statusCode == 200){
+      return rawItemsCatalogData;
+    }else{
+      throw RequestFailureApi.fromCode(rawItemsCatalogData.statusCode);
+    }
+  }
+
+  Future<http.Response> postNewRequestImageCatalogDataProvider(header, bodyString,imageFile) async {
+    http.Response rawItemsCatalogData = await http.post(
+      Uri.parse("https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Item_Request/UploadAttach"),
+      headers: header,
+      body: bodyString,
+    ).timeout(const Duration(seconds: 10));
+
+    if (kDebugMode) {
+      print(rawItemsCatalogData.body);
+    }
+    if(rawItemsCatalogData.statusCode == 200){
+      return rawItemsCatalogData;
+    }else{
+      throw RequestFailureApi.fromCode(rawItemsCatalogData.statusCode);
+    }
+  }
 
 }

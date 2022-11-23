@@ -175,11 +175,10 @@ class DirectManagerProfileScreenClass
                             decoration: BoxDecoration(
                               border: Border.all(
                                   width: 2,
-                                  //    color: Colors.black
+
                                   color: Colors.white.withOpacity(0.1)),
                               borderRadius: const BorderRadius.all(
                                   Radius.circular(20)),
-                              // color: Colors.black26
                               color: Colors.grey.shade400.withOpacity(0.2),
                             ),
                             child: Column(children: [
@@ -214,12 +213,12 @@ class DirectManagerProfileScreenClass
                                     horizontal: 8),
                                 decoration: BoxDecoration(
                                   border: Border.all(
-                                      width: 2, //color: Colors.black
+                                      width: 2,
                                       color: Colors.white.withOpacity(0.1)
                                   ),
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(20)),
-                                  // color: Colors.black26,
+
                                   color: Colors.grey.shade400.withOpacity(0.2),
                                 ),
                                 child: Column(children: [
@@ -364,7 +363,7 @@ class DirectManagerProfileScreenClass
                                         child: Row(
                                           children: [
                                             Flexible(
-                                              flex: 6,
+                                              flex: 5,
                                               child: Column(children: [
                                                 getHead(
                                                     "Mobile Number:", false),
@@ -382,11 +381,20 @@ class DirectManagerProfileScreenClass
                                                 ),
                                               ]),
                                             ),
+
+                                            const Flexible(
+                                              flex: 1,
+                                              child: Text(
+                                                "ZOOM",
+                                                style: TextStyle(color: Colors.lightBlue,
+                                                  fontSize: 14,
+                                                  fontFamily: 'Nunito',),
+                                              ),
+                                            ),
                                             const Flexible(
                                               flex: 1,
                                               child: Icon(
-                                                Icons
-                                                    .phone,
+                                                Icons.phone,
                                                 color: Colors.white,
                                                 size: 25.0,
                                               ),
@@ -415,7 +423,7 @@ class DirectManagerProfileScreenClass
                                         child: Row(
                                           children: [
                                             Flexible(
-                                              flex: 6,
+                                              flex: 5,
                                               child: Column(children: [
                                                 getHead("Ext:", false),
                                                 Padding(
@@ -429,12 +437,14 @@ class DirectManagerProfileScreenClass
                                             ),
                                             const Flexible(
                                               flex: 1,
-                                              child: Icon(
-                                                Icons.phone,
-                                                color: Colors.white,
-                                                size: 25.0,
+                                              child: Text(
+                                                "ZOOM",
+                                                style: TextStyle(color: Colors.lightBlue,
+                                                  fontSize: 14,
+                                                  fontFamily: 'Nunito',),
                                               ),
                                             ),
+
                                           ],
                                         ),
                                       )),
