@@ -55,6 +55,9 @@ class $AssetsImagesGen {
   AssetGenImage get defaultBg =>
       const AssetGenImage('assets/images/defaultBg.jpg');
 
+  /// File path: assets/images/excel.png
+  AssetGenImage get excel => const AssetGenImage('assets/images/excel.png');
+
   /// File path: assets/images/favicon.png
   AssetGenImage get favicon => const AssetGenImage('assets/images/favicon.png');
 

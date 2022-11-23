@@ -68,6 +68,7 @@ class CartScreen extends StatelessWidget {
             centerTitle: true,
             actions: [
               BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                // buildWhen: (previous, current) => previous.cartResult != current.cartResult,
                 builder: (context, state) {
                   return IconButton(
                       onPressed: () async {
@@ -87,15 +88,19 @@ class CartScreen extends StatelessWidget {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => importData(ItemCatalogSearchCubit.get(context).state.cartResult),
+        floatingActionButton:FloatingActionButton.extended(
+        onPressed: () => importData(ItemCatalogSearchCubit.get(context).state.cartResult,() {
+          ItemCatalogSearchCubit.get(context).deleteAllCart(hrCode: user.employeeData?.userHrCode ??"");
+        }),
+        backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        icon: const Icon(Icons.panorama_vertical_select),
+        icon: Assets.images.excel.image(fit: BoxFit.scaleDown,scale: 13),
         label: const Text('Export to Excel'),
       ),
       body: BlocProvider<ItemCatalogSearchCubit>.value(
         value: ItemCatalogSearchCubit.get(context)
-          ..getCartItems(userHrCode: user.employeeData?.userHrCode ?? ""),
+          ..getCartItems(userHrCode: user.employeeData?.userHrCode ?? "")
+          ..getFavoriteItems(userHrCode: user.employeeData?.userHrCode ?? ""),
         child: BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
           builder: (context, state) {
             if (state.detail == false) {
