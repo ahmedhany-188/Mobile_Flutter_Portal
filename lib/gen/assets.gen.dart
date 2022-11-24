@@ -106,6 +106,9 @@ class $AssetsImagesGen {
   AssetGenImage get noSearchIcon =>
       const AssetGenImage('assets/images/no_search_icon.png');
 
+  /// File path: assets/images/outlook.png
+  AssetGenImage get outlook => const AssetGenImage('assets/images/outlook.png');
+
   $AssetsImagesStaffdashboardGen get staffdashboard =>
       const $AssetsImagesStaffdashboardGen();
 
