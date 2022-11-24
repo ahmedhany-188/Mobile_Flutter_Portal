@@ -90,7 +90,7 @@ class MainDrawer extends StatelessWidget {
           child: Assets.images.outlook.image(),
         ),
         const Text(
-          'Outlook',
+          'Outlook Calendar',
           style: TextStyle(
               fontFamily: 'RobotoCondensed',
               fontSize: 15,
