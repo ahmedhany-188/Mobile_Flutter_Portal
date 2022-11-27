@@ -111,12 +111,21 @@ class ItemsCatalogGetAllRepository {
     final json = await jsonDecode(result.toString());
     final ItemsCatalogCategory response = ItemsCatalogCategory.fromJson(json);
 
-    print("the finaaal "+response.data.toString());
-    print("the finaaal "+response.error.toString());
-    print("the finaaal "+response.code.toString());
-    print("the finaaal "+response.message.toString());
-
     return response;
+  }
+
+
+  Future<List<NewRequestCatalogModelResponse>> getCatalogRequestsItems( hrCode) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
+    final http.Response rawItemsCatalog= await itemsCatalogGetAllDataProvider.getRequestsCatalogList(header,hrCode);
+    final json = await jsonDecode(rawItemsCatalog.body);
+    NewRequestCatalogModelResponse newRequestCatalogModelResponse=NewRequestCatalogModelResponse.fromJson(json);
+
+    List<NewRequestCatalogModelResponse> newRequestCatalogModelResponseList=[newRequestCatalogModelResponse];
+    return newRequestCatalogModelResponseList;
   }
 
 }

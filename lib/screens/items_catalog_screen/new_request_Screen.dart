@@ -1,6 +1,5 @@
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_image_model.dart';
 import 'package:hassanallamportalflutter/widgets/success/success_request_widget.dart';
-
 import 'cart_screen.dart';
 import 'favorite_screen.dart';
 import 'dart:io';
@@ -18,7 +17,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 
 class NewRequestCatalogScreen extends StatefulWidget {
 
-  static const routeName = "/new-request-screen";
+  static const routeName = "/new-catalog-request-screen";
   static const  itemsGetAllTree = "treeListStructure";
 
   const NewRequestCatalogScreen({Key? key,this.requestData}) : super(key: key);
@@ -41,8 +40,11 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
 
     final currentRequestData = widget.requestData;
 
-    List<
-        ItemsCatalogTreeModel> itemsGetAllTree = currentRequestData[NewRequestCatalogScreen
+    if(currentRequestData[NewRequestCatalogScreen.itemsGetAllTree]==null){
+      Navigator.pop(context);
+    }
+
+    List<ItemsCatalogTreeModel> itemsGetAllTree = currentRequestData[NewRequestCatalogScreen
         .itemsGetAllTree];
 
     for (int i = 0; i < itemsGetAllTree.length; i++) {
@@ -66,11 +68,11 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                   listener: (context, state) {
                     if (state.newRequestCatalogEnumState ==
                         NewRequestCatalogEnumState.success) {
-                      // LoadingDialog.hide(context);
                       EasyLoading.dismiss(animation: true);
                       Navigator.of(context).pushReplacement(
                           MaterialPageRoute(builder: (_) =>
-                               SuccessScreen(text: state.errorMessage ,routName: NewRequestCatalogScreen.routeName, requestName: 'Catalog item',)));
+                               SuccessScreen(text: state.errorMessage ,routName: NewRequestCatalogScreen.routeName,
+                                 requestName: 'Catalog item',)));
 
                     }
                     else if (state.newRequestCatalogEnumState ==

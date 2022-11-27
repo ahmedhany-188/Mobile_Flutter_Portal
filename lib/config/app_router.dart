@@ -20,6 +20,7 @@ import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_req
 import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request_screen.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_requests_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
@@ -213,6 +214,11 @@ class AppRouter {
           builder: (_) => const SOSAlertScreen(),
         );
 
+      case CatalogHistoryRequestScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const CatalogHistoryRequestScreen(),
+        );
+
       case EmbassyLetterScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => EmbassyLetterScreen(requestData: settings.arguments),
@@ -311,3 +317,5 @@ class AppRouter {
     }
   }
 }
+
+

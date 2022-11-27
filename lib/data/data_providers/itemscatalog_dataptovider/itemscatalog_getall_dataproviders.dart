@@ -13,19 +13,28 @@ class ItemsCatalogGetAllDataProvider {
     return rawItemsCatalogData;
   }
 
+  Future<http.Response> getRequestsCatalogList(Map<String, String> header,String hrCode) async {
+    http.Response rawItemsCatalogData = await http.get(
+      Uri.parse(
+          "https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Item_Request/GetMyRequests?HRCode=$hrCode"),
+      headers: header,
+    ).timeout(const Duration(seconds: 10));
+    return rawItemsCatalogData;
+  }
+
   Future<http.Response> getItemsCatalogAttachList(Map<String, String> header) async {
     http.Response rawItemsCatalogData = await http.get(
       Uri.parse(
           "https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Category/GetAll"),
       headers: header,
+
     );
     return rawItemsCatalogData;
   }
 
   Future<http.Response> getItemsCatalogListDataProvider(Map<String, String> header, int id) async {
     http.Response rawItemsCatalogData = await http.get(
-      Uri.parse(
-          "https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Items/GetByCategory?ID=$id"), headers: header,
+      Uri.parse("https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Items/GetByCategory?ID=$id"), headers: header,
     );
     return rawItemsCatalogData;
   }

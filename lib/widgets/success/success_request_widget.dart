@@ -86,28 +86,7 @@ class SuccessScreen extends StatelessWidget {
                 //   ),
                 // ),
                 SizedBox(height: screenHeight * 0.06),
-                GestureDetector(
-                  onTap: () => Navigator.of(context).popAndPushNamed(routName,
-                      arguments: {'request-No': '0'}),
-                  child: Container(
-                    height: 50,
-                    width: 200,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).highlightColor,
-                      borderRadius: BorderRadius.circular(22),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "Create another request",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
+                addAnotherRequest(context,requestName),
                 SizedBox(height: screenHeight * 0.01),
                 GestureDetector(
                   onTap: () => Navigator.pop(context),
@@ -136,5 +115,37 @@ class SuccessScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Container addAnotherRequest(context,String requestName){
+    if(requestName=="Catalog item"){
+      return Container();
+    }else{
+      return Container(
+        child: GestureDetector(
+          onTap: () => Navigator.of(context).popAndPushNamed(routName,
+              arguments: {'request-No': '0'}),
+          child: Container(
+            height: 50,
+            width: 200,
+            decoration: BoxDecoration(
+              color: Theme.of(context).highlightColor,
+              borderRadius: BorderRadius.circular(22),
+            ),
+            child: const Center(
+              child: Text(
+                "Create another request",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    }
+
   }
 }
