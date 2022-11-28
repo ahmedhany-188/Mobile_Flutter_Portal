@@ -4,7 +4,9 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:hassanallamportalflutter/data/data_providers/itemscatalog_dataptovider/itemscatalog_getall_dataproviders.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_all_data.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_get_data_byhrcode.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_image_model.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_respond_requests_model.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_attachs_model.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_getall_model.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_new_request_model.dart';
@@ -125,6 +127,35 @@ class ItemsCatalogGetAllRepository {
     NewRequestCatalogModelResponse newRequestCatalogModelResponse=NewRequestCatalogModelResponse.fromJson(json);
 
     List<NewRequestCatalogModelResponse> newRequestCatalogModelResponseList=[newRequestCatalogModelResponse];
+    return newRequestCatalogModelResponseList;
+  }
+
+  Future<List<ItemCatalogRespondRequests>> getCatalogRespondRequestsItems(groupNumber) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
+    final http.Response rawItemsCatalog= await itemsCatalogGetAllDataProvider.getRespondRequestsCatalogList(header,groupNumber);
+    final json = await jsonDecode(rawItemsCatalog.body);
+
+    print(json.toString());
+    ItemCatalogRespondRequests newRequestCatalogModelResponse=ItemCatalogRespondRequests.fromJson(json);
+
+    List<ItemCatalogRespondRequests> newRequestCatalogModelResponseList=[newRequestCatalogModelResponse];
+    return newRequestCatalogModelResponseList;
+  }
+
+  Future<List<ItemCatalogUserInfo>> getCatalogGetDataHr(hrCode) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
+    final http.Response rawItemsCatalog= await itemsCatalogGetAllDataProvider.getRespondRequestsCatalogList(header,hrCode);
+    final json = await jsonDecode(rawItemsCatalog.body);
+
+    ItemCatalogUserInfo newRequestCatalogModelResponse=ItemCatalogUserInfo.fromJson(json);
+
+    List<ItemCatalogUserInfo> newRequestCatalogModelResponseList=[newRequestCatalogModelResponse];
     return newRequestCatalogModelResponseList;
   }
 

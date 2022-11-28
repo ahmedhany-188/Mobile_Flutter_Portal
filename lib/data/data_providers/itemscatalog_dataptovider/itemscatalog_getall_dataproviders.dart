@@ -19,6 +19,23 @@ class ItemsCatalogGetAllDataProvider {
           "https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Item_Request/GetMyRequests?HRCode=$hrCode"),
       headers: header,
     ).timeout(const Duration(seconds: 10));
+
+    return rawItemsCatalogData;
+  }
+
+  Future<http.Response> getRespondRequestsCatalogList(Map<String, String> header,String groupNumber) async {
+    http.Response rawItemsCatalogData = await http.get(
+      Uri.parse("https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Item_Request/GetRequestHistory?groupID=$groupNumber"),
+      headers: header,
+    ).timeout(const Duration(seconds: 10));
+    return rawItemsCatalogData;
+  }
+
+  Future<http.Response> getRespondGetHrData(Map<String, String> header,String hrCode) async {
+    http.Response rawItemsCatalogData = await http.get(
+      Uri.parse("https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Admin/getByHrCode?hrCode=$hrCode"),
+      headers: header,
+    ).timeout(const Duration(seconds: 10));
     return rawItemsCatalogData;
   }
 

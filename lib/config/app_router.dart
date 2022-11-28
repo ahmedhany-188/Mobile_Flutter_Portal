@@ -21,6 +21,7 @@ import 'package:hassanallamportalflutter/screens/it_requests_screen/access_right
 import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_useraccount_screen.dart';
 import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_requests_screen.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_respond_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
@@ -217,6 +218,11 @@ class AppRouter {
       case CatalogHistoryRequestScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => const CatalogHistoryRequestScreen(),
+        );
+
+      case CatalogHistoryRespondScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const CatalogHistoryRespondScreen(),
         );
 
       case EmbassyLetterScreen.routeName:
