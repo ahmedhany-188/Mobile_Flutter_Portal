@@ -25,7 +25,7 @@ class GetDirectionCubit extends Cubit<GetDirectionInitial> {
     });
   }
   // ignore: constant_identifier_names
-  static const GOOGLE_API_KEY = 'AIzaSyAbkday4kMNt8-gG5Y-j2CDRKmpZXzkqeA';
+  static const GOOGLE_API_KEY = 'AIzaSyCbfO186hgOZdPM64077xecdmQdXkZNNJY';
 
   static GetDirectionCubit get(context) => BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();

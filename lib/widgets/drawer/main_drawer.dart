@@ -3,7 +3,6 @@ import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
-import 'package:hassanallamportalflutter/screens/currency_picker_screen/currency_picker_screen.dart';
 import 'package:hassanallamportalflutter/screens/sos_screen/sos_alert_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
@@ -16,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../bloc/apps_screen_bloc/apps_cubit.dart';
 import '../../bloc/login_cubit/login_cubit.dart';
 import '../../constants/url_links.dart';
+import '../../gen/assets.gen.dart';
 import '../../screens/about_value_screen/value_screen.dart';
 import '../../screens/get_direction_screen/get_direction_screen.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
@@ -51,6 +51,47 @@ class MainDrawer extends StatelessWidget {
         Text(
           title,
           style: const TextStyle(
+              fontFamily: 'RobotoCondensed',
+              fontSize: 15,
+              fontWeight: FontWeight.normal,
+              color: Colors.white),
+        ),
+      ]),
+    );
+    // return ListTile(
+    //   leading: Icon(
+    //     icon,
+    //     size: 15,
+    //     color: Colors.white,
+    //   ),
+    //   title: Text(
+    //     title,
+    //     style: const TextStyle(
+    //         fontFamily: 'RobotoCondensed',
+    //         fontSize: 14,
+    //         fontWeight: FontWeight.normal,
+    //         color: Colors.white),
+    //   ),
+    //   onTap: tapHandler,
+    // );
+  }
+  Widget outlook() {
+    return InkWell(
+      onTap: () async{
+        // void fetchOutlookCalender() async {
+        await launchUrl(Uri.parse('https://outlook.office.com/calendar/view/month'),
+            mode: LaunchMode.externalNonBrowserApplication);
+      },
+      child: Row(children: [
+        Container(
+          margin: const EdgeInsets.only(left: 7.0),
+          padding: const EdgeInsets.all(5.0),
+          height: 30,
+          child: Assets.images.outlook.image(),
+        ),
+        const Text(
+          'Outlook Calendar',
+          style: TextStyle(
               fontFamily: 'RobotoCondensed',
               fontSize: 15,
               fontWeight: FontWeight.normal,
@@ -581,10 +622,7 @@ class MainDrawer extends StatelessWidget {
                           context, ItemsCatalogGetAllScreen.routeName);
                     },),
 
-                    buildListTile("Currency Calc", Icons.currency_exchange,  () {
-                      Navigator.popAndPushNamed(
-                          context, CurrencyPickerScreen.routeName);
-                    },),
+                    outlook(),
 
                     buildListTile(
                       'Sign Out',
