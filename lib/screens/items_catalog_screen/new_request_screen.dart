@@ -1,7 +1,5 @@
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_image_model.dart';
 import 'package:hassanallamportalflutter/widgets/success/success_request_widget.dart';
-import 'cart_screen.dart';
-import 'favorite_screen.dart';
 import 'dart:io';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,6 +12,8 @@ import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_ne
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_tree_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import 'package:dropdown_search/dropdown_search.dart';
+
+import 'items_catalog_screen_getall.dart';
 
 class NewRequestCatalogScreen extends StatefulWidget {
 
@@ -91,37 +91,44 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                     },
                   builder: (context, state) {
                     return Scaffold(
-                      appBar: AppBar(
-                        backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
-                        elevation: 0,
-                        title: const Text('New Request'),
-                        centerTitle: true,
-                        actions: <Widget>[
-                          IconButton(
-                            icon: const Icon(
-                              Icons.shopping_cart,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .pushNamed(CartScreen.routeName);
-                            },
+                      appBar: PreferredSize(
+                        preferredSize: const Size.fromHeight(80.0),
+                        child: Hero(
+                          tag: 'hero',
+                          child: AppBar(
+                            backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
+                            elevation: 0,
+                            leading: InkWell(onTap: () => Navigator.of(context).pushReplacementNamed(ItemsCatalogGetAllScreen.routeName),child: const Icon(Icons.home)),
+                            title: const Text('New Request'),
+                            centerTitle: true,
+                            // actions: <Widget>[
+                            //   IconButton(
+                            //     icon: const Icon(
+                            //       Icons.shopping_cart,
+                            //       color: Colors.white,
+                            //     ),
+                            //     onPressed: () {
+                            //       Navigator.of(context)
+                            //           .pushNamed(CartScreen.routeName);
+                            //     },
+                            //   ),
+                            //   IconButton(
+                            //     icon: const Icon(
+                            //       Icons.favorite,
+                            //       color: Colors.white,
+                            //     ),
+                            //     onPressed: () {
+                            //       Navigator.of(context)
+                            //           .pushNamed(FavoriteScreen.routeName);
+                            //     },
+                            //   )
+                            // ],
+                            shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(25),
+                                    bottomRight: Radius.circular(25))),
                           ),
-                          IconButton(
-                            icon: const Icon(
-                              Icons.favorite,
-                              color: Colors.white,
-                            ),
-                            onPressed: () {
-                              Navigator.of(context)
-                                  .pushNamed(FavoriteScreen.routeName);
-                            },
-                          )
-                        ],
-                        shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(25),
-                                bottomRight: Radius.circular(25))),
+                        ),
                       ),
                       floatingActionButton: Column(
                         mainAxisSize: MainAxisSize.min,
