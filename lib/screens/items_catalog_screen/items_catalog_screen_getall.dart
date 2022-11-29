@@ -5,6 +5,7 @@ import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/data_providers/general_dio/general_dio.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_requests_screen.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/new_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_respond_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/new_request_Screen.dart';
 
@@ -56,6 +57,10 @@ class ItemsCatalogGetAllScreenStateClass
               child: AppBar(
                 title: const Text('Item Catalog'),
                 elevation: 0,
+                leading: InkWell(
+                  onTap: () => Navigator.of(context).pop(),
+                  child: const Icon(Icons.clear),
+                ),
                 backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(0.0),
@@ -135,7 +140,7 @@ class ItemsCatalogGetAllScreenStateClass
                       return IconButton(
                           onPressed: () async {
                             Navigator.of(context)
-                                .pushNamed(FavoriteScreen.routeName);
+                                .pushReplacementNamed(FavoriteScreen.routeName);
                           },
                           icon: const Icon(Icons.favorite));
                     },
@@ -145,7 +150,7 @@ class ItemsCatalogGetAllScreenStateClass
                       return IconButton(
                           onPressed: () async {
                             Navigator.of(context)
-                                .pushNamed(CartScreen.routeName);
+                                .pushReplacementNamed(CartScreen.routeName);
                           },
                           icon: const Icon(Icons.shopping_cart));
                     },
@@ -156,9 +161,9 @@ class ItemsCatalogGetAllScreenStateClass
                     builder: (context, state) {
                       return IconButton(
                           onPressed: () async {
-                            Navigator.of(context)
-                                .pushNamed(NewRequestCatalogScreen.routeName,
-                                arguments: {NewRequestCatalogScreen.itemsGetAllTree:state.itemsGetAllTree});
+                            // Navigator.of(context)
+                            //     .pushReplacementNamed(NewRequestCatalogScreen.routeName,
+                            //     arguments: {NewRequestCatalogScreen.itemsGetAllTree:state.itemsGetAllTree});
                           },
                           icon: const Icon(Icons.add));
                     },
@@ -168,7 +173,7 @@ class ItemsCatalogGetAllScreenStateClass
                       return IconButton(
                           onPressed: () async {
                             Navigator.of(context)
-                                .pushNamed(CatalogHistoryRequestScreen.routeName,
+                                .pushReplacementNamed(CatalogHistoryRequestScreen.routeName,
                                 arguments: {CatalogHistoryRequestScreen});
                           },
                           icon: const Icon(Icons.more_vert));

@@ -8,10 +8,9 @@ import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_requestCatalog_reponse.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
-import 'package:hassanallamportalflutter/screens/items_catalog_screen/cart_screen.dart';
-import 'package:hassanallamportalflutter/screens/items_catalog_screen/favorite_screen.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'export_excel.dart';
+import 'items_catalog_screen_getall.dart';
 
 class CatalogHistoryRequestScreen extends StatefulWidget{
 
@@ -61,36 +60,43 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
               builder: (context, state) {
 
                 return Scaffold(
-                  appBar: AppBar(
-                    backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
-                    elevation: 0,
-                    title: const Text('Request History'),
-                    centerTitle: true,
-                    actions: <Widget>[
-                      IconButton(
-                        icon: const Icon(
-                          Icons.shopping_cart,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(CartScreen.routeName);
-                        },
+                  appBar: PreferredSize(
+                    preferredSize: const Size.fromHeight(80.0),
+                    child: Hero(
+                      tag: 'hero',
+                      child: AppBar(
+                        backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
+                        elevation: 0,
+                        leading: InkWell(onTap: () => Navigator.of(context).pushReplacementNamed(ItemsCatalogGetAllScreen.routeName),child: const Icon(Icons.home)),
+                        title: const Text('Request History'),
+                        centerTitle: true,
+                        // actions: <Widget>[
+                        //   IconButton(
+                        //     icon: const Icon(
+                        //       Icons.shopping_cart,
+                        //       color: Colors.white,
+                        //     ),
+                        //     onPressed: () {
+                        //       Navigator.of(context).pushNamed(CartScreen.routeName);
+                        //     },
+                        //   ),
+                        //   IconButton(
+                        //     icon: const Icon(
+                        //       Icons.favorite,
+                        //       color: Colors.white,
+                        //     ),
+                        //     onPressed: () {
+                        //       Navigator.of(context).pushNamed(
+                        //           FavoriteScreen.routeName);
+                        //     },
+                        //   )
+                        // ],
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(25),
+                                bottomRight: Radius.circular(25))),
                       ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                              FavoriteScreen.routeName);
-                        },
-                      )
-                    ],
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(25),
-                            bottomRight: Radius.circular(25))),
+                    ),
                   ),
 
                   floatingActionButton:FloatingActionButton.extended(
@@ -172,7 +178,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                     Row(
                                       children: <Widget>[
                                         Container(
-                                          padding: EdgeInsets.all(5),
+                                          padding: const EdgeInsets.all(5),
                                           decoration: BoxDecoration(
                                               color: Colors.indigo.shade50,
                                               borderRadius: BorderRadius
@@ -190,27 +196,27 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                             ),
                                           ),
                                         ),
-                                        SizedBox(width: 5,),
+                                        const SizedBox(width: 5,),
                                         cardText(
                                             "Item Name: ${getCatalogRequestsHistoryList[0]
                                                 .data![index].itemName
                                                 .toString()}", 18.0),
                                       ],
                                     ),
-                                    SizedBox(height: 4,),
+                                    const SizedBox(height: 4,),
                                     Row(
                                       children: <Widget>[
-                                        SizedBox(width: 30,),
+                                        const SizedBox(width: 30,),
                                         cardText(
                                             "Description: ${getCatalogRequestsHistoryList[0]
                                                 .data![index].itemDesc
                                                 .toString()}", 14.0),
                                       ],
                                     ),
-                                    SizedBox(height: 4,),
+                                    const SizedBox(height: 4,),
                                     Row(
                                       children: <Widget>[
-                                        SizedBox(width: 30,),
+                                        const SizedBox(width: 30,),
                                         cardText(
                                             "Request ID: ${getCatalogRequestsHistoryList[0]
                                                 .data![index].requestID
@@ -219,17 +225,17 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                       ],
                                     ),
 
-                                    SizedBox(height: 4,),
+                                    const SizedBox(height: 4,),
                                     Row(
                                       children: <Widget>[
-                                        SizedBox(width: 30,),
+                                        const SizedBox(width: 30,),
                                         cardText(
                                             "Category: ${getCatalogRequestsHistoryList[0]
                                                 .data![index].catName
                                                 .toString()}", 14.0),
                                       ],
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: <Widget>[
@@ -294,11 +300,11 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                           borderRadius: BorderRadius.circular(
                                               20)
                                       ),
-                                      child: Icon(Icons.cached,
+                                      child: const Icon(Icons.cached,
                                           color: ConstantsColors
                                               .backgroundStartColor),
                                     ),
-                                    SizedBox(width: 16,),
+                                    const SizedBox(width: 16,),
                                     Text(
                                         "${getCatalogRequestsHistoryList[0]
                                             .data![index]
