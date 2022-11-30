@@ -29,7 +29,6 @@ class NewRequestCatalogScreen extends StatefulWidget {
 
 class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
 
-
   final GlobalKey<
       DropdownSearchState<String>> catalogCategoriesFormKey = GlobalKey();
   List<String> categoriesList = [];

@@ -1,33 +1,40 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_respond_requests_history/item_catalog_respond_requests__history_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_respond_requests_history/item_catalog_respond_requests__history_state.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
-import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_respond_requests_model.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_request_work_flow.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
-import 'package:hassanallamportalflutter/screens/items_catalog_screen/cart_screen.dart';
-import 'package:hassanallamportalflutter/screens/items_catalog_screen/favorite_screen.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_workflow_screen.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 
-class CatalogHistoryRespondScreen extends StatefulWidget{
+class CatalogRequestWorkFlowScreen extends StatefulWidget{
 
-  static const routeName = "/history-catalog-respond-screen";
-  const CatalogHistoryRespondScreen({Key? key}) : super(key: key);
+  static const routeName = "/work-flow-catalog-request-screen";
+
+  static const catalogRequestIDWorkFlow = "catalogRequestIDWorkFlow";
+
+  const CatalogRequestWorkFlowScreen({Key? key, this.requestData}) : super(key: key);
+
+  final dynamic requestData;
+
   @override
-  State<CatalogHistoryRespondScreen> createState() => CatalogHistoryRespondScreenClass();
+  State<CatalogRequestWorkFlowScreen> createState() => CatalogRequestWorkFlowScreenClass();
 }
 
-class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen> {
+class CatalogRequestWorkFlowScreenClass extends State<CatalogRequestWorkFlowScreen> {
 
 
   @override
   Widget build(BuildContext context) {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
+
+    final currentRequestData = widget.requestData;
+
     return WillPopScope(
         onWillPop: () async {
           await EasyLoading.dismiss(animation: true);
@@ -35,8 +42,7 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
         },
         child: BlocProvider<CatalogRespondRequestsHistoryCubit>(
           create: (context) =>
-          CatalogRespondRequestsHistoryCubit(ItemsCatalogGetAllRepository(user))
-            ..getAllRequestList(user.employeeData?.userHrCode),
+          (CatalogRespondRequestsHistoryCubit(ItemsCatalogGetAllRepository(user))..getAllWorkFlowRequestList(currentRequestData[CatalogRequestWorkFlowScreen.catalogRequestIDWorkFlow].toString())),
           child: BlocConsumer<CatalogRespondRequestsHistoryCubit,
               CatalogRespondRequestsHistoryInitial>(
               listener: (context, state) {
@@ -61,41 +67,48 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
               builder: (context, state) {
 
                 return Scaffold(
-                  appBar: AppBar(
-                    backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
-                    elevation: 0,
-                    title: const Text('Request History'),
-                    centerTitle: true,
-                    actions: <Widget>[
-                      IconButton(
-                        icon: const Icon(
-                          Icons.shopping_cart,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(CartScreen.routeName);
-                        },
+                  appBar: PreferredSize(
+                    preferredSize: const Size.fromHeight(80.0),
+                    child: Hero(
+                      tag: 'hero',
+                      child: AppBar(
+                        backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
+                        elevation: 0,
+                        leading: InkWell(onTap: () => Navigator.of(context).pushReplacementNamed(ItemsCatalogGetAllScreen.routeName),child: const Icon(Icons.home)),
+                        title: const Text('Request History'),
+                        centerTitle: true,
+                        // actions: <Widget>[
+                        //   IconButton(
+                        //     icon: const Icon(
+                        //       Icons.shopping_cart,
+                        //       color: Colors.white,
+                        //     ),
+                        //     onPressed: () {
+                        //       Navigator.of(context).pushNamed(CartScreen.routeName);
+                        //     },
+                        //   ),
+                        //   IconButton(
+                        //     icon: const Icon(
+                        //       Icons.favorite,
+                        //       color: Colors.white,
+                        //     ),
+                        //     onPressed: () {
+                        //       Navigator.of(context).pushNamed(
+                        //           FavoriteScreen.routeName);
+                        //     },
+                        //   )
+                        // ],
+                        shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                                bottomLeft: Radius.circular(25),
+                                bottomRight: Radius.circular(25))),
                       ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                              FavoriteScreen.routeName);
-                        },
-                      )
-                    ],
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(25),
-                            bottomRight: Radius.circular(25))),
+                    ),
                   ),
 
                   floatingActionButton:FloatingActionButton.extended(
                     onPressed: () {
-                      // importDataRespondRequests(state.getCatalogRespondRequestsHistoryList[0]);
+                      // importDataRequests(state.getCatalogWorkFlowList[0]);
                     },
                     backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -103,10 +116,12 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                     label: const Text('Export'),
                   ),
 
-                  body: Container(
-                    child: getRespondCatalogHistoryData(
-                        state.getCatalogRespondRequestsHistoryList),
+                  body:
+                  Container(
+                    child: getCatalogWorkFlowHistoryData(
+                        state.getCatalogWorkFlowList),
                   ),
+
 
                 );
               }),
@@ -114,9 +129,10 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
     );
   }
 
-  SafeArea getRespondCatalogHistoryData(List<ItemCatalogRespondRequests> getCatalogRespondRequestsHistoryList) {
-    if (getCatalogRespondRequestsHistoryList.isNotEmpty) {
-      if (getCatalogRespondRequestsHistoryList[0].data != null) {
+  SafeArea getCatalogWorkFlowHistoryData(
+      List<CatalogRequestWorkFlow> getCatalogWorkFlowList) {
+    if (getCatalogWorkFlowList.isNotEmpty) {
+      if (getCatalogWorkFlowList[0].data != null) {
         return SafeArea(
           maintainBottomViewPadding: true,
           child: ConditionalBuilder(
@@ -129,13 +145,13 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 1,
                       // childAspectRatio: (1 / .4),
-                      // mainAxisExtent: 285, // here set custom Height You Want
+                      // mainAxisExtent: 220, // here set custom Height You Want
                       // width between items
                       crossAxisSpacing: 2,
                       // height between items
                       mainAxisSpacing: 5,
                     ),
-                    itemCount: getCatalogRespondRequestsHistoryList[0].data?.length,
+                    itemCount: getCatalogWorkFlowList[0].data?.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
@@ -169,7 +185,7 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                                     Row(
                                       children: <Widget>[
                                         Container(
-                                          padding: EdgeInsets.all(5),
+                                          padding: const EdgeInsets.all(5),
                                           decoration: BoxDecoration(
                                               color: Colors.indigo.shade50,
                                               borderRadius: BorderRadius
@@ -187,88 +203,64 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                                             ),
                                           ),
                                         ),
-                                        SizedBox(width: 5,),
+                                        const SizedBox(width: 5,),
+                                        cardText(
+                                            "Group Name: ${getCatalogWorkFlowList[0]
+                                                .data![index].groupName
+                                                .toString()}", 18.0),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 4,),
+                                    Row(
+                                      children: <Widget>[
+                                        const SizedBox(width: 30,),
+                                        cardText(
+                                            "Action: ${getCatalogWorkFlowList[0]
+                                                .data![index].actionDesc
+                                                .toString()}", 14.0),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 4,),
+                                    Row(
+                                      children: <Widget>[
+                                        const SizedBox(width: 30,),
+                                        cardText(
+                                            "Request ID: ${getCatalogWorkFlowList[0]
+                                                .data![index].requestID
+                                                .toString()}", 14.0),
+
+                                      ],
+                                    ),
+
+                                    const SizedBox(height: 4,),
+                                    Row(
+                                      children: <Widget>[
+                                        const SizedBox(width: 30,),
                                         Flexible(
                                           child: cardText(
-                                              "user Action: ${getCatalogRespondRequestsHistoryList[0]
-                                                  .data![index].userAction
-                                                  .toString()}", 18.0),
+                                              "Action by name: ${getCatalogWorkFlowList[0]
+                                                  .data![index].actionByName
+                                                  .toString()}", 14.0),
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: 4,),
+                                    const SizedBox(height: 4,),
                                     Row(
                                       children: <Widget>[
-                                        SizedBox(width: 30,),
+                                        const SizedBox(width: 30,),
                                         cardText(
-                                            "cat Name: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].catName
+                                            "Item Name: ${getCatalogWorkFlowList[0]
+                                                .data![index].itemName
                                                 .toString()}", 14.0),
                                       ],
                                     ),
-                                    SizedBox(height: 4,),
-                                    Row(
-                                      children: <Widget>[
-                                        SizedBox(width: 30,),
-                                        cardText(
-                                            "Action Name: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].actionName
-                                                .toString()}", 14.0),
-                                      ],
-                                    ),
-                                    SizedBox(height: 4,),
-                                    Row(
-                                      children: <Widget>[
-                                        SizedBox(width: 30,),
-                                        cardText(
-                                            "Request No: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].requestNo
-                                                .toString()}", 14.0),
-
-                                      ],
-                                    ),
-
-                                    SizedBox(height: 4,),
-                                    Row(
-                                      children: <Widget>[
-                                        SizedBox(width: 30,),
-                                        cardText(
-                                            "Category ID: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].catID
-                                                .toString()}", 14.0),
-
-                                      ],
-                                    ),
-
-                                    SizedBox(height: 4,),
-                                    Row(
-                                      children: <Widget>[
-                                        SizedBox(width: 30,),
-                                        cardText(
-                                            "Submitted Hr Code: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].submittedHrCode
-                                                .toString()}", 14.0),
-
-                                      ],
-                                    ),
-
-                                    SizedBox(height: 4,),
-                                    Row(
-                                      children: <Widget>[
-                                        SizedBox(width: 30,),
-                                        cardText(
-                                            "Category: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].catName
-                                                .toString()}", 14.0),
-                                      ],
-                                    ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: <Widget>[
                                         cardText(
-                                            "Submitted Date: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].submittedDate.toString()}",
+                                            getCatalogWorkFlowList[0]
+                                                .data![index].requestDate.toString(),
                                             12.0),
                                       ],
                                     ),
@@ -318,40 +310,29 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                                         bottomLeft: Radius.circular(24),
                                         bottomRight: Radius.circular(24))
                                 ),
-
-                                child: InkWell(
-                                  onTap: (){
-                                    Navigator.of(context).pushNamed(CatalogRequestWorkFlowScreen.routeName,
-                                    arguments: {
-                                      CatalogRequestWorkFlowScreen.catalogRequestIDWorkFlow:
-                                      getCatalogRespondRequestsHistoryList[0].data![index].request?.requestID
-                                    });
-                                  },
-                                  child: Row(
-                                    children: <Widget>[
-                                      Container(
-                                        padding: const EdgeInsets.all(8),
-                                        decoration: BoxDecoration(
-                                            color: Colors.black12,
-                                            borderRadius: BorderRadius.circular(
-                                                20)
-                                        ),
-                                        child: Icon(Icons.incomplete_circle,
-                                            color: ConstantsColors
-                                                .backgroundStartColor),
+                                child: Row(
+                                  children: <Widget>[
+                                    Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: BoxDecoration(
+                                          color: Colors.black12,
+                                          borderRadius: BorderRadius.circular(
+                                              20)
                                       ),
-                                      SizedBox(width: 16,),
-                                      Text(
-                                          "Status action: ${getCatalogRespondRequestsHistoryList[0]
-                                              .data![index]
-                                              .action.toString()}...",
-                                          style: const TextStyle(fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.grey)),
-                                    ],
-                                  ),
-                                )
-
+                                      child: const Icon(Icons.cached,
+                                          color: ConstantsColors
+                                              .backgroundStartColor),
+                                    ),
+                                    const SizedBox(width: 16,),
+                                    Text(
+                                        "${getCatalogWorkFlowList[0]
+                                            .data![index]
+                                            .action.toString()}",
+                                        style: const TextStyle(fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.grey)),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -380,6 +361,4 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
           color: ConstantsColors
               .bottomSheetBackground),);
   }
-
-
 }

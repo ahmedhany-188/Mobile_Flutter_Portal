@@ -36,10 +36,10 @@ class Data {
   int? groupID;
   Group? group;
   bool? isSuperAdmin;
-  Null? inUser;
-  Null? inDate;
+  String? inUser;
+  String? inDate;
   String? upUser;
-  Null? upDate;
+  String? upDate;
 
   Data(
       {this.id,
@@ -86,8 +86,8 @@ class Group {
   String? groupName;
   String? inUser;
   String? inDate;
-  Null? upUser;
-  Null? upDate;
+  String? upUser;
+  String? upDate;
 
   Group(
       {this.id,

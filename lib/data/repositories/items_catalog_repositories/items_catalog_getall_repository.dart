@@ -11,6 +11,7 @@ import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_getall_model.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_new_request_model.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_requestCatalog_reponse.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_request_work_flow.dart';
 import 'package:http/http.dart' as http;
 
 class ItemsCatalogGetAllRepository {
@@ -138,10 +139,25 @@ class ItemsCatalogGetAllRepository {
     final http.Response rawItemsCatalog= await itemsCatalogGetAllDataProvider.getRespondRequestsCatalogList(header,groupNumber);
     final json = await jsonDecode(rawItemsCatalog.body);
 
-    print(json.toString());
     ItemCatalogRespondRequests newRequestCatalogModelResponse=ItemCatalogRespondRequests.fromJson(json);
-
     List<ItemCatalogRespondRequests> newRequestCatalogModelResponseList=[newRequestCatalogModelResponse];
+    return newRequestCatalogModelResponseList;
+  }
+
+  Future<List<CatalogRequestWorkFlow>> getCatalogWorkFlow(String requestID) async {
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
+
+    final http.Response rawItemsCatalog= await itemsCatalogGetAllDataProvider.getCatalogWorkFlowList(header,requestID);
+    final json = await jsonDecode(rawItemsCatalog.body);
+    print("requestID"+json.toString());
+
+    CatalogRequestWorkFlow newRequestCatalogModelResponse=CatalogRequestWorkFlow.fromJson(json);
+
+    print("oiiooo"+json.toString());
+    List<CatalogRequestWorkFlow> newRequestCatalogModelResponseList=[newRequestCatalogModelResponse];
     return newRequestCatalogModelResponseList;
   }
 
@@ -150,11 +166,11 @@ class ItemsCatalogGetAllRepository {
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
-    final http.Response rawItemsCatalog= await itemsCatalogGetAllDataProvider.getRespondRequestsCatalogList(header,hrCode);
+
+    final http.Response rawItemsCatalog= await itemsCatalogGetAllDataProvider.getRespondGetHrData(header,hrCode);
+
     final json = await jsonDecode(rawItemsCatalog.body);
-
     ItemCatalogUserInfo newRequestCatalogModelResponse=ItemCatalogUserInfo.fromJson(json);
-
     List<ItemCatalogUserInfo> newRequestCatalogModelResponseList=[newRequestCatalogModelResponse];
     return newRequestCatalogModelResponseList;
   }

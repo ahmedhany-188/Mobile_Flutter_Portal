@@ -23,9 +23,18 @@ class ItemsCatalogGetAllDataProvider {
     return rawItemsCatalogData;
   }
 
-  Future<http.Response> getRespondRequestsCatalogList(Map<String, String> header,String groupNumber) async {
+  Future<http.Response> getRespondRequestsCatalogList(Map<String, String> header,int groupNumber) async {
     http.Response rawItemsCatalogData = await http.get(
       Uri.parse("https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Item_Request/GetRequestHistory?groupID=$groupNumber"),
+      headers: header,
+    ).timeout(const Duration(seconds: 10));
+
+    return rawItemsCatalogData;
+  }
+
+  Future<http.Response> getCatalogWorkFlowList(Map<String, String> header,String requestID) async {
+    http.Response rawItemsCatalogData = await http.get(
+      Uri.parse("https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Item_Request/GetItemWorkflowTrackCycle?requestID=$requestID"),
       headers: header,
     ).timeout(const Duration(seconds: 10));
     return rawItemsCatalogData;

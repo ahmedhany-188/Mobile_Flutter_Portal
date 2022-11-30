@@ -23,6 +23,7 @@ import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_r
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_requests_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_respond_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_workflow_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_screen.dart';
@@ -190,6 +191,10 @@ class AppRouter {
       case NewRequestCatalogScreen.routeName:
         return MaterialPageRoute(
         builder: (_) =>  NewRequestCatalogScreen(requestData: settings.arguments),
+        );
+      case CatalogRequestWorkFlowScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) =>  CatalogRequestWorkFlowScreen(requestData: settings.arguments),
         );
       case PhotosScreen.routeName:
         return MaterialPageRoute(

@@ -35,6 +35,43 @@ class CatalogRespondRequestsHistoryCubit extends Cubit<CatalogRespondRequestsHis
   static CatalogRespondRequestsHistoryCubit get(context) => BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();
 
+  Future<void> dataNotFound() async{
+    emit(state.copyWith(
+      catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.failed,
+    ));
+  }
+
+  Future<void> getAllWorkFlowRequestList(String requestID) async{
+
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+      try {
+        emit(state.copyWith(
+          catalogRespondRequestsHistoryEnumStates : CatalogRespondRequestsHistoryEnumStates.loading,
+        ));
+        await requestRepository.getCatalogWorkFlow(requestID).then((workFlowData) async{
+            emit(state.copyWith(
+              catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.success,
+              getCatalogWorkFlowList: workFlowData,
+            ));
+          }).catchError((error) {
+            emit(state.copyWith(
+              catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.failed,
+            ));
+          });
+
+      } catch (e) {
+        emit(state.copyWith(
+          catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.failed,
+        ));
+      }
+    } else {
+      emit(state.copyWith(
+        catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.noConnection,
+      ));
+    }
+
+  }
+
   Future<void> getAllRequestList(hrCode) async {
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       try {
@@ -67,7 +104,6 @@ class CatalogRespondRequestsHistoryCubit extends Cubit<CatalogRespondRequestsHis
         catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.noConnection,
       ));
     }
-
   }
 
   @override

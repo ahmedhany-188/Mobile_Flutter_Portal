@@ -5,7 +5,6 @@ import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/data_providers/general_dio/general_dio.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_requests_screen.dart';
-import 'package:hassanallamportalflutter/screens/items_catalog_screen/new_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_respond_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/new_request_Screen.dart';
 
@@ -161,9 +160,9 @@ class ItemsCatalogGetAllScreenStateClass
                     builder: (context, state) {
                       return IconButton(
                           onPressed: () async {
-                            // Navigator.of(context)
-                            //     .pushReplacementNamed(NewRequestCatalogScreen.routeName,
-                            //     arguments: {NewRequestCatalogScreen.itemsGetAllTree:state.itemsGetAllTree});
+                            Navigator.of(context)
+                                .pushReplacementNamed(NewRequestCatalogScreen.routeName,
+                                arguments: {NewRequestCatalogScreen.itemsGetAllTree:state.itemsGetAllTree});
                           },
                           icon: const Icon(Icons.add));
                     },
@@ -183,8 +182,9 @@ class ItemsCatalogGetAllScreenStateClass
                         return IconButton(
                             onPressed: () async {
                               Navigator.of(context)
-                                  .pushNamed(CatalogHistoryRespondScreen.routeName,
-                                  arguments: {CatalogHistoryRespondScreen});
+                                  .pushNamed(CatalogHistoryRespondScreen.routeName
+                                  // , arguments: {CatalogHistoryRespondScreen}
+                              );
                             },
                             icon: const Icon(Icons.abc));
                       },
