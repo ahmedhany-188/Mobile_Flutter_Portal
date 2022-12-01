@@ -149,7 +149,8 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                                 topRight: Radius.circular(24),
                                 bottomLeft: Radius.circular(24),
                                 bottomRight: Radius.circular(24),
-                              )
+                              ),
+                              color: Colors.white
                           ),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
@@ -157,13 +158,6 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                               Container(
                                 padding: const EdgeInsets.only(
                                     left: 16, right: 16, bottom: 5, top: 16),
-                                decoration: const BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(24),
-                                        topRight: Radius.circular(24))
-                                ),
-
                                 child: Column(
                                   children: <Widget>[
                                     Row(

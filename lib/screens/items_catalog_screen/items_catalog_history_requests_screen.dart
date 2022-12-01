@@ -9,6 +9,8 @@ import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_c
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/cart_screen.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/favorite_screen.dart';
 import 'export_excel.dart';
 import 'items_catalog_screen_getall.dart';
 
@@ -70,27 +72,20 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                         leading: InkWell(onTap: () => Navigator.of(context).pushReplacementNamed(ItemsCatalogGetAllScreen.routeName),child: const Icon(Icons.home)),
                         title: const Text('Request History'),
                         centerTitle: true,
-                        // actions: <Widget>[
-                        //   IconButton(
-                        //     icon: const Icon(
-                        //       Icons.shopping_cart,
-                        //       color: Colors.white,
-                        //     ),
-                        //     onPressed: () {
-                        //       Navigator.of(context).pushNamed(CartScreen.routeName);
-                        //     },
-                        //   ),
-                        //   IconButton(
-                        //     icon: const Icon(
-                        //       Icons.favorite,
-                        //       color: Colors.white,
-                        //     ),
-                        //     onPressed: () {
-                        //       Navigator.of(context).pushNamed(
-                        //           FavoriteScreen.routeName);
-                        //     },
-                        //   )
-                        // ],
+                        actions: <Widget>[
+                          IconButton(
+                              onPressed: () async {
+                                Navigator.of(context)
+                                    .pushReplacementNamed(FavoriteScreen.routeName);
+                              },
+                              icon: const Icon(Icons.favorite)),
+                          IconButton(
+                              onPressed: () async {
+                                Navigator.of(context)
+                                    .pushReplacementNamed(CartScreen.routeName);
+                              },
+                              icon: const Icon(Icons.shopping_cart)),
+                        ],
                         shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(25),
