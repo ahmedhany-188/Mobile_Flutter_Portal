@@ -60,7 +60,8 @@ class ItemsCatalogGetAllScreenStateClass
                   onTap: () => Navigator.of(context).pop(),
                   child: const Icon(Icons.clear),
                 ),
-                backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
+                backgroundColor: ConstantsColors
+                    .bottomSheetBackgroundDark,
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(0.0),
                   child:
@@ -72,7 +73,8 @@ class ItemsCatalogGetAllScreenStateClass
                       builder: (ctx, state) {
                         if (state.itemsGetAllTree == [] ||
                             state.itemsGetAllTree.isEmpty) {
-                          ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(
+                          ItemCatalogSearchCubit.get(ctx)
+                              .getAllItemsCatalog(
                               user.employeeData?.userHrCode ?? "");
                         }
 
@@ -87,20 +89,25 @@ class ItemsCatalogGetAllScreenStateClass
                             ItemCatalogSearchCubit.get(ctx)
                                 .setSearchString(text);
                             if (text.isEmpty) {
-                              ItemCatalogSearchCubit.get(ctx).clearData();
+                              ItemCatalogSearchCubit.get(ctx)
+                                  .clearData();
                               ItemCatalogSearchCubit.get(ctx)
                                   .getAllItemsCatalog(
-                                  user.employeeData?.userHrCode ?? "");
+                                  user.employeeData?.userHrCode ??
+                                      "");
                             }
                           },
                           decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(10),
+                              contentPadding: const EdgeInsets.all(
+                                  10),
                               filled: true,
                               focusColor: Colors.white,
-                              fillColor: Colors.grey.shade400.withOpacity(0.4),
+                              fillColor: Colors.grey.shade400
+                                  .withOpacity(0.4),
                               // labelText: "Search contact",
                               hintText: 'Item Name',
-                              suffixIcon: (textController.text.isNotEmpty ||
+                              suffixIcon: (textController.text
+                                  .isNotEmpty ||
                                   textController.text != "")
                                   ? IconButton(
                                 icon: const Icon(Icons.clear),
@@ -117,12 +124,15 @@ class ItemsCatalogGetAllScreenStateClass
                                 },
                               )
                                   : null,
-                              hintStyle: const TextStyle(color: Colors.white),
+                              hintStyle: const TextStyle(
+                                  color: Colors.white),
                               prefixIcon:
-                              const Icon(Icons.search, color: Colors.white),
+                              const Icon(
+                                  Icons.search, color: Colors.white),
                               border: const OutlineInputBorder(
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
+                                  BorderRadius.all(
+                                      Radius.circular(20.0)),
                                   borderSide: BorderSide.none)),
                         );
                       },
@@ -135,27 +145,19 @@ class ItemsCatalogGetAllScreenStateClass
                         bottomLeft: Radius.circular(25),
                         bottomRight: Radius.circular(25))),
                 actions: [
+                  IconButton(
+                      onPressed: () async {
+                        Navigator.of(context)
+                            .pushReplacementNamed(FavoriteScreen.routeName);
+                      },
+                      icon: const Icon(Icons.favorite)),
 
-                  BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
-                    builder: (context, state) {
-                      return IconButton(
-                          onPressed: () async {
-                            Navigator.of(context)
-                                .pushReplacementNamed(FavoriteScreen.routeName);
-                          },
-                          icon: const Icon(Icons.favorite));
-                    },
-                  ),
-                  BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
-                    builder: (context, state) {
-                      return IconButton(
-                          onPressed: () async {
-                            Navigator.of(context)
-                                .pushReplacementNamed(CartScreen.routeName);
-                          },
-                          icon: const Icon(Icons.shopping_cart));
-                    },
-                  ),
+                  IconButton(
+                      onPressed: () async {
+                        Navigator.of(context)
+                            .pushReplacementNamed(CartScreen.routeName);
+                      },
+                      icon: const Icon(Icons.shopping_cart)),
 
                   BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
                       builder: (context, state) {
