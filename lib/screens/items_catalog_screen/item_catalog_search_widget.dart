@@ -10,7 +10,6 @@ import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cu
 import '../../constants/url_links.dart';
 import '../../gen/assets.gen.dart';
 import 'package:flutter/gestures.dart';
-
 import 'item_detail_widget.dart';
 
 Widget itemCatalogSearchWidget(hrcode) {
@@ -92,8 +91,7 @@ Widget itemCatalogSearchWidget(hrcode) {
     );
   }
 
-  Widget checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData,
-      String treeDirection) {
+  Widget checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData, String treeDirection) {
     if (itemCategoryGetAllData.isNotEmpty) {
       return ListView.builder(
         shrinkWrap: true,
@@ -169,9 +167,11 @@ Widget itemCatalogSearchWidget(hrcode) {
     }
   }
 
+
   return BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
     builder: (context, state) {
-      if (state.searchString != "" && state.detail == false) {
+      if (state.searchString != "" && state.detail == false)
+      {
         return Column(
             crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Padding(
@@ -277,9 +277,15 @@ Widget itemCatalogSearchWidget(hrcode) {
           ),
         ]);
       }
-      if (state.detail == true) {
+
+      if (state.detail == true)
+
+      {
         return itemDetailWidget(hrcode);
-      } else {
+      }
+
+      else {
+
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -317,8 +323,7 @@ Widget itemCatalogSearchWidget(hrcode) {
             ),
             buildDivider(),
             Expanded(
-                child: checkList(state
-                    .itemsGetAllTree) //(state.getAllItemsCatalogList.data.isNotEmpty)
+                child: checkList(state.itemsGetAllTree) //(state.getAllItemsCatalogList.data.isNotEmpty)
                     ? ListView.builder(
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
@@ -426,7 +431,10 @@ Widget itemCatalogSearchWidget(hrcode) {
                     state.itemsGetItemsCategory, state.treeDirection))
           ],
         );
+
       }
     },
   );
+
+
 }

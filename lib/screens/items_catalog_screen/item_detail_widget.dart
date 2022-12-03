@@ -7,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
+import '../../widgets/dialogpopoup/dialog_popup_catalog_item_share.dart';
 
 import '../../constants/colors.dart';
 import '../../constants/url_links.dart';
@@ -273,6 +274,53 @@ Widget itemDetailWidget(dynamic hrcode) {
               ),
             ),
           ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: InkWell(
+                onTap: () async {
+
+
+                  showModalBottomSheet<void>(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (BuildContext context) {
+                        return  DialogCatalogShareItemBottomSheet(
+                          value:"https://apps.hassanallam.com/catalog/item/"+state.itemAllDatalist[0].itemID.toString(),
+                        );
+                      });
+
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Share Item",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: ConstantsColors.bottomSheetBackground),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Item id:"+state.itemAllDatalist[0].itemID.toString(),
+                          style: const TextStyle(
+                              fontSize: 15,
+                              color: ConstantsColors.bottomSheetBackground),
+                        ),
+                        const Icon(Icons.share, size: 20),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 10),
             child: Align(
