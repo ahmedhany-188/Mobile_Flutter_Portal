@@ -174,9 +174,7 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                                                 : null,
                                           )
                                       ),
-
                                     ),
-
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: TextFormField(
@@ -208,10 +206,8 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                                                 ? 'invalid Description'
                                                 : null,
                                           )
-
                                       ),
                                     ),
-
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: DropdownSearch<String>(
@@ -222,8 +218,7 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                                         onChanged: (item) =>
                                         {
                                           for (int i = 0; i <
-                                              itemsGetAllTreeParents
-                                                  .length; i++) {
+                                              itemsGetAllTreeParents.length; i++) {
                                             if(item == itemsGetAllTreeParents[i]){
                                               context.read<
                                                   NewRequestCatalogCubit>()
@@ -406,7 +401,6 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                                       .bottomSheetBackgroundDark),
                             ]
                         )
-
                     ),
                   );
                 }
@@ -415,6 +409,5 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
       ),
     );
   }
-
 }
 
