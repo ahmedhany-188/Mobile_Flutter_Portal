@@ -64,68 +64,144 @@ class ItemsCatalogGetAllScreenStateClass
                 bottom: PreferredSize(
                   preferredSize: const Size.fromHeight(0.0),
                   child:
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 40.0, right: 40, bottom: 20),
-                    child: BlocBuilder<ItemCatalogSearchCubit,
-                        ItemCatalogSearchState>(
-                      builder: (ctx, state) {
-                        if (state.itemsGetAllTree == [] ||
-                            state.itemsGetAllTree.isEmpty) {
-                          ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(
-                              user.employeeData?.userHrCode ?? "");
-                        }
-
-                        return TextFormField(
-                          focusNode: textFoucus,
-                          // key: uniqueKey,
-                          controller: textController,
-                          style: const TextStyle(
-                            color: Colors.white,
+                  SingleChildScrollView(
+                    physics: const NeverScrollableScrollPhysics(),
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                          BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                            builder: (context, state) {
+                              return IconButton(
+                                  onPressed: () async {
+                                    Navigator.of(context)
+                                        .pushReplacementNamed(FavoriteScreen.routeName);
+                                  },
+                                  icon: const Icon(Icons.favorite,color: Colors.white,size: 25,));
+                            },
                           ),
-                          onChanged: (text) {
-                            ItemCatalogSearchCubit.get(ctx)
-                                .setSearchString(text);
-                            if (text.isEmpty) {
-                              ItemCatalogSearchCubit.get(ctx).clearData();
-                              ItemCatalogSearchCubit.get(ctx)
-                                  .getAllItemsCatalog(
-                                  user.employeeData?.userHrCode ?? "");
-                            }
-                          },
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.all(10),
-                              filled: true,
-                              focusColor: Colors.white,
-                              fillColor: Colors.grey.shade400.withOpacity(0.4),
-                              // labelText: "Search contact",
-                              hintText: 'Item Name',
-                              suffixIcon: (textController.text.isNotEmpty ||
-                                  textController.text != "")
-                                  ? IconButton(
-                                icon: const Icon(Icons.clear),
-                                color: Colors.red,
-                                onPressed: () {
+                          BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                            builder: (context, state) {
+                              return IconButton(
+                                  onPressed: () async {
+                                    Navigator.of(context)
+                                        .pushReplacementNamed(CartScreen.routeName);
+                                  },
+                                  icon: const Icon(Icons.shopping_cart,color: Colors.white,size: 25,));
+                            },
+                          ),
+                          BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                              builder: (context, state) {
+                                return PopupMenuButton(
+                                    icon: const Icon(Icons.add,color: Colors.white,size: 25,),
+                                    itemBuilder: (context) {
+                                      return [
+                                        const PopupMenuItem<int>(
+                                          value: 0,
+                                          child: Text("Create a Request"),
+                                        ),
+                                        const PopupMenuItem<int>(
+                                          value: 1,
+                                          child: Text("New requests"),
+                                        ),
+                                        const PopupMenuItem<int>(
+                                          value: 2,
+                                          child: Text("Pending Requests"),
+                                        ),
+                                      ];
+                                    },
+                                    onSelected: (value) {
+                                      if (value == 0) {
+                                        Navigator.of(context)
+                                            .pushReplacementNamed(
+                                            NewRequestCatalogScreen.routeName,
+                                            arguments: {
+                                              NewRequestCatalogScreen
+                                                  .itemsGetAllTree: state
+                                                  .itemsGetAllTree
+                                            });
+                                      } else if (value == 1) {
+                                        Navigator.of(context)
+                                            .pushReplacementNamed(
+                                            CatalogHistoryRequestScreen.routeName,
+                                            arguments: {CatalogHistoryRequestScreen});
+                                      }
+                                      else if (value == 2) {
+                                        Navigator.of(context)
+                                            .pushNamed(
+                                            CatalogHistoryRespondScreen.routeName);
+                                        // , arguments: {CatalogHistoryRespondScreen}
+                                      }
+                                    }
+                                );
+                              }),
+                        ]),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 40.0, right: 40, bottom: 20),
+                          child: BlocBuilder<ItemCatalogSearchCubit,
+                              ItemCatalogSearchState>(
+                            builder: (ctx, state) {
+                              if (state.itemsGetAllTree == [] ||
+                                  state.itemsGetAllTree.isEmpty) {
+                                ItemCatalogSearchCubit.get(ctx).getAllItemsCatalog(
+                                    user.employeeData?.userHrCode ?? "");
+                              }
+
+                              return TextFormField(
+                                focusNode: textFoucus,
+                                // key: uniqueKey,
+                                controller: textController,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                ),
+                                onChanged: (text) {
                                   ItemCatalogSearchCubit.get(ctx)
-                                      .clearData();
-                                  ItemCatalogSearchCubit.get(ctx)
-                                      .getAllItemsCatalog(
-                                      user.employeeData?.userHrCode ??
-                                          "");
-                                  textController.clear();
-                                  textFoucus.unfocus();
+                                      .setSearchString(text);
+                                  if (text.isEmpty) {
+                                    ItemCatalogSearchCubit.get(ctx).clearData();
+                                    ItemCatalogSearchCubit.get(ctx)
+                                        .getAllItemsCatalog(
+                                        user.employeeData?.userHrCode ?? "");
+                                  }
                                 },
-                              )
-                                  : null,
-                              hintStyle: const TextStyle(color: Colors.white),
-                              prefixIcon:
-                              const Icon(Icons.search, color: Colors.white),
-                              border: const OutlineInputBorder(
-                                  borderRadius:
-                                  BorderRadius.all(Radius.circular(20.0)),
-                                  borderSide: BorderSide.none)),
-                        );
-                      },
+                                decoration: InputDecoration(
+                                    contentPadding: const EdgeInsets.all(10),
+                                    filled: true,
+                                    focusColor: Colors.white,
+                                    fillColor: Colors.grey.shade400.withOpacity(0.4),
+                                    // labelText: "Search contact",
+                                    hintText: 'Item Name',
+                                    suffixIcon: (textController.text.isNotEmpty ||
+                                        textController.text != "")
+                                        ? IconButton(
+                                      icon: const Icon(Icons.clear),
+                                      color: Colors.red,
+                                      onPressed: () {
+                                        ItemCatalogSearchCubit.get(ctx)
+                                            .clearData();
+                                        ItemCatalogSearchCubit.get(ctx)
+                                            .getAllItemsCatalog(
+                                            user.employeeData?.userHrCode ??
+                                                "");
+                                        textController.clear();
+                                        textFoucus.unfocus();
+                                      },
+                                    )
+                                        : null,
+                                    hintStyle: const TextStyle(color: Colors.white),
+                                    prefixIcon:
+                                    const Icon(Icons.search, color: Colors.white),
+                                    border: const OutlineInputBorder(
+                                        borderRadius:
+                                        BorderRadius.all(Radius.circular(20.0)),
+                                        borderSide: BorderSide.none)),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -134,75 +210,75 @@ class ItemsCatalogGetAllScreenStateClass
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(25),
                         bottomRight: Radius.circular(25))),
-                actions: [
-
-                  BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
-                    builder: (context, state) {
-                      return IconButton(
-                          onPressed: () async {
-                            Navigator.of(context)
-                                .pushReplacementNamed(FavoriteScreen.routeName);
-                          },
-                          icon: const Icon(Icons.favorite));
-                    },
-                  ),
-                  BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
-                    builder: (context, state) {
-                      return IconButton(
-                          onPressed: () async {
-                            Navigator.of(context)
-                                .pushReplacementNamed(CartScreen.routeName);
-                          },
-                          icon: const Icon(Icons.shopping_cart));
-                    },
-                  ),
-
-                  BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
-                      builder: (context, state) {
-                        return PopupMenuButton(
-                            icon: Icon(Icons.add),
-                            itemBuilder: (context) {
-                              return [
-                                const PopupMenuItem<int>(
-                                  value: 0,
-                                  child: Text("Create a Request"),
-                                ),
-                                const PopupMenuItem<int>(
-                                  value: 1,
-                                  child: Text("New requests"),
-                                ),
-                                const PopupMenuItem<int>(
-                                  value: 2,
-                                  child: Text("Pending Requests"),
-                                ),
-                              ];
-                            },
-                            onSelected: (value) {
-                              if (value == 0) {
-                                Navigator.of(context)
-                                    .pushReplacementNamed(
-                                    NewRequestCatalogScreen.routeName,
-                                    arguments: {
-                                      NewRequestCatalogScreen
-                                          .itemsGetAllTree: state
-                                          .itemsGetAllTree
-                                    });
-                              } else if (value == 1) {
-                                Navigator.of(context)
-                                    .pushReplacementNamed(
-                                    CatalogHistoryRequestScreen.routeName,
-                                    arguments: {CatalogHistoryRequestScreen});
-                              }
-                              else if (value == 2) {
-                                Navigator.of(context)
-                                    .pushNamed(
-                                    CatalogHistoryRespondScreen.routeName);
-                                // , arguments: {CatalogHistoryRespondScreen}
-                              }
-                            }
-                        );
-                      }),
-                ],
+                // actions: [
+                //
+                //   BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                //     builder: (context, state) {
+                //       return IconButton(
+                //           onPressed: () async {
+                //             Navigator.of(context)
+                //                 .pushReplacementNamed(FavoriteScreen.routeName);
+                //           },
+                //           icon: const Icon(Icons.favorite));
+                //     },
+                //   ),
+                //   BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                //     builder: (context, state) {
+                //       return IconButton(
+                //           onPressed: () async {
+                //             Navigator.of(context)
+                //                 .pushReplacementNamed(CartScreen.routeName);
+                //           },
+                //           icon: const Icon(Icons.shopping_cart));
+                //     },
+                //   ),
+                //
+                //   BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                //       builder: (context, state) {
+                //         return PopupMenuButton(
+                //             icon: Icon(Icons.add),
+                //             itemBuilder: (context) {
+                //               return [
+                //                 const PopupMenuItem<int>(
+                //                   value: 0,
+                //                   child: Text("Create a Request"),
+                //                 ),
+                //                 const PopupMenuItem<int>(
+                //                   value: 1,
+                //                   child: Text("New requests"),
+                //                 ),
+                //                 const PopupMenuItem<int>(
+                //                   value: 2,
+                //                   child: Text("Pending Requests"),
+                //                 ),
+                //               ];
+                //             },
+                //             onSelected: (value) {
+                //               if (value == 0) {
+                //                 Navigator.of(context)
+                //                     .pushReplacementNamed(
+                //                     NewRequestCatalogScreen.routeName,
+                //                     arguments: {
+                //                       NewRequestCatalogScreen
+                //                           .itemsGetAllTree: state
+                //                           .itemsGetAllTree
+                //                     });
+                //               } else if (value == 1) {
+                //                 Navigator.of(context)
+                //                     .pushReplacementNamed(
+                //                     CatalogHistoryRequestScreen.routeName,
+                //                     arguments: {CatalogHistoryRequestScreen});
+                //               }
+                //               else if (value == 2) {
+                //                 Navigator.of(context)
+                //                     .pushNamed(
+                //                     CatalogHistoryRespondScreen.routeName);
+                //                 // , arguments: {CatalogHistoryRespondScreen}
+                //               }
+                //             }
+                //         );
+                //       }),
+                // ],
               ),
             ),
           ),
