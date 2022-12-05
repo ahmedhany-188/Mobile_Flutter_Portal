@@ -50,7 +50,7 @@ class ItemsCatalogGetAllScreenStateClass
         child: Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(130.0),
+            preferredSize: const Size.fromHeight(150.0),
             child: Hero(
               tag: 'hero',
               child: AppBar(
