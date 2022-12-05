@@ -48,7 +48,7 @@ class DialogCatalogShareItemBottomSheet extends StatelessWidget {
                   const Icon(
                       Icons.copy,
                       size: 40.0,
-                      color: Colors.green
+                      color: Colors.grey
                   ),
                   context, value
               ),),
@@ -137,28 +137,22 @@ class DialogCatalogShareItemBottomSheet extends StatelessWidget {
                 child: InkWell(onTap: () async {
                   try {
                     bool found = await url_launcher.canLaunchUrl(
-                        Uri.parse('wa.me://'));
+                        Uri.parse("whatsapp://send?phone=0"));
                     if (defaultTargetPlatform == TargetPlatform.macOS ||
                         defaultTargetPlatform == TargetPlatform.iOS) {
                       if (found) {
-                        // const url = "https://wa.me/?text=Your Message here";
-                        // var encoded = Uri.encodeFull(url);
                         // ios
                         // <key>LSApplicationQueriesSchemes</key>
                         // <array>
                         // <string>whatsapp</string>
                         // </array>
-                        url_launcher.launchUrl(Uri.parse(
-                            'https://wa.me/?text=${Uri.parse(value)}'));
+                        url_launcher.launchUrl(Uri.parse("whatsapp://send?text=$value"));
                       } else {
                         EasyLoading.showInfo('App not Found');
                       }
                     } else {
                       if (found) {
-                        // const url = "https://wa.me/?text=Your Message here";
-                        // var encoded = Uri.encodeFull(url);
-                        url_launcher.launchUrl(Uri.parse(
-                            'https://wa.me/?text=${Uri.parse(value)}'));
+                        url_launcher.launchUrl(Uri.parse("whatsapp://send?text=$value"));
                       } else {
                         EasyLoading.showInfo('App not Found');
                       }

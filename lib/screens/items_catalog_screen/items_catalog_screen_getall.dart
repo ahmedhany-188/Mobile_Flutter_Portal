@@ -185,9 +185,7 @@ class ItemsCatalogGetAllScreenStateClass
                                     .pushReplacementNamed(
                                     NewRequestCatalogScreen.routeName,
                                     arguments: {
-                                      NewRequestCatalogScreen
-                                          .itemsGetAllTree: state
-                                          .itemsGetAllTree
+                                      NewRequestCatalogScreen.itemsGetAllTree: state.mainCategories
                                     });
                               } else if (value == 1) {
                                 Navigator.of(context)

@@ -369,7 +369,7 @@ Widget itemCatalogSearchWidget(hrcode) {
                             color: Colors.grey.shade300,
                             child: Row(
                               children: [
-                                (state.itemsGetAllTree[index].image
+                                (state.itemsGetAllTree[index].main_Photo
                                     .toString() !=
                                     'null')
                                     ? Padding(
@@ -378,7 +378,7 @@ Widget itemCatalogSearchWidget(hrcode) {
                                   child: Image.network(
                                     getCatalogPhotosCat(state
                                         .itemsGetAllTree[index]
-                                        .image
+                                        .main_Photo
                                         .toString()),
                                     width: 100,
                                     height: 100,

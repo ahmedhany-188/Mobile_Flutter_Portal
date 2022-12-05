@@ -156,11 +156,15 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
                 getAllItemsCatalogTreeList = value.data;
                 state.itemsGetAllTree=getAllItemsCatalogTreeList!;
 
+                List<String> mainCategories=[];
+                for(int i=0;i<getAllItemsCatalogTreeList.length;i++){
+                  mainCategories.add(getAllItemsCatalogTreeList[i].text??"");
+                }
                 emit(state.copyWith(
                   // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
                   // itemsGetAllTree: getAllItemsCatalogTreeList,
                   getAllItemsCatalogList: value,
-
+                  mainCategories: mainCategories,
                 ));
 
               } else {
@@ -571,7 +575,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     for (int i = 0; i < itemsGetAllTreeTest.length; i++) {
       for (int j = 0; j < getAllItemsCatalogAttachTreeList.length; j++) {
         if (itemsGetAllTreeTest[i].id == getAllItemsCatalogAttachTreeList[j].catId) {
-          itemsGetAllTreeTest[i].image = getAllItemsCatalogAttachTreeList[j].catPhoto;
+          itemsGetAllTreeTest[i].main_Photo = getAllItemsCatalogAttachTreeList[j].catPhoto;
         }
       }
     }

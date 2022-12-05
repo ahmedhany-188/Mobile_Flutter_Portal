@@ -11,7 +11,6 @@ import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_ne
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_new_request/item_catalog_new_request_state.dart';
-import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_tree_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
@@ -33,7 +32,6 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
 
   final GlobalKey<
       DropdownSearchState<String>> catalogCategoriesFormKey = GlobalKey();
-  List<String> categoriesList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +42,8 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
     if (currentRequestData[NewRequestCatalogScreen.itemsGetAllTree] == null) {
       Navigator.pop(context);
     }
-
-    List<
-        ItemsCatalogTreeModel> itemsGetAllTree = currentRequestData[NewRequestCatalogScreen
-        .itemsGetAllTree];
-
-    for (int i = 0; i < itemsGetAllTree.length; i++) {
-      categoriesList.add(itemsGetAllTree[i].text.toString());
-    }
+ 
+    List<String> itemsGetAllTreeParents = currentRequestData[NewRequestCatalogScreen.itemsGetAllTree];
 
     return WillPopScope(
       onWillPop: () async {
@@ -224,23 +216,19 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                                       padding: const EdgeInsets.all(5.0),
                                       child: DropdownSearch<String>(
                                         key: catalogCategoriesFormKey,
-                                        items: categoriesList,
+                                        items: itemsGetAllTreeParents,
                                         itemAsString: (
                                             categoryItem) => categoryItem,
                                         onChanged: (item) =>
                                         {
                                           for (int i = 0; i <
-                                              itemsGetAllTree
+                                              itemsGetAllTreeParents
                                                   .length; i++) {
-                                            if(item ==
-                                                itemsGetAllTree[i]
-                                                    .text){
+                                            if(item == itemsGetAllTreeParents[i]){
                                               context.read<
                                                   NewRequestCatalogCubit>()
                                                   .addSelectedCategoryItem(
-                                                  itemsGetAllTree[i]
-                                                      .id
-                                                      .toString()),
+                                                  itemsGetAllTreeParents[i]),
                                             }
                                           }
                                         },

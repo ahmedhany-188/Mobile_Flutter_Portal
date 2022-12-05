@@ -106,9 +106,10 @@ Widget itemDetailWidget(dynamic hrcode) {
                           (state.favoriteResult.any((element) =>
                                   element.itemCode ==
                                   state.itemAllDatalist[0].itemCode))
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: Colors.amber,
+                              ? Icons.star
+                              : Icons.star_border,
+                          color: ConstantsColors
+                              .bottomSheetBackgroundDark,
                         ),
                         padding: EdgeInsets.zero,
                         iconSize: 30,
@@ -135,7 +136,8 @@ Widget itemDetailWidget(dynamic hrcode) {
                                   state.itemAllDatalist[0].itemID))
                               ? Icons.shopping_cart
                               : Icons.add_shopping_cart_outlined,
-                          color: Colors.amber,
+                          color:ConstantsColors
+                              .bottomSheetBackgroundDark,
                         ),
                         padding: EdgeInsets.zero,
                         iconSize: 30,
@@ -282,13 +284,12 @@ Widget itemDetailWidget(dynamic hrcode) {
               child: InkWell(
                 onTap: () async {
 
-
                   showModalBottomSheet<void>(
                       context: context,
                       isScrollControlled: true,
                       builder: (BuildContext context) {
                         return  DialogCatalogShareItemBottomSheet(
-                          value:"https://apps.hassanallam.com/catalog/item/"+state.itemAllDatalist[0].itemID.toString(),
+                          value:"https://apps.hassanallam.com/Catalogue/item/"+state.itemAllDatalist[0].itemID.toString(),
                         );
                       });
 

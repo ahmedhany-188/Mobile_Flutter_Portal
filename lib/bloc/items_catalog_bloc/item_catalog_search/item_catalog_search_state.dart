@@ -11,33 +11,34 @@ class ItemCatalogSearchState extends Equatable {
   final List<CartModelData> cartResult;
   final String searchString;
   final bool detail;
+  final List<String> mainCategories;
 
   final List<ItemCategorygetAllData> itemAllDatalist;
 
-   List<ItemCategorygetAllData> itemsGetItemsCategory;
+  List<ItemCategorygetAllData> itemsGetItemsCategory;
 
   final ItemsCatalogCategory getAllItemsCatalogList;
-   List<ItemsCatalogTreeModel> itemsGetAllTree;
+  List<ItemsCatalogTreeModel> itemsGetAllTree;
   final List<ItemCategoryAttachData> itemCategoryAttachData;
 
-  final  String treeDirection;
+  final String treeDirection;
 
 
-
-   ItemCatalogSearchState({
+  ItemCatalogSearchState({
     this.itemCatalogSearchEnumStates = ItemCatalogSearchEnumStates.initial,
     this.searchResult = const <ItemCatalogSearchData>[],
     this.favoriteResult = const <ItemCatalogFavoriteData>[],
     this.cartResult = const <CartModelData>[],
     this.itemCatalogAllDataEnumStates = ItemCatalogSearchEnumStates.initial,
     this.itemAllDatalist = const <ItemCategorygetAllData>[],
-    this.itemsGetAllTree=const<ItemsCatalogTreeModel>[],
-    this.itemCategoryAttachData=const<ItemCategoryAttachData>[],
-    this.itemsGetItemsCategory=const<ItemCategorygetAllData>[],
+    this.itemsGetAllTree = const<ItemsCatalogTreeModel>[],
+    this.mainCategories = const<String>[],
+    this.itemCategoryAttachData = const<ItemCategoryAttachData>[],
+    this.itemsGetItemsCategory = const<ItemCategorygetAllData>[],
     this.detail = false,
 
     this.searchString = "",
-    this.treeDirection="",
+    this.treeDirection = "",
     required this.getAllItemsCatalogList,
 
   });
@@ -49,8 +50,9 @@ class ItemCatalogSearchState extends Equatable {
     List<CartModelData>? cartResult,
     ItemCatalogSearchEnumStates? itemCatalogAllDataEnumStates,
     List<ItemCategorygetAllData>? itemAllDatalist,
+    List<String>? mainCategories,
     bool? detail,
-    String?  treeDirection,
+    String? treeDirection,
     String? searchString,
     List<ItemCategoryAttachData>? itemCategoryAttachData,
     List<ItemsCatalogTreeModel>? itemsGetAllTree,
@@ -67,12 +69,16 @@ class ItemCatalogSearchState extends Equatable {
       itemCatalogAllDataEnumStates: itemCatalogAllDataEnumStates ??
           this.itemCatalogAllDataEnumStates,
       itemAllDatalist: itemAllDatalist ?? this.itemAllDatalist,
+      mainCategories: mainCategories ?? this.mainCategories,
       searchString: searchString ?? this.searchString,
-      treeDirection:treeDirection??this.treeDirection,
-      itemCategoryAttachData:itemCategoryAttachData??this.itemCategoryAttachData,
-      itemsGetAllTree : itemsGetAllTree ?? this.itemsGetAllTree,
-      itemsGetItemsCategory : itemsGetItemsCategory ?? this.itemsGetItemsCategory,
-      getAllItemsCatalogList: getAllItemsCatalogList ?? this.getAllItemsCatalogList,
+      treeDirection: treeDirection ?? this.treeDirection,
+      itemCategoryAttachData: itemCategoryAttachData ??
+          this.itemCategoryAttachData,
+      itemsGetAllTree: itemsGetAllTree ?? this.itemsGetAllTree,
+      itemsGetItemsCategory: itemsGetItemsCategory ??
+          this.itemsGetItemsCategory,
+      getAllItemsCatalogList: getAllItemsCatalogList ??
+          this.getAllItemsCatalogList,
       detail: detail ?? this.detail,
     );
   }
@@ -86,6 +92,7 @@ class ItemCatalogSearchState extends Equatable {
         cartResult,
         itemCatalogAllDataEnumStates,
         itemAllDatalist,
+        mainCategories,
         searchString,
         treeDirection,
         getAllItemsCatalogList,
@@ -106,6 +113,7 @@ class ItemCatalogSearchState extends Equatable {
       'searchString': searchString,
       'detail': detail,
       'itemAllDatalist': itemAllDatalist,
+      'mainCategories': mainCategories,
       'itemsGetItemsCategory': itemsGetItemsCategory,
       'getAllItemsCatalogList': getAllItemsCatalogList,
       'itemsGetAllTree': itemsGetAllTree,
@@ -126,13 +134,14 @@ class ItemCatalogSearchState extends Equatable {
       searchString: map['searchString'] as String,
       detail: map['detail'] as bool,
       itemAllDatalist: map['itemAllDatalist'] as List<ItemCategorygetAllData>,
+      mainCategories: map['mainCategories'] as List<String>,
       itemsGetItemsCategory:
-          map['itemsGetItemsCategory'] as List<ItemCategorygetAllData>,
+      map['itemsGetItemsCategory'] as List<ItemCategorygetAllData>,
       getAllItemsCatalogList:
-          map['getAllItemsCatalogList'] as ItemsCatalogCategory,
+      map['getAllItemsCatalogList'] as ItemsCatalogCategory,
       itemsGetAllTree: map['itemsGetAllTree'] as List<ItemsCatalogTreeModel>,
       itemCategoryAttachData:
-          map['itemCategoryAttachData'] as List<ItemCategoryAttachData>,
+      map['itemCategoryAttachData'] as List<ItemCategoryAttachData>,
       treeDirection: map['treeDirection'] as String,
     );
   }
