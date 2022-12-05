@@ -69,7 +69,7 @@ class ItemsCatalogGetAllScreenStateClass
                     child: Column(
                       children: [
                         Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
                               BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
                                 builder: (context, state) {
@@ -91,51 +91,47 @@ class ItemsCatalogGetAllScreenStateClass
                                       icon: const Icon(Icons.shopping_cart,color: Colors.white,size: 25,));
                                 },
                               ),
+
                               BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
-                                  builder: (context, state) {
-                                    return PopupMenuButton(
-                                        icon: const Icon(Icons.add,color: Colors.white,size: 25,),
-                                        itemBuilder: (context) {
-                                          return [
-                                            const PopupMenuItem<int>(
-                                              value: 0,
-                                              child: Text("Create a Request"),
-                                            ),
-                                            const PopupMenuItem<int>(
-                                              value: 1,
-                                              child: Text("New requests"),
-                                            ),
-                                            const PopupMenuItem<int>(
-                                              value: 2,
-                                              child: Text("Pending Requests"),
-                                            ),
-                                          ];
-                                        },
-                                        onSelected: (value) {
-                                          if (value == 0) {
-                                            Navigator.of(context)
-                                                .pushReplacementNamed(
-                                                NewRequestCatalogScreen.routeName,
-                                                arguments: {
-                                                  NewRequestCatalogScreen
-                                                      .itemsGetAllTree: state
-                                                      .itemsGetAllTree
-                                                });
-                                          } else if (value == 1) {
-                                            Navigator.of(context)
-                                                .pushReplacementNamed(
-                                                CatalogHistoryRequestScreen.routeName,
-                                                arguments: {CatalogHistoryRequestScreen});
-                                          }
-                                          else if (value == 2) {
-                                            Navigator.of(context)
-                                                .pushNamed(
-                                                CatalogHistoryRespondScreen.routeName);
-                                            // , arguments: {CatalogHistoryRespondScreen}
-                                          }
-                                        }
-                                    );
-                                  }),
+                                builder: (context, state) {
+                                  return IconButton(
+                                      onPressed: () async {
+                                        Navigator.of(context)
+                                            .pushReplacementNamed(
+                                            NewRequestCatalogScreen.routeName,
+                                            arguments: {
+                                              NewRequestCatalogScreen
+                                                  .itemsGetAllTree: state.mainCategories
+                                            });
+                                      },
+                                      icon: const Icon(Icons.add,color: Colors.white,size: 25,));
+                                },
+                              ),
+
+                              BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                                builder: (context, state) {
+                                  return IconButton(
+                                      onPressed: () async {
+                                        Navigator.of(context)
+                                            .pushReplacementNamed(
+                                            CatalogHistoryRequestScreen.routeName,
+                                            arguments: {CatalogHistoryRequestScreen});
+                                      },
+                                      icon: const Icon(Icons.list,color: Colors.white,size: 25,));
+                                },
+                              ),
+
+                              BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                                builder: (context, state) {
+                                  return IconButton(
+                                      onPressed: () async {
+                                        Navigator.of(context)
+                                            .pushNamed(
+                                            CatalogHistoryRespondScreen.routeName);
+                                      },
+                                      icon: const Icon(Icons.pending_actions,color: Colors.white,size: 25,));
+                                },
+                              ),
                             ]),
                         Padding(
                           padding: const EdgeInsets.only(
@@ -210,75 +206,6 @@ class ItemsCatalogGetAllScreenStateClass
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(25),
                         bottomRight: Radius.circular(25))),
-                // actions: [
-                //
-                //   BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
-                //     builder: (context, state) {
-                //       return IconButton(
-                //           onPressed: () async {
-                //             Navigator.of(context)
-                //                 .pushReplacementNamed(FavoriteScreen.routeName);
-                //           },
-                //           icon: const Icon(Icons.favorite));
-                //     },
-                //   ),
-                //   BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
-                //     builder: (context, state) {
-                //       return IconButton(
-                //           onPressed: () async {
-                //             Navigator.of(context)
-                //                 .pushReplacementNamed(CartScreen.routeName);
-                //           },
-                //           icon: const Icon(Icons.shopping_cart));
-                //     },
-                //   ),
-                //
-                //   BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
-                //       builder: (context, state) {
-                //         return PopupMenuButton(
-                //             icon: Icon(Icons.add),
-                //             itemBuilder: (context) {
-                //               return [
-                //                 const PopupMenuItem<int>(
-                //                   value: 0,
-                //                   child: Text("Create a Request"),
-                //                 ),
-                //                 const PopupMenuItem<int>(
-                //                   value: 1,
-                //                   child: Text("New requests"),
-                //                 ),
-                //                 const PopupMenuItem<int>(
-                //                   value: 2,
-                //                   child: Text("Pending Requests"),
-                //                 ),
-                //               ];
-                //             },
-                //             onSelected: (value) {
-                //               if (value == 0) {
-                //                 Navigator.of(context)
-                //                     .pushReplacementNamed(
-                //                     NewRequestCatalogScreen.routeName,
-                //                     arguments: {
-                //                       NewRequestCatalogScreen
-                //                           .itemsGetAllTree: state
-                //                           .itemsGetAllTree
-                //                     });
-                //               } else if (value == 1) {
-                //                 Navigator.of(context)
-                //                     .pushReplacementNamed(
-                //                     CatalogHistoryRequestScreen.routeName,
-                //                     arguments: {CatalogHistoryRequestScreen});
-                //               }
-                //               else if (value == 2) {
-                //                 Navigator.of(context)
-                //                     .pushNamed(
-                //                     CatalogHistoryRespondScreen.routeName);
-                //                 // , arguments: {CatalogHistoryRespondScreen}
-                //               }
-                //             }
-                //         );
-                //       }),
-                // ],
               ),
             ),
           ),

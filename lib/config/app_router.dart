@@ -24,6 +24,7 @@ import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_cata
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_respond_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_workflow_screen.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_detail_screen.dart';
 import 'package:hassanallamportalflutter/screens/login_screen/auth_screen.dart';
 import 'package:hassanallamportalflutter/screens/medicalrequest_screen/medical_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/my_requests_screen/my_requests_screen.dart';
@@ -213,6 +214,11 @@ class AppRouter {
       case BusinessCardScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => BusinessCardScreen(requestData: settings.arguments),
+        );
+
+      case ItemsCatalogDetailScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => ItemsCatalogDetailScreen(requestData: settings.arguments),
         );
 
       case SOSAlertScreen.routeName:

@@ -10,9 +10,9 @@ import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cu
 import '../../constants/url_links.dart';
 import '../../gen/assets.gen.dart';
 import 'package:flutter/gestures.dart';
-import 'item_detail_widget.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_detail_screen.dart';
 
-Widget itemCatalogSearchWidget(hrcode) {
+Widget itemCatalogSearchWidget(hrCode) {
   getShimmer() {
     return Padding(
       padding: const EdgeInsets.all(5),
@@ -102,14 +102,24 @@ Widget itemCatalogSearchWidget(hrcode) {
             padding: const EdgeInsets.only(left: 15.0, right: 15.0, bottom: 20),
             child: InkWell(
               onTap: () {
-                ItemCatalogSearchCubit.get(context).setDetail(
-                    itemCode: getSearchObject(itemCategoryGetAllData[index])
-                        .itemCode ??
-                        "");
+                // ItemCatalogSearchCubit.get(context).setDetail(
+                //     itemCode: getSearchObject(itemCategoryGetAllData[index])
+                //         .itemCode ??
+                //         "");
                 // Navigator.of(context).pushNamed(
                 //     ItemDetailScreen.routeName,
-                //     arguments: getSearchObject(
-                //         itemCategoryGetAllData[index]));
+                //     arguments: getSearchObject(itemCategoryGetAllData[index]));
+                Navigator.of(context).pushNamed(
+                    ItemsCatalogDetailScreen.routeName,
+                    arguments: {
+                      ItemsCatalogDetailScreen.itemCode: itemCategoryGetAllData[index].itemCode,
+                ItemsCatalogDetailScreen.itemPhoto: itemCategoryGetAllData[index].itemPhoto,
+                ItemsCatalogDetailScreen.itemName: itemCategoryGetAllData[index].itemName,
+                ItemsCatalogDetailScreen.itemDesc: itemCategoryGetAllData[index].itemDesc,
+                      ItemsCatalogDetailScreen.itemID: itemCategoryGetAllData[index].itemID.toString(),
+                      // ItemsCatalogDetailScreen.catName: itemCategoryGetAllData[index].category.catName??"",
+                      ItemsCatalogDetailScreen.userHrCode:hrCode
+                    });
               },
               borderRadius: BorderRadius.circular(20),
               child: ClipRRect(
@@ -278,11 +288,12 @@ Widget itemCatalogSearchWidget(hrcode) {
         ]);
       }
 
-      if (state.detail == true)
-
-      {
-        return itemDetailWidget(hrcode);
-      }
+      // if (state.detail == true)
+      //
+      // {
+      //
+      //   return Text("");
+      // }
 
       else {
 
@@ -346,7 +357,7 @@ Widget itemCatalogSearchWidget(hrcode) {
                                   state.itemsGetAllTree[index].text);
                             } else {
                               ItemCatalogSearchCubit.get(context)
-                                  .getCategoryDataWithId(hrcode,
+                                  .getCategoryDataWithId(hrCode,
                                   state.itemsGetAllTree[index].id);
                               ItemCatalogSearchCubit.get(context)
                                   .setTreeDirection(
@@ -354,7 +365,7 @@ Widget itemCatalogSearchWidget(hrcode) {
                             }
                           } else {
                             ItemCatalogSearchCubit.get(context)
-                                .getCategoryDataWithId(hrcode,
+                                .getCategoryDataWithId(hrCode,
                                 state.itemsGetAllTree[index].id);
                             ItemCatalogSearchCubit.get(context)
                                 .setTreeDirection(
