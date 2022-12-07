@@ -98,7 +98,7 @@ class CartScreen extends StatelessWidget {
       ),
         floatingActionButton:FloatingActionButton.extended(
         onPressed: () => importDataCart(ItemCatalogSearchCubit.get(context).state.cartResult,() {
-          ItemCatalogSearchCubit.get(context).deleteAllCart(hrCode: user.employeeData?.userHrCode ??"");
+          ItemCatalogSearchCubit.get(context).deleteAllCart(hrCode: user.employeeData?.userHrCode ??"",cartList:ItemCatalogSearchCubit.get(context).state.cartResult );
         }),
         backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
@@ -136,7 +136,6 @@ class CartScreen extends StatelessWidget {
                               //     itemCode: state.cartResult[index].itmCatItems
                               //             ?.itemCode ??
                               //         "");
-
                               ItemCategorygetAllData itemCategorygetAllData=ItemCategorygetAllData(itemName: state.cartResult[index].itmCatItems?.itemName,
                                   itemDesc: state.cartResult[index].itmCatItems?.itemDesc,
                                   itemID: state.cartResult[index].itmCatItems?.itemID,itemQty:state.cartResult[index].itmCatItems?.itemQty,

@@ -8,11 +8,7 @@ import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_requestCatalog_reponse.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
-import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
-import 'package:hassanallamportalflutter/screens/items_catalog_screen/cart_screen.dart';
-import 'package:hassanallamportalflutter/screens/items_catalog_screen/favorite_screen.dart';
-import 'export_excel.dart';
 import 'items_catalog_screen_getall.dart';
 
 class CatalogHistoryRequestScreen extends StatefulWidget{
@@ -74,20 +70,20 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                         leading: InkWell(onTap: () => Navigator.of(context).pushReplacementNamed(ItemsCatalogGetAllScreen.routeName),child: const Icon(Icons.home)),
                         title: const Text('Request History'),
                         centerTitle: true,
-                        actions: <Widget>[
-                          IconButton(
-                              onPressed: () async {
-                                Navigator.of(context)
-                                    .pushReplacementNamed(FavoriteScreen.routeName);
-                              },
-                              icon: const Icon(Icons.favorite)),
-                          IconButton(
-                              onPressed: () async {
-                                Navigator.of(context)
-                                    .pushReplacementNamed(CartScreen.routeName);
-                              },
-                              icon: const Icon(Icons.shopping_cart)),
-                        ],
+                        // actions: <Widget>[
+                        //   IconButton(
+                        //       onPressed: () async {
+                        //         Navigator.of(context)
+                        //             .pushReplacementNamed(FavoriteScreen.routeName);
+                        //       },
+                        //       icon: const Icon(Icons.favorite)),
+                        //   IconButton(
+                        //       onPressed: () async {
+                        //         Navigator.of(context)
+                        //             .pushReplacementNamed(CartScreen.routeName);
+                        //       },
+                        //       icon: const Icon(Icons.shopping_cart)),
+                        // ],
                         shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(25),
@@ -96,15 +92,15 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                     ),
                   ),
 
-                  floatingActionButton:FloatingActionButton.extended(
-                    onPressed: () {
-                      importDataRequests(state.getCatalogRequestsHistoryList[0]);
-                    },
-                    backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                    icon: Assets.images.excel.image(fit: BoxFit.scaleDown,scale: 13),
-                    label: const Text('Export'),
-                  ),
+                  // floatingActionButton:FloatingActionButton.extended(
+                  //   onPressed: () {
+                  //     importDataRequests(state.getCatalogRequestsHistoryList[0]);
+                  //   },
+                  //   backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
+                  //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  //   icon: Assets.images.excel.image(fit: BoxFit.scaleDown,scale: 13),
+                  //   label: const Text('Export'),
+                  // ),
 
                   body:
                   Container(

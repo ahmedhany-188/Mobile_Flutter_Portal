@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -9,9 +8,6 @@ import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_respond_requests_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
-import 'package:hassanallamportalflutter/gen/assets.gen.dart';
-import 'package:hassanallamportalflutter/screens/items_catalog_screen/cart_screen.dart';
-import 'package:hassanallamportalflutter/screens/items_catalog_screen/favorite_screen.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_workflow_screen.dart';
 
@@ -66,44 +62,44 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                   appBar: AppBar(
                     backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
                     elevation: 0,
-                    title: const Text('Request History'),
+                    title: const Text('Request Status'),
                     centerTitle: true,
-                    actions: <Widget>[
-                      IconButton(
-                        icon: const Icon(
-                          Icons.shopping_cart,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(CartScreen.routeName);
-                        },
-                      ),
-                      IconButton(
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: Colors.white,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(
-                              FavoriteScreen.routeName);
-                        },
-                      )
-                    ],
+                    // actions: <Widget>[
+                      // IconButton(
+                      //   icon: const Icon(
+                      //     Icons.shopping_cart,
+                      //     color: Colors.white,
+                      //   ),
+                      //   onPressed: () {
+                      //     Navigator.of(context).pushNamed(CartScreen.routeName);
+                      //   },
+                      // ),
+                      // IconButton(
+                      //   icon: const Icon(
+                      //     Icons.favorite,
+                      //     color: Colors.white,
+                      //   ),
+                      //   onPressed: () {
+                      //     Navigator.of(context).pushNamed(
+                      //         FavoriteScreen.routeName);
+                      //   },
+                      // )
+                    // ],
                     shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.only(
                             bottomLeft: Radius.circular(25),
                             bottomRight: Radius.circular(25))),
                   ),
 
-                  floatingActionButton:FloatingActionButton.extended(
-                    onPressed: () {
-                      // importDataRespondRequests(state.getCatalogRespondRequestsHistoryList[0]);
-                    },
-                    backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                    icon: Assets.images.excel.image(fit: BoxFit.scaleDown,scale: 13),
-                    label: const Text('Export'),
-                  ),
+                  // floatingActionButton:FloatingActionButton.extended(
+                  //   onPressed: () {
+                  //     // importDataRespondRequests(state.getCatalogRespondRequestsHistoryList[0]);
+                  //   },
+                  //   backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
+                  //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                  //   icon: Assets.images.excel.image(fit: BoxFit.scaleDown,scale: 13),
+                  //   label: const Text('Export'),
+                  // ),
 
                   body: Container(
                     child: getRespondCatalogHistoryData(
@@ -124,19 +120,10 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
           child: ConditionalBuilder(
             condition: true,
             builder: (context) =>
-                GridView.builder(
+                ListView.builder(
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior
                         .onDrag,
                     shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      // childAspectRatio: (1 / .4),
-                      // mainAxisExtent: 285, // here set custom Height You Want
-                      // width between items
-                      crossAxisSpacing: 2,
-                      // height between items
-                      mainAxisSpacing: 5,
-                    ),
                     itemCount: getCatalogRespondRequestsHistoryList[0].data?.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
@@ -165,7 +152,7 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                                     Row(
                                       children: <Widget>[
                                         Container(
-                                          padding: EdgeInsets.all(5),
+                                          padding: const EdgeInsets.all(5),
                                           decoration: BoxDecoration(
                                               color: Colors.indigo.shade50,
                                               borderRadius: BorderRadius
@@ -183,7 +170,7 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                                             ),
                                           ),
                                         ),
-                                        SizedBox(width: 5,),
+                                        const SizedBox(width: 5,),
                                         Flexible(
                                           child: cardText(
                                               "user Action: ${getCatalogRespondRequestsHistoryList[0]
@@ -192,90 +179,102 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: 4,),
+                                    const SizedBox(height: 5,),
                                     Row(
                                       children: <Widget>[
-                                        SizedBox(width: 30,),
-                                        cardText(
-                                            "cat Name: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].catName
-                                                .toString()}", 14.0),
+                                        const SizedBox(width: 30,),
+                                        Flexible(
+                                          child: cardText(
+                                              "cat Name: ${getCatalogRespondRequestsHistoryList[0]
+                                                  .data![index].catName
+                                                  .toString()}", 14.0),
+                                        ),
                                       ],
                                     ),
-                                    SizedBox(height: 4,),
+                                    const SizedBox(height: 4,),
                                     Row(
                                       children: <Widget>[
-                                        SizedBox(width: 30,),
-                                        cardText(
-                                            "Action Name: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].actionName
-                                                .toString()}", 14.0),
+                                        const SizedBox(width: 30,),
+                                        Flexible(
+                                          child: cardText(
+                                              "Action Name: ${getCatalogRespondRequestsHistoryList[0]
+                                                  .data![index].actionName
+                                                  .toString()}", 14.0),
+                                        ),
                                       ],
                                     ),
-                                    SizedBox(height: 4,),
+                                    const SizedBox(height: 4,),
                                     Row(
                                       children: <Widget>[
-                                        SizedBox(width: 30,),
-                                        cardText(
-                                            "Request No: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].requestNo
-                                                .toString()}", 14.0),
+                                        const SizedBox(width: 30,),
+                                        Flexible(
+                                          child: cardText(
+                                              "Request No: ${getCatalogRespondRequestsHistoryList[0]
+                                                  .data![index].requestNo
+                                                  .toString()}", 14.0),
+                                        ),
 
                                       ],
                                     ),
 
-                                    SizedBox(height: 4,),
+                                    const SizedBox(height: 4,),
                                     Row(
                                       children: <Widget>[
-                                        SizedBox(width: 30,),
-                                        cardText(
-                                            "Category ID: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].catID
-                                                .toString()}", 14.0),
+                                        const SizedBox(width: 30,),
+                                        Flexible(
+                                          child: cardText(
+                                              "Category ID: ${getCatalogRespondRequestsHistoryList[0]
+                                                  .data![index].catID
+                                                  .toString()}", 14.0),
+                                        ),
 
                                       ],
                                     ),
 
-                                    SizedBox(height: 4,),
+                                    const SizedBox(height: 4,),
                                     Row(
                                       children: <Widget>[
-                                        SizedBox(width: 30,),
-                                        cardText(
-                                            "Submitted Hr Code: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].submittedHrCode
-                                                .toString()}", 14.0),
+                                        const SizedBox(width: 30,),
+                                        Flexible(
+                                          child: cardText(
+                                              "Submitted Hr Code: ${getCatalogRespondRequestsHistoryList[0]
+                                                  .data![index].submittedHrCode
+                                                  .toString()}", 14.0),
+                                        ),
 
                                       ],
                                     ),
 
-                                    SizedBox(height: 4,),
+                                    const SizedBox(height: 4,),
                                     Row(
                                       children: <Widget>[
-                                        SizedBox(width: 30,),
-                                        cardText(
-                                            "Category: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].catName
-                                                .toString()}", 14.0),
+                                        const SizedBox(width: 30,),
+                                        Flexible(
+                                          child: cardText(
+                                              "Category: ${getCatalogRespondRequestsHistoryList[0]
+                                                  .data![index].catName
+                                                  .toString()}", 14.0),
+                                        ),
                                       ],
                                     ),
-                                    SizedBox(height: 10),
+                                    const SizedBox(height: 10),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: <Widget>[
-                                        cardText(
-
-                                          "Subitted date: "+
-                                    GlobalConstants.dateFormatViewed.format(
+                                        Flexible(
+                                          child: cardText(
+                                            "Subitted date: ${GlobalConstants.dateFormatViewed.format(
                                     GlobalConstants.dateFormatServer.parse(
                                     getCatalogRespondRequestsHistoryList[0]
-                                        .data![index].submittedDate.toString()
-                                    ))
+                                          .data![index].submittedDate.toString()
+                                    ))}"
                       // "Submitted Date:${getCatalogRespondRequestsHistoryList[0]
                       //     .data![index].submittedDate.toString()}"??""
-                                            ,
-                                            12.0
+                                              ,
+                                              12.0
 
-                                            ),
+                                              ),
+                                        ),
                                       ],
                                     ),
                                   ],
@@ -342,11 +341,11 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                                             borderRadius: BorderRadius.circular(
                                                 20)
                                         ),
-                                        child: Icon(Icons.incomplete_circle,
+                                        child: const Icon(Icons.incomplete_circle,
                                             color: ConstantsColors
                                                 .backgroundStartColor),
                                       ),
-                                      SizedBox(width: 16,),
+                                      const SizedBox(width: 16,),
                                       Text(
                                           "Status action: ${getCatalogRespondRequestsHistoryList[0]
                                               .data![index]

@@ -350,6 +350,21 @@ class GeneralDio {
     });
   }
 
+  Future<Response> putCartOrder(dynamic dataToPost) async {
+    String url =
+        'InformationTechnology-ItemCatalog/ItmCat_Users_Cart/UpdateOrderID';
+    return await dio!
+        .put(url,
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: "application/json-patch+json",
+          'Authorization': 'Bearer ${userData?.user?.token}',
+        }),
+        data: dataToPost)
+        .catchError((err) {
+      throw err;
+    });
+  }
+
 
   Future<Response> removeItemCatalogFavorite(int itemId) async {
     String url =
