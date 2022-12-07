@@ -52,7 +52,7 @@ class ItemsCatalogGetAllScreenStateClass
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(150.0),
             child: Hero(
-              tag: 'hero',
+              tag: 'hero1',
               child: AppBar(
                 title: const Text('Catalog'),
                 elevation: 0,
@@ -62,11 +62,12 @@ class ItemsCatalogGetAllScreenStateClass
                 ),
                 backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
                 bottom: PreferredSize(
-                  preferredSize: const Size.fromHeight(0.0),
+                  preferredSize: const Size.fromHeight(150.0),
                   child:
                   SingleChildScrollView(
-                    physics: const NeverScrollableScrollPhysics(),
+                    // physics: const NeverScrollableScrollPhysics(),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,

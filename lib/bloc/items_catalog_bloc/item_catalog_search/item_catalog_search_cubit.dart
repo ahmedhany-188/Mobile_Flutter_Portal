@@ -199,9 +199,10 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
 
 
           } catch (e) {
-            emit(state.copyWith(
-              itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
-            ));
+            /// commented this to avoid emit after close the state to avoid error crashes
+            // emit(state.copyWith(
+            //   itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+            // ));
           }
         } else {
           emit(state.copyWith(
