@@ -238,30 +238,18 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
                                   );
                                 });
                           },
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: const [
+                               Text(
                                 "Share Item",
                                 style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: ConstantsColors.bottomSheetBackground),
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "Item id:" +
-                                        itemCategorygetAllData.itemID.toString(),
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        color: ConstantsColors
-                                            .bottomSheetBackground),
-                                  ),
-                                  const Icon(Icons.share, size: 20),
-                                ],
-                              ),
+                              Icon(Icons.share, size: 20),
+
                             ],
                           ),
                         ),

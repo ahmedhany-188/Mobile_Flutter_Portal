@@ -13,6 +13,8 @@ import 'package:flutter/gestures.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_detail_screen.dart';
 
 Widget itemCatalogSearchWidget(hrCode) {
+
+
   getShimmer() {
     return Padding(
       padding: const EdgeInsets.all(5),
@@ -91,7 +93,9 @@ Widget itemCatalogSearchWidget(hrCode) {
     );
   }
 
-  Widget checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData, String treeDirection) {
+
+  // this function for going to the last children then go to the detail screen
+  Widget checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData, List<String> treeDirection) {
     if (itemCategoryGetAllData.isNotEmpty) {
       return ListView.builder(
         shrinkWrap: true,
@@ -316,13 +320,13 @@ Widget itemCatalogSearchWidget(hrCode) {
                             ItemCatalogSearchCubit.get(context)
                                 .setInitialization();
                           }),
-                    TextSpan(
-                      text: "",//state.treeDirection,
-                      style: const TextStyle(
-                          color: Colors.grey,
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    // TextSpan(
+                    //   text: state.treeDirection,
+                    //   style: const TextStyle(
+                    //       color: Colors.grey,
+                    //       fontSize: 17,
+                    //       fontWeight: FontWeight.bold),
+                    // ),
                   ],
                 ),
               ),
@@ -348,14 +352,14 @@ Widget itemCatalogSearchWidget(hrCode) {
                                   .getSubTree(
                                   state.itemsGetAllTree[index].items);
                               ItemCatalogSearchCubit.get(context)
-                                  .setTreeDirection(
+                                  .setTreeDirectionList(
                                   state.itemsGetAllTree[index].text);
                             } else {
                               ItemCatalogSearchCubit.get(context)
                                   .getCategoryDataWithId(hrCode,
                                   state.itemsGetAllTree[index].id);
                               ItemCatalogSearchCubit.get(context)
-                                  .setTreeDirection(
+                                  .setTreeDirectionList(
                                   state.itemsGetAllTree[index].text);
                             }
                           } else {
@@ -363,7 +367,7 @@ Widget itemCatalogSearchWidget(hrCode) {
                                 .getCategoryDataWithId(hrCode,
                                 state.itemsGetAllTree[index].id);
                             ItemCatalogSearchCubit.get(context)
-                                .setTreeDirection(
+                                .setTreeDirectionList(
                                 state.itemsGetAllTree[index].text);
                           }
                         },
@@ -433,9 +437,8 @@ Widget itemCatalogSearchWidget(hrCode) {
                     );
                   },
                 )
-                    :Text(""))
-                // checkItemsList(
-                //     state.itemsGetItemsCategory, state.treeDirection))
+                    : checkItemsList(
+                    state.itemsGetItemsCategory, state.treeDirectionList))
           ],
         );
 

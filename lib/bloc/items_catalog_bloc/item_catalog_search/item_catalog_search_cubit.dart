@@ -404,71 +404,33 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
       throw e;
     });
   }
-  Future<void> deleteAllCart({required String hrCode, dynamic cartList}) async{
+  Future<void> deleteAllCart({required String hrCode}) async{
     EasyLoading.show(status: 'Loading...');
     emit(state.copyWith(
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
     ));
-    await _generalDio.putCartOrder(cartList).then((value)
-    {
-      if(value.statusCode == 200){
-        _generalDio.removeAllCart().then((value) {
-          if (value.statusCode == 200) {
-            getCartItems(userHrCode: hrCode);
-            emit(state.copyWith(
-              itemCatalogSearchEnumStates:
-              ItemCatalogSearchEnumStates.success,
-            ));
-            EasyLoading.dismiss();
-          } else {
-            emit(state.copyWith(
-              itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
-            ));
-            EasyLoading.showError('Something went wrong');
-          }
-        }).catchError((e) {
-          emit(state.copyWith(
-            itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
-          ));
-          EasyLoading.showError('Something went wrong');
-          throw e;
-        });
-      }
-      else {
+    await _generalDio.removeAllCart().
+    then((value) {
+      if(value.statusCode ==200){
+        getCartItems(userHrCode: hrCode);
+        emit(state.copyWith(
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+        ));
+        EasyLoading.dismiss();
+      }else{
         emit(state.copyWith(
           itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
         ));
         EasyLoading.showError('Something went wrong');
       }
-        }).catchError((e) {
+
+    }).catchError((e) {
       emit(state.copyWith(
         itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
       ));
       EasyLoading.showError('Something went wrong');
       throw e;
     });
-    // await _generalDio.removeAllCart().
-    // then((value) {
-    //   if(value.statusCode ==200){
-    //     getCartItems(userHrCode: hrCode);
-    //     emit(state.copyWith(
-    //       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
-    //     ));
-    //     EasyLoading.dismiss();
-    //   }else{
-    //     emit(state.copyWith(
-    //       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
-    //     ));
-    //     EasyLoading.showError('Something went wrong');
-    //   }
-    //
-    // }).catchError((e) {
-    //   emit(state.copyWith(
-    //     itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
-    //   ));
-    //   EasyLoading.showError('Something went wrong');
-    //   throw e;
-    // });
   }
 
   void getSubTree(List<Items>? item) {
@@ -485,7 +447,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     }
   }
 
-  void setTreeDirection(String? name){
+  void setTreeDirectionList(String? name){
     List<String> dir = state.treeDirectionList;
     if (name != null) {
       dir.add(name);
@@ -545,7 +507,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
 
   void setInitialization() {
     emit(state.copyWith(
-      treeDirectionList: [],
+      treeDirectionList:[],
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
       itemsGetAllTree: state.getAllItemsCatalogList.data,
         detail: false
