@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_all_data.dart';
-import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_search_model.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_tree_model.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
@@ -13,8 +12,6 @@ import 'package:flutter/gestures.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_detail_screen.dart';
 
 Widget itemCatalogSearchWidget(hrCode) {
-
-
   getShimmer() {
     return Padding(
       padding: const EdgeInsets.all(5),
@@ -45,7 +42,7 @@ Widget itemCatalogSearchWidget(hrCode) {
                             Container(
                               padding: const EdgeInsets.all(20.0),
                               child:
-                              const Icon(Icons.arrow_forward_ios, size: 18),
+                                  const Icon(Icons.arrow_forward_ios, size: 18),
                             ),
                           ],
                         ),
@@ -71,15 +68,15 @@ Widget itemCatalogSearchWidget(hrCode) {
     }
   }
 
-  ItemCatalogSearchData getSearchObject(
-      ItemCategorygetAllData itemCategorygetAllData) {
-    return ItemCatalogSearchData(
-      itemCode: itemCategorygetAllData.itemCode,
-      itemPhoto: itemCategorygetAllData.itemPhoto,
-      itemName: itemCategorygetAllData.itemName,
-      itemDesc: itemCategorygetAllData.itemDesc,
-    );
-  }
+  // ItemCatalogSearchData getSearchObject(
+  //     ItemCategorygetAllData itemCategorygetAllData) {
+  //   return ItemCatalogSearchData(
+  //     itemCode: itemCategorygetAllData.itemCode,
+  //     itemPhoto: itemCategorygetAllData.itemPhoto,
+  //     itemName: itemCategorygetAllData.itemName,
+  //     itemDesc: itemCategorygetAllData.itemDesc,
+  //   );
+  // }
 
   Padding buildDivider() {
     return const Padding(
@@ -96,6 +93,8 @@ Widget itemCatalogSearchWidget(hrCode) {
 
   // this function for going to the last children then go to the detail screen
   Widget checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData, List<String> treeDirection) {
+  Widget checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData,
+      String treeDirection) {
     if (itemCategoryGetAllData.isNotEmpty) {
       return ListView.builder(
         shrinkWrap: true,
@@ -138,9 +137,9 @@ Widget itemCatalogSearchWidget(hrCode) {
                           fit: BoxFit.fill,
                           errorBuilder: (context, error, stackTrace) =>
                               Assets.images.favicon.image(
-                                width: 100,
-                                height: 100,
-                              ),
+                            width: 100,
+                            height: 100,
+                          ),
                         ),
                       ),
                       Expanded(
@@ -176,13 +175,10 @@ Widget itemCatalogSearchWidget(hrCode) {
     }
   }
 
-
   return BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
     builder: (context, state) {
-      if (state.searchString != "" && state.detail == false)
-      {
-        return Column(
-            crossAxisAlignment: CrossAxisAlignment.start, children: [
+      if (state.searchString != "" && state.detail == false) {
+        return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           const Padding(
             padding: EdgeInsets.only(
               left: 20.0,
@@ -199,89 +195,118 @@ Widget itemCatalogSearchWidget(hrCode) {
           ),
           Expanded(
             child: (state.searchResult.isNotEmpty &&
-                state.searchString.isNotEmpty)
+                    state.searchString.isNotEmpty)
                 ? ListView.builder(
-              shrinkWrap: true,
-              keyboardDismissBehavior:
-              ScrollViewKeyboardDismissBehavior.onDrag,
-              physics: const BouncingScrollPhysics(),
-              itemCount: state.searchResult.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(
-                      left: 15.0, right: 15.0, bottom: 20),
-                  child: InkWell(
-                    onTap: () {
-                      ItemCatalogSearchCubit.get(context).setDetail(
-                          itemCode:
-                          state.searchResult[index].itemCode ?? "");
-                      // Navigator.of(context).pushNamed(
-                      //     ItemDetailScreen.routeName,
-                      //     arguments: state.searchResult[index]);
-                    },
-                    borderRadius: BorderRadius.circular(20),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Container(
-                        padding: EdgeInsets.zero,
-                        color: Colors.grey.shade300,
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Image.network(
-                                getCatalogPhotos(
-                                    state.searchResult[index].itemPhoto ??
-                                        ""),
-                                width: 100,
-                                height: 100,
-                                fit: BoxFit.fill,
-                                errorBuilder:
-                                    (context, error, stackTrace) =>
-                                    Assets.images.favicon.image(
+                    shrinkWrap: true,
+                    keyboardDismissBehavior:
+                        ScrollViewKeyboardDismissBehavior.onDrag,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: state.searchResult.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                            left: 15.0, right: 15.0, bottom: 20),
+                        child: InkWell(
+                          onTap: () {
+                            // ItemCatalogSearchCubit.get(context).setDetail(
+                            //     itemCode:
+                            //     state.searchResult[index].itemCode ?? "");
+                            ItemCategorygetAllData itemCategorygetAllData =
+                                ItemCategorygetAllData(
+                                    itemName:
+                                        state.searchResult[index].itemName,
+                                    itemDesc:
+                                        state.searchResult[index].itemDesc,
+                                    itemID: state.searchResult[index].itemID,
+                                    itemQty: int.parse(
+                                        state.searchResult[index].itemQty ??
+                                            '0'),
+                                    itemPhoto:
+                                        state.searchResult[index].itemPhoto,
+                                    itemCode:
+                                        state.searchResult[index].itemCode);
+
+                            Navigator.of(context).pushNamed(
+                                ItemsCatalogDetailScreen.routeName,
+                                arguments: {
+                                  ItemsCatalogDetailScreen.object:
+                                      itemCategorygetAllData,
+                                  ItemsCatalogDetailScreen.userHrCode: hrCode
+                                });
+                            // Navigator.of(context).pushNamed(
+                            //     ItemDetailScreen.routeName,
+                            //     arguments: state.searchResult[index]);
+                          },
+                          borderRadius: BorderRadius.circular(20),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              padding: EdgeInsets.zero,
+                              height: 100,
+                              color: Colors.grey.shade300,
+                              child: Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: Image.network(
+                                      getCatalogPhotos(
+                                          state.searchResult[index].itemPhoto ??
+                                              ""),
                                       width: 100,
                                       height: 100,
+                                      fit: BoxFit.fill,
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              Assets.images.favicon.image(
+                                                  // width: 100,
+                                                  // height: 100,
+                                                  ),
                                     ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                      state.searchResult[index]
-                                          .itemName ??
-                                          "NOt defined",
-                                      style: const TextStyle(
-                                        fontSize: 18,
-                                      )),
-                                  Padding(
-                                    padding:
-                                    const EdgeInsets.only(left: 8.0),
-                                    child: Text(
-                                        state.searchResult[index]
-                                            .itemDesc ??
-                                            "No description",
-                                        style: const TextStyle(
-                                            fontSize: 14)),
+                                  ),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                            state.searchResult[index]
+                                                    .itemName ??
+                                                "Not defined",
+                                            maxLines: 2,
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              overflow: TextOverflow.ellipsis,
+                                            )),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 8.0,),
+                                          child: Text(
+                                              state.searchResult[index]
+                                                      .itemDesc ??
+                                                  "No description",
+                                              maxLines: 3,
+                                              style: const TextStyle(
+                                                fontSize: 13,
+                                                overflow: TextOverflow.ellipsis,
+                                              )),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.all(20.0),
+                                    child: const Icon(Icons.arrow_forward_ios,
+                                        size: 18),
                                   ),
                                 ],
                               ),
                             ),
-                            Container(
-                              padding: const EdgeInsets.all(20.0),
-                              child: const Icon(Icons.arrow_forward_ios,
-                                  size: 18),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            )
+                      );
+                    },
+                  )
                 : getShimmer(),
           ),
         ]);
@@ -295,7 +320,6 @@ Widget itemCatalogSearchWidget(hrCode) {
       // }
 
       else {
-
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -333,7 +357,8 @@ Widget itemCatalogSearchWidget(hrCode) {
             ),
             buildDivider(),
             Expanded(
-                child: checkList(state.itemsGetAllTree) //(state.getAllItemsCatalogList.data.isNotEmpty)
+                child: checkList(state
+                        .itemsGetAllTree) //(state.getAllItemsCatalogList.data.isNotEmpty)
                     ? ListView.builder(
                   shrinkWrap: true,
                   physics: const BouncingScrollPhysics(),
@@ -438,13 +463,10 @@ Widget itemCatalogSearchWidget(hrCode) {
                   },
                 )
                     : checkItemsList(
-                    state.itemsGetItemsCategory, state.treeDirectionList))
+                    state.itemsGetItemsCategory, state.treeDirection))
           ],
         );
-
       }
     },
   );
-
-
 }
