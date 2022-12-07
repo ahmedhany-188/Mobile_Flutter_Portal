@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_all_data.dart';
 
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
@@ -14,6 +15,7 @@ import '../../gen/assets.gen.dart';
 import '../../widgets/background/custom_background.dart';
 import 'cart_screen.dart';
 import 'items_catalog_screen_getall.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_detail_screen.dart';
 
 class FavoriteScreen extends StatelessWidget {
   const FavoriteScreen({Key? key}) : super(key: key);
@@ -89,9 +91,19 @@ class FavoriteScreen extends StatelessWidget {
                               left: 15.0, right: 15.0, bottom: 20),
                           child: InkWell(
                             onTap: () {
-                              ItemCatalogSearchCubit.get(context).setDetail(
-                                  itemCode:
-                                      state.favoriteResult[index].itemCode ?? "");
+                              // ItemCatalogSearchCubit.get(context).setDetail(
+                              //     itemCode:
+                              //         state.favoriteResult[index].itemCode ?? "");
+                              ItemCategorygetAllData itemCategorygetAllData=ItemCategorygetAllData(itemName: state.favoriteResult[index].itemName,
+                                  itemDesc: state.favoriteResult[index].itemDesc,
+                                  itemID: state.favoriteResult[index].itemID,itemQty:state.favoriteResult[index].itemQty,itemPhoto: state.favoriteResult[index].itemPhoto,itemCode: state.favoriteResult[index].itemCode);
+
+                              Navigator.of(context).pushNamed(
+                                  ItemsCatalogDetailScreen.routeName,
+                                  arguments: {
+                                    ItemsCatalogDetailScreen.object: itemCategorygetAllData,
+                                    ItemsCatalogDetailScreen.userHrCode:user.employeeData?.userHrCode ?? ""
+                                  });
                             },
                             borderRadius: BorderRadius.circular(20),
                             child: ClipRRect(

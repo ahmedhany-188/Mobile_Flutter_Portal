@@ -6,6 +6,7 @@ import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_respond_requests_history/item_catalog_respond_requests__history_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_respond_requests_history/item_catalog_respond_requests__history_state.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_respond_requests_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
@@ -61,6 +62,7 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
               builder: (context, state) {
 
                 return Scaffold(
+                  backgroundColor: Colors.white,
                   appBar: AppBar(
                     backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
                     elevation: 0,
@@ -261,9 +263,19 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: <Widget>[
                                         cardText(
-                                            "Submitted Date: ${getCatalogRespondRequestsHistoryList[0]
-                                                .data![index].submittedDate.toString()}",
-                                            12.0),
+
+                                          "Subitted date: "+
+                                    GlobalConstants.dateFormatViewed.format(
+                                    GlobalConstants.dateFormatServer.parse(
+                                    getCatalogRespondRequestsHistoryList[0]
+                                        .data![index].submittedDate.toString()
+                                    ))
+                      // "Submitted Date:${getCatalogRespondRequestsHistoryList[0]
+                      //     .data![index].submittedDate.toString()}"??""
+                                            ,
+                                            12.0
+
+                                            ),
                                       ],
                                     ),
                                   ],

@@ -368,7 +368,8 @@ class GeneralDio {
 
   Future<Response> removeItemCatalogCart(int itemId) async {
     String url =
-        'InformationTechnology-ItemCatalog/ItmCat_Users_Cart/DeleteItemCart?HRCode=${userData?.user?.userHRCode}&ItemCode=$itemId';
+        'InformationTechnology-ItemCatalog/ItmCat_Users_Cart/DeleteItemCart?ID=$itemId';
+    // 'InformationTechnology-ItemCatalog/ItmCat_Users_Cart/DeleteItemCart?HRCode=${userData?.user?.userHRCode}&ItemCode=$itemId';
     return await dio!
         .delete(
       url,

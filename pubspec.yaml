@@ -138,6 +138,7 @@ dependencies:
 #repositories
   authentication_repository:
     path: packages/authentication_repository
+  assets_gen: ^1.3.0
 
 
 
@@ -260,6 +261,8 @@ flutter:
     - assets/images/staffdashboard/boxlayer.png
     - assets/images/staffdashboard/arrowdown.png
     - assets/images/bot6.jpg
+    - assets/images/backgroundcatalogpattern.png
+
 
 
 

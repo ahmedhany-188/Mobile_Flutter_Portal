@@ -5,6 +5,7 @@ import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_requests_history/item_catalog_requests_history_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_requests_history/item_catalog_requests_history_state.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
+import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_requestCatalog_reponse.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
@@ -62,6 +63,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
               builder: (context, state) {
 
                 return Scaffold(
+                  backgroundColor: Colors.white,
                   appBar: PreferredSize(
                     preferredSize: const Size.fromHeight(80.0),
                     child: Hero(
@@ -235,8 +237,13 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: <Widget>[
                                         cardText(
-                                            getCatalogRequestsHistoryList[0]
-                                                .data![index].date.toString(),
+
+                                    GlobalConstants.dateFormatViewed.format(
+                                    GlobalConstants.dateFormatServer.parse(
+                                        getCatalogRequestsHistoryList[0]
+                                            .data![index].date.toString()
+                                    ))
+                                            ,
                                             12.0),
                                       ],
                                     ),

@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_all_data.dart';
 
 import 'dart:io';
 import 'package:open_file/open_file.dart' as open_file;
@@ -21,6 +22,7 @@ import '../../widgets/background/custom_background.dart';
 import 'export_excel.dart';
 import 'favorite_screen.dart';
 import 'items_catalog_screen_getall.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_detail_screen.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -130,10 +132,23 @@ class CartScreen extends StatelessWidget {
                               left: 15.0, right: 15.0, bottom: 20),
                           child: InkWell(
                             onTap: () {
-                              ItemCatalogSearchCubit.get(context).setDetail(
-                                  itemCode: state.cartResult[index].itmCatItems
-                                          ?.itemCode ??
-                                      "");
+                              // ItemCatalogSearchCubit.get(context).setDetail(
+                              //     itemCode: state.cartResult[index].itmCatItems
+                              //             ?.itemCode ??
+                              //         "");
+
+                              ItemCategorygetAllData itemCategorygetAllData=ItemCategorygetAllData(itemName: state.cartResult[index].itmCatItems?.itemName,
+                                  itemDesc: state.cartResult[index].itmCatItems?.itemDesc,
+                                  itemID: state.cartResult[index].itmCatItems?.itemID,itemQty:state.cartResult[index].itmCatItems?.itemQty,
+                                  itemPhoto: state.cartResult[index].itmCatItems?.itemPhoto,itemCode: state.cartResult[index].itmCatItems?.itemCode);
+
+                              Navigator.of(context).pushNamed(
+                                  ItemsCatalogDetailScreen.routeName,
+                                  arguments: {
+                                    ItemsCatalogDetailScreen.object : itemCategorygetAllData,
+                                    ItemsCatalogDetailScreen.userHrCode : user.employeeData?.userHrCode ?? "",
+                                    ItemsCatalogDetailScreen.objectID:state.cartResult[index].id??0,
+                                  });
                             },
                             borderRadius: BorderRadius.circular(20),
                             child: ClipRRect(

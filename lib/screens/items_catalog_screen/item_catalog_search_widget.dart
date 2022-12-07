@@ -112,12 +112,7 @@ Widget itemCatalogSearchWidget(hrCode) {
                 Navigator.of(context).pushNamed(
                     ItemsCatalogDetailScreen.routeName,
                     arguments: {
-                      ItemsCatalogDetailScreen.itemCode: itemCategoryGetAllData[index].itemCode,
-                ItemsCatalogDetailScreen.itemPhoto: itemCategoryGetAllData[index].itemPhoto,
-                ItemsCatalogDetailScreen.itemName: itemCategoryGetAllData[index].itemName,
-                ItemsCatalogDetailScreen.itemDesc: itemCategoryGetAllData[index].itemDesc,
-                      ItemsCatalogDetailScreen.itemID: itemCategoryGetAllData[index].itemID.toString(),
-                      // ItemsCatalogDetailScreen.catName: itemCategoryGetAllData[index].category.catName??"",
+                      ItemsCatalogDetailScreen.object: itemCategoryGetAllData[index],
                       ItemsCatalogDetailScreen.userHrCode:hrCode
                     });
               },
