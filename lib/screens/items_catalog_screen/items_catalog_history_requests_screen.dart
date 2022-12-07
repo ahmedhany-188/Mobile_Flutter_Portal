@@ -124,19 +124,10 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
           child: ConditionalBuilder(
             condition: true,
             builder: (context) =>
-                GridView.builder(
+                ListView.builder(
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior
                         .onDrag,
                     shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      // childAspectRatio: (1 / .4),
-                      mainAxisExtent: 220, // here set custom Height You Want
-                      // width between items
-                      crossAxisSpacing: 2,
-                      // height between items
-                      mainAxisSpacing: 5,
-                    ),
                     itemCount: getCatalogRequestsHistoryList[0].data?.length,
                     itemBuilder: (BuildContext context, int index) {
                       return Padding(
@@ -190,30 +181,36 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                           ),
                                         ),
                                         const SizedBox(width: 5,),
-                                        cardText(
-                                            "Item Name: ${getCatalogRequestsHistoryList[0]
-                                                .data![index].itemName
-                                                .toString()}", 18.0),
+                                        Flexible(
+                                          child: cardText(
+                                              "Item Name: ${getCatalogRequestsHistoryList[0]
+                                                  .data![index].itemName
+                                                  .toString()}", 18.0),
+                                        ),
                                       ],
                                     ),
                                     const SizedBox(height: 4,),
                                     Row(
                                       children: <Widget>[
                                         const SizedBox(width: 30,),
-                                        cardText(
-                                            "Description: ${getCatalogRequestsHistoryList[0]
-                                                .data![index].itemDesc
-                                                .toString()}", 14.0),
+                                        Flexible(
+                                          child: cardText(
+                                              "Description: ${getCatalogRequestsHistoryList[0]
+                                                  .data![index].itemDesc
+                                                  .toString()}", 14.0),
+                                        ),
                                       ],
                                     ),
                                     const SizedBox(height: 4,),
                                     Row(
                                       children: <Widget>[
                                         const SizedBox(width: 30,),
-                                        cardText(
-                                            "Request ID: ${getCatalogRequestsHistoryList[0]
-                                                .data![index].requestID
-                                                .toString()}", 14.0),
+                                        Flexible(
+                                          child: cardText(
+                                              "Request ID: ${getCatalogRequestsHistoryList[0]
+                                                  .data![index].requestID
+                                                  .toString()}", 14.0),
+                                        ),
 
                                       ],
                                     ),
@@ -222,25 +219,29 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                     Row(
                                       children: <Widget>[
                                         const SizedBox(width: 30,),
-                                        cardText(
-                                            "Category: ${getCatalogRequestsHistoryList[0]
-                                                .data![index].catName
-                                                .toString()}", 14.0),
+                                        Flexible(
+                                          child: cardText(
+                                              "Category: ${getCatalogRequestsHistoryList[0]
+                                                  .data![index].catName
+                                                  .toString()}", 14.0),
+                                        ),
                                       ],
                                     ),
                                     const SizedBox(height: 10),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
                                       children: <Widget>[
-                                        cardText(
+                                        Flexible(
+                                          child: cardText(
 
                                     GlobalConstants.dateFormatViewed.format(
                                     GlobalConstants.dateFormatServer.parse(
-                                        getCatalogRequestsHistoryList[0]
-                                            .data![index].date.toString()
+                                          getCatalogRequestsHistoryList[0]
+                                              .data![index].date.toString()
                                     ))
-                                            ,
-                                            12.0),
+                                              ,
+                                              12.0),
+                                        ),
                                       ],
                                     ),
                                   ],
@@ -303,13 +304,15 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                               .backgroundStartColor),
                                     ),
                                     const SizedBox(width: 16,),
-                                    Text(
-                                        "${getCatalogRequestsHistoryList[0]
-                                            .data![index]
-                                            .status.toString()}...",
-                                        style: const TextStyle(fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.grey)),
+                                    Flexible(
+                                      child: Text(
+                                          "${getCatalogRequestsHistoryList[0]
+                                              .data![index]
+                                              .status.toString()}...",
+                                          style: const TextStyle(fontSize: 16,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.grey)),
+                                    ),
                                   ],
                                 ),
                               ),
