@@ -390,12 +390,12 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.all(8.0),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            "Add To Cart",
+                            (state.cartResult.any((element) =>element.itemCode ==itemCategorygetAllData.itemID))? 'Remove from cart':'Add to cart',
                             style:
-                                TextStyle(color: Colors.white, fontSize: 18),
+                                const TextStyle(color: Colors.white, fontSize: 18),
                           ),
                         ),
                         Padding(
