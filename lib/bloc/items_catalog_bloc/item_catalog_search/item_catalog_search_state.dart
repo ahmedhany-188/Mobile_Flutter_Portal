@@ -21,7 +21,7 @@ class ItemCatalogSearchState extends Equatable {
   List<ItemsCatalogTreeModel> itemsGetAllTree;
   final List<ItemCategoryAttachData> itemCategoryAttachData;
 
-  final String treeDirection;
+  final List<String> treeDirectionList;
 
 
   ItemCatalogSearchState({
@@ -38,7 +38,7 @@ class ItemCatalogSearchState extends Equatable {
     this.detail = false,
 
     this.searchString = "",
-    this.treeDirection = "",
+    this.treeDirectionList = const<String>[],
     required this.getAllItemsCatalogList,
 
   });
@@ -52,7 +52,7 @@ class ItemCatalogSearchState extends Equatable {
     List<ItemCategorygetAllData>? itemAllDatalist,
     List<String>? mainCategories,
     bool? detail,
-    String? treeDirection,
+    List<String>? treeDirectionList,
     String? searchString,
     List<ItemCategoryAttachData>? itemCategoryAttachData,
     List<ItemsCatalogTreeModel>? itemsGetAllTree,
@@ -71,7 +71,7 @@ class ItemCatalogSearchState extends Equatable {
       itemAllDatalist: itemAllDatalist ?? this.itemAllDatalist,
       mainCategories: mainCategories ?? this.mainCategories,
       searchString: searchString ?? this.searchString,
-      treeDirection: treeDirection ?? this.treeDirection,
+      treeDirectionList: treeDirectionList ?? this.treeDirectionList,
       itemCategoryAttachData: itemCategoryAttachData ??
           this.itemCategoryAttachData,
       itemsGetAllTree: itemsGetAllTree ?? this.itemsGetAllTree,
@@ -94,7 +94,7 @@ class ItemCatalogSearchState extends Equatable {
         itemAllDatalist,
         mainCategories,
         searchString,
-        treeDirection,
+        treeDirectionList,
         getAllItemsCatalogList,
         itemsGetAllTree,
         itemsGetItemsCategory,
@@ -118,7 +118,7 @@ class ItemCatalogSearchState extends Equatable {
       'getAllItemsCatalogList': getAllItemsCatalogList,
       'itemsGetAllTree': itemsGetAllTree,
       'itemCategoryAttachData': itemCategoryAttachData,
-      'treeDirection': treeDirection,
+      'treeDirectionList': treeDirectionList,
     };
   }
 
@@ -142,7 +142,7 @@ class ItemCatalogSearchState extends Equatable {
       itemsGetAllTree: map['itemsGetAllTree'] as List<ItemsCatalogTreeModel>,
       itemCategoryAttachData:
       map['itemCategoryAttachData'] as List<ItemCategoryAttachData>,
-      treeDirection: map['treeDirection'] as String,
+      treeDirectionList: map['treeDirectionList'] as List<String>,
     );
   }
 }

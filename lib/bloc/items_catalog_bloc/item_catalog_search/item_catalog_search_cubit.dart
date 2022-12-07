@@ -448,12 +448,12 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   }
 
   void setTreeDirection(String? name){
-    String dir = "";
+    List<String> dir = state.treeDirectionList;
     if (name != null) {
-      dir = state.treeDirection + " > " + name;
+      dir.add(name);
     }
     emit(state.copyWith(
-        treeDirection: dir
+        treeDirectionList: dir
     ));
   }
 
@@ -507,7 +507,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
 
   void setInitialization() {
     emit(state.copyWith(
-      treeDirection: "",
+      treeDirectionList: [],
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
       itemsGetAllTree: state.getAllItemsCatalogList.data,
         detail: false

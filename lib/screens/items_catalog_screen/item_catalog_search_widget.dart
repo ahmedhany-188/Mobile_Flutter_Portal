@@ -317,7 +317,7 @@ Widget itemCatalogSearchWidget(hrCode) {
                                 .setInitialization();
                           }),
                     TextSpan(
-                      text: state.treeDirection,
+                      text: "",//state.treeDirection,
                       style: const TextStyle(
                           color: Colors.grey,
                           fontSize: 17,
@@ -433,8 +433,9 @@ Widget itemCatalogSearchWidget(hrCode) {
                     );
                   },
                 )
-                    : checkItemsList(
-                    state.itemsGetItemsCategory, state.treeDirection))
+                    :Text(""))
+                // checkItemsList(
+                //     state.itemsGetItemsCategory, state.treeDirection))
           ],
         );
 
