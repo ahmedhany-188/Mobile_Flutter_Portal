@@ -98,7 +98,7 @@ class CartScreen extends StatelessWidget {
       ),
         floatingActionButton:FloatingActionButton.extended(
         onPressed: () => importDataCart(ItemCatalogSearchCubit.get(context).state.cartResult,() {
-          ItemCatalogSearchCubit.get(context).deleteAllCart(hrCode: user.employeeData?.userHrCode ??"",cartList:ItemCatalogSearchCubit.get(context).state.cartResult );
+          ItemCatalogSearchCubit.get(context).deleteAllCart(hrCode: user.employeeData?.userHrCode ??"");//,cartList:ItemCatalogSearchCubit.get(context).state.cartResult );
         }),
         backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),

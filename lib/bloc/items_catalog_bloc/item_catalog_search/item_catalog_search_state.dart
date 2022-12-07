@@ -38,7 +38,7 @@ class ItemCatalogSearchState extends Equatable {
     this.detail = false,
 
     this.searchString = "",
-    this.treeDirectionList = const<String>[],
+    this.treeDirectionList = const<String>["Home"],
     required this.getAllItemsCatalogList,
 
   });

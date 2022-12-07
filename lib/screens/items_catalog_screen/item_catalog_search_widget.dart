@@ -8,7 +8,6 @@ import 'package:shimmer/shimmer.dart';
 import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
 import '../../constants/url_links.dart';
 import '../../gen/assets.gen.dart';
-import 'package:flutter/gestures.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_detail_screen.dart';
 
 Widget itemCatalogSearchWidget(hrCode) {
@@ -93,9 +92,8 @@ Widget itemCatalogSearchWidget(hrCode) {
 
   // this function for going to the last children then go to the detail screen
   Widget checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData, List<String> treeDirection) {
-  Widget checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData,
-      String treeDirection) {
     if (itemCategoryGetAllData.isNotEmpty) {
+
       return ListView.builder(
         shrinkWrap: true,
         physics: const BouncingScrollPhysics(),
@@ -168,7 +166,7 @@ Widget itemCatalogSearchWidget(hrCode) {
         },
       );
     } else {
-      if (treeDirection.isNotEmpty) {
+      if (treeDirection.length==1) {
         EasyLoading.showInfo('No data found');
       }
       return getShimmer();
@@ -320,41 +318,39 @@ Widget itemCatalogSearchWidget(hrCode) {
       // }
 
       else {
+        EasyLoading.dismiss();
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(
-                left: 20.0,
-                bottom: 5,
-                top: 10,
+              padding: const EdgeInsets.all(2.0),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                    // scrollDirection: Axis.horizontal,
+
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: state.treeDirectionList.length,
+                  itemBuilder: (context,index){
+                    return Padding(padding: const EdgeInsets.all(3.0),
+                    child: InkWell(
+                      onTap: () {
+
+                        if(state.treeDirectionList[index]=="Home" && index==0){
+                                        ItemCatalogSearchCubit.get(context)
+                                            .setInitialization();
+                        }else{
+                          ItemCatalogSearchCubit.get(context).getNewSubTree(index);
+                        }
+
+                      },
+                      child: Text(state.treeDirectionList[index]+" > ",
+                      style: TextStyle(fontSize: 15,color: ConstantsColors.bottomSheetBackground,fontStyle: FontStyle.italic),),
+                      ),
+                    );
+                  }),
               ),
-              child: RichText(
-                text: TextSpan(
-                  style: const TextStyle(color: Colors.grey, fontSize: 20.0),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: "Home",
-                        style: const TextStyle(
-                            color: ConstantsColors.backgroundEndColor,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            ItemCatalogSearchCubit.get(context)
-                                .setInitialization();
-                          }),
-                    // TextSpan(
-                    //   text: state.treeDirection,
-                    //   style: const TextStyle(
-                    //       color: Colors.grey,
-                    //       fontSize: 17,
-                    //       fontWeight: FontWeight.bold),
-                    // ),
-                  ],
-                ),
-              ),
-            ),
+
+
             buildDivider(),
             Expanded(
                 child: checkList(state
@@ -463,10 +459,13 @@ Widget itemCatalogSearchWidget(hrCode) {
                   },
                 )
                     : checkItemsList(
-                    state.itemsGetItemsCategory, state.treeDirection))
+                    state.itemsGetItemsCategory, state.treeDirectionList))
           ],
         );
       }
     },
   );
+
+
+
 }

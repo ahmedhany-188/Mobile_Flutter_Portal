@@ -448,12 +448,13 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   }
 
   void setTreeDirectionList(String? name){
-    List<String> dir = state.treeDirectionList;
-    if (name != null) {
-      dir.add(name);
+    List<String> treeDirectionList=[];
+    for(int i=0;i<state.treeDirectionList.length;i++){
+      treeDirectionList.add(state.treeDirectionList[i]);
     }
+    treeDirectionList.add(name??"");
     emit(state.copyWith(
-        treeDirectionList: dir
+        treeDirectionList: treeDirectionList
     ));
   }
 
@@ -507,11 +508,30 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
 
   void setInitialization() {
     emit(state.copyWith(
-      treeDirectionList:[],
+      treeDirectionList:["Home"],
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
       itemsGetAllTree: state.getAllItemsCatalogList.data,
         detail: false
     ));
+  }
+
+  void getNewSubTree(int index){
+    // setInitialization();
+
+    List<ItemsCatalogTreeModel>? treeList=state.getAllItemsCatalogList.data;
+    List<String>? treeDirectionList =state.treeDirectionList;
+
+    for(int i=0;i<treeDirectionList.length;i++){
+
+      if(treeList!.any((element) =>
+      element.text==treeDirectionList[i])){
+        print("--yes--"+treeDirectionList[i]);
+      }else{
+        print("--no--"+treeDirectionList[i]);
+      }
+    }
+
+
   }
 
   void clearData() {
