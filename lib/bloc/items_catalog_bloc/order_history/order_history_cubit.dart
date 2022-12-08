@@ -1,8 +1,11 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
+import '../../../constants/url_links.dart';
 import '../../../data/data_providers/general_dio/general_dio.dart';
 import '../../../data/data_providers/requests_data_providers/request_data_providers.dart';
 import '../../../data/models/items_catalog_models/item_catalog_all_data.dart';
@@ -32,9 +35,13 @@ class OrderHistoryCubit extends Cubit<OrderHistoryState> {
     });
   }
 
+  static OrderHistoryCubit get(context) => BlocProvider.of(context);
+
   final Connectivity connectivity = Connectivity();
   final GeneralDio _generalDio;
-
+  reAddToCart() {
+    //TODO: call API
+  }
   void getOrderHistoryList(String hrCode) async {
     emit(state.copyWith(
       orderHistoryEnumStates: OrderHistoryEnumStates.initial,
@@ -85,5 +92,34 @@ class OrderHistoryCubit extends Cubit<OrderHistoryState> {
         throw RequestFailureApi.fromCode(value.statusCode!);
       }
     });
+  }
+
+  showItemsDialog(BuildContext context, String hrCode) async {
+    await showDialog(
+      context: context,
+      builder: (ctx) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: state.orderDataList.length,
+            itemBuilder: (ctx, index) {
+              getOrderData(hrCode, state.orderHistoryList[index].id);
+              return Row(
+                children: [
+                  SizedBox(
+                    height: 50,width: 50,
+                      child: Image.network(getCatalogPhotos(
+                          state.orderDataList[index].itemPhoto ?? ""))),
+                  Text(state.orderDataList[index].itemName ?? "Not Defined"),
+                  Text('${state.orderDataList[index].itemQty}'),
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
   }
 }

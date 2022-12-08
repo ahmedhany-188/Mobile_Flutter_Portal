@@ -201,7 +201,9 @@ class ItemCatalogOrderHistory extends StatelessWidget {
                                   children: <Widget>[
                                     Flexible(
                                       child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          OrderHistoryCubit.get(context).showItemsDialog(context,user.employeeData?.userHrCode ?? "");
+                                        },
                                         style: ElevatedButton.styleFrom(
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
@@ -211,7 +213,9 @@ class ItemCatalogOrderHistory extends StatelessWidget {
                                     ),
                                     Flexible(
                                       child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          OrderHistoryCubit.get(context).reAddToCart();
+                                        },
                                         style: ElevatedButton.styleFrom(
                                             shape: RoundedRectangleBorder(
                                                 borderRadius:
