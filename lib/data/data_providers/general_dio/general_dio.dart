@@ -365,6 +365,34 @@ class GeneralDio {
     });
   }
 
+  Future<Response> getOrderHistory(String hrCode) async {
+    String url =
+        'InformationTechnology-ItemCatalog/ItmCat_Users_Cart/OrderHistory?HRCode=$hrCode';
+    return await dio!
+        .get(url,
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: "application/json-patch+json",
+          'Authorization': 'Bearer ${userData?.user?.token}',
+        },
+        ),).catchError((err) {
+      throw err;
+    });
+  }
+
+  Future<Response> getOrderData(String hrCode,orderCode) async {
+    String url =
+    'InformationTechnology-ItemCatalog/ItmCat_Users_Cart/OrderData?OrderId=$orderCode&HRCode=$hrCode';
+    return await dio!
+        .get(url,
+      options: Options(headers: {
+        HttpHeaders.contentTypeHeader: "application/json-patch+json",
+        'Authorization': 'Bearer ${userData?.user?.token}',
+      },
+      ),).catchError((err) {
+      throw err;
+    });
+  }
+
 
   Future<Response> removeItemCatalogFavorite(int itemId) async {
     String url =

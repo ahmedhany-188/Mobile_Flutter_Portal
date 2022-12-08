@@ -21,6 +21,7 @@ import '../../gen/assets.gen.dart';
 import '../../widgets/background/custom_background.dart';
 import 'export_excel.dart';
 import 'favorite_screen.dart';
+import 'items_catalog_order_history_screen.dart';
 import 'items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_detail_screen.dart';
 
@@ -88,6 +89,19 @@ class CartScreen extends StatelessWidget {
                       icon: const Icon(Icons.favorite));
                 },
               ),
+              BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+                // buildWhen: (previous, current) => previous.cartResult != current.cartResult,
+                builder: (context, state) {
+                  return IconButton(
+                      onPressed: () async {
+                        ItemCatalogSearchCubit.get(context).clearData();
+
+                        await Navigator.of(context)
+                            .pushReplacementNamed(ItemCatalogOrderHistory.routeName);
+                      },
+                      icon: const Icon(Icons.history));
+                },
+              ),
             ],
             shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.only(
@@ -96,9 +110,9 @@ class CartScreen extends StatelessWidget {
           ),
         ),
       ),
-        floatingActionButton:FloatingActionButton.extended(
+        floatingActionButton: FloatingActionButton.extended(
         onPressed: () => importDataCart(ItemCatalogSearchCubit.get(context).state.cartResult,() {
-          ItemCatalogSearchCubit.get(context).deleteAllCart(hrCode: user.employeeData?.userHrCode ??"");//,cartList:ItemCatalogSearchCubit.get(context).state.cartResult );
+          ItemCatalogSearchCubit.get(context).placeOrder(hrCode: user.employeeData?.userHrCode ??"");//,cartList:ItemCatalogSearchCubit.get(context).state.cartResult );
         }),
         backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),

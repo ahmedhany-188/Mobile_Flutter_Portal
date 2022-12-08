@@ -22,6 +22,7 @@ import 'package:hassanallamportalflutter/screens/it_requests_screen/email_and_us
 import 'package:hassanallamportalflutter/screens/it_requests_screen/equipments_request_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_requests_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_respond_screen.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_order_history_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_workflow_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_detail_screen.dart';
@@ -328,6 +329,10 @@ class AppRouter {
         case ProjectDetailsScreen.routeName:
         return MaterialPageRoute(
             builder: (_) =>  ProjectDetailsScreen(locationData: settings.arguments as LocationData,));
+
+      case ItemCatalogOrderHistory.routeName:
+        return MaterialPageRoute(
+            builder: (_) =>  ItemCatalogOrderHistory());
 
       default:
         return null;

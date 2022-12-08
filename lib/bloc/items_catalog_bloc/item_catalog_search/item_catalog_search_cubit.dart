@@ -405,7 +405,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
       throw e;
     });
   }
-  Future<void> deleteAllCart({required String hrCode}) async{
+  Future<void> placeOrder({required String hrCode}) async{
     EasyLoading.show(status: 'Loading...');
     emit(state.copyWith(
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
@@ -425,37 +425,13 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         "up_Date": state.cartResult[i].upDate
       };
       listData.add(detailedDataPost);
-      // listData.add(state.cartResult[i].itmCatItems?.toJson());
-      print('========$detailedDataPost');
-      print('========$listData');
-
     }
-    var value = await _generalDio.putCartOrder(listData)
+    await _generalDio.putCartOrder(listData).then((value) {
+      emit(state.copyWith(cartResult: []));
+      EasyLoading.dismiss();
+    })
         .catchError((e) {
       // return response;
-      EasyLoading.showError('Something went wrong');
-      throw e;
-    });
-    print('value ==== ${value.data}');
-    await _generalDio.removeAllCart().
-    then((value) {
-      if(value.statusCode ==200){
-        getCartItems(userHrCode: hrCode);
-        emit(state.copyWith(
-          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
-        ));
-        EasyLoading.dismiss();
-      }else{
-        emit(state.copyWith(
-          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
-        ));
-        EasyLoading.showError('Something went wrong');
-      }
-
-    }).catchError((e) {
-      emit(state.copyWith(
-        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
-      ));
       EasyLoading.showError('Something went wrong');
       throw e;
     });
