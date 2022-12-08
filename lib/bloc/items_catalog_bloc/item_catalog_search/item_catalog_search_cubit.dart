@@ -381,7 +381,6 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     await _generalDio.postItemCatalogCart(cartDataPost).
     then((value) {
       // TODO: add to cart respnse here {value}
-      print(value);
       getCartItems(userHrCode: hrCode);
       EasyLoading.dismiss();
     })
@@ -519,22 +518,35 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     ));
   }
 
-  void getNewSubTree(int index){
-    // setInitialization();
+  int getTreeLenght(){
 
+
+    return state.treeDirectionList.length;
+  }
+
+  Future<void> getNewSubTree(int index) async {
     List<ItemsCatalogTreeModel>? treeList=state.getAllItemsCatalogList.data;
+
     List<String>? treeDirectionList =state.treeDirectionList;
 
-    for(int i=0;i<treeDirectionList.length;i++){
+    setInitialization();
 
-      if(treeList!.any((element) =>
-      element.text==treeDirectionList[i])){
-        print("--yes--"+treeDirectionList[i]);
-      }else{
-        print("--no--"+treeDirectionList[i]);
+    outerLoop:
+    for(int i=0;i<treeDirectionList.length;i++){
+      treeList = state.itemsGetAllTree;
+      for(int j=0;j<treeList.length;j++){
+        if(treeList[j].text==treeDirectionList[i]){
+          getSubTree(treeList[j].items);
+          if(index==i){
+            index++;
+            emit(state.copyWith(
+                treeDirectionList:treeDirectionList.sublist(0,index)
+            ));
+            break outerLoop;
+          }
+        }
       }
     }
-
 
   }
 
