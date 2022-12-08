@@ -409,6 +409,33 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     emit(state.copyWith(
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
     ));
+    List<dynamic> listData =[];
+    for (int i = 0; i < state.cartResult.length; i++) {
+      Map<String, dynamic> detailedDataPost = {
+        "id": state.cartResult[i].id,
+        "orderID": 0,
+        "hrCode": state.cartResult[i].hrCode,
+        "item_Code": state.cartResult[i].itemCode,
+        "item_Qty": state.cartResult[i].itemQty,
+        "isClosed": true,
+        "in_User": state.cartResult[i].inUser,
+        "in_Date": state.cartResult[i].inDate,
+        "up_User": state.cartResult[i].upUser,
+        "up_Date": state.cartResult[i].upDate
+      };
+      listData.add(detailedDataPost);
+      // listData.add(state.cartResult[i].itmCatItems?.toJson());
+      print('========$detailedDataPost');
+      print('========$listData');
+
+    }
+    var value = await _generalDio.putCartOrder(listData)
+        .catchError((e) {
+      // return response;
+      EasyLoading.showError('Something went wrong');
+      throw e;
+    });
+    print('value ==== ${value.data}');
     await _generalDio.removeAllCart().
     then((value) {
       if(value.statusCode ==200){
