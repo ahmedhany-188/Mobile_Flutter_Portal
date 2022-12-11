@@ -8,9 +8,8 @@ import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_requestCatalog_reponse.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'items_catalog_screen_getall.dart';
-import 'package:hassanallamportalflutter/widgets/error/error_widget.dart';
+import '../../widgets/error/error_widget.dart';
 
 class CatalogHistoryRequestScreen extends StatefulWidget{
 
@@ -118,13 +117,11 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
 
   SafeArea getCatalogHistoryData(
       List<NewRequestCatalogModelResponse> getCatalogRequestsHistoryList) {
+    if (getCatalogRequestsHistoryList.isNotEmpty) {
       if (getCatalogRequestsHistoryList[0].data != null) {
         return SafeArea(
           maintainBottomViewPadding: true,
-          child: ConditionalBuilder(
-            condition: getCatalogRequestsHistoryList.isNotEmpty,
-            builder: (context) =>
-                ListView.builder(
+          child: ListView.builder(
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior
                         .onDrag,
                     shrinkWrap: true,
@@ -322,16 +319,13 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                       );
                     }
                 ),
-            fallback: (context) => noDataFoundContainerCatalog("No Data Found"),
-          ),
         );
       } else {
-        return SafeArea(
-          child: Center(
-              child: noDataFoundContainerCatalog("No Data Found")
-          ),
-        );
+        return SafeArea(child: Center(child: noDataFoundContainerCatalog("No Data Found"),));
       }
+    }
+    else {
+      return  SafeArea(child: Center(child: noDataFoundContainerCatalog("No Data Found"),));
     }
   }
 
@@ -342,3 +336,4 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
           color: ConstantsColors
               .bottomSheetBackground),);
   }
+}

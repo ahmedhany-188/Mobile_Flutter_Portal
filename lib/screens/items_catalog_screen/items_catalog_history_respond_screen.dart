@@ -8,8 +8,8 @@ import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_respond_requests_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_workflow_screen.dart';
+import '../../widgets/error/error_widget.dart';
 
 class CatalogHistoryRespondScreen extends StatefulWidget{
 
@@ -20,7 +20,6 @@ class CatalogHistoryRespondScreen extends StatefulWidget{
 }
 
 class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -90,17 +89,6 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                             bottomLeft: Radius.circular(25),
                             bottomRight: Radius.circular(25))),
                   ),
-
-                  // floatingActionButton:FloatingActionButton.extended(
-                  //   onPressed: () {
-                  //     // importDataRespondRequests(state.getCatalogRespondRequestsHistoryList[0]);
-                  //   },
-                  //   backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
-                  //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                  //   icon: Assets.images.excel.image(fit: BoxFit.scaleDown,scale: 13),
-                  //   label: const Text('Export'),
-                  // ),
-
                   body: Container(
                     child: getRespondCatalogHistoryData(
                         state.getCatalogRespondRequestsHistoryList),
@@ -117,10 +105,7 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
       if (getCatalogRespondRequestsHistoryList[0].data != null) {
         return SafeArea(
           maintainBottomViewPadding: true,
-          child: ConditionalBuilder(
-            condition: true,
-            builder: (context) =>
-                ListView.builder(
+          child: ListView.builder(
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior
                         .onDrag,
                     shrinkWrap: true,
@@ -364,17 +349,13 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                       );
                     }
                 ),
-            fallback: (context) =>
-            const Center(
-                child: CircularProgressIndicator(color: Colors.white,)),
-          ),
         );
       } else {
-        return const SafeArea(child: Text(""));
+        return SafeArea(child: Center(child: noDataFoundContainerCatalog("No Data Found"),));
       }
     }
     else {
-      return const SafeArea(child: Text(""),);
+      return SafeArea(child: Center(child: noDataFoundContainerCatalog("No Data Found"),));
     }
   }
 
