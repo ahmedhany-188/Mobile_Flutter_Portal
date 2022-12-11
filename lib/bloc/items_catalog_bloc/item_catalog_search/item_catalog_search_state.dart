@@ -19,6 +19,9 @@ class ItemCatalogSearchState extends Equatable {
 
   final ItemsCatalogCategory getAllItemsCatalogList;
   List<ItemsCatalogTreeModel> itemsGetAllTree;
+
+  final bool listTapAction;
+
   final List<ItemCategoryAttachData> itemCategoryAttachData;
 
   final List<String> treeDirectionList;
@@ -37,6 +40,8 @@ class ItemCatalogSearchState extends Equatable {
     this.itemsGetItemsCategory = const<ItemCategorygetAllData>[],
     this.detail = false,
 
+    this.listTapAction=false,
+
     this.searchString = "",
     this.treeDirectionList = const<String>["Home"],
     required this.getAllItemsCatalogList,
@@ -52,6 +57,7 @@ class ItemCatalogSearchState extends Equatable {
     List<ItemCategorygetAllData>? itemAllDatalist,
     List<String>? mainCategories,
     bool? detail,
+    bool? listTapAction,
     List<String>? treeDirectionList,
     String? searchString,
     List<ItemCategoryAttachData>? itemCategoryAttachData,
@@ -80,6 +86,7 @@ class ItemCatalogSearchState extends Equatable {
       getAllItemsCatalogList: getAllItemsCatalogList ??
           this.getAllItemsCatalogList,
       detail: detail ?? this.detail,
+        listTapAction:listTapAction??this.listTapAction,
     );
   }
 
@@ -99,6 +106,7 @@ class ItemCatalogSearchState extends Equatable {
         itemsGetAllTree,
         itemsGetItemsCategory,
         detail,
+        listTapAction,
         itemCategoryAttachData,
         itemsGetItemsCategory
       ];
@@ -112,6 +120,7 @@ class ItemCatalogSearchState extends Equatable {
       'cartResult': cartResult,
       'searchString': searchString,
       'detail': detail,
+      'listTapAction':listTapAction,
       'itemAllDatalist': itemAllDatalist,
       'mainCategories': mainCategories,
       'itemsGetItemsCategory': itemsGetItemsCategory,
@@ -133,6 +142,7 @@ class ItemCatalogSearchState extends Equatable {
       cartResult: map['cartResult'] as List<CartModelData>,
       searchString: map['searchString'] as String,
       detail: map['detail'] as bool,
+      listTapAction:map['listTapAction'] as bool,
       itemAllDatalist: map['itemAllDatalist'] as List<ItemCategorygetAllData>,
       mainCategories: map['mainCategories'] as List<String>,
       itemsGetItemsCategory:

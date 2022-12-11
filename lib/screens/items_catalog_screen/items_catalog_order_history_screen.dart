@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/data/data_providers/general_dio/general_dio.dart';
-
+import 'package:hassanallamportalflutter/widgets/error/error_widget.dart';
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/items_catalog_bloc/order_history/order_history_cubit.dart';
 import '../../constants/colors.dart';
@@ -273,10 +273,7 @@ class ItemCatalogOrderHistory extends StatelessWidget {
                       );
                     },
                   ),
-                  fallback: (context) => const Center(
-                      child: CircularProgressIndicator(
-                    color: ConstantsColors.bottomSheetBackgroundDark,
-                  )),
+                  fallback: (context) => noDataFoundContainerCatalog("No Data Found"),
                 ),
               ),
             );
