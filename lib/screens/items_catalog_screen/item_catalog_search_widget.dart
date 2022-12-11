@@ -398,16 +398,25 @@ Widget itemCatalogSearchWidget(hrCode) {
                               left: 15.0, right: 15.0, bottom: 20),
                           child: InkWell(
                             onTap: () {
-                              if (state.itemsGetAllTree[index].items !=
-                                  null) {
-                                if (state.itemsGetAllTree[index].items!
-                                    .isNotEmpty) {
-                                  ItemCatalogSearchCubit.get(context)
-                                      .getSubTree(
-                                      state.itemsGetAllTree[index].items);
-                                  ItemCatalogSearchCubit.get(context)
-                                      .setTreeDirectionList(
-                                      state.itemsGetAllTree[index].text);
+                              if(state.listTapAction==false){
+                                if (state.itemsGetAllTree[index].items !=
+                                    null) {
+                                  if (state.itemsGetAllTree[index].items!
+                                      .isNotEmpty) {
+                                    ItemCatalogSearchCubit.get(context)
+                                        .getSubTree(
+                                        state.itemsGetAllTree[index].items);
+                                    ItemCatalogSearchCubit.get(context)
+                                        .setTreeDirectionList(
+                                        state.itemsGetAllTree[index].text);
+                                  } else {
+                                    ItemCatalogSearchCubit.get(context)
+                                        .getCategoryDataWithId(hrCode,
+                                        state.itemsGetAllTree[index].id);
+                                    ItemCatalogSearchCubit.get(context)
+                                        .setTreeDirectionList(
+                                        state.itemsGetAllTree[index].text);
+                                  }
                                 } else {
                                   ItemCatalogSearchCubit.get(context)
                                       .getCategoryDataWithId(hrCode,
@@ -416,15 +425,9 @@ Widget itemCatalogSearchWidget(hrCode) {
                                       .setTreeDirectionList(
                                       state.itemsGetAllTree[index].text);
                                 }
-                              } else {
-                                ItemCatalogSearchCubit.get(context)
-                                    .getCategoryDataWithId(hrCode,
-                                    state.itemsGetAllTree[index].id);
-                                ItemCatalogSearchCubit.get(context)
-                                    .setTreeDirectionList(
-                                    state.itemsGetAllTree[index].text);
                               }
                             },
+                            onDoubleTap: (){},
                             borderRadius: BorderRadius.circular(20),
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(20),

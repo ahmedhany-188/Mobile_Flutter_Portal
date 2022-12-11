@@ -437,6 +437,9 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   }
 
   void getSubTree(List<Items>? item) {
+    emit(state.copyWith(
+     listTapAction: true
+    ));
     List<ItemsCatalogTreeModel> newTreeList = <ItemsCatalogTreeModel>[];
     if (item != null) {
       for (int i = 0; i < item.length; i++) {
@@ -457,7 +460,8 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     }
     treeDirectionList.add(name??"");
     emit(state.copyWith(
-        treeDirectionList: treeDirectionList
+        treeDirectionList: treeDirectionList,
+            listTapAction: false
     ));
   }
 
@@ -547,7 +551,9 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         }
       }
     }
-
+    emit(state.copyWith(
+        listTapAction: false
+    ));
   }
 
   void clearData() {

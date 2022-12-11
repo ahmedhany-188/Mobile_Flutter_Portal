@@ -10,6 +10,7 @@ import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_c
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'items_catalog_screen_getall.dart';
+import 'package:hassanallamportalflutter/widgets/error/error_widget.dart';
 
 class CatalogHistoryRequestScreen extends StatefulWidget{
 
@@ -117,12 +118,11 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
 
   SafeArea getCatalogHistoryData(
       List<NewRequestCatalogModelResponse> getCatalogRequestsHistoryList) {
-    if (getCatalogRequestsHistoryList.isNotEmpty) {
       if (getCatalogRequestsHistoryList[0].data != null) {
         return SafeArea(
           maintainBottomViewPadding: true,
           child: ConditionalBuilder(
-            condition: true,
+            condition: getCatalogRequestsHistoryList.isNotEmpty,
             builder: (context) =>
                 ListView.builder(
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior
@@ -322,17 +322,16 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                       );
                     }
                 ),
-            fallback: (context) =>
-            const Center(
-                child: CircularProgressIndicator(color: Colors.white,)),
+            fallback: (context) => noDataFoundContainerCatalog("No Data Found"),
           ),
         );
       } else {
-        return const SafeArea(child: Text(""));
+        return SafeArea(
+          child: Center(
+              child: noDataFoundContainerCatalog("No Data Found")
+          ),
+        );
       }
-    }
-    else {
-      return const SafeArea(child: Text(""),);
     }
   }
 
@@ -343,4 +342,3 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
           color: ConstantsColors
               .bottomSheetBackground),);
   }
-}
