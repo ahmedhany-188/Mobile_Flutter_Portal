@@ -6,10 +6,12 @@ import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_c
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/favorite_screen.dart';
 import '../../constants/url_links.dart';
 import 'package:flutter/services.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import '../../widgets/dialogpopoup/dialog_popup_catalog_item_share.dart';
+import 'cart_screen.dart';
 
 class ItemsCatalogDetailScreen extends StatefulWidget {
   static const routeName = '/itemscatalog-detail-screen';
@@ -101,6 +103,47 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  InkWell(
+                    onTap:(){
+                      Navigator.of(context)
+                          .pushReplacementNamed(
+                          FavoriteScreen.routeName);
+                    } ,
+                    child: const Padding(
+                      padding:  EdgeInsets.all(5.0),
+                      child:  Text('Favorite list',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                            color: ConstantsColors.bottomSheetBackground),
+                      ),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: (){
+                      Navigator.of(context)
+                          .pushReplacementNamed(
+                          CartScreen.routeName);
+                    },
+                    child: const Padding(
+                      padding:  EdgeInsets.all(5.0),
+                      child:  Text('Cart list',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold,
+                            decoration: TextDecoration.underline,
+                            color: ConstantsColors.bottomSheetBackground),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
               ClipRRect(
                 borderRadius: BorderRadius.circular(25.0),
                 child: Container(
@@ -147,7 +190,7 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10, top: 10, bottom: 25),
+                padding: const EdgeInsets.only(left: 10, top: 10, bottom: 1),
                 child: Center(
                   child: Text(
                     itemCategorygetAllData.itemName ?? "",
@@ -158,6 +201,9 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
                   ),
                 ),
               ),
+
+
+
               Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
@@ -493,9 +539,14 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
                         ),
                       ],
                     ),
+
+
                   ),
                 ),
               ),
+
+
+
             ],
           ),
         ),

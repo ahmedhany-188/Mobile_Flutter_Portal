@@ -273,7 +273,7 @@ class ItemCatalogOrderHistory extends StatelessWidget {
                       );
                     },
                   ),
-                  fallback: (context) => noDataFoundContainerCatalog("No Data Found"),
+                  fallback: (context) => Center(child: noDataFoundContainerCatalog("No Data Found")),
                 ),
               ),
             );
