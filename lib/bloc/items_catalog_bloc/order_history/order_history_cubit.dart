@@ -39,9 +39,7 @@ class OrderHistoryCubit extends Cubit<OrderHistoryState> {
 
   final Connectivity connectivity = Connectivity();
   final GeneralDio _generalDio;
-  reAddToCart() {
-    //TODO: call API
-  }
+
   void getOrderHistoryList(String hrCode) async {
     emit(state.copyWith(
       orderHistoryEnumStates: OrderHistoryEnumStates.initial,
@@ -69,7 +67,7 @@ class OrderHistoryCubit extends Cubit<OrderHistoryState> {
     });
   }
 
-  void getOrderData(String hrCode, orderId) async {
+  Future<void> getOrderData(String hrCode, orderId) async {
     emit(state.copyWith(
       orderHistoryEnumStates: OrderHistoryEnumStates.initial,
     ));
@@ -94,7 +92,7 @@ class OrderHistoryCubit extends Cubit<OrderHistoryState> {
     });
   }
 
-  showItemsDialog(BuildContext context, String hrCode) async {
+  Future<void> showItemsDialog(BuildContext context, String hrCode) async {
     await showDialog(
       context: context,
       builder: (ctx) {
@@ -105,16 +103,20 @@ class OrderHistoryCubit extends Cubit<OrderHistoryState> {
             shrinkWrap: true,
             itemCount: state.orderDataList.length,
             itemBuilder: (ctx, index) {
-              getOrderData(hrCode, state.orderHistoryList[index].id);
-              return Row(
-                children: [
-                  SizedBox(
-                    height: 50,width: 50,
-                      child: Image.network(getCatalogPhotos(
-                          state.orderDataList[index].itemPhoto ?? ""))),
-                  Text(state.orderDataList[index].itemName ?? "Not Defined"),
-                  Text('${state.orderDataList[index].itemQty}'),
-                ],
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: Image.network(getCatalogPhotos(
+                            state.orderDataList[index].itemPhoto ?? ""))),
+                    Text(state.orderDataList[index].itemName ?? "Not Defined"),
+                    Text('${state.orderDataList[index].itemQty}'),
+                  ],
+                ),
               );
             },
           ),
@@ -122,4 +124,133 @@ class OrderHistoryCubit extends Cubit<OrderHistoryState> {
       },
     );
   }
+
+  //
+  // reAddToCart() {
+  //   //TODO: call API
+  // }
+
+  Future<void> reAddToCart({required String hrCode, required int itemCode}) async{
+    EasyLoading.show(status: 'Loading...');
+    emit(state.copyWith(
+      orderHistoryEnumStates: OrderHistoryEnumStates.initial,
+    ));
+    Map<String, dynamic> cartDataPost =
+    {
+      "id": 0,
+      "orderID": 0,
+      "hrCode": hrCode,
+      "item_Code": itemCode,
+      // "itmCat_Items": {
+      //   "item_ID": 0,
+      //   "requestNo": 0,
+      //   "systemItemCode": "",
+      //   "itemCode": "",
+      //   "item_Name": "",
+      //   "item_Desc": "",
+      //   "item_Qty": 0,
+      //   "item_Price": 0,
+      //   "item_AppearPrice": true,
+      //   "in_User": "",
+      //   "in_Date": DateTime.now().toString(),
+      //   "up_User": "",
+      //   "up_Date":  DateTime.now().toString(),
+      //   // "items_Attaches": [
+      //   //   {
+      //   //     "id": 0,
+      //   //     "item_ID": 0,
+      //   //     "attach_File": "string",
+      //   //     "in_User": "string",
+      //   //     "in_Date":  DateTime.now().toString(),
+      //   //     "up_User": "string",
+      //   //     "up_Date":  DateTime.now().toString()
+      //   //   }
+      //   // ],
+      //   "cat_ID": 0,
+      //   // "category": {
+      //   //   "cat_id": 0,
+      //   //   "parent_ID": 0,
+      //   //   "cat_Name": "string",
+      //   //   "cat_Code": "string",
+      //   //   "cat_Desc": "string",
+      //   //   "cat_Photo": "string",
+      //   //   "cat_StartDate":  DateTime.now().toString(),
+      //   //   "cat_EndDate":  DateTime.now().toString(),
+      //   //   "tags": "string",
+      //   //   "isActive": true,
+      //   //   "allow_Items": true,
+      //   //   "in_User": "string",
+      //   //   "in_Date":  DateTime.now().toString(),
+      //   //   "up_User": "string",
+      //   //   "up_Date":  DateTime.now().toString(),
+      //   //   "category_Attach": [
+      //   //     {
+      //   //       "id": 0,
+      //   //       "cat_id": 0,
+      //   //       "attach_file": "string",
+      //   //       "in_User": "string",
+      //   //       "in_Date":  DateTime.now().toString(),
+      //   //       "up_User": "string",
+      //   //       "up_Date":  DateTime.now().toString()
+      //   //     }
+      //   //   ]
+      //   // },
+      //   "item_UOM": 0,
+      //   // "itmCat_UOM": {
+      //   //   "id": 0,
+      //   //   "unit_Name": "string",
+      //   //   "in_User": "string",
+      //   //   "in_Date":  DateTime.now().toString(),
+      //   //   "up_User": "string",
+      //   //   "up_Date":  DateTime.now().toString()
+      //   // },
+      //   "item_MatGroup": 0,
+      //   // "matrialGroup": {
+      //   //   "id": 0,
+      //   //   "material_Name": "string",
+      //   //   "group_Desc": "string",
+      //   //   "in_User": "string",
+      //   //   "in_Date":  DateTime.now().toString(),
+      //   //   "up_User": "string",
+      //   //   "up_Date":  DateTime.now().toString()
+      //   // },
+      //   "item_MatType": 0,
+      //   // "materialType": {
+      //   //   "id": 0,
+      //   //   "materialTyp_Name": "string",
+      //   //   "type_Desc": "string",
+      //   //   "in_User": "string",
+      //   //   "in_Date":  DateTime.now().toString(),
+      //   //   "up_User": "string",
+      //   //   "up_Date":  DateTime.now().toString()
+      //   // },
+      //   "item_Photo": "",
+      //   "tags": "",
+      //   "enableBrand": true,
+      //   "enableColor": true,
+      //   "expirationDateFlag": true,
+      //   "arabicDesc": ""
+      // },
+      "item_Qty": 1,
+      "isClosed": true,
+      "in_User": hrCode,
+      "in_Date":  DateTime.now().toString(),
+      "up_User": "",
+      "up_Date":  DateTime.now().toString()
+    };
+    await _generalDio.postItemCatalogCart(cartDataPost).
+    then((value) {
+      // TODO: add to cart respnse here {value}
+      // getCartItems(userHrCode: hrCode);
+      emit(state.copyWith(
+        orderHistoryEnumStates: OrderHistoryEnumStates.success,
+      ));
+      EasyLoading.dismiss();
+    })
+        .catchError((e) {
+      EasyLoading.showError('Something went wrong');
+      throw e;
+    });
+  }
+
 }

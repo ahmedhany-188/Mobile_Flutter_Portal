@@ -65,10 +65,10 @@ class ItemCatalogOrderHistory extends StatelessWidget {
                             horizontal: 10.0, vertical: 5),
                         child: Container(
                           decoration: BoxDecoration(
-                              border: Border.all(
-                                  color: Colors.grey.shade300, width: 3.0),
-                              borderRadius: BorderRadius.circular(20),
-                              ),
+                            border: Border.all(
+                                color: Colors.grey.shade300, width: 3.0),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: <Widget>[
@@ -197,12 +197,26 @@ class ItemCatalogOrderHistory extends StatelessWidget {
                                         bottomLeft: Radius.circular(24),
                                         bottomRight: Radius.circular(24))),
                                 child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
                                     Flexible(
                                       child: ElevatedButton(
-                                        onPressed: () {
-                                          OrderHistoryCubit.get(context).showItemsDialog(context,user.employeeData?.userHrCode ?? "");
+                                        onPressed: () async {
+                                          await OrderHistoryCubit.get(context)
+                                              .getOrderData(
+                                                  user.employeeData
+                                                          ?.userHrCode ??
+                                                      "",
+                                                  state.orderHistoryList[index]
+                                                      .id)
+                                              .then((_) => OrderHistoryCubit
+                                                      .get(context)
+                                                  .showItemsDialog(
+                                                      context,
+                                                      user.employeeData
+                                                              ?.userHrCode ??
+                                                          ""));
                                         },
                                         style: ElevatedButton.styleFrom(
                                             shape: RoundedRectangleBorder(
@@ -213,8 +227,35 @@ class ItemCatalogOrderHistory extends StatelessWidget {
                                     ),
                                     Flexible(
                                       child: ElevatedButton(
-                                        onPressed: () {
-                                          OrderHistoryCubit.get(context).reAddToCart();
+                                        onPressed: () async {
+                                          await OrderHistoryCubit.get(context)
+                                              .getOrderData(
+                                                  user.employeeData
+                                                          ?.userHrCode ??
+                                                      "",
+                                                  state.orderHistoryList[index]
+                                                      .id)
+                                              .then(
+                                            (_) {
+                                              for (int i = 0;
+                                                  i <
+                                                      state
+                                                          .orderDataList.length;
+                                                  i++) {
+                                                OrderHistoryCubit.get(context)
+                                                    .reAddToCart(
+                                                  hrCode: user.employeeData
+                                                          ?.userHrCode ??
+                                                      "",
+                                                  itemCode: state
+                                                          .orderDataList[i]
+                                                          .itemID ??
+                                                      0,
+                                                );
+                                              }
+                                              EasyLoading.showSuccess('order added');
+                                            },
+                                          );
                                         },
                                         style: ElevatedButton.styleFrom(
                                             shape: RoundedRectangleBorder(
