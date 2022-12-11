@@ -31,7 +31,7 @@ class FavoriteScreen extends StatelessWidget {
         child: Hero(
           tag: 'hero',
           child: AppBar(
-            title: const Text('Favorite'),
+            title: const Text('Favourite'),
             leading: InkWell(onTap: () => Navigator.of(context).pushReplacementNamed(ItemsCatalogGetAllScreen.routeName),child: const Icon(Icons.home)),
             elevation: 0,
             backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
@@ -153,6 +153,18 @@ class FavoriteScreen extends StatelessWidget {
                             ),
                           ),
                         );
+
+                        /*
+                        // return Padding(
+                          //   padding: const EdgeInsets.all(10.0),
+                          //   child: Column(
+                          //     children: [
+                          //       Icon(Icons.remove_shopping_cart_outlined, size: 18),
+                          //       Text("Your Cart is Empty"),
+                          //     ],
+                          //   ),
+                          // );
+                         */
                       },
                     ),
                   ),

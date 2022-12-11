@@ -224,7 +224,7 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
               ),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: InkWell(
@@ -239,29 +239,17 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
                             );
                           });
                     },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
+                    child:  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: const [
+                         Text(
                           "Share Item",
                           style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: ConstantsColors.bottomSheetBackground),
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Item id: ${itemCategorygetAllData.itemID}",
-                              style: const TextStyle(
-                                  fontSize: 15,
-                                  color:
-                                      ConstantsColors.bottomSheetBackground),
-                            ),
-                            const Icon(Icons.share, size: 20),
-                          ],
-                        ),
+                        Icon(Icons.share, size: 25),
                       ],
                     ),
                   ),

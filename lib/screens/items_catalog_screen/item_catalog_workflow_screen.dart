@@ -75,7 +75,7 @@ class CatalogRequestWorkFlowScreenClass extends State<CatalogRequestWorkFlowScre
                         backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
                         elevation: 0,
                         leading: InkWell(onTap: () => Navigator.of(context).pushReplacementNamed(ItemsCatalogGetAllScreen.routeName),child: const Icon(Icons.home)),
-                        title: const Text('Request History'),
+                        title: const Text('Request WorkFlow'),
                         centerTitle: true,
                         // actions: <Widget>[
                         //   IconButton(
@@ -138,21 +138,13 @@ class CatalogRequestWorkFlowScreenClass extends State<CatalogRequestWorkFlowScre
           child: ConditionalBuilder(
             condition: true,
             builder: (context) =>
-                GridView.builder(
+                ListView.builder(
                     keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior
                         .onDrag,
                     shrinkWrap: true,
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 1,
-                      // childAspectRatio: (1 / .4),
-                      // mainAxisExtent: 220, // here set custom Height You Want
-                      // width between items
-                      crossAxisSpacing: 2,
-                      // height between items
-                      mainAxisSpacing: 5,
-                    ),
                     itemCount: getCatalogWorkFlowList[0].data?.length,
-                    itemBuilder: (BuildContext context, int index) {
+                    itemBuilder: (BuildContext context, int index)
+                     {
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 10.0, vertical: 5),
