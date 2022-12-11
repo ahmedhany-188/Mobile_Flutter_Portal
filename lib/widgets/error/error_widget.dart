@@ -18,10 +18,10 @@ Widget noDataFoundContainer() {
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      Assets.images.noSearchIcon.image(color: Colors.white, scale: 5),
+      Assets.images.noSearchIcon.image(color: Colors.black, scale: 5),
       const Text('No Data Found',
           style: TextStyle(
-              color: Colors.white,
+              color: Colors.black,
               fontFamily: FontFamily.robotoCondensed,
               fontSize: 25,
               fontWeight: FontWeight.normal)),

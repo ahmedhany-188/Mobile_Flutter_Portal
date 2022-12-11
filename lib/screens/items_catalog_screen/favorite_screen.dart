@@ -141,7 +141,7 @@ class FavoriteScreen extends StatelessWidget {
                   );
                 },
               )
-                  :noDataFoundContainer();
+                  :Center(child: noDataFoundContainer());
             // } else {
             //   return itemDetailWidgetInternal(
             //       user.employeeData?.userHrCode ?? "");
