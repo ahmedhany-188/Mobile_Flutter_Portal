@@ -37,7 +37,7 @@ import '../news_screen/news_screen.dart';
 import '../notification_screen/notifications_screen.dart';
 import '../../screens/contacts_screen/contacts_screen.dart';
 import '../videos_screen/videos_screen.dart';
-import 'portal_assistant_screen.dart';
+// import 'portal_assistant_screen.dart';
 
 // class HomeGridViewScreen extends StatefulWidget {
 //   const HomeGridViewScreen({Key? key}) : super(key: key);
@@ -162,20 +162,20 @@ class HomeGridViewScreen extends StatelessWidget {
               ],
             ),
             drawer: const MainDrawer(),
-            floatingActionButton: Padding(
-              padding: const EdgeInsets.only(bottom: 20.0),
-              child: FloatingActionButton(
-                onPressed: () => Navigator.pushNamed(
-                    context, PortalAssistantScreen.routeName),
-                child: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.rectangle,
-                      image: DecorationImage(
-                          image: Assets.images.bot6.image().image),
-                      borderRadius: BorderRadius.circular(10)),
-                ),
-              ),
-            ),
+            // floatingActionButton: Padding(
+            //   padding: const EdgeInsets.only(bottom: 20.0),
+            //   child: FloatingActionButton(
+            //     onPressed: () => Navigator.pushNamed(
+            //         context, PortalAssistantScreen.routeName),
+            //     child: Container(
+            //       decoration: BoxDecoration(
+            //           shape: BoxShape.rectangle,
+            //           image: DecorationImage(
+            //               image: Assets.images.bot6.image().image),
+            //           borderRadius: BorderRadius.circular(10)),
+            //     ),
+            //   ),
+            // ),
             // Container(
             //   margin: const EdgeInsets.only(bottom: 20.0),
             //   decoration: BoxDecoration(shape: BoxShape.circle,image: DecorationImage(image: Assets.images.bot6.image().image)),

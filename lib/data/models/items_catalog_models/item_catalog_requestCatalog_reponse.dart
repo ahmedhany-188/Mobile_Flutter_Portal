@@ -13,16 +13,16 @@ class NewRequestCatalogModelResponse {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add( Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    data['message'] = this.message;
-    data['error'] = this.error;
+    data['code'] = code;
+    data['message'] = message;
+    data['error'] = error;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -63,14 +63,14 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['requestID'] = this.requestID;
-    data['findItem_ID'] = this.findItemID;
-    data['date'] = this.date;
-    data['itemName'] = this.itemName;
-    data['cat_ID'] = this.catID;
-    data['catName'] = this.catName;
-    data['status'] = this.status;
-    data['itemDesc'] = this.itemDesc;
+    data['requestID'] = requestID;
+    data['findItem_ID'] = findItemID;
+    data['date'] = date;
+    data['itemName'] = itemName;
+    data['cat_ID'] = catID;
+    data['catName'] = catName;
+    data['status'] = status;
+    data['itemDesc'] = itemDesc;
     return data;
   }
 }

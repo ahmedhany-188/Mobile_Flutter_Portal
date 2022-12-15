@@ -8,7 +8,6 @@ import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_requestCatalog_reponse.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
-import 'items_catalog_screen_getall.dart';
 import '../../widgets/error/error_widget.dart';
 
 class CatalogHistoryRequestScreen extends StatefulWidget{
@@ -55,6 +54,10 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                     CatalogRequestsHistoryEnumStates.valid) {
                   EasyLoading.dismiss(animation: true);
                 }
+                else if (state.catalogRequestsHistoryEnumStates ==
+                    CatalogRequestsHistoryEnumStates.noConnection) {
+                  EasyLoading.dismiss(animation: true);
+                }
               },
               builder: (context, state) {
 
@@ -67,7 +70,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                       child: AppBar(
                         backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
                         elevation: 0,
-                        leading: InkWell(onTap: () => Navigator.of(context).pushReplacementNamed(ItemsCatalogGetAllScreen.routeName),child: const Icon(Icons.home)),
+                        leading: InkWell(onTap: () => Navigator.of(context).pop(),child: const Icon(Icons.home)),
                         title: const Text('Request History'),
                         centerTitle: true,
                         // actions: <Widget>[
@@ -231,7 +234,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                         Flexible(
                                           child: cardText(
 
-                                    GlobalConstants.dateFormatViewed.format(
+                                    GlobalConstants.dateFormatViewedWithTime.format(
                                     GlobalConstants.dateFormatServer.parse(
                                           getCatalogRequestsHistoryList[0]
                                               .data![index].date.toString()

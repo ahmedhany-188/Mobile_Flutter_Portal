@@ -317,10 +317,10 @@ class AppRouter {
             builder: (_) =>  PortalAssistantScreen());
       case FavoriteScreen.routeName:
         return MaterialPageRoute(
-            builder: (_) =>  FavoriteScreen());
+            builder: (_) =>  const FavoriteScreen());
       case CartScreen.routeName:
         return MaterialPageRoute(
-            builder: (_) =>  CartScreen());
+            builder: (_) => const CartScreen());
 
       case ProjectsPortfolioScreen.routeName:
         return MaterialPageRoute(
@@ -332,7 +332,7 @@ class AppRouter {
 
       case ItemCatalogOrderHistory.routeName:
         return MaterialPageRoute(
-            builder: (_) =>  ItemCatalogOrderHistory());
+            builder: (_) => const ItemCatalogOrderHistory());
 
       default:
         return null;

@@ -1,11 +1,9 @@
 import 'package:file_picker/file_picker.dart';
-import 'package:bloc/bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_new_request/item_catalog_new_request_state.dart';
-import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_image_model.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_new_request_model.dart';
 import 'package:hassanallamportalflutter/data/models/requests_form_models/request_date.dart';
@@ -54,7 +52,7 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
     ));
 
     if (state.status.isValidated) {
-      if (itemAttach.isNotEmpty) {
+      // if (itemAttach.isNotEmpty) {
         NewRequestCatalogModel newRequestCatalogModel = NewRequestCatalogModel(
             itemName: itemName.value,
             itemDesc: itemDescription.value,
@@ -71,18 +69,16 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
 
             final newRequestCatalog = await requestRepository
                 .postNewRequestCatalog(newRequestCatalogModel);
-
             if (newRequestCatalog.error == false) {
-
               int? reqID = newRequestCatalog.data?[0].requestID;
-
-              print("ttttttttttt-:"+reqID.toString());
               if (reqID != null) {
-                for (int i = 0; i < state.itemAttach.length; i++) {
-                  final newRequestImageCatalog = await requestRepository.postNewRequestImageCatalog
-                    (state.itemAttach[i], hrcode, reqID);
-                    print("..........="+newRequestImageCatalog.toString());
-                }
+                if (itemAttach.isNotEmpty) {
+                  for (int i = 0; i < state.itemAttach.length; i++) {
+                    //final newRequestImageCatalog =
+                    await requestRepository.postNewRequestImageCatalog
+                      (state.itemAttach[i], hrcode, reqID);
+                  }
+              }
               }
 
               emit(state.copyWith(
@@ -90,14 +86,11 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
                 errorMessage: reqID.toString(),
                 status: FormzStatus.submissionSuccess,
               ),);
-
             } else {
               emit(state.copyWith(
                   status: FormzStatus.submissionFailure,
                   errorMessage: newRequestCatalog.message,
-                  newRequestCatalogEnumState: NewRequestCatalogEnumState
-                      .failed),
-
+                  newRequestCatalogEnumState: NewRequestCatalogEnumState.failed),
               );
             }
           } else {
@@ -118,31 +111,31 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
             ),
           );
         }
-      }else{
-        emit(
-          state.copyWith(
-              errorMessage: "Invalid image",
-              status: FormzStatus.submissionFailure,
-              newRequestCatalogEnumState: NewRequestCatalogEnumState.failed
-          ),
-        );
-      }
+      // }else{
+      //   emit(
+      //     state.copyWith(
+      //         errorMessage: "Invalid image",
+      //         status: FormzStatus.submissionFailure,
+      //         newRequestCatalogEnumState: NewRequestCatalogEnumState.failed
+      //     ),
+      //   );
+      // }
     }
   }
 
-  void checkTheValueOfTree() {
-    var now = DateTime.now();
-    var formatter = GlobalConstants.dateFormatViewed;
-    String formattedDate = formatter.format(now);
-    final requestDate = RequestDate.dirty(formattedDate);
-    emit(
-      state.copyWith(
-        newRequestDate: requestDate,
-        newRequestCatalogEnumState: NewRequestCatalogEnumState.valid,
-        status: Formz.validate([requestDate]),
-      ),
-    );
-  }
+  // void checkTheValueOfTree() {
+  //   var now = DateTime.now();
+  //   var formatter = GlobalConstants.dateFormatViewed;
+  //   String formattedDate = formatter.format(now);
+  //   final requestDate = RequestDate.dirty(formattedDate);
+  //   emit(
+  //     state.copyWith(
+  //       newRequestDate: requestDate,
+  //       newRequestCatalogEnumState: NewRequestCatalogEnumState.valid,
+  //       status: Formz.validate([requestDate]),
+  //     ),
+  //   );
+  // }
 
   void addItemName(name) {
     final itemName = RequestDate.dirty(name);
@@ -206,21 +199,17 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
     }
 
     void changeMainImage(index){
-
-      for(int i=0; i<state.itemAttach.length; i++){
-        state.itemAttach[i].isMain=false;
+      List<ItemImageCatalogModel> itemAttach=state.itemAttach;
+      for(int i=0; i<itemAttach.length; i++){
+        itemAttach[i].isMain=false;
       }
-      state.itemAttach[index].isMain=true;
-
-      List<ItemImageCatalogModel> itemAttachs=state.itemAttach;
-
+      itemAttach[index].isMain=true;
       emit(
           state.copyWith(
-            itemAttach: itemAttachs,
+            itemAttach: itemAttach,
             newRequestCatalogEnumState: NewRequestCatalogEnumState.valid,
           ));
     }
-
   }
 
 

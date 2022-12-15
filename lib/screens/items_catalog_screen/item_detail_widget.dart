@@ -289,7 +289,7 @@ Widget itemDetailWidget(dynamic hrcode) {
                       isScrollControlled: true,
                       builder: (BuildContext context) {
                         return  DialogCatalogShareItemBottomSheet(
-                          value:"https://apps.hassanallam.com/Catalogue/item/"+state.itemAllDatalist[0].itemID.toString(),
+                          value:"https://apps.hassanallam.com/Catalogue/item/${state.itemAllDatalist[0].itemID}",
                         );
                       });
 
@@ -308,7 +308,7 @@ Widget itemDetailWidget(dynamic hrcode) {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Item id:"+state.itemAllDatalist[0].itemID.toString(),
+                          "Item id:${state.itemAllDatalist[0].itemID}",
                           style: const TextStyle(
                               fontSize: 15,
                               color: ConstantsColors.bottomSheetBackground),

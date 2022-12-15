@@ -13,16 +13,16 @@ class CatalogRequestWorkFlow {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add( Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    data['message'] = this.message;
-    data['error'] = this.error;
+    data['code'] = code;
+    data['message'] = message;
+    data['error'] = error;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -111,30 +111,30 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['group_ID'] = this.groupID;
-    data['group_Name'] = this.groupName;
-    data['action'] = this.action;
-    data['action_Desc'] = this.actionDesc;
-    data['catID_Workflow'] = this.catIDWorkflow;
-    data['catWorkflowName'] = this.catWorkflowName;
-    data['actionByHRCode'] = this.actionByHRCode;
-    data['actionByName'] = this.actionByName;
-    data['actionByEmail'] = this.actionByEmail;
-    data['submitted_Date'] = this.submittedDate;
-    data['submitted_Comment'] = this.submittedComment;
-    data['requestID'] = this.requestID;
-    data['findItem_ID'] = this.findItemID;
-    data['cat_ID'] = this.catID;
-    data['cat_Name'] = this.catName;
-    data['itemCode'] = this.itemCode;
-    data['item_Name'] = this.itemName;
-    data['item_Desc'] = this.itemDesc;
-    data['tags'] = this.tags;
-    data['requester_HRCode'] = this.requesterHRCode;
-    data['requester_Name'] = this.requesterName;
-    data['requester_Email'] = this.requesterEmail;
-    data['request_Date'] = this.requestDate;
+    data['id'] = id;
+    data['group_ID'] = groupID;
+    data['group_Name'] = groupName;
+    data['action'] = action;
+    data['action_Desc'] = actionDesc;
+    data['catID_Workflow'] = catIDWorkflow;
+    data['catWorkflowName'] = catWorkflowName;
+    data['actionByHRCode'] = actionByHRCode;
+    data['actionByName'] = actionByName;
+    data['actionByEmail'] = actionByEmail;
+    data['submitted_Date'] = submittedDate;
+    data['submitted_Comment'] = submittedComment;
+    data['requestID'] = requestID;
+    data['findItem_ID'] = findItemID;
+    data['cat_ID'] = catID;
+    data['cat_Name'] = catName;
+    data['itemCode'] = itemCode;
+    data['item_Name'] = itemName;
+    data['item_Desc'] = itemDesc;
+    data['tags'] = tags;
+    data['requester_HRCode'] = requesterHRCode;
+    data['requester_Name'] = requesterName;
+    data['requester_Email'] = requesterEmail;
+    data['request_Date'] = requestDate;
     return data;
   }
 }

@@ -2,25 +2,20 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_all_data.dart';
-
 import 'dart:io';
 import 'package:open_file/open_file.dart' as open_file;
 import 'package:path_provider/path_provider.dart' as path_provider;
-// ignore: depend_on_referenced_packages
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-
-
 import '../../bloc/auth_app_status_bloc/app_bloc.dart';
 import '../../bloc/items_catalog_bloc/item_catalog_search/item_catalog_search_cubit.dart';
 import '../../constants/colors.dart';
 import '../../constants/url_links.dart';
 import '../../gen/assets.gen.dart';
 import '../../widgets/error/error_widget.dart';
-import 'export_excel.dart';
 import 'favorite_screen.dart';
 import 'items_catalog_order_history_screen.dart';
-import 'items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_detail_screen.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({Key? key}) : super(key: key);
@@ -65,7 +60,7 @@ class CartScreen extends StatelessWidget {
           tag: 'hero',
           child: AppBar(
             title: const Text('Cart'),
-            leading: InkWell(onTap: () => Navigator.of(context).pushReplacementNamed(ItemsCatalogGetAllScreen.routeName),child: const Icon(Icons.home)),
+            leading: InkWell(onTap: () => Navigator.of(context).pop(),child: const Icon(Icons.home)),
             elevation: 0,
             backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
             centerTitle: true,
@@ -105,9 +100,10 @@ class CartScreen extends StatelessWidget {
         ),
       ),
         floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => importDataCart(ItemCatalogSearchCubit.get(context).state.cartResult,() {
-          ItemCatalogSearchCubit.get(context).placeOrder(hrCode: user.employeeData?.userHrCode ??"");//,cartList:ItemCatalogSearchCubit.get(context).state.cartResult );
-        }),
+        onPressed: () =>{
+
+            ItemCatalogSearchCubit.get(context).placeOrder(hrCode: user.employeeData?.userHrCode ??""),//,cartList:ItemCatalogSearchCubit.get(context).state.cartResult );
+        },
         backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         icon: Assets.images.excel.image(fit: BoxFit.scaleDown,scale: 13),
@@ -117,102 +113,119 @@ class CartScreen extends StatelessWidget {
         value: ItemCatalogSearchCubit.get(context)
           ..getCartItems(userHrCode: user.employeeData?.userHrCode ?? "")
           ..getFavoriteItems(userHrCode: user.employeeData?.userHrCode ?? ""),
-        child: BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
-          builder: (context, state) {
-            // if (state.detail == false) {
-              return (state.cartResult.isNotEmpty)? ListView.builder(
-                shrinkWrap: true,
-                physics: const BouncingScrollPhysics(),
-                itemCount: state.cartResult.length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                        left: 15.0, right: 15.0, top: 20),
-                    child: InkWell(
-                      onTap: () {
-                        // ItemCatalogSearchCubit.get(context).setDetail(
-                        //     itemCode: state.cartResult[index].itmCatItems
-                        //             ?.itemCode ??
-                        //         "");
-                        ItemCategorygetAllData itemCategorygetAllData=ItemCategorygetAllData(itemName: state.cartResult[index].itmCatItems?.itemName,
-                            itemDesc: state.cartResult[index].itmCatItems?.itemDesc,
-                            itemID: state.cartResult[index].itmCatItems?.itemID,itemQty:state.cartResult[index].itmCatItems?.itemQty,
-                            itemPhoto: state.cartResult[index].itmCatItems?.itemPhoto,itemCode: state.cartResult[index].itmCatItems?.itemCode);
+        child: BlocConsumer<ItemCatalogSearchCubit, ItemCatalogSearchState>(
+          listener: (context, state) {
+            if (state.itemCatalogSearchEnumStates ==
+                ItemCatalogSearchEnumStates.success) {
+              EasyLoading.dismiss();
+            } else if (state.itemCatalogSearchEnumStates ==
+                ItemCatalogSearchEnumStates.noConnection) {
+              EasyLoading.showError("No Internet Connection");
+            } else if (state.itemCatalogSearchEnumStates ==
+                ItemCatalogSearchEnumStates.failed) {
+              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text("error"),
+                ),
+              );
+            }
+          },
+            builder: (context, state) {
+              // if (state.detail == false) {
+                return (state.cartResult.isNotEmpty)? ListView.builder(
+                  shrinkWrap: true,
+                  physics: const BouncingScrollPhysics(),
+                  itemCount: state.cartResult.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15.0, right: 15.0, top: 20),
+                      child: InkWell(
+                        onTap: () {
+                          // ItemCatalogSearchCubit.get(context).setDetail(
+                          //     itemCode: state.cartResult[index].itmCatItems
+                          //             ?.itemCode ??
+                          //         "");
+                          ItemCategorygetAllData itemCategorygetAllData=ItemCategorygetAllData(itemName: state.cartResult[index].itmCatItems?.itemName,
+                              itemDesc: state.cartResult[index].itmCatItems?.itemDesc,
+                              itemID: state.cartResult[index].itmCatItems?.itemID,itemQty:state.cartResult[index].itmCatItems?.itemQty,
+                              itemPhoto: state.cartResult[index].itmCatItems?.itemPhoto,itemCode: state.cartResult[index].itmCatItems?.itemCode);
 
-                        Navigator.of(context).pushNamed(
-                            ItemsCatalogDetailScreen.routeName,
-                            arguments: {
-                              ItemsCatalogDetailScreen.object : itemCategorygetAllData,
-                              ItemsCatalogDetailScreen.userHrCode : user.employeeData?.userHrCode ?? "",
-                              ItemsCatalogDetailScreen.objectID:state.cartResult[index].id??0,
-                            });
-                      },
-                      borderRadius: BorderRadius.circular(20),
-                      child: ClipRRect(
+                          Navigator.of(context).pushNamed(
+                              ItemsCatalogDetailScreen.routeName,
+                              arguments: {
+                                ItemsCatalogDetailScreen.object : itemCategorygetAllData,
+                                ItemsCatalogDetailScreen.userHrCode : user.employeeData?.userHrCode ?? "",
+                                ItemsCatalogDetailScreen.objectID:state.cartResult[index].id??0,
+                              });
+                        },
                         borderRadius: BorderRadius.circular(20),
-                        child: Container(
-                          padding: EdgeInsets.zero,
-                          color: Colors.grey.shade300,
-                          child: Row(
-                            children: [
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 8.0),
-                                child: Image.network(
-                                  getCatalogPhotos(state.cartResult[index]
-                                          .itmCatItems?.itemPhoto ??
-                                      ""),
-                                  width: 100,
-                                  height: 100,
-                                  fit: BoxFit.fill,
-                                  errorBuilder:
-                                      (context, error, stackTrace) =>
-                                          Assets.images.favicon.image(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: Container(
+                            padding: EdgeInsets.zero,
+                            color: Colors.grey.shade300,
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding:
+                                      const EdgeInsets.only(right: 8.0),
+                                  child: Image.network(
+                                    getCatalogPhotos(state.cartResult[index]
+                                            .itmCatItems?.itemPhoto ??
+                                        ""),
                                     width: 100,
                                     height: 100,
+                                    fit: BoxFit.fill,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Assets.images.favicon.image(
+                                      width: 100,
+                                      height: 100,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                        state.cartResult[index]
-                                                .itmCatItems?.itemName ??
-                                            "Not Defined",
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                        )),
-                                    Text(
-                                        "Quantity: ${state.cartResult[index].itemQty ?? 0}",
-                                        style: const TextStyle(
-                                          fontSize: 15,
-                                        )),
-                                  ],
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                          state.cartResult[index]
+                                                  .itmCatItems?.itemName ??
+                                              "Not Defined",
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                          )),
+                                      Text(
+                                          "Quantity: ${state.cartResult[index].itemQty ?? 0}",
+                                          style: const TextStyle(
+                                            fontSize: 15,
+                                          )),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Container(
-                                padding: const EdgeInsets.all(20.0),
-                                child: const Icon(Icons.arrow_forward_ios,
-                                    size: 18),
-                              ),
-                            ],
+                                Container(
+                                  padding: const EdgeInsets.all(20.0),
+                                  child: const Icon(Icons.arrow_forward_ios,
+                                      size: 18),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ): Center(child: noDataFoundContainer());
-            // } else {
-            //   return itemDetailWidgetInternal(
-            //       user.employeeData?.userHrCode ?? "");
-            // }
-          },
+                    );
+                  },
+                ): Center(child: noDataFoundContainer());
+              // } else {
+              //   return itemDetailWidgetInternal(
+              //       user.employeeData?.userHrCode ?? "");
+              // }
+            },
+          ),
         ),
-      ),
     );
   }
 }

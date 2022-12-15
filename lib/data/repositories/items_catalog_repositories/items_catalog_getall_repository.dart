@@ -152,11 +152,9 @@ class ItemsCatalogGetAllRepository {
 
     final http.Response rawItemsCatalog= await itemsCatalogGetAllDataProvider.getCatalogWorkFlowList(header,requestID);
     final json = await jsonDecode(rawItemsCatalog.body);
-    print("requestID"+json.toString());
 
     CatalogRequestWorkFlow newRequestCatalogModelResponse=CatalogRequestWorkFlow.fromJson(json);
 
-    print("oiiooo"+json.toString());
     List<CatalogRequestWorkFlow> newRequestCatalogModelResponseList=[newRequestCatalogModelResponse];
     return newRequestCatalogModelResponseList;
   }

@@ -1,6 +1,6 @@
 part of 'item_catalog_search_cubit.dart';
 
-enum ItemCatalogSearchEnumStates { initial, success, filtered, failed,loadingTreeData, successTreeData,noConnection }
+enum ItemCatalogSearchEnumStates { initial, success, filtered, failed,loadingTreeData, successTreeData,noConnection, noDataFound}
 
 class ItemCatalogSearchState extends Equatable {
 
@@ -12,6 +12,9 @@ class ItemCatalogSearchState extends Equatable {
   final String searchString;
   final bool detail;
   final List<String> mainCategories;
+  final List<int> mainCategoriesID;
+
+  final bool itemCategoryShow;
 
   final List<ItemCategorygetAllData> itemAllDatalist;
 
@@ -29,16 +32,18 @@ class ItemCatalogSearchState extends Equatable {
 
   ItemCatalogSearchState({
     this.itemCatalogSearchEnumStates = ItemCatalogSearchEnumStates.initial,
+    this.itemCatalogAllDataEnumStates=ItemCatalogSearchEnumStates.initial,
     this.searchResult = const <ItemCatalogSearchData>[],
     this.favoriteResult = const <ItemCatalogFavoriteData>[],
     this.cartResult = const <CartModelData>[],
-    this.itemCatalogAllDataEnumStates = ItemCatalogSearchEnumStates.initial,
     this.itemAllDatalist = const <ItemCategorygetAllData>[],
     this.itemsGetAllTree = const<ItemsCatalogTreeModel>[],
     this.mainCategories = const<String>[],
+    this.mainCategoriesID=const<int>[],
     this.itemCategoryAttachData = const<ItemCategoryAttachData>[],
     this.itemsGetItemsCategory = const<ItemCategorygetAllData>[],
     this.detail = false,
+    this.itemCategoryShow=false,
 
     this.listTapAction=false,
 
@@ -50,13 +55,15 @@ class ItemCatalogSearchState extends Equatable {
 
   ItemCatalogSearchState copyWith({
     ItemCatalogSearchEnumStates? itemCatalogSearchEnumStates,
+    ItemCatalogSearchEnumStates?itemCatalogAllDataEnumStates,
     List<ItemCatalogSearchData>? searchResult,
     List<ItemCatalogFavoriteData>? favoriteResult,
     List<CartModelData>? cartResult,
-    ItemCatalogSearchEnumStates? itemCatalogAllDataEnumStates,
     List<ItemCategorygetAllData>? itemAllDatalist,
     List<String>? mainCategories,
+    List<int>? mainCategoriesID,
     bool? detail,
+    bool? itemCategoryShow,
     bool? listTapAction,
     List<String>? treeDirectionList,
     String? searchString,
@@ -67,15 +74,14 @@ class ItemCatalogSearchState extends Equatable {
 
   }) {
     return ItemCatalogSearchState(
-      itemCatalogSearchEnumStates: itemCatalogSearchEnumStates ??
-          this.itemCatalogSearchEnumStates,
+      itemCatalogSearchEnumStates: itemCatalogSearchEnumStates ?? this.itemCatalogSearchEnumStates,
+      itemCatalogAllDataEnumStates:itemCatalogAllDataEnumStates??this.itemCatalogAllDataEnumStates,
       searchResult: searchResult ?? this.searchResult,
       favoriteResult: favoriteResult ?? this.favoriteResult,
       cartResult: cartResult ?? this.cartResult,
-      itemCatalogAllDataEnumStates: itemCatalogAllDataEnumStates ??
-          this.itemCatalogAllDataEnumStates,
       itemAllDatalist: itemAllDatalist ?? this.itemAllDatalist,
       mainCategories: mainCategories ?? this.mainCategories,
+      mainCategoriesID:mainCategoriesID??this.mainCategoriesID,
       searchString: searchString ?? this.searchString,
       treeDirectionList: treeDirectionList ?? this.treeDirectionList,
       itemCategoryAttachData: itemCategoryAttachData ??
@@ -86,6 +92,7 @@ class ItemCatalogSearchState extends Equatable {
       getAllItemsCatalogList: getAllItemsCatalogList ??
           this.getAllItemsCatalogList,
       detail: detail ?? this.detail,
+      itemCategoryShow:itemCategoryShow??this.itemCategoryShow,
         listTapAction:listTapAction??this.listTapAction,
     );
   }
@@ -94,18 +101,20 @@ class ItemCatalogSearchState extends Equatable {
   List<Object> get props =>
       [
         itemCatalogSearchEnumStates,
+        itemCatalogAllDataEnumStates,
         searchResult,
         favoriteResult,
         cartResult,
-        itemCatalogAllDataEnumStates,
         itemAllDatalist,
         mainCategories,
+        mainCategoriesID,
         searchString,
         treeDirectionList,
         getAllItemsCatalogList,
         itemsGetAllTree,
         itemsGetItemsCategory,
         detail,
+        itemCategoryShow,
         listTapAction,
         itemCategoryAttachData,
         itemsGetItemsCategory
@@ -113,16 +122,18 @@ class ItemCatalogSearchState extends Equatable {
 
   Map<String, dynamic> toMap() {
     return {
-      // 'itemCatalogSearchEnumStates': this.itemCatalogSearchEnumStates,
-      // 'itemCatalogAllDataEnumStates': this.itemCatalogAllDataEnumStates,
+      'itemCatalogSearchEnumStates': itemCatalogSearchEnumStates,
+      'itemCatalogAllDataEnumStates':itemCatalogAllDataEnumStates,
       'searchResult': searchResult,
       'favoriteResult': favoriteResult,
       'cartResult': cartResult,
       'searchString': searchString,
       'detail': detail,
+      'itemCategoryShow':itemCategoryShow,
       'listTapAction':listTapAction,
       'itemAllDatalist': itemAllDatalist,
       'mainCategories': mainCategories,
+      'mainCategoriesID':mainCategoriesID,
       'itemsGetItemsCategory': itemsGetItemsCategory,
       'getAllItemsCatalogList': getAllItemsCatalogList,
       'itemsGetAllTree': itemsGetAllTree,
@@ -133,18 +144,18 @@ class ItemCatalogSearchState extends Equatable {
 
   factory ItemCatalogSearchState.fromMap(Map<String, dynamic> map) {
     return ItemCatalogSearchState(
-      // itemCatalogSearchEnumStates:
-      //     map['itemCatalogSearchEnumStates'] as ItemCatalogSearchEnumStates,
-      // itemCatalogAllDataEnumStates:
-      //     map['itemCatalogAllDataEnumStates'] as ItemCatalogSearchEnumStates,
+      itemCatalogSearchEnumStates: map['itemCatalogSearchEnumStates'] as ItemCatalogSearchEnumStates,
+      itemCatalogAllDataEnumStates:map['itemCatalogAllDataEnumStates'] as ItemCatalogSearchEnumStates,
       searchResult: map['searchResult'] as List<ItemCatalogSearchData>,
       favoriteResult: map['favoriteResult'] as List<ItemCatalogFavoriteData>,
       cartResult: map['cartResult'] as List<CartModelData>,
       searchString: map['searchString'] as String,
       detail: map['detail'] as bool,
+      itemCategoryShow: map['itemCategoryShow'] as bool,
       listTapAction:map['listTapAction'] as bool,
       itemAllDatalist: map['itemAllDatalist'] as List<ItemCategorygetAllData>,
       mainCategories: map['mainCategories'] as List<String>,
+      mainCategoriesID: map['mainCategoriesID'] as List<int>,
       itemsGetItemsCategory:
       map['itemsGetItemsCategory'] as List<ItemCategorygetAllData>,
       getAllItemsCatalogList:

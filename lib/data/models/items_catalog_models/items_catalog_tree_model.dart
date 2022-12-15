@@ -23,7 +23,7 @@ class ItemsCatalogTreeModel {
     if (json['items'] != null) {
       items = <Items>[];
       json['items'].forEach((v) {
-        items!.add(new Items.fromJson(v));
+        items!.add(Items.fromJson(v));
       });
     }
     active = json['active'];
@@ -33,16 +33,16 @@ class ItemsCatalogTreeModel {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['text'] = this.text;
-    data['expanded'] = this.expanded;
-    if (this.items != null) {
-      data['items'] = this.items!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['text'] = text;
+    data['expanded'] = expanded;
+    if (items != null) {
+      data['items'] = items!.map((v) => v.toJson()).toList();
     }
-    data['active'] = this.active;
-    data['allow_Items'] = this.allowItems;
-    data['main_Photo'] = this.main_Photo;
+    data['active'] = active;
+    data['allow_Items'] = allowItems;
+    data['main_Photo'] = main_Photo;
     return data;
   }
 }
@@ -72,7 +72,7 @@ class Items {
     if (json['items'] != null) {
       items = <Items>[];
       json['items'].forEach((v) {
-         items!.add(new Items.fromJson(v));
+         items!.add(Items.fromJson(v));
       });
     }
     active = json['active'];
@@ -81,16 +81,16 @@ class Items {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['text'] = this.text;
-    data['expanded'] = this.expanded;
-    if (this.items != null) {
-       data['items'] = this.items!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['text'] = text;
+    data['expanded'] = expanded;
+    if (items != null) {
+       data['items'] = items!.map((v) => v.toJson()).toList();
     }
-    data['active'] = this.active;
-    data['allow_Items'] = this.allowItems;
-    data['main_Photo']=this.main_Photo;
+    data['active'] = active;
+    data['allow_Items'] = allowItems;
+    data['main_Photo']=main_Photo;
     return data;
   }
 }

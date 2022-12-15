@@ -4,6 +4,8 @@ class GlobalConstants {
 
   static final DateFormat dateFormatViewed = DateFormat("EEEE dd-MM-yyyy");
 
+  static final DateFormat dateFormatViewedWithTime = DateFormat("EEEE dd-MM-yyyy',' hh:mm aa");
+
   static final DateFormat dateFormatServerDashBoard = DateFormat("yyyy-MM-dd");
 
   static final DateFormat dateFormatServer = DateFormat(

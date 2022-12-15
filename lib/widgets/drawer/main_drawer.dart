@@ -3,7 +3,7 @@ import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
-import 'package:hassanallamportalflutter/screens/sos_screen/sos_alert_screen.dart';
+// import 'package:hassanallamportalflutter/screens/sos_screen/sos_alert_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
@@ -617,12 +617,12 @@ class MainDrawer extends StatelessWidget {
                             context, EmployeeAppraisalScreen.routeName);
                       },
                     ),
-                    buildListTile("Items Catalogue", Icons.image_aspect_ratio,  () {
+                    buildListTile("Catalogue", Icons.image_aspect_ratio,  () {
                       Navigator.popAndPushNamed(
                           context, ItemsCatalogGetAllScreen.routeName);
                     },),
 
-                    outlook(),
+                    // outlook(),
 
                     buildListTile(
                       'Sign Out',
@@ -657,13 +657,13 @@ class MainDrawer extends StatelessWidget {
                       },
                     ),
 
-                    buildNoIconTile(
-                      'SOS HAH',
-                          () {
-                        Navigator.of(context)
-                            .popAndPushNamed(SOSAlertScreen.routeName);
-                      },
-                    ),
+                    // buildNoIconTile(
+                    //   'SOS HAH',
+                    //       () {
+                    //     Navigator.of(context)
+                    //         .popAndPushNamed(SOSAlertScreen.routeName);
+                    //   },
+                    // ),
 
                     buildNoIconTile(
                       'Subsidiaries',

@@ -6,6 +6,7 @@ import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_getall_model.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_tree_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
+import 'package:hassanallamportalflutter/screens/items_catalog_screen/export_excel.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import '../../../data/data_providers/general_dio/general_dio.dart';
 import '../../../data/data_providers/requests_data_providers/request_data_providers.dart';
@@ -31,9 +32,12 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
             ));
           }
         } else if (connectivityResult == ConnectivityResult.none) {
-          emit(state.copyWith(
-            itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
-          ));
+          if(!isClosed){
+            emit(state.copyWith(
+              itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+            ));
+          }
+
         }
       }
     });
@@ -46,40 +50,49 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   static ItemCatalogSearchCubit get(context) => BlocProvider.of(context);
 
   void getSearchList({int? catalogId}) async {
-    emit(state.copyWith(
-      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
-    ));
-    EasyLoading.show();
-    await _generalDio
-        .getItemCatalogSearch(state.searchString, categoryId: catalogId)
-        .then((value) {
-      if (value.data['data'] != null && value.statusCode == 200) {
-        List<ItemCatalogSearchData> searchResult =
-        List<ItemCatalogSearchData>.from(value.data['data']
-            .map((model) => ItemCatalogSearchData.fromJson(model)));
-        emit(state.copyWith(
-          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
-          searchResult: searchResult,
-        ));
-        EasyLoading.dismiss();
-      } else if (value.data['data'] == null) {
-        EasyLoading.dismiss();
-        emit(state.copyWith(
-          searchResult: [],
-          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
-        ));
-      } else {
-        throw RequestFailureApi.fromCode(value.statusCode!);
-      }
-    }).catchError((error) {
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       emit(state.copyWith(
-          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed));
-    });
-    EasyLoading.dismiss();
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
+      ));
+      EasyLoading.show();
+      await _generalDio
+          .getItemCatalogSearch(state.searchString, categoryId: catalogId)
+          .then((value) {
+        if (value.data['data'] != null && value.statusCode == 200) {
+          List<ItemCatalogSearchData> searchResult =
+          List<ItemCatalogSearchData>.from(value.data['data']
+              .map((model) => ItemCatalogSearchData.fromJson(model)));
+          emit(state.copyWith(
+            itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+            searchResult: searchResult,
+          ));
+          EasyLoading.dismiss();
+        } else if (value.data['data'] == null) {
+          EasyLoading.dismiss();
+          emit(state.copyWith(
+            searchResult: [],
+            itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noDataFound,
+          ));
+        } else {
+          throw RequestFailureApi.fromCode(value.statusCode!);
+        }
+      }).catchError((error) {
+        emit(state.copyWith(
+            itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed));
+      });
+    }{
+      emit(state.copyWith(
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noConnection,
+      ));
+    }
   }
 
   void getFavoriteItems({required String userHrCode}) async{
-    emit(state.copyWith(
+
+
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+
+      emit(state.copyWith(
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
     ));
     await _generalDio.getItemCatalogFavorite(userHrCode).then((value) {
@@ -96,17 +109,23 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         EasyLoading.dismiss();
         emit(state.copyWith(
           favoriteResult: [],
-          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noDataFound,
         ));
       } else {
         throw RequestFailureApi.fromCode(value.statusCode!);
       }
     });
-
+    }else{
+      emit(state.copyWith(
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noConnection,
+      ));
+    }
   }
 
   void getCartItems({required String userHrCode}) async{
-    emit(state.copyWith(
+
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+      emit(state.copyWith(
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
     ));
     await _generalDio.getItemCatalogCart(userHrCode).then((value) {
@@ -123,12 +142,17 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         EasyLoading.dismiss();
         emit(state.copyWith(
           cartResult: [],
-          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noDataFound,
         ));
       } else {
         throw RequestFailureApi.fromCode(value.statusCode!);
       }
     });
+    }else{
+      emit(state.copyWith(
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noConnection,
+      ));
+    }
 
   }
 
@@ -138,7 +162,14 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   }
 
   getAllItemsCatalog(userHRCode) async {
-    state.getAllItemsCatalogList.data ??= [];
+
+    ItemsCatalogCategory listData=state.getAllItemsCatalogList;
+    listData.data=[];
+
+    emit(state.copyWith(
+      getAllItemsCatalogList:listData,
+    ));
+
     if (state.getAllItemsCatalogList.data != null) {
       if (state.getAllItemsCatalogList.data!.isEmpty) {
         if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
@@ -160,9 +191,14 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
                 for(int i=0;i<getAllItemsCatalogTreeList.length;i++){
                   mainCategories.add(getAllItemsCatalogTreeList[i].text??"");
                 }
+                List<int> mainCategoriesID=[];
+                for(int i=0;i<getAllItemsCatalogTreeList.length;i++){
+                  mainCategoriesID.add(getAllItemsCatalogTreeList[i].id??0);
+                }
                 emit(state.copyWith(
                   // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
                   // itemsGetAllTree: getAllItemsCatalogTreeList,
+                  mainCategoriesID:mainCategoriesID,
                   getAllItemsCatalogList: value,
                   mainCategories: mainCategories,
                 ));
@@ -170,7 +206,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
               } else {
                 emit(state.copyWith(
                   itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
-                      .failed,
+                      .noDataFound,
                 ));
               }
             }).catchError((error) {
@@ -188,7 +224,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
               } else {
                 emit(state.copyWith(
                   itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
-                      .failed,
+                      .noDataFound,
                 ));
               }
             }).catchError((error) {
@@ -196,8 +232,6 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
                 itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
               ));
             });
-
-
           } catch (e) {
             /// commented this to avoid emit after close the state to avoid error crashes
             // emit(state.copyWith(
@@ -215,7 +249,10 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   }
 
   Future<void> setFavorite({required String hrCode, required int itemCode}) async{
-    EasyLoading.show(status: 'Loading...');
+
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+
+      EasyLoading.show(status: 'Loading...');
     emit(state.copyWith(
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
     ));
@@ -238,9 +275,17 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
       EasyLoading.showError('Something went wrong');
       throw e;
     });
+    } else {
+      emit(state.copyWith(
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+            .noConnection,
+      ));
+    }
   }
   Future<void> deleteFavorite({required String hrCode,required int itemId}) async{
-    EasyLoading.show(status: 'Loading...');
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+
+      EasyLoading.show(status: 'Loading...');
     emit(state.copyWith(
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
     ));
@@ -253,9 +298,17 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
       EasyLoading.showError('Something went wrong');
       throw e;
     });
+  } else {
+  emit(state.copyWith(
+  itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+      .noConnection,
+  ));
+  }
   }
   Future<void> deleteAllFavorite({required String hrCode}) async{
-    EasyLoading.show(status: 'Loading...');
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+
+      EasyLoading.show(status: 'Loading...');
     emit(state.copyWith(
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
     ));
@@ -268,10 +321,18 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
       EasyLoading.showError('Something went wrong');
       throw e;
     });
+  } else {
+emit(state.copyWith(
+itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+    .noConnection,
+));
+}
   }
 
   Future<void> addToCart({required String hrCode, required int itemCode,required int qty}) async{
-    EasyLoading.show(status: 'Loading...');
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+
+      EasyLoading.show(status: 'Loading...');
     emit(state.copyWith(
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
     ));
@@ -281,96 +342,6 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
       "orderID": 0,
       "hrCode": hrCode,
       "item_Code": itemCode,
-      // "itmCat_Items": {
-      //   "item_ID": 0,
-      //   "requestNo": 0,
-      //   "systemItemCode": "",
-      //   "itemCode": "",
-      //   "item_Name": "",
-      //   "item_Desc": "",
-      //   "item_Qty": 0,
-      //   "item_Price": 0,
-      //   "item_AppearPrice": true,
-      //   "in_User": "",
-      //   "in_Date": DateTime.now().toString(),
-      //   "up_User": "",
-      //   "up_Date":  DateTime.now().toString(),
-      //   // "items_Attaches": [
-      //   //   {
-      //   //     "id": 0,
-      //   //     "item_ID": 0,
-      //   //     "attach_File": "string",
-      //   //     "in_User": "string",
-      //   //     "in_Date":  DateTime.now().toString(),
-      //   //     "up_User": "string",
-      //   //     "up_Date":  DateTime.now().toString()
-      //   //   }
-      //   // ],
-      //   "cat_ID": 0,
-      //   // "category": {
-      //   //   "cat_id": 0,
-      //   //   "parent_ID": 0,
-      //   //   "cat_Name": "string",
-      //   //   "cat_Code": "string",
-      //   //   "cat_Desc": "string",
-      //   //   "cat_Photo": "string",
-      //   //   "cat_StartDate":  DateTime.now().toString(),
-      //   //   "cat_EndDate":  DateTime.now().toString(),
-      //   //   "tags": "string",
-      //   //   "isActive": true,
-      //   //   "allow_Items": true,
-      //   //   "in_User": "string",
-      //   //   "in_Date":  DateTime.now().toString(),
-      //   //   "up_User": "string",
-      //   //   "up_Date":  DateTime.now().toString(),
-      //   //   "category_Attach": [
-      //   //     {
-      //   //       "id": 0,
-      //   //       "cat_id": 0,
-      //   //       "attach_file": "string",
-      //   //       "in_User": "string",
-      //   //       "in_Date":  DateTime.now().toString(),
-      //   //       "up_User": "string",
-      //   //       "up_Date":  DateTime.now().toString()
-      //   //     }
-      //   //   ]
-      //   // },
-      //   "item_UOM": 0,
-      //   // "itmCat_UOM": {
-      //   //   "id": 0,
-      //   //   "unit_Name": "string",
-      //   //   "in_User": "string",
-      //   //   "in_Date":  DateTime.now().toString(),
-      //   //   "up_User": "string",
-      //   //   "up_Date":  DateTime.now().toString()
-      //   // },
-      //   "item_MatGroup": 0,
-      //   // "matrialGroup": {
-      //   //   "id": 0,
-      //   //   "material_Name": "string",
-      //   //   "group_Desc": "string",
-      //   //   "in_User": "string",
-      //   //   "in_Date":  DateTime.now().toString(),
-      //   //   "up_User": "string",
-      //   //   "up_Date":  DateTime.now().toString()
-      //   // },
-      //   "item_MatType": 0,
-      //   // "materialType": {
-      //   //   "id": 0,
-      //   //   "materialTyp_Name": "string",
-      //   //   "type_Desc": "string",
-      //   //   "in_User": "string",
-      //   //   "in_Date":  DateTime.now().toString(),
-      //   //   "up_User": "string",
-      //   //   "up_Date":  DateTime.now().toString()
-      //   // },
-      //   "item_Photo": "",
-      //   "tags": "",
-      //   "enableBrand": true,
-      //   "enableColor": true,
-      //   "expirationDateFlag": true,
-      //   "arabicDesc": ""
-      // },
       "item_Qty": qty,
       "isClosed": true,
       "in_User": hrCode,
@@ -388,9 +359,17 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
       EasyLoading.showError('Something went wrong');
       throw e;
     });
+  } else {
+emit(state.copyWith(
+itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+    .noConnection,
+));
+}
   }
   Future<void> deleteFromCart({required String hrCode,required int itemId}) async{
-    EasyLoading.show(status: 'Loading...');
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+
+      EasyLoading.show(status: 'Loading...');
     emit(state.copyWith(
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
     ));
@@ -403,42 +382,68 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
       EasyLoading.showError('Something went wrong');
       throw e;
     });
+  } else {
+emit(state.copyWith(
+itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+    .noConnection,
+));
+}
   }
   Future<void> placeOrder({required String hrCode}) async{
-    EasyLoading.show(status: 'Loading...');
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+
+      EasyLoading.show(status: 'Loading...');
     emit(state.copyWith(
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
     ));
-    List<dynamic> listData =[];
+    List<CartModelData> listData =[];
     for (int i = 0; i < state.cartResult.length; i++) {
-      Map<String, dynamic> detailedDataPost = {
-        "id": state.cartResult[i].id,
-        "orderID": 0,
-        "hrCode": state.cartResult[i].hrCode,
-        "item_Code": state.cartResult[i].itemCode,
-        "item_Qty": state.cartResult[i].itemQty,
-        "isClosed": true,
-        "in_User": state.cartResult[i].inUser,
-        "in_Date": state.cartResult[i].inDate,
-        "up_User": state.cartResult[i].upUser,
-        "up_Date": state.cartResult[i].upDate
-      };
+      CartModelData detailedDataPost = CartModelData(
+        id: state.cartResult[i].id,
+        orderID: 0,
+        hrCode: state.cartResult[i].hrCode,
+        itemCode: state.cartResult[i].itemCode,
+        itemQty: state.cartResult[i].itemQty,
+        isClosed: true,
+        inUser: state.cartResult[i].inUser,
+        inDate: state.cartResult[i].inDate,
+        upUser: state.cartResult[i].upUser,
+        upDate: state.cartResult[i].upDate
+      );
       listData.add(detailedDataPost);
     }
-    await _generalDio.putCartOrder(listData).then((value) {
-      emit(state.copyWith(cartResult: []));
-      EasyLoading.dismiss();
-    })
-        .catchError((e) {
-      // return response;
+    await _generalDio.putCartOrder(listData).then((value) async {
+      if (value.data['data'] != null){
+        List<CartModelData> cartResultWithID=List<CartModelData>.from(value.data['data']
+            .map((model) => CartModelData.fromJson(model)));
+        int? orderID=cartResultWithID[0].orderID??-1;
+        if(orderID!=-1){
+          await importDataCart(state.cartResult,orderID);//,cartList:ItemCatalogSearchCubit.get(context).state.cartResult );
+        }
+        emit(state.copyWith(cartResult: []));
+        EasyLoading.showSuccess("Order Added");
+      } else if (value.data['data'] == null) {
+        EasyLoading.dismiss();
+        EasyLoading.showError('Something went wrong');
+      } else {
+        throw RequestFailureApi.fromCode(value.statusCode!);
+      }
+    }).catchError((e) {
       EasyLoading.showError('Something went wrong');
       throw e;
     });
+  } else {
+emit(state.copyWith(
+itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+    .noConnection,
+));
+}
   }
 
   void getSubTree(List<Items>? item) {
     emit(state.copyWith(
-     listTapAction: true
+     listTapAction: true,
+        itemCategoryShow:false
     ));
     List<ItemsCatalogTreeModel> newTreeList = <ItemsCatalogTreeModel>[];
     if (item != null) {
@@ -454,6 +459,8 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   }
 
   void setTreeDirectionList(String? name){
+
+
     List<String> treeDirectionList=[];
     for(int i=0;i<state.treeDirectionList.length;i++){
       treeDirectionList.add(state.treeDirectionList[i]);
@@ -463,9 +470,17 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         treeDirectionList: treeDirectionList,
             listTapAction: false
     ));
+    print("take third shot");
+    print("third direction is "+state.treeDirectionList.toString());
   }
 
   void getCategoryDataWithId(userHRCode, id) async {
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+
+      emit(state.copyWith(
+        itemCategoryShow:true,
+        itemsGetItemsCategory:[]
+    ));
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       try {
         emit(state.copyWith(
@@ -484,7 +499,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
             ));
           } else {
             emit(state.copyWith(
-              itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+              itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noDataFound,
                 itemsGetAllTree:[],
                 itemsGetItemsCategory:[]
             ));
@@ -511,30 +526,36 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
           itemsGetItemsCategory:[]
       ));
     }
+      // emit(state.copyWith(
+      //   itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+      //       .noConnection,
+      // ));
+    }
   }
 
   void setInitialization() {
+    print("second direction is "+state.treeDirectionList.toString());
     emit(state.copyWith(
       treeDirectionList:["Home"],
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
       itemsGetAllTree: state.getAllItemsCatalogList.data,
-        detail: false
+        detail: false,
+        itemCategoryShow:false
     ));
+
   }
 
   int getTreeLenght(){
-
-
+    print("four direction is "+state.treeDirectionList.toString());
     return state.treeDirectionList.length;
   }
 
   Future<void> getNewSubTree(int index) async {
+
+
     List<ItemsCatalogTreeModel>? treeList=state.getAllItemsCatalogList.data;
-
     List<String>? treeDirectionList =state.treeDirectionList;
-
     setInitialization();
-
     outerLoop:
     for(int i=0;i<treeDirectionList.length;i++){
       treeList = state.itemsGetAllTree;
@@ -552,8 +573,12 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
       }
     }
     emit(state.copyWith(
-        listTapAction: false
+        listTapAction: false,
+        itemCategoryShow:false
     ));
+
+    print("take this shot");
+    print("one direction is "+state.treeDirectionList.toString());
   }
 
   void clearData() {
@@ -566,32 +591,45 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   }
 
   Future<void> getAllCatalogList({required String itemCode}) async {
-    emit(state.copyWith(
-      itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.initial,
-    ));
-    await _generalDio
-        .getItemCatalogAllData(itemCode)
-        .then((value) {
-      if (value.data['data'] != null && value.statusCode == 200) {
-        List<ItemCategorygetAllData> itemAllDatalist =
-        List<ItemCategorygetAllData>.from(value.data['data']
-            .map((model) => ItemCategorygetAllData.fromJson(model)));
-        emit(state.copyWith(
-          itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.success,
-          itemAllDatalist: itemAllDatalist,
-        ));
-      } else if (value.data['data'] == null) {
-        emit(state.copyWith(
-          itemAllDatalist: [],
-          itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.failed,
-        ));
-      } else {
-        throw RequestFailureApi.fromCode(value.statusCode!);
-      }
-    }).catchError((error) {
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       emit(state.copyWith(
-          itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.failed));
-    });
+        itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.initial,
+        // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
+      ));
+      await _generalDio
+          .getItemCatalogAllData(itemCode)
+          .then((value) {
+        if (value.data['data'] != null && value.statusCode == 200) {
+          List<ItemCategorygetAllData> itemAllDatalist =
+          List<ItemCategorygetAllData>.from(value.data['data']
+              .map((model) => ItemCategorygetAllData.fromJson(model)));
+          emit(state.copyWith(
+            itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.success,
+            // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+            itemAllDatalist: itemAllDatalist,
+          ));
+        } else if (value.data['data'] == null) {
+          emit(state.copyWith(
+            itemAllDatalist: [],
+            itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.noDataFound,
+
+            // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+          ));
+        } else {
+          throw RequestFailureApi.fromCode(value.statusCode!);
+        }
+      }).catchError((error) {
+        emit(state.copyWith(
+            // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed));
+            itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.failed));
+
+      });
+    } else {
+      emit(state.copyWith(
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+            .noConnection,
+      ));
+    }
   }
 
   @override
@@ -602,7 +640,8 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
 
   @override
   Map<String, dynamic>? toJson(ItemCatalogSearchState state) {
-    if (state.itemCatalogAllDataEnumStates ==
+    // if (state.itemCatalogSearchEnumStates ==
+    if (state.itemCatalogAllDataEnumStates  ==
         ItemCatalogSearchEnumStates.success &&
         state.itemsGetAllTree.isNotEmpty) {
       return state.toMap();
@@ -613,7 +652,6 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
 
   getCategoryImages(List<ItemCategoryAttachData> getAllItemsCatalogAttachTreeList) {
     List<ItemsCatalogTreeModel> itemsGetAllTreeTest = state.itemsGetAllTree;
-
     for (int i = 0; i < itemsGetAllTreeTest.length; i++) {
       for (int j = 0; j < getAllItemsCatalogAttachTreeList.length; j++) {
         if (itemsGetAllTreeTest[i].id == getAllItemsCatalogAttachTreeList[j].catId) {
@@ -621,15 +659,12 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         }
       }
     }
-
-
     emit(state.copyWith(
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
           .success,
       itemsGetAllTree: itemsGetAllTreeTest,
       itemCategoryAttachData: getAllItemsCatalogAttachTreeList,
     ));
-
   }
 
 }

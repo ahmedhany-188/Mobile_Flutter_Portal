@@ -37,6 +37,10 @@ class CatalogRequestsHistoryCubit extends Cubit<CatalogRequestsHistoryInitial> w
   final Connectivity connectivity = Connectivity();
 
   Future<void> getAllRequestList(userHRCode) async {
+
+    emit(state.copyWith(
+        getCatalogRequestsHistoryList:[],
+    ));
       if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
         try {
           emit(state.copyWith(
@@ -51,13 +55,11 @@ class CatalogRequestsHistoryCubit extends Cubit<CatalogRequestsHistoryInitial> w
                 ));
 
           }).catchError((error) {
-            print("ohhh here");
             emit(state.copyWith(
               catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates.failed,
             ));
           });
         } catch (e) {
-          print("also here");
           emit(state.copyWith(
             catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates.failed,
           ));

@@ -13,16 +13,16 @@ class ItemCatalogUserInfo {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    data['message'] = this.message;
-    data['error'] = this.error;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['code'] = code;
+    data['message'] = message;
+    data['error'] = error;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -56,7 +56,7 @@ class Data {
     id = json['id'];
     hrCode = json['hrCode'];
     groupID = json['group_ID'];
-    group = json['group'] != null ? new Group.fromJson(json['group']) : null;
+    group = json['group'] != null ?  Group.fromJson(json['group']) : null;
     isSuperAdmin = json['isSuperAdmin'];
     inUser = json['in_User'];
     inDate = json['in_Date'];
@@ -66,17 +66,17 @@ class Data {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['hrCode'] = this.hrCode;
-    data['group_ID'] = this.groupID;
-    if (this.group != null) {
-      data['group'] = this.group!.toJson();
+    data['id'] = id;
+    data['hrCode'] = hrCode;
+    data['group_ID'] = groupID;
+    if (group != null) {
+      data['group'] = group!.toJson();
     }
-    data['isSuperAdmin'] = this.isSuperAdmin;
-    data['in_User'] = this.inUser;
-    data['in_Date'] = this.inDate;
-    data['up_User'] = this.upUser;
-    data['up_Date'] = this.upDate;
+    data['isSuperAdmin'] = isSuperAdmin;
+    data['in_User'] = inUser;
+    data['in_Date'] = inDate;
+    data['up_User'] = upUser;
+    data['up_Date'] = upDate;
     return data;
   }
 }
@@ -108,12 +108,12 @@ class Group {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['group_Name'] = this.groupName;
-    data['in_User'] = this.inUser;
-    data['in_Date'] = this.inDate;
-    data['up_User'] = this.upUser;
-    data['up_Date'] = this.upDate;
+    data['id'] = id;
+    data['group_Name'] = groupName;
+    data['in_User'] = inUser;
+    data['in_Date'] = inDate;
+    data['up_User'] = upUser;
+    data['up_Date'] = upDate;
     return data;
   }
 }

@@ -35,44 +35,53 @@ class CatalogRespondRequestsHistoryCubit extends Cubit<CatalogRespondRequestsHis
   static CatalogRespondRequestsHistoryCubit get(context) => BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();
 
-  Future<void> dataNotFound() async{
+
+  Future<void> getAllWorkFlowRequestList(String requestID) async {
     emit(state.copyWith(
-      catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.failed,
+      getCatalogWorkFlowList: [],
     ));
-  }
-
-  Future<void> getAllWorkFlowRequestList(String requestID) async{
-
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       try {
         emit(state.copyWith(
-          catalogRespondRequestsHistoryEnumStates : CatalogRespondRequestsHistoryEnumStates.loading,
+          catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+              .loading,
         ));
-        await requestRepository.getCatalogWorkFlow(requestID).then((workFlowData) async{
-            emit(state.copyWith(
-              catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.success,
-              getCatalogWorkFlowList: workFlowData,
-            ));
-          }).catchError((error) {
-            emit(state.copyWith(
-              catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.failed,
-            ));
-          });
-
+        await requestRepository.getCatalogWorkFlow(requestID).then((
+            workFlowData) async {
+          emit(state.copyWith(
+            catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+                .success,
+            getCatalogWorkFlowList: workFlowData,
+          ));
+        }).catchError((error) {
+          emit(state.copyWith(
+            catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+                .failed,
+            message: error,
+          ));
+        });
       } catch (e) {
-        emit(state.copyWith(
-          catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.failed,
-        ));
+        if (isClosed) {
+        } else {
+          emit(state.copyWith(
+            catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+                .failed,
+            message: e.toString(),
+          ));
+        }
       }
     } else {
       emit(state.copyWith(
-        catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.noConnection,
+        catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+            .noConnection,
       ));
     }
-
   }
 
   Future<void> getAllRequestList(hrCode) async {
+    emit(state.copyWith(
+      getCatalogRespondRequestsHistoryList: [],
+    ));
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       try {
         emit(state.copyWith(
@@ -90,14 +99,22 @@ class CatalogRespondRequestsHistoryCubit extends Cubit<CatalogRespondRequestsHis
           }).catchError((error) {
             emit(state.copyWith(
               catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.failed,
+              message: error
             ));
           });
         });
 
       } catch (e) {
-        emit(state.copyWith(
-          catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.failed,
-        ));
+
+        if(isClosed){
+           // print("emits closed and failed to emit faild");
+        }else{
+          emit(state.copyWith(
+            catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.failed,
+              message: e.toString(),
+          ));
+        }
+
       }
     } else {
       emit(state.copyWith(

@@ -107,13 +107,13 @@ class ItmCatItems {
   String? upDate;
   List<ItemsAttaches>? itemsAttaches;
   int? catID;
-  Null? category;
+  String? category;
   int? itemUOM;
-  Null? itmCatUOM;
+  String? itmCatUOM;
   int? itemMatGroup;
-  Null? matrialGroup;
+  String? matrialGroup;
   int? itemMatType;
-  Null? materialType;
+  String? materialType;
   String? itemPhoto;
   String? tags;
   bool? enableBrand;
@@ -230,8 +230,8 @@ class ItemsAttaches {
   String? attachFile;
   String? inUser;
   String? inDate;
-  Null? upUser;
-  Null? upDate;
+  String? upUser;
+  String? upDate;
 
   ItemsAttaches(
       {this.id,

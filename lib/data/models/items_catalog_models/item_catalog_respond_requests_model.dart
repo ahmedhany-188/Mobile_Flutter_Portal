@@ -13,16 +13,16 @@ class ItemCatalogRespondRequests {
     if (json['data'] != null) {
       data = <Data>[];
       json['data'].forEach((v) {
-        data!.add(new Data.fromJson(v));
+        data!.add(Data.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    data['message'] = this.message;
-    data['error'] = this.error;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['code'] = code;
+    data['message'] = message;
+    data['error'] = error;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -80,27 +80,27 @@ class Data {
     catName = json['cat_Name'];
     userAction = json['user_Action'];
     request =
-    json['request'] != null ? new Request.fromJson(json['request']) : null;
+    json['request'] != null ? Request.fromJson(json['request']) : null;
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['group_ID'] = this.groupID;
-    data['requestNo'] = this.requestNo;
-    data['cat_ID'] = this.catID;
-    data['in_User'] = this.inUser;
-    data['in_Date'] = this.inDate;
-    data['action'] = this.action;
-    data['submitted_HrCode'] = this.submittedHrCode;
-    data['submitted_Date'] = this.submittedDate;
-    data['submitted_Comment'] = this.submittedComment;
-    data['findItemCode'] = this.findItemCode;
-    data['action_Name'] = this.actionName;
-    data['cat_Name'] = this.catName;
-    data['user_Action'] = this.userAction;
-    if (this.request != null) {
-      data['request'] = this.request!.toJson();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['group_ID'] = groupID;
+    data['requestNo'] = requestNo;
+    data['cat_ID'] = catID;
+    data['in_User'] = inUser;
+    data['in_Date'] = inDate;
+    data['action'] = action;
+    data['submitted_HrCode'] = submittedHrCode;
+    data['submitted_Date'] = submittedDate;
+    data['submitted_Comment'] = submittedComment;
+    data['findItemCode'] = findItemCode;
+    data['action_Name'] = actionName;
+    data['cat_Name'] = catName;
+    data['user_Action'] = userAction;
+    if (request != null) {
+      data['request'] = request!.toJson();
     }
     return data;
   }
@@ -185,32 +185,32 @@ class Request {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['requestID'] = this.requestID;
-    data['findItem_ID'] = this.findItemID;
-    data['group_Step'] = this.groupStep;
-    data['cat_ID'] = this.catID;
-    data['systemItemCode'] = this.systemItemCode;
-    data['itemCode'] = this.itemCode;
-    data['item_Name'] = this.itemName;
-    data['item_Desc'] = this.itemDesc;
-    data['item_UOM'] = this.itemUOM;
-    data['item_MatGroup'] = this.itemMatGroup;
-    data['item_MatType'] = this.itemMatType;
-    data['tags'] = this.tags;
-    data['item_Qty'] = this.itemQty;
-    data['item_Price'] = this.itemPrice;
-    data['item_AppearPrice'] = this.itemAppearPrice;
-    data['status'] = this.status;
-    data['in_User'] = this.inUser;
-    data['in_Date'] = this.inDate;
-    data['up_User'] = this.upUser;
-    data['up_Date'] = this.upDate;
-    if (this.itemsAttaches != null) {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['requestID'] = requestID;
+    data['findItem_ID'] = findItemID;
+    data['group_Step'] = groupStep;
+    data['cat_ID'] = catID;
+    data['systemItemCode'] = systemItemCode;
+    data['itemCode'] = itemCode;
+    data['item_Name'] = itemName;
+    data['item_Desc'] = itemDesc;
+    data['item_UOM'] = itemUOM;
+    data['item_MatGroup'] = itemMatGroup;
+    data['item_MatType'] = itemMatType;
+    data['tags'] = tags;
+    data['item_Qty'] = itemQty;
+    data['item_Price'] = itemPrice;
+    data['item_AppearPrice'] = itemAppearPrice;
+    data['status'] = status;
+    data['in_User'] = inUser;
+    data['in_Date'] = inDate;
+    data['up_User'] = upUser;
+    data['up_Date'] = upDate;
+    if (itemsAttaches != null) {
       data['items_Attaches'] =
-          this.itemsAttaches!.map((v) => v).toList();
+          itemsAttaches!.map((v) => v).toList();
     }
-    data['mainPhoto'] = this.mainPhoto;
+    data['mainPhoto'] = mainPhoto;
     return data;
   }
 }

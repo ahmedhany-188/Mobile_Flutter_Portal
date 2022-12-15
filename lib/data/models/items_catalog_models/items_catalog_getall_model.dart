@@ -15,16 +15,16 @@ class ItemsCatalogCategory {
     if (json['data'] != null) {
       data = <ItemsCatalogTreeModel>[];
       json['data'].forEach((v) {
-        data!.add(new ItemsCatalogTreeModel.fromJson(v));
+        data!.add(ItemsCatalogTreeModel.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    data['message'] = this.message;
-    data['error'] = this.error;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['code'] = code;
+    data['message'] = message;
+    data['error'] = error;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }

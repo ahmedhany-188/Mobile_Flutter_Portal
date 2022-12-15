@@ -4,6 +4,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_cart_model.dart';
 
 class GeneralDio {
   static Dio? dio;
@@ -350,7 +351,7 @@ class GeneralDio {
     });
   }
 
-  Future<Response> putCartOrder(dynamic dataToPost) async {
+  Future<Response> putCartOrder(List<CartModelData> dataToPost) async {
     String url =
         'InformationTechnology-ItemCatalog/ItmCat_Users_Cart/UpdateOrderID';
     return await dio!

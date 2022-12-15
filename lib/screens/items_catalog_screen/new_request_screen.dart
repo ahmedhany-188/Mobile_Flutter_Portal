@@ -13,13 +13,13 @@ import 'package:flutter/material.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_new_request/item_catalog_new_request_state.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import 'package:dropdown_search/dropdown_search.dart';
-
 import 'items_catalog_screen_getall.dart';
 
 class NewRequestCatalogScreen extends StatefulWidget {
 
   static const routeName = "/new-catalog-request-screen";
   static const  itemsGetAllTree = "treeListStructure";
+  static const itemsGetAllTreeID ="treeListStructureID";
 
   const NewRequestCatalogScreen({Key? key,this.requestData}) : super(key: key);
   final dynamic requestData;
@@ -44,7 +44,7 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
     }
  
     List<String> itemsGetAllTreeParents = currentRequestData[NewRequestCatalogScreen.itemsGetAllTree];
-
+    List<int> itemsGetAllTreeParentsID = currentRequestData[NewRequestCatalogScreen.itemsGetAllTreeID];
     return WillPopScope(
       onWillPop: () async {
         await EasyLoading.dismiss(animation: true);
@@ -80,6 +80,7 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                   EasyLoading.showError(state.errorMessage);
                 } else if (state.newRequestCatalogEnumState ==
                     NewRequestCatalogEnumState.valid) {
+                  addListOfImages(state.itemAttach);
                   EasyLoading.dismiss(animation: true);
                 }
               },
@@ -95,7 +96,7 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                         elevation: 0,
                         leading: InkWell(onTap: () =>
                             Navigator.of(context)
-                                .pushReplacementNamed(ItemsCatalogGetAllScreen
+                                .pop(ItemsCatalogGetAllScreen
                                 .routeName), child: const Icon(Icons.home)),
                         title: const Text('New Request'),
                         centerTitle: true,
@@ -133,7 +134,6 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                         icon: const Icon(Icons.send),
                         label: const Text('SUBMIT'),
                       ),
-
                     ],
                   ),
                   body: Padding(
@@ -142,7 +142,6 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                           child: SingleChildScrollView(
                               child: Column(
                                   children: [
-
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
                                       child: TextFormField(
@@ -151,8 +150,7 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                                           keyboardType: TextInputType
                                               .text,
                                           onChanged: (value) {
-                                            context.read<
-                                                NewRequestCatalogCubit>()
+                                            context.read<NewRequestCatalogCubit>()
                                                 .addItemName(
                                                 value.toString()
                                                     .trim());
@@ -223,7 +221,7 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                                               context.read<
                                                   NewRequestCatalogCubit>()
                                                   .addSelectedCategoryItem(
-                                                  itemsGetAllTreeParents[i]),
+                                                  itemsGetAllTreeParentsID[i].toString()),
                                             }
                                           }
                                         },

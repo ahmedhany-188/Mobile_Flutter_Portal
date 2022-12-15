@@ -1,6 +1,6 @@
 class itemCategoryAttachs {
   int? code;
-  Null? message;
+  String? message;
   bool? error;
   List<ItemCategoryAttachData>? data;
 
@@ -13,16 +13,16 @@ class itemCategoryAttachs {
     if (json['data'] != null) {
       data = <ItemCategoryAttachData>[];
       json['data'].forEach((v) {
-        data!.add(new ItemCategoryAttachData.fromJson(v));
+        data!.add(ItemCategoryAttachData.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['code'] = this.code;
-    data['message'] = this.message;
-    data['error'] = this.error;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['code'] = code;
+    data['message'] = message;
+    data['error'] = error;
     if (this.data != null) {
       data['data'] = this.data!.map((v) => v.toJson()).toList();
     }
@@ -37,12 +37,12 @@ class ItemCategoryAttachData {
   String? catCode;
   String? catDesc;
   String? catPhoto;
-  Null? catStartDate;
-  Null? catEndDate;
+  String? catStartDate;
+  String? catEndDate;
   String? tags;
   bool? isActive;
   bool? allowItems;
-  Null? inUser;
+  String? inUser;
   String? inDate;
   String? upUser;
   String? upDate;
@@ -85,31 +85,31 @@ class ItemCategoryAttachData {
     if (json['category_Attach'] != null) {
       categoryAttach = <CategoryAttach>[];
       json['category_Attach'].forEach((v) {
-        categoryAttach!.add(new CategoryAttach.fromJson(v));
+        categoryAttach!.add(CategoryAttach.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['cat_id'] = this.catId;
-    data['parent_ID'] = this.parentID;
-    data['cat_Name'] = this.catName;
-    data['cat_Code'] = this.catCode;
-    data['cat_Desc'] = this.catDesc;
-    data['cat_Photo'] = this.catPhoto;
-    data['cat_StartDate'] = this.catStartDate;
-    data['cat_EndDate'] = this.catEndDate;
-    data['tags'] = this.tags;
-    data['isActive'] = this.isActive;
-    data['allow_Items'] = this.allowItems;
-    data['in_User'] = this.inUser;
-    data['in_Date'] = this.inDate;
-    data['up_User'] = this.upUser;
-    data['up_Date'] = this.upDate;
-    if (this.categoryAttach != null) {
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['cat_id'] = catId;
+    data['parent_ID'] = parentID;
+    data['cat_Name'] = catName;
+    data['cat_Code'] = catCode;
+    data['cat_Desc'] = catDesc;
+    data['cat_Photo'] = catPhoto;
+    data['cat_StartDate'] = catStartDate;
+    data['cat_EndDate'] = catEndDate;
+    data['tags'] = tags;
+    data['isActive'] = isActive;
+    data['allow_Items'] = allowItems;
+    data['in_User'] = inUser;
+    data['in_Date'] = inDate;
+    data['up_User'] = upUser;
+    data['up_Date'] = upDate;
+    if (categoryAttach != null) {
       data['category_Attach'] =
-          this.categoryAttach!.map((v) => v.toJson()).toList();
+          categoryAttach!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -121,8 +121,8 @@ class CategoryAttach {
   String? attachFile;
   String? inUser;
   String? inDate;
-  Null? upUser;
-  Null? upDate;
+  String? upUser;
+  String? upDate;
 
   CategoryAttach(
       {this.id,
@@ -144,14 +144,14 @@ class CategoryAttach {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['cat_id'] = this.catId;
-    data['attach_file'] = this.attachFile;
-    data['in_User'] = this.inUser;
-    data['in_Date'] = this.inDate;
-    data['up_User'] = this.upUser;
-    data['up_Date'] = this.upDate;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['cat_id'] = catId;
+    data['attach_file'] = attachFile;
+    data['in_User'] = inUser;
+    data['in_Date'] = inDate;
+    data['up_User'] = upUser;
+    data['up_Date'] = upDate;
     return data;
   }
 }

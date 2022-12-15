@@ -1,15 +1,12 @@
 import 'dart:io';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_requestCatalog_reponse.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Row,Column;
-
 import '../../data/models/items_catalog_models/item_catalog_cart_model.dart';
 
-Future<void> importDataCart(List<CartModelData> reports,VoidCallback onSuccess) async {
+Future<void> importDataCart(List<CartModelData> reports,int orderID) async {
   //Create a Excel document.
   //Creating a workbook.
   if(reports.isNotEmpty){
@@ -39,12 +36,13 @@ Future<void> importDataCart(List<CartModelData> reports,VoidCallback onSuccess) 
     //Get the storage folder location using path_provider package.
     final Directory directory = await getApplicationSupportDirectory();
     final String path = directory.path;
-    final File file = File('$path/ImportData.xlsx');
+    final String orderIDName="Order-$orderID";
+    final File file = File('$path/$orderIDName.xlsx');
     await file.writeAsBytes(bytes, flush: true);
 
     //Launch the file (used open_file package)
-    await OpenFile.open('$path/ImportData.xlsx');
-    onSuccess.call();
+    await OpenFile.open('$path/$orderIDName.xlsx');
+    // onSuccess.call();
   }
   else{
     EasyLoading.showInfo('Add Items to Cart');
@@ -61,7 +59,7 @@ Future<List<ExcelDataRow>> _buildCustomersDataRowsIHCart(List<CartModelData> lis
   excelDataRows = reports_1.map<ExcelDataRow>((CartModelData dataRow) {
     // TODO: call API to get item details :)
     return ExcelDataRow(cells: <ExcelDataCell>[
-      ExcelDataCell(columnHeader: 'Item of Requisition', value: dataRow.itemCode),
+      ExcelDataCell(columnHeader: 'Item of Requisition', value: dataRow.itmCatItems?.itemCode??""),
       const ExcelDataCell(columnHeader: 'Acct Assignment Cat.', value: ""),
       const ExcelDataCell(columnHeader: 'Item Category', value: 'dataRow.itmCatItems?.category'),
       ExcelDataCell(columnHeader: 'Short Text', value: dataRow.itmCatItems?.itemName),
