@@ -196,7 +196,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
                   mainCategoriesID.add(getAllItemsCatalogTreeList[i].id??0);
                 }
                 emit(state.copyWith(
-                  // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+                  itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
                   // itemsGetAllTree: getAllItemsCatalogTreeList,
                   mainCategoriesID:mainCategoriesID,
                   getAllItemsCatalogList: value,
@@ -221,6 +221,9 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
               if (value.data != null) {
                 getAllItemsCatalogAttachTreeList = value.data??[];
                 getCategoryImages(getAllItemsCatalogAttachTreeList);
+                emit(state.copyWith(
+                  itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+                ));
               } else {
                 emit(state.copyWith(
                   itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates

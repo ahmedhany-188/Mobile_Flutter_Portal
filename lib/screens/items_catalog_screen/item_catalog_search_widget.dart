@@ -387,7 +387,6 @@ Widget itemCatalogSearchWidget(hrCode) {
                   child: ListView.builder(
                       shrinkWrap: true,
                       // scrollDirection: Axis.horizontal,
-
                       physics: const BouncingScrollPhysics(),
                       itemCount: state.treeDirectionList.length,
                       itemBuilder: (context, index) {
@@ -401,16 +400,12 @@ Widget itemCatalogSearchWidget(hrCode) {
                               } else {
                                 ItemCatalogSearchCubit.get(context)
                                     .getNewSubTree(
-                                    index);
-                              }
-                            },
+                                    index);}},
                             child: Text("${state.treeDirectionList[index]} > ",
                               style: const TextStyle(fontSize: 15,
                                   color: ConstantsColors.bottomSheetBackground,
-                                  fontStyle: FontStyle.italic),),
-                          ),
-                        );
-                      }),
+                                  fontStyle: FontStyle.italic),),),
+                        );}),
                 ),
 
                 buildDivider(),
