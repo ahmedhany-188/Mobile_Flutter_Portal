@@ -14,11 +14,11 @@ import 'cart_screen.dart';
 import 'favorite_screen.dart';
 import 'item_catalog_search_widget.dart';
 
+
 class ItemsCatalogGetAllScreen extends StatefulWidget {
   static const routeName = '/itemscatalog-getall-list-screen';
 
   const ItemsCatalogGetAllScreen({Key? key}) : super(key: key);
-
   @override
   State<ItemsCatalogGetAllScreen> createState() =>
       ItemsCatalogGetAllScreenStateClass();
@@ -43,9 +43,7 @@ class ItemsCatalogGetAllScreenStateClass
               .of<AppBloc>(context)
               .state
               .userData),
-          ItemsCatalogGetAllRepository(user))
-        ..getFavoriteItems(userHrCode: user.employeeData?.userHrCode ?? "")
-        ..getCartItems(userHrCode: user.employeeData?.userHrCode ?? ""),
+          ItemsCatalogGetAllRepository(user)),
       child: GestureDetector(
           onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
           child: BlocConsumer<ItemCatalogSearchCubit, ItemCatalogSearchState>(
@@ -66,10 +64,14 @@ class ItemsCatalogGetAllScreenStateClass
                   ItemCatalogSearchEnumStates.noDataFound) {
                 EasyLoading.showError("No Data Found");
               }
+              else if (state.itemCatalogSearchEnumStates ==
+                  ItemCatalogSearchEnumStates.loadingTreeData) {
+                EasyLoading.show();
+              }
             },
             builder: (context, state) {
               return Scaffold(
-                  resizeToAvoidBottomInset: false,
+                  // resizeToAvoidBottomInset: false,
                   appBar: PreferredSize(
                     preferredSize: const Size.fromHeight(150.0),
                     child: Hero(
@@ -81,12 +83,10 @@ class ItemsCatalogGetAllScreenStateClass
                           onTap: () => Navigator.of(context).pop(),
                           child: const Icon(Icons.clear),
                         ),
-                        backgroundColor: ConstantsColors
-                            .bottomSheetBackgroundDark,
+                        backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
                         bottom: PreferredSize(
                           preferredSize: const Size.fromHeight(0.0),
-                          child:
-                          SingleChildScrollView(
+                          child: SingleChildScrollView(
                             // physics: const NeverScrollableScrollPhysics(),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
@@ -95,11 +95,7 @@ class ItemsCatalogGetAllScreenStateClass
                                     mainAxisAlignment: MainAxisAlignment
                                         .spaceAround,
                                     children: [
-                                      BlocBuilder<
-                                          ItemCatalogSearchCubit,
-                                          ItemCatalogSearchState>(
-                                        builder: (context, state) {
-                                          return IconButton(
+                                            IconButton(
                                               onPressed: () async {
                                                 Navigator.of(context)
                                                     .pushNamed(
@@ -108,14 +104,8 @@ class ItemsCatalogGetAllScreenStateClass
                                               icon: const Icon(
                                                 Icons.favorite,
                                                 color: Colors.white,
-                                                size: 25,));
-                                        },
-                                      ),
-                                      BlocBuilder<
-                                          ItemCatalogSearchCubit,
-                                          ItemCatalogSearchState>(
-                                        builder: (context, state) {
-                                          return IconButton(
+                                                size: 25,)),
+                                          IconButton(
                                               onPressed: () async {
                                                 Navigator.of(context)
                                                     .pushNamed(
@@ -124,15 +114,8 @@ class ItemsCatalogGetAllScreenStateClass
                                               icon: const Icon(
                                                 Icons.shopping_cart,
                                                 color: Colors.white,
-                                                size: 25,));
-                                        },
-                                      ),
-
-                                      BlocBuilder<
-                                          ItemCatalogSearchCubit,
-                                          ItemCatalogSearchState>(
-                                        builder: (context, state) {
-                                          return IconButton(
+                                                size: 25,)),
+                                            IconButton(
                                               onPressed: () async {
                                                 if (state.mainCategories
                                                     .isNotEmpty) {
@@ -152,15 +135,8 @@ class ItemsCatalogGetAllScreenStateClass
                                               },
                                               icon: const Icon(
                                                 Icons.add, color: Colors.white,
-                                                size: 25,));
-                                        },
-                                      ),
-
-                                      BlocBuilder<
-                                          ItemCatalogSearchCubit,
-                                          ItemCatalogSearchState>(
-                                        builder: (context, state) {
-                                          return IconButton(
+                                                size: 25,)),
+                                            IconButton(
                                               onPressed: () async {
                                                 Navigator.of(context)
                                                     .pushNamed(
@@ -172,15 +148,8 @@ class ItemsCatalogGetAllScreenStateClass
                                               },
                                               icon: const Icon(
                                                 Icons.list, color: Colors.white,
-                                                size: 25,));
-                                        },
-                                      ),
-
-                                      BlocBuilder<
-                                          ItemCatalogSearchCubit,
-                                          ItemCatalogSearchState>(
-                                        builder: (context, state) {
-                                          return IconButton(
+                                                size: 25,)),
+                                            IconButton(
                                               onPressed: () async {
                                                 Navigator.of(context)
                                                     .pushNamed(
@@ -190,13 +159,11 @@ class ItemsCatalogGetAllScreenStateClass
                                               icon: const Icon(
                                                 Icons.pending_actions,
                                                 color: Colors.white,
-                                                size: 25,));
-                                        },
-                                      ),
+                                                size: 25,)),
                                     ]),
                                 Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 40.0, right: 40, bottom: 20),
+                                      left: 30.0, right: 30, bottom: 20),
                                   child: BlocBuilder<ItemCatalogSearchCubit,
                                       ItemCatalogSearchState>(
                                     builder: (ctx, state) {
@@ -207,7 +174,6 @@ class ItemsCatalogGetAllScreenStateClass
                                             user.employeeData?.userHrCode ??
                                                 "");
                                       }
-
                                       return TextFormField(
                                         focusNode: textFoucus,
                                         // key: uniqueKey,
@@ -216,15 +182,16 @@ class ItemsCatalogGetAllScreenStateClass
                                           color: Colors.white,
                                         ),
                                         onChanged: (text) {
-                                          ItemCatalogSearchCubit.get(ctx)
-                                              .setSearchString(text);
                                           if (text.isEmpty) {
                                             ItemCatalogSearchCubit.get(ctx)
                                                 .clearData();
                                             ItemCatalogSearchCubit.get(ctx)
-                                                .getAllItemsCatalog(
-                                                user.employeeData?.userHrCode ??
-                                                    "");
+                                                .setInitialization();
+                                            textController.clear();
+                                            textFoucus.unfocus();
+                                          }else{
+                                            // ItemCatalogSearchCubit.get(ctx)
+                                            //     .setSearchString(text);
                                           }
                                         },
                                         decoration: InputDecoration(
@@ -246,10 +213,7 @@ class ItemsCatalogGetAllScreenStateClass
                                                 ItemCatalogSearchCubit.get(ctx)
                                                     .clearData();
                                                 ItemCatalogSearchCubit.get(ctx)
-                                                    .getAllItemsCatalog(
-                                                    user.employeeData
-                                                        ?.userHrCode ??
-                                                        "");
+                                                    .setInitialization();
                                                 textController.clear();
                                                 textFoucus.unfocus();
                                               },
@@ -266,6 +230,12 @@ class ItemsCatalogGetAllScreenStateClass
                                                 BorderRadius.all(
                                                     Radius.circular(20.0)),
                                                 borderSide: BorderSide.none)),
+                                        onFieldSubmitted: (value){
+                                          if(value.isNotEmpty){
+                                            ItemCatalogSearchCubit.get(ctx)
+                                                .setSearchString(value);
+                                          }
+                                        },
                                       );
                                     },
                                   ),
@@ -282,15 +252,14 @@ class ItemsCatalogGetAllScreenStateClass
                       ),
                     ),
                   ),
-                  body: itemCatalogSearchWidget(
-                      user.employeeData?.userHrCode ?? "")
+                  body:
+                  // state.searchString.isNotEmpty? getShimmer() :
+                  itemCatalogSearchWidget(
+                      user.employeeData?.userHrCode ?? ""),
               );
             },
           )
-
       ),
     );
   }
-
-
 }

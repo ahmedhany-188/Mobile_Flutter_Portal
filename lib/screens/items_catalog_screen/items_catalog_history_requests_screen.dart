@@ -11,7 +11,6 @@ import 'package:hassanallamportalflutter/data/repositories/items_catalog_reposit
 import '../../widgets/error/error_widget.dart';
 
 class CatalogHistoryRequestScreen extends StatefulWidget{
-
   static const routeName = "/history-catalog-request-screen";
   const CatalogHistoryRequestScreen({Key? key}) : super(key: key);
   @override
@@ -19,7 +18,6 @@ class CatalogHistoryRequestScreen extends StatefulWidget{
 }
 
 class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen> {
-
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +31,6 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
           create: (context) =>
           CatalogRequestsHistoryCubit(ItemsCatalogGetAllRepository(user))
             ..getAllRequestList(user.employeeData?.userHrCode.toString()),
-          //  ..checkTheValueOfTree()),
           child: BlocConsumer<CatalogRequestsHistoryCubit,
               CatalogRequestsHistoryInitial>(
               listener: (context, state) {
@@ -57,10 +54,12 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                 else if (state.catalogRequestsHistoryEnumStates ==
                     CatalogRequestsHistoryEnumStates.noConnection) {
                   EasyLoading.dismiss(animation: true);
+                }else if (state.catalogRequestsHistoryEnumStates ==
+                    CatalogRequestsHistoryEnumStates.noDataFound) {
+                  EasyLoading.showError("No Data Found");
                 }
               },
               builder: (context, state) {
-
                 return Scaffold(
                   backgroundColor: Colors.white,
                   appBar: PreferredSize(
@@ -73,20 +72,6 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                         leading: InkWell(onTap: () => Navigator.of(context).pop(),child: const Icon(Icons.home)),
                         title: const Text('Request History'),
                         centerTitle: true,
-                        // actions: <Widget>[
-                        //   IconButton(
-                        //       onPressed: () async {
-                        //         Navigator.of(context)
-                        //             .pushReplacementNamed(FavoriteScreen.routeName);
-                        //       },
-                        //       icon: const Icon(Icons.favorite)),
-                        //   IconButton(
-                        //       onPressed: () async {
-                        //         Navigator.of(context)
-                        //             .pushReplacementNamed(CartScreen.routeName);
-                        //       },
-                        //       icon: const Icon(Icons.shopping_cart)),
-                        // ],
                         shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(25),
@@ -94,24 +79,10 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                       ),
                     ),
                   ),
-
-                  // floatingActionButton:FloatingActionButton.extended(
-                  //   onPressed: () {
-                  //     importDataRequests(state.getCatalogRequestsHistoryList[0]);
-                  //   },
-                  //   backgroundColor: ConstantsColors.bottomSheetBackgroundDark,
-                  //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                  //   icon: Assets.images.excel.image(fit: BoxFit.scaleDown,scale: 13),
-                  //   label: const Text('Export'),
-                  // ),
-
-                  body:
-                  Container(
+                  body: Container(
                     child: getCatalogHistoryData(
-                        state.getCatalogRequestsHistoryList),
+                        state.getCatalogRequestsHistoryList,state),
                   ),
-
-
                 );
               }),
         )
@@ -119,7 +90,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
   }
 
   SafeArea getCatalogHistoryData(
-      List<NewRequestCatalogModelResponse> getCatalogRequestsHistoryList) {
+      List<NewRequestCatalogModelResponse> getCatalogRequestsHistoryList,CatalogRequestsHistoryInitial state) {
     if (getCatalogRequestsHistoryList.isNotEmpty) {
       if (getCatalogRequestsHistoryList[0].data != null) {
         return SafeArea(
@@ -211,7 +182,6 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                                   .data![index].requestID
                                                   .toString()}", 14.0),
                                         ),
-
                                       ],
                                     ),
 
@@ -238,8 +208,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                     GlobalConstants.dateFormatServer.parse(
                                           getCatalogRequestsHistoryList[0]
                                               .data![index].date.toString()
-                                    ))
-                                              ,
+                                    )),
                                               12.0),
                                         ),
                                       ],
@@ -247,12 +216,10 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                   ],
                                 ),
                               ),
-
                               Container(
                                 color: Colors.white,
                                 child: Row(
                                   children: <Widget>[
-
                                     Expanded(
                                       child: Padding(
                                         padding: const EdgeInsets.all(5.0),
@@ -324,14 +291,13 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                 ),
         );
       } else {
-        return SafeArea(child: Center(child: noDataFoundContainerCatalog("No Data Found"),));
+        return SafeArea(child: getFavoriteResult(state));
       }
     }
     else {
-      return  SafeArea(child: Center(child: noDataFoundContainerCatalog("No Data Found"),));
+      return  SafeArea(child: getFavoriteResult(state));
     }
   }
-
   Text cardText(String text, double size) {
     return Text(
       text,
@@ -339,4 +305,17 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
           color: ConstantsColors
               .bottomSheetBackground),);
   }
+
+  Center getFavoriteResult(CatalogRequestsHistoryInitial state) {
+    if (state.catalogRequestsHistoryEnumStates ==
+        CatalogRequestsHistoryEnumStates.noDataFound) {
+      return Center(child: noDataFoundContainerCatalog("List is empty"));
+    } else if (state.catalogRequestsHistoryEnumStates ==
+        CatalogRequestsHistoryEnumStates.noConnection) {
+      return Center(child: noDataFoundContainerCatalog("No internet connection"));
+    } else {
+      return Center(child: noDataFoundContainerCatalog("Something went wrong"));
+    }
+  }
 }
+

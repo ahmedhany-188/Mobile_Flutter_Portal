@@ -32,7 +32,7 @@ class ItemCatalogSearchModel {
 
 class ItemCatalogSearchData {
   int? itemID;
-  String? requestNo;
+  int? requestNo;
   String? systemItemCode;
   String? itemCode;
   String? itemName;

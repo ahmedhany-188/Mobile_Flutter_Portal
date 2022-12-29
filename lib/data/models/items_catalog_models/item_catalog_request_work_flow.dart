@@ -2,7 +2,7 @@ class CatalogRequestWorkFlow {
   int? code;
   String? message;
   bool? error;
-  List<Data>? data;
+  List<DataWF>? data;
 
   CatalogRequestWorkFlow({this.code, this.message, this.error, this.data});
 
@@ -11,9 +11,9 @@ class CatalogRequestWorkFlow {
     message = json['message'];
     error = json['error'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <DataWF>[];
       json['data'].forEach((v) {
-        data!.add( Data.fromJson(v));
+        data!.add( DataWF.fromJson(v));
       });
     }
   }
@@ -30,7 +30,7 @@ class CatalogRequestWorkFlow {
   }
 }
 
-class Data {
+class DataWF {
   int? id;
   int? groupID;
   String? groupName;
@@ -47,7 +47,7 @@ class Data {
   int? findItemID;
   int? catID;
   String? catName;
-  int? itemCode;
+  String? itemCode;
   String? itemName;
   String? itemDesc;
   String? tags;
@@ -56,7 +56,7 @@ class Data {
   String? requesterEmail;
   String? requestDate;
 
-  Data(
+  DataWF(
       {this.id,
         this.groupID,
         this.groupName,
@@ -82,7 +82,7 @@ class Data {
         this.requesterEmail,
         this.requestDate});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataWF.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     groupID = json['group_ID'];
     groupName = json['group_Name'];

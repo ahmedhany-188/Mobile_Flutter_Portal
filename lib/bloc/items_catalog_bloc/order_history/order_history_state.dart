@@ -7,7 +7,8 @@ enum OrderHistoryEnumStates {
   failed,
   loadingTreeData,
   successTreeData,
-  noConnection
+  noConnection,
+  noDataFound
 }
 
 class OrderHistoryState extends Equatable {

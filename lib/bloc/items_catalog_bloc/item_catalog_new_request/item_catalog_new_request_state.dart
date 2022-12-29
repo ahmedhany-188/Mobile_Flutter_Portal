@@ -13,7 +13,7 @@ abstract class NewRequestCatalogState extends Equatable{
   required FormzStatus status,});
 }
 
-enum NewRequestCatalogEnumState { initial, success, failed, loading,noConnection,valid }
+enum NewRequestCatalogEnumState { initial, success, failed, loading,noConnection,valid,noDataFound }
 
 class NewRequestCatalogInitial extends NewRequestCatalogState {
   const NewRequestCatalogInitial({

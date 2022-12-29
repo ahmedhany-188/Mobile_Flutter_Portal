@@ -2,7 +2,7 @@ class ItemCatalogRespondRequests {
   int? code;
   String? message;
   bool? error;
-  List<Data>? data;
+  List<DataRR>? data;
 
   ItemCatalogRespondRequests({this.code, this.message, this.error, this.data});
 
@@ -11,9 +11,9 @@ class ItemCatalogRespondRequests {
     message = json['message'];
     error = json['error'];
     if (json['data'] != null) {
-      data = <Data>[];
+      data = <DataRR>[];
       json['data'].forEach((v) {
-        data!.add(Data.fromJson(v));
+        data!.add(DataRR.fromJson(v));
       });
     }
   }
@@ -30,7 +30,7 @@ class ItemCatalogRespondRequests {
   }
 }
 
-class Data {
+class DataRR {
   int? id;
   int? groupID;
   int? requestNo;
@@ -47,7 +47,7 @@ class Data {
   String? userAction;
   Request? request;
 
-  Data(
+  DataRR(
       {this.id,
         this.groupID,
         this.requestNo,
@@ -64,7 +64,7 @@ class Data {
         this.userAction,
         this.request});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  DataRR.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     groupID = json['group_ID'];
     requestNo = json['requestNo'];

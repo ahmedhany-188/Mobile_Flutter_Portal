@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_requestCatalog_reponse.dart';
 
-enum CatalogRequestsHistoryEnumStates {loading, success, failed,noConnection,initial,valid}
+enum CatalogRequestsHistoryEnumStates {loading, success, failed,noConnection,initial,valid,noDataFound}
 
 abstract class CatalogRequestsHistoryState  extends Equatable {
 

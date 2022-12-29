@@ -37,38 +37,48 @@ class CatalogRequestsHistoryCubit extends Cubit<CatalogRequestsHistoryInitial> w
   final Connectivity connectivity = Connectivity();
 
   Future<void> getAllRequestList(userHRCode) async {
-
     emit(state.copyWith(
-        getCatalogRequestsHistoryList:[],
+      getCatalogRequestsHistoryList: [],
     ));
-      if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
-        try {
-          emit(state.copyWith(
-            catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates.loading,
-          ));
-          await requestRepository.getCatalogRequestsItems(
-              userHRCode,)
-              .then((value) async {
-                emit(state.copyWith(
-                  catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates.success,
-                  getCatalogRequestsHistoryList: value,
-                ));
-
-          }).catchError((error) {
-            emit(state.copyWith(
-              catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates.failed,
-            ));
-          });
-        } catch (e) {
-          emit(state.copyWith(
-            catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates.failed,
-          ));
-      }} else {
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+      try {
         emit(state.copyWith(
-          catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates.noConnection,
+          catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
+              .loading,
+        ));
+        await requestRepository.getCatalogRequestsItems(
+          userHRCode,)
+            .then((value) async {
+          if (value.isNotEmpty) {
+            emit(state.copyWith(
+              catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
+                  .success,
+              getCatalogRequestsHistoryList: value,
+            ));
+          } else {
+            emit(state.copyWith(
+                getCatalogRequestsHistoryList: [],
+                catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
+                    .noDataFound));
+          }
+        }).catchError((error) {
+          emit(state.copyWith(
+            catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
+                .failed,
+          ));
+        });
+      } catch (e) {
+        emit(state.copyWith(
+          catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
+              .failed,
         ));
       }
-
+    } else {
+      emit(state.copyWith(
+        catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
+            .noConnection,
+      ));
+    }
   }
 
   @override

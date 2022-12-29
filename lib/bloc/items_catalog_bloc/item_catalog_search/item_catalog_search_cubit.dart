@@ -49,14 +49,13 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
 
   static ItemCatalogSearchCubit get(context) => BlocProvider.of(context);
 
-  void getSearchList({int? catalogId}) async {
+  void getSearchList() async {
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       emit(state.copyWith(
-        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.loadingTreeData,
       ));
-      EasyLoading.show();
       await _generalDio
-          .getItemCatalogSearch(state.searchString, categoryId: catalogId)
+          .getItemCatalogSearch(state.searchString)
           .then((value) {
         if (value.data['data'] != null && value.statusCode == 200) {
           List<ItemCatalogSearchData> searchResult =
@@ -66,9 +65,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
             itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
             searchResult: searchResult,
           ));
-          EasyLoading.dismiss();
         } else if (value.data['data'] == null) {
-          EasyLoading.dismiss();
           emit(state.copyWith(
             searchResult: [],
             itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noDataFound,
@@ -80,7 +77,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         emit(state.copyWith(
             itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed));
       });
-    }{
+    }else{
       emit(state.copyWith(
         itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noConnection,
       ));
@@ -88,12 +85,9 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   }
 
   void getFavoriteItems({required String userHrCode}) async{
-
-
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
-
       emit(state.copyWith(
-      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
+      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.loadingTreeData,
     ));
     await _generalDio.getItemCatalogFavorite(userHrCode).then((value) {
       if (value.data['data'] != null && value.statusCode == 200) {
@@ -106,7 +100,6 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         ));
       }
       else if (value.data['data'] == null) {
-        EasyLoading.dismiss();
         emit(state.copyWith(
           favoriteResult: [],
           itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noDataFound,
@@ -122,42 +115,41 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
     }
   }
 
-  void getCartItems({required String userHrCode}) async{
-
+  void getCartItems({required String userHrCode}) async {
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       emit(state.copyWith(
-      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
-    ));
-    await _generalDio.getItemCatalogCart(userHrCode).then((value) {
-      if (value.data['data'] != null && value.statusCode == 200) {
-        List<CartModelData> cartResult =
-        List<CartModelData>.from(value.data['data']
-            .map((model) => CartModelData.fromJson(model)));
-        emit(state.copyWith(
-          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
-          cartResult: cartResult,
-        ));
-      }
-      else if (value.data['data'] == null) {
-        EasyLoading.dismiss();
-        emit(state.copyWith(
-          cartResult: [],
-          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noDataFound,
-        ));
-      } else {
-        throw RequestFailureApi.fromCode(value.statusCode!);
-      }
-    });
-    }else{
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+            .loadingTreeData,
+      ));
+      await _generalDio.getItemCatalogCart(userHrCode).then((value) {
+        if (value.data['data'] != null && value.statusCode == 200) {
+          List<CartModelData> cartResult =
+          List<CartModelData>.from(value.data['data']
+              .map((model) => CartModelData.fromJson(model)));
+          emit(state.copyWith(
+            itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+            cartResult: cartResult,
+          ));
+        }
+        else if (value.data['data'] == null) {
+          emit(state.copyWith(
+            cartResult: [],
+            itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+                .noDataFound,
+          ));
+        } else {
+          throw RequestFailureApi.fromCode(value.statusCode!);
+        }
+      });
+    } else {
       emit(state.copyWith(
         itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noConnection,
       ));
     }
-
   }
 
   void setSearchString(String searchString) {
-    emit(state.copyWith(searchString: searchString,detail: false));
+    emit(state.copyWith(searchString: searchString,detail: true, searchResult: [],));
     getSearchList();
   }
 
@@ -254,7 +246,6 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   Future<void> setFavorite({required String hrCode, required int itemCode}) async{
 
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
-
       EasyLoading.show(status: 'Loading...');
     emit(state.copyWith(
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
@@ -308,28 +299,28 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   ));
   }
   }
-  Future<void> deleteAllFavorite({required String hrCode}) async{
+  Future<void> deleteAllFavorite({required String hrCode}) async {
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
-
-      EasyLoading.show(status: 'Loading...');
-    emit(state.copyWith(
-      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
-    ));
-    await _generalDio.removeAllFavorite().
-    then((value) {
-      getFavoriteItems(userHrCode: hrCode);
-      EasyLoading.dismiss();
-    })
-        .catchError((e) {
-      EasyLoading.showError('Something went wrong');
-      throw e;
-    });
-  } else {
-emit(state.copyWith(
-itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
-    .noConnection,
-));
-}
+      emit(state.copyWith(
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.loadingTreeData,
+      ));
+      await _generalDio.removeAllFavorite().
+      then((value) {
+        getFavoriteItems(userHrCode: hrCode);
+        emit(state.copyWith(
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
+        ));
+      }).catchError((e) {
+        emit(state.copyWith(
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+        ));
+        throw e;
+      });
+    } else {
+      emit(state.copyWith(
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noConnection,
+      ));
+    }
   }
 
   Future<void> addToCart({required String hrCode, required int itemCode,required int qty}) async{
@@ -392,55 +383,59 @@ itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
 ));
 }
   }
-  Future<void> placeOrder({required String hrCode}) async{
+  Future<void> placeOrder({required String hrCode}) async {
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
-
-      EasyLoading.show(status: 'Loading...');
-    emit(state.copyWith(
-      itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
-    ));
-    List<CartModelData> listData =[];
-    for (int i = 0; i < state.cartResult.length; i++) {
-      CartModelData detailedDataPost = CartModelData(
-        id: state.cartResult[i].id,
-        orderID: 0,
-        hrCode: state.cartResult[i].hrCode,
-        itemCode: state.cartResult[i].itemCode,
-        itemQty: state.cartResult[i].itemQty,
-        isClosed: true,
-        inUser: state.cartResult[i].inUser,
-        inDate: state.cartResult[i].inDate,
-        upUser: state.cartResult[i].upUser,
-        upDate: state.cartResult[i].upDate
-      );
-      listData.add(detailedDataPost);
-    }
-    await _generalDio.putCartOrder(listData).then((value) async {
-      if (value.data['data'] != null){
-        List<CartModelData> cartResultWithID=List<CartModelData>.from(value.data['data']
-            .map((model) => CartModelData.fromJson(model)));
-        int? orderID=cartResultWithID[0].orderID??-1;
-        if(orderID!=-1){
-          await importDataCart(state.cartResult,orderID);//,cartList:ItemCatalogSearchCubit.get(context).state.cartResult );
-        }
-        emit(state.copyWith(cartResult: []));
-        EasyLoading.showSuccess("Order Added");
-      } else if (value.data['data'] == null) {
-        EasyLoading.dismiss();
-        EasyLoading.showError('Something went wrong');
-      } else {
-        throw RequestFailureApi.fromCode(value.statusCode!);
+      emit(state.copyWith(
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.loadingTreeData,
+      ));
+      List<CartModelData> listData = [];
+      for (int i = 0; i < state.cartResult.length; i++) {
+        CartModelData detailedDataPost = CartModelData(
+            id: state.cartResult[i].id,
+            orderID: 0,
+            hrCode: state.cartResult[i].hrCode,
+            itemCode: state.cartResult[i].itemCode,
+            itemQty: state.cartResult[i].itemQty,
+            itmCatItems: state.cartResult[i].itmCatItems,
+            isClosed: true,
+            inUser: state.cartResult[i].inUser,
+            inDate: state.cartResult[i].inDate,
+            upUser: state.cartResult[i].upUser,
+            upDate: state.cartResult[i].upDate
+        );
+        listData.add(detailedDataPost);
       }
-    }).catchError((e) {
-      EasyLoading.showError('Something went wrong');
-      throw e;
-    });
-  } else {
-emit(state.copyWith(
-itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
-    .noConnection,
-));
-}
+      await _generalDio.putCartOrder(listData).then((value) async {
+        if (value.data['data'] != null) {
+          List<CartModelData> cartResultWithID = List<CartModelData>.from(
+              value.data['data']
+                  .map((model) => CartModelData.fromJson(model)));
+          int? orderID = cartResultWithID[0].orderID ?? -1;
+          if (orderID != -1) {
+            await importDataCart(listData,
+                orderID); //,cartList:ItemCatalogSearchCubit.get(context).state.cartResult );
+          }
+          emit(state.copyWith(cartResult: []));
+          EasyLoading.showSuccess("Order Added");
+        } else if (value.data['data'] == null) {
+          emit(state.copyWith(
+            itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.loadingTreeData,
+          ));
+        } else {
+          throw RequestFailureApi.fromCode(value.statusCode!);
+        }
+      }).catchError((e) {
+        emit(state.copyWith(
+          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.loadingTreeData,
+        ));
+        throw e;
+      });
+    } else {
+      emit(state.copyWith(
+        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+            .noConnection,
+      ));
+    }
   }
 
   void getSubTree(List<Items>? item) {
@@ -473,71 +468,54 @@ itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
         treeDirectionList: treeDirectionList,
             listTapAction: false
     ));
-    print("take third shot");
-    print("third direction is "+state.treeDirectionList.toString());
   }
 
   void getCategoryDataWithId(userHRCode, id) async {
-    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
-
-      emit(state.copyWith(
-        itemCategoryShow:true,
-        itemsGetItemsCategory:[]
-    ));
-    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
-      try {
-        emit(state.copyWith(
-          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
-              .loadingTreeData,
-        ));
-        await itemsCatalogRepository.getItemsCatalogListData(userHRCode, id)
-            .then((value) async {
-          List<ItemCategorygetAllData>? itemCatalogSearchData = [];
-          if (value.data != null) {
-            itemCatalogSearchData = value.data;
-            emit(state.copyWith(
-              itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
-              itemsGetItemsCategory: itemCatalogSearchData,
-                itemsGetAllTree:[]
-            ));
-          } else {
-            emit(state.copyWith(
-              itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noDataFound,
-                itemsGetAllTree:[],
-                itemsGetItemsCategory:[]
-            ));
-          }
-        }).catchError((error) {
+      if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
           emit(state.copyWith(
-            itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
-              itemsGetAllTree:[],
-              itemsGetItemsCategory:[]
+            itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.loadingTreeData,
+              itemCategoryShow: true,
+              itemsGetItemsCategory: []
           ));
-        });
-      } catch (e) {
+          await itemsCatalogRepository.getItemsCatalogListData(userHRCode, id)
+              .then((value) async {
+            List<ItemCategorygetAllData>? itemCatalogSearchData = [];
+            if (value.data != null) {
+              itemCatalogSearchData = value.data;
+              emit(state.copyWith(
+                  itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+                      .success,
+                  itemsGetItemsCategory: itemCatalogSearchData,
+                  itemsGetAllTree: []
+              ));
+          } else if (value.data == null){
+              emit(state.copyWith(
+                  itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+                      .noDataFound,
+                  itemsGetAllTree: [],
+                  itemsGetItemsCategory: []
+              ));
+            }else{
+            throw RequestFailureApi.fromCode(value.code!);
+            }
+          }).catchError((error) {
+            emit(state.copyWith(
+                itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
+                itemsGetAllTree: [],
+                itemsGetItemsCategory: []
+            ));
+          });
+        }
+      else {
         emit(state.copyWith(
-          itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
-            itemsGetAllTree:[],
-            itemsGetItemsCategory:[]
+            itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.noConnection,
+            itemsGetAllTree: [],
+            itemsGetItemsCategory: []
         ));
       }
-    } else {
-      emit(state.copyWith(
-        itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
-            .noConnection,
-          itemsGetAllTree:[],
-          itemsGetItemsCategory:[]
-      ));
-    }
-      // emit(state.copyWith(
-      //   itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
-      //       .noConnection,
-      // ));
-    }
   }
 
   void setInitialization() {
-    print("second direction is "+state.treeDirectionList.toString());
     emit(state.copyWith(
       treeDirectionList:["Home"],
       itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.success,
@@ -549,13 +527,10 @@ itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
   }
 
   int getTreeLenght(){
-    print("four direction is "+state.treeDirectionList.toString());
     return state.treeDirectionList.length;
   }
 
   Future<void> getNewSubTree(int index) async {
-
-
     List<ItemsCatalogTreeModel>? treeList=state.getAllItemsCatalogList.data;
     List<String>? treeDirectionList =state.treeDirectionList;
     setInitialization();
@@ -579,19 +554,16 @@ itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
         listTapAction: false,
         itemCategoryShow:false
     ));
-
-    print("take this shot");
-    print("one direction is "+state.treeDirectionList.toString());
   }
 
   void clearData() {
     emit(state.copyWith(searchString: '', searchResult: [],detail: false));
   }
 
-  void setDetail({required String itemCode}) async{
-    await getAllCatalogList(itemCode: itemCode);
-    emit(state.copyWith(detail: true,));
-  }
+  // void setDetail({required String itemCode}) async{
+  //   await getAllCatalogList(itemCode: itemCode);
+  //   emit(state.copyWith(detail: true,));
+  // }
 
   Future<void> getAllCatalogList({required String itemCode}) async {
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {

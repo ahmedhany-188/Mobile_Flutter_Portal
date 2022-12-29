@@ -1,7 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_new_request/item_catalog_new_request_state.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_image_model.dart';
@@ -52,90 +51,65 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
     ));
 
     if (state.status.isValidated) {
-      // if (itemAttach.isNotEmpty) {
-        NewRequestCatalogModel newRequestCatalogModel = NewRequestCatalogModel(
-            itemName: itemName.value,
-            itemDesc: itemDescription.value,
-            catID: int.parse(selectedCategory.value),
-            inUser: hrcode);
-        try {
-          var connectivityResult = await connectivity.checkConnectivity();
-          if (connectivityResult == ConnectivityResult.wifi ||
-              connectivityResult == ConnectivityResult.mobile) {
-            emit(state.copyWith(
-                status: FormzStatus.submissionInProgress,
-                newRequestCatalogEnumState: NewRequestCatalogEnumState.loading
-            ));
-
-            final newRequestCatalog = await requestRepository
-                .postNewRequestCatalog(newRequestCatalogModel);
-            if (newRequestCatalog.error == false) {
-              int? reqID = newRequestCatalog.data?[0].requestID;
-              if (reqID != null) {
-                if (itemAttach.isNotEmpty) {
-                  for (int i = 0; i < state.itemAttach.length; i++) {
-                    //final newRequestImageCatalog =
-                    await requestRepository.postNewRequestImageCatalog
-                      (state.itemAttach[i], hrcode, reqID);
-                  }
+      NewRequestCatalogModel newRequestCatalogModel = NewRequestCatalogModel(
+          itemName: itemName.value,
+          itemDesc: itemDescription.value,
+          catID: int.parse(selectedCategory.value),
+          inUser: hrcode);
+      try {
+        var connectivityResult = await connectivity.checkConnectivity();
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          emit(state.copyWith(
+              status: FormzStatus.submissionInProgress,
+              newRequestCatalogEnumState: NewRequestCatalogEnumState.loading
+          ));
+          final newRequestCatalog = await requestRepository
+              .postNewRequestCatalog(newRequestCatalogModel);
+          if (newRequestCatalog.error == false) {
+            int? reqID = newRequestCatalog.data?[0].requestID;
+            if (reqID != null) {
+              if (itemAttach.isNotEmpty) {
+                for (int i = 0; i < state.itemAttach.length; i++) {
+                  //final newRequestImageCatalog =
+                  await requestRepository.postNewRequestImageCatalog
+                    (state.itemAttach[i], hrcode, reqID);
+                }
               }
-              }
-
-              emit(state.copyWith(
-                newRequestCatalogEnumState: NewRequestCatalogEnumState.success,
-                errorMessage: reqID.toString(),
-                status: FormzStatus.submissionSuccess,
-              ),);
-            } else {
-              emit(state.copyWith(
-                  status: FormzStatus.submissionFailure,
-                  errorMessage: newRequestCatalog.message,
-                  newRequestCatalogEnumState: NewRequestCatalogEnumState.failed),
-              );
             }
+            emit(state.copyWith(
+              newRequestCatalogEnumState: NewRequestCatalogEnumState.success,
+              errorMessage: reqID.toString(),
+              status: FormzStatus.submissionSuccess,
+            ),);
           } else {
-            emit(
-              state.copyWith(
-                  status: FormzStatus.submissionFailure,
-                  newRequestCatalogEnumState: NewRequestCatalogEnumState
-                      .noConnection
-              ),
+            emit(state.copyWith(
+                status: FormzStatus.submissionFailure,
+                errorMessage: newRequestCatalog.message,
+                newRequestCatalogEnumState: NewRequestCatalogEnumState.failed),
             );
           }
-        } catch (e) {
+        } else {
           emit(
             state.copyWith(
-                errorMessage: e.toString(),
                 status: FormzStatus.submissionFailure,
-                newRequestCatalogEnumState: NewRequestCatalogEnumState.failed
+                newRequestCatalogEnumState: NewRequestCatalogEnumState
+                    .noConnection
             ),
           );
         }
-      // }else{
-      //   emit(
-      //     state.copyWith(
-      //         errorMessage: "Invalid image",
-      //         status: FormzStatus.submissionFailure,
-      //         newRequestCatalogEnumState: NewRequestCatalogEnumState.failed
-      //     ),
-      //   );
-      // }
+      } catch (e) {
+        emit(
+          state.copyWith(
+              errorMessage: e.toString(),
+              status: FormzStatus.submissionFailure,
+              newRequestCatalogEnumState: NewRequestCatalogEnumState.failed
+          ),
+        );
+      }
     }
   }
 
-  // void checkTheValueOfTree() {
-  //   var now = DateTime.now();
-  //   var formatter = GlobalConstants.dateFormatViewed;
-  //   String formattedDate = formatter.format(now);
-  //   final requestDate = RequestDate.dirty(formattedDate);
-  //   emit(
-  //     state.copyWith(
-  //       newRequestDate: requestDate,
-  //       newRequestCatalogEnumState: NewRequestCatalogEnumState.valid,
-  //       status: Formz.validate([requestDate]),
-  //     ),
-  //   );
-  // }
 
   void addItemName(name) {
     final itemName = RequestDate.dirty(name);
@@ -171,32 +145,31 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
   }
 
   void addChosenImageName() async {
-
     await FilePicker.platform.pickFiles(type: FileType.image,)
-        .then((value) async{
-
-          if(value!=null){
-            ItemImageCatalogModel imageCatalogModel = ItemImageCatalogModel(
-                false, value);
-            List<ItemImageCatalogModel> photos = [imageCatalogModel];
-            photos += state.itemAttach;
-            emit(
-                state.copyWith(
-
-                  itemAttach: photos,
-                    errorMessage: "Image Added",
-                  newRequestCatalogEnumState: NewRequestCatalogEnumState.valid,
-                ));
-
-
-          }
-
+        .then((value) async {
+      if (value != null) {
+        ItemImageCatalogModel imageCatalogModel = ItemImageCatalogModel(
+            false, value);
+        List<ItemImageCatalogModel> photos = [imageCatalogModel];
+        photos += state.itemAttach;
+        emit(
+            state.copyWith(
+              itemAttach: photos,
+              errorMessage: "Image Added",
+              newRequestCatalogEnumState: NewRequestCatalogEnumState.valid,
+            ));
+      }
     }).catchError((err) {
-      EasyLoading.showError('Something went wrong');
+      emit(
+        state.copyWith(
+            errorMessage:'Something went wrong',
+            status: FormzStatus.submissionFailure,
+            newRequestCatalogEnumState: NewRequestCatalogEnumState.failed
+        ),
+      );
       throw err;
     });
-
-    }
+  }
 
     void changeMainImage(index){
       List<ItemImageCatalogModel> itemAttach=state.itemAttach;

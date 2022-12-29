@@ -53,8 +53,6 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
       child: BlocProvider<NewRequestCatalogCubit>(
           create: (context) =>
               NewRequestCatalogCubit(ItemsCatalogGetAllRepository(user)),
-          //  //TODO the value of the tree depends on the internet connection
-          //  ..checkTheValueOfTree()),
           child:
           BlocConsumer<
               NewRequestCatalogCubit,
