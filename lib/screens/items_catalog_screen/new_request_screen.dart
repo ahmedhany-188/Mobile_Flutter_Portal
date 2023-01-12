@@ -42,9 +42,13 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
     if (currentRequestData[NewRequestCatalogScreen.itemsGetAllTree] == null) {
       Navigator.pop(context);
     }
- 
-    List<String> itemsGetAllTreeParents = currentRequestData[NewRequestCatalogScreen.itemsGetAllTree];
-    List<int> itemsGetAllTreeParentsID = currentRequestData[NewRequestCatalogScreen.itemsGetAllTreeID];
+
+    List<
+        String> itemsGetAllTreeParents = currentRequestData[NewRequestCatalogScreen
+        .itemsGetAllTree];
+    List<
+        int> itemsGetAllTreeParentsID = currentRequestData[NewRequestCatalogScreen
+        .itemsGetAllTreeID];
     return WillPopScope(
       onWillPop: () async {
         await EasyLoading.dismiss(animation: true);
@@ -102,18 +106,19 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                         title: const Text('New Request'),
                         centerTitle: true,
                         actions: <Widget>[
-                         IconButton(
-                                  onPressed: () async {
-                                    Navigator.of(context)
-                                        .pushReplacementNamed(FavoriteScreen.routeName);
-                                  },
-                                  icon: const Icon(Icons.favorite)),
-                         IconButton(
-                                  onPressed: () async {
-                                    Navigator.of(context)
-                                        .pushReplacementNamed(CartScreen.routeName);
-                                  },
-                                  icon: const Icon(Icons.shopping_cart)),
+                          IconButton(
+                              onPressed: () async {
+                                Navigator.of(context)
+                                    .pushReplacementNamed(
+                                    FavoriteScreen.routeName);
+                              },
+                              icon: const Icon(Icons.favorite)),
+                          IconButton(
+                              onPressed: () async {
+                                Navigator.of(context)
+                                    .pushReplacementNamed(CartScreen.routeName);
+                              },
+                              icon: const Icon(Icons.shopping_cart)),
                         ],
                         shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.only(
@@ -145,34 +150,43 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                                   children: [
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
-                                      child: TextFormField(
-                                          initialValue: state
-                                              .itemName.value,
-                                          keyboardType: TextInputType
-                                              .text,
-                                          onChanged: (value) {
-                                            context.read<NewRequestCatalogCubit>()
-                                                .addItemName(
-                                                value.toString()
-                                                    .trim());
-                                          },
-                                          decoration: InputDecoration(
-                                            floatingLabelAlignment:
-                                            FloatingLabelAlignment
-                                                .start,
-                                            labelText: "Item Name",
-                                            prefixIcon: const Icon(
-                                              Icons
-                                                  .drive_file_rename_outline,
-                                              color: ConstantsColors
-                                                  .bottomSheetBackgroundDark,),
-                                            errorText: state
-                                                .itemName
-                                                .invalid
-                                                ? 'invalid Name'
-                                                : null,
-                                          )
-                                      ),
+                                      child:
+
+                                      BlocBuilder<
+                                          NewRequestCatalogCubit,
+                                          NewRequestCatalogInitial>(
+                                          builder: (context, state) {
+                                            return
+                                              TextFormField(
+                                                  initialValue: state
+                                                      .itemName.value,
+                                                  keyboardType: TextInputType
+                                                      .text,
+                                                  onChanged: (value) {
+                                                    context.read<
+                                                        NewRequestCatalogCubit>()
+                                                        .addItemName(
+                                                        value.toString()
+                                                            .trim());
+                                                  },
+                                                  decoration: InputDecoration(
+                                                    floatingLabelAlignment:
+                                                    FloatingLabelAlignment
+                                                        .start,
+                                                    labelText: "Item Name",
+                                                    prefixIcon: const Icon(
+                                                      Icons
+                                                          .drive_file_rename_outline,
+                                                      color: ConstantsColors
+                                                          .bottomSheetBackgroundDark,),
+                                                    errorText: state
+                                                        .itemName
+                                                        .invalid
+                                                        ? 'invalid Name'
+                                                        : null,
+                                                  )
+                                              );
+                                          }),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(5.0),
@@ -217,12 +231,15 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                                         onChanged: (item) =>
                                         {
                                           for (int i = 0; i <
-                                              itemsGetAllTreeParents.length; i++) {
-                                            if(item == itemsGetAllTreeParents[i]){
+                                              itemsGetAllTreeParents
+                                                  .length; i++) {
+                                            if(item ==
+                                                itemsGetAllTreeParents[i]){
                                               context.read<
                                                   NewRequestCatalogCubit>()
                                                   .addSelectedCategoryItem(
-                                                  itemsGetAllTreeParentsID[i].toString()),
+                                                  itemsGetAllTreeParentsID[i]
+                                                      .toString()),
                                             }
                                           }
                                         },
@@ -316,54 +333,55 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                                     ),
 
                                     Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .spaceAround,
                                       children: [
-                                      Flexible(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: ElevatedButton.icon(
-                                            onPressed: () {
-                                              NewRequestCatalogCubit
-                                                  .get(
-                                                  context)
-                                                  .addChosenImageName(true);
-                                            },
-                                            label: const Text(
-                                                'Main image',
-                                                style: TextStyle(
-                                                    color: Colors
-                                                        .white)),
-                                            icon: const Icon(
-                                                Icons
-                                                    .cloud_upload_sharp,
-                                                color: Colors.white),
+                                        Flexible(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: ElevatedButton.icon(
+                                              onPressed: () {
+                                                NewRequestCatalogCubit
+                                                    .get(
+                                                    context)
+                                                    .addChosenImageName(true);
+                                              },
+                                              label: const Text(
+                                                  'Main image',
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .white)),
+                                              icon: const Icon(
+                                                  Icons
+                                                      .cloud_upload_sharp,
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         ),
-                                      ),
 
-                                      Flexible(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(5.0),
-                                          child: ElevatedButton.icon(
-                                            onPressed: () {
-                                              NewRequestCatalogCubit
-                                                  .get(
-                                                  context)
-                                                  .addChosenImageName(false);
-                                            },
-                                            label: const Text(
-                                                'Sub image',
-                                                style: TextStyle(
-                                                    color: Colors
-                                                        .white)),
-                                            icon: const Icon(
-                                                Icons
-                                                    .cloud_upload_sharp,
-                                                color: Colors.white),
+                                        Flexible(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(5.0),
+                                            child: ElevatedButton.icon(
+                                              onPressed: () {
+                                                NewRequestCatalogCubit
+                                                    .get(
+                                                    context)
+                                                    .addChosenImageName(false);
+                                              },
+                                              label: const Text(
+                                                  'Sub image',
+                                                  style: TextStyle(
+                                                      color: Colors
+                                                          .white)),
+                                              icon: const Icon(
+                                                  Icons
+                                                      .cloud_upload_sharp,
+                                                  color: Colors.white),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],),
+                                      ],),
 
                                   ]
                               )

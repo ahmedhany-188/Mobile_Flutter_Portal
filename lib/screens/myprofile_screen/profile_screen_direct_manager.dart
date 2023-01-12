@@ -382,15 +382,15 @@ class DirectManagerProfileScreenClass
                                               ]),
                                             ),
 
-                                            const Flexible(
-                                              flex: 1,
-                                              child: Text(
-                                                "ZOOM",
-                                                style: TextStyle(color: Colors.lightBlue,
-                                                  fontSize: 14,
-                                                  fontFamily: 'Nunito',),
-                                              ),
-                                            ),
+                                            // const Flexible(
+                                            //   flex: 1,
+                                            //   child: Text(
+                                            //     "ZOOM",
+                                            //     style: TextStyle(color: Colors.lightBlue,
+                                            //       fontSize: 14,
+                                            //       fontFamily: 'Nunito',),
+                                            //   ),
+                                            // ),
                                             const Flexible(
                                               flex: 1,
                                               child: Icon(
@@ -435,15 +435,15 @@ class DirectManagerProfileScreenClass
                                                 ),
                                               ]),
                                             ),
-                                            const Flexible(
-                                              flex: 1,
-                                              child: Text(
-                                                "ZOOM",
-                                                style: TextStyle(color: Colors.lightBlue,
-                                                  fontSize: 14,
-                                                  fontFamily: 'Nunito',),
-                                              ),
-                                            ),
+                                            // const Flexible(
+                                            //   flex: 1,
+                                            //   child: Text(
+                                            //     "ZOOM",
+                                            //     style: TextStyle(color: Colors.lightBlue,
+                                            //       fontSize: 14,
+                                            //       fontFamily: 'Nunito',),
+                                            //   ),
+                                            // ),
 
                                           ],
                                         ),

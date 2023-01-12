@@ -155,7 +155,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                         Flexible(
                                           child: cardText(
                                               "Item Name: ${getCatalogRequestsHistoryList[0]
-                                                  .data![index].itemName
+                                                  .data?[index].itemName
                                                   .toString()}", 18.0),
                                         ),
                                       ],
@@ -167,7 +167,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                         Flexible(
                                           child: cardText(
                                               "Description: ${getCatalogRequestsHistoryList[0]
-                                                  .data![index].itemDesc
+                                                  .data?[index].itemDesc
                                                   .toString()}", 14.0),
                                         ),
                                       ],
@@ -179,7 +179,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                         Flexible(
                                           child: cardText(
                                               "Request ID: ${getCatalogRequestsHistoryList[0]
-                                                  .data![index].requestID
+                                                  .data?[index].requestID
                                                   .toString()}", 14.0),
                                         ),
                                       ],
@@ -192,7 +192,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                         Flexible(
                                           child: cardText(
                                               "Category: ${getCatalogRequestsHistoryList[0]
-                                                  .data![index].catName
+                                                  .data?[index].catName
                                                   .toString()}", 14.0),
                                         ),
                                       ],
@@ -207,7 +207,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                     GlobalConstants.dateFormatViewedWithTime.format(
                                     GlobalConstants.dateFormatServer.parse(
                                           getCatalogRequestsHistoryList[0]
-                                              .data![index].date.toString()
+                                              .data?[index].date.toString()??""
                                     )),
                                               12.0),
                                         ),
@@ -274,7 +274,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                     Flexible(
                                       child: Text(
                                           "${getCatalogRequestsHistoryList[0]
-                                              .data![index]
+                                              .data?[index]
                                               .status.toString()}...",
                                           style: const TextStyle(fontSize: 16,
                                               fontWeight: FontWeight.w500,

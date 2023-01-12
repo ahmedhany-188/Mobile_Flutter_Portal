@@ -227,7 +227,7 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                                   Flexible(
                                     child: cardText(
                                         "user Action: ${getCatalogRespondRequestsHistoryList[0]
-                                            .data![index].userAction
+                                            .data?[index].userAction
                                             .toString()}", 18.0),
                                   ),
                                 ],
@@ -236,42 +236,42 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
 
                               itemWidgetRequestRespond(
                                   "Request No: ${getCatalogRespondRequestsHistoryList[0]
-                                      .data![index].requestNo
+                                      .data?[index].requestNo
                                       .toString()}", 14.0),
 
                               const SizedBox(height: 4,),
 
                               itemWidgetRequestRespond(
                                   "Item Name: ${getCatalogRespondRequestsHistoryList[0]
-                                      .data![index].request?.itemName
+                                      .data?[index].request?.itemName
                                       .toString()}", 14.0),
 
                               const SizedBox(height: 4,),
 
                               itemWidgetRequestRespond(
                                   "Item Code: ${getCatalogRespondRequestsHistoryList[0]
-                                      .data![index].request?.itemCode
+                                      .data?[index].request?.itemCode
                                       .toString()}", 14.0),
 
                               const SizedBox(height: 4,),
 
                               itemWidgetRequestRespond(
                                   "Category Name: ${getCatalogRespondRequestsHistoryList[0]
-                                      .data![index].catName
+                                      .data?[index].catName
                                       .toString()}", 14.0),
 
                               const SizedBox(height: 4,),
 
                               itemWidgetRequestRespond(
                                   "User Hr Action: ${getCatalogRespondRequestsHistoryList[0]
-                                      .data![index].submittedHrCode
+                                      .data?[index].submittedHrCode
                                       .toString()}", 14.0),
 
                               const SizedBox(height: 4,),
 
                               itemWidgetRequestRespondActionName(
                                   getCatalogRespondRequestsHistoryList[0]
-                                      .data![index].action ?? -1, 14.0),
+                                      .data?[index].action ?? -1, 14.0),
                               const SizedBox(height: 10),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
@@ -286,8 +286,8 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                                             GlobalConstants.dateFormatServer
                                                 .parse(
                                                 getCatalogRespondRequestsHistoryList[0]
-                                                    .data![index].inDate
-                                                    .toString()
+                                                    .data?[index].inDate
+                                                    .toString()??""
                                             ))}",
                                         12.0
                                     ),
@@ -348,7 +348,7 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                                     CatalogRequestWorkFlowScreen
                                         .catalogRequestIDWorkFlow:
                                     getCatalogRespondRequestsHistoryList[0]
-                                        .data![index].request?.requestID
+                                        .data?[index].request?.requestID
                                   });
                             },
                             label: const Text(

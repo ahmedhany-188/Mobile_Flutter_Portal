@@ -72,7 +72,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
                 .noDataFound,
           ));
         } else {
-          throw RequestFailureApi.fromCode(value.statusCode!);
+          throw RequestFailureApi.fromCode(value.statusCode??0);
         }
       }).catchError((error) {
         emit(state.copyWith(
@@ -242,7 +242,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
               itemsGetItemsCategory: []
           ));
         } else {
-          throw RequestFailureApi.fromCode(value.code!);
+          throw RequestFailureApi.fromCode(value.code??0);
         }
       }).catchError((error) {
         emit(state.copyWith(
@@ -349,7 +349,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
                 .noDataFound,
           ));
         } else {
-          throw RequestFailureApi.fromCode(value.statusCode!);
+          throw RequestFailureApi.fromCode(value.statusCode??0);
         }
       });
     } else {
@@ -466,7 +466,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
                 .noDataFound,
           ));
         } else {
-          throw RequestFailureApi.fromCode(value.statusCode!);
+          throw RequestFailureApi.fromCode(value.statusCode??0);
         }
       });
     } else {
@@ -588,7 +588,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
             emit(state.copyWith(
               itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
             ));
-            throw RequestFailureApi.fromCode(value.statusCode!);
+            throw RequestFailureApi.fromCode(value.statusCode??0);
           }
         }).catchError((e) {
           emit(state.copyWith(
@@ -615,7 +615,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   // }
 
   // Future<void> getAllCatalogList({required String itemCode}) async {
-  //   if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+  //   if (await connectivity.checkConnectivity() = ConnectivityResult.none) {
   //     emit(state.copyWith(
   //       itemCatalogAllDataEnumStates: ItemCatalogSearchEnumStates.initial,
   //       // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.initial,
@@ -623,7 +623,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   //     await _generalDio
   //         .getItemCatalogAllData(itemCode)
   //         .then((value) {
-  //       if (value.data['data'] != null && value.statusCode == 200) {
+  //       if (value.data['data'] = null && value.statusCode == 200) {
   //         List<ItemCategorygetAllData> itemAllDatalist =
   //         List<ItemCategorygetAllData>.from(value.data['data']
   //             .map((model) => ItemCategorygetAllData.fromJson(model)));
@@ -639,7 +639,7 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
   //           // itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,
   //         ));
   //       } else {
-  //         throw RequestFailureApi.fromCode(value.statusCode!);
+  //         throw RequestFailureApi.fromCode(value.statusCode);
   //       }
   //     }).catchError((error) {
   //       emit(state.copyWith(

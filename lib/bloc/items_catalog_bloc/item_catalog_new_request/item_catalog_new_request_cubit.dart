@@ -44,47 +44,57 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
       final itemAttach = state.itemAttach;
       final selectedCategory = RequestDate.dirty(state.selectedCategory.value);
 
-      emit(state.copyWith(
-        itemName: itemName,
-        itemDescription: itemDescription,
-        itemAttach: itemAttach,
-        selectedCategory: selectedCategory,
-        status: Formz.validate([itemName, itemDescription, selectedCategory]),
-      ));
-      if (state.status.isValidated) {
-        NewRequestCatalogModel newRequestCatalogModel = NewRequestCatalogModel(
-            itemName: itemName.value,
-            itemDesc: itemDescription.value,
-            catID: int.parse(selectedCategory.value),
-            inUser: hrcode);
+      if (itemName.toString().length > 40) {
+        emit(
+            state.copyWith(
+              itemName: itemName,
+              errorMessage: "Maximum item name 40 letter",
+              newRequestCatalogEnumState: NewRequestCatalogEnumState.failed,
+            ));
+      }
+      else {
         emit(state.copyWith(
-            status: FormzStatus.submissionInProgress,
-            newRequestCatalogEnumState: NewRequestCatalogEnumState.loading
+          itemName: itemName,
+          itemDescription: itemDescription,
+          itemAttach: itemAttach,
+          selectedCategory: selectedCategory,
+          status: Formz.validate([itemName, itemDescription, selectedCategory]),
         ));
-        final newRequestCatalog = await requestRepository
-            .postNewRequestCatalog(newRequestCatalogModel);
-        if (newRequestCatalog.error == false) {
-          int? reqID = newRequestCatalog.data?[0].requestID;
-          if (reqID != null) {
-            if (itemAttach.isNotEmpty) {
-              for (int i = 0; i < state.itemAttach.length; i++) {
-                //final newRequestImageCatalog =
-                await requestRepository.postNewRequestImageCatalog
-                  (state.itemAttach[i], hrcode, reqID);
+        if (state.status.isValidated) {
+          NewRequestCatalogModel newRequestCatalogModel = NewRequestCatalogModel(
+              itemName: itemName.value,
+              itemDesc: itemDescription.value,
+              catID: int.parse(selectedCategory.value),
+              inUser: hrcode);
+          emit(state.copyWith(
+              status: FormzStatus.submissionInProgress,
+              newRequestCatalogEnumState: NewRequestCatalogEnumState.loading
+          ));
+          final newRequestCatalog = await requestRepository
+              .postNewRequestCatalog(newRequestCatalogModel);
+          if (newRequestCatalog.error == false) {
+            int? reqID = newRequestCatalog.data?[0].requestID;
+            if (reqID != null) {
+              if (itemAttach.isNotEmpty) {
+                for (int i = 0; i < state.itemAttach.length; i++) {
+                  //final newRequestImageCatalog =
+                  await requestRepository.postNewRequestImageCatalog
+                    (state.itemAttach[i], hrcode, reqID);
+                }
               }
             }
+            emit(state.copyWith(
+              newRequestCatalogEnumState: NewRequestCatalogEnumState.success,
+              errorMessage: reqID.toString(),
+              status: FormzStatus.submissionSuccess,
+            ),);
+          } else {
+            emit(state.copyWith(
+                status: FormzStatus.submissionFailure,
+                errorMessage: newRequestCatalog.message,
+                newRequestCatalogEnumState: NewRequestCatalogEnumState.failed),
+            );
           }
-          emit(state.copyWith(
-            newRequestCatalogEnumState: NewRequestCatalogEnumState.success,
-            errorMessage: reqID.toString(),
-            status: FormzStatus.submissionSuccess,
-          ),);
-        } else {
-          emit(state.copyWith(
-              status: FormzStatus.submissionFailure,
-              errorMessage: newRequestCatalog.message,
-              newRequestCatalogEnumState: NewRequestCatalogEnumState.failed),
-          );
         }
       }
     } else {
@@ -99,14 +109,16 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
 
 
   void addItemName(name) {
-    final itemName = RequestDate.dirty(name);
-    emit(
-      state.copyWith(
-        newRequestCatalogEnumState: NewRequestCatalogEnumState.valid,
-        itemName: itemName,
-        status: Formz.validate([itemName]),
-      ),
-    );
+
+      final itemName = RequestDate.dirty(name);
+      emit(
+        state.copyWith(
+          newRequestCatalogEnumState: NewRequestCatalogEnumState.valid,
+          itemName: itemName,
+          status: Formz.validate([itemName]),
+        ),
+      );
+
   }
 
   void addItemDescription(description) {

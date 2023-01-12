@@ -176,8 +176,8 @@ class CatalogRequestWorkFlowScreenClass extends State<CatalogRequestWorkFlowScre
                                   Flexible(
                                     child: cardText(
                                         "Group Name: ${getCatalogWorkFlowList[0]
-                                            .data![index].groupName
-                                            .toString()}", 18.0),
+                                            .data?[index].groupName.toString()}", 18.0
+                                    ),
                                   ),
                                 ],
                               ),
@@ -185,49 +185,47 @@ class CatalogRequestWorkFlowScreenClass extends State<CatalogRequestWorkFlowScre
                               const SizedBox(height: 4,),
                               itemWidgetRequestWorkFlow(
                                   "Requester Name: ${getCatalogWorkFlowList[0]
-                                      .data![index].requesterName
-                                      .toString()}", 14.0),
+                                      .data?[index].requesterName.toString()}", 14.0),
                               const SizedBox(height: 4,),
                               itemWidgetRequestWorkFlow(
                                   "Requester HRcode: ${getCatalogWorkFlowList[0]
-                                      .data![index].requesterHRCode
-                                      .toString()}", 14.0),
+                                      .data?[index].requesterHRCode.toString()}", 14.0),
                               const SizedBox(height: 4,),
                               itemWidgetRequestWorkFlow(
                                   "Requester Email: ${getCatalogWorkFlowList[0]
-                                      .data![index].requesterEmail
-                                      .toString()}", 14.0),
+                                      .data?[index].requesterEmail.toString()
+                                      }", 14.0),
 
                               const SizedBox(height: 4,),
                               itemWidgetRequestWorkFlow(
                                   "Request ID: ${getCatalogWorkFlowList[0]
-                                      .data![index].requestID
+                                      .data?[index].requestID
                                       .toString()}", 14.0),
 
                               const SizedBox(height: 4,),
                               itemWidgetRequestWorkFlow(
                                   "Item Name: ${getCatalogWorkFlowList[0]
-                                      .data![index].itemName
+                                      .data?[index].itemName
                                       .toString()}", 14.0),
                               const SizedBox(height: 4,),
                               itemWidgetRequestWorkFlow(
                                   "Item Code: ${getCatalogWorkFlowList[0]
-                                      .data![index].itemCode
+                                      .data?[index].itemCode
                                       .toString()}", 14.0),
                               const SizedBox(height: 4,),
                               itemWidgetRequestWorkFlow(
                                   "Action HRCode: ${getCatalogWorkFlowList[0]
-                                      .data![index].actionByHRCode
+                                      .data?[index].actionByHRCode
                                       .toString()}", 14.0),
                               const SizedBox(height: 4,),
                               itemWidgetRequestWorkFlow(
                                   "Action by name: ${getCatalogWorkFlowList[0]
-                                      .data![index].actionByName
+                                      .data?[index].actionByName
                                       .toString()}", 14.0),
                               const SizedBox(height: 4,),
                               itemWidgetRequestWorkFlow(
                                   "Action Email: ${getCatalogWorkFlowList[0]
-                                      .data![index].actionByEmail
+                                      .data?[index].actionByEmail
                                       .toString()}", 14.0),
                               const SizedBox(height: 10),
                               Row(
@@ -265,7 +263,7 @@ class CatalogRequestWorkFlowScreenClass extends State<CatalogRequestWorkFlowScre
                               const SizedBox(height: 4,),
                               itemWidgetRequestWorkFlowActionName(
                                   getCatalogWorkFlowList[0]
-                                      .data![index].action ?? 0, 14.0),
+                                      .data?[index].action ?? 0, 14.0),
                             ],
                           ),
                         ),

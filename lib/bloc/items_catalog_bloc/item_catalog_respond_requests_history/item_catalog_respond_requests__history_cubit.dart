@@ -127,7 +127,7 @@ class CatalogRespondRequestsHistoryCubit extends Cubit<CatalogRespondRequestsHis
       if (state.getCatalogWorkFlowList[0].data != null) {
         await importDataWorkFlowCatalog(state.getCatalogWorkFlowList,
             "Request ID- ${state.getCatalogWorkFlowList[0]
-                .data![0].requestID
+                .data?[0].requestID
                 .toString()}");
       }
     }
@@ -144,7 +144,7 @@ class CatalogRespondRequestsHistoryCubit extends Cubit<CatalogRespondRequestsHis
         ));
         await requestRepository.getCatalogGetDataHr(hrCode).then((groupNoValue) async{
           List<ItemCatalogUserInfo> inFoList=groupNoValue;
-          await requestRepository.getCatalogRespondRequestsItems(inFoList[0].data![0].groupID)
+          await requestRepository.getCatalogRespondRequestsItems(inFoList[0].data?[0].groupID)
               .then((respondListValue) async {
                 if(respondListValue.isNotEmpty){
                   emit(state.copyWith(

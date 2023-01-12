@@ -52,7 +52,7 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
 
     ItemCategorygetAllData itemCategorygetAllData = currentRequestData[ItemsCatalogDetailScreen.object];
 
-    List<String> treeDirectionList = currentRequestData[ItemsCatalogDetailScreen.directionList]!=null?currentRequestData[ItemsCatalogDetailScreen.directionList]:["Search Result"];
+    List<String> treeDirectionList = currentRequestData[ItemsCatalogDetailScreen.directionList] ?? ["Search Result"];
 
     TextEditingController textController = TextEditingController();
     return BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(

@@ -61,7 +61,7 @@ class OrderHistoryCubit extends Cubit<OrderHistoryState> {
           emit(state.copyWith(
             orderHistoryEnumStates: OrderHistoryEnumStates.failed,
           ));
-          throw RequestFailureApi.fromCode(value.statusCode!);
+          throw RequestFailureApi.fromCode(value.statusCode??0);
         }
       });
     }
@@ -93,7 +93,7 @@ class OrderHistoryCubit extends Cubit<OrderHistoryState> {
             orderHistoryEnumStates: OrderHistoryEnumStates.failed,
           ));
         } else {
-          throw RequestFailureApi.fromCode(value.statusCode!);
+          throw RequestFailureApi.fromCode(value.statusCode??0);
         }
       });
     }
