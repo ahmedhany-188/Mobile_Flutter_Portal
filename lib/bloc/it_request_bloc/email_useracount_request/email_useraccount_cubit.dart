@@ -249,6 +249,7 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
 
     // final permissionTime = PermissionTime.dirty(value);
     // print(permissionTime.value);
+    value=value.trim();
     emit(
       state.copyWith(
         actionComment : value,
@@ -270,6 +271,10 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
     // EasyLoading.show(status: 'Loading...',
     //   maskType: EasyLoadingMaskType.black,
     //   dismissOnTap: false,);
+
+    if ((valueStatus == ActionValueStatus.reject &&
+        state.actionComment.isNotEmpty) ||
+        (valueStatus == ActionValueStatus.accept)) {
     emit(state.copyWith(status: FormzStatus.submissionInProgress,));
     final vacationResultResponse = await requestRepository.postTakeActionRequest(
         valueStatus: valueStatus,
@@ -297,6 +302,8 @@ class EmailUserAccountCubit extends Cubit<EmailUserAccountInitial> {
         ),
       );
       // }
+    } } else {
+      EasyLoading.showError('Add a rejection comment');
     }
 
   }

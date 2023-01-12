@@ -5,6 +5,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/data_providers/general_dio/general_dio.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
+import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_requests_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_history_respond_screen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/new_request_Screen.dart';
@@ -73,14 +74,17 @@ class ItemsCatalogGetAllScreenStateClass
               return Scaffold(
                   // resizeToAvoidBottomInset: false,
                   appBar: PreferredSize(
-                    preferredSize: const Size.fromHeight(150.0),
+                    preferredSize: const Size.fromHeight(170.0),
                     child: Hero(
                       tag: 'hero1',
                       child: AppBar(
-                        title: const Text('Catalog'),
+                        title:  Image(image:Assets.images.catlogotwo.image().image,width: 240,height: 240,),
                         elevation: 0,
                         leading: InkWell(
-                          onTap: () => Navigator.of(context).pop(),
+                          onTap: () {
+                            EasyLoading.dismiss();
+                            Navigator.of(context).pop();
+                          },
                           child: const Icon(Icons.clear),
                         ),
                         backgroundColor: ConstantsColors.bottomSheetBackgroundDark,

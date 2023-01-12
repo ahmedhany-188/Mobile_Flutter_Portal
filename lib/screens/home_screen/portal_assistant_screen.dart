@@ -4,7 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/bloc/helper_bot_screen_bloc/portal_assistant_cubit.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
+import 'package:hassanallamportalflutter/screens/employee_appraisal_screen/employee_appraisal_screen.dart';
+import 'package:hassanallamportalflutter/screens/myattendance_screen/attendance_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
+import 'package:hassanallamportalflutter/screens/projects_portfolio/projects_portfolio_screen.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import 'package:intl/intl.dart';
 
@@ -41,7 +44,7 @@ class PortalAssistantScreen extends StatelessWidget {
                 ],
               ),
               body: Container(
-                padding: const EdgeInsets.only(bottom: 0.0),
+                padding: const EdgeInsets.only(bottom: 10.0),
                 child: DashChat(
                   currentUser: PortalAssistantCubit.get(ctx).currentChatUser,
                   messages: state.listQuestions,
@@ -154,31 +157,7 @@ class PortalAssistantScreen extends StatelessWidget {
                                 createdAt: DateTime.now(),
                                 text: media.fileName)));
 
-                        if (media.fileName == 'IT FAQ') {
-                          Future.delayed(
-                            const Duration(seconds: 1),
-                            () {
-                              shouldType = false;
-                              PortalAssistantCubit.get(ctx)
-                                  .startAddingTempMessages(
-                                [...state.listQuestions]..insertAll(0, [
-                                    ChatMessage(
-                                        user: PortalAssistantCubit.get(ctx)
-                                            .allamAssistant,
-                                        createdAt: DateTime.now(),
-                                        text:
-                                            "How can i reset portal password?\ni don't know"),
-                                    ChatMessage(
-                                        user: PortalAssistantCubit.get(ctx)
-                                            .currentChatUser,
-                                        createdAt: DateTime.now(),
-                                        text: media.fileName),
-                                  ]),
-                              );
-                            },
-                          );
-                        }
-                        if (media.fileName == 'HR FAQ') {
+                        if (media.fileName == 'Payslip') {
                           Future.delayed(
                             const Duration(seconds: 1),
                             () {
@@ -191,7 +170,7 @@ class PortalAssistantScreen extends StatelessWidget {
                                           .allamAssistant,
                                       createdAt: DateTime.now(),
                                       text: "Click here to download payslip",
-                                      customProperties: {'isAnswer': true},
+                                      customProperties: {'isPayslipAnswer': true},
                                     ),
                                     ChatMessage(
                                       user: PortalAssistantCubit.get(ctx)
@@ -209,20 +188,140 @@ class PortalAssistantScreen extends StatelessWidget {
                             },
                           );
                         }
+                        if (media.fileName == 'Attendance') {
+                          Future.delayed(
+                            const Duration(seconds: 1),
+                                () {
+                              shouldType = false;
+                              PortalAssistantCubit.get(ctx)
+                                  .startAddingTempMessages(
+                                [...state.listQuestions]..insertAll(0, [
+                                  ChatMessage(
+                                    user: PortalAssistantCubit.get(ctx)
+                                        .allamAssistant,
+                                    createdAt: DateTime.now(),
+                                    text: "Click here to show attendance page",
+                                    customProperties: {'isAttendanceAnswer': true},
+                                  ),
+                                  ChatMessage(
+                                    user: PortalAssistantCubit.get(ctx)
+                                        .allamAssistant,
+                                    createdAt: DateTime.now(),
+                                    text: "Attendance page?",
+                                  ),
+                                  ChatMessage(
+                                      user: PortalAssistantCubit.get(ctx)
+                                          .currentChatUser,
+                                      createdAt: DateTime.now(),
+                                      text: media.fileName),
+                                ]),
+                              );
+                            },
+                          );
+                        }
+                        if (media.fileName == 'HAH Projects') {
+                          Future.delayed(
+                            const Duration(seconds: 1),
+                                () {
+                              shouldType = false;
+                              PortalAssistantCubit.get(ctx)
+                                  .startAddingTempMessages(
+                                [...state.listQuestions]..insertAll(0, [
+                                  ChatMessage(
+                                    user: PortalAssistantCubit.get(ctx)
+                                        .allamAssistant,
+                                    createdAt: DateTime.now(),
+                                    text: "Click here to show HAH projects page",
+                                    customProperties: {'isProjectsAnswer': true},
+                                  ),
+                                  ChatMessage(
+                                    user: PortalAssistantCubit.get(ctx)
+                                        .allamAssistant,
+                                    createdAt: DateTime.now(),
+                                    text: "HAH projects?",
+                                  ),
+                                  ChatMessage(
+                                      user: PortalAssistantCubit.get(ctx)
+                                          .currentChatUser,
+                                      createdAt: DateTime.now(),
+                                      text: media.fileName),
+                                ]),
+                              );
+                            },
+                          );
+                        }
+                        if (media.fileName == 'Appraisal') {
+                          Future.delayed(
+                            const Duration(seconds: 1),
+                                () {
+                              shouldType = false;
+                              PortalAssistantCubit.get(ctx)
+                                  .startAddingTempMessages(
+                                [...state.listQuestions]..insertAll(0, [
+                                  ChatMessage(
+                                    user: PortalAssistantCubit.get(ctx)
+                                        .allamAssistant,
+                                    createdAt: DateTime.now(),
+                                    text: "Click here to show Appraisal page",
+                                    customProperties: {'isAppraisalAnswer': true},
+                                  ),
+                                  ChatMessage(
+                                    user: PortalAssistantCubit.get(ctx)
+                                        .allamAssistant,
+                                    createdAt: DateTime.now(),
+                                    text: "Appraisal page?",
+                                  ),
+                                  ChatMessage(
+                                      user: PortalAssistantCubit.get(ctx)
+                                          .currentChatUser,
+                                      createdAt: DateTime.now(),
+                                      text: media.fileName),
+                                ]),
+                              );
+                            },
+                          );
+                        }
                       }
                     },
                     onPressMessage: (p0) {
                       if (p0.text.contains('payslip') &&
-                          p0.customProperties?['isAnswer'] == true) {
+                          p0.customProperties?['isPayslipAnswer'] == true) {
                         EasyLoading.show(
                             dismissOnTap: false, status: 'Redirecting...');
                         Future.delayed(const Duration(seconds: 1), () {
-                          Navigator.of(context)
-                              .pushReplacementNamed(PayslipScreen.routeName);
+                          Navigator.of(context).pushReplacementNamed(PayslipScreen.routeName);
+                          EasyLoading.dismiss();
+                        });
+                      }
+                      if (p0.text.contains('Appraisal') &&
+                          p0.customProperties?['isAppraisalAnswer'] == true) {
+                        EasyLoading.show(
+                            dismissOnTap: false, status: 'Redirecting...');
+                        Future.delayed(const Duration(seconds: 1), () {
+                          Navigator.of(context).pushReplacementNamed(EmployeeAppraisalScreen.routeName);
+                          EasyLoading.dismiss();
+                        });
+                      }
+                      if (p0.text.contains('HAH projects') &&
+                          p0.customProperties?['isProjectsAnswer'] == true) {
+                        EasyLoading.show(
+                            dismissOnTap: false, status: 'Redirecting...');
+                        Future.delayed(const Duration(seconds: 1), () {
+                          Navigator.of(context).pushReplacementNamed(ProjectsPortfolioScreen.routeName);
+                          EasyLoading.dismiss();
+                        });
+                      }
+                      if (p0.text.contains('attendance') &&
+                          p0.customProperties?['isAttendanceAnswer'] == true) {
+                        EasyLoading.show(
+                            dismissOnTap: false, status: 'Redirecting...');
+                        Future.delayed(const Duration(seconds: 1), () {
+                          Navigator.of(context).pushReplacementNamed(AttendanceScreen.routeName);
                           EasyLoading.dismiss();
                         });
                       }
                     },
+
                   ),
                   onSend: (m) {},
                 ),

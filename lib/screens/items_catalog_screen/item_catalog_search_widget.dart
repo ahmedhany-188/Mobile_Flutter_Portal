@@ -128,13 +128,15 @@ Widget itemCatalogSearchWidget(hrCode) {
 
   // this function for going to the last children then go to the detail screen
   Widget checkItemsList(List<ItemCategorygetAllData> itemCategoryGetAllData, ItemCatalogSearchState state) {
-    if(state.itemCatalogSearchEnumStates==ItemCatalogSearchEnumStates.noDataFound){
+
+    if(state.itemCatalogSearchEnumStates==ItemCatalogSearchEnumStates.success && itemCategoryGetAllData.isEmpty){
       return Center(
         child: Container(
           child:noDataFoundContainerCatalog("Category is empty"),
         ),
       );
-    }else if(state.itemCatalogSearchEnumStates==ItemCatalogSearchEnumStates.noConnection){
+    }
+    else if(state.itemCatalogSearchEnumStates==ItemCatalogSearchEnumStates.noConnection){
       return Center(
         child: Container(
           child:noDataFoundContainerCatalog("No internet connection"),
@@ -153,9 +155,9 @@ Widget itemCatalogSearchWidget(hrCode) {
                 Navigator.of(context).pushNamed(
                     ItemsCatalogDetailScreen.routeName,
                     arguments: {
-                      ItemsCatalogDetailScreen
-                          .object: itemCategoryGetAllData[index],
-                      ItemsCatalogDetailScreen.userHrCode: hrCode
+                      ItemsCatalogDetailScreen.object : itemCategoryGetAllData[index],
+                      ItemsCatalogDetailScreen.userHrCode : hrCode,
+                      ItemsCatalogDetailScreen.directionList : state.treeDirectionList,
                     });
               },
               borderRadius: BorderRadius.circular(20),
@@ -188,6 +190,7 @@ Widget itemCatalogSearchWidget(hrCode) {
         },
       );
     } else {
+      // print("the shimmer is here");
       return getShimmer();
     }
   }
@@ -275,10 +278,10 @@ Widget itemCatalogSearchWidget(hrCode) {
                             state.searchResult[index].itemName,
                             itemDesc:
                             state.searchResult[index].itemDesc,
+                            arabicDesc: state.searchResult[index].arabicDesc,
                             itemID: state.searchResult[index].itemID,
-                            itemQty: int.parse(
-                                state.searchResult[index].itemQty ??
-                                    '0'),
+                            tags: state.searchResult[index].tags,
+                            itemQty: int.parse(state.searchResult[index].itemQty ?? '0'),
                             itemPhoto:
                             state.searchResult[index].itemPhoto,
                             itemCode:
@@ -395,7 +398,7 @@ Widget itemCatalogSearchWidget(hrCode) {
                 Expanded(
                     child: checkList(state
                         .itemsGetAllTree) && !state
-                        .itemCategoryShow //(state.getAllItemsCatalogList.data.isNotEmpty)
+                        .itemCategoryShow
                         ? ListView.builder(
                       shrinkWrap: true,
                       physics: const BouncingScrollPhysics(),
@@ -447,15 +450,12 @@ Widget itemCatalogSearchWidget(hrCode) {
                         );
                       },
                     )
-                        : checkItemsList(
-                        state.itemsGetItemsCategory, state))
+                        : checkItemsList(state.itemsGetItemsCategory, state))
               ],
             )
         );
       }
     },
   );
-
-
 
 }

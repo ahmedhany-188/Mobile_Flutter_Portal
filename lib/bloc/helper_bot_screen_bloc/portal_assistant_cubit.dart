@@ -101,16 +101,17 @@ class PortalAssistantCubit extends Cubit<PortalAssistantInitial> with HydratedMi
         user: allamAssistant,
         createdAt: DateTime.now(),
         medias: [
-          ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3340.jpg', fileName: 'IT FAQ', type: MediaType.image),
-          ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3340.jpg', fileName: 'HR FAQ', type: MediaType.image),
-          ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3340.jpg', fileName: 'HR FAQ', type: MediaType.image),
-          ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3340.jpg', fileName: 'HR FAQ', type: MediaType.image),
+          ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3341.jpg', fileName: 'Attendance', type: MediaType.image),
+          ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3342.jpg', fileName: 'HAH Projects', type: MediaType.image),
+          ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3343.jpg', fileName: 'Appraisal', type: MediaType.image),
+          ChatMedia(url: 'https://portal.hassanallam.com/images/imgs/3344.jpg', fileName: 'Payslip', type: MediaType.image),
         ],
       ),
       ChatMessage(
-        text: 'Hello!\nHere is a scoop to choose from..',
+        text: 'Hello, I am HAH Bot!\nHere is a scoop to choose from..',
         user: allamAssistant,
         createdAt: DateTime.now(),
+
       ),
     ]));
   }

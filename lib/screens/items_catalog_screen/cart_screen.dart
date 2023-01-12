@@ -238,7 +238,10 @@ Center getCartResult(ItemCatalogSearchState state) {
   } else if (state.itemCatalogSearchEnumStates ==
       ItemCatalogSearchEnumStates.noConnection) {
     return Center(child: noDataFoundContainerCatalog("No internet connection"));
-  } else {
+  }  else if(state.itemCatalogSearchEnumStates ==
+      ItemCatalogSearchEnumStates.failed) {
     return Center(child: noDataFoundContainerCatalog("Something went wrong"));
+  }else{
+    return Center(child: noDataFoundContainerCatalog(""));
   }
 }

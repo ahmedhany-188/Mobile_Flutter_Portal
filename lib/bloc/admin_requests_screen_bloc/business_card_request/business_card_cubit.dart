@@ -90,6 +90,7 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
 
     // final permissionTime = PermissionTime.dirty(value);
     // print(permissionTime.value);
+    value=value.trim();
     emit(
       state.copyWith(
         actionComment : value,
@@ -214,37 +215,45 @@ class BusinessCardCubit extends Cubit<BusinessCardInitial> {
     // EasyLoading.show(status: 'Loading...',
     //   maskType: EasyLoadingMaskType.black,
     //   dismissOnTap: false,);
+    if ((valueStatus == ActionValueStatus.reject &&
+        state.actionComment.isNotEmpty) ||
+        (valueStatus == ActionValueStatus.accept)) {
+      emit(state.copyWith(status: FormzStatus.submissionInProgress,));
 
-    emit(state.copyWith(status: FormzStatus.submissionInProgress,));
+      final businessCardResultResponse = await requestRepository
+          .postTakeActionRequest(
+          valueStatus: valueStatus,
+          requestNo: requestNo,
+          actionComment: state.actionComment,
+          serviceID: RequestServiceID.businessCardServiceID,
+          serviceName: GlobalConstants.requestCategoryBusniessCardActivity,
+          requesterHRCode: state.requesterData.userHrCode ?? "",
+          requesterEmail: state.requesterData.email ?? "");
 
-    final businessCardResultResponse = await requestRepository.postTakeActionRequest(
-        valueStatus: valueStatus,
-        requestNo: requestNo,
-        actionComment: state.actionComment,
-        serviceID: RequestServiceID.businessCardServiceID,
-        serviceName: GlobalConstants.requestCategoryBusniessCardActivity,
-        requesterHRCode: state.requesterData.userHrCode ?? "",
-    requesterEmail: state.requesterData.email ?? "");
-
-    final result = businessCardResultResponse.result ?? "false";
-    if (result.toLowerCase().contains("true")) {
-      emit(
-        state.copyWith(
-          successMessage: "#$requestNo \n ${valueStatus == ActionValueStatus.accept ? "Request has been Accepted":"Request has been Rejected"}",
-          status: FormzStatus.submissionSuccess,
-        ),
-      );
+      final result = businessCardResultResponse.result ?? "false";
+      if (result.toLowerCase().contains("true")) {
+        emit(
+          state.copyWith(
+            successMessage: "#$requestNo \n ${valueStatus ==
+                ActionValueStatus.accept
+                ? "Request has been Accepted"
+                : "Request has been Rejected"}",
+            status: FormzStatus.submissionSuccess,
+          ),
+        );
+      }
+      else {
+        emit(
+          state.copyWith(
+            errorMessage: "An error occurred",
+            status: FormzStatus.submissionFailure,
+          ),
+        );
+        // }
+      }
+    } else {
+      EasyLoading.showError('Add a rejection comment');
     }
-    else {
-      emit(
-        state.copyWith(
-          errorMessage:"An error occurred",
-          status: FormzStatus.submissionFailure,
-        ),
-      );
-      // }
-    }
-
   }
 
   @override

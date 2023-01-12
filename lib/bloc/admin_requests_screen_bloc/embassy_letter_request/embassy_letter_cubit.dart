@@ -284,6 +284,7 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
 
     // final permissionTime = PermissionTime.dirty(value);
     // print(permissionTime.value);
+    value=value.trim();
     emit(
       state.copyWith(
         actionComment : value,
@@ -296,35 +297,44 @@ class EmbassyLetterCubit extends Cubit<EmbassyLetterInitial> {
     // EasyLoading.show(status: 'Loading...',
     //   maskType: EasyLoadingMaskType.black,
     //   dismissOnTap: false,);
-    emit(state.copyWith(status: FormzStatus.submissionInProgress,));
-    final embassyResultResponse = await _requestRepository.postTakeActionRequest(
-        valueStatus: valueStatus,
-        requestNo: requestNo,
-        actionComment: state.actionComment,
-        serviceID: RequestServiceID.embassyServiceID,
-        serviceName: GlobalConstants.requestCategoryEmbassyActivity,
-        requesterHRCode: state.requesterData.userHrCode ?? "",
-    requesterEmail: state.requesterData.email ?? "");
+    if ((valueStatus == ActionValueStatus.reject &&
+        state.actionComment.isNotEmpty) ||
+        (valueStatus == ActionValueStatus.accept)) {
+      emit(state.copyWith(status: FormzStatus.submissionInProgress,));
+      final embassyResultResponse = await _requestRepository
+          .postTakeActionRequest(
+          valueStatus: valueStatus,
+          requestNo: requestNo,
+          actionComment: state.actionComment,
+          serviceID: RequestServiceID.embassyServiceID,
+          serviceName: GlobalConstants.requestCategoryEmbassyActivity,
+          requesterHRCode: state.requesterData.userHrCode ?? "",
+          requesterEmail: state.requesterData.email ?? "");
 
-    final result = embassyResultResponse.result ?? "false";
-    if (result.toLowerCase().contains("true")) {
-      emit(
-        state.copyWith(
-          successMessage: "#$requestNo \n ${valueStatus == ActionValueStatus.accept ? "Request has been Accepted":"Request has been Rejected"}",
-          status: FormzStatus.submissionSuccess,
-        ),
-      );
+      final result = embassyResultResponse.result ?? "false";
+      if (result.toLowerCase().contains("true")) {
+        emit(
+          state.copyWith(
+            successMessage: "#$requestNo \n ${valueStatus ==
+                ActionValueStatus.accept
+                ? "Request has been Accepted"
+                : "Request has been Rejected"}",
+            status: FormzStatus.submissionSuccess,
+          ),
+        );
+      }
+      else {
+        emit(
+          state.copyWith(
+            errorMessage: "An error occurred",
+            status: FormzStatus.submissionFailure,
+          ),
+        );
+        // }
+      }
+    } else {
+      EasyLoading.showError('Add a rejection comment');
     }
-    else {
-      emit(
-        state.copyWith(
-          errorMessage:"An error occurred",
-          status: FormzStatus.submissionFailure,
-        ),
-      );
-      // }
-    }
-
   }
 
   @override

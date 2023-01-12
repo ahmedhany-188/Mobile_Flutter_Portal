@@ -321,8 +321,11 @@ class ItemCatalogOrderHistory extends StatelessWidget {
     } else if (state.orderHistoryEnumStates ==
         OrderHistoryEnumStates.noConnection) {
       return Center(child: noDataFoundContainerCatalog("No internet connection"));
-    } else {
+    } else if(state.orderHistoryEnumStates ==
+        OrderHistoryEnumStates.failed) {
       return Center(child: noDataFoundContainerCatalog("Something went wrong"));
+    }else{
+      return Center(child: noDataFoundContainerCatalog(""));
     }
   }
 

@@ -421,8 +421,11 @@ class CatalogRequestWorkFlowScreenClass extends State<CatalogRequestWorkFlowScre
     } else if (state.catalogRespondRequestsHistoryEnumStates ==
         CatalogRespondRequestsHistoryEnumStates.noConnection) {
       return Center(child: noDataFoundContainerCatalog("No internet connection"));
-    } else {
+    }  else if(state.catalogRespondRequestsHistoryEnumStates ==
+        CatalogRespondRequestsHistoryEnumStates.failed) {
       return Center(child: noDataFoundContainerCatalog("Something went wrong"));
+    }else{
+      return Center(child: noDataFoundContainerCatalog(""));
     }
   }
 

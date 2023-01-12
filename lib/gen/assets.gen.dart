@@ -44,12 +44,31 @@ class $AssetsImagesGen {
   AssetGenImage get backgroundattendance =>
       const AssetGenImage('assets/images/backgroundattendance.jpg');
 
+  /// File path: assets/images/backgroundcatalogpattern.png
+  AssetGenImage get backgroundcatalogpattern =>
+      const AssetGenImage('assets/images/backgroundcatalogpattern.png');
+
   /// File path: assets/images/bot6.jpg
   AssetGenImage get bot6 => const AssetGenImage('assets/images/bot6.jpg');
 
   /// File path: assets/images/buildings.png
   AssetGenImage get buildings =>
       const AssetGenImage('assets/images/buildings.png');
+
+  /// File path: assets/images/catlogo.png
+  AssetGenImage get catlogo => const AssetGenImage('assets/images/catlogo.png');
+
+  /// File path: assets/images/catlogoone.png
+  AssetGenImage get catlogoone =>
+      const AssetGenImage('assets/images/catlogoone.png');
+
+  /// File path: assets/images/catlogothree.png
+  AssetGenImage get catlogothree =>
+      const AssetGenImage('assets/images/catlogothree.png');
+
+  /// File path: assets/images/catlogotwo.png
+  AssetGenImage get catlogotwo =>
+      const AssetGenImage('assets/images/catlogotwo.png');
 
   /// File path: assets/images/defaultBg.jpg
   AssetGenImage get defaultBg =>

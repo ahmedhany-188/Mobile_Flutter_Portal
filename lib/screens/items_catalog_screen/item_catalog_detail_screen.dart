@@ -12,12 +12,15 @@ import 'package:flutter/services.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 import '../../widgets/dialogpopoup/dialog_popup_catalog_item_share.dart';
 import 'cart_screen.dart';
+import 'package:flutter/gestures.dart';
 
 class ItemsCatalogDetailScreen extends StatefulWidget {
   static const routeName = '/itemscatalog-detail-screen';
   static const object = "object";
 
   static const userHrCode = "userHrCode";
+
+  static const directionList = "directionList";
 
   static const objectID = 0;
   const ItemsCatalogDetailScreen({Key? key, this.requestData})
@@ -47,8 +50,9 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
   Widget build(BuildContext context) {
     final currentRequestData = widget.requestData;
 
-    ItemCategorygetAllData itemCategorygetAllData =
-    currentRequestData[ItemsCatalogDetailScreen.object];
+    ItemCategorygetAllData itemCategorygetAllData = currentRequestData[ItemsCatalogDetailScreen.object];
+
+    List<String> treeDirectionList = currentRequestData[ItemsCatalogDetailScreen.directionList]!=null?currentRequestData[ItemsCatalogDetailScreen.directionList]:["Search Result"];
 
     TextEditingController textController = TextEditingController();
     return BlocBuilder<ItemCatalogSearchCubit, ItemCatalogSearchState>(
@@ -104,6 +108,8 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
 
+
+
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -142,6 +148,38 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
                         ),
                       ),
                     ],
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: RichText(
+                      text: TextSpan(
+                        style: const TextStyle(color: Colors.black),
+                        children: [
+                          for (int i = 0; i < treeDirectionList.length; i++)
+                            TextSpan(
+                              text: '${treeDirectionList[i]} >  ',
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  color: ConstantsColors.bottomSheetBackground,
+                                  fontStyle: FontStyle
+                                  .italic
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  // if (state.treeDirectionList[i] == "Home" &&
+                                  //     i == 0) {
+                                  //   ItemCatalogSearchCubit.get(context)
+                                  //       .setInitialization();
+                                  // } else {
+                                  //   ItemCatalogSearchCubit.get(context)
+                                  //       .getNewSubTree(i);
+                                  // }
+                                },
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
 
                   ClipRRect(
@@ -183,7 +221,7 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
                             left: 10.0, right: 10, top: 5, bottom: 50),
                         child: CachedNetworkImage(
                             imageUrl: getCatalogPhotos(
-                                itemCategorygetAllData.itemPhoto ?? ""),
+                                itemCategorygetAllData.itemPhoto ?? "..."),
                             width: double.infinity,
                             placeholder: (context, url) =>
                                 Assets.images.loginImageLogo.image(),
@@ -199,7 +237,7 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
                         left: 10, top: 10, bottom: 1),
                     child: Center(
                       child: Text(
-                        itemCategorygetAllData.itemName ?? "",
+                        itemCategorygetAllData.itemName ?? "...",
                         style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -223,13 +261,27 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
                                 color: ConstantsColors.bottomSheetBackground),
                           ),
                           Text(
-                            itemCategorygetAllData.itemDesc ?? "",
+                            itemCategorygetAllData.itemDesc ?? "...",
                             style: const TextStyle(
                                 fontSize: 15,
                                 color: ConstantsColors.bottomSheetBackground),
                           ),
                           Text(
-                            itemCategorygetAllData.arabicDesc ?? "",
+                            itemCategorygetAllData.arabicDesc ?? "...",
+                            style: const TextStyle(
+                                fontSize: 15,
+                                color: ConstantsColors.bottomSheetBackground),
+                          ),
+
+                          const Text(
+                            "Tags",
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: ConstantsColors.bottomSheetBackground),
+                          ),
+                          Text(
+                            itemCategorygetAllData.tags ?? "no tags found.",
                             style: const TextStyle(
                                 fontSize: 15,
                                 color: ConstantsColors.bottomSheetBackground),
@@ -247,7 +299,7 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
                       child: InkWell(
                         onTap: () async {
                           await Clipboard.setData(ClipboardData(
-                              text: itemCategorygetAllData.itemCode ?? ""));
+                              text: itemCategorygetAllData.itemCode ?? "..."));
                           EasyLoading.showInfo('Code Copied');
                         },
                         child: Column(
@@ -264,7 +316,7 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                  itemCategorygetAllData.itemCode ?? "",
+                                  itemCategorygetAllData.itemCode ?? "...",
                                   style: const TextStyle(
                                       fontSize: 15,
                                       color:

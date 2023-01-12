@@ -617,7 +617,7 @@ class MainDrawer extends StatelessWidget {
                             context, EmployeeAppraisalScreen.routeName);
                       },
                     ),
-                    buildListTile("Catalogue", Icons.image_aspect_ratio,  () {
+                    buildListTile("The Catalogue", Icons.category,  () {
                       Navigator.popAndPushNamed(
                           context, ItemsCatalogGetAllScreen.routeName);
                     },),

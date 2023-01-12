@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_all_data.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_request_work_flow.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Row,Column;
-import '../../data/models/items_catalog_models/item_catalog_cart_model.dart';
 
-Future<void> importDataCart(List<CartModelData> reports,int orderID) async {
+Future<void> importDataCart(List<ItemCategorygetAllData> reports,int orderID) async {
   //Create a Excel document.
   //Creating a workbook.
   if(reports.isNotEmpty){
@@ -49,27 +49,27 @@ Future<void> importDataCart(List<CartModelData> reports,int orderID) async {
   }
 }
 
-Future<List<ExcelDataRow>> _buildCustomersDataRowsIHCart(List<CartModelData> list) async {
+Future<List<ExcelDataRow>> _buildCustomersDataRowsIHCart(List<ItemCategorygetAllData> list) async {
   List<ExcelDataRow> excelDataRows = <ExcelDataRow>[];
   // final Future<List<CartModelData>> reports = _getCustomersImageHyperlink();
-  final List<CartModelData> reports = list;
+  final List<ItemCategorygetAllData> reports = list;
 
-  List<CartModelData> reports_1 = await Future.value(reports);
+  List<ItemCategorygetAllData> reports_1 = await Future.value(reports);
 
-  excelDataRows = reports_1.map<ExcelDataRow>((CartModelData dataRow) {
+  excelDataRows = reports_1.map<ExcelDataRow>((ItemCategorygetAllData dataRow) {
     // TODO: call API to get item details :)
     return ExcelDataRow(cells: <ExcelDataCell>[
-      ExcelDataCell(columnHeader: 'Item of Requisition', value: dataRow.itmCatItems?.itemCode??""),
+      ExcelDataCell(columnHeader: 'Item of Requisition', value: dataRow.itemCode??""),
       const ExcelDataCell(columnHeader: 'Acct Assignment Cat.', value: ""),
-      ExcelDataCell(columnHeader: 'Item Category', value: dataRow.itmCatItems?.category??""),
-      ExcelDataCell(columnHeader: 'Short Text', value: dataRow.itmCatItems?.itemName),
-      ExcelDataCell(columnHeader: 'Quantity', value: dataRow.itemQty),
-      ExcelDataCell(columnHeader: 'Base Unit of Measure', value: dataRow.itmCatItems?.itmCatUOM??""),
+      ExcelDataCell(columnHeader: 'Item Category', value: dataRow.category?.catName??""),
+      ExcelDataCell(columnHeader: 'Short Text', value: dataRow.itemName??""),
+      ExcelDataCell(columnHeader: 'Quantity', value: dataRow.itemQty??0),
+      ExcelDataCell(columnHeader: 'Base Unit of Measure', value: dataRow.itmCatUOM?.unitName??""),
       const ExcelDataCell(columnHeader: 'Deliv. date category', value: ""),
       const ExcelDataCell(columnHeader: 'Deliv. date(From/to)', value: ""),
-      ExcelDataCell(columnHeader: 'Material Group', value: dataRow.itmCatItems?.matrialGroup??""),
-      ExcelDataCell(columnHeader: 'Material Type', value: dataRow.itmCatItems?.materialType??""),
-      ExcelDataCell(columnHeader: 'Description', value: dataRow.itmCatItems?.itemDesc),
+      ExcelDataCell(columnHeader: 'Material Group', value: dataRow.matrialGroup?.materialName??""),
+      ExcelDataCell(columnHeader: 'Material Type', value: dataRow.materialType?.materialTypName??""),
+      ExcelDataCell(columnHeader: 'Description', value: dataRow.itemDesc??""),
       const ExcelDataCell(columnHeader: 'Plant', value: ""),
       const ExcelDataCell(columnHeader: 'Storage location', value: ""),
       const ExcelDataCell(columnHeader: 'Purchasing Group', value: ""),

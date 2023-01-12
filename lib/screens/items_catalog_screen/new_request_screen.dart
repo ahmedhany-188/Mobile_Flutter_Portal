@@ -80,6 +80,9 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                     NewRequestCatalogEnumState.valid) {
                   addListOfImages(state.itemAttach);
                   EasyLoading.dismiss(animation: true);
+                } else if (state.newRequestCatalogEnumState ==
+                    NewRequestCatalogEnumState.noConnection) {
+                  EasyLoading.showError("No Internet Connection");
                 }
               },
               builder: (context, state) {
@@ -312,23 +315,55 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                                       ),
                                     ),
 
-                                    ElevatedButton.icon(
-                                      onPressed: () {
-                                        NewRequestCatalogCubit
-                                            .get(
-                                            context)
-                                            .addChosenImageName();
-                                      },
-                                      label: const Text(
-                                          'Upload image',
-                                          style: TextStyle(
-                                              color: Colors
-                                                  .white)),
-                                      icon: const Icon(
-                                          Icons
-                                              .cloud_upload_sharp,
-                                          color: Colors.white),
-                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: ElevatedButton.icon(
+                                            onPressed: () {
+                                              NewRequestCatalogCubit
+                                                  .get(
+                                                  context)
+                                                  .addChosenImageName(true);
+                                            },
+                                            label: const Text(
+                                                'Main image',
+                                                style: TextStyle(
+                                                    color: Colors
+                                                        .white)),
+                                            icon: const Icon(
+                                                Icons
+                                                    .cloud_upload_sharp,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(5.0),
+                                          child: ElevatedButton.icon(
+                                            onPressed: () {
+                                              NewRequestCatalogCubit
+                                                  .get(
+                                                  context)
+                                                  .addChosenImageName(false);
+                                            },
+                                            label: const Text(
+                                                'Sub image',
+                                                style: TextStyle(
+                                                    color: Colors
+                                                        .white)),
+                                            icon: const Icon(
+                                                Icons
+                                                    .cloud_upload_sharp,
+                                                color: Colors.white),
+                                          ),
+                                        ),
+                                      ),
+                                    ],),
 
                                   ]
                               )
@@ -367,9 +402,9 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                 itemBuilder: (BuildContext context, int index) {
                   return InkWell(
                     onTap: () {
-                      context.read<
-                          NewRequestCatalogCubit>()
-                          .changeMainImage(index);
+                      // context.read<
+                      //     NewRequestCatalogCubit>()
+                      //     .changeMainImage(index);
                     },
                     child: SizedBox(
                         width: double

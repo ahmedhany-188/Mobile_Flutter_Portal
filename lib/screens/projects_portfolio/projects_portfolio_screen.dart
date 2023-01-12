@@ -99,20 +99,20 @@ Widget buildList(List<LocationData> projectsDirectionData) {
               borderRadius: BorderRadius.circular(10),
               child: Container(
                 padding: const EdgeInsets.all(10),
-                color: Colors.white60,
+                color: Colors.white38,
                 child: Column(children: [
                   Text(
                       projectsDirectionData[index].projectName ?? "Not Defined",
                       style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
+                          // fontWeight: FontWeight.bold,
+                          fontSize: 18,
                           color: Colors.white),
                       textAlign: TextAlign.center),
                   const Divider(color: Colors.white, thickness: 2),
                   Text(
                     projectsDirectionData[index].departmentName ?? "",
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 13,
                       color: ConstantsColors.bottomSheetBackgroundDark,
                     ),
                   ),

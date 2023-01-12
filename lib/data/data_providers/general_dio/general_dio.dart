@@ -95,8 +95,12 @@ class GeneralDio {
   }
 
   Future<Response> getItemCatalogSearch(String searchText) async {
-    String url =
-        'InformationTechnology-ItemCatalog/ItmCat_Items/Search?text=$searchText';
+    // String url =
+    //     'InformationTechnology-ItemCatalog/ItmCat_Items/Search?text=$searchText';
+
+    String url = 'InformationTechnology-ItemCatalog/ItmCat_Items/GetItemsSearch?searchValue=$searchText';
+
+    print("the url is "+url);
     // if (categoryId == null) {
     //   url =
     //       'InformationTechnology-ItemCatalog/ItmCat_Items/Search?text=$searchText';
@@ -364,6 +368,22 @@ class GeneralDio {
       throw err;
     });
   }
+
+  Future<Response> getItemCatalogById(int id) async {
+    String url =
+        'InformationTechnology-ItemCatalog/ItmCat_Items/GetByID?ID=$id';
+    return await dio!
+        .get(url,
+        options: Options(headers: {
+          HttpHeaders.contentTypeHeader: "application/json-patch+json",
+          'Authorization': 'Bearer ${userData?.user?.token}',
+        }),
+        )
+        .catchError((err) {
+      throw err;
+    });
+  }
+
 
   Future<Response> getOrderHistory(String hrCode) async {
     String url =

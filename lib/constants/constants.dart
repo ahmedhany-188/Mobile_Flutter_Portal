@@ -61,14 +61,19 @@ class GlobalConstants {
   static final List<String> labsType = [
     "ELmokhtaber",
     "ELBORG",
+    "ALFA",
   ];
   static final List<String> serviceTypeElBorg = [
-    "Lab",
+    "Analysis",
     "Scan",
   ];
   static final List<String> serviceTypeElMokhtabr = [
-    "Lab",
+    "Analysis",
   ];
+  static final List<String> serviceTypeALFA= [
+    "Analysis",
+  ];
+
   static final List<String> embassyLetterPurposeList = [
     "Tourism",
     "Business",

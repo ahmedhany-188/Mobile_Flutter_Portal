@@ -224,10 +224,15 @@ class MedicalRequestState extends State<MedicalRequestScreen> {
                                           if (selectedValueLab == "ELmokhtaber") {
                                             servicesListState = GlobalConstants
                                                 .serviceTypeElMokhtabr;
-                                            selectedValueService="Lab";
+                                            selectedValueService="Analysis";
                                             context.read<MedicalRequestCubit>()
-                                                .addSelectedService("Lab");
-
+                                                .addSelectedService("Analysis");
+                                          }else if (selectedValueLab == "ALFA") {
+                                            servicesListState = GlobalConstants
+                                                .serviceTypeALFA;
+                                            selectedValueService="Analysis";
+                                            context.read<MedicalRequestCubit>()
+                                                .addSelectedService("Analysis");
                                           } else {
                                             servicesListState =
                                                 GlobalConstants.serviceTypeElBorg;

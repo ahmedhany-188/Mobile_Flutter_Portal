@@ -313,8 +313,11 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
     } else if (state.catalogRequestsHistoryEnumStates ==
         CatalogRequestsHistoryEnumStates.noConnection) {
       return Center(child: noDataFoundContainerCatalog("No internet connection"));
-    } else {
+    }  else if(state.catalogRequestsHistoryEnumStates ==
+        CatalogRequestsHistoryEnumStates.failed) {
       return Center(child: noDataFoundContainerCatalog("Something went wrong"));
+    }else{
+      return Center(child: noDataFoundContainerCatalog(""));
     }
   }
 }

@@ -34,79 +34,66 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
 
   static NewRequestCatalogCubit get(context) => BlocProvider.of(context);
   final Connectivity connectivity = Connectivity();
+
   final ItemsCatalogGetAllRepository requestRepository;
 
   void submitCatalogNewRequest(hrcode) async {
-    final itemName = RequestDate.dirty(state.itemName.value);
-    final itemDescription = RequestDate.dirty(state.itemDescription.value);
-    final itemAttach = state.itemAttach;
-    final selectedCategory = RequestDate.dirty(state.selectedCategory.value);
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+      final itemName = RequestDate.dirty(state.itemName.value);
+      final itemDescription = RequestDate.dirty(state.itemDescription.value);
+      final itemAttach = state.itemAttach;
+      final selectedCategory = RequestDate.dirty(state.selectedCategory.value);
 
-    emit(state.copyWith(
-      itemName: itemName,
-      itemDescription: itemDescription,
-      itemAttach: itemAttach,
-      selectedCategory: selectedCategory,
-      status: Formz.validate([itemName, itemDescription, selectedCategory]),
-    ));
-
-    if (state.status.isValidated) {
-      NewRequestCatalogModel newRequestCatalogModel = NewRequestCatalogModel(
-          itemName: itemName.value,
-          itemDesc: itemDescription.value,
-          catID: int.parse(selectedCategory.value),
-          inUser: hrcode);
-      try {
-        var connectivityResult = await connectivity.checkConnectivity();
-        if (connectivityResult == ConnectivityResult.wifi ||
-            connectivityResult == ConnectivityResult.mobile) {
-          emit(state.copyWith(
-              status: FormzStatus.submissionInProgress,
-              newRequestCatalogEnumState: NewRequestCatalogEnumState.loading
-          ));
-          final newRequestCatalog = await requestRepository
-              .postNewRequestCatalog(newRequestCatalogModel);
-          if (newRequestCatalog.error == false) {
-            int? reqID = newRequestCatalog.data?[0].requestID;
-            if (reqID != null) {
-              if (itemAttach.isNotEmpty) {
-                for (int i = 0; i < state.itemAttach.length; i++) {
-                  //final newRequestImageCatalog =
-                  await requestRepository.postNewRequestImageCatalog
-                    (state.itemAttach[i], hrcode, reqID);
-                }
+      emit(state.copyWith(
+        itemName: itemName,
+        itemDescription: itemDescription,
+        itemAttach: itemAttach,
+        selectedCategory: selectedCategory,
+        status: Formz.validate([itemName, itemDescription, selectedCategory]),
+      ));
+      if (state.status.isValidated) {
+        NewRequestCatalogModel newRequestCatalogModel = NewRequestCatalogModel(
+            itemName: itemName.value,
+            itemDesc: itemDescription.value,
+            catID: int.parse(selectedCategory.value),
+            inUser: hrcode);
+        emit(state.copyWith(
+            status: FormzStatus.submissionInProgress,
+            newRequestCatalogEnumState: NewRequestCatalogEnumState.loading
+        ));
+        final newRequestCatalog = await requestRepository
+            .postNewRequestCatalog(newRequestCatalogModel);
+        if (newRequestCatalog.error == false) {
+          int? reqID = newRequestCatalog.data?[0].requestID;
+          if (reqID != null) {
+            if (itemAttach.isNotEmpty) {
+              for (int i = 0; i < state.itemAttach.length; i++) {
+                //final newRequestImageCatalog =
+                await requestRepository.postNewRequestImageCatalog
+                  (state.itemAttach[i], hrcode, reqID);
               }
             }
-            emit(state.copyWith(
-              newRequestCatalogEnumState: NewRequestCatalogEnumState.success,
-              errorMessage: reqID.toString(),
-              status: FormzStatus.submissionSuccess,
-            ),);
-          } else {
-            emit(state.copyWith(
-                status: FormzStatus.submissionFailure,
-                errorMessage: newRequestCatalog.message,
-                newRequestCatalogEnumState: NewRequestCatalogEnumState.failed),
-            );
           }
+          emit(state.copyWith(
+            newRequestCatalogEnumState: NewRequestCatalogEnumState.success,
+            errorMessage: reqID.toString(),
+            status: FormzStatus.submissionSuccess,
+          ),);
         } else {
-          emit(
-            state.copyWith(
-                status: FormzStatus.submissionFailure,
-                newRequestCatalogEnumState: NewRequestCatalogEnumState
-                    .noConnection
-            ),
+          emit(state.copyWith(
+              status: FormzStatus.submissionFailure,
+              errorMessage: newRequestCatalog.message,
+              newRequestCatalogEnumState: NewRequestCatalogEnumState.failed),
           );
         }
-      } catch (e) {
-        emit(
-          state.copyWith(
-              errorMessage: e.toString(),
-              status: FormzStatus.submissionFailure,
-              newRequestCatalogEnumState: NewRequestCatalogEnumState.failed
-          ),
-        );
       }
+    } else {
+      emit(
+        state.copyWith(
+            newRequestCatalogEnumState: NewRequestCatalogEnumState
+                .noConnection
+        ),
+      );
     }
   }
 
@@ -144,12 +131,18 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
     );
   }
 
-  void addChosenImageName() async {
+  void addChosenImageName(bool main) async {
     await FilePicker.platform.pickFiles(type: FileType.image,)
         .then((value) async {
       if (value != null) {
+        if (main) {
+          // List<ItemImageCatalogModel> itemAttach = state.itemAttach;
+          for (int i = 0; i < state.itemAttach.length; i++) {
+            state.itemAttach[i].isMain = false;
+          }
+        }
         ItemImageCatalogModel imageCatalogModel = ItemImageCatalogModel(
-            false, value);
+            main, value);
         List<ItemImageCatalogModel> photos = [imageCatalogModel];
         photos += state.itemAttach;
         emit(
@@ -162,7 +155,7 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
     }).catchError((err) {
       emit(
         state.copyWith(
-            errorMessage:'Something went wrong',
+            errorMessage: 'Something went wrong',
             status: FormzStatus.submissionFailure,
             newRequestCatalogEnumState: NewRequestCatalogEnumState.failed
         ),
@@ -171,19 +164,7 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
     });
   }
 
-    void changeMainImage(index){
-      List<ItemImageCatalogModel> itemAttach=state.itemAttach;
-      for(int i=0; i<itemAttach.length; i++){
-        itemAttach[i].isMain=false;
-      }
-      itemAttach[index].isMain=true;
-      emit(
-          state.copyWith(
-            itemAttach: itemAttach,
-            newRequestCatalogEnumState: NewRequestCatalogEnumState.valid,
-          ));
-    }
-  }
+}
 
 
 

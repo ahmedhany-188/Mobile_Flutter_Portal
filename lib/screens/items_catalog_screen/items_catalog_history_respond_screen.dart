@@ -273,20 +273,24 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
                                   getCatalogRespondRequestsHistoryList[0]
                                       .data![index].action ?? -1, 14.0),
                               const SizedBox(height: 10),
-
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: <Widget>[
                                   Flexible(
                                     child: cardText(
+                                  //       "Action date:"+getCatalogRespondRequestsHistoryList[0]
+                                  //           .data![index].submittedDate
+                                  // .toString(),
                                         "Action date: ${GlobalConstants
                                             .dateFormatViewedWithTime.format(
                                             GlobalConstants.dateFormatServer
                                                 .parse(
                                                 getCatalogRespondRequestsHistoryList[0]
-                                                    .data![index].submittedDate
+                                                    .data![index].inDate
                                                     .toString()
-                                            ))}", 12.0),
+                                            ))}",
+                                        12.0
+                                    ),
                                   ),
                                 ],
                               ),
@@ -381,8 +385,11 @@ class CatalogHistoryRespondScreenClass extends State<CatalogHistoryRespondScreen
         CatalogRespondRequestsHistoryEnumStates.noConnection) {
       return Center(
           child: noDataFoundContainerCatalog("No internet connection"));
-    } else {
+    } else if(state.catalogRespondRequestsHistoryEnumStates ==
+        CatalogRespondRequestsHistoryEnumStates.failed) {
       return Center(child: noDataFoundContainerCatalog("Something went wrong"));
+    }else{
+      return Center(child: noDataFoundContainerCatalog(""));
     }
   }
 

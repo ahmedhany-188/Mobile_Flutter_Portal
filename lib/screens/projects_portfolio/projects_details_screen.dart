@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/models/get_location_model/location_data.dart';
 import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 
@@ -9,6 +10,7 @@ import '../../widgets/map/open_map.dart';
 class ProjectDetailsScreen extends StatelessWidget {
   static const routeName = 'projects-portfolio-details-screen';
   final LocationData locationData;
+
   const ProjectDetailsScreen({required this.locationData, Key? key})
       : super(key: key);
 
@@ -25,8 +27,9 @@ class ProjectDetailsScreen extends StatelessWidget {
                   locationData.longitude.toString().contains('.'))
                 IconButton(
                     splashRadius: 1,
-                    onPressed: () => openMap(locationData.latitude ?? 0,
-                        locationData.longitude ?? 0),
+                    onPressed: () =>
+                        openMap(locationData.latitude ?? 0,
+                            locationData.longitude ?? 0),
                     icon: const Icon(
                       Icons.directions,
                     )),
@@ -45,7 +48,10 @@ class ProjectDetailsScreen extends StatelessWidget {
                     }
                   },
                   child: Container(
-                    height: MediaQuery.of(context).size.height * 0.30,
+                    height: MediaQuery
+                        .of(context)
+                        .size
+                        .height * 0.30,
                     margin: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
@@ -60,69 +66,80 @@ class ProjectDetailsScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.all(10),
-                  padding: const EdgeInsets.all(10),
-                  width: double.infinity,
-                  decoration: BoxDecoration(color: Colors.blueGrey.shade200,borderRadius: BorderRadius.circular(20)),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          'Project Name: \n${locationData.projectName}',
-                          style: const TextStyle(fontSize: 16),
-                          // textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          'Project Manager Name: \n${locationData.projectManagerName}',
-                          style: const TextStyle(fontSize: 16),
-                          // textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          'Department Name: \n${locationData.departmentName}',
-                          style: const TextStyle(fontSize: 16),
-                          // textAlign: TextAlign.center,
-                        ),
-                      ),
-                      if (locationData.startAt != null)
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            'Starts At: \n${DateTime.parse(locationData.startAt ?? "0")}',
-                            style: const TextStyle(fontSize: 16),
-                            // textAlign: TextAlign.center,
-                          ),
-                        ),
-                      if (locationData.endAt != null)
-                        Padding(
-                          padding:
-                              const EdgeInsets.only(bottom: 8.0),
-                          child: Text(
-                            'End At: \n${DateTime.parse(locationData.endAt ?? "0")}',
-                            style: const TextStyle(fontSize: 16),
-                            // textAlign: TextAlign.center,
-                          ),
-                        ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: Text(
-                          'Projects Director: \n${locationData.projectsDirector}',
-                          style: const TextStyle(fontSize: 16),
-                          // textAlign: TextAlign.center,
-                        ),
-                      ),
-                      // SizedBox(
-                      //   height: 500,
-                      // ),
-                    ],
+                SizedBox(
+                  child: Container(
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(5),
+                    width: double.infinity,
+                    decoration: BoxDecoration(color: Colors.white24,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: Column(
+                      children: [
+
+                        textHead('Project Name:'),
+                        textLine(locationData.projectName.toString()),
+
+                        textHead('Project Manager Name:'),
+                        textLine(locationData.projectManagerName.toString()),
+
+                        textHead('Department Name:'),
+                        textLine(locationData.departmentName.toString()),
+
+                        // if (locationData.startAt != null)
+                        //   Padding(
+                        //     padding:
+                        //     const EdgeInsets.only(bottom: 8.0),
+                        //     child: Text(
+                        //       'Starts At: \n${DateTime.parse(
+                        //           locationData.startAt ?? "0")}',
+                        //       style: const TextStyle(fontSize: 16),
+                        //       // textAlign: TextAlign.center,
+                        //     ),
+                        //   ),
+                        // if (locationData.endAt != null)
+                        //   Padding(
+                        //     padding:
+                        //     const EdgeInsets.only(bottom: 8.0),
+                        //     child: Text(
+                        //       'End At: \n${DateTime.parse(
+                        //           locationData.endAt ?? "0")}',
+                        //       style: const TextStyle(fontSize: 16),
+                        //       // textAlign: TextAlign.center,
+                        //     ),
+                        //   ),
+
+                        textHead('Projects Director:'),
+                        textLine(locationData.projectsDirector.toString()),
+
+                        textHead('HR Coordinator:'),
+                        textLine(locationData.hrCoordinator.toString()),
+
+                        textHead('HR SectionHead:'),
+                        textLine(locationData.hrSectionHead.toString()),
+
+                        textHead('HRAssWages:'),
+                        textLine(locationData.hrAssWages.toString()),
+
+                        textHead('Project Status:'),
+                        textLine(locationData.status.toString()),
+
+                        textHead('Project City:'),
+                        textLine(locationData.city.toString()),
+
+                        textHead('Project Start Date:'),
+                        textLine(locationData.startAt.toString()),
+
+                        textHead('Project End Date:'),
+                        textLine(locationData.endAt.toString()),
+
+                        textHead('Project Admin:'),
+                        textLine(locationData.projectAdmin.toString()),
+
+                        textHead('Project ID:'),
+                        textLine(locationData.projectId.toString()),
+
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -131,5 +148,46 @@ class ProjectDetailsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Row textHead(String name) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Flexible(
+          child: Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: Text(
+              name, style: const TextStyle(
+              color: ConstantsColors.appraisalColor3,
+              fontSize: 17,
+              fontFamily: 'Nunito',
+            ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Row textLine(String line) {
+    return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  left: 15, right: 3, top: 3, bottom: 3),
+              child: Text(
+                line,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontFamily: 'Nunito',
+                ),
+              ),
+            ),
+          )
+        ]);
   }
 }

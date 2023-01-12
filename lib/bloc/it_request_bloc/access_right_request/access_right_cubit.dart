@@ -376,9 +376,10 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
   void commentRequesterChanged(String value) {
     // final permissionTime = PermissionTime.dirty(value);
     // print(permissionTime.value);
+    value=value.trim();
     emit(
       state.copyWith(
-          // actionComment : value,
+          actionComment : value,
           // status: Formz.validate([state.requestDate,state.permissionDate,state.permissionTime]),
           ),
     );
@@ -403,37 +404,46 @@ class AccessRightCubit extends Cubit<AccessRightInitial> {
     // EasyLoading.show(status: 'Loading...',
     //   maskType: EasyLoadingMaskType.black,
     //   dismissOnTap: false,);
-    emit(state.copyWith(
-      status: FormzStatus.submissionInProgress,
-    ));
 
-    final vacationResultResponse =
-        await requestRepository.postTakeActionRequest(
-            valueStatus: valueStatus,
-            requestNo: requestNo,
-            actionComment: state.actionComment,
-            serviceID: RequestServiceID.accessRightServiceID,
-            serviceName: GlobalConstants.requestCategoryAccessRight,
-            requesterHRCode: state.requesterData.userHrCode ?? "",
-            requesterEmail: state.requesterData.email ?? "");
+    if ((valueStatus == ActionValueStatus.reject &&
+        state.actionComment.isNotEmpty) ||
+        (valueStatus == ActionValueStatus.accept)) {
+      emit(state.copyWith(
+        status: FormzStatus.submissionInProgress,
+      ));
 
-    final result = vacationResultResponse.result ?? "false";
-    if (result.toLowerCase().contains("true")) {
-      emit(
-        state.copyWith(
-          successMessage:
-              "#$requestNo \n ${valueStatus == ActionValueStatus.accept ? "Request has been Accepted" : "Request has been Rejected"}",
-          status: FormzStatus.submissionSuccess,
-        ),
-      );
+      final vacationResultResponse =
+      await requestRepository.postTakeActionRequest(
+          valueStatus: valueStatus,
+          requestNo: requestNo,
+          actionComment: state.actionComment,
+          serviceID: RequestServiceID.accessRightServiceID,
+          serviceName: GlobalConstants.requestCategoryAccessRight,
+          requesterHRCode: state.requesterData.userHrCode ?? "",
+          requesterEmail: state.requesterData.email ?? "");
+
+      final result = vacationResultResponse.result ?? "false";
+      if (result.toLowerCase().contains("true")) {
+        emit(
+          state.copyWith(
+            successMessage:
+            "#$requestNo \n ${valueStatus == ActionValueStatus.accept
+                ? "Request has been Accepted"
+                : "Request has been Rejected"}",
+            status: FormzStatus.submissionSuccess,
+          ),
+        );
+      } else {
+        emit(
+          state.copyWith(
+            errorMessage: "An error occurred",
+            status: FormzStatus.submissionFailure,
+          ),
+        );
+        // }
+      }
     } else {
-      emit(
-        state.copyWith(
-          errorMessage: "An error occurred",
-          status: FormzStatus.submissionFailure,
-        ),
-      );
-      // }
+      EasyLoading.showError('Add a rejection comment');
     }
   }
 

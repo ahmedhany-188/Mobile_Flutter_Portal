@@ -66,6 +66,7 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   void commentRequesterChanged(String value) {
     // final permissionTime = PermissionTime.dirty(value);
     // print(permissionTime.value);
+    value=value.trim();
     emit(
       state.copyWith(
         actionComment: value,
@@ -224,6 +225,8 @@ class EquipmentsCubit extends Cubit<EquipmentsCubitStates> {
   }
 
   submitAction(ActionValueStatus valueStatus, String requestNo) async {
+
+
     if ((valueStatus == ActionValueStatus.reject &&
             state.actionComment.isNotEmpty) ||
         (valueStatus == ActionValueStatus.accept)) {
