@@ -546,8 +546,6 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         for (int i = 0; i < state.cartResult.length; i++) {
           await _generalDio.getItemCatalogById(state.cartResult[i].itemCode??0).then((value) async{
             if(value.data['data']!=null){
-
-              print("value.data['data'] + "+value.data['data'].toString());
               listDataImport.addAll(List<ItemCategorygetAllData>.from(value.data['data']
                   .map((model) => ItemCategorygetAllData.fromJson(model))));
             }
@@ -580,10 +578,10 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
             emit(state.copyWith(cartResult: []));
             EasyLoading.showSuccess("Order Added");
           } else if (value.data['data'] == null) {
-            emit(state.copyWith(
-              itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
-                  .noDataFound,
-            ));
+            // emit(state.copyWith(
+            //   itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
+            //       .noDataFound,
+            // ));
           } else {
             emit(state.copyWith(
               itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates.failed,

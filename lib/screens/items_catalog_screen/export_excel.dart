@@ -33,6 +33,7 @@ Future<void> importDataCart(List<ItemCategorygetAllData> reports,int orderID) as
     //Dispose the document.
     workbook.dispose();
 
+    EasyLoading.dismiss();
     //Get the storage folder location using path_provider package.
     final Directory directory = await getApplicationSupportDirectory();
     final String path = directory.path;
@@ -111,6 +112,9 @@ Future<void> importDataWorkFlowCatalog(List<CatalogRequestWorkFlow> getCatalogWo
 
     //Dispose the document.
     workbook.dispose();
+
+    EasyLoading.dismiss();
+
 
     //Get the storage folder location using path_provider package.
     final Directory directory = await getApplicationSupportDirectory();
