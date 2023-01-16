@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 // import 'package:hassanallamportalflutter/screens/sos_screen/sos_alert_screen.dart';
-import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
+// import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ import '../../screens/about_value_screen/about_screen.dart';
 import '../../screens/my_requests_screen/my_requests_screen.dart';
 import '../../screens/myattendance_screen/attendance_screen.dart';
 import '../../screens/employee_appraisal_screen/employee_appraisal_screen.dart';
-import '../../screens/projects_portfolio/projects_portfolio_screen.dart';
+// import '../../screens/projects_portfolio/projects_portfolio_screen.dart';
 
 class MainDrawer extends StatelessWidget {
   const MainDrawer({Key? key}) : super(key: key);
@@ -617,10 +617,10 @@ class MainDrawer extends StatelessWidget {
                             context, EmployeeAppraisalScreen.routeName);
                       },
                     ),
-                    buildListTile("The Catalogue", Icons.category,  () {
-                      Navigator.popAndPushNamed(
-                          context, ItemsCatalogGetAllScreen.routeName);
-                    },),
+                    // buildListTile("The Catalogue", Icons.category,  () {
+                    //   Navigator.popAndPushNamed(
+                    //       context, ItemsCatalogGetAllScreen.routeName);
+                    // },),
 
                     // outlook(),
 
@@ -649,13 +649,13 @@ class MainDrawer extends StatelessWidget {
                             .popAndPushNamed(GetDirectionScreen.routeName);
                       },
                     ),
-                    buildNoIconTile(
-                      'Projects Portfolio',
-                          () {
-                        Navigator.of(context)
-                            .popAndPushNamed(ProjectsPortfolioScreen.routeName);
-                      },
-                    ),
+                    // buildNoIconTile(
+                    //   'Projects Portfolio',
+                    //       () {
+                    //     Navigator.of(context)
+                    //         .popAndPushNamed(ProjectsPortfolioScreen.routeName);
+                    //   },
+                    // ),
 
                     // buildNoIconTile(
                     //   'SOS HAH',

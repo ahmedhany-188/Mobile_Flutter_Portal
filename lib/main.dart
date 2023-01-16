@@ -206,38 +206,47 @@ Future<void> timedOut() async {
       title: const Text(
         'Alert',
         style: TextStyle(
-          color: Colors.red,
+          color: Colors.redAccent,
         ),
       ),
       content: const Text(
-        'Sorry but you have been logged out due to inactivity...',
+        'Sorry, but you have been logged out due to inactivity...',
         style: TextStyle(
           color: Colors.white,
+          fontStyle: FontStyle.italic,
         ),
       ),
       actions: <Widget>[
-        TextButton(
+        ElevatedButton.icon(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.white
+          ),
           onPressed: () {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(
                 builder: (BuildContext context) => const SplashScreen(),
               ),
-              (route) => false,
+                  (route) => false,
             );
             context.read<AppBloc>().add(AppLogoutRequested());
             context.read<LoginCubit>().clearCubit();
-          },
-          child: const Text(
+            },
+          label: const Text(
             'Confirm',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.white,
+              color: ConstantsColors
+                  .bottomSheetBackground,
             ),
           ),
+          icon: const Icon(
+              Icons.output_rounded,
+              color: ConstantsColors
+                  .bottomSheetBackground),
         ),
       ],
-    ),
+    )
   );
 }
 
