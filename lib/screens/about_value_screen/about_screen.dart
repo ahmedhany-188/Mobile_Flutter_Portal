@@ -77,7 +77,7 @@ class AboutScreen extends StatelessWidget {
                   const Align(
                     alignment: FractionalOffset.bottomCenter,
                     child: Text(
-                        "Copyright 2020 by HAH IT Department All Rights Reserved. Reproduced or Using this application without being an Hassan Allam Holding's Employees or any of Hassan Allam Subsidiary's Employees is prohibited",
+                        "Copyright 2023 by HAH IT Department All Rights Reserved. Reproduced or Using this application without being an Hassan Allam Holding's Employees or any of Hassan Allam Subsidiary's Employees is prohibited",
                         style: TextStyle(
                           color: Colors.white,
                         ),
