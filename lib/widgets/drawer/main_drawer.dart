@@ -212,10 +212,17 @@ class MainDrawer extends StatelessWidget {
             )));
   }
 
-  Widget buildExternalLinks(String name, String urlLink) {
+  Widget buildExternalLinks(BuildContext context,String name, String urlLink) {
     return InkWell(
       onTap: () {
         launchUrl(Uri.parse(urlLink), mode: LaunchMode.externalApplication);
+        // Navigator.of(context).pushNamed(
+        //     WebViewScreen.routeName,
+        //     arguments: {
+        //       WebViewScreen
+        //           .webURL:
+        //       urlLink ?? "https://portal.hassanallam.com/"
+        //     });
       },
       child: Row(
         children: [
@@ -688,15 +695,15 @@ class MainDrawer extends StatelessWidget {
 
                     buildDivider(),
                     buildGrouping('MAIN MENU'),
-                    buildExternalLinks('HR Management', getHrManagment()),
-                    buildExternalLinks('Quality ISO', getQualityIso()),
-                    buildExternalLinks('Quality ASME', getQualityAsme()),
-                    buildExternalLinks('HSE Management', getHSEManagment()),
-                    buildExternalLinks('IT Management', getItManagment()),
-                    buildExternalLinks('Appraisal', getAppraisal()),
-                    buildExternalLinks('Compliance', getCompliance()),
-                    buildExternalLinks('Code Of Conduct', getCodeOfConduct()),
-                    buildExternalLinks('Training Plan', getTrainingPlan()),
+                    buildExternalLinks(context,'HR Management', getHrManagment()),
+                    buildExternalLinks(context,'Quality ISO', getQualityIso()),
+                    buildExternalLinks(context,'Quality ASME', getQualityAsme()),
+                    buildExternalLinks(context,'HSE Management', getHSEManagment()),
+                    buildExternalLinks(context,'IT Management', getItManagment()),
+                    buildExternalLinks(context,'Appraisal', getAppraisal()),
+                    buildExternalLinks(context,'Compliance', getCompliance()),
+                    buildExternalLinks(context,'Code Of Conduct', getCodeOfConduct()),
+                    buildExternalLinks(context,'Training Plan', getTrainingPlan()),
 
                     buildDivider(),
                     buildGrouping('APPLICATIONS'),
@@ -718,7 +725,7 @@ class MainDrawer extends StatelessWidget {
                                   physics: const NeverScrollableScrollPhysics(),
                                   itemCount: state.appsList.length,
                                   itemBuilder: (ctx, index) {
-                                    return buildExternalLinks(
+                                    return buildExternalLinks(context,
                                         state.appsList[index].sysName??"",
                                         state.appsList[index].sysLink.toString());
                                   })

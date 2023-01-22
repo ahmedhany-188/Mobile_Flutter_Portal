@@ -35,6 +35,7 @@ import 'package:hassanallamportalflutter/screens/myprofile_screen/profile_screen
 import 'package:hassanallamportalflutter/screens/news_screen/news_details_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
+import 'package:hassanallamportalflutter/screens/webview_screen/webview_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
 import 'package:hassanallamportalflutter/screens/sos_screen/sos_alert_screen.dart';
@@ -162,6 +163,11 @@ class AppRouter {
       case EconomyNewsScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => const EconomyNewsScreen(),
+        );
+
+        case WebViewScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) =>  WebViewScreen(requestData: settings.arguments),
         );
 
       case PayslipScreen.routeName:

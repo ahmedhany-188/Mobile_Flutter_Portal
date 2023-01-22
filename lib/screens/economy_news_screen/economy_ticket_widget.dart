@@ -1,6 +1,6 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:hassanallamportalflutter/screens/webview_screen/webview_screen.dart';
 
 // ignore: must_be_immutable
 class EconomyNewsTicketWidget extends StatelessWidget {
@@ -40,10 +40,17 @@ class EconomyNewsTicketWidget extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 5),
                     child: GestureDetector(
                         onTap: (){
-                          launchUrl(
-                          Uri.parse(EconomyNewsTicketWidgetData[index]["url"]),
-                          mode: LaunchMode.externalApplication,
-                        );
+                        //   launchUrl(
+                        //   Uri.parse(EconomyNewsTicketWidgetData[index]["url"]),
+                        //   mode: LaunchMode.externalApplication,
+                        // );
+                          Navigator.of(context).pushNamed(
+                              WebViewScreen.routeName,
+                              arguments: {
+                                WebViewScreen
+                                    .webURL:
+                                EconomyNewsTicketWidgetData[index]["url"] ?? "https://portal.hassanallam.com/"
+                              });
                         },
                         child:Container(
                       decoration: BoxDecoration(
