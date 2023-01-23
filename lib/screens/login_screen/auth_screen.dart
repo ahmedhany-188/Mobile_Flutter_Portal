@@ -206,7 +206,7 @@ class _AuthScreenState extends State<AuthScreen> with TickerProviderStateMixin {
                     highlightColor: Colors.grey.shade700,
                     period: const Duration(milliseconds: 3000),
                     child: const Text(
-                      '\u00a9 2022 IT Department All Rights Reserved',
+                      '\u00a9 2023 IT Department All Rights Reserved',
                       style: TextStyle(
                         fontSize: 14,
                       ),

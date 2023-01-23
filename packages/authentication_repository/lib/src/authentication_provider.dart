@@ -5,18 +5,36 @@ import 'package:http/http.dart' as http;
 
 class AuthenticationProvider{
 
+  // old - get method
+  // Future<http.Response> loginApiAuthentication(String userName,String password) async {
+  //   var encodedPassword = Uri.encodeComponent(password);
+  //   http.Response rawAttendanceData = await http.get(
+  //     Uri.parse(
+  //         "https://api.hassanallam.com/api/Account/LoginToken?Email=$userName&Password=$encodedPassword&Remember=true"),
+  //   ).timeout(Duration(seconds: 20));
+  //   if (kDebugMode) {
+  //     print(rawAttendanceData.body);
+  //   }
+  //   return rawAttendanceData;
+  // }
+
+  // new - post method
   Future<http.Response> loginApiAuthentication(String userName,String password) async {
     var encodedPassword = Uri.encodeComponent(password);
-    http.Response rawAttendanceData = await http.get(
-      Uri.parse(
-          "https://api.hassanallam.com/api/Account/LoginToken?Email=$userName&Password=$encodedPassword&Remember=true"),
+    String bodyString=jsonEncode(<String, dynamic>{
+        "email": userName,
+        "password": encodedPassword,
+        "remember": true
+    });
+    http.Response rawAttendanceData = await http.post(
+      Uri.parse("https://api.hassanallam.com/api/Account/LoginToken"),
+        body:bodyString,
     ).timeout(Duration(seconds: 20));
     if (kDebugMode) {
       print(rawAttendanceData.body);
     }
     return rawAttendanceData;
   }
-
 
   Future<http.Response> getEmployeeData(String hrCode,String token) async {
     var header = <String, String>{
@@ -34,4 +52,5 @@ class AuthenticationProvider{
     }
     return rawAttendanceData;
   }
+
 }
