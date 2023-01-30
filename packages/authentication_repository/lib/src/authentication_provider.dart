@@ -20,16 +20,20 @@ class AuthenticationProvider{
 
   // new - post method
   Future<http.Response> loginApiAuthentication(String userName,String password) async {
-    var encodedPassword = Uri.encodeComponent(password);
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    };
+    // var encodedPassword = Uri.encodeComponent(password);
     String bodyString=jsonEncode(<String, dynamic>{
         "email": userName,
-        "password": encodedPassword,
+        "password": password,
         "remember": true
     });
     http.Response rawAttendanceData = await http.post(
       Uri.parse("https://api.hassanallam.com/api/Account/LoginToken"),
-        body:bodyString,
-    ).timeout(Duration(seconds: 20));
+      headers: header,
+      body:bodyString,
+    ).timeout(const Duration(seconds: 20));
     if (kDebugMode) {
       print(rawAttendanceData.body);
     }
