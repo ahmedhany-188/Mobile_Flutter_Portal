@@ -6,8 +6,7 @@ import 'package:dio/dio.dart';
 // import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:open_file/open_file.dart';
-import 'package:open_file_safe/open_file_safe.dart';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path/path.dart' as path;
@@ -46,7 +45,9 @@ class DownloadPdfHelper{
 
 
     // final dir =
-    // await getApplicationDocumentsDirectory(); //From path_provider package
+    // await getApplicationDocumentsDirectory(); // From path_provider package
+
+
     var _localPath = externalStorageDirPath;
     final savedDir = Directory(_localPath!);
     await savedDir.create(recursive: true).then((value) async {
@@ -139,11 +140,11 @@ class DownloadPdfHelper{
   Future<Directory?> _getDownloadDirectory() async {
     if (Platform.isAndroid) {
       return await getExternalStorageDirectory();
-    }else if (Platform.isIOS) {
-      return await getApplicationDocumentsDirectory();
+     } else if (Platform.isIOS) {
+       return await getApplicationDocumentsDirectory();
       // externalStorageDirPath =
       //     (await getApplicationDocumentsDirectory()).absolute.path;
-    }
+     }
 
     // in this example we are using only Android and iOS so I can assume
     // that you are not trying it for other platforms and the if statement
@@ -201,7 +202,7 @@ class DownloadPdfHelper{
       failed();
     } finally {
       success();
-      // await _showNotification(result);
+      await _showNotification(result);
       if (result['isSuccess']) {
         OpenFile.open(result['filePath']);
       } else {
