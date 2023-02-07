@@ -61,7 +61,7 @@ class ItemsCatalogDetailScreenClass extends State<ItemsCatalogDetailScreen> {
             backgroundColor: Colors.white,
             appBar: AppBar(
               title: const Text(
-                'Item Catalog',
+                'Item Catalogue',
                 style: TextStyle(
                     color: ConstantsColors.bottomSheetBackground,
                     fontWeight: FontWeight.bold),

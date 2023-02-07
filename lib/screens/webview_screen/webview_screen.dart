@@ -19,7 +19,6 @@ class WebViewScreen extends StatefulWidget {
 class WebViewScreenState extends State<WebViewScreen> {
   late final WebViewController controller;
 
-
   @override
   void initState() {
     super.initState();
@@ -43,6 +42,7 @@ class WebViewScreenState extends State<WebViewScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('HAH'),
+        backgroundColor: ConstantsColors.backgroundStartColor,
         actions: [
           NavigationControls(controller: controller),
         ],
