@@ -260,56 +260,59 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                 ),
                                 child: Row(
                                   children: <Widget>[
-                                    Container(
-                                      padding: const EdgeInsets.all(8),
-                                      decoration: BoxDecoration(
-                                          color: Colors.black12,
-                                          borderRadius: BorderRadius.circular(
-                                              20)
+
+
+                                      Container(
+                                        padding: const EdgeInsets.all(8),
+                                        decoration: BoxDecoration(
+                                            color: Colors.black12,
+                                            borderRadius: BorderRadius.circular(
+                                                20)
+                                        ),
+                                        child: const Icon(Icons.cached,
+                                            color: ConstantsColors
+                                                .backgroundStartColor),
                                       ),
-                                      child: const Icon(Icons.cached,
-                                          color: ConstantsColors
-                                              .backgroundStartColor),
-                                    ),
-                                    const SizedBox(width: 16,),
-                                    Flexible(
-                                      child: Text(
-                                          "${getCatalogRequestsHistoryList[0]
-                                              .data?[index]
-                                              .status.toString()}...",
-                                          style: const TextStyle(fontSize: 16,
-                                              fontWeight: FontWeight.w500,
-                                              color: Colors.grey)),
-                                    ),
-                                    getCatalogRequestsHistoryList[0]
-                                        .data?[index].groupStep==1?ElevatedButton.icon(
-                                      onPressed: () {
+                                      const SizedBox(width: 16,),
+                                      Flexible(
+                                        child: Text(
+                                            "${getCatalogRequestsHistoryList[0]
+                                                .data?[index]
+                                                .status.toString()}...",
+                                            style: const TextStyle(fontSize: 16,
+                                                fontWeight: FontWeight.w500,
+                                                color: Colors.grey)),
+                                      ),
 
-                                        NewRequestCatalogModel cancelRequestObject = NewRequestCatalogModel(
-                                            requestID:getCatalogRequestsHistoryList[0].data?[index].requestID,
-                                            findItemID:getCatalogRequestsHistoryList[0].data?[index].findItemID,
-                                            inDate:getCatalogRequestsHistoryList[0].data?[index].date,
-                                            itemName:getCatalogRequestsHistoryList[0].data?[index].itemName,
-                                            catID:getCatalogRequestsHistoryList[0].data?[index].catID,
-                                            itemDesc:getCatalogRequestsHistoryList[0].data?[index].itemDesc,
-                                            groupStep:getCatalogRequestsHistoryList[0].data?[index].groupStep
-                                        );
-
-
-                                        context.read<CatalogRequestsHistoryCubit>().cancelRequest(cancelRequestObject);
-                                      },
-                                      label: const Text(
-                                          'Cancel',
-                                          style: TextStyle(
-                                              color: Colors
-                                                  .white)),
-                                      icon: const Icon(
-                                          Icons.cancel_outlined,
-                                          color: Colors.redAccent),
-                                    ):Text(""),
                                   ],
                                 ),
                               ),
+                              getCatalogRequestsHistoryList[0]
+                                  .data?[index].groupStep==1
+                              && getCatalogRequestsHistoryList[0]
+                              .data?[index].status=="In Progress"
+                                  ?ElevatedButton.icon(
+                                onPressed: () {
+                                  NewRequestCatalogModel cancelRequestObject = NewRequestCatalogModel(
+                                      requestID:getCatalogRequestsHistoryList[0].data?[index].requestID,
+                                      findItemID:getCatalogRequestsHistoryList[0].data?[index].findItemID,
+                                      inDate:getCatalogRequestsHistoryList[0].data?[index].date,
+                                      itemName:getCatalogRequestsHistoryList[0].data?[index].itemName,
+                                      catID:getCatalogRequestsHistoryList[0].data?[index].catID,
+                                      itemDesc:getCatalogRequestsHistoryList[0].data?[index].itemDesc,
+                                      groupStep:getCatalogRequestsHistoryList[0].data?[index].groupStep
+                                  );
+                                  context.read<CatalogRequestsHistoryCubit>().cancelRequest(cancelRequestObject);
+                                },
+                                label: const Text(
+                                    'Cancel',
+                                    style: TextStyle(
+                                        color: Colors
+                                            .white)),
+                                icon: const Icon(
+                                    Icons.cancel_outlined,
+                                    color: Colors.redAccent),
+                              ):Text(""),
                             ],
                           ),
                         ),

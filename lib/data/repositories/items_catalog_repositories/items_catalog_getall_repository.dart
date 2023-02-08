@@ -182,7 +182,7 @@ class ItemsCatalogGetAllRepository {
       "itemName": newRequestCatalogModelResponse.itemName,
       "cat_ID": newRequestCatalogModelResponse.catID,
       // "catName": newRequestCatalogModelResponse.cat,
-      // "status": newRequestCatalogModelResponse.status,
+      "status": 5,
       "itemDesc": newRequestCatalogModelResponse.itemDesc,
       "groupStep": newRequestCatalogModelResponse.groupStep
     });
