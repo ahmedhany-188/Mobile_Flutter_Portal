@@ -86,7 +86,7 @@ class CatalogRequestsHistoryCubit extends Cubit<CatalogRequestsHistoryInitial> w
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       await requestRepository.cancelRequestRepository(
           newRequestCatalogModelResponse).then((value) async {
-        if (value.error != false) {
+        if (value.error == false) {
           emit(state.copyWith(
             catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
                 .success,
@@ -96,6 +96,7 @@ class CatalogRequestsHistoryCubit extends Cubit<CatalogRequestsHistoryInitial> w
           emit(state.copyWith(
             catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
                 .failed,
+            message: "failed to delete request"
           ));
         }
       }).catchError((e) {

@@ -184,7 +184,7 @@ class ItemsCatalogGetAllRepository {
       // "catName": newRequestCatalogModelResponse.cat,
       "status": 5,
       "itemDesc": newRequestCatalogModelResponse.itemDesc,
-      "groupStep": newRequestCatalogModelResponse.groupStep
+      "group_Step": newRequestCatalogModelResponse.groupStep
     });
     var header = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
