@@ -39,6 +39,7 @@ class Data {
   String? catName;
   String? status;
   String? itemDesc;
+  int? groupStep;
 
   Data(
       {this.requestID,
@@ -48,7 +49,8 @@ class Data {
         this.catID,
         this.catName,
         this.status,
-        this.itemDesc});
+        this.itemDesc,
+        this.groupStep});
 
   Data.fromJson(Map<String, dynamic> json) {
     requestID = json['requestID'];
@@ -59,6 +61,7 @@ class Data {
     catName = json['catName'];
     status = json['status'];
     itemDesc = json['itemDesc'];
+    groupStep = json['groupStep'];
   }
 
   Map<String, dynamic> toJson() {
@@ -71,6 +74,7 @@ class Data {
     data['catName'] = catName;
     data['status'] = status;
     data['itemDesc'] = itemDesc;
+    data['groupStep'] = groupStep;
     return data;
   }
 }

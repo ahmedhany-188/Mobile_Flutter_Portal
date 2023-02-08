@@ -48,6 +48,24 @@ class ItemsCatalogGetAllDataProvider {
     return rawItemsCatalogData;
   }
 
+  Future<http.Response> postCancelNewRequest(Map<String, String> header,String bodyString) async {
+    http.Response cancelRequestCatalogue = await http.post(
+      Uri.parse("https://api.hassanallam.com/api/InformationTechnology-ItemCatalog/ItmCat_Item_Request/CancelRequest"),
+      headers: header,
+      body: bodyString,
+    ).timeout(const Duration(seconds: 10));
+
+    if (kDebugMode) {
+      print(cancelRequestCatalogue.body);
+    }
+
+    if(cancelRequestCatalogue.statusCode == 200){
+      return cancelRequestCatalogue;
+    }else{
+      throw RequestFailureApi.fromCode(cancelRequestCatalogue.statusCode);
+    }
+  }
+
   Future<http.Response> getItemsCatalogAttachList(Map<String, String> header) async {
     http.Response rawItemsCatalogData = await http.get(
       Uri.parse(

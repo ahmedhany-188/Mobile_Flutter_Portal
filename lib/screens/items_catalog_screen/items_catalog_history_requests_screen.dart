@@ -7,6 +7,7 @@ import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_re
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_requestCatalog_reponse.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_new_request_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import '../../widgets/error/error_widget.dart';
 
@@ -280,6 +281,32 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                               fontWeight: FontWeight.w500,
                                               color: Colors.grey)),
                                     ),
+                                    getCatalogRequestsHistoryList[0]
+                                        .data?[index].groupStep==1?ElevatedButton.icon(
+                                      onPressed: () {
+
+                                        NewRequestCatalogModel cancelRequestObject = NewRequestCatalogModel(
+                                            requestID:getCatalogRequestsHistoryList[0].data?[index].requestID,
+                                            findItemID:getCatalogRequestsHistoryList[0].data?[index].findItemID,
+                                            inDate:getCatalogRequestsHistoryList[0].data?[index].date,
+                                            itemName:getCatalogRequestsHistoryList[0].data?[index].itemName,
+                                            catID:getCatalogRequestsHistoryList[0].data?[index].catID,
+                                            itemDesc:getCatalogRequestsHistoryList[0].data?[index].itemDesc,
+                                            groupStep:getCatalogRequestsHistoryList[0].data?[index].groupStep
+                                        );
+
+
+                                        context.read<CatalogRequestsHistoryCubit>().cancelRequest(cancelRequestObject);
+                                      },
+                                      label: const Text(
+                                          'Cancel',
+                                          style: TextStyle(
+                                              color: Colors
+                                                  .white)),
+                                      icon: const Icon(
+                                          Icons.cancel_outlined,
+                                          color: Colors.redAccent),
+                                    ):Text(""),
                                   ],
                                 ),
                               ),

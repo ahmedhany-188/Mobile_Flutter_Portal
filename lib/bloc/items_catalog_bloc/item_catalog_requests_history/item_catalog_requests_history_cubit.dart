@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/items_catalog_bloc/item_catalog_requests_history/item_catalog_requests_history_state.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_new_request_model.dart';
 import 'package:hassanallamportalflutter/data/repositories/items_catalog_repositories/items_catalog_getall_repository.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 
@@ -80,6 +81,39 @@ class CatalogRequestsHistoryCubit extends Cubit<CatalogRequestsHistoryInitial> w
       ));
     }
   }
+
+  Future<void> cancelRequest(NewRequestCatalogModel  newRequestCatalogModelResponse) async {
+    if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
+      await requestRepository.cancelRequestRepository(
+          newRequestCatalogModelResponse).then((value) async {
+        if (value.error != false) {
+          emit(state.copyWith(
+            catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
+                .success,
+            // getCatalogRequestsHistoryList: value,
+          ));
+        } else {
+          emit(state.copyWith(
+            catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
+                .failed,
+          ));
+        }
+      }).catchError((e) {
+        emit(state.copyWith(
+          catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
+              .failed,));
+        throw e;
+        // throw RequestFailureApi.fromCode(value.statusCode??0);
+      });
+    } else {
+      emit(state.copyWith(
+        catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
+            .noConnection,
+      ));
+    }
+  }
+
+
 
   @override
   Future<void> close() {

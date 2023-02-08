@@ -173,4 +173,29 @@ class ItemsCatalogGetAllRepository {
     return newRequestCatalogModelResponseList;
   }
 
+  Future<NewRequestCatalogModelResponse> cancelRequestRepository(NewRequestCatalogModel newRequestCatalogModelResponse) async{
+
+    var bodyString =jsonEncode(<String, dynamic>{
+      "requestID": newRequestCatalogModelResponse.requestID,
+      "findItem_ID": newRequestCatalogModelResponse.findItemID,
+      "date": newRequestCatalogModelResponse.inDate,
+      "itemName": newRequestCatalogModelResponse.itemName,
+      "cat_ID": newRequestCatalogModelResponse.catID,
+      // "catName": newRequestCatalogModelResponse.cat,
+      // "status": newRequestCatalogModelResponse.status,
+      "itemDesc": newRequestCatalogModelResponse.itemDesc,
+      "groupStep": newRequestCatalogModelResponse.groupStep
+    });
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
+    final http.Response rawPermission =
+        await itemsCatalogGetAllDataProvider.postCancelNewRequest(header, bodyString);
+    final json = await jsonDecode(rawPermission.body);
+    final NewRequestCatalogModelResponse response = NewRequestCatalogModelResponse.fromJson(json);
+
+    return response;
+  }
+
 }

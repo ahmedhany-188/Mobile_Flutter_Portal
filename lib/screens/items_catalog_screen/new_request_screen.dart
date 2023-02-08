@@ -309,6 +309,44 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
 
                                     Padding(
                                       padding: const EdgeInsets.all(10.0),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                      children: [
+                                        Column(
+                                          children: [
+                                            const Text('Quality enabled',style: TextStyle(color: ConstantsColors.bottomSheetBackground)),
+                                            Checkbox(
+                                              value: state.newRequestQuantity,
+                                              onChanged: (bool? value) {
+                                                context
+                                                    .read<
+                                                    NewRequestCatalogCubit>()
+                                                    .addQualityEnabled(
+                                                    value??false);
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: [
+                                            const Text('Entity enabled',style: TextStyle(color: ConstantsColors.bottomSheetBackground)),
+                                            Checkbox(
+                                              value: state.newRequestEntity,
+                                              onChanged: (bool? value) {
+                                                context
+                                                    .read<NewRequestCatalogCubit>()
+                                                    .addEntityEnabled(
+                                                    value??false);
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                    ),
+
+                                    Padding(
+                                      padding: const EdgeInsets.all(10.0),
                                       child: BlocBuilder<
                                           NewRequestCatalogCubit,
                                           NewRequestCatalogInitial>(

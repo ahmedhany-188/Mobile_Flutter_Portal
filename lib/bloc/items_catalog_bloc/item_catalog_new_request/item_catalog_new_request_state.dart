@@ -31,6 +31,9 @@ class NewRequestCatalogInitial extends NewRequestCatalogState {
     this.selectedCategory = const RequestDate.pure(),
     this.errorMessage = "",
 
+    this.newRequestEntity=false,
+    this.newRequestQuantity=false,
+
   });
 
   final NewRequestCatalogEnumState newRequestCatalogEnumState;
@@ -45,11 +48,12 @@ class NewRequestCatalogInitial extends NewRequestCatalogState {
   final List<ItemImageCatalogModel> itemAttach;
   final RequestDate selectedCategory;
   final String errorMessage;
+  final bool newRequestQuantity,newRequestEntity;
 
   @override
   List<Object> get props => [newRequestCatalogEnumState,status,
     listCatalogRequests,newRequestDate,itemName,
-    itemDescription,itemAttach,selectedCategory,errorMessage];
+    itemDescription,itemAttach,selectedCategory,errorMessage,newRequestQuantity,newRequestEntity];
 
 
   NewRequestCatalogInitial copyWith({
@@ -61,6 +65,7 @@ class NewRequestCatalogInitial extends NewRequestCatalogState {
     RequestDate? newRequestDate,
     RequestDate? itemName,
     RequestDate? itemDescription,
+    bool? newRequestQuantity,newRequestEntity,
     List<ItemImageCatalogModel>? itemAttach,
     RequestDate? selectedCategory,
     String? errorMessage,
@@ -78,6 +83,8 @@ class NewRequestCatalogInitial extends NewRequestCatalogState {
       itemAttach:itemAttach??this.itemAttach,
       selectedCategory:selectedCategory??this.selectedCategory,
         errorMessage:errorMessage??this.errorMessage,
+        newRequestQuantity:newRequestQuantity??this.newRequestQuantity,
+      newRequestEntity:newRequestEntity??this.newRequestEntity,
     );
   }
 
