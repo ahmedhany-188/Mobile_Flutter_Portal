@@ -80,7 +80,9 @@ class ItemsCatalogGetAllRepository {
       "cat_ID": newRequestCatalogModel.catID,
       "item_Name": newRequestCatalogModel.itemName,
       "item_Desc": newRequestCatalogModel.itemDesc,
-      "in_User":newRequestCatalogModel.inUser
+      "in_User":newRequestCatalogModel.inUser,
+      "brand_Enabled": newRequestCatalogModel.brandEnabled,
+      "quality_Enabled": newRequestCatalogModel.qualityEnabled,
     });
 
     var header = <String, String>{

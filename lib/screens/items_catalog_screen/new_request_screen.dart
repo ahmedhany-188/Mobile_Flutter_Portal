@@ -316,7 +316,7 @@ class NewRequestCatalogScreenClass extends State<NewRequestCatalogScreen> {
                                           children: [
                                             const Text('Quality enabled',style: TextStyle(color: ConstantsColors.bottomSheetBackground)),
                                             Checkbox(
-                                              value: state.newRequestQuantity,
+                                              value: state.newRequestQuality,
                                               onChanged: (bool? value) {
                                                 context
                                                     .read<

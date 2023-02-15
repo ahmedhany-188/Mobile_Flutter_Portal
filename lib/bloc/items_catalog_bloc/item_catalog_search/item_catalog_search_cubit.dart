@@ -494,16 +494,15 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         "in_User": hrCode,
         "in_Date": DateTime.now().toString(),
         "up_User": "",
-        "up_Date": DateTime.now().toString()
+        "up_Date": DateTime.now().toString(),
       };
       await _generalDio.postItemCatalogCart(cartDataPost).
       then((value) {
         // TODO: add to cart respnse here {value}
-        getCartItems(userHrCode: hrCode);
-        EasyLoading.dismiss();
-      })
-          .catchError((e) {
-        // EasyLoading.showError('Something went wrong');
+          getCartItems(userHrCode: hrCode);
+          EasyLoading.showSuccess("Order Added");
+      }).catchError((e) {
+        EasyLoading.showError('Something went wrong');
         throw e;
       });
     } else {

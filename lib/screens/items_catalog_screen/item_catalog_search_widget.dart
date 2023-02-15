@@ -8,7 +8,6 @@ import '../../constants/url_links.dart';
 import '../../gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/screens/items_catalog_screen/item_catalog_detail_screen.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'catalog_shimmer.dart';
 import '../../widgets/error/error_widget.dart';
@@ -339,6 +338,9 @@ Widget itemCatalogSearchWidget(hrCode) {
         );
       }
       else {
+
+        final ScrollController controllerHorizontal = ScrollController();
+
         return WillPopScope(
             onWillPop: () async {
               int treeLength = ItemCatalogSearchCubit.get(context)
@@ -364,34 +366,87 @@ Widget itemCatalogSearchWidget(hrCode) {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: RichText(
-                    text: TextSpan(
-                      style: const TextStyle(color: Colors.black),
-                      children: [
-                        for (int i = 0; i < state.treeDirectionList.length; i++)
-                          TextSpan(
-                            text: '${state.treeDirectionList[i]} >  ',
-                            style: const TextStyle(
-                                fontSize: 15, color: ConstantsColors
-                                .bottomSheetBackground, fontStyle: FontStyle
-                                .italic
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                if (state.treeDirectionList[i] == "Home" &&
-                                    i == 0) {
+                Container(
+                  height: 50,
+                  child: Padding(
+                    padding: const EdgeInsets.all(5.0),
+
+                    child :ListView.builder(
+                      shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: state.treeDirectionList.length,
+                       controller: controllerHorizontal,
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: () async {
+                              if(index != state.treeDirectionList.length-1){
+                                if (state.treeDirectionList[index] == "Home" && index == 0) {
                                   ItemCatalogSearchCubit.get(context)
                                       .setInitialization();
                                 } else {
-                                  ItemCatalogSearchCubit.get(context)
-                                      .getNewSubTree(i);
+                                  await ItemCatalogSearchCubit.get(context)
+                                      .getNewSubTree(index);
+                                  controllerHorizontal.jumpTo(controllerHorizontal.position.maxScrollExtent);
                                 }
-                              },
-                          ),
-                      ],
+                              }
+                              controllerHorizontal.jumpTo(controllerHorizontal.position.maxScrollExtent);
+                            },
+                            child: Row(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      bottom: BorderSide(
+                                      color:index == state.treeDirectionList.length-1? ConstantsColors.backgroundEndColor:Colors.transparent,
+                                      width: 3.0,
+                                    ),
+                                    ),
+                                  ),
+                                  child: Text('${state.treeDirectionList[index]}',
+                                            style:  TextStyle(
+                                                fontSize: 16, color: index == state.treeDirectionList.length-1?ConstantsColors.backgroundEndColor
+                                                :Colors.black, fontStyle: FontStyle
+                                                .normal
+                                            ),),
+
+                                ),
+                                index != state.treeDirectionList.length-1?
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5,right: 5),
+                                  child: Icon(Icons.arrow_forward_ios,
+                                      size: 15),
+                                ):Text(""),
+                              ],
+                            ),
+                          );
+                        }
                     ),
+                    // child: RichText(
+                    //   text: TextSpan(
+                    //     children: [
+                    //       for (int i = 0; i < state.treeDirectionList.length; i++)
+                    //         TextSpan(
+                    //           text: '${state.treeDirectionList[i]} ',
+                    //           style: const TextStyle(
+                    //               fontSize: 15, color: ConstantsColors
+                    //               .bottomSheetBackgroundDark, fontStyle: FontStyle
+                    //               .italic
+                    //           ),
+                    //           recognizer: TapGestureRecognizer()
+                    //             ..onTap = () {
+                    //               if (state.treeDirectionList[i] == "Home" && i == 0) {
+                    //                 ItemCatalogSearchCubit.get(context)
+                    //                     .setInitialization();
+                    //               } else {
+                    //                 ItemCatalogSearchCubit.get(context)
+                    //                     .getNewSubTree(i);
+                    //               }
+                    //             },
+                    //         ),
+                    //     ],
+                    //   ),
+                    // ),
                   ),
                 ),
                 buildDivider(),
@@ -414,10 +469,10 @@ Widget itemCatalogSearchWidget(hrCode) {
                                     null) {
                                   if (state.itemsGetAllTree[index].items!
                                       .isNotEmpty) {
-                                    ItemCatalogSearchCubit.get(context)
+                                     ItemCatalogSearchCubit.get(context)
                                         .getSubTree(
                                         state.itemsGetAllTree[index].items);
-                                    ItemCatalogSearchCubit.get(context)
+                                      ItemCatalogSearchCubit.get(context)
                                         .setTreeDirectionList(
                                         state.itemsGetAllTree[index].text);
                                   } else {
@@ -427,6 +482,8 @@ Widget itemCatalogSearchWidget(hrCode) {
                                     ItemCatalogSearchCubit.get(context)
                                         .setTreeDirectionList(
                                         state.itemsGetAllTree[index].text);
+
+
                                   }
                                 } else {
                                   ItemCatalogSearchCubit.get(context)
@@ -435,6 +492,8 @@ Widget itemCatalogSearchWidget(hrCode) {
                                   ItemCatalogSearchCubit.get(context)
                                       .setTreeDirectionList(
                                       state.itemsGetAllTree[index].text);
+
+
                                 }
                               }
                             },

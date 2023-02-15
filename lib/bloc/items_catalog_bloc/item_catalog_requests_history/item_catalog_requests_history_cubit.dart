@@ -90,6 +90,7 @@ class CatalogRequestsHistoryCubit extends Cubit<CatalogRequestsHistoryInitial> w
           emit(state.copyWith(
             catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
                 .success,
+              message: "Request cancelled"
             // getCatalogRequestsHistoryList: value,
           ));
         } else {

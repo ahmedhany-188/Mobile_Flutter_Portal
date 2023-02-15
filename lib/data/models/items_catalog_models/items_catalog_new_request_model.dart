@@ -22,6 +22,8 @@ class NewRequestCatalogModel {
   String? upDate;
   List<ItemsAttaches>? itemsAttaches;
   String? mainPhoto;
+  bool? brandEnabled;
+  bool? qualityEnabled;
 
   NewRequestCatalogModel(
       {this.requestID,
@@ -45,7 +47,9 @@ class NewRequestCatalogModel {
         this.upUser,
         this.upDate,
         this.itemsAttaches,
-        this.mainPhoto});
+        this.mainPhoto,
+        this.brandEnabled,
+        this.qualityEnabled});
 
   NewRequestCatalogModel.fromJson(Map<String, dynamic> json) {
     requestID = json['requestID'];
@@ -75,6 +79,8 @@ class NewRequestCatalogModel {
       });
     }
     mainPhoto = json['mainPhoto'];
+    brandEnabled = json['brand_Enabled'];
+    qualityEnabled = json['quality_Enabled'];
   }
 
   Map<String, dynamic> toJson() {
@@ -104,6 +110,8 @@ class NewRequestCatalogModel {
           itemsAttaches!.map((v) => v.toJson()).toList();
     }
     data['mainPhoto'] = mainPhoto;
+    data['brand_Enabled'] = this.brandEnabled;
+    data['quality_Enabled'] = this.qualityEnabled;
     return data;
   }
 }

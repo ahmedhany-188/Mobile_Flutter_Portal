@@ -44,7 +44,7 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
       final itemAttach = state.itemAttach;
       final selectedCategory = RequestDate.dirty(state.selectedCategory.value);
 
-      final quantity=state.newRequestQuantity;
+      final quality=state.newRequestQuality;
       final entity=state.newRequestEntity;
 
       if (itemName.toString().length > 40) {
@@ -62,7 +62,7 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
           itemAttach: itemAttach,
           selectedCategory: selectedCategory,
           newRequestEntity: entity,
-          newRequestQuantity: quantity,
+          newRequestQuality: quality,
           status: Formz.validate([itemName, itemDescription, selectedCategory]),
         ));
         if (state.status.isValidated) {
@@ -70,6 +70,8 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
               itemName: itemName.value,
               itemDesc: itemDescription.value,
               catID: int.parse(selectedCategory.value),
+              brandEnabled: entity,
+              qualityEnabled: quality,
               inUser: hrcode);
           emit(state.copyWith(
               status: FormzStatus.submissionInProgress,
@@ -129,7 +131,7 @@ class NewRequestCatalogCubit extends Cubit<NewRequestCatalogInitial> {
   void addQualityEnabled(value) {
     emit(
       state.copyWith(
-        newRequestQuantity: value,
+        newRequestQuality: value,
       ),
     );
   }
