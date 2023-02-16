@@ -82,11 +82,12 @@ class CatalogRequestsHistoryCubit extends Cubit<CatalogRequestsHistoryInitial> w
     }
   }
 
-  Future<void> cancelRequest(NewRequestCatalogModel  newRequestCatalogModelResponse) async {
+  Future<void> cancelRequest(NewRequestCatalogModel  newRequestCatalogModelResponse,userHRCode) async {
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       await requestRepository.cancelRequestRepository(
           newRequestCatalogModelResponse).then((value) async {
         if (value.error == false) {
+          getAllRequestList(userHRCode);
           emit(state.copyWith(
             catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
                 .success,

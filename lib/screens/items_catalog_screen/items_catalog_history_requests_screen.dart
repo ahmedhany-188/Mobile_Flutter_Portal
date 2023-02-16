@@ -82,7 +82,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                   ),
                   body: Container(
                     child: getCatalogHistoryData(
-                        state.getCatalogRequestsHistoryList,state),
+                        state.getCatalogRequestsHistoryList,state,user.employeeData?.userHrCode.toString()),
                   ),
                 );
               }),
@@ -91,7 +91,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
   }
 
   SafeArea getCatalogHistoryData(
-      List<NewRequestCatalogModelResponse> getCatalogRequestsHistoryList,CatalogRequestsHistoryInitial state) {
+      List<NewRequestCatalogModelResponse> getCatalogRequestsHistoryList,CatalogRequestsHistoryInitial state,String? hrCode) {
     if (getCatalogRequestsHistoryList.isNotEmpty) {
       if (getCatalogRequestsHistoryList[0].data != null) {
         return SafeArea(
@@ -302,7 +302,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
                                       itemDesc:getCatalogRequestsHistoryList[0].data?[index].itemDesc,
                                       groupStep:getCatalogRequestsHistoryList[0].data?[index].groupStep
                                   );
-                                  context.read<CatalogRequestsHistoryCubit>().cancelRequest(cancelRequestObject);
+                                  context.read<CatalogRequestsHistoryCubit>().cancelRequest(cancelRequestObject,hrCode);
                                 },
                                 label: const Text(
                                     'Cancel',

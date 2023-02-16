@@ -14,6 +14,16 @@ import '../../widgets/error/error_widget.dart';
 
 Widget itemCatalogSearchWidget(hrCode) {
 
+
+  ScrollController controllerHorizontal = ScrollController();
+
+  scrollToBottomTree() {
+    // controllerHorizontal.jumpTo(controllerHorizontal.position.maxScrollExtent);
+    controllerHorizontal.animateTo(controllerHorizontal.position.maxScrollExtent, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+
+  }
+
+
   Padding networkImageFunction(String image) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
@@ -339,8 +349,9 @@ Widget itemCatalogSearchWidget(hrCode) {
       }
       else {
 
-        final ScrollController controllerHorizontal = ScrollController();
 
+
+         WidgetsBinding.instance.addPostFrameCallback((_) => scrollToBottomTree());
         return WillPopScope(
             onWillPop: () async {
               int treeLength = ItemCatalogSearchCubit.get(context)
@@ -389,8 +400,9 @@ Widget itemCatalogSearchWidget(hrCode) {
                                       .getNewSubTree(index);
                                   controllerHorizontal.jumpTo(controllerHorizontal.position.maxScrollExtent);
                                 }
+                              }else{
+                                controllerHorizontal.jumpTo(controllerHorizontal.position.maxScrollExtent);
                               }
-                              controllerHorizontal.jumpTo(controllerHorizontal.position.maxScrollExtent);
                             },
                             child: Row(
                               children: [
@@ -409,7 +421,6 @@ Widget itemCatalogSearchWidget(hrCode) {
                                                 :Colors.black, fontStyle: FontStyle
                                                 .normal
                                             ),),
-
                                 ),
                                 index != state.treeDirectionList.length-1?
                                 Padding(
@@ -472,9 +483,10 @@ Widget itemCatalogSearchWidget(hrCode) {
                                      ItemCatalogSearchCubit.get(context)
                                         .getSubTree(
                                         state.itemsGetAllTree[index].items);
-                                      ItemCatalogSearchCubit.get(context)
+                                       ItemCatalogSearchCubit.get(context)
                                         .setTreeDirectionList(
                                         state.itemsGetAllTree[index].text);
+
                                   } else {
                                     ItemCatalogSearchCubit.get(context)
                                         .getCategoryDataWithId(hrCode,
@@ -482,8 +494,6 @@ Widget itemCatalogSearchWidget(hrCode) {
                                     ItemCatalogSearchCubit.get(context)
                                         .setTreeDirectionList(
                                         state.itemsGetAllTree[index].text);
-
-
                                   }
                                 } else {
                                   ItemCatalogSearchCubit.get(context)
@@ -492,7 +502,6 @@ Widget itemCatalogSearchWidget(hrCode) {
                                   ItemCatalogSearchCubit.get(context)
                                       .setTreeDirectionList(
                                       state.itemsGetAllTree[index].text);
-
 
                                 }
                               }
