@@ -136,11 +136,13 @@ class DialogCatalogShareItemBottomSheet extends StatelessWidget {
                 type: MaterialType.transparency,
                 child: InkWell(onTap: () async {
                   try {
-                    bool found = await url_launcher.canLaunchUrl(
+                    bool foundAndroid = await url_launcher.canLaunchUrl(
+                        Uri.parse("whatsapp://send?phone=0"));
+                    bool foundIOS = await url_launcher.canLaunchUrl(
                         Uri.parse("whatsapp://send?phone=0"));
                     if (defaultTargetPlatform == TargetPlatform.macOS ||
                         defaultTargetPlatform == TargetPlatform.iOS) {
-                      if (found) {
+                      if (foundIOS) {
                         // ios
                         // <key>LSApplicationQueriesSchemes</key>
                         // <array>
@@ -151,7 +153,7 @@ class DialogCatalogShareItemBottomSheet extends StatelessWidget {
                         EasyLoading.showInfo('App not Found');
                       }
                     } else {
-                      if (found) {
+                      if (foundAndroid) {
                         url_launcher.launchUrl(Uri.parse("whatsapp://send?text=$value"));
                       } else {
                         EasyLoading.showInfo('App not Found');

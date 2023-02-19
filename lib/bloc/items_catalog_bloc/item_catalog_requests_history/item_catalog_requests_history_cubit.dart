@@ -86,14 +86,16 @@ class CatalogRequestsHistoryCubit extends Cubit<CatalogRequestsHistoryInitial> w
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       await requestRepository.cancelRequestRepository(
           newRequestCatalogModelResponse).then((value) async {
-        if (value.error == false) {
+        if (value == false) {
+          print("here1");
           getAllRequestList(userHRCode);
-          emit(state.copyWith(
-            catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
-                .success,
-              message: "Request cancelled"
-            // getCatalogRequestsHistoryList: value,
-          ));
+          print("here2");
+          // emit(state.copyWith(
+          //   catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
+          //       .success,
+          //     message: "Request cancelled"
+          //   // getCatalogRequestsHistoryList: value,
+          // ));
         } else {
           emit(state.copyWith(
             catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
@@ -102,10 +104,11 @@ class CatalogRequestsHistoryCubit extends Cubit<CatalogRequestsHistoryInitial> w
           ));
         }
       }).catchError((e) {
+        print("error "+e.toString());
         emit(state.copyWith(
           catalogRequestsHistoryEnumStates: CatalogRequestsHistoryEnumStates
               .failed,));
-        throw e;
+
         // throw RequestFailureApi.fromCode(value.statusCode??0);
       });
     } else {

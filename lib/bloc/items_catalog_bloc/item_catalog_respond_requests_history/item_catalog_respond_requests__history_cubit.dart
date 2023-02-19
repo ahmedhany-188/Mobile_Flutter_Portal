@@ -44,7 +44,9 @@ class CatalogRespondRequestsHistoryCubit extends Cubit<CatalogRespondRequestsHis
   final Connectivity connectivity = Connectivity();
 
   void clearData() {
-    emit(state.copyWith(searchCatalogWorkFlow: '', getCatalogWorkFlowSearchList: [],filter: false));
+    emit(state.copyWith(searchCatalogWorkFlow: '',
+        getCatalogWorkFlowSearchList: [],
+        filter: false));
   }
 
   void setSearchString(String searchString) {
@@ -52,23 +54,37 @@ class CatalogRespondRequestsHistoryCubit extends Cubit<CatalogRespondRequestsHis
     getSearchList();
   }
 
-  void getSearchList(){
-    List<DataRR> catalogRequestWorkFlowData=[];
+  void getSearchList() {
+    List<DataRR> catalogRequestWorkFlowData = [];
     if (state.getCatalogRespondRequestsHistoryList.isNotEmpty) {
       if (state.getCatalogRespondRequestsHistoryList[0].data != null) {
-        for(int i=0;i<state.getCatalogRespondRequestsHistoryList[0].data!.length;i++){
-          if(state.getCatalogRespondRequestsHistoryList[0].data![i].requestNo.toString().contains(state.searchCatalogWorkFlow)){
-            catalogRequestWorkFlowData.add(state.getCatalogRespondRequestsHistoryList[0].data![i]);
+        for (int i = 0; i <
+            state.getCatalogRespondRequestsHistoryList[0].data!.length; i++) {
+          if (state.getCatalogRespondRequestsHistoryList[0].data![i].requestNo
+              .toString().contains(state.searchCatalogWorkFlow)) {
+            catalogRequestWorkFlowData.add(
+                state.getCatalogRespondRequestsHistoryList[0].data![i]);
           }
         }
-        if(catalogRequestWorkFlowData.isEmpty){
-          ItemCatalogRespondRequests getCatalogWorkFlowSearchList=ItemCatalogRespondRequests(data: catalogRequestWorkFlowData);
-          emit(state.copyWith(getCatalogWorkFlowSearchList: [getCatalogWorkFlowSearchList],filter: true,
-    catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.failed,message: "Req ID Not Found"));
-        }else{
-          ItemCatalogRespondRequests getCatalogWorkFlowSearchList=ItemCatalogRespondRequests(data: catalogRequestWorkFlowData);
-          emit(state.copyWith(getCatalogWorkFlowSearchList: [getCatalogWorkFlowSearchList],filter: true
-          ,catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.success,message: ""));
+        if (catalogRequestWorkFlowData.isEmpty) {
+          ItemCatalogRespondRequests getCatalogWorkFlowSearchList = ItemCatalogRespondRequests(
+              data: catalogRequestWorkFlowData);
+          emit(state.copyWith(
+              getCatalogWorkFlowSearchList: [getCatalogWorkFlowSearchList],
+              filter: true,
+              catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+                  .failed,
+              message: "Req ID Not Found"));
+        } else {
+          ItemCatalogRespondRequests getCatalogWorkFlowSearchList = ItemCatalogRespondRequests(
+              data: catalogRequestWorkFlowData);
+          emit(state.copyWith(
+              getCatalogWorkFlowSearchList: [getCatalogWorkFlowSearchList],
+              filter: true
+              ,
+              catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+                  .success,
+              message: ""));
         }
       }
     }
@@ -86,18 +102,18 @@ class CatalogRespondRequestsHistoryCubit extends Cubit<CatalogRespondRequestsHis
         ));
         await requestRepository.getCatalogWorkFlow(requestID).then((
             workFlowData) async {
-          if(workFlowData.isNotEmpty){
+          if (workFlowData.isNotEmpty) {
             emit(state.copyWith(
               catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
                   .success,
               getCatalogWorkFlowList: workFlowData,
             ));
-          }else{
+          } else {
             emit(state.copyWith(
-              catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.noDataFound,
+              catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+                  .noDataFound,
             ));
           }
-
         }).catchError((error) {
           emit(state.copyWith(
             catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
@@ -140,47 +156,59 @@ class CatalogRespondRequestsHistoryCubit extends Cubit<CatalogRespondRequestsHis
     if (await connectivity.checkConnectivity() != ConnectivityResult.none) {
       try {
         emit(state.copyWith(
-          catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.loading,
+          catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+              .loading,
         ));
-        await requestRepository.getCatalogGetDataHr(hrCode).then((groupNoValue) async{
-          List<ItemCatalogUserInfo> inFoList=groupNoValue;
-          await requestRepository.getCatalogRespondRequestsItems(inFoList[0].data?[0].groupID)
-              .then((respondListValue) async {
-                if(respondListValue.isNotEmpty){
-                  emit(state.copyWith(
-                    catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.success,
-                    getCatalogRespondRequestsHistoryList: respondListValue,
-                  ));
-                }else{
-                  emit(state.copyWith(
-                    catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.noDataFound,
-                    getCatalogRespondRequestsHistoryList: respondListValue,
-                  ));
-                }
+        await requestRepository.getCatalogGetDataHr(hrCode).then((
+            groupNoValue) async {
 
-          }).catchError((error) {
+          if(groupNoValue[0].code==204){
             emit(state.copyWith(
-              catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.failed,
-              message: error
+              catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+                  .noDataFound,
             ));
-          });
+          }else{
+            List<ItemCatalogUserInfo> inFoList = groupNoValue;
+            await requestRepository.getCatalogRespondRequestsItems(
+                inFoList[0].data?[0].groupID)
+                .then((respondListValue) async {
+              if (respondListValue.isNotEmpty) {
+                emit(state.copyWith(
+                  catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+                      .success,
+                  getCatalogRespondRequestsHistoryList: respondListValue,
+                ));
+              } else {
+                emit(state.copyWith(
+                  catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+                      .noDataFound,
+                  getCatalogRespondRequestsHistoryList: respondListValue,
+                ));
+              }
+            }).catchError((error) {
+              emit(state.copyWith(
+                  catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+                      .failed,
+                  message: error
+              ));
+            });
+          }
         });
-
       } catch (e) {
-
-        if(isClosed){
-           // print("emits closed and failed to emit faild");
-        }else{
+        if (isClosed) {
+          // print("emits closed and failed to emit failed");
+        } else {
           emit(state.copyWith(
-            catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.failed,
-              message: e.toString(),
+            catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+                .failed,
+            message: e.toString(),
           ));
         }
-
       }
     } else {
       emit(state.copyWith(
-        catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates.noConnection,
+        catalogRespondRequestsHistoryEnumStates: CatalogRespondRequestsHistoryEnumStates
+            .noConnection,
       ));
     }
   }
@@ -198,14 +226,13 @@ class CatalogRespondRequestsHistoryCubit extends Cubit<CatalogRespondRequestsHis
 
   @override
   Map<String, dynamic>? toJson(CatalogRespondRequestsHistoryInitial state) {
-    if (state.catalogRespondRequestsHistoryEnumStates == CatalogRespondRequestsHistoryEnumStates.success &&
+    if (state.catalogRespondRequestsHistoryEnumStates ==
+        CatalogRespondRequestsHistoryEnumStates.success &&
         state.getCatalogRespondRequestsHistoryList.isNotEmpty) {
       return state.toMap();
     } else {
       return null;
     }
   }
-
-
 
 }

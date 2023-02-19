@@ -91,7 +91,7 @@ class CatalogHistoryRequestScreenClass extends State<CatalogHistoryRequestScreen
   }
 
   SafeArea getCatalogHistoryData(
-      List<NewRequestCatalogModelResponse> getCatalogRequestsHistoryList,CatalogRequestsHistoryInitial state,String? hrCode) {
+      List<NewRequestCatalogModelResponse> getCatalogRequestsHistoryList,CatalogRequestsHistoryInitial state,hrCode) {
     if (getCatalogRequestsHistoryList.isNotEmpty) {
       if (getCatalogRequestsHistoryList[0].data != null) {
         return SafeArea(

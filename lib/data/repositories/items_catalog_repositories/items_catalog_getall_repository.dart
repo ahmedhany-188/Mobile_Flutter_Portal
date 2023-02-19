@@ -12,6 +12,8 @@ import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/items_catalog_new_request_model.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_requestCatalog_reponse.dart';
 import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_catalog_request_work_flow.dart';
+import 'package:hassanallamportalflutter/data/models/items_catalog_models/item_cataloge_cancelrequest_response.dart';
+
 import 'package:http/http.dart' as http;
 
 class ItemsCatalogGetAllRepository {
@@ -175,7 +177,7 @@ class ItemsCatalogGetAllRepository {
     return newRequestCatalogModelResponseList;
   }
 
-  Future<NewRequestCatalogModelResponse> cancelRequestRepository(NewRequestCatalogModel newRequestCatalogModelResponse) async{
+  Future<bool> cancelRequestRepository(NewRequestCatalogModel newRequestCatalogModelResponse) async{
 
     var bodyString =jsonEncode(<String, dynamic>{
       "requestID": newRequestCatalogModelResponse.requestID,
@@ -195,7 +197,7 @@ class ItemsCatalogGetAllRepository {
     final http.Response rawPermission =
         await itemsCatalogGetAllDataProvider.postCancelNewRequest(header, bodyString);
     final json = await jsonDecode(rawPermission.body);
-    final NewRequestCatalogModelResponse response = NewRequestCatalogModelResponse.fromJson(json);
+    final bool response = NewRequestCatalogCancelRequestResponse.fromJson(json).error??false;
 
     return response;
   }
