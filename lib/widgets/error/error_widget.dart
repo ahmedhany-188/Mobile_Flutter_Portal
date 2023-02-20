@@ -34,13 +34,13 @@ Widget noDataFoundContainerCatalog(String text) {
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      Assets.images.noSearchIcon.image(color: ConstantsColors.bottomSheetBackground, scale: 5),
-       Text(text,
-          style: const TextStyle(
-              color: ConstantsColors.bottomSheetBackground,
-              fontFamily: FontFamily.robotoCondensed,
-              fontSize: 25,
-              fontWeight: FontWeight.normal)),
+      Assets.images.noDataFound.image(color: ConstantsColors.bottomSheetBackground, scale: 1),
+       // Text(text,
+       //    style: const TextStyle(
+       //        color: ConstantsColors.bottomSheetBackground,
+       //        fontFamily: FontFamily.robotoCondensed,
+       //        fontSize: 25,
+       //        fontWeight: FontWeight.normal)),
     ],
   );
 }

@@ -345,8 +345,9 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         else if (value.data['data'] == null) {
           emit(state.copyWith(
             favoriteResult: [],
+            // to remove easy loading
             itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
-                .noDataFound,
+                .success,
           ));
         } else {
           throw RequestFailureApi.fromCode(value.statusCode??0);
@@ -462,8 +463,9 @@ class ItemCatalogSearchCubit extends Cubit<ItemCatalogSearchState> with Hydrated
         else if (value.data['data'] == null) {
           emit(state.copyWith(
             cartResult: [],
+            // to remove easy loading
             itemCatalogSearchEnumStates: ItemCatalogSearchEnumStates
-                .noDataFound,
+                .success,
           ));
         } else {
           throw RequestFailureApi.fromCode(value.statusCode??0);
