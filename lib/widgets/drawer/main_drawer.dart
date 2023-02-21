@@ -3,7 +3,7 @@ import 'package:badges/badges.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
-import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
+// import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 // import 'package:hassanallamportalflutter/screens/sos_screen/sos_alert_screen.dart';
 // import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
@@ -216,7 +216,16 @@ class MainDrawer extends StatelessWidget {
   Widget buildExternalLinks(BuildContext context,String name, String urlLink) {
     return InkWell(
       onTap: () {
-        launchUrl(Uri.parse(urlLink), mode: LaunchMode.externalApplication);
+        if(urlLink.contains("https://")){
+
+          launchUrl(Uri.parse(urlLink), mode: LaunchMode.externalApplication);
+
+        }else{
+          // buildListTile("Item Catalogue", Icons.category,  () {
+            Navigator.popAndPushNamed(
+                context, urlLink);
+          // },),
+        }
         // Navigator.of(context).pushNamed(
         //     WebViewScreen.routeName,
         //     arguments: {
@@ -625,10 +634,10 @@ class MainDrawer extends StatelessWidget {
                             context, EmployeeAppraisalScreen.routeName);
                       },
                     ),
-                    buildListTile("Item Catalogue", Icons.category,  () {
-                      Navigator.popAndPushNamed(
-                          context, ItemsCatalogGetAllScreen.routeName);
-                    },),
+                    // buildListTile("Item Catalogue", Icons.category,  () {
+                    //   Navigator.popAndPushNamed(
+                    //       context, ItemsCatalogGetAllScreen.routeName);
+                    // },),
 
                     // outlook(),
 

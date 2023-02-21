@@ -7,7 +7,7 @@ import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/constants/constants.dart';
-import 'package:hassanallamportalflutter/data/models/apps_model/apps_model.dart';
+// import 'package:hassanallamportalflutter/data/models/apps_model/apps_model.dart';
 import 'package:hassanallamportalflutter/data/models/staff_dashboard_models/companystaffdashboard_model.dart';
 import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
@@ -38,6 +38,8 @@ import '../notification_screen/notifications_screen.dart';
 import '../../screens/contacts_screen/contacts_screen.dart';
 import '../videos_screen/videos_screen.dart';
 // import 'portal_assistant_screen.dart';
+import 'package:hassanallamportalflutter/data/models/apps_model/apps_drawer_model.dart';
+
 
 // class HomeGridViewScreen extends StatefulWidget {
 //   const HomeGridViewScreen({Key? key}) : super(key: key);
@@ -53,12 +55,12 @@ class HomeGridViewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final user = context.select((AppBloc bloc) => bloc.state.userData);
 
-    List<AppsData> userApps = context.select((AppsCubit bloc) => bloc.appsList);
+    List<AppDrawerModel> userApps = context.select((AppsCubit bloc) => bloc.appsList);
     bool userStaffDashboard = false;
     bool dashBoardIcon = false;
 
     for (int i = 0; i < userApps.length; i++) {
-      if (userApps[i].sysID == 24) {
+      if (userApps[i].id == 24) {
         userStaffDashboard = true;
       }
     }

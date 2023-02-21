@@ -4,8 +4,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:simple_grouped_listview/simple_grouped_listview.dart';
+import 'package:hassanallamportalflutter/data/models/apps_model/apps_drawer_model.dart';
 
-import '../../data/models/apps_model/apps_model.dart';
+// import '../../data/models/apps_model/apps_model.dart';
 import '../../bloc/apps_screen_bloc/apps_cubit.dart';
 import '../../widgets/icons/angular_icon.dart';
 
@@ -77,9 +78,9 @@ class AppsScreen extends StatelessWidget {
     );
   }
 
-  buildSeperatedGridApps(List<AppsData> apps, BuildContext appsContext) {
+  buildSeperatedGridApps(List<AppDrawerModel> apps, BuildContext appsContext) {
     return (apps.isNotEmpty)
-        ? GroupedListView<String, AppsData>.grid(
+        ? GroupedListView<String, AppDrawerModel>.grid(
             items: apps,
             shrinkWrap: true,
             crossAxisCount: 3,
@@ -150,7 +151,7 @@ class AppsScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     createAngularIcon(
-                      angularIcon: element.angularIcon.toString(),
+                      angularIcon: element.sysIcon.toString(),
                       solid: false,
                       context: appsContext,
                       color: Colors.white,
@@ -272,7 +273,7 @@ class AppsScreen extends StatelessWidget {
   //           : buildNoSearchFound();
   // }
 
-  buildApps(List<AppsData> apps, BuildContext appsContext) {
+  buildApps(List<AppDrawerModel> apps, BuildContext appsContext) {
     return (apps.isNotEmpty)
         ? GridView.builder(
             physics: const BouncingScrollPhysics(),
@@ -314,7 +315,7 @@ class AppsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       createAngularIcon(
-                        angularIcon: apps[index].angularIcon.toString(),
+                        angularIcon: apps[index].sysIcon.toString(),
                         solid: false,
                         context: appsContext,
                         color: Colors.white,

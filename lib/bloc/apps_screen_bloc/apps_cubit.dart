@@ -1,7 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hassanallamportalflutter/data/models/apps_model/apps_model.dart';
+import 'package:hassanallamportalflutter/data/models/apps_model/apps_drawer_model.dart';
 
 import '../../data/data_providers/general_dio/general_dio.dart';
 import '../../data/data_providers/requests_data_providers/request_data_providers.dart';
@@ -31,15 +31,19 @@ class AppsCubit extends Cubit<AppsState> {
 
   static AppsCubit get(context) => BlocProvider.of(context);
 
-  List<AppsData> appsList = [];
+  List<AppDrawerModel> appsList = [];
 
   void getApps() {
     emit(AppsLoadingState());
     _generalDio.appsData().then((value) {
       if (value.data != null && value.statusCode ==200) {
-        AppsModel appsResponse = AppsModel.fromJson(value.data);
-        if (appsResponse.data != null) {
-          appsList = appsResponse.data!;
+        // AppsModel appsResponse = AppsModel.fromJson(value.data);
+        List<AppDrawerModel> appsResponse =[];
+        appsResponse = List<AppDrawerModel>.from(
+            value.data.map((model) => AppDrawerModel.fromJson(model)));
+
+        if (appsResponse.isNotEmpty) {
+          appsList = appsResponse;
           emit(AppsSuccessState(appsList));
         } else {
           emit(AppsErrorState('noAppsFound'));

@@ -8,7 +8,8 @@ class AppsInitial extends AppsState {}
 class AppsLoadingState extends AppsState {}
 
 class AppsSuccessState extends AppsState {
-  final List<AppsData> appsList;
+  // final List<AppsData> appsList;
+  final List<AppDrawerModel> appsList;
 
   AppsSuccessState(this.appsList);
 }

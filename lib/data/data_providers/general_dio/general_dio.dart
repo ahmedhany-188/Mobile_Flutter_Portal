@@ -162,7 +162,7 @@ class GeneralDio {
 
   Future<Response> appsData() async {
     String url =
-        'portal/UserData/GetApplications?HRCode=${userData?.user?.userHRCode}';
+        'portal/GetUserApps?HRCode=${userData?.user?.userHRCode}&Email=${userData?.user?.email}';
     var userHRCode = userData?.user?.userHRCode ?? "";
     if (userHRCode.isNotEmpty) {
       return await dio!
