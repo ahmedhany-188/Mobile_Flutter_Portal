@@ -29,4 +29,29 @@ class PayslipRepository {
     // final WeatherData weather = WeatherData.fromJson(json);
     return pdfLink;
   }
+
+  Future<String> getPayslipAvailableMonths(String email,String password) async {
+
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
+    final http.Response rawWeather = await payslipDataProvider.getPayslipAvailableMonths(header,email, password);
+    final monthsString = rawWeather.body.toString();
+    // final WeatherData weather = WeatherData.fromJson(json);
+    return monthsString;
+  }
+
+  Future<String> getPayslipByMonth(String email,String password, String month) async {
+
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
+    final http.Response rawWeather = await payslipDataProvider.getPayslipByMonth(header,email, password, month);
+    final pdfLink = rawWeather.body.toString();
+    // final WeatherData weather = WeatherData.fromJson(json);
+    return pdfLink;
+  }
+
 }

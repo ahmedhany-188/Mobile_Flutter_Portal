@@ -10,4 +10,23 @@ class PayslipDataProvider {
     );
     return rawPayslipLink;
   }
+
+  Future<http.Response> getPayslipAvailableMonths(Map<String, String> header,String email,String password) async {
+    http.Response rawPayslipMonths = await http.get(
+      Uri.parse(
+          getPayslipAvailableMonthsData(email,password)),
+      headers: header,
+    );
+    return rawPayslipMonths;
+  }
+
+  Future<http.Response> getPayslipByMonth(Map<String, String> header,String email,String password, String month) async {
+    http.Response rawPayslipLink = await http.get(
+      Uri.parse(
+          getPayslipByMonthsData(email,password,month)),
+      headers: header,
+    );
+    return rawPayslipLink;
+  }
+
 }

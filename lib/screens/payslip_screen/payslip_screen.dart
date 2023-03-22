@@ -8,8 +8,9 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
 import 'package:hassanallamportalflutter/bloc/payslip_screen_bloc/payslip_cubit.dart';
-
+import 'package:intl/intl.dart';
 import '../../widgets/background/custom_background.dart';
+import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_reset_password_screen.dart';
 
 class PayslipScreen extends StatefulWidget {
   static const routeName = 'payslip-screen';
@@ -69,12 +70,12 @@ class _PayslipScreenState extends State<PayslipScreen> {
   @override
   Widget build(BuildContext context) {
     final user = context.select((AppBloc bloc) => bloc.state.userData.user);
-    final FocusNode passwordFocusNode=FocusNode();
+    final FocusNode passwordFocusNode = FocusNode();
     return WillPopScope(
       onWillPop: () async {
         await EasyLoading.dismiss(animation: true);
         return true;
-        },
+      },
       child: CustomBackground(
         child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -87,8 +88,11 @@ class _PayslipScreenState extends State<PayslipScreen> {
           ),
           body: BlocConsumer<PayslipCubit, PayslipState>(
             listener: (context, state) {
-              if (state is PayslipLoadingState) {
-                EasyLoading.show(status: 'Loading...',maskType: EasyLoadingMaskType.black,dismissOnTap: false,);
+              if (state.payslipDataEnumStates ==
+                  PayslipDataEnumStates.loading) {
+                EasyLoading.show(status: 'Loading...',
+                  maskType: EasyLoadingMaskType.black,
+                  dismissOnTap: false,);
                 // ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 // ScaffoldMessenger.of(context).showSnackBar(
                 //   const SnackBar(
@@ -96,7 +100,8 @@ class _PayslipScreenState extends State<PayslipScreen> {
                 //   ),
                 // );
               }
-              else if (state is PayslipErrorState) {
+              else
+              if (state.payslipDataEnumStates == PayslipDataEnumStates.failed) {
                 EasyLoading.showError(state.error,);
                 // ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 // ScaffoldMessenger.of(context).showSnackBar(
@@ -105,7 +110,8 @@ class _PayslipScreenState extends State<PayslipScreen> {
                 //   ),
                 // );
               }
-              else if (state is PayslipSuccessState) {
+              else if (state.payslipDataEnumStates ==
+                  PayslipDataEnumStates.success) {
                 // _requestDownload(state.response);
                 // ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 // ScaffoldMessenger.of(context).showSnackBar(
@@ -115,9 +121,9 @@ class _PayslipScreenState extends State<PayslipScreen> {
                 // );
                 EasyLoading.showSuccess(state.response,);
               }
-              else if (state is PayslipDownloadState) {
+              else if (state.payslipDataEnumStates ==
+                  PayslipDataEnumStates.download) {
                 // _requestDownload(state.response);
-
                 EasyLoading.showSuccess(state.response,);
                 // ScaffoldMessenger.of(context).hideCurrentSnackBar();
                 // ScaffoldMessenger.of(context).showSnackBar(
@@ -140,11 +146,18 @@ class _PayslipScreenState extends State<PayslipScreen> {
                         MaterialButton(
                           padding: const EdgeInsets.all(0),
                           onPressed: () {
-                            BlocProvider.of<PayslipCubit>(context).openResetLink();
+                            // BlocProvider.of<PayslipCubit>(context)
+                            //     .openResetLink();
+                            Navigator.of(context).pushNamed(
+                              PayslipResetPasswordScreen.routeName,
+                            );
                           },
-                          child:  Text("Reset Payslip Password",style: TextStyle(
+                          child: Text(
+                            "Reset Payslip Password", style: TextStyle(
                             decoration: TextDecoration.underline,
-                            color: Theme.of(context).highlightColor,
+                            color: Theme
+                                .of(context)
+                                .highlightColor,
                           ),),
                         ),
                       ],
@@ -165,11 +178,11 @@ class _PayslipScreenState extends State<PayslipScreen> {
                           },
                           icon: showPassword
                               ? const Icon(
-                            Icons.visibility,
-                            color: Colors.white70
+                              Icons.visibility,
+                              color: Colors.white70
                           )
                               : const Icon(Icons.visibility_off,
-                              color:  Colors.white38),
+                              color: Colors.white38),
                         ),
                         prefixIcon: Icon(
                           Icons.password,
@@ -193,19 +206,109 @@ class _PayslipScreenState extends State<PayslipScreen> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue[900],
-                          padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 10),
                           textStyle: const TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold)),
                       onPressed: () {
-                        if (_passwordController.text.isNotEmpty) {
-                          BlocProvider.of<PayslipCubit>(context).getPdfLink(
-                              user ?? User.empty, _passwordController.text.toString());
+                        // if (_passwordController.text
+                        //     .trim()
+                        //     .isNotEmpty
+                        // ) {
+                          // old way to get only the last payslip
+                          // BlocProvider.of<PayslipCubit>(context).getPdfLink(
+                          //     user ?? User.empty, _passwordController.text.toString());
+
+                          BlocProvider.of<PayslipCubit>(context)
+                              .getPayslipAvailableMonths(
+                              user ?? User.empty,
+                              _passwordController.text.toString());
+
                           // context.read<PayslipCubit>().getPdfLink("ahmed.elghandour@hassanallam.com", _passwordController.text.toString());
-                        }
+                        // }
                       },
-                      child: const Text("Download Payslip"),
+                      // child: const Text("Download Payslip"),
+                      child: const Text("Show Payslip"),
+                    ),
+                    state.months.isNotEmpty ?
+                    Container(
+                      margin: const EdgeInsets.all(15.0),
+                      padding: const EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        border: Border.all(width: 2, color: Colors.white54),
+                        borderRadius: BorderRadius.all(Radius.circular(15)),
+                        color: Colors.black12,
+                      ),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(10),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween,
+                                children: const [
+                                  Text("Num",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 16)),
+                                  Text("Month",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 16)),
+                                  Text("View File",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 16)),
+                                ],),
+                            ),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: const BouncingScrollPhysics(),
+                              itemCount: state.months.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    const Divider(
+                                      thickness: 2,
+                                      color: Colors.white60,
+                                    ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(5),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment
+                                                .spaceBetween,
+                                            children: [
+                                              Text(" ${state.months[index]} ",
+                                                  style: const TextStyle(
+                                                      color: Colors.white)),
+                                              Text(" ${DateFormat('MMM').format(
+                                                  DateTime(0, int.parse(
+                                                      state.months[index])))} ",
+                                                  style: const TextStyle(
+                                                      color: Colors.white)),
+                                              IconButton(
+                                                  onPressed: () {
+                                                    BlocProvider.of<PayslipCubit>(
+                                                        context)
+                                                        .getPayslipByMonth(
+                                                        user ?? User.empty,
+                                                        _passwordController.text
+                                                            .toString(),
+                                                        state.months[index]);
+                                                  },
+                                                  icon: const Icon(
+                                                      Icons.download,
+                                                      color: Colors.white
+                                                  )
+                                              ),]
+                                    ),
+                                        ),
+                                  ],
+                                );
+                              },
+                            )
+                          ],
+                      ),
                     )
+                        : const Text(""),
                   ],
                 ),
               );
@@ -215,6 +318,5 @@ class _PayslipScreenState extends State<PayslipScreen> {
       ),
     );
   }
-
 
 }

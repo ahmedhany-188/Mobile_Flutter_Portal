@@ -7,6 +7,8 @@ import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 // import 'package:hassanallamportalflutter/screens/sos_screen/sos_alert_screen.dart';
 // import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
+import 'package:hassanallamportalflutter/screens/projects_portfolio/projects_portfolio_screen.dart';
+import 'package:hassanallamportalflutter/screens/sos_screen/sos_alert_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -666,21 +668,21 @@ class MainDrawer extends StatelessWidget {
                             .popAndPushNamed(GetDirectionScreen.routeName);
                       },
                     ),
-                    // buildNoIconTile(
-                    //   'Projects Portfolio',
-                    //       () {
-                    //     Navigator.of(context)
-                    //         .popAndPushNamed(ProjectsPortfolioScreen.routeName);
-                    //   },
-                    // ),
+                    buildNoIconTile(
+                      'Projects Portfolio',
+                          () {
+                        Navigator.of(context)
+                            .popAndPushNamed(ProjectsPortfolioScreen.routeName);
+                      },
+                    ),
 
-                    // buildNoIconTile(
-                    //   'SOS HAH',
-                    //       () {
-                    //     Navigator.of(context)
-                    //         .popAndPushNamed(SOSAlertScreen.routeName);
-                    //   },
-                    // ),
+                    buildNoIconTile(
+                      'SOS HAH',
+                          () {
+                        Navigator.of(context)
+                            .popAndPushNamed(SOSAlertScreen.routeName);
+                      },
+                    ),
 
                     buildNoIconTile(
                       'Subsidiaries',

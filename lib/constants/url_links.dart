@@ -23,8 +23,17 @@ videosLinks(String videoName) {
 resetPayslipLink() {
   return 'https://portal.hassanallam.com/PaySlip_Login.aspx';
 }
+
 getPayslipLink(String email,String password){
   return "https://api.hassanallam.com/api/Portal/Payslip?Email=$email&Password=$password";
+}
+
+getPayslipAvailableMonthsData(String email,String password){
+  return "https://api.hassanallam.com/api/Portal/GetAvailableMonthsPayslip?Email=$email&Password=$password";
+}
+
+getPayslipByMonthsData(String email,String password, String month){
+  return "https://api.hassanallam.com/api/Portal/GetPayslipByMonth?Email=$email&Password=$password&Month=$month";
 }
 
 addPermissionLink(){
