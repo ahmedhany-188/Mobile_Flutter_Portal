@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/payslip_screen_bloc/payslip_bloc_reset_password/payslip_cubit_reset_password.dart';
 import 'package:hassanallamportalflutter/data/repositories/medical_request_repository.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -46,7 +47,7 @@ import './bloc/setting_screen_bloc/settings_cubit.dart';
 import './config/app_router.dart';
 import './bloc/benefits_screen_bloc/benefits_cubit.dart';
 import './bloc/myattendance_screen_bloc/attendance_cubit.dart';
-import './bloc/payslip_screen_bloc/payslip_cubit.dart';
+import 'bloc/payslip_screen_bloc/payslip_bloc_data/payslip_cubit.dart';
 import './bloc/subsidiaries_screen_bloc/subsidiaries_cubit.dart';
 import 'bloc/auth_app_status_bloc/app_bloc.dart';
 import 'bloc/helper_bot_screen_bloc/portal_assistant_cubit.dart';
@@ -321,8 +322,14 @@ class _MyAppState extends State<MyApp> {
           create: (portalAssistantCubitContext) => PortalAssistantCubit(GeneralDio(
           BlocProvider.of<AppBloc>(portalAssistantCubitContext).state.userData))
           ..getQuestions(),lazy: true),
+
           BlocProvider<PayslipCubit>(
             create: (payslipContext) => PayslipCubit(PayslipRepository(
+                BlocProvider.of<AppBloc>(payslipContext).state.userData)),
+          ),
+
+          BlocProvider<PayslipResetPasswordCubit>(
+            create: (payslipContext) => PayslipResetPasswordCubit(PayslipRepository(
                 BlocProvider.of<AppBloc>(payslipContext).state.userData)),
           ),
 

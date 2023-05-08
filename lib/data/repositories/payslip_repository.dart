@@ -42,6 +42,28 @@ class PayslipRepository {
     return monthsString;
   }
 
+  Future<String> sentResetPassword(password, verificationCode) async{
+
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
+    final http.Response rawWeather = await payslipDataProvider.getPayslipResetPassword(header, password, verificationCode);
+    final responseResetPassword = rawWeather.body.toString();
+    return responseResetPassword;
+  }
+
+  Future<String> sentVerificationPassword(hrCode) async{
+
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
+    final http.Response rawWeather = await payslipDataProvider.getPayslipVerificationPassword(header,hrCode);
+    final responseVerificationPassword = rawWeather.body.toString();
+    return responseVerificationPassword;
+  }
+
   Future<String> getPayslipByMonth(String email,String password, String month) async {
 
     var header = <String, String>{
@@ -52,6 +74,18 @@ class PayslipRepository {
     final pdfLink = rawWeather.body.toString();
     // final WeatherData weather = WeatherData.fromJson(json);
     return pdfLink;
+  }
+
+  Future<String> getAccountValidation(String hrCode) async {
+
+    var header = <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization': 'Bearer ${userData?.user?.token}',
+    };
+    final http.Response rawWeather = await payslipDataProvider.getAccountValidation(header,hrCode);
+    final accountValidation = rawWeather.body.toString();
+    // final WeatherData weather = WeatherData.fromJson(json);
+    return accountValidation;
   }
 
 }

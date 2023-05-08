@@ -29,4 +29,31 @@ class PayslipDataProvider {
     return rawPayslipLink;
   }
 
+  Future<http.Response> getPayslipResetPassword(Map<String, String> header,String password, String verificationCode) async {
+    http.Response rawPayslipResetPassword = await http.get(
+      Uri.parse(
+          getPayslipResetPasswordLink(password,verificationCode)),
+      headers: header,
+    );
+    return rawPayslipResetPassword;
+  }
+
+  Future<http.Response> getPayslipVerificationPassword(Map<String, String> header,String hrCode) async {
+    http.Response rawPayslipVerificationPassword = await http.get(
+      Uri.parse(
+          getPayslipVerificationPasswordLink(hrCode)),
+      headers: header,
+    );
+    return rawPayslipVerificationPassword;
+  }
+
+  Future<http.Response> getAccountValidation(Map<String, String> header,String hrCode) async {
+    http.Response rawPayslipAccountValidation = await http.get(
+      Uri.parse(
+          getPayslipAccountValidation(hrCode)),
+      headers: header,
+    );
+    return rawPayslipAccountValidation;
+  }
+
 }

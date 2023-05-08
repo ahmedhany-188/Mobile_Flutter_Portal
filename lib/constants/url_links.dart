@@ -36,6 +36,18 @@ getPayslipByMonthsData(String email,String password, String month){
   return "https://api.hassanallam.com/api/Portal/GetPayslipByMonth?Email=$email&Password=$password&Month=$month";
 }
 
+getPayslipResetPasswordLink(String password, String verificationCode){
+  return "https://api.hassanallam.com/api/Portal/";
+}
+
+getPayslipVerificationPasswordLink(String hrCode){
+  return "https://api.hassanallam.com/api/Portal/";
+}
+
+getPayslipAccountValidation(String hrCode){
+  return "https://api.hassanallam.com/api/Portal/PayslipGetAccountValidation";
+}
+
 addPermissionLink(){
   return "https://api.hassanallam.com/api/SelfService/AddPermission";
 }

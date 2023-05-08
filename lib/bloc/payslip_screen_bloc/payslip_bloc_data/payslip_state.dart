@@ -1,40 +1,54 @@
 part of 'payslip_cubit.dart';
 
+enum PayslipDataEnumStates { loading, download, success, failed,validationSuccess,noConnection,validationFailed}
 
-enum PayslipDataEnumStates {initial, loading, download, success, failed,noConnection}
+@immutable
+abstract class PayslipState  extends Equatable{
 
+  const PayslipState();
+  const PayslipState.copyWith({
+    required FormzStatus status});
+}
 
-class PayslipState  extends Equatable {
+class PayslipStateInitial  extends PayslipState {
 
-  final PayslipDataEnumStates payslipDataEnumStates;
-  final String pdf,response,error;
-  final List<String> months;
-
-  PayslipState({
+  const PayslipStateInitial({
     this.payslipDataEnumStates = PayslipDataEnumStates.loading,
     this.pdf ="",
     this.months =  const [],
     this.response = "",
     this.error = "",
+    this.status = FormzStatus.pure,
   });
 
-  PayslipState copyWith({
+  final PayslipDataEnumStates payslipDataEnumStates;
+  final String pdf,response,error;
+  final List<String> months;
+  final FormzStatus status;
+
+  @override
+  List<Object> get props => [
+    payslipDataEnumStates,pdf,
+    months,response,
+    error,
+    status,
+  ];
+
+  PayslipStateInitial copyWith({
     PayslipDataEnumStates? payslipDataEnumStates,
-    String? pdf,months,response,error
+    String? pdf,months,response,error,
+    FormzStatus ?status,
   }) {
-    return PayslipState(
+    return PayslipStateInitial(
       payslipDataEnumStates: payslipDataEnumStates ?? this.payslipDataEnumStates,
       pdf: pdf ?? this.pdf,
       months: months ?? this.months,
         response:response??this.response,
       error: error ?? this.error,
+      status: status ?? this.status,
     );
   }
 
-  @override
-  List<Object> get props => [
-    payslipDataEnumStates,pdf,months,response,error
-  ];
 }
 
 

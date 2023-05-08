@@ -36,6 +36,7 @@ import 'package:hassanallamportalflutter/screens/news_screen/news_details_screen
 import 'package:hassanallamportalflutter/screens/news_screen/news_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/news_screen/news_screen.dart';
 import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_reset_password_screen.dart';
+import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_reset_new_password_screen.dart';
 import 'package:hassanallamportalflutter/screens/webview_screen/webview_screen.dart';
 import 'package:hassanallamportalflutter/screens/photos_screen/photos_screen.dart';
 import 'package:hassanallamportalflutter/screens/setting_screen/setting_screen.dart';
@@ -179,6 +180,11 @@ class AppRouter {
       case PayslipResetPasswordScreen.routeName:
         return MaterialPageRoute(
           builder: (_) => const PayslipResetPasswordScreen(),
+        );
+
+      case PayslipResetNewPasswordScreen.routeName:
+        return MaterialPageRoute(
+          builder: (_) => const PayslipResetNewPasswordScreen(),
         );
 
       case CurrencyPickerScreen.routeName:

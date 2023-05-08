@@ -1,24 +1,44 @@
-
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/data/helpers/download_pdf.dart';
 import 'package:hassanallamportalflutter/data/repositories/payslip_repository.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
-
-import '../../constants/url_links.dart';
 
 part 'payslip_state.dart';
 
-class PayslipCubit extends Cubit<PayslipState> {
+class PayslipCubit extends Cubit<PayslipStateInitial>{
+
+  PayslipCubit(this._payslipRepository) : super(const PayslipStateInitial()){
+    connectivity.onConnectivityChanged.listen((connectivityResult) async {
+      if (state.payslipDataEnumStates == PayslipDataEnumStates.failed ||
+          state.payslipDataEnumStates ==
+              PayslipDataEnumStates.noConnection) {
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          try {
+            getAccountValidation(_payslipRepository.userData?.employeeData?.userHrCode??"");
+          } catch (e) {
+            emit(state.copyWith(
+              payslipDataEnumStates: PayslipDataEnumStates.failed,
+            ));
+          }
+        }
+        else if (connectivityResult == ConnectivityResult.none) {
+          emit(state.copyWith(
+            payslipDataEnumStates: PayslipDataEnumStates.noConnection,
+          ));
+        }
+      }
+    });
+  }
 
   final Connectivity connectivity = Connectivity();
-  PayslipCubit(this._payslipRepository) : super(PayslipState());
-
+  static PayslipCubit get(context) => BlocProvider.of(context);
 
   final PayslipRepository _payslipRepository;
 
@@ -46,7 +66,7 @@ class PayslipCubit extends Cubit<PayslipState> {
                   error: response));
             }else {
             emit(state.copyWith(
-              payslipDataEnumStates: PayslipDataEnumStates.failed,
+              payslipDataEnumStates: PayslipDataEnumStates.noConnection,
             error: "No internet Connection"));
           }
         } catch (e) {
@@ -57,6 +77,39 @@ class PayslipCubit extends Cubit<PayslipState> {
               payslipDataEnumStates: PayslipDataEnumStates.failed,
               error: e.toString()));
         }
+  }
+
+  void getAccountValidation( hrCode) async {
+    emit(state.copyWith(
+      payslipDataEnumStates: PayslipDataEnumStates.loading,));
+    try {
+      var connectivityResult = await connectivity.checkConnectivity();
+      if (connectivityResult == ConnectivityResult.wifi ||
+          connectivityResult == ConnectivityResult.mobile) {
+        final response = await _payslipRepository.getAccountValidation(hrCode);
+        if(response.toString()=="No data found"){
+          emit(state.copyWith(
+              payslipDataEnumStates: PayslipDataEnumStates.validationFailed,));
+        }else{
+          print("the verification code is "+response);
+          emit(state.copyWith(
+              payslipDataEnumStates: PayslipDataEnumStates.validationSuccess,
+              response: "Enter New Password"));
+        }
+      }else {
+        emit(state.copyWith(
+            payslipDataEnumStates: PayslipDataEnumStates.noConnection,
+            error: "No internet Connection"));
+      }
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      emit(state.copyWith(
+          payslipDataEnumStates: PayslipDataEnumStates.failed,
+          error: e.toString()));
+    }
+
   }
 
   void getPayslipAvailableMonths(User user,String password) async {
@@ -94,7 +147,7 @@ class PayslipCubit extends Cubit<PayslipState> {
         }
       } else {
         emit(state.copyWith(
-            payslipDataEnumStates: PayslipDataEnumStates.failed,
+            payslipDataEnumStates: PayslipDataEnumStates.noConnection,
             error: "No internet Connection"));
       }
     } catch (e) {
@@ -133,7 +186,7 @@ class PayslipCubit extends Cubit<PayslipState> {
         }
       }else {
         emit(state.copyWith(
-            payslipDataEnumStates: PayslipDataEnumStates.failed,
+            payslipDataEnumStates: PayslipDataEnumStates.noConnection,
             error: "No internet Connection"));
       }
     } catch (e) {
@@ -167,24 +220,13 @@ class PayslipCubit extends Cubit<PayslipState> {
 
   }
 
-  void openResetLink(){
-    try {
-      launchUrl(
-        Uri.parse(resetPayslipLink()),
-        mode: LaunchMode.externalApplication,
-      );
-    } catch (e, s) {
-      print(s);
-    }
-  }
-
   @override
   Future<void> close() {
     // TODO: implement close
     EasyLoading.dismiss();
     return super.close();
-
   }
+
 
 
 }
