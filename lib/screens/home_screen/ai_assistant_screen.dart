@@ -4,7 +4,8 @@
 // import 'package:hassanallamportalflutter/bloc/helper_bot_screen_bloc/portal_assistant_cubit.dart';
 // import 'package:hassanallamportalflutter/widgets/background/custom_background.dart';
 // import 'package:intl/intl.dart';
-//////////........////////////......////////////////////
+
+// new update 5-8-2023
 // // ignore: must_be_immutable
 // class AIAssitantScreen extends StatelessWidget {
 //   AIAssitantScreen({Key? key}) : super(key: key);
