@@ -1,6 +1,6 @@
 part of 'payslip_cubit.dart';
 
-enum PayslipDataEnumStates { loading, download, success, failed,validationSuccess,noConnection,validationFailed}
+enum PayslipDataEnumStates { loading, download, success, failed,validationSuccess,noConnection,validationFailed,initialLoading,exite}
 
 @immutable
 abstract class PayslipState  extends Equatable{
@@ -19,12 +19,14 @@ class PayslipStateInitial  extends PayslipState {
     this.response = "",
     this.error = "",
     this.status = FormzStatus.pure,
+    this.payslipOpen = 0,
   });
 
   final PayslipDataEnumStates payslipDataEnumStates;
   final String pdf,response,error;
   final List<String> months;
   final FormzStatus status;
+  final int payslipOpen;
 
   @override
   List<Object> get props => [
@@ -32,12 +34,14 @@ class PayslipStateInitial  extends PayslipState {
     months,response,
     error,
     status,
+    payslipOpen,
   ];
 
   PayslipStateInitial copyWith({
     PayslipDataEnumStates? payslipDataEnumStates,
     String? pdf,months,response,error,
     FormzStatus ?status,
+    int ?payslipOpen,
   }) {
     return PayslipStateInitial(
       payslipDataEnumStates: payslipDataEnumStates ?? this.payslipDataEnumStates,
@@ -46,6 +50,7 @@ class PayslipStateInitial  extends PayslipState {
         response:response??this.response,
       error: error ?? this.error,
       status: status ?? this.status,
+      payslipOpen: payslipOpen ?? this.payslipOpen,
     );
   }
 

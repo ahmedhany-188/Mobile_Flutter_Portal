@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:hassanallamportalflutter/data/models/payslip_models/payslip_response_model.dart';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:hassanallamportalflutter/data/data_providers/payslip_data_provider/payslip_data_provider.dart';
@@ -42,26 +45,28 @@ class PayslipRepository {
     return monthsString;
   }
 
-  Future<String> sentResetPassword(password, verificationCode) async{
+  Future<PayslipResponseModel> sentResetPassword(hrCode, email, password, verificationCode) async{
 
     var header = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
-    final http.Response rawWeather = await payslipDataProvider.getPayslipResetPassword(header, password, verificationCode);
-    final responseResetPassword = rawWeather.body.toString();
-    return responseResetPassword;
+    final http.Response rawRequestData = await payslipDataProvider.getPayslipResetPassword(header,hrCode,email, password, verificationCode);
+    final json = await jsonDecode(rawRequestData.body);
+    final PayslipResponseModel payslipResponse = PayslipResponseModel.fromJson(json);
+    return payslipResponse;
   }
 
-  Future<String> sentVerificationPassword(hrCode) async{
+  Future<PayslipResponseModel> sentVerificationPassword(hrCode) async{
 
     var header = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
-    final http.Response rawWeather = await payslipDataProvider.getPayslipVerificationPassword(header,hrCode);
-    final responseVerificationPassword = rawWeather.body.toString();
-    return responseVerificationPassword;
+    final http.Response rawRequestData = await payslipDataProvider.getPayslipVerificationPassword(header,hrCode);
+    final json = await jsonDecode(rawRequestData.body);
+    final PayslipResponseModel payslipResponse = PayslipResponseModel.fromJson(json);
+    return payslipResponse;
   }
 
   Future<String> getPayslipByMonth(String email,String password, String month) async {
@@ -71,21 +76,21 @@ class PayslipRepository {
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
     final http.Response rawWeather = await payslipDataProvider.getPayslipByMonth(header,email, password, month);
-    final pdfLink = rawWeather.body.toString();
+    final pdfLink = rawWeather.body;
     // final WeatherData weather = WeatherData.fromJson(json);
     return pdfLink;
   }
 
-  Future<String> getAccountValidation(String hrCode) async {
+  Future<PayslipResponseModel> getAccountValidation(String hrCode) async {
 
     var header = <String, String>{
       'Content-Type': 'application/json; charset=UTF-8',
       'Authorization': 'Bearer ${userData?.user?.token}',
     };
-    final http.Response rawWeather = await payslipDataProvider.getAccountValidation(header,hrCode);
-    final accountValidation = rawWeather.body.toString();
-    // final WeatherData weather = WeatherData.fromJson(json);
-    return accountValidation;
+    final http.Response rawRequestData = await payslipDataProvider.getAccountValidation(header,hrCode);
+    final json = await jsonDecode(rawRequestData.body);
+    final PayslipResponseModel payslipResponse = PayslipResponseModel.fromJson(json);
+    return payslipResponse;
   }
 
 }

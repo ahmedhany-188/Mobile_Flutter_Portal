@@ -6,6 +6,8 @@ import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart
 import 'package:hassanallamportalflutter/bloc/payslip_screen_bloc/payslip_bloc_reset_password/payslip_cubit_reset_password.dart';
 import 'package:hassanallamportalflutter/bloc/payslip_screen_bloc/payslip_bloc_reset_password/payslip_state_reset_password.dart';
 import '../../widgets/background/custom_background.dart';
+import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_reset_new_password_screen.dart';
+import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 
 class PayslipResetPasswordScreen extends StatefulWidget {
   static const routeName = 'payslip-reset-password-screen';
@@ -19,6 +21,7 @@ class PayslipResetPasswordScreen extends StatefulWidget {
 class _PayslipResetPasswordScreenState  extends State<PayslipResetPasswordScreen> {
 
   final FocusNode passwordFocusNode = FocusNode();
+
 
   @override
   void initState() {
@@ -37,7 +40,9 @@ class _PayslipResetPasswordScreenState  extends State<PayslipResetPasswordScreen
     final user = context.select((AppBloc bloc) => bloc.state.userData.user);
     return WillPopScope(
       onWillPop: () async {
-        await EasyLoading.dismiss(animation: true);
+        Navigator.of(context).pushReplacementNamed(
+          PayslipScreen.routeName,
+        );
         return true;
       },
       child: CustomBackground(
@@ -61,6 +66,9 @@ class _PayslipResetPasswordScreenState  extends State<PayslipResetPasswordScreen
               }
               else if (state.status.isSubmissionSuccess) {
                 EasyLoading.showSuccess(state.response,);
+                Navigator.of(context).pushReplacementNamed(
+                  PayslipResetNewPasswordScreen.routeName,
+                );
               }
             },
             builder: (context, state) {

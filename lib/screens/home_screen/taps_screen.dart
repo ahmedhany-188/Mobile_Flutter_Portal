@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -147,17 +147,17 @@ class _TapsScreenState extends State<TapsScreen> {
                     child: BlocBuilder<UserNotificationBloc,
                         UserNotificationState>(
                       builder: (context, state) {
-                        return Badge(
+                        return badge.Badge(
                           toAnimate: true,
                           animationDuration: const Duration(milliseconds: 1000),
-                          animationType: BadgeAnimationType.scale,
+                          animationType: badge.BadgeAnimationType.scale,
                           badgeColor: Colors.red,
                           badgeContent: Text(
                             "${state.notifications.length}",
                             style: const TextStyle(
                                 color: Colors.white, fontSize: 12),
                           ),
-                          position: const BadgePosition(
+                          position: const badge.BadgePosition(
                             start: 5,
                             top: 4,
                           ),

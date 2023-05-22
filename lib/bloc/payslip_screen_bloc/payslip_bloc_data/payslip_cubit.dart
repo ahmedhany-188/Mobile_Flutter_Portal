@@ -55,12 +55,12 @@ class PayslipCubit extends Cubit<PayslipStateInitial>{
                 connectivityResult == ConnectivityResult.mobile) {
               final response = await _payslipRepository.getPayslipPdf(
                   user.email, password);
-              bool _validURL = Uri
+              bool validURL = Uri
                   .parse(response)
                   .isAbsolute;
 
               // downloadPdf(response);
-              _validURL ? downloadPdf(user,response) :
+              validURL ? downloadPdf(user,response) :
                   emit(state.copyWith(
               payslipDataEnumStates: PayslipDataEnumStates.failed,
                   error: response));
@@ -79,35 +79,48 @@ class PayslipCubit extends Cubit<PayslipStateInitial>{
         }
   }
 
-  void getAccountValidation( hrCode) async {
+  void resetMonths(){
     emit(state.copyWith(
-      payslipDataEnumStates: PayslipDataEnumStates.loading,));
-    try {
-      var connectivityResult = await connectivity.checkConnectivity();
-      if (connectivityResult == ConnectivityResult.wifi ||
-          connectivityResult == ConnectivityResult.mobile) {
-        final response = await _payslipRepository.getAccountValidation(hrCode);
-        if(response.toString()=="No data found"){
-          emit(state.copyWith(
-              payslipDataEnumStates: PayslipDataEnumStates.validationFailed,));
-        }else{
-          print("the verification code is "+response);
-          emit(state.copyWith(
-              payslipDataEnumStates: PayslipDataEnumStates.validationSuccess,
-              response: "Enter New Password"));
-        }
-      }else {
-        emit(state.copyWith(
-            payslipDataEnumStates: PayslipDataEnumStates.noConnection,
-            error: "No internet Connection"));
-      }
-    } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      months: <String>[],
+      payslipOpen: 0,
+      payslipDataEnumStates: PayslipDataEnumStates.exite,
+    ));
+  }
+
+  void getAccountValidation( hrCode) async {
+
+    if(state.payslipOpen == 0){
+
       emit(state.copyWith(
-          payslipDataEnumStates: PayslipDataEnumStates.failed,
-          error: e.toString()));
+        payslipDataEnumStates: PayslipDataEnumStates.initialLoading,));
+      try {
+        var connectivityResult = await connectivity.checkConnectivity();
+        if (connectivityResult == ConnectivityResult.wifi ||
+            connectivityResult == ConnectivityResult.mobile) {
+          final response = await _payslipRepository.getAccountValidation(hrCode);
+          if(response.message.toString()=="No data found"){
+            emit(state.copyWith(
+              payslipDataEnumStates: PayslipDataEnumStates.validationFailed,
+                payslipOpen: 1));
+          }else{
+            emit(state.copyWith(
+                payslipDataEnumStates: PayslipDataEnumStates.validationSuccess,
+                response: "Enter New Password"));
+          }
+        }else {
+          emit(state.copyWith(
+              payslipDataEnumStates: PayslipDataEnumStates.noConnection,
+              error: "No internet Connection"));
+        }
+      } catch (e) {
+        if (kDebugMode) {
+          print(e);
+        }
+        emit(state.copyWith(
+            payslipDataEnumStates: PayslipDataEnumStates.failed,
+            error: e.toString()));
+      }
+
     }
 
   }
@@ -176,10 +189,10 @@ class PayslipCubit extends Cubit<PayslipStateInitial>{
               payslipDataEnumStates: PayslipDataEnumStates.failed,
               error: "Invalid Password"));
         }else{
-          bool _validURL = Uri
+          bool validURL = Uri
               .parse(response)
               .isAbsolute;
-          _validURL ? downloadPdf(user,response) :
+          validURL ? downloadPdf(user,response) :
           emit(state.copyWith(
               payslipDataEnumStates: PayslipDataEnumStates.failed,
               error: response));

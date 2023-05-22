@@ -3,11 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:formz/formz.dart';
 import 'package:hassanallamportalflutter/bloc/auth_app_status_bloc/app_bloc.dart';
+import 'package:hassanallamportalflutter/bloc/payslip_screen_bloc/payslip_bloc_data/payslip_cubit.dart';
 import 'package:hassanallamportalflutter/bloc/payslip_screen_bloc/payslip_bloc_reset_password/payslip_cubit_reset_password.dart';
 import 'package:hassanallamportalflutter/bloc/payslip_screen_bloc/payslip_bloc_reset_password/payslip_state_reset_password.dart';
 import 'package:hassanallamportalflutter/constants/colors.dart';
 import 'package:hassanallamportalflutter/data/repositories/payslip_repository.dart';
 import '../../widgets/background/custom_background.dart';
+import 'package:hassanallamportalflutter/screens/payslip_screen/payslip_screen.dart';
 
 class PayslipResetNewPasswordScreen extends StatefulWidget {
   static const routeName = 'payslip-reset-new-password-screen';
@@ -40,7 +42,9 @@ class _PayslipResetNewPasswordScreenState  extends State<PayslipResetNewPassword
 
     return WillPopScope(
       onWillPop: () async {
-        await EasyLoading.dismiss(animation: true);
+        BlocProvider.of<PayslipCubit>(
+            context)
+            .resetMonths();
         return true;
       },
       child: CustomBackground(
@@ -63,7 +67,7 @@ class _PayslipResetNewPasswordScreenState  extends State<PayslipResetNewPassword
                         backgroundColor: ConstantsColors.bottomSheetBackground,
                         onPressed: () {
                           context.read<PayslipResetPasswordCubit>()
-                              .getSubmitResetPassword();
+                              .getSubmitResetPassword(user.user?.userHRCode,user.user?.email);
                         },
                         icon: const Icon(Icons.send),
                         label: const Text('SUBMIT'),
@@ -78,7 +82,10 @@ class _PayslipResetNewPasswordScreenState  extends State<PayslipResetNewPassword
                             EasyLoading.showError(state.error);
                           }
                           else if (state.status.isSubmissionSuccess) {
-                            EasyLoading.showSuccess(state.error,);
+                            EasyLoading.showSuccess(state.response,);
+                            Navigator.of(context).pushReplacementNamed(
+                              PayslipScreen.routeName,
+                            );
                           }
                         },
                         child: Padding(
@@ -125,7 +132,7 @@ class _PayslipResetNewPasswordScreenState  extends State<PayslipResetNewPassword
                                               color: Colors.white70,),
                                             errorText: state.verificationCode
                                                 .invalid
-                                                ? 'invalid Phone Number'
+                                                ? 'Invalid Code'
                                                 : null,
                                           ),
                                         );
@@ -168,7 +175,7 @@ class _PayslipResetNewPasswordScreenState  extends State<PayslipResetNewPassword
                                               Icons.password,
                                               color: Colors.white70,),
                                             errorText: state.password.invalid
-                                                ? 'invalid Phone Number'
+                                                ? 'Invalid Password'
                                                 : null,
                                           ),
                                         );
@@ -199,7 +206,7 @@ class _PayslipResetNewPasswordScreenState  extends State<PayslipResetNewPassword
                                               color: Colors.white70,),
                                             errorText: state.passwordConfirm
                                                 .invalid
-                                                ? 'invalid Phone Number'
+                                                ? 'Invalid Password'
                                                 : null,
                                           ),
                                         );

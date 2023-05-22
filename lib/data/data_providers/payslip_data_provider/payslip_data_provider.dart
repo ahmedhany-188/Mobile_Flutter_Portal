@@ -29,10 +29,10 @@ class PayslipDataProvider {
     return rawPayslipLink;
   }
 
-  Future<http.Response> getPayslipResetPassword(Map<String, String> header,String password, String verificationCode) async {
+  Future<http.Response> getPayslipResetPassword(Map<String, String> header,String hrCode, String email, String password, String verificationCode) async {
     http.Response rawPayslipResetPassword = await http.get(
       Uri.parse(
-          getPayslipResetPasswordLink(password,verificationCode)),
+          getPayslipResetPasswordLink(hrCode,email,password,verificationCode)),
       headers: header,
     );
     return rawPayslipResetPassword;

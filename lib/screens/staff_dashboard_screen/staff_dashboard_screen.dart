@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -210,7 +210,7 @@ class StaffDashBoardScreenClass extends State<StaffDashBoardScreen> {
                       ),
 
                       Flexible(
-                        child: Badge(
+                        child: badge.Badge(
                           toAnimate: false,
                           badgeColor: Colors.transparent,
                           // position: BadgePosition.center(),

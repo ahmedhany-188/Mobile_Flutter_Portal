@@ -1,5 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:hassanallamportalflutter/bloc/notification_bloc/cubit/user_notification_api_cubit.dart';
 import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
@@ -7,8 +7,8 @@ import 'package:hassanallamportalflutter/gen/fonts.gen.dart';
 // import 'package:hassanallamportalflutter/screens/sos_screen/sos_alert_screen.dart';
 // import 'package:hassanallamportalflutter/screens/items_catalog_screen/items_catalog_screen_getall.dart';
 import 'package:hassanallamportalflutter/screens/notification_screen/notifications_screen.dart';
-import 'package:hassanallamportalflutter/screens/projects_portfolio/projects_portfolio_screen.dart';
-import 'package:hassanallamportalflutter/screens/sos_screen/sos_alert_screen.dart';
+// import 'package:hassanallamportalflutter/screens/projects_portfolio/projects_portfolio_screen.dart';
+// import 'package:hassanallamportalflutter/screens/sos_screen/sos_alert_screen.dart';
 import 'package:hassanallamportalflutter/screens/subsidiaries_screen/subsidiaries_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -593,7 +593,7 @@ class MainDrawer extends StatelessWidget {
                               child: BlocBuilder<UserNotificationApiCubit,
                                   UserNotificationApiState>(
                                 builder: (context, state) {
-                                  return Badge(
+                                  return badge.Badge(
                                     showBadge:
                                         state.userNotificationList.isNotEmpty
                                             ? true
@@ -601,14 +601,14 @@ class MainDrawer extends StatelessWidget {
                                     toAnimate: false,
                                     animationDuration:
                                         const Duration(milliseconds: 1000),
-                                    animationType: BadgeAnimationType.scale,
+                                    animationType: badge.BadgeAnimationType.scale,
                                     badgeColor: Colors.red,
                                     badgeContent: Text(
                                       "${state.userNotificationList.length}",
                                       style: const TextStyle(
                                           color: Colors.white, fontSize: 10),
                                     ),
-                                    position: const BadgePosition(
+                                    position: const badge.BadgePosition(
                                       start: 5,
                                       top: 4,
                                     ),
@@ -668,21 +668,21 @@ class MainDrawer extends StatelessWidget {
                             .popAndPushNamed(GetDirectionScreen.routeName);
                       },
                     ),
-                    buildNoIconTile(
-                      'Projects Portfolio',
-                          () {
-                        Navigator.of(context)
-                            .popAndPushNamed(ProjectsPortfolioScreen.routeName);
-                      },
-                    ),
+                    // buildNoIconTile(
+                    //   'Projects Portfolio',
+                    //       () {
+                    //     Navigator.of(context)
+                    //         .popAndPushNamed(ProjectsPortfolioScreen.routeName);
+                    //   },
+                    // ),
 
-                    buildNoIconTile(
-                      'SOS HAH',
-                          () {
-                        Navigator.of(context)
-                            .popAndPushNamed(SOSAlertScreen.routeName);
-                      },
-                    ),
+                    // buildNoIconTile(
+                    //   'SOS HAH',
+                    //       () {
+                    //     Navigator.of(context)
+                    //         .popAndPushNamed(SOSAlertScreen.routeName);
+                    //   },
+                    // ),
 
                     buildNoIconTile(
                       'Subsidiaries',

@@ -29,23 +29,23 @@ getPayslipLink(String email,String password){
 }
 
 getPayslipAvailableMonthsData(String email,String password){
-  return "https://api.hassanallam.com/api/Portal/GetAvailableMonthsPayslip?Email=$email&Password=$password";
+  return "https://api.hassanallam.com/api/Portal/PayslipGetAvailableMonths?Email=$email&Password=$password";
 }
 
 getPayslipByMonthsData(String email,String password, String month){
-  return "https://api.hassanallam.com/api/Portal/GetPayslipByMonth?Email=$email&Password=$password&Month=$month";
+  return "https://api.hassanallam.com/api/Portal/PayslipGetByMonth?Email=$email&Password=$password&Month=$month";
 }
 
-getPayslipResetPasswordLink(String password, String verificationCode){
-  return "https://api.hassanallam.com/api/Portal/";
+getPayslipResetPasswordLink(String hrCode, String email, String password, String verificationCode){
+  return "https://api.hassanallam.com/api/Portal/PayslipChangePasswordRequest?HRCode=$hrCode&Email=$email&Password=$password&VerificationCode=$verificationCode";
 }
 
 getPayslipVerificationPasswordLink(String hrCode){
-  return "https://api.hassanallam.com/api/Portal/";
+  return "https://api.hassanallam.com/api/Portal/PayslipGetSendVerificationRequestReset?HRCode=$hrCode";
 }
 
 getPayslipAccountValidation(String hrCode){
-  return "https://api.hassanallam.com/api/Portal/PayslipGetAccountValidation";
+  return "https://api.hassanallam.com/api/Portal/PayslipGetAccountValidation?HRCode=$hrCode";
 }
 
 addPermissionLink(){

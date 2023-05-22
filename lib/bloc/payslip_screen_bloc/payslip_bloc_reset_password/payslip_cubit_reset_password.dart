@@ -11,12 +11,12 @@ import 'package:hassanallamportalflutter/data/repositories/payslip_repository.da
 class PayslipResetPasswordCubit extends Cubit<PayslipResetPasswordStateInitial> {
 
   final Connectivity connectivity = Connectivity();
-  PayslipResetPasswordCubit(this.payslipRepository) : super(const PayslipResetPasswordStateInitial());
+
+  PayslipResetPasswordCubit(this.payslipRepository)
+      : super(const PayslipResetPasswordStateInitial());
 
   static PayslipResetPasswordCubit get(context) => BlocProvider.of(context);
   final PayslipRepository payslipRepository;
-
-  bool showPassword = true;
 
   @override
   Future<void> close() {
@@ -24,41 +24,42 @@ class PayslipResetPasswordCubit extends Cubit<PayslipResetPasswordStateInitial> 
     return super.close();
   }
 
-  void getSubmitResetPassword() async{
-
+  void getSubmitResetPassword(String? hrCode, String ?email) async {
     final verificationCode = RequestDate.dirty(state.verificationCode.value);
     final password = RequestDate.dirty(state.password.value);
     final passwordConfirm = RequestDate.dirty(state.passwordConfirm.value);
 
+    String? newEmail = email?.replaceAll("@hassanallam.com", "");
     emit(state.copyWith(
       verificationCode: verificationCode,
       password: password,
-      passwordConfirm:passwordConfirm,
-      status: Formz.validate([verificationCode, password,passwordConfirm]),
+      passwordConfirm: passwordConfirm,
+      status: Formz.validate([verificationCode, password, passwordConfirm]),
     ));
 
-    if(state.status.isValidated) {
+    if (state.status.isValidated) {
       emit(state.copyWith(
           status: FormzStatus.submissionInProgress));
 
-      if(password==passwordConfirm){
+      if (password == passwordConfirm) {
         try {
           var connectivityResult = await connectivity.checkConnectivity();
           if (connectivityResult == ConnectivityResult.wifi ||
               connectivityResult == ConnectivityResult.mobile) {
-
-            final response = await payslipRepository.sentResetPassword(password,verificationCode);
-            if(response.toString() == "1"){
+            final response = await payslipRepository.sentResetPassword(
+                hrCode,newEmail,password.value, verificationCode.value);
+            if (response.error==false) {
               emit(state.copyWith(
+                  response: response.message,
                   status: FormzStatus.submissionSuccess));
-            }else {
+            } else {
               emit(state.copyWith(
-                error: "An error occurred", status: FormzStatus.submissionFailure,
+                error: response.message,
+                status: FormzStatus.submissionFailure,
               ),
               );
             }
-
-          }else{
+          } else {
             emit(
               state.copyWith(
                 error: "No internet Connection",
@@ -66,7 +67,6 @@ class PayslipResetPasswordCubit extends Cubit<PayslipResetPasswordStateInitial> 
               ),
             );
           }
-
         } catch (ex) {
           emit(
             state.copyWith(
@@ -75,7 +75,7 @@ class PayslipResetPasswordCubit extends Cubit<PayslipResetPasswordStateInitial> 
             ),
           );
         }
-      }else{
+      } else {
         emit(
           state.copyWith(
             error: "Password Mismatch",
@@ -83,7 +83,6 @@ class PayslipResetPasswordCubit extends Cubit<PayslipResetPasswordStateInitial> 
           ),
         );
       }
-
     }
   }
 
@@ -91,7 +90,8 @@ class PayslipResetPasswordCubit extends Cubit<PayslipResetPasswordStateInitial> 
     final password = RequestDate.dirty(value);
     emit(state.copyWith(
       password: password,
-      status: Formz.validate([state.verificationCode,password,state.passwordConfirm]),
+      status: Formz.validate(
+          [state.verificationCode, password, state.passwordConfirm]),
     ));
   }
 
@@ -99,7 +99,8 @@ class PayslipResetPasswordCubit extends Cubit<PayslipResetPasswordStateInitial> 
     final confirmPassword = RequestDate.dirty(value);
     emit(state.copyWith(
       passwordConfirm: confirmPassword,
-      status: Formz.validate([state.verificationCode,state.password,confirmPassword]),
+      status: Formz.validate(
+          [state.verificationCode, state.password, confirmPassword]),
     ));
   }
 
@@ -107,12 +108,12 @@ class PayslipResetPasswordCubit extends Cubit<PayslipResetPasswordStateInitial> 
     final verificationCode = RequestDate.dirty(value);
     emit(state.copyWith(
       verificationCode: verificationCode,
-      status: Formz.validate([verificationCode,state.password,state.passwordConfirm]),
+      status: Formz.validate(
+          [verificationCode, state.password, state.passwordConfirm]),
     ));
   }
 
   void sendVerificationRequest(String hrCode) async {
-
     emit(state.copyWith(
         status: FormzStatus.submissionInProgress));
     try {
@@ -121,10 +122,7 @@ class PayslipResetPasswordCubit extends Cubit<PayslipResetPasswordStateInitial> 
           connectivityResult == ConnectivityResult.mobile) {
         final response = await payslipRepository.sentVerificationPassword(
             hrCode);
-
-        print("the response is equal "+response.toString());
-
-        if (response.toString() == "1") {
+        if (response.error == false) {
           emit(state.copyWith(
               response: "Send Successfully",
               status: FormzStatus.submissionSuccess));

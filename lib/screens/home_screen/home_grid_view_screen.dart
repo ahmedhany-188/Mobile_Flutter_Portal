@@ -1,4 +1,4 @@
-import 'package:badges/badges.dart';
+import 'package:badges/badges.dart' as badge;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
@@ -13,6 +13,7 @@ import 'package:hassanallamportalflutter/gen/assets.gen.dart';
 import 'package:hassanallamportalflutter/screens/admin_request_screen/embassy_letter_screen.dart';
 import 'package:hassanallamportalflutter/screens/benefits_screen/benefits_screen.dart';
 import 'package:hassanallamportalflutter/screens/economy_news_screen/economy_news_screen.dart';
+// import 'package:hassanallamportalflutter/screens/home_screen/ai_assistant_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/business_mission_request_screen/business_mission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/permission_request_screen/permission_screen.dart';
 import 'package:hassanallamportalflutter/screens/hr_requests_screen/vacation_request_screen/vacation_screen.dart';
@@ -133,20 +134,20 @@ class HomeGridViewScreen extends StatelessWidget {
                       highlightColor: Colors.transparent,
                       onTap: () => Navigator.of(context)
                           .pushNamed(NotificationsScreen.routeName),
-                      child: Badge(
+                      child: badge.Badge(
                         showBadge: state.userNotificationList.isNotEmpty
                             ? true
                             : false,
                         toAnimate: true,
                         animationDuration: const Duration(milliseconds: 1000),
-                        animationType: BadgeAnimationType.scale,
+                        animationType: badge.BadgeAnimationType.scale,
                         badgeColor: Colors.red,
                         badgeContent: Text(
                           "${state.userNotificationList.length}",
                           style: const TextStyle(
                               color: Colors.white, fontSize: 10),
                         ),
-                        position: const BadgePosition(
+                        position: const badge.BadgePosition(
                           start: 5,
                           top: 5,
                         ),
@@ -168,7 +169,10 @@ class HomeGridViewScreen extends StatelessWidget {
             //   padding: const EdgeInsets.only(bottom: 20.0),
             //   child: FloatingActionButton(
             //     onPressed: () => Navigator.pushNamed(
-            //         context, PortalAssistantScreen.routeName),
+            //         context,
+            //        PortalAssistantScreen.routeName
+            //        // AIAssitantScreen.routeName
+            //     ),
             //     child: Container(
             //       decoration: BoxDecoration(
             //           shape: BoxShape.rectangle,
@@ -197,345 +201,439 @@ class HomeGridViewScreen extends StatelessWidget {
             //   ),
             // ),
             body: Stack(
-                // mainAxisAlignment: MainAxisAlignment.start,
-                // crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Align(
-                    alignment: Alignment.topCenter,
-                    child: BlocProvider<NewsCubit>.value(
-                      value: NewsCubit.get(context),
-                      child: BlocBuilder<NewsCubit, NewsState>(
-                        builder: (context, state) {
-                          return Container(
-                            width: MediaQuery.of(context).size.width / 1.2,
-                            padding: const EdgeInsets.all(10),
-                            margin: const EdgeInsets.only(top: 25),
-                            // height: 100,
-                            child: ListView(
-                              physics: const NeverScrollableScrollPhysics(),
-                              reverse: false,
-                              shrinkWrap: true,
-                              children: [
-                                AnimatedTextKit(
-                                  isRepeatingAnimation: true,
-                                  pause: const Duration(milliseconds: 1000),
-                                  repeatForever: true,
-                                  displayFullTextOnTap: false,
-                                  animatedTexts:
-                                      NewsCubit.get(context).announcment.isEmpty
-                                          ? [
-                                              TyperAnimatedText(
-                                                'Checking for Announcement... ',
-                                                speed: const Duration(
-                                                    milliseconds: 100),
-                                                textAlign: TextAlign.center,
-                                                curve: Curves.ease,
-                                                textStyle: const TextStyle(
-                                                    color: Colors.white,
-                                                    overflow: TextOverflow.clip,
-                                                    fontFamily: 'RobotoFlex',
-                                                    fontSize: 14),
-                                              )
-                                            ]
-                                          : NewsCubit.get(context).announcment,
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: GridView(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3,
+                  children: [
+                    Align(
+                      alignment: Alignment.topCenter,
+                      child: BlocProvider<NewsCubit>.value(
+                        value: NewsCubit.get(context),
+                        child: BlocBuilder<NewsCubit, NewsState>(
+                          builder: (context, state) {
+                            return Container(
+                              width: MediaQuery.of(context).size.width / 1.2,
+                              padding: const EdgeInsets.all(10),
+                              margin: const EdgeInsets.only(top: 25),
+                              // height: 100,
+                              child: ListView(
+                                physics: const NeverScrollableScrollPhysics(),
+                                reverse: false,
+                                shrinkWrap: true,
+                                children: [
+                                  AnimatedTextKit(
+                                    isRepeatingAnimation: true,
+                                    pause: const Duration(milliseconds: 1000),
+                                    repeatForever: true,
+                                    displayFullTextOnTap: false,
+                                    animatedTexts:
+                                        NewsCubit.get(context).announcment.isEmpty
+                                            ? [
+                                                TyperAnimatedText(
+                                                  'Checking for Announcement... ',
+                                                  speed: const Duration(
+                                                      milliseconds: 100),
+                                                  textAlign: TextAlign.center,
+                                                  curve: Curves.ease,
+                                                  textStyle: const TextStyle(
+                                                      color: Colors.white,
+                                                      overflow: TextOverflow.clip,
+                                                      fontFamily: 'RobotoFlex',
+                                                      fontSize: 14),
+                                                )
+                                              ]
+                                            : NewsCubit.get(context).announcment,
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
                         ),
-                        padding: EdgeInsets.zero,
-                        addRepaintBoundaries: false,
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        children: [
-                          InkWell(
-                              onTap: () => {
-                                    if (user.employeeData?.isCEO != null &&
-                                        user.employeeData?.isTopManagement !=
-                                            null)
-                                      {
-                                        // 10
-                                        if (user.employeeData
-                                                ?.isTopManagement ==
-                                            true)
-                                          {
-                                            Navigator.of(context).pushNamed(
-                                                StaffDashBoardScreen.routeName),
-                                          } // 11
-                                        else if (user.employeeData?.isCEO ==
-                                            true)
-                                          {
-                                            Navigator.of(context).pushNamed(
-                                                StaffDashBoardDetailScreen
-                                                    .routeName,
-                                                arguments: {
-                                                  StaffDashBoardDetailScreen
-                                                          .staffDashboardList:
-                                                      <CompanyStaffDashBoard>[],
-                                                  StaffDashBoardDetailScreen
-                                                          .date:
-                                                      GlobalConstants
-                                                          .dateFormatServerDashBoard
-                                                          .format(
-                                                              DateTime.now())
-                                                }),
-                                          }
-                                        else if (userStaffDashboard)
-                                          {
-                                            Navigator.of(context).pushNamed(
-                                                StaffDashBoardProjectScreen
-                                                    .routeName,
-                                                arguments: {
-                                                  StaffDashBoardProjectScreen
-                                                      .companyID: "0",
-                                                  StaffDashBoardProjectScreen
-                                                      .project: "0",
-                                                  StaffDashBoardProjectScreen
-                                                          .director:
-                                                      user.employeeData
-                                                          ?.userHrCode,
-                                                  StaffDashBoardProjectScreen
-                                                          .date:
-                                                      GlobalConstants
-                                                          .dateFormatServerDashBoard
-                                                          .format(
-                                                              DateTime.now()),
-                                                }),
-                                          }
-                                        else
-                                          {
-                                            Navigator.of(context).pushNamed(
-                                                AttendanceScreen.routeName),
-                                          }
-                                      }
-                                    else
-                                      {
-                                        Navigator.of(context).pushNamed(
-                                            AttendanceScreen.routeName),
-                                      }
-                                  },
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                      dashBoardIcon
-                                          ? Assets.images.homepage
-                                              .staffDashboardIcon.path
-                                          : Assets.images.homepage
-                                              .attendanceIcon.path,
-                                      scale: 3),
-                                  Text(
-                                    dashBoardIcon
-                                        ? 'Staff Dashboard'
-                                        : "Attendance",
-                                    softWrap: true,
-                                    style: const TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                  )
-                                ],
-                              )),
-                          InkWell(
-                              onTap: () => Navigator.of(context)
-                                  .pushNamed(ContactsScreen.routeName),
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                      Assets
-                                          .images.homepage.contactListIcon.path,
-                                      scale: 3),
-                                  const Text(
-                                    'Contact List',
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                  )
-                                ],
-                              )),
-                          MenuPopupWidget(
-                            benefitsMenuItems(context),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets.images.homepage.benefitsIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'Benefits',
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            ),
-                          ),
-                          MenuPopupWidget(
-                            hrRequestMenuItems(context),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets.images.homepage.hrRequestsIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'HR Request',
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            ),
-                          ),
-                          MenuPopupWidget(
-                            itRequestMenuItems(context),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets.images.homepage.itRequestIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'IT Request',
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            ),
-                          ),
-                          MenuPopupWidget(
-                            mediaCenterMenuItems(context),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets.images.homepage.mediaCenterIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'Media Center',
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            ),
-                          ),
-                          InkWell(
-                              onTap: () => Navigator.of(context)
-                                  .pushNamed(NewsScreen.routeName),
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                      Assets.images.homepage.newsIcon.path,
-                                      scale: 3),
-                                  const Text(
-                                    'News',
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                  )
-                                ],
-                              )),
-                          MenuPopupWidget(
-                            newsLetterMenuItems(context),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Image.asset(
-                                    Assets
-                                        .images.homepage.haNewsLetterIcon.path,
-                                    scale: 3),
-                                const Text(
-                                  'HA NewsLetter',
-                                  softWrap: true,
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
-                                )
-                              ],
-                            ),
-                          ),
-                          InkWell(
-                              onTap: () => Navigator.of(context)
-                                  .pushNamed(EconomyNewsScreen.routeName),
-                              splashColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Image.asset(
-                                      Assets
-                                          .images.homepage.economyNewsIcon.path,
-                                      scale: 3),
-                                  const Text(
-                                    'Economy News',
-                                    softWrap: true,
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 14),
-                                  )
-                                ],
-                              )),
-                        ],
                       ),
                     ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Shimmer.fromColors(
-                          baseColor: Colors.white,
-                          highlightColor: Colors.grey.shade700,
-                          period: const Duration(milliseconds: 3000),
-                          child: const Text(
-                            '\u00a9 2023 IT Department All Rights Reserved',
-                            style: TextStyle(
-                              fontSize: 14,
-                            ),
-                          )
-                          // Container(
-                          //   color: Colors.red,
-                          //   height: 20,
-                          //   width: MediaQuery.of(context).size.width,
-                          // ),
-                          ),
+                    const SizedBox(
+                      height: 10,
                     ),
-                  ),
-                ])),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: GridView(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                          ),
+                          padding: EdgeInsets.zero,
+                          addRepaintBoundaries: false,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            InkWell(
+                                onTap: () => {
+                                      if (user.employeeData?.isCEO != null &&
+                                          user.employeeData?.isTopManagement !=
+                                              null)
+                                        {
+                                          // 10
+                                          if (user.employeeData
+                                                  ?.isTopManagement ==
+                                              true)
+                                            {
+                                              Navigator.of(context).pushNamed(
+                                                  StaffDashBoardScreen.routeName),
+                                            } // 11
+                                          else if (user.employeeData?.isCEO ==
+                                              true)
+                                            {
+                                              Navigator.of(context).pushNamed(
+                                                  StaffDashBoardDetailScreen
+                                                      .routeName,
+                                                  arguments: {
+                                                    StaffDashBoardDetailScreen
+                                                            .staffDashboardList:
+                                                        <CompanyStaffDashBoard>[],
+                                                    StaffDashBoardDetailScreen
+                                                            .date:
+                                                        GlobalConstants
+                                                            .dateFormatServerDashBoard
+                                                            .format(
+                                                                DateTime.now())
+                                                  }),
+                                            }
+                                          else if (userStaffDashboard)
+                                            {
+                                              Navigator.of(context).pushNamed(
+                                                  StaffDashBoardProjectScreen
+                                                      .routeName,
+                                                  arguments: {
+                                                    StaffDashBoardProjectScreen
+                                                        .companyID: "0",
+                                                    StaffDashBoardProjectScreen
+                                                        .project: "0",
+                                                    StaffDashBoardProjectScreen
+                                                            .director:
+                                                        user.employeeData
+                                                            ?.userHrCode,
+                                                    StaffDashBoardProjectScreen
+                                                            .date:
+                                                        GlobalConstants
+                                                            .dateFormatServerDashBoard
+                                                            .format(
+                                                                DateTime.now()),
+                                                  }),
+                                            }
+                                          else
+                                            {
+                                              Navigator.of(context).pushNamed(
+                                                  AttendanceScreen.routeName),
+                                            }
+                                        }
+                                      else
+                                        {
+                                          Navigator.of(context).pushNamed(
+                                              AttendanceScreen.routeName),
+                                        }
+                                    },
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Expanded(
+                                        flex:5,
+                                        child: Image.asset(
+                                            dashBoardIcon
+                                                ? Assets.images.homepage
+                                                    .staffDashboardIcon.path
+                                                : Assets.images.homepage
+                                                    .attendanceIcon.path,
+                                            scale: 3),
+                                      ),
+                                      Expanded(
+                                        flex:5,
+                                        child: Center(
+                                          child: Text(
+                                            dashBoardIcon ? 'Staff Dashboard' : "Attendance",
+                                            maxLines: 1,
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            softWrap: true,
+                                            style: const TextStyle(
+                                                color: Colors.white, fontSize: 14),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                            InkWell(
+                                onTap: () => Navigator.of(context)
+                                    .pushNamed(ContactsScreen.routeName),
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Expanded(
+                                        flex: 5,
+                                        child: Image.asset(
+                                            Assets.images.homepage.contactListIcon.path,
+                                            scale: 3),
+                                      ),
+                                       const Expanded(
+                                         flex :5,
+                                         child: Center(
+                                          child:  Text(
+                                            'Contact List',
+                                            softWrap: true,
+                                            textAlign: TextAlign.center,
+                                            overflow: TextOverflow.ellipsis,
+                                            maxLines: 1,
+                                            style: TextStyle(
+                                                color: Colors.white, fontSize: 14),
+                                          ),
+                                      ),
+                                       )
+                                    ],
+                                  ),
+                                ),
+                            MenuPopupWidget(
+                              benefitsMenuItems(context),
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                      flex: 5,
+                                      child: Image.asset(
+                                          Assets.images.homepage.benefitsIcon.path,
+                                          scale: 3),
+                                    ),
+                                    const Expanded(
+                                       flex:5,
+                                       child:  Center(
+                                         child: Text(
+                                          'Benefits',
+                                          softWrap: true,
+                                          textAlign: TextAlign.center,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 14),
+                                    ),
+                                       ),
+                                     )
+                                  ],
+                              ),
+                            ),
+                            MenuPopupWidget(
+                              hrRequestMenuItems(context),
+                             Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                      flex:5,
+                                      child: Image.asset(
+                                          Assets.images.homepage.hrRequestsIcon.path,
+                                          scale: 3),
+                                    ),
+                                      const Expanded(
+                                        flex :5,
+                                        child: Center(
+                                         child: Text(
+                                          'HR Request',
+                                          softWrap: true,
+                                           textAlign: TextAlign.center,
+                                           overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 14),
+                                    ),
+                                     ),
+                                      )
+                                  ],
+                                ),
+                            ),
+                            MenuPopupWidget(
+                                itRequestMenuItems(context),
+                               Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                      flex :5,
+                                      child: Image.asset(
+                                          Assets.images.homepage.itRequestIcon.path,
+                                          scale: 3),
+                                    ),
+                                     const Expanded(
+                                        flex:5,
+                                        child: Center(
+                                         child: Text(
+                                          'IT Request',
+                                          softWrap: true,
+                                           textAlign: TextAlign.center,
+                                           overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 14),
+                                    ),
+                                     ),
+                                      )
+                                  ],
+                                ),
+                            ),
+                            MenuPopupWidget(
+                              mediaCenterMenuItems(context),
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                      flex:5,
+                                      child: Image.asset(
+                                           Assets.images.homepage.mediaCenterIcon.path,
+                                          scale: 3),
+                                    ),
+                                      const Expanded(
+                                        flex:5,
+                                        child: Center(
+                                         child: Text(
+                                          'Media Center',
+                                          softWrap: true,
+                                           textAlign: TextAlign.center,
+                                           overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 14),
+                                    ),
+                                     ),
+                                      )
+                                  ],
+                              ),
+                            ),
+                            InkWell(
+                                  onTap: () => Navigator.of(context)
+                                      .pushNamed(NewsScreen.routeName),
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Expanded(
+                                          flex:5,
+                                          child: Image.asset(
+                                              Assets.images.homepage.newsIcon.path,
+                                              scale: 3),
+                                        ),
+                                        const Expanded(
+                                          flex:5,
+                                          child: Center(
+                                             child: Text(
+                                              'News',
+                                              softWrap: true,
+                                               textAlign: TextAlign.center,
+                                               overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                  color: Colors.white, fontSize: 14),
+                                          ),
+                                           ),
+                                        )
+                                      ],
+                                  )),
+                            MenuPopupWidget(
+                                newsLetterMenuItems(context),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Expanded(
+                                      flex:5,
+                                      child: Image.asset(
+                                          Assets.images.homepage.haNewsLetterIcon.path,
+                                          scale: 3),
+                                    ),
+                                    const Expanded(
+                                      flex:5,
+                                       child:  Center(
+                                         child: Text(
+                                          'HA NewsLetter',
+                                          softWrap: true,
+                                           textAlign: TextAlign.center,
+                                           overflow: TextOverflow.ellipsis,
+                                          maxLines: 1,
+                                          style: TextStyle(
+                                              color: Colors.white, fontSize: 14),
+                                    ),
+                                       ),
+                                     )
+                                  ],
+                                ),
+                            ),
+                            InkWell(
+                                  onTap: () => Navigator.of(context)
+                                      .pushNamed(EconomyNewsScreen.routeName),
+                                  splashColor: Colors.transparent,
+                                  highlightColor: Colors.transparent,
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Expanded(
+                                          flex:5,
+                                          child: Image.asset(
+                                              Assets.images.homepage.economyNewsIcon.path,
+                                              scale: 3),
+                                        ),
+                                          const Expanded(
+                                            flex:5,
+                                            child: Center(
+                                             child: Text(
+                                               'Economy News',
+                                              softWrap: true,
+                                               textAlign: TextAlign.center,
+                                               overflow: TextOverflow.ellipsis,
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                  color: Colors.white, fontSize: 14),
+                                        ),
+                                         ),
+                                          )
+                                      ],
+                                  )),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Shimmer.fromColors(
+                            baseColor: Colors.white,
+                            highlightColor: Colors.grey.shade700,
+                            period: const Duration(milliseconds: 3000),
+                            child: const Text(
+                              '\u00a9 2023 IT Department All Rights Reserved',
+                              style: TextStyle(
+                                fontSize: 14,
+                              ),
+                            )
+                            // Container(
+                            //   color: Colors.red,
+                            //   height: 20,
+                            //   width: MediaQuery.of(context).size.width,
+                            // ),
+                            ),
+                      ),
+                    ),
+                  ]
+            )),
       ),
     );
   }
@@ -841,10 +939,10 @@ Widget newsLetterMenuItems(BuildContext context) {
 
 class MenuPopupWidget extends StatelessWidget {
   const MenuPopupWidget(
-    this.widgetFunction,
-    this.childWidget, {
-    Key? key,
-  }) : super(key: key);
+      this.widgetFunction,
+      this.childWidget, {
+        Key? key,
+      }) : super(key: key);
 
   final Widget widgetFunction;
   final Widget childWidget;
@@ -863,7 +961,7 @@ class MenuPopupWidget extends StatelessWidget {
           direction: PopoverDirection.top,
           width: 150,
           backgroundColor:
-              ConstantsColors.bottomSheetBackgroundDark.withOpacity(0.9),
+          ConstantsColors.bottomSheetBackgroundDark.withOpacity(0.9),
           arrowHeight: 15,
           arrowWidth: 30,
         );
