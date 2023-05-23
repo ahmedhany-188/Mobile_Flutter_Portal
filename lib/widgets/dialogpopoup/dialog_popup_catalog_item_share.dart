@@ -54,11 +54,12 @@ class DialogCatalogShareItemBottomSheet extends StatelessWidget {
               ),),
             Flexible(
               child: sizeSendItemWhats(
-                  const Icon(
-                      Icons.whatsapp,
-                      size: 40.0,
-                      color: Colors.green
-                  ),
+                  // const Icon(
+                  //     Icons.WhatsApp,
+                  //     size: 40.0,
+                  //     color: Colors.green
+                  // ),
+                const Text("WhatsApp",style:TextStyle(color: Colors.green,fontWeight: FontWeight.w800,fontSize: 18),),
                   context, value),
             ),
           ]),
@@ -107,7 +108,7 @@ class DialogCatalogShareItemBottomSheet extends StatelessWidget {
   }
 
 
-  Padding sizeSendItemWhats(Icon requestIcon, BuildContext context, value) {
+  Padding sizeSendItemWhats(Text requestIcon, BuildContext context, value) {
     return Padding(
       padding: const EdgeInsets.all(5.0),
       child: Container(
